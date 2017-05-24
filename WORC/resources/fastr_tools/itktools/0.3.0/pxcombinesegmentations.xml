@@ -1,0 +1,56 @@
+<tool id="PxCombineSegmentations" name="ITKTools Combine Image Segmentations" version="0.1">
+  <description>A wrapper around ITK Tools, as set of simple command line tools for image analysis.</description>
+  <authors>
+    <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.3.0" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="windows" arch="*" paths="vfs://apps/itktools/0.3.0/install/bin" bin="pxcombinesegmentations.exe"/>
+      <target os="linux" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxcombinesegmentations"/>
+      <target os="darwin" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxcombinesegmentations"/>
+    </targets>
+    <description>
+
+    </description>
+    <license/>
+    <authors>
+      <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl"
+              url="http://www.bigr.nl/people/HakimAchterberg"/>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="images" name="Input Images" datatype="ITKImageFile" prefix="-in" cardinality="1-*"
+             required="true"/>
+      <input id="method" name="Combination Method" prefix="-m" cardinality="1" required="true">
+        <enum>STAPLE</enum>
+        <enum>VOTE</enum>
+        <enum>MULTISTAPLE</enum>
+        <enum>MULTISTAPLE2</enum>
+        <enum>VOTE_MULTISTAPLE2</enum>
+      </input>
+      <input id="number_of_classes" name="Number of classes" datatype="Int" prefix="-n" required="false" default="2"/>
+      <input id="original_labels" name="Inputlabels for Relabeling" datatype="Int" prefix="-iv" cardinality="1-*"
+             required="false"/>
+      <input id="substitute_labels" name="Outputlabels for Relabeling" datatype="Int" prefix="-ov"
+             cardinality="as:original_labels" required="false"/>
+    </inputs>
+    <outputs>
+      <output id="hard_segment" name="Output hard label segmentation" datatype="ITKImageFile" prefix="-outh"
+              cardinality="1" required="false"/>
+      <output id="soft_segment" name="Output soft label segmentation" datatype="ITKImageFile" prefix="-outs"
+              cardinality="val:number_of_classes" required="false"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references/>
+</tool>

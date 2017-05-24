@@ -1,0 +1,123 @@
+<tool id="Transformix" name="Elastix Transformation" version="0.2">
+  <description>A wrapper around transformix (part of elastix). elastix is open source software, based on the well-known
+    Insight Segmentation and Registration Toolkit (ITK). The software consists of a collection of algorithms that are
+    commonly used to solve (medical) image registration problems. The modular design of elastix allows the user to
+    quickly configure, test, and compare different registration methods for a specific application. A command-line
+    interface enables automated processing of large numbers of data sets, by means of scripting.
+  </description>
+  <authors>
+    <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="4.8" url="http://elastix.isi.uu.nl/">
+    <targets>
+      <target os="windows" arch="*" bin="transformix.exe">
+        <paths>
+          <path type="bin" value="vfs://apps/elastix/4.8/install/" />
+          <path type="lib" value="vfs://apps/elastix/4.8/install/lib" />
+        </paths>
+      </target>
+      <target os="linux" arch="*" modules="elastix/4.8" bin="transformix">
+        <paths>
+          <path type="bin" value="vfs://apps/elastix/4.8/install/" />
+          <path type="lib" value="vfs://apps/elastix/4.8/install/lib" />
+        </paths>
+      </target>
+      <target os="darwin" arch="*" modules="elastix/4.8" bin="transformix">
+        <paths>
+          <path type="bin" value="vfs://apps/elastix/4.8/install/" />
+          <path type="lib" value="vfs://apps/elastix/4.8/install/lib" />
+        </paths>
+      </target>
+    </targets>
+    <description>
+      transformix version: 4.800
+
+      transformix applies a transform on an input image and/or generates a deformation field.
+      The transform is specified in the transform-parameter file.
+
+      Call transformix from the command line with mandatory arguments:
+      -out output directory
+      -tp transform-parameter file, only 1
+
+      Optional extra commands:
+      -in input image to deform
+      -def file containing input-image points; the point are transformed
+      according to the specified transform-parameter file
+      use "-def all" to transform all points from the input-image, which
+      effectively generates a deformation field.
+      -jac use "-jac all" to generate an image with the determinant of the
+      spatial Jacobian
+      -jacmat use "-jacmat all" to generate an image with the spatial Jacobian
+      matrix at each voxel
+      -priority set the process priority to high, abovenormal, normal (default),
+      belownormal, or idle (Windows only option)
+      -threads set the maximum number of threads of transformix
+
+      At least one of the options "-in", "-def", "-jac", or "-jacmat" should be given.
+
+      The transform-parameter file must contain all the information necessary for transformix to run properly. That
+      includes which transform to use, with which parameters, etc. For a usable transform-parameter file, run elastix,
+      and inspect the output file "TransformParameters.0.txt".
+
+      Need further help?
+      Check the website http://elastix.isi.uu.nl, or mail elastix@bigr.nl.
+    </description>
+    <license/>
+    <authors>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="transform" name="transform file" datatype="ElastixTransformFile" prefix="-tp" cardinality="1"
+             required="true"/>
+      <input id="image" name="input image" datatype="ITKImageFile" prefix="-in" cardinality="1" required="false"/>
+      <input id="points" name="input image points" datatype="TransformixPointFile" prefix="-def" cardinality="1"
+             required="false"/>
+      <input id="determinant_of_jacobian_flag" name="determinant of jacobian" datatype="Boolean" prefix="-jac" cardinality="1"
+             required="false"/>
+      <input id="jacobian_matrix_flag" name="jacobian matrix" datatype="Boolean" prefix="-jacmat" cardinality="1" required="false"/>
+      <input id="priority" name="priority" prefix="-priority" cardinality="1" required="false">
+        <enum>high</enum>
+        <enum>abovenormal</enum>
+        <enum>normal</enum>
+        <enum>belownormal</enum>
+        <enum>idle</enum>
+      </input>
+      <input id="threads" name="threads" datatype="Int" prefix="-threads" cardinality="1" required="false"/>
+    </inputs>
+    <outputs>
+      <output id="directory" name="output directory" action="ensure" datatype="Directory" prefix="-out"
+              cardinality="1"/>
+      <output id="image" name="transformed image" datatype="ITKImageFile" cardinality="as:image"
+              automatic="true" location="{output.directory[0]}/result.{special.extension}" method="path"/>
+      <output id="points" name="transformed points" datatype="TransformixOutputPointFile"
+              cardinality="as:points" automatic="true" location="{output.directory[0]}/outputpoints.txt"
+              method="path"/>
+      <output id="determinant_of_jacobian" name="determinant of jacobian" datatype="ITKImageFile" cardinality="as:determinant_of_jacobian_flag"
+              automatic="true" location="{output.directory[0]}/spatialJacobian.{special.extension}" method="path"/>
+      <output id="jacobian_matrix" name="jacobian matrix" datatype="ITKImageFile" cardinality="as:jacobian_matrix_flag" automatic="true"
+              location="{output.directory[0]}/fullSpatialJacobian.{special.extension}" method="path"/>
+      <output id="log_file" name="transformix log" datatype="TransformixLogFile" cardinality="1" automatic="true"
+              location="{output.directory[0]}/transformix.log" method="path"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests/>
+  <help>
+  </help>
+  <cite>
+    @article{KleinStaring:2010,
+    author = "{S. Klein AND M. Staring AND K. Murphy AND M.A. Viergever AND J.P.W. Pluim}",
+    title = "{elastix: a toolbox for intensity-based medical image registration}",
+    journal = "{IEEE Transactions on Medical Imaging}",
+    volume = "{29}",
+    number = "{1}",
+    pages = "{196 - 205}",
+    month = "{January}",
+    year = "{2010}",
+    }
+  </cite>
+  <references/>
+</tool>

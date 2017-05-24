@@ -1,0 +1,27 @@
+include LICENSE
+include APACHE-LICENSE-2.0
+include README.md
+include requirements.txt
+include test_requirements.txt
+include version
+include CHANGELOG
+
+recursive-include WORC/fastrconfig *
+recursive-include WORC *
+recursive-include WORC/exampledata/CLM *
+recursive-include WORC/exampledata/elastix *
+recursive-include WORC/IOparser/ *
+recursive-include WORC/resources/ *
+recursive-include WORC/resources/fastr_tests *
+recursive-include WORC/resources/fastr_tools *
+recursive-include WORC/resources/fastr_types *
+
+#documentation
+recursive-include docs/_build/html *
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[cod]
+
+# Exclude all bytecode
+global-exclude *.pyo
+global-exclude *.pyc

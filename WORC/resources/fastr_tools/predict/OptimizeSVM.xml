@@ -1,0 +1,42 @@
+<tool id="OptimizeSVM" name="OptimizeSVM" version="1.0">
+    <description>A wrapper about PREDICT's Radiomics patient classification using Support Vector Machines.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="OptimizeSVM_tool.py" />
+    </targets>
+    <description>
+       OptimizeSVM.py data svm
+       output = SVM specifications
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+      <author  name="Sebastian van der Voort" email="s.vandervoort@erasmusmc.nl" url="http://www.bigr.nl/people/SebastianvanderVoort" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="data" name="Input test, training and configuration data" datatype="HDF5" prefix="--data" cardinality="1" repeat_prefix="false" required="true" />
+     </inputs>
+    <outputs>
+      <output id="svm" name="SVM specifications" datatype="HDF5" cardinality="1" nospace="False" order="0" prefix="--svm" required="true"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: OptimizeSVM.py [-h] -data DATA.hdf5 -svm SVM.hdf5
+
+        Train and optimize a support vector machine classifier.
+
+        optional arguments:
+        -h, --help show this help message and exit
+        -data DATA.hdf5 File containing all necessary data for Training
+        -svm Filename to save the classifier to
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

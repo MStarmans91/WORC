@@ -1,0 +1,71 @@
+<tool id="PxGaussianImageFilter" name="ITKTools Gaussian Image Filter" version="0.1" >
+  <description>A wrapper around ITK Tools, as set of simple command line tools for image analysis.</description>
+  <authors>
+    <author name="Marcel Koek" email="m.koek@erasmusmc.nl" url="http://www.bigr.nl/people/MarcelKoek" />
+  </authors>
+  <command version="0.3.0" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="windows" arch="*" location="vfs://apps/itktools/0.3.0/install/bin" bin="pxgaussianimagefilter.exe" />
+      <target os="darwin" arch="*" location="vfs://apps/itktools/0.3.0/install/bin" bin="pxgaussianimagefilter" />
+      <target os="linux" arch="*" modules="itktools/0.3.0" location="vfs://apps/itktools/0.3.0/install/bin" bin="pxgaussianimagefilter" />
+    </targets>
+    <description>
+      -in      inputFilename
+      [-out]   outputFilename, default in + BLURRED.mhd
+      [-std]   sigma, for each dimension, default 1.0
+      [-ord]   order, for each dimension, default zero
+      0: zero order = blurring
+      1: first order = gradient
+      2: second order derivative
+      [-mag]   compute the magnitude of the separate blurrings, default false
+      [-lap]   compute the laplacian, default false
+      [-inv]   compute invariants, choose one of
+      {LiLi, LiLijLj, LiLijLjkLk, Lii, LijLji, LijLjkLki}
+      [-opct]  output pixel type, default equal to input
+      Supported: 2D, 3D, (unsigned) char, (unsigned) short, (unsigned) int, (unsigned) long, float, double.
+    </description>
+    <license />
+    <authors>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein" />
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html" />
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="image" name="Input Image" datatype="ITKImageFile" prefix="-in" cardinality="1" required="true" />
+      <input id="order" name="Order" datatype="Int" prefix="-ord" cardinality="1-3" repeat_prefix="false" required="true" />
+      <input id="magnitude" name="Compute Magnitude" datatype="Boolean" prefix="-mag" cardinality="1" required="false" />
+      <input id="laplacian" name="Compute Laplacian" datatype="Boolean" prefix="-lap" cardinality="1" required="false" />
+      <input id="invariants" name="Compute Invariants" prefix="-inv" cardinality="1" required="false">
+        <enum>LiLi</enum>
+        <enum>LiLijLj</enum>
+        <enum>LiLijLjkLk</enum>
+        <enum>Lii</enum>
+        <enum>LijLji</enum>
+        <enum>LijLjkLki</enum>
+      </input>
+      <input id="component_type" name="Output Pixel Component Type" prefix="-opct" cardinality="1" required="false">
+        <enum>unsigned_char</enum>
+        <enum>char</enum>
+        <enum>unsigned_short</enum>
+        <enum>short</enum>
+        <enum>unsigned_int</enum>
+        <enum>int</enum>
+        <enum>unsigned_long</enum>
+        <enum>long</enum>
+        <enum>float</enum>
+        <enum>double</enum>
+      </input>
+    </inputs>
+    <outputs>
+      <output id="image" name="Output Image" datatype="ITKImageFile" prefix="-out" cardinality="1" required="true" />
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

@@ -1,0 +1,90 @@
+<tool id="PxMorphology" name="ITKTools Morphology" version="0.1">
+  <description>A wrapper around ITK Tools, as set of simple command line tools for image analysis.</description>
+  <authors>
+    <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.3.0" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="windows" arch="*" paths="vfs://apps/itktools/0.3.0/install/bin" bin="pxmorphology.exe"/>
+      <target os="linux" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxmorphology"/>
+      <target os="darwin" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxmorphology"/>
+    </targets>
+    <description>
+      ITKTools v0.2.2
+      Usage:
+      pxmorphology
+      -in inputFilename
+      -op operation, choose one of {erosion, dilation, opening, closing, gradient}
+      [-type] type, choose one of {grayscale, binary, parabolic}, default grayscale
+      [-out] outputFilename, default in_operation_type.extension
+      [-z] compression flag; if provided, the output image is compressed
+      -r radius
+      [-bc] boundaryCondition (grayscale): the gray value outside the image
+      [-bin] foreground and background values
+      [-a] algorithm type for op=gradient
+      BASIC = 0, HISTO = 1, ANCHOR = 2, VHGW = 3, default 0
+      BASIC and HISTO have radius dependent performance, ANCHOR and VHGW not
+      [-opct] pixelType, default: automatically determined from input image
+      For grayscale filters, supply the boundary condition.
+      This value defaults to the maximum pixel value.
+      For binary filters, supply the foreground and background value.
+      The foreground value refers to the value of the object of interest (default 1),
+      the background value is by default 0,
+      It is not only intended for binary images, but also for grayscale images.
+      In this case the foreground value selects which value to do the operation on.
+      Examples:
+      1) Dilate a binary image (1 = foreground, 0 = background)
+      pxmorphology -in input.mhd -op dilation -type binary -out output.mhd -r 1
+      2) Dilate a binary image (255 = foreground, 0 = background)
+      pxmorphology -in input.mhd -op dilation -type binary -out output.mhd -r 1 -bin 255 0
+      Supported: 2D, 3D, (unsigned) char, (unsigned) short.
+    </description>
+    <license/>
+    <authors>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="image" name="Input Filename" datatype="ITKImageFile" prefix="-in" cardinality="1" required="true"/>
+      <input id="operation" name="Operation" prefix="-op" cardinality="1" required="true">
+        <enum>erosion</enum>
+        <enum>dilation</enum>
+        <enum>opening</enum>
+        <enum>closing</enum>
+        <enum>gradient</enum>
+      </input>
+      <input id="operation_type" name="Operation Type" prefix="-type" cardinality="1" required="false">
+        <enum>grayscale</enum>
+        <enum>binary</enum>
+        <enum>parabolic</enum>
+      </input>
+      <input id="compression_flag" name="Compression Flag" datatype="Boolean" prefix="-z" cardinality="1" required="false"/>
+      <input id="radius" name="Radius of the Operator" datatype="Float" prefix="-r" cardinality="1" required="true"/>
+      <input id="boundary_condition" name="Boundary Condition" datatype="Float" prefix="-bc" cardinality="1"
+             required="false"/>
+      <input id="foreground_background_value" name="Foreground and Background Values" datatype="Float" prefix="-bin" cardinality="2"
+             required="false"/>
+      <input id="gradient_algorithm_enum" name="Algorithm for the Gradient Operator" prefix="-a" cardinality="1" required="false">
+        <enum>0</enum>
+        <enum>1</enum>
+        <enum>2</enum>
+        <enum>3</enum>
+      </input>
+      <input id="component_type" name="PixelType Used" datatype="String" cardinality="1" prefix="-opct" required="false"/>
+    </inputs>
+    <outputs>
+      <output id="image" name="Output Filename" datatype="ITKImageFile" prefix="-out" cardinality="1"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references/>
+</tool>
