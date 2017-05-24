@@ -82,6 +82,9 @@ echo "machine images.xnat.org
 chmod 600 ~/.netrc
 ```
 
+# FASTR
+If you are using FASTR < 1.3.0, you need to manually add the WORC tools, datatypes and mounts to your FASTR configuration (~/.fastr/config.py). Check the fastrconfig/config.py in this repository for the necessary additions.
+
 ### 3rd-party packages used in WORC:
 
  - FASTR (Workflow design and building)
