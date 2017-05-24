@@ -1,0 +1,5 @@
+*.pyc
+/data
+.env
+/Elastix/*.txt
+/Elastix/*.log

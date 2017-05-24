@@ -1,0 +1,18 @@
+language: python
+python:
+- '2.7'
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get -qq -y install libblas-dev liblapack-dev libatlas-base-dev gfortran
+
+install:
+- pip install -r requirements.txt
+- python setup.py -q install
+
+notifications:
+  slack:
+    secure: ytGFd2Y7qBM4yC4G5FmU2ckPSEFTXU3GLt9QiPlkETwEtqBDeajWTCy08n5pCH9wvXeXTxO+5+I9kdILR3K+fMIXCkQNwY7wDRJkdcoa0zlwxBGTAiKkRtfOm1vo/7iwk3CS7M97H2KVaIESy5CCXBN2HlflAEfNpQxdFnS9C8aq3kwuU5sfKW9o/+zI8U6bqFBZ9jDXcet1yMTVVXJeOY7xl1hFen7QwhsfQAYW7iBKxeJVITydUnCA6ekY5m+XCTMV1MV5HBIXODCwZA7OjxjXR9f77+i680MuvDtQVc/6TBZtZ8unZzokJVB1tI+GIecTiFn7C3IswYNHPdRqZC3zk7t8MEhyLiC/DGq9VZUlbV64N5mKa+ESYfClOakbOc7OWzo+cNEIxbaG4CDh9e/0FuNH99f+14SNFLPyksSWFTPnGU1ejvAJ/SHxZTyq160ODHiDHPap6jtuiTMpDUMUY93qM1DVX/577geiyPv7sxpYt4g8nYjynvIGTZDQJk0NaViwOZHThUOnb2xteBAhpwqsPRdSf9qo3Z4y8sMqS1xinyeUYN/T6MbcHzyt8IC9AoHoWoGtbeMO8fd3gLtMgzoPZoMJ+GXW5Q601dwUnt9xbKqNqrgMK4Mrj2WmgxDqA8Yrjo1vaaIEE+9Kq7TuR1hmU05nsbHmMLYVS84=
+
+script:
+- python ./tests/tests.py
