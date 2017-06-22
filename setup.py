@@ -19,6 +19,7 @@ import subprocess
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools.command.test import test as TestCommand
+from setuptools import setup, find_packages
 
 with open('requirements.txt', 'r') as fh:
     _requires = fh.read().splitlines()
@@ -32,6 +33,8 @@ with open('version', 'r') as fh:
 with open('test_requirements.txt', 'r') as fh:
     _tests_require = fh.read().splitlines()
 
+with open('requirements-setup.txt', 'r') as fp:
+    setup_requirements = list(filter(bool, (line.strip() for line in fp)))
 
 def scan_dir(path, prefix=None):
     if prefix is None:
@@ -84,27 +87,40 @@ class NoseTestCommand(TestCommand):
         # Run nose ensuring that argv simulates running nosetests directly
         import nose
         nose.run_exit(argv=['nosetests'])
+        
+class MyInstall(install):
+    def run(self):
+        try:
+            # note cwd - this makes the current directory
+            # the one with the Makefile.
+            # subprocess.call(['pip install -r requirements-setup.txt'])
+            for i in setup_requirements:
+                regcommand = ('pip install ' + i)
+                print regcommand
+                proc = subprocess.Popen(regcommand,
+                                        shell=True,
+                                        stdin=subprocess.PIPE,
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.STDOUT,
+                                        )
+                stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
 
+            # Install pyradiomics
+            commands = 'git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..;'
+            print commands
+            proc = subprocess.Popen(commands,
+                                    shell=True,
+                                    stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.STDOUT,
+                                    )
+            stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
 
-# class MyInstall(install):
-#     def run(self):
-#         try:
-#             # Install pyradiomics
-#             commands = 'python install/install.py'
-#             print("Installing configuration file ...")
-#             proc = subprocess.Popen(commands,
-#                                     shell=True,
-#                                     stdin=subprocess.PIPE,
-#                                     stdout=subprocess.PIPE,
-#                                     stderr=subprocess.STDOUT,
-#                                     )
-#             stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
-#             print("... done!")
-#         except Exception as e:
-#             print e
-#             exit(1)
-#         else:
-#             install.run(self)
+        except Exception as e:
+            print e
+            exit(1)
+        else:
+            install.run(self)
 
 setup(
     name='WORC',
@@ -146,7 +162,7 @@ setup(
     install_requires=_requires,
     tests_require=_tests_require,
     test_suite='nose.collector',
-    cmdclass={'test': NoseTestCommand},
+    cmdclass={'test': NoseTestCommand, 'install': MyInstall},
     entry_points=entry_points,
 
 )
