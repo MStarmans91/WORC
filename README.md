@@ -53,6 +53,16 @@ cmake -DModule_ITKReview=ON -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF PATH/ITK/IT
 make
 ```
 
+Alternative version:
+```
+git clone https://itk.org/ITK.git
+mkdir ITK-build
+cd ITK-build
+cmake ../ITK
+make
+```
+
+
 2.  Obtain and build ITKtools
 ```
 mkdir PATH/itktools
