@@ -75,6 +75,12 @@ cmake ../src -DITK_DIR=PATH/ITK/ITK-bin/
 make
 ```
 
+or on linux run:
+
+"""
+./install_ITK.sh
+"""
+
 # Elastix
 Image registration is included in WORC through [elastix and transformix](http://elastix.isi.uu.nl/). Download the binaries and,
 similar to ITKtools, place them in the fastr.config.mounts['apps'] path. Check the elastix tool description for the correct
