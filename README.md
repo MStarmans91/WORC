@@ -43,6 +43,12 @@ maximally profit from our toolbox.
 We use the ITKtools toolbox for the conversion between different image types, which is by default embedded in the toolbox.
 As ITKtools requires you to build ITK, you should do this first. PATH should be equal to your fastr.config.mounts['apps'] path.
 
+On Linux, we provide a script for automatic installation. Simply run:
+"""
+./install_ITK.sh
+"""
+
+On Windows/MacOSx, follow the steps below.
 
 1. Obtain the ITK sources, compile and install
 ```
@@ -52,6 +58,16 @@ cd PATH/ITK/ITK-bin/
 cmake -DModule_ITKReview=ON -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF PATH/ITK/ITK-src
 make
 ```
+
+Alternative version:
+```
+git clone https://itk.org/ITK.git
+mkdir ITK-build
+cd ITK-build
+cmake ../ITK
+make
+```
+
 
 2.  Obtain and build ITKtools
 ```
@@ -65,7 +81,7 @@ cmake ../src -DITK_DIR=PATH/ITK/ITK-bin/
 make
 ```
 
-### Elastix
+# Elastix
 Image registration is included in WORC through [elastix and transformix](http://elastix.isi.uu.nl/). Download the binaries and,
 similar to ITKtools, place them in the fastr.config.mounts['apps'] path. Check the elastix tool description for the correct
 subdirectory structure. For example, on Linux, the binaries and libraries should be in "../apps/elastix/4.8/install/"  and
