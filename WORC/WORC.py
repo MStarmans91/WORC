@@ -192,6 +192,10 @@ class WORC(object):
         config['HyperOptimization']['N_iterations'] = '10'
         config['HyperOptimization']['score_threshold'] = '0.02'
 
+        # BUG: the FASTR XNAT plugin can only retreive folders. We therefore need to add the filenames of the resources manually
+        config['FASTR_bug_image'] = 'image.nii.gz'
+        config['FASTR_bug_seg'] = 'mask.nii.gz'
+
         return config
 
     def build(self):
@@ -243,7 +247,6 @@ class WORC(object):
                     # Create nodes to compute features
                     self.network.calcfeatures = dict()
                     self.network.sources_images = dict()
-                    self.network.sources_metadata = dict()
                     self.network.sources_parameters = dict()
                     self.network.sinks_features = dict()
                     self.network.converters_im = dict()
@@ -283,6 +286,9 @@ class WORC(object):
                     if self.semantics:
                         self.network.sources_semantics = dict()
 
+                    if self.metadata:
+                        self.network.sources_metadata = dict()
+
                     # Create label for each modality/image
                     self.modlabels = list()
                     for num, mod in enumerate(image_types):
@@ -295,10 +301,12 @@ class WORC(object):
                         self.modlabels.append(label)
 
                         # Create required sources and sinks
-                        self.network.sources_metadata[label] = self.network.create_source('DicomImageFile', id_='metadata_' + label, nodegroup='input')
                         self.network.sources_parameters[label] = self.network.create_source('ParameterFile', id_='parameters_' + label)
                         self.network.sources_images[label] = self.network.create_source('ITKImageFile', id_='images_' + label, nodegroup='input')
                         self.network.sinks_features[label] = self.network.create_sink('HDF5', id_='features_' + label)
+
+                        if self.metadata:
+                            self.network.sources_metadata[label] = self.network.create_source('DicomImageFile', id_='metadata_' + label, nodegroup='input')
 
                         if self.masks:
                             # Create mask source and convert
@@ -324,8 +332,10 @@ class WORC(object):
                         # Create required links
                         self.network.converters_im[label].inputs['image'] = self.network.sources_images[label].output
                         self.network.calcfeatures[label].inputs['parameters'] = self.network.sources_parameters[label].output
-                        self.network.calcfeatures[label].inputs['metadata'] = self.network.sources_metadata[label].output
                         self.network.calcfeatures[label].inputs['image'] = self.network.converters_im[label].outputs['image']
+
+                        if self.metadata:
+                            self.network.calcfeatures[label].inputs['metadata'] = self.network.sources_metadata[label].output
 
                         if self.semantics:
                             self.network.sources_semantics[label] = self.network.create_source('CSVFile', id_='semantics_' + label)
@@ -419,7 +429,7 @@ class WORC(object):
                     self.network.links_C1[label] = self.network.create_link(self.network.sources_features[label].output, self.network.classify.inputs['features_m' + str(num+1)])
                     self.network.links_C1[label].collapse = 'input'
 
-                if self.configs[num]['General']['PCE']:
+                if self.configs[num]['General']['PCE'] == 'True':
                     # NOTE: PCE Features is currently not probided.
                     # TODO: PCE currently assumes Gaussian feature normalization
                     self.network.PCEnode = self.network.create_node('PCE', memory='64G', id_='PCE')
@@ -475,13 +485,15 @@ class WORC(object):
                     fastr.ioplugins['xnat']
                     # metalink = im_m1.replace('NIFTI','DICOM')
                     im = fastr.ioplugins['xnat'].expand_url(im)
-                    self.images[num] = {v[(v.find('subjects') + 9):v.find('/experiments')]: v + 'image.nii.gz?insecure=true' for k, v in im}
+                    imagename = self.configs[num]['FASTR_bug_image']
+                    self.images[num] = {v[(v.find('subjects') + 9):v.find('/experiments')]: v + imagename + '?insecure=true' for k, v in im}
 
         for num, seg in enumerate(self.segmentations):
             if seg is not None and 'xnat' in seg:
                 fastr.ioplugins['xnat']
                 seg = fastr.ioplugins['xnat'].expand_url(seg)
-                self.segmentations[num] = {v[(v.find('subjects') + 9):v.find('/experiments')]: v + 'mask.nii.gz?insecure=true' for k, v in seg}
+                segname = self.configs[num]['FASTR_bug_seg']
+                self.segmentations[num] = {v[(v.find('subjects') + 9):v.find('/experiments')]: v + segname + '?insecure=true' for k, v in seg}
 
         # BUG: if we have only a file on one modality, e.g. semantics, what to do with others? You currently need to provide empty files.
         for num, label in enumerate(self.modlabels):

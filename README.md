@@ -26,7 +26,7 @@ Alternatively, you can generate the documentation by checking out the master bra
 
 The documentation can then be viewed in a browser by opening `PACKAGE_ROOT\build\sphinx\html\index.html`.
 
-### Installation
+# Installation
 
 WORC has currently only been tested on Unix with Python 2.7.
 The package can be installed through pip:
@@ -39,7 +39,7 @@ More information can be found at [the FASTR website](http://fastr.readthedocs.io
 Several tools have some prerequisites which are listed below. We highly recommend you to install these to
 maximally profit from our toolbox.
 
-# ITK and ITK tools
+### ITK and ITK tools
 We use the ITKtools toolbox for the conversion between different image types, which is by default embedded in the toolbox.
 As ITKtools requires you to build ITK, you should do this first. PATH should be equal to your fastr.config.mounts['apps'] path.
 
@@ -65,13 +65,13 @@ cmake ../src -DITK_DIR=PATH/ITK/ITK-bin/
 make
 ```
 
-# Elastix
+### Elastix
 Image registration is included in WORC through [elastix and transformix](http://elastix.isi.uu.nl/). Download the binaries and,
 similar to ITKtools, place them in the fastr.config.mounts['apps'] path. Check the elastix tool description for the correct
 subdirectory structure. For example, on Linux, the binaries and libraries should be in "../apps/elastix/4.8/install/"  and
 "../apps/elastix/4.8/install/lib" respectively.
 
-# XNAT
+### XNAT
 We use the XNATpy package to connect the toolbox to XNAT online database platforms. We advise you to specify
 your account settings in a .netrc file when using this feature,  such that you do not need to input them on every request:
 
@@ -82,28 +82,29 @@ echo "machine images.xnat.org
 chmod 600 ~/.netrc
 ```
 
-# FASTR
-If you are using FASTR < 1.3.0, you need to manually add the WORC tools, datatypes and mounts to your FASTR configuration (~/.fastr/config.py). Check the fastrconfig/config.py in this repository for the necessary additions.
+### FASTR
+If you are using FASTR < 1.3.0, you need to manually add the WORC tools, datatypes and mounts to your FASTR configuration (~/.fastr/config.py). Check the WORC/fastrconfig/config.py file for the necessary additions.
 
 ### 3rd-party packages used in WORC:
 
  - FASTR (Workflow design and building)
- - PREDICT(Feature extractor and classifiers)
  - xnat (Collecting data from XNAT)
  - SimpleITK (Image loading and preprocessing)
  - Pyradiomics (Feature extractor)
 
+Also, the PREDICT(Feature extractor and classifiers) package is used, which currently needs to be installed manually from the PREDICT Github repository.
+
 See also the [requirements file](requirements.txt).
 
-### WIP
+## WIP
 - We are working on improving the documentation.
 - We are working on the addition of different classifiers.
 - Examples and unit tests will be added.
 
-### License
+## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
 
-### Contact
+## Contact
 We are happy to help you with any questions. Please contact us on the [WORC email list](https://groups.google.com/forum/#!forum/worc-users).
 
 We welcome contributions to WORC. We will soon make some guidelines. For the moment, converting your toolbox into FASTR

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to WORC’s documentation! &#8212; WORC 1.0.0rc1 documentation</title>
+    <title>Welcome to WORC’s documentation! &#8212; WORC rc1.0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0.0rc1',
+        VERSION:     'rc1.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -43,6 +43,7 @@
             
   <div class="section" id="welcome-to-worc-s-documentation">
 <h1>Welcome to WORC&#8217;s documentation!<a class="headerlink" href="#welcome-to-worc-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://travis-ci.com/MStarmans91/WORC"><img alt="Build Status" src="https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&amp;branch=master" /></a></p>
 </div>
 <div class="section" id="worc-v1-0-0">
 <h1>WORC v1.0.0<a class="headerlink" href="#worc-v1-0-0" title="Permalink to this headline">¶</a></h1>
@@ -57,6 +58,13 @@ to facilitate and stimulate collaboration and comparison of different
 Radiomics approaches. By combining this in a single framework, we hope
 to find a universal Radiomics strategy that can address various
 problems.</p>
+</div>
+<div class="section" id="disclaimer">
+<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h2>
+<p>This package is under heavy development. We try to thoroughly test and
+evaluate every new build and function, but bugs can off course still
+occur. Please contact us through the channels below if you find any and
+we will try to fix them as soon as possible.</p>
 <div class="section" id="documentation">
 <h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
 <p>For more information, see the sphinx generated documentation available
@@ -69,25 +77,21 @@ master branch and running from the root directory:</p>
 <p>The documentation can then be viewed in a browser by opening
 <code class="docutils literal"><span class="pre">PACKAGE_ROOT\build\sphinx\html\index.html</span></code>.</p>
 </div>
+</div>
+</div>
 <div class="section" id="installation">
-<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <p>WORC has currently only been tested on Unix with Python 2.7. The package
 can be installed through pip:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">WORC</span>
 </pre></div>
 </div>
 <p>The installation will create a FASTR configuration file in the
-~/.fastr/config.d folder. Please inspect the mounts and change if neccesary.
-More information can be found at <a class="reference external" href="http://fastr.readthedocs.io/en/stable/static/file_description.html#config-file">the
-FASTR
+~/.fastr/config.d folder. Please inspect the mounts and change if
+neccesary. More information can be found at <a class="reference external" href="http://fastr.readthedocs.io/en/stable/static/file_description.html#config-file">the FASTR
 website</a></p>
 <p>Several tools have some prerequisites which are listed below. We highly
 recommend you to install these to maximally profit from our toolbox.</p>
-</div>
-</div>
-</div>
-<div class="section" id="itk-and-itk-tools">
-<h1>ITK and ITK tools<a class="headerlink" href="#itk-and-itk-tools" title="Permalink to this headline">¶</a></h1>
 <p>We use the ITKtools toolbox for the conversion between different image
 types, which is by default embedded in the toolbox. As ITKtools requires
 you to build ITK, you should do this first. PATH should be equal to your
@@ -115,9 +119,6 @@ make
 </div>
 </li>
 </ol>
-</div>
-<div class="section" id="elastix">
-<h1>Elastix<a class="headerlink" href="#elastix" title="Permalink to this headline">¶</a></h1>
 <p>Image registration is included in WORC through <a class="reference external" href="http://elastix.isi.uu.nl/">elastix and
 transformix</a>. Download the binaries and,
 similar to ITKtools, place them in the fastr.config.mounts[&#8216;apps&#8217;] path.
@@ -125,9 +126,6 @@ Check the elastix tool description for the correct subdirectory
 structure. For example, on Linux, the binaries and libraries should be
 in &#8221;../apps/elastix/4.8/install/&#8221; and &#8221;../apps/elastix/4.8/install/lib&#8221;
 respectively.</p>
-</div>
-<div class="section" id="xnat">
-<h1>XNAT<a class="headerlink" href="#xnat" title="Permalink to this headline">¶</a></h1>
 <p>We use the XNATpy package to connect the toolbox to XNAT online database
 platforms. We advise you to specify your account settings in a .netrc
 file when using this feature, such that you do not need to input them on
@@ -138,27 +136,41 @@ every request:</p>
 <span class="n">chmod</span> <span class="mi">600</span> <span class="o">~/.</span><span class="n">netrc</span>
 </pre></div>
 </div>
+<p>If you are using FASTR &lt; 1.3.0, you need to manually add the WORC tools,
+datatypes and mounts to your FASTR configuration (~/.fastr/config.py).
+Check the WORC/fastrconfig/config.py file for the necessary additions.</p>
 <ul class="simple">
 <li>FASTR (Workflow design and building)</li>
-<li>PREDICT(Feature extractor and classifiers)</li>
 <li>xnat (Collecting data from XNAT)</li>
 <li>SimpleITK (Image loading and preprocessing)</li>
 <li>Pyradiomics (Feature extractor)</li>
 </ul>
+<p>Also, the PREDICT(Feature extractor and classifiers) package is used,
+which currently needs to be installed manually from the PREDICT Github
+repository.</p>
 <p>See also the <a class="reference external" href="requirements.txt">requirements file</a>.</p>
+<div class="section" id="wip">
+<h2>WIP<a class="headerlink" href="#wip" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>We are working on improving the documentation.</li>
 <li>We are working on the addition of different classifiers.</li>
 <li>Examples and unit tests will be added.</li>
 </ul>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
 <p>This package is covered by the open source <a class="reference external" href="APACHE-LICENSE-2.0">APACHE 2.0
 License</a>.</p>
+</div>
+<div class="section" id="contact">
+<h2>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h2>
 <p>We are happy to help you with any questions. Please contact us on the
 <a class="reference external" href="https://groups.google.com/forum/#!forum/worc-users">WORC email
 list</a>.</p>
 <p>We welcome contributions to WORC. We will soon make some guidelines. For
 the moment, converting your toolbox into FASTR will be satisfactory.</p>
 <div class="toctree-wrapper compound">
+</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -180,16 +192,19 @@ the moment, converting your toolbox into FASTR will be satisfactory.</p>
   <ul>
 <li><a class="reference internal" href="#">Welcome to WORC&#8217;s documentation!</a></li>
 <li><a class="reference internal" href="#worc-v1-0-0">WORC v1.0.0</a><ul>
-<li><a class="reference internal" href="#workflow-for-optimal-radiomics-classification">Workflow for Optimal Radiomics Classification</a><ul>
+<li><a class="reference internal" href="#workflow-for-optimal-radiomics-classification">Workflow for Optimal Radiomics Classification</a></li>
+<li><a class="reference internal" href="#disclaimer">Disclaimer</a><ul>
 <li><a class="reference internal" href="#documentation">Documentation</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#itk-and-itk-tools">ITK and ITK tools</a></li>
-<li><a class="reference internal" href="#elastix">Elastix</a></li>
-<li><a class="reference internal" href="#xnat">XNAT</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#wip">WIP</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#contact">Contact</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 <div class="relations">
