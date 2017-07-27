@@ -1,0 +1,171 @@
+<tool id="Elastix" name="Elastix Registration" version="0.2">
+  <description>A wrapper around elastix. elastix is open source software, based on the well-known Insight Segmentation
+    and Registration Toolkit (ITK). The software consists of a collection of algorithms that are commonly used to solve
+    (medical) image registration problems. The modular design of elastix allows the user to quickly configure, test, and
+    compare different registration methods for a specific application. A command-line interface enables automated
+    processing of large numbers of data sets, by means of scripting.
+  </description>
+  <tags>
+    <tag>registration</tag>
+  </tags>
+  <authors>
+    <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="4.8" url="http://elastix.isi.uu.nl/">
+    <targets>
+      <target os="windows" arch="*" bin="elastix.exe">
+        <paths>
+          <path type="bin" value="vfs://apps/elastix/4.8/install/" />
+          <path type="lib" value="vfs://apps/elastix/4.8/install/lib" />
+        </paths>
+      </target>
+      <target os="linux" arch="*" modules="elastix/4.8" bin="elastix">
+        <paths>
+          <path type="bin" value="vfs://apps/elastix/install/" />
+          <path type="lib" value="vfs://apps/elastix/install/lib" />
+        </paths>
+      </target>
+      <target os="darwin" arch="*" modules="elastix/4.8" bin="elastix">
+        <paths>
+          <path type="bin" value="vfs://apps/elastix/4.8/install/" />
+          <path type="lib" value="vfs://apps/elastix/4.8/install/lib" />
+        </paths>
+      </target>
+    </targets>
+    <description>
+      elastix version: 4.800
+
+      elastix registers a moving image to a fixed image.
+      The registration-process is specified in the parameter file.
+
+      Call elastix from the command line with mandatory arguments:
+      -f fixed image
+      -m moving image
+      -out output directory
+      -p parameter file, elastix handles 1 or more "-p"
+
+      Optional extra commands:
+      -fMask mask for fixed image
+      -mMask mask for moving image
+      -t0 parameter file for initial transform
+      -priority set the process priority to high or belownormal (Windows only)
+      -threads set the maximum number of threads of elastix
+
+      The parameter-file must contain all the information necessary for elastix to run properly. That includes which
+      metric to use, which optimizer, which transform, etc.
+      It must also contain information specific for the metric, optimizer, transform, ...
+      For a usable parameter-file, see the website.
+
+      Need further help? Check the website http://elastix.isi.uu.nl, or mail elastix.support@gmail.com.
+    </description>
+    <license>
+      Copyright (c) 2004-2013 University Medical Center Utrecht
+      All rights reserved.
+
+      License:
+
+      Redistribution and use in source and binary forms, with or without
+      modification, are permitted provided that the following conditions are met:
+
+      * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+
+      * Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+
+      * Neither the name of the University Medical Center Utrecht nor the names of
+      its contributors may be used to endorse or promote products derived from
+      this software without specific prior written permission.
+
+      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+      ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+      DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+      ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+      (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+      LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+      ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+      (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+      SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    </license>
+    <authors>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="fixed_image" name="fixed image" datatype="ITKImageFile" prefix="-f" cardinality="1-*" repeat_prefix="true"
+             required="true"/>
+      <input id="moving_image" name="moving image" datatype="ITKImageFile" prefix="-m" cardinality="as:fixed_image"
+             repeat_prefix="true" required="true"/>
+      <input id="parameters" name="parameter files" datatype="ElastixParameterFile" prefix="-p" cardinality="1-*"
+             repeat_prefix="true" required="true"/>
+      <input id="fixed_mask" name="fixed mask" datatype="ITKImageFile" prefix="-fMask#" cardinality="as:fixed_image"
+             repeat_prefix="true" required="false"/>
+      <input id="moving_mask" name="moving mask" datatype="ITKImageFile" prefix="-mMask#" cardinality="as:moving_image"
+             repeat_prefix="true" required="false"/>
+      <input id="initial_transform" name="initial transform file" datatype="ElastixTransformFile" prefix="-t0"
+             cardinality="1" required="false"/>
+      <input id="priority" name="priority" prefix="-priority" cardinality="1" required="false">
+        <enum>high</enum>
+        <enum>abovenormal</enum>
+        <enum>normal</enum>
+        <enum>belownormal</enum>
+        <enum>idle</enum>
+      </input>
+      <input id="threads" name="threads" datatype="Int" prefix="-threads" cardinality="1" required="false"/>
+    </inputs>
+    <outputs>
+      <output id="directory" name="output directory" datatype="Directory" action="ensure" prefix="-out"
+              cardinality="1"/>
+      <output id="transform" name="transform parameters" datatype="ElastixTransformFile" cardinality="as:parameters"
+              automatic="true" location="{output.directory[0]}/TransformParameters.{special.cardinality}.txt"
+              method="path"/>
+      <output id="log_file" name="elastix log" datatype="ElastixLogFile" cardinality="1" automatic="true"
+              location="{output.directory[0]}/elastix.log" method="path"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <help>
+    RTFM! =]
+  </help>
+  <cite>
+    @article{KleinStaring:2010,
+    author = "{S. Klein AND M. Staring AND K. Murphy AND M.A. Viergever AND J.P.W. Pluim}",
+    title = "{elastix: a toolbox for intensity-based medical image registration}",
+    journal = "{IEEE Transactions on Medical Imaging}",
+    volume = "{29}",
+    number = "{1}",
+    pages = "{196 - 205}",
+    month = "{January}",
+    year = "{2010}",
+    }
+  </cite>
+  <tests>
+    <test>
+      <input>
+        <fixed>slice047.mhd</fixed>
+        <moving>slice091.mhd</moving>
+        <parameters>parAslice.txt</parameters>
+        <parameters>parBslice.txt</parameters>
+      </input>
+      <command>{bin}</command>
+      <command>-f</command>
+      <command>{input.fixed[0]}</command>
+      <command>-m</command>
+      <command>{input.moving[0]}</command>
+      <command>-p</command>
+      <command>{input.parameters[0]}</command>
+      <command>-p</command>
+      <command>{input.parameters[1]}</command>
+      <command>-out</command>
+      <command>{output.directory[0]}</command>
+      <output>
+        <transform>TransformParameters.0.txt</transform>
+        <transform>TransformParameters.1.txt</transform>
+      </output>
+    </test>
+  </tests>
+</tool>

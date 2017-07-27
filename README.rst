@@ -28,8 +28,7 @@ we will try to fix them as soon as possible.
 Documentation
 ~~~~~~~~~~~~~
 
-For more information, see the sphinx generated documentation available
-`here <http://worc.readthedocs.io/>`__.
+For more information, see our Github Wiki.
 
 Alternatively, you can generate the documentation by checking out the
 master branch and running from the root directory:

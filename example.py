@@ -5,8 +5,8 @@ network = WORC.WORC('example')
 
 # Below are the minimal inputs: you can also use features instead of images and segmentations.
 # You need to change these to your sources: check the FASTR documentation.
-network.images.append('xnat://xnat.example.nl/search?project=projectid&subjects=subjects[0-9][0-9][0-9]&experiments=*_LIVER&scans=T2W&resources=NIFTI&insecure=true')
-network.segmentations.append('vfsregex://mount/somedir/.*.nii')
+network.images.append('xnat://xnat.example.nl/search?project=projectid&subjects=subject[0-9][0-9][0-9]&experiments=*_LIVER&scans=T2W&resources=NIFTI&insecure=true')
+network.segmentations.append('vfsregex://exmaplemount/somedir/.*.nii')
 network.labels.append('vfs://mount/somedir/labels.txt')
 
 # Default classifier is 3rd order polynomial SVM

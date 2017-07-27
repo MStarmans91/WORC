@@ -5,3 +5,5 @@ WORC
    :maxdepth: 4
 
    WORC
+   example
+   setup

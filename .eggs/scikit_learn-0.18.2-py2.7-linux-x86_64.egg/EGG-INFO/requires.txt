@@ -1,0 +1,4 @@
+
+[alldeps]
+numpy >= 1.6.1
+scipy >= 0.9

@@ -1,0 +1,104 @@
+<tool id="PxThresholdImage" name="ITKTools Threshold Image" version="0.1">
+  <description>A wrapper around ITK Tools, as set of simple command line tools for image analysis.</description>
+  <authors>
+    <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.3.0" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="windows" arch="*" paths="vfs://apps/itktools/0.3.0/install/bin" bin="pxthresholdimage.exe"/>
+      <target os="linux" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxthresholdimage"/>
+      <target os="darwin" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxthresholdimage"/>
+    </targets>
+    <description>
+      ITKTools v0.2.2
+      This program thresholds an image.
+      Usage:
+      pxthresholdimage
+      -in inputFilename
+      [-out] outputFilename; default in + THRESHOLDED.mhd
+      [-mask] maskFilename, optional for "OtsuThreshold", required for "KappaSigmaThreshold"
+      [-m] method, choose one of
+      {Threshold, OtsuThreshold, OtsuMultipleThreshold,
+      AdaptiveOtsuThreshold, RobustAutomaticThreshold,
+      KappaSigmaThreshold, MinErrorThreshold }
+      default "Threshold"
+      [-t1] lower threshold, for "Threshold", default -infinity
+      [-t2] upper threshold, for "Threshold", default 1.0
+      [-inside] inside value, default 0
+      [-outside] outside value, default 1
+      [-t] number of thresholds, for "OtsuMultipleThreshold", default 1
+      [-b] number of histogram bins, for "OtsuThreshold", "MinErrorThreshold"
+      and "AdaptiveOtsuThreshold", default 128
+      [-r] radius, for "AdaptiveOtsuThreshold", default 8
+      [-cp] number of control points, for "AdaptiveOtsuThreshold", default 50
+      [-l] number of levels, for "AdaptiveOtsuThreshold", default 3
+      [-s] number of samples, for "AdaptiveOtsuThreshold", default 5000
+      [-o] spline order, for "AdaptiveOtsuThreshold", default 3
+      [-p] power, for "RobustAutomaticThreshold", default 1
+      [-sigma] sigma factor, for "KappaSigmaThreshold", default 2
+      [-iter] number of iterations, for "KappaSigmaThreshold", default 2
+      [-mv] mask value, for "KappaSigmaThreshold", default 1
+      [-mt] mixture type (1 - Gaussians, 2 - Poissons), for "MinErrorThreshold", default 1
+      [-z] compression flag; if provided, the output image is compressed
+    </description>
+    <license/>
+    <authors>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="image" name="Input Image" datatype="ITKImageFile" prefix="-in" cardinality="1" required="true"/>
+      <input id="method" name="Threshold Method" prefix="-m" cardinality="1" required="false">
+        <enum>Threshold</enum>
+        <enum>OtsuThreshold</enum>
+        <enum>OtsuMultipleThreshold</enum>
+        <enum>AdaptiveOtsuThreshold</enum>
+        <enum>RobustAutomaticThreshold</enum>
+        <enum>KappaSigmaThreshold</enum>
+        <enum>MinErrorThreshold</enum>
+      </input>
+      <input id="mask" name="Mask Image" datatype="ITKImageFile" prefix="-mask" cardinality="1" required="false"/>
+      <input id="lower_threshold" name="Lower Threshold" datatype="Float" prefix="-t1" cardinality="1" required="false"/>
+      <input id="upper_threshold" name="Upper Threshold" datatype="Float" prefix="-t2" cardinality="1" required="false"/>
+      <input id="inside_value" name="Inside Value" datatype="Float" prefix="-inside" cardinality="1" required="false"/>
+      <input id="outside_value" name="Outside Value" datatype="Float" prefix="-outside" cardinality="1" required="false"/>
+      <input id="number_of_thresholds" name="Number of Thresholds" datatype="UnsignedInt" prefix="-t" cardinality="1"
+             required="false"/>
+      <input id="number_of_histbins" name="Number of Histogram Bins" datatype="UnsignedInt" prefix="-b" cardinality="1"
+             required="false"/>
+      <input id="radius" name="Radius for AdaptiveOtsuThreshold" datatype="UnsignedInt" prefix="-r" cardinality="1"
+             required="false"/>
+      <input id="number_of_controlpoints" name="Number of Control Points" datatype="UnsignedInt" prefix="-cp" cardinality="1"
+             required="false"/>
+      <input id="number_of_levels" name="Number of Levels" datatype="UnsignedInt" prefix="-l" cardinality="1" required="false"/>
+      <input id="number_of_samples" name="Number of Levels" datatype="UnsignedInt" prefix="-s" cardinality="1" required="false"/>
+      <input id="spline_order" name="Spline Order" datatype="UnsignedInt" prefix="-o" cardinality="1" required="false"/>
+      <input id="power" name="Power for RobustAutomaticThreshold" datatype="Float" prefix="-p" cardinality="1"
+             required="false"/>
+      <input id="sigma" name="Sigma factor for KappaSigmaThreshold" datatype="Float" prefix="-sigma" cardinality="1"
+             required="false"/>
+      <input id="number_of_iterations" name="Number of Iterations" datatype="UnsignedInt" prefix="-iter" cardinality="1"
+             required="false"/>
+      <input id="mask_value" name="Mask Value" datatype="UnsignedInt" prefix="-mv" cardinality="1" required="false"/>
+      <input id="mixture_type" name="Mixture Type" prefix="-r" cardinality="1" required="false">
+        <enum>1</enum>
+        <enum>2</enum>
+      </input>
+      <input id="compression_flag" name="Compression Flag" datatype="Boolean" prefix="-z" cardinality="1" required="false"/>
+    </inputs>
+    <outputs>
+      <output id="image" name="Output Image" datatype="ITKImageFile" prefix="-out" cardinality="1"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references/>
+</tool>

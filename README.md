@@ -18,7 +18,7 @@ them as soon as possible.
 
 ### Documentation
 
-For more information, see the sphinx generated documentation available [here](http://worc.readthedocs.io/).
+For more information, see our Github Wiki.
 
 Alternatively, you can generate the documentation by checking out the master branch and running from the root directory:
 
@@ -33,7 +33,7 @@ The package can be installed through pip:
 
       pip install WORC
 
-The installation will create a FASTR configuration file in the ~/.fastr/config.d folder. Please inspect the mounts and change if neccesary.
+The installation will create a FASTR configuration file in the ~/.fastr/config.d folder. Please inspect the mounts and change them if neccesary.
 More information can be found at [the FASTR website](http://fastr.readthedocs.io/en/stable/static/file_description.html#config-file)
 
 Several tools have some prerequisites which are listed below. We highly recommend you to install these to
@@ -81,7 +81,7 @@ cmake ../src -DITK_DIR=PATH/ITK/ITK-bin/
 make
 ```
 
-# Elastix
+### Elastix
 Image registration is included in WORC through [elastix and transformix](http://elastix.isi.uu.nl/). Download the binaries and,
 similar to ITKtools, place them in the fastr.config.mounts['apps'] path. Check the elastix tool description for the correct
 subdirectory structure. For example, on Linux, the binaries and libraries should be in "../apps/elastix/4.8/install/"  and
@@ -99,7 +99,22 @@ chmod 600 ~/.netrc
 ```
 
 ### FASTR
-If you are using FASTR < 1.3.0, you need to manually add the WORC tools, datatypes and mounts to your FASTR configuration (~/.fastr/config.py). Check the WORC/fastrconfig/config.py file for the necessary additions.
+If you are using FASTR < 1.3.0, you need to manually add the WORC tools, datatypes and mounts to your FASTR configuration (~/.fastr/config.py). This concerns the following additions:
+
+```
+# Add the WORC FASTR tools and type paths
+packagedir = site.getsitepackages()[0]
+tools_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_tools')] + tools_path
+types_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_types')] + types_path
+
+# Mounts accessible to fastr virtual file system
+mounts['worc_example_data'] = os.path.join(packagedir, 'WORC', 'exampledata')
+mounts['apps'] = os.path.expanduser(os.path.join('~', 'apps'))
+mounts['output'] = os.path.expanduser(os.path.join('~', 'WORC', 'output'))
+mounts['test'] = os.path.join(packagedir, 'WORC', 'resources', 'fastr_tests')
+```
+
+Note that the Python site package does not work properly in virtual environments. You must then manually locate the packagedir.
 
 ### 3rd-party packages used in WORC:
 
@@ -112,10 +127,14 @@ Also, the PREDICT(Feature extractor and classifiers) package is used, which curr
 
 See also the [requirements file](requirements.txt).
 
+## Start
+We provide an example script for you to get started with. Make sure you input your own data as the sources. Also, check out the unit tests of several tools in the WORC/resources/fastr_tests directory.
+
 ## WIP
 - We are working on improving the documentation.
 - We are working on the addition of different classifiers.
 - Examples and unit tests will be added.
+- We have some issues with installing numpy and scipy in the requirements. There is now a workaround implemented.
 
 ## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).

@@ -1,0 +1,13 @@
+ObjectType = Image
+NDims = 2
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = False
+TransformMatrix = 1 0 0 1
+Offset = -67.6484 -265.368
+CenterOfRotation = 0 0
+ElementSpacing = 0.703125 0.703125
+DimSize = 256 256
+AnatomicalOrientation = ??
+ElementType = MET_SHORT
+ElementDataFile = slice091.raw

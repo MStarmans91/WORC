@@ -36,6 +36,7 @@ with open('test_requirements.txt', 'r') as fh:
 with open('requirements-setup.txt', 'r') as fp:
     setup_requirements = list(filter(bool, (line.strip() for line in fp)))
 
+
 def scan_dir(path, prefix=None):
     if prefix is None:
         prefix = path
@@ -87,7 +88,8 @@ class NoseTestCommand(TestCommand):
         # Run nose ensuring that argv simulates running nosetests directly
         import nose
         nose.run_exit(argv=['nosetests'])
-        
+
+
 class MyInstall(install):
     def run(self):
         try:
@@ -106,7 +108,7 @@ class MyInstall(install):
                 stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
 
             # Install pyradiomics
-            commands = 'git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..;'
+            commands = 'git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r pyradiomics;'
             print commands
             proc = subprocess.Popen(commands,
                                     shell=True,
@@ -121,6 +123,7 @@ class MyInstall(install):
             exit(1)
         else:
             install.run(self)
+
 
 setup(
     name='WORC',
@@ -164,5 +167,5 @@ setup(
     test_suite='nose.collector',
     cmdclass={'test': NoseTestCommand, 'install': MyInstall},
     entry_points=entry_points,
-
+    setup_requires=_requires
 )

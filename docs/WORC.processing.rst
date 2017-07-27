@@ -28,14 +28,6 @@ WORC.processing.segstatistics module
     :undoc-members:
     :show-inheritance:
 
-WORC.processing.xnattocsv module
---------------------------------
-
-.. automodule:: WORC.processing.xnattocsv
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------
