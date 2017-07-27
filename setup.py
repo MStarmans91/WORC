@@ -96,16 +96,15 @@ class MyInstall(install):
             # note cwd - this makes the current directory
             # the one with the Makefile.
             # subprocess.call(['pip install -r requirements-setup.txt'])
-            for i in setup_requirements:
-                regcommand = ('pip install ' + i)
-                print regcommand
-                proc = subprocess.Popen(regcommand,
-                                        shell=True,
-                                        stdin=subprocess.PIPE,
-                                        stdout=subprocess.PIPE,
-                                        stderr=subprocess.STDOUT,
-                                        )
-                stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
+            regcommand = 'pip install -r requirements.txt'
+            print regcommand
+            proc = subprocess.Popen(regcommand,
+                                    shell=True,
+                                    stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.STDOUT,
+                                    )
+            stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
 
             # Install pyradiomics
             commands = 'git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r pyradiomics;'
