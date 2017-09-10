@@ -13,12 +13,11 @@ we hope to find a universal Radiomics strategy that can address various problems
 
 ## Disclaimer
 This package is under heavy development. We try to thoroughly test and evaluate every new build and function, but
-bugs can off course still occur. Please contact us through the channels below if you find any and we will try to fix
-them as soon as possible.
+bugs can off course still occur. Please create an issue on Github or contact us through the channels below if you find any. We will try to fix them as soon as possible.
 
 ### Documentation
 
-For more information, see our Github Wiki.
+More detailed information can be found in the Wiki on this Github repository.
 
 Alternatively, you can generate the documentation by checking out the master branch and running from the root directory:
 
@@ -29,9 +28,9 @@ The documentation can then be viewed in a browser by opening `PACKAGE_ROOT\build
 # Installation
 
 WORC has currently only been tested on Unix with Python 2.7.
-The package can be installed through pip:
+The package can be installed by cloning the repository and executing:
 
-      pip install WORC
+      python setup.py install
 
 The installation will create a FASTR configuration file in the ~/.fastr/config.d folder. Please inspect the mounts and change them if neccesary.
 More information can be found at [the FASTR website](http://fastr.readthedocs.io/en/stable/static/file_description.html#config-file)
@@ -99,9 +98,13 @@ chmod 600 ~/.netrc
 ```
 
 ### FASTR
-If you are using FASTR < 1.3.0, you need to manually add the WORC tools, datatypes and mounts to your FASTR configuration (~/.fastr/config.py). This concerns the following additions:
+If you are using FASTR < 1.3.0, you need to manually add the WORC tools, datatypes and mounts to your FASTR configuration (~/.fastr/config.py). The mounts are used by WORC to look for input data, external applications such as ITK tools and save output to. The tools and types path need to be expended to add those from WORC to FASTR.
+
+This concerns the following additions:
 
 ```
+import site
+
 # Add the WORC FASTR tools and type paths
 packagedir = site.getsitepackages()[0]
 tools_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_tools')] + tools_path
@@ -114,16 +117,16 @@ mounts['output'] = os.path.expanduser(os.path.join('~', 'WORC', 'output'))
 mounts['test'] = os.path.join(packagedir, 'WORC', 'resources', 'fastr_tests')
 ```
 
-Note that the Python site package does not work properly in virtual environments. You must then manually locate the packagedir.
+Note that the Python site package does not work properly in virtual environments. You must then manually locate the packagedir, which on Ubuntu is probably located at \usr\local\lib\python2.7\site-packages.
 
 ### 3rd-party packages used in WORC:
 
  - FASTR (Workflow design and building)
- - xnat (Collecting data from XNAT)
+ - xnatpy (Collecting data from XNAT)
  - SimpleITK (Image loading and preprocessing)
  - Pyradiomics (Feature extractor)
 
-Also, the PREDICT(Feature extractor and classifiers) package is used, which currently needs to be installed manually from the PREDICT Github repository.
+Also, the PREDICT(Feature extractor and classification) package is used, which currently needs to be installed manually from the [PREDICT Github repository](https://github.com/Svdvoort/PREDICTFastr).
 
 See also the [requirements file](requirements.txt).
 
@@ -131,9 +134,10 @@ See also the [requirements file](requirements.txt).
 We provide an example script for you to get started with. Make sure you input your own data as the sources. Also, check out the unit tests of several tools in the WORC/resources/fastr_tests directory.
 
 ## WIP
-- We are working on improving the documentation.
+- WORC and PREDICT will be uploaded to pip soon.
+- We are working on improving the documentation with a readthedocs.io.
 - We are working on the addition of different classifiers.
-- Examples and unit tests will be added.
+- Examples on open source data and unit tests will be added in the near future.
 - We have some issues with installing numpy and scipy in the requirements. There is now a workaround implemented.
 
 ## License
@@ -142,5 +146,4 @@ This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2
 ## Contact
 We are happy to help you with any questions. Please contact us on the [WORC email list](https://groups.google.com/forum/#!forum/worc-users).
 
-We welcome contributions to WORC. We will soon make some guidelines. For the moment, converting your toolbox into FASTR
-will be satisfactory.
+We welcome contributions to WORC. We will soon make some guidelines. For the moment, converting your toolbox into a tool wrapper for FASTR will be satisfactory.
