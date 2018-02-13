@@ -8,6 +8,7 @@ Subpackages
 
     WORC.IOparser
     WORC.processing
+    WORC.tools
 
 Submodules
 ----------

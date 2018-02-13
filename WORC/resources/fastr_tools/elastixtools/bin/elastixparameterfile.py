@@ -310,8 +310,8 @@ if __name__ == '__main__':
             print('Set "{}" to {}'.format(key, value))
 
     params.update(substitutions)
-    
+
     if VERBOSE:
         print('Writing result to {}'.format(output_file))
-    
+
     params.write(output_file)

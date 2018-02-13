@@ -19,11 +19,12 @@
   <repository />
   <interface>
     <inputs>
-        <input id="features_m1" name="Input feature files of first modality" datatype="HDF5" prefix="--feat_m1" cardinality="1" repeat_prefix="false" required="true" />
-        <input id="features_m2" name="Input feature files of first modality" datatype="HDF5" prefix="--feat_m2" cardinality="as:features_m1" repeat_prefix="false" required="false" />
-        <input id="features_m3" name="Input feature files of third modality" datatype="HDF5" prefix="--feat_m3" cardinality="as:features_m1" repeat_prefix="false" required="false" />
-        <input id="patientclass" name="patientclass" datatype="PatientInfoFile" prefix="--pc" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="features_train" name="Input feature files of first modality" datatype="HDF5" prefix="--feat_train" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="features_test" name="Input feature files of first modality" datatype="HDF5" prefix="--feat_test" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="patientclass_train" name="patientclass" datatype="PatientInfoFile" prefix="--pc_train" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="patientclass_test" name="patientclass" datatype="PatientInfoFile" prefix="--pc_test" cardinality="1" repeat_prefix="false" required="false" />
         <input id="config" name="config" datatype="ParameterFile" prefix="--conf" cardinality="1-*" repeat_prefix="false" required="true" />
+        <input id="fixedsplits" name="File containing fixed splits for cross validation" datatype="XlsxFile" prefix="--fs" cardinality="1" repeat_prefix="false" required="false" />
      </inputs>
     <outputs>
       <output id="classification" name="Radiomics classification" datatype="HDF5" cardinality="as:config" nospace="False" order="0" prefix="--class" required="true"/>

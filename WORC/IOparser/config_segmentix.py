@@ -45,4 +45,10 @@ def load_config(config_file_path):
     settings_dict['Segmentix']['radius'] =\
         int(settings['Segmentix']['segradius'])
 
+    settings_dict['Segmentix']['N_blobs'] =\
+        int(settings['Segmentix']['N_blobs'])
+
+    settings_dict['Segmentix']['fillholes'] =\
+        settings['Segmentix'].getboolean('fillholes')
+
     return settings_dict

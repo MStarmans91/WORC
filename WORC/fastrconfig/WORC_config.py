@@ -17,10 +17,20 @@
 
 import site
 import os
+import sys
 
+
+# Get directory in which packages are installed
+try:
+    packagedir = site.getsitepackages()[0]
+except AttributeError:
+    # Inside virtualenvironment, so getsitepackages doesnt work.
+    paths = sys.path
+    for p in paths:
+        if os.path.isdir(p) and os.path.basename(p) == 'site-packages':
+            packagedir = p
 
 # Add the WORC FASTR tools and type paths
-packagedir = site.getsitepackages()[0]
 tools_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_tools')] + tools_path
 types_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_types')] + types_path
 
@@ -29,3 +39,7 @@ mounts['worc_example_data'] = os.path.join(packagedir, 'WORC', 'exampledata')
 mounts['apps'] = os.path.expanduser(os.path.join('~', 'apps'))
 mounts['output'] = os.path.expanduser(os.path.join('~', 'WORC', 'output'))
 mounts['test'] = os.path.join(packagedir, 'WORC', 'resources', 'fastr_tests')
+
+# The ITKFile type requires a preferred type when no specification is given.
+# We will set it to Nifti, but you may change this.
+preferred_types += ["NiftiImageFileCompressed"]

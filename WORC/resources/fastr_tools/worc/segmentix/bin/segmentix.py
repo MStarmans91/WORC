@@ -25,6 +25,41 @@ import WORC.IOparser.config_segmentix as config_io
 
 def segmentix(parameters=None, image=None, segmentation=None,
               output=None, metadata_file=None, mask=None):
+        '''
+        Segmentix is a mixture of processing methods that can be applied to
+        agument a segmentation. Examples include selecting only the largest blob
+        and the application of morphological operations.
+
+        Parameters
+        ----------
+        parameters: string, mandatory
+                Contains the path referring to a .ini file in which the
+                parameters to be used are specified. See the Github Wiki
+                for more details on the format and content.
+
+        image: string, optional
+                Note implemented yet! Image to be used for automatic segmentation.
+
+        segmentation: string, currently mandatory
+                path referring to the input segmentation file. Should be a
+                format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+                .raw, .tiff, .nrrd.
+
+        output: string, mandatory
+                path referring to the output segmentation file. Should be a
+                format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+                .raw, .tiff, .nrrd.
+
+        metadata_file: string, optional
+                Note implemented yet! Path referring to the .dcm from which
+                fields can be used as metadata for segmentation.
+
+        mask: string, optional
+                path referring to the mask used for the final segmentation.
+                Should be a format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+                .raw, .tiff, .nrrd.
+                
+        '''
         if parameters is None:
             raise IOError("You must provide a parameter file!")
         # Load variables from the confilg file
@@ -37,7 +72,6 @@ def segmentix(parameters=None, image=None, segmentation=None,
                 segmentation = ''.join(segmentation)
 
             # Convert to binary image and clean up small errors/areas
-            # TODO: More robust is to do this with labeling and select largest blob
             contour = sitk.ReadImage(segmentation)
             contour = sitk.GetArrayFromImage(contour)
 
@@ -45,14 +79,18 @@ def segmentix(parameters=None, image=None, segmentation=None,
             contour[:,:,-1] = np.zeros([contour.shape[0], contour.shape[1]])
             contour[:,:, 0] = np.zeros([contour.shape[0], contour.shape[1]])
 
-            contour = nd.binary_fill_holes(contour)
-            contour = contour.astype(bool)
+            if config['Segmentix']['fillholes']:
+                contour = nd.binary_fill_holes(contour)
+
             # contour = morphology.remove_small_objects(contour, min_size=2, connectivity=2, in_place=False)
-            contour = ExtractNLargestBlobsn(contour, 1)
+            if config['Segmentix']['N_blobs'] != 0:
+                contour = contour.astype(bool)
+                contour = ExtractNLargestBlobsn(contour, 1)
 
             # Expand contour depending on settings
             # TODO: this is a workaround for 3-D morphology
             if config['Segmentix']['type'] == 'Ring':
+                contour = contour.astype(bool)
                 radius = int(config['Segmentix']['radius'])
                 disk = morphology.disk(radius)
 
@@ -62,7 +100,7 @@ def segmentix(parameters=None, image=None, segmentation=None,
                     contour_e = morphology.binary_erosion(contour[:, :, ind], disk)
                     contour[:, :, ind] = np.subtract(contour_d, contour_e)
 
-            # Mask if necessary
+            # Mask the segmentation if necessary
             if mask is not None:
                 if type(mask) is list:
                     mask = ''.join(mask)
@@ -76,11 +114,6 @@ def segmentix(parameters=None, image=None, segmentation=None,
                     contour = contour - mask
                 elif method == "multiply":
                     contour = np.multiply(contour, mask)
-
-
-            # Use slicer if necessary
-            # if config['Segmentix']['slicer']:
-            #     # Every 2-D Axial slice is a separate sample
 
             # Output contour
             contour = contour.astype(np.uint8)

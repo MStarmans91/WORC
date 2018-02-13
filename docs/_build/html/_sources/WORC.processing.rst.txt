@@ -20,14 +20,6 @@ WORC.processing.classes module
     :undoc-members:
     :show-inheritance:
 
-WORC.processing.segstatistics module
-------------------------------------
-
-.. automodule:: WORC.processing.segstatistics
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------

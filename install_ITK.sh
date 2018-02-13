@@ -19,18 +19,11 @@ make -j $N_cores
 
 # Installation of ITK tools
 cd ~/apps
-git clone https://github.com/ITKTools/ITKTools.git 0.3.2/
-cd 0.3.2/
+git clone https://github.com/ITKTools/ITKTools.git itktools/0.3.2/
+cd itktools/0.3.2/
 git checkout tags/v0.3.2
 mkdir install/
 cd install/
-cmake ../src/ -DITK_DIR=../../ITK-build
+cmake ../src/ -DITK_DIR=~/apps/ITK/ITK-build
 make -j $N_cores
 cd ..
-
-
-
-
-
-
-

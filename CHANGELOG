@@ -6,6 +6,32 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+2.0.0 - 2018-02-13
+------------------
+
+Added
+~~~~~~~
+- Elastix and transformix as separate workflow in the tools folder. Can be used
+  through the WORC.Tools attribute.
+- Example data for elastix and transformix tool.
+- Workflow for separate training and testing set
+- FASTR tool for applying ttest to all features. Works similar to the
+  trainclassifier tool in terms of inputs and outputs.
+
+
+Changed
+~~~~~~~
+- Option for multiple modalities. Supports infinitely many inputs per object.
+- Moved many PREDICT parameters to the configuration file.
+- When using a multimodal workflow with only a single segmentation,
+  Elastix will automatically be used for registration. Note that you have to
+  put the reference segmentation on the first modality!
+
+Fixed
+~~~~~
+- Proper combining of features from multiple modalities to classify tool.
+- Minor bugs in segmentix tool.
+- For multiple modalities, add only optional sources like metadata when present.
 
 1.0.0rc1 - 2017-05-08
 ------------------
