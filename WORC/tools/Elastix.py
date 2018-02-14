@@ -7,6 +7,10 @@ import WORC.addexceptions as WORCexceptions
 
 class Elastix(object):
     def __init__(self):
+        # Which version of elastix and transformix tools should be used
+        self.elastix_toolname = 'Elastix'
+        self.transformix_toolname = 'Transformix'
+
         # self.Elastix = sitk.SimpleElastix()
         self.create_network('pairwise')
         self.FixedImage = []
@@ -20,11 +24,6 @@ class Elastix(object):
         self.TransformedSeg = 'vfs://tmp/WORC_Elastix/results/elastix_output_seg_{sample_id}_{cardinality}.nii.gz'
         self.TransformParameters = 'vfs://tmp/WORC_Elastix/results/elastix_output_trans_{sample_id}_{cardinality}.txt'
         self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], 'WORC_Elastix')
-
-        # Which version of elastix and transformix tools should be used
-        self.elastix_toolname = 'Elastix'
-        self.transformix_toolname = 'Transformix'
-
         # TODO: Add initial transformation
 
     def getparametermap(self, model='affine', size=(512, 512, 128)):
@@ -84,7 +83,7 @@ class Elastix(object):
             # self.OutputFolderSource = self.network.create_sink('Directory', id_='Out')
 
             # Create Elastix node and links
-            self.elastix_node = self.network.create_node('self.elastix_toolname', id_='elastix')
+            self.elastix_node = self.network.create_node(self.elastix_toolname, id_='elastix')
             self.elastix_node.inputs['fixed_image'] = self.FixedImageSource.output
             self.elastix_node.inputs['fixed_mask'] = self.FixedMaskSource.output
             self.elastix_node.inputs['moving_image'] = self.MovingImageSource.output
@@ -100,7 +99,7 @@ class Elastix(object):
             self.outtrans.inputs['input'] = self.elastix_node.outputs['transform']
 
             # Transform output image
-            self.transformix_node = self.network.create_node('self.transformix_toolname', id_='transformix')
+            self.transformix_node = self.network.create_node(self.transformix_toolname, id_='transformix')
             self.transformix_node.inputs['image'] = self.MovingImageSource.output
             self.transformix_node.inputs['transform'] = self.elastix_node.outputs['transform'][-1]
             self.outimage.inputs['input'] = self.transformix_node.outputs['image']
@@ -118,7 +117,7 @@ class Elastix(object):
             self.copymetadata_node.inputs['destination'] = self.ToTransformSource.output
 
             # Then transform the segmentation
-            self.transformix_node_seg = self.network.create_node('self.transformix_toolname', id_='transformix_seg')
+            self.transformix_node_seg = self.network.create_node(self.transformix_toolname, id_='transformix_seg')
             self.transformix_node_seg.inputs['image'] = self.copymetadata_node.outputs['output']
             self.transformix_node_seg.inputs['transform'] = self.changeorder_node.outputs['transform'][-1]
             self.outseg.inputs['input'] = self.transformix_node_seg.outputs['image']
@@ -135,7 +134,7 @@ class Elastix(object):
             # self.OutputFolderSource = self.network.create_sink('Directory', id_='Out')
 
             # Create Elastix node and links
-            self.elastix_node = self.network.create_node('self.elastix_toolname', id_='elastix')
+            self.elastix_node = self.network.create_node(self.elastix_toolname, id_='elastix')
             self.elastix_node.inputs['fixed_image'] = self.FixedImageSource.output
             self.elastix_node.inputs['fixed_mask'] = self.FixedMaskSource.output
             self.elastix_node.inputs['moving_image'] = self.FixedImageSource.output
@@ -151,7 +150,7 @@ class Elastix(object):
             self.outtrans.inputs['input'] = self.elastix_node.outputs['transform']
 
             # Transform output image
-            self.transformix_node = self.network.create_node('self.transformix_toolname', id_='transformix')
+            self.transformix_node = self.network.create_node(self.transformix_toolname, id_='transformix')
             self.transformix_node.inputs['image'] = self.MovingImageSource.output
             self.transformix_node.inputs['transform'] = self.elastix_node.outputs['transform'][-1]
             self.outimage.inputs['input'] = self.transformix_node.outputs['image']
@@ -170,7 +169,7 @@ class Elastix(object):
             self.copymetadata_node.inputs['destination'] = self.ToTransformSource.output
 
             # Then transform the segmentation
-            self.transformix_node_seg = self.network.create_node('self.transformix_toolname', id_='transformix_seg')
+            self.transformix_node_seg = self.network.create_node(self.transformix_toolname, id_='transformix_seg')
             self.transformix_node_seg.inputs['image'] = self.copymetadata_node.outputs['output']
             self.transformix_node_seg.inputs['transform'] = self.changeorder_node.outputs['transform'][-1]
             self.outseg.inputs['input'] = self.transformix_node_seg.outputs['image']
