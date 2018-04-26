@@ -33,17 +33,8 @@ def AllFeatures(image, mask):
     # Initialize wrapperClass to generate signature
     extractor = featureextractor.RadiomicsFeaturesExtractor(**kwargs)
 
-    # By default, only original is enabled. Optionally enable some filters:
-    # extractor.enableInputImages(Original={}, LoG={}, Wavelet={})
-
     # Disable all classes except firstorder
     extractor.enableAllFeatures()
-
-    # Enable all features in firstorder
-    # extractor.enableFeatureClassByName('firstorder')
-
-    # Only enable mean and skewness in firstorder
-    # extractor.enableFeaturesByName(firstorder=['Mean', 'Skewness'])
 
     # Enable writing out the log using radiomics logger
     radiomics.debug()  # Switch on radiomics logging from level=DEBUG (default level=WARNING)

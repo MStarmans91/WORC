@@ -16,7 +16,6 @@
 # limitations under the License.
 
 import argparse
-# from PREDICT import CalcFeatures
 from PREDICT.CalcFeatures import CalcFeatures
 
 

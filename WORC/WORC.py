@@ -118,18 +118,11 @@ class WORC(object):
         config['Segmentix']['segradius'] = '5'
         config['Segmentix']['N_blobs'] = '1'
 
-        # Gridsearch options
-        config['SelectFeatGroup'] = dict()
-        config['SelectFeatGroup']['shape_features'] = 'True'
-        config['SelectFeatGroup']['histogram_features'] = 'True'
-        config['SelectFeatGroup']['orientation_features'] = 'True'
-        config['SelectFeatGroup']['texture_features'] = 'True'
-        config['SelectFeatGroup']['patient_features'] = 'False'
-        config['SelectFeatGroup']['semantic_features'] = 'False'
-        config['SelectFeatGroup']['coliage_features'] = 'False'
-        config['SelectFeatGroup']['log_features'] = 'False'
-        config['SelectFeatGroup']['vessel_features'] = 'False'
-        config['SelectFeatGroup']['phase_features'] = 'False'
+        # Preprocessing
+        config['Preprocessing'] = dict()
+        config['Preprocessing']['Normalize'] = dict()
+        config['Preprocessing']['Normalize']['ROI']:
+        config['Preprocessing']['Normalize']['Method']
 
         # PREDICT - Feature calculation
         config['ImageFeatures'] = dict()
@@ -187,11 +180,26 @@ class WORC(object):
         config['CrossValidation']['N_iterations'] = '50'
         config['CrossValidation']['test_size'] = '0.2'
 
+        # Options for the labels that are used (not only genetics)
         config['Genetics'] = dict()
         config['Genetics']['label_names'] = '[GP]'
         config['Genetics']['url'] = 'WIP'
         config['Genetics']['projectID'] = 'WIP'
 
+        # Gridsearch options
+        config['SelectFeatGroup'] = dict()
+        config['SelectFeatGroup']['shape_features'] = 'True'
+        config['SelectFeatGroup']['histogram_features'] = 'True'
+        config['SelectFeatGroup']['orientation_features'] = 'True'
+        config['SelectFeatGroup']['texture_features'] = 'True'
+        config['SelectFeatGroup']['patient_features'] = 'False'
+        config['SelectFeatGroup']['semantic_features'] = 'False'
+        config['SelectFeatGroup']['coliage_features'] = 'False'
+        config['SelectFeatGroup']['log_features'] = 'False'
+        config['SelectFeatGroup']['vessel_features'] = 'False'
+        config['SelectFeatGroup']['phase_features'] = 'False'
+
+        # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.15'
@@ -247,7 +255,7 @@ class WORC(object):
                         self.configs = [self.defaultconfig()] * len(self.images_train)
                     else:
                         self.configs = [self.defaultconfig()] * len(self.features_train)
-                self.network = fastr.Network('WORC' + self.name)
+                self.network = fastr.Network('WORC_' + self.name)
 
                 # BUG: We currently use the first configuration as general config
                 image_types = list()
@@ -258,9 +266,9 @@ class WORC(object):
                     image_types.append(self.configs[c]['ImageFeatures']['image_type'])
 
                 # Classification tool and label source
-                self.network.source_patientclass_train = self.network.create_source('PatientInfoFile', id_='patientclass', nodegroup='pctrain')
+                self.network.source_patientclass_train = self.network.create_source('PatientInfoFile', id_='patientclass_train', nodegroup='pctrain')
                 if self.labels_test:
-                    self.network.source_patientclass_test = self.network.create_source('PatientInfoFile', id_='patientclass', nodegroup='pctest')
+                    self.network.source_patientclass_test = self.network.create_source('PatientInfoFile', id_='patientclass_test', nodegroup='pctest')
 
                 self.network.classify = self.network.create_node('TrainClassifier', memory='12G', id_='classify')
 
@@ -483,7 +491,7 @@ class WORC(object):
                                 # NOTE: Assume elastix node type is on first configuration
                                 elastix_node = str(self.configs[0]['General']['RegistrationNode'])
                                 transformix_node = str(self.configs[0]['General']['TransformationNode'])
-                                self.network.elastix_nodes_train[label] = self.network.create_node(elastix_node, id_='elastix_train' + label)
+                                self.network.elastix_nodes_train[label] = self.network.create_node(elastix_node, id_='elastix_train_' + label)
                                 self.network.transformix_nodes_train[label] = self.network.create_node(transformix_node, id_='transformix_train_' + label)
 
                                 if self.images_test or self.features_test:
@@ -609,10 +617,22 @@ class WORC(object):
                                 self.network.nodes_segmentix_test[label].inputs['mask'] = self.network.converters_masks_test[label].outputs['image']
 
                         else:
-                            self.network.calcfeatures_train[label].inputs['segmentation'] = self.network.converters_seg_train[label].outputs['image']
+                            if self.segmode == 'Provided':
+                                self.network.calcfeatures_train[label].inputs['segmentation'] = self.network.converters_seg_train[label].outputs['image']
+                            elif self.segmode == 'Register':
+                                if nmod > 0:
+                                    self.network.calcfeatures_train[label].inputs['segmentation'] = self.network.transformix_nodes_train[label].outputs['image']
+                                else:
+                                    self.network.calcfeatures_train[label].inputs['segmentation'] = self.network.converters_seg_train[label].outputs['image']
 
                             if self.images_test or self.features_test:
-                                self.network.calcfeatures_train[label].inputs['segmentation'] = self.network.converters_seg_train[label].outputs['image']
+                                if self.segmode == 'Provided':
+                                    self.network.calcfeatures_train[label].inputs['segmentation'] = self.network.converters_seg_train[label].outputs['image']
+                                elif self.segmode == 'Register':
+                                    if nmod > 0:
+                                        self.network.calcfeatures_test[label].inputs['segmentation'] = self.network.transformix_nodes_test[label] .outputs['image']
+                                    else:
+                                        self.network.calcfeatures_train[label].inputs['segmentation'] = self.network.converters_seg_train[label].outputs['image']
 
                         # Add the features from this modality to the classifier node input
                         self.network.links_C1_train[label] = self.network.classify.inputs['features_train'][str(label)] << self.network.calcfeatures_train[label].outputs['features']
@@ -702,7 +722,8 @@ class WORC(object):
         self.source_data['config_classification'] = self.fastrconfigs
 
         # Set source and sink data
-        self.source_data['patientclass'] = self.labels_train
+        self.source_data['patientclass_train'] = self.labels_train
+        self.source_data['patientclass_test'] = self.labels_test
 
         self.sink_data['classification'] = ("vfs://output/{}/svm_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
