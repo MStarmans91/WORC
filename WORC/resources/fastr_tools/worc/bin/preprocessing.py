@@ -18,6 +18,8 @@
 import SimpleITK as sitk
 import argparse
 import dicom as pydicom
+import WORC.IOparser.config_preprocessing as config_io
+import os
 
 
 def main():
@@ -39,23 +41,50 @@ def main():
                         help='Image output (ITK Image)')
     args = parser.parse_args()
 
+    # Convert list inputs to strings
+    if type(args.im) is list:
+        args.im = ''.join(args.im)
+
+    if type(args.md) is list:
+        args.md = ''.join(args.md)
+
+    if type(args.mask) is list:
+        args.mask = ''.join(args.mask)
+
+    if type(args.para) is list:
+        args.para = ''.join(args.para)
+
+    if type(args.out) is list:
+        args.out = ''.join(args.out)
+
     # Read the config, image and if given masks and metadata
-    config = yaml.parse(args.para)
+    config = config_io.load_config(args.para)
     image = sitk.ReadImage(args.im)
-    if args.metadata is not None:
+
+    if args.md is not None:
         metadata = pydicom.read_file(args.md)
+
     if args.mask is not None:
         mask = sitk.ReadImage(args.mask)
 
-    if not config['Preprocessing']['Normalize']['ROI']:
-        # Apply z-scoring on full image
+    # Convert image to Hounsfield units if type is CT
+    image_type = config['ImageFeatures']['image_type']
+    # NOTE: We only do this if the input is a DICOM folder
+    if 'CT' in image_type and not os.path.isfile(args.im):
+        print('Converting intensity to Hounsfield units.')
+        image = image*metadata.RescaleSlope +\
+            metadata.RescaleIntercept
+
+    # Apply the preprocessing
+    if not config['Normalize']['ROI']:
+        print('Apply z-scoring on full image.')
         image = sitk.Normalize(image)
     else:
-        # Apply scaling of image based on a Region Of Interest.
+        print('Apply scaling of image based on a Region Of Interest.')
         if args.mask is None:
             raise IOError('Mask input required for ROI normalization.')
         else:
-            if config['Preprocessing']['Normalize']['Method'] == 'z_score':
+            if config['Normalize']['Method'] == 'z_score':
                 # Apply scaling using z-scoring based on the ROI
 
                 # Cast to float to allow proper processing
@@ -69,7 +98,7 @@ def main():
                 image = sitk.ShiftScale(image,
                                         shift=-ROI_mean,
                                         scale=1.0/ROI_std)
-            elif config['Preprocessing']['Normalize']['Method'] == 'minmed':
+            elif config['Normalize']['Method'] == 'minmed':
                 # Apply scaling using the minimum and mean of the ROI
                 image = sitk.Cast(image, 9)
 
@@ -84,6 +113,7 @@ def main():
 
     # Save the output
     sitk.WriteImage(image, args.out)
+
 
 if __name__ == '__main__':
     main()

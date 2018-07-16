@@ -11,17 +11,25 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 Added
 ~~~~~~~
--
+- Feature imputation settings in WORC config.
+- PCA settings in WORC config.
+- Dummy file, which can generally be accepted by WORC.
+- Preprocessing is now a separate node before the calcfeatures node.
+- Started working on a RTStructReader tool.
 
 
 Changed
 ~~~~~~~
--
+- Separate sinks for the output segmentations of the elastix and segmentix
+  nodes.
+- Switched from using PXCastConvert to WORCCastConvert, hence ITK is not
+  anymore required as well as ITK tools.
 
 Fixed
 ~~~~~
 - Patientclass ID was used for both test and training. Now given separate names.
 - When elastix is used but segmentix isn't, there was a bug.
+- DataFile dataype is now a TypeGroup instead of an URLType.
 
 
 2.0.0 - 2018-02-13

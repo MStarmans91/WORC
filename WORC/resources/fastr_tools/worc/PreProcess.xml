@@ -18,13 +18,13 @@
   <repository />
   <interface>
     <inputs>
-        <input id="image_in" name="image_in" datatype="ITKImageFile" prefix="--im" cardinality="1" repeat_prefix="false" required="true" />
-        <input id="metadata" name="metadata" datatype="DicomImageFile" prefix="--md" cardinality="as:image_in" repeat_prefix="false" required="false" />
-        <input id="mask" name="mask" datatype="ITKImageFile" prefix="--mask" cardinality="as:image_in" repeat_prefix="false" required="false" />
+        <input id="image" name="image" datatype="ITKImageFile" prefix="--im" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="metadata" name="metadata" datatype="DicomImageFile" prefix="--md" cardinality="as:image" repeat_prefix="false" required="false" />
+        <input id="mask" name="mask" datatype="ITKImageFile" prefix="--mask" cardinality="as:image" repeat_prefix="false" required="false" />
         <input id="parameters" name="parameters" datatype="ParameterFile" prefix="--para" cardinality="1-*" repeat_prefix="false" required="true" />
      </inputs>
     <outputs>
-      <output id="image_out" name="Output image" datatype="ITKImageFile" cardinality="as:image_in" nospace="False" order="0" prefix="--out" required="true"/>
+      <output id="image" name="Output image" datatype="ITKImageFile" cardinality="as:image" nospace="False" order="0" prefix="--out" required="true"/>
     </outputs>
   </interface>
   <requirements />
