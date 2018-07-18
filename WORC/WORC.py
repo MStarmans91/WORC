@@ -182,7 +182,7 @@ class WORC(object):
 
         ## PREDICT - Classification
         config['Classification'] = dict()
-        config['Classification']['fastr'] = 'True'
+        config['Classification']['fastr'] = 'False'
         config['Classification']['classifier'] = 'SVM'
         config['Classification']['Kernel'] = 'polynomial'
 
