@@ -16,7 +16,7 @@ This package is still under development. We try to thoroughly test and evaluate 
 bugs can off course still occur. Please contact us through the channels below if you find any and we will try to fix
 them as soon as possible, or create an issue on this Github.
 
-### Documentation
+## Documentation
 
 For more information, see our Github Wiki.
 
@@ -25,6 +25,9 @@ Alternatively, you can generate the documentation by checking out the master bra
     python setup.py build_sphinx
 
 The documentation can then be viewed in a browser by opening `PACKAGE_ROOT\build\sphinx\html\index.html`.
+
+## Tutorial
+The WORC tutorial is hosted in a [separate repository](https://github.com/MStarmans91/WORCTutorial).
 
 # Installation
 

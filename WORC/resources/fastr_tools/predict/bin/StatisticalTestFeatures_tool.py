@@ -16,7 +16,7 @@
 # limitations under the License.
 
 import argparse
-from PREDICT.ttest import ttest
+from PREDICT.StatisticalTestFeatures import StatisticalTestFeatures
 
 
 def main():
@@ -36,11 +36,11 @@ def main():
                         help='Performance (JSON)')
     args = parser.parse_args()
 
-    ttest(features=args.feat,
-          patientinfo=args.pc,
-          config=args.cf,
-          output=args.perf,
-          verbose=False)
+    StatisticalTestFeatures(features=args.feat,
+                            patientinfo=args.pc,
+                            config=args.cf,
+                            output=args.perf,
+                            verbose=False)
 
 
 if __name__ == '__main__':

@@ -16,6 +16,17 @@ Added
 - Dummy file, which can generally be accepted by WORC.
 - Preprocessing is now a separate node before the calcfeatures node.
 - Started working on a RTStructReader tool.
+- Added EditElastixTransformFile node to set FinalBSplineInterpolationOrder to 0
+  in Elastix. Neccesary for transforming segmentations.
+- Registred image is also saved as a sink.
+- Tex, Zip and PNG Datatypes
+- Plot ROC tool for PREDICT
+- Plot SVM tool for PREDICT
+- Plot Barchart tool for PREDICT
+- Plot Ranked Scores tool for PREDICT
+- Plot statistical test tool for PREDICT
+- Tools: Evaluation network. Can currently be run only serparately: future
+  work includes the optional addition of the Evaluate network to the WORC network.
 
 
 Changed
@@ -30,6 +41,10 @@ Fixed
 - Patientclass ID was used for both test and training. Now given separate names.
 - When elastix is used but segmentix isn't, there was a bug.
 - DataFile dataype is now a TypeGroup instead of an URLType.
+- Last transformation output from elastix is passed further to the network.
+- Set FinalBSplineInterpolationOrder to 0 before transforming segmentation with
+  transformix.
+- Bug: when giving multiple feature sources, only the first was used.
 
 
 2.0.0 - 2018-02-13
