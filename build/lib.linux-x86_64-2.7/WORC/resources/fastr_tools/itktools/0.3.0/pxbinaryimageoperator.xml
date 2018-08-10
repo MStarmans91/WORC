@@ -1,0 +1,67 @@
+<tool id="PxBinaryImageOperator" name="ITKTools BinaryImageOperator" version="0.1">
+  <description>A wrapper around ITK Tools, as set of simple command line tools for image analysis.</description>
+  <authors>
+    <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.3.0" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="windows" arch="*" paths="vfs://apps/itktools/0.3.0/install/bin" bin="pxbinaryimageoperator.exe"/>
+      <target os="linux" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxbinaryimageoperator"/>
+      <target os="darwin" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxbinaryimageoperator"/>
+    </targets>
+    <description>
+      ITKTools v0.2.2
+      Performs binary operations on two images.
+      Usage:
+      pxbinaryimageoperator
+      -in inputFilenames
+      [-out] outputFilename, default in1 + ops + arg + in2 + .mhd
+      -ops binary operator of the following form:
+      {+,-,*,/,^,%}
+      notation:
+      {ADDITION, WEIGHTEDADDITION, MINUS, TIMES,DIVIDE,POWER,
+      MAXIMUM, MINIMUM, ABSOLUTEDIFFERENCE, SQUAREDDIFFERENCE,
+      BINARYMAGNITUDE, MASK, MASKNEGATED, LOG}
+      notation examples:
+      MINUS = A - B
+      ABSDIFF = |A - B|
+      MIN = min( A, B )
+      MAGNITUDE = sqrt( A * A + B * B )
+      [-arg] argument, necessary for some ops
+      WEIGHTEDADDITION: 0.0 &lt; weight alpha &lt; 1.0
+      MASK[NEG]: background value, e.g. 0.
+      [-z] compression flag; if provided, the output image is compressed
+      [-opct] output component type, by default the largest of the two input images
+      choose one of: {[unsigned_]{char,short,int,long},float,double}
+      Supported: 2D, 3D, (unsigned) char, (unsigned) short, (unsigned) int, (unsigned) long, float, double.
+    </description>
+    <license/>
+    <authors>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="images" name="Input Images" datatype="ITKImageFile" prefix="-in" cardinality="2" required="true"/>
+      <input id="operator" name="Binary Operator" datatype="String" prefix="-ops" cardinality="1" required="true"/>
+      <input id="arguments" name="Operator Arguments" datatype="Float" prefix="-arg" cardinality="0-2"
+             required="false"/>
+      <input id="compression_flag" name="Compression Flag" datatype="String" prefix="-z" cardinality="0" required="false"/>
+      <input id="component_type" name="Output Pixel Component Type" datatype="String" prefix="-opct" cardinality="1"
+             required="false"/>
+    </inputs>
+    <outputs>
+      <output id="image" name="output image" datatype="ITKImageFile" prefix="-out" cardinality="1"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references/>
+</tool>

@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-2.0.1 - Unreleased
+2.1.0 - 2018-08-09
 ------------------
 
 Added
@@ -27,6 +27,8 @@ Added
 - Plot statistical test tool for PREDICT
 - Tools: Evaluation network. Can currently be run only serparately: future
   work includes the optional addition of the Evaluate network to the WORC network.
+- Settings for PREDICT General, which contains the joblib Parallel settings and
+  whether a temporary save will be made after each cross validation.
 
 
 Changed

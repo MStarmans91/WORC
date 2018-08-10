@@ -1,0 +1,48 @@
+<tool id="CF_pyradiomics" name="CF_pyradiomics" version="1.0">
+    <description>A wrapper around the pyradiomics feature extractor.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="CF_pyradiomics_tool.py" />
+    </targets>
+    <description>
+       CF_pyradiomics.py image metadata segmentation semantics parameters output
+       output = Radiomics features
+    </description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="image" name="image" datatype="ITKImageFile" prefix="--im" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="metadata" name="metadata" datatype="DicomImageFile" prefix="--md" cardinality="as:image" repeat_prefix="false" required="false" />
+        <input id="semantics" name="semantics" datatype="CSVFile" prefix="--sem" cardinality="1-*" repeat_prefix="false" required="false" />
+        <input id="segmentation" name="segmentation" datatype="ITKImageFile" prefix="--seg" cardinality="as:image" repeat_prefix="false" required="true" />
+        <input id="parameters" name="parameters" datatype="ParameterFile" prefix="--para" cardinality="1-*" repeat_prefix="false" required="false" />
+     </inputs>
+    <outputs>
+      <output id="features" name="Output feature files" datatype="DataFile" cardinality="as:parameters" nospace="False" order="0" prefix="--out" required="false"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: CF_pyradiomics.py [-h] -im IMAGE.ITKIM -seg SEGMENTATION.ITKIM [-sem SEMANTICS.csv] [-para PARAMETERS.ini] -out OUTPUT.hdf5
+
+    Compute Radiomics features.
+
+    optional arguments:
+    -h, --help show this help message and exit
+    -im IMAGE.ITKIM ITK image file containing an image
+    -seg SEGMENTATION.ITKIM ITK image file containing a matching segmentations
+    -sem SEMANTICS.csv CSV file containing the semantic features for this sample.
+    -para PARAMETERS.ini parameters used in feature extraction
+    -out OUTPUT.hdf5f Path to save computed features to
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

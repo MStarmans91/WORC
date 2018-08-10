@@ -1,0 +1,56 @@
+<tool id="PxIntensityReplace" name="Replaces some user specified intensity values in an image" version="0.1">
+  <description>A wrapper around ITK Tools, as set of simple command line tools for image analysis.</description>
+  <authors>
+    <author name="Marcel Koek" email="m.koek@erasmusmc.nl" url="http://www.bigr.nl/people/MarcelKoek"/>
+  </authors>
+  <command version="0.3.0" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="windows" arch="*" paths="vfs://apps/itktools/0.3.0/install/bin" bin="pxintensityreplace.exe"/>
+      <target os="linux" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxintensityreplace"/>
+      <target os="darwin" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxintensityreplace"/>
+    </targets>
+    <description>
+      This program replaces some user specified intensity values in an image.
+      Usage:
+      pxintensityreplace
+      -in inputFilename
+      [-out] outputFilename, default in + LUTAPPLIED.mhd
+      -i input pixel values that should be replaced
+      -o output pixel values that replace the corresponding input values
+      [-pt] output pixel type, default equal to input
+      Supported: 2D, 3D, (unsigned) char, (unsigned) short, (unsigned) int,
+      (unsigned) long, float, double.
+      If "-pt" is used, the input is immediately converted to that particular
+      type, after which the intensity replacement is performed.
+    </description>
+    <license/>
+    <authors>
+      <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl"
+              url="http://www.bigr.nl/people/HakimAchterberg"/>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="image" name="Input Filename" datatype="ITKImageFile" prefix="-in" cardinality="1" required="true"/>
+      <input id="original_values" name="Input Pixel Values" datatype="Int" prefix="-i" cardinality="1-*" required="true"/>
+      <input id="substitute_values" name="Output Pixel Values" datatype="Int" prefix="-o" cardinality="as:original_values"
+             required="true"/>
+      <input id="component_type" name="Output Pixel Type (default: as input)" datatype="String" prefix="-pt"
+             cardinality="1" required="false"/>
+    </inputs>
+    <outputs>
+      <output id="image" name="Output Filename" datatype="ITKImageFile" prefix="-out" cardinality="1"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references/>
+</tool>

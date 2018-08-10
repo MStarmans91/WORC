@@ -1,0 +1,41 @@
+<tool id="PlotRankedScores" name="PlotRankedScores" version="1.0">
+    <description>A wrapper around PREDICT's Ranked Scores Plotting Function.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="PlotRankedScores.py" />
+    </targets>
+    <description>
+       PlotRankedScores.py estimator pinfo ensemble label_type scores images segmentations
+       output = output_zip output_tex
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="estimator" name="Radiomics estimator object from PREDICT Trainclassifier function" datatype="HDF5" prefix="--estimator" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="pinfo" name="Text file containing labels from patients" datatype="PatientInfoFile" prefix="--pinfo" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="ensemble" name="Ensemble size or ensembling method." datatype="String" prefix="--ensemble" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="label_type" name="Name of label predicted by the estimator to plot RankedScores for." datatype="String" prefix="--label_type" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="scores" name="Scoring method to be used: percentages or posteriors." datatype="String" prefix="--scores" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="images" name="Images to plot in ranking" datatype="ITKImageFile" prefix="--images" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="segmentations" name="Segmentations to plot in ranking" datatype="ITKImageFile" prefix="--segmentations" cardinality="1" repeat_prefix="false" required="false" />
+     </inputs>
+    <outputs>
+      <output id="output_zip" name="Output ZIP File." datatype="ZipFile" prefix="--output_zip" cardinality="1" nospace="False" order="0" required="false" />
+      <output id="output_csv" name="Output CSV File." datatype="CSVFile" prefix="--output_csv" cardinality="1" nospace="False" order="0" required="false" />
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: to write
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

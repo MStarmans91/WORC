@@ -1,0 +1,45 @@
+<tool id="TransformixPointFileToNumbers" name="Create json data from transformix output points" version="0.2" class="FlowNode">
+  <description>A tool that creates a mean transform based on a list of ElastixTransformFile files</description>
+  <tags>
+    <tag>registration</tag>
+  </tags>
+  <authors>
+    <author name="Hakim Achterberg" email="hakim.achterberg@gmail.com" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.1" url="">
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths="bin/" bin="transformixpoint2json.py"/>
+    </targets>
+    <description>
+    </description>
+    <license>
+    </license>
+    <authors>
+      <author name="Hakim Achterberg" email="hakim.achterberg@gmail.com"
+              url="http://www.bigr.nl/people/HakimAchterberg"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="points" name="transformix output point file to convert" datatype="TransformixOutputPointFile"
+             prefix="--in" cardinality="1" required="true"/>
+    </inputs>
+    <outputs>
+      <output id="input_index" name="Indices of the input points" datatype="Int" cardinality="unknown" automatic="True"
+              location="__INPUTINDEX__ = (.*)$" method="json"/>
+      <output id="input_point" name="Coordinates of the input points" datatype="Float" cardinality="unknown"
+              automatic="True" location="__INPUTPOINT__ = (.*)$" method="json"/>
+      <output id="output_index" name="Indices of the output points" datatype="Int" cardinality="unknown" automatic="True"
+              location="__OUTPUTINDEX__ = (.*)$" method="json"/>
+      <output id="output_point" name="Coordinates of the output points" datatype="Float" cardinality="unknown"
+              automatic="True" location="__OUTPUTPOINT__ = (.*)$" method="json"/>
+      <output id="deformation" name="Deformation of the points" datatype="Float" cardinality="unknown" automatic="True"
+              location="__DEFORMATION__ = (.*)$" method="json"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+</tool>

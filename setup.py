@@ -107,15 +107,17 @@ class MyInstall(install):
             stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
 
             # Install pyradiomics
-            commands = 'git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r pyradiomics;'
-            print commands
-            proc = subprocess.Popen(commands,
-                                    shell=True,
-                                    stdin=subprocess.PIPE,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.STDOUT,
-                                    )
-            stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
+            commands = ['git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r pyradiomics;',
+                        'git clone https://github.com/Svdvoort/PREDICTFastr PREDICT; cd PREDICT; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r PREDICT;']
+            for command in commands:
+                print(command)
+                proc = subprocess.Popen(commands,
+                                        shell=True,
+                                        stdin=subprocess.PIPE,
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.STDOUT,
+                                        )
+                stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
 
         except Exception as e:
             print e
@@ -126,7 +128,7 @@ class MyInstall(install):
 
 setup(
     name='WORC',
-    version='0.1.0',
+    version='2.1.0',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',
