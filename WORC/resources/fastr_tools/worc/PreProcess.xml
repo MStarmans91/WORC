@@ -1,0 +1,37 @@
+<tool id="PreProcess" name="PreProcess" version="1.0">
+    <description>Node for preprocessing of images..</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="preprocessing.py" />
+    </targets>
+    <description>
+       preprocessing.py image_in metadata mask parameters image_out
+       output = Processed Image
+    </description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="image" name="image" datatype="ITKImageFile" prefix="--im" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="metadata" name="metadata" datatype="DicomImageFile" prefix="--md" cardinality="as:image" repeat_prefix="false" required="false" />
+        <input id="mask" name="mask" datatype="ITKImageFile" prefix="--mask" cardinality="as:image" repeat_prefix="false" required="false" />
+        <input id="parameters" name="parameters" datatype="ParameterFile" prefix="--para" cardinality="1-*" repeat_prefix="false" required="true" />
+     </inputs>
+    <outputs>
+      <output id="image" name="Output image" datatype="ITKImageFile" cardinality="as:image" nospace="False" order="0" prefix="--out" required="true"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: preprocessing.py [-h] -im IMAGE.ITKIM [-md METADATA.dcm] [-mask MASK.ITKIM] -para PARAMETERS.ini -out IMAGE_OUT.ITKIM
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

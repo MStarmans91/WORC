@@ -8,6 +8,7 @@ before_install:
 - sudo apt-get -qq -y install libblas-dev liblapack-dev libatlas-base-dev gfortran
 
 install:
+- pip install -r requirements.txt
 - python setup.py -q install
 
 script:

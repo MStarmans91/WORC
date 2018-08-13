@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2011-2017 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +14,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 IS_TEST = True
 
 

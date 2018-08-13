@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2011-2017 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,6 @@
 # limitations under the License.
 
 import argparse
-# from PREDICT import CalcFeatures
 from PREDICT.CalcFeatures import CalcFeatures
 
 

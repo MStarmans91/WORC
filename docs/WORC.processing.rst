@@ -12,6 +12,14 @@ WORC.processing.ExtractNLargestBlobsn module
     :undoc-members:
     :show-inheritance:
 
+WORC.processing.RTStructReader module
+-------------------------------------
+
+.. automodule:: WORC.processing.RTStructReader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 WORC.processing.classes module
 ------------------------------
 

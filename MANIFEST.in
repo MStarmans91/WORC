@@ -1,8 +1,9 @@
 include LICENSE
 include APACHE-LICENSE-2.0
-include README.md
+include README.rst
 include requirements.txt
 include test_requirements.txt
+include requirements-setup.txt
 include version
 include CHANGELOG
 

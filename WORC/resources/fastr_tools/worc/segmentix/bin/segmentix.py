@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2011-2017 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,7 @@ def segmentix(parameters=None, image=None, segmentation=None,
                 path referring to the mask used for the final segmentation.
                 Should be a format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
                 .raw, .tiff, .nrrd.
-                
+
         '''
         if parameters is None:
             raise IOError("You must provide a parameter file!")

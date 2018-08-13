@@ -14,10 +14,10 @@
 # limitations under the License.
 
 
-from fastr.datatypes import URLType
+from fastr.datatypes import TypeGroup
 
 
-class DataFile(URLType):
+class DataFile(TypeGroup):
     description = 'General data file for features, classifiers etcetera'
     _members = frozenset(['HDF5',
                           'RDF'])

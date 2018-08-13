@@ -12,6 +12,14 @@ WORC.tools.Elastix module
     :undoc-members:
     :show-inheritance:
 
+WORC.tools.Evaluate module
+--------------------------
+
+.. automodule:: WORC.tools.Evaluate
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 WORC.tools.Transformix module
 -----------------------------
 

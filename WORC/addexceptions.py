@@ -1,4 +1,6 @@
-# Copyright 2011-2017 Biomedical Imaging Group Rotterdam, Departments of
+#!/usr/bin/env python
+
+# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +19,9 @@
 This module contains all WORC-related Exceptions
 """
 
-import inspect
-import os
-import textwrap
+# import inspect
+# import os
+# import textwrap
 
 # pylint: disable=too-many-ancestors
 # Because fo inheriting from FastrError and a common exception causes this
