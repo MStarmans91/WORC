@@ -34,7 +34,11 @@ The documentation can then be viewed in a browser by opening `PACKAGE_ROOT\build
 WORC currently only supports Unix with Python 2 (>2.7.6) systems. Windows is not supported,
 although WORC can still work under windows.
 
-The package can be installed by running the setup file:
+The package can be installed through pip (Note due to a bug, the versioning like this is needed):
+
+      pip install "WORC==2.1.0_2"
+
+Alternatively, you can directly install WORC from this repository:
 
       python setup.py install
 
@@ -44,6 +48,12 @@ Make sure you install the requirements first:
 
 Several tools have some (mandatory) prerequisites which are listed below. We highly recommend you to install these to
 maximally profit from our toolbox.
+
+### PREDICT
+Most of the default tools in WORC use [PREDICT](https://github.com/Svdvoort/PREDICTFastr), our in-house feature extraction and classification toolbox.
+Currently, you do need to manually install PREDICT from the Github or with pip:
+
+      pip install PREDICT
 
 ### Fastr Configuration
 The installation will create a FASTR configuration file in the $HOME/.fastr/config.d folder. This file is used for configuring

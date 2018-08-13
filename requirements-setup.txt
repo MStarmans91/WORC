@@ -1,6 +1,1 @@
 numpy
-scipy
-sklearn
-scikit-image
-scikit-learn
-scipy

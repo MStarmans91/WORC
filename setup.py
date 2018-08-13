@@ -24,7 +24,7 @@ from setuptools import setup, find_packages
 with open('requirements.txt', 'r') as fh:
     _requires = fh.read().splitlines()
 
-with open('README.md', 'r') as fh:
+with open('README.rst', 'r') as fh:
     _description = fh.read()
 
 with open('version', 'r') as fh:
@@ -97,7 +97,7 @@ class MyInstall(install):
             # the one with the Makefile.
             # subprocess.call(['pip install -r requirements-setup.txt'])
             regcommand = 'pip install -r requirements.txt'
-            print regcommand
+            print(regcommand)
             proc = subprocess.Popen(regcommand,
                                     shell=True,
                                     stdin=subprocess.PIPE,
@@ -107,8 +107,9 @@ class MyInstall(install):
             stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
 
             # Install pyradiomics
-            commands = ['git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r pyradiomics;',
-                        'git clone https://github.com/Svdvoort/PREDICTFastr PREDICT; cd PREDICT; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r PREDICT;']
+            commands = ['git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r pyradiomics;']
+            # commands = ['git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r pyradiomics;',
+            #             'git clone https://github.com/Svdvoort/PREDICTFastr PREDICT; cd PREDICT; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r PREDICT;']
             for command in commands:
                 print(command)
                 proc = subprocess.Popen(commands,
@@ -120,7 +121,7 @@ class MyInstall(install):
                 stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
 
         except Exception as e:
-            print e
+            print(e)
             exit(1)
         else:
             install.run(self)

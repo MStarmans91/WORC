@@ -2,8 +2,8 @@ APACHE-LICENSE-2.0
 CHANGELOG
 LICENSE
 MANIFEST.in
-README.md
 README.rst
+requirements-setup.txt
 requirements.txt
 setup.cfg
 setup.py
