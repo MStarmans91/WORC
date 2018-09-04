@@ -11,16 +11,20 @@ Unreleased
 
 Added
 ~~~~~~~
-
+- Several new PREDICT variables to the config.
+- Multilabel classification workflow.
+- New oversampling strategy.
+- RankedSVM multilabel classification and Relief feature selection.
 
 
 Changed
 ~~~~~~~
+- Major reduction in memory usage, especially due to PREDICT updates.
 
 
 Fixed
 ~~~~~
-
+- Minor bug in test worklflow: needed str of label in appending to classify.
 
 
 2.1.0 - 2018-08-09

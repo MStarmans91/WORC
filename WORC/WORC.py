@@ -222,7 +222,7 @@ class WORC(object):
         # Vessel features radius for erosion to determine boudnary
         config['ImageFeatures']['vessel_radius'] = '5'
 
-        ## PREDICT - Feature selection
+        # PREDICT - Feature selection
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = 'True'
         config['Featsel']['SelectFromModel'] = 'False'
@@ -231,6 +231,11 @@ class WORC(object):
         config['Featsel']['StatisticalTestUse'] = 'False'
         config['Featsel']['StatisticalTestMetric'] = 'ttest, Welch, Wilcoxon, MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '0.02, 0.2'
+        config['Featsel']['ReliefUse'] = 'False'
+        config['Featsel']['ReliefNN'] = '2, 4'
+        config['Featsel']['ReliefSampleSize'] = '1, 1'
+        config['Featsel']['ReliefDistanceP'] = '1, 3'
+        config['Featsel']['ReliefNumFeatures'] = '25, 200'
 
         # PREDICT - Gridsearch options
         config['SelectFeatGroup'] = dict()
@@ -245,13 +250,13 @@ class WORC(object):
         config['SelectFeatGroup']['vessel_features'] = 'False'
         config['SelectFeatGroup']['phase_features'] = 'False'
 
-        ## PREDICT - Feature imputation
+        # PREDICT - Feature imputation
         config['Imputation'] = dict()
         config['Imputation']['use'] = 'False'
         config['Imputation']['strategy'] = 'mean'
         config['Imputation']['n_neighbors'] = '5'
 
-        ## PREDICT - Classification
+        # PREDICT - Classification
         config['Classification'] = dict()
         config['Classification']['fastr'] = 'False'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
@@ -265,6 +270,7 @@ class WORC(object):
         # PREDICT - Options for the labels that are used (not only genetics)
         config['Genetics'] = dict()
         config['Genetics']['label_names'] = 'Label1, Label2'
+        config['Genetics']['modus'] = 'singlelabel'
         config['Genetics']['url'] = 'WIP'
         config['Genetics']['projectID'] = 'WIP'
 
@@ -285,6 +291,7 @@ class WORC(object):
         config['SampleProcessing']['SMOTE'] = 'True'
         config['SampleProcessing']['SMOTE_ratio'] = '1.0'
         config['SampleProcessing']['SMOTE_neighbors'] = '10'
+        config['SampleProcessing']['Oversampling'] = 'False'
 
         # PREDICT - Ensemble options
         config['Ensemble'] = dict()
@@ -731,7 +738,7 @@ class WORC(object):
                             self.network.sinks_segmentations_segmentix_train[label].input = self.network.nodes_segmentix_train[label].outputs['segmentation_out']
 
                             if self.images_test or self.features_test:
-                                self.network.sinks_segmentations_segmentix_test[label] = self.network.create_sink('ITKImageFile', id_='segmentation_out_segmentix_test_' + label)
+                                self.network.sinks_segmentations_segmentix_test[label] = self.network.create_sink('ITKImageFile', id_='segmentations_out_segmentix_test_' + label)
                                 self.network.nodes_segmentix_test[label] = self.network.create_node('Segmentix', memory='6G', id_='segmentix_test_' + label)
                                 if hasattr(self.network, 'transformix_seg_nodes_test'):
                                     if label in self.network.transformix_seg_nodes_test.keys():
@@ -781,7 +788,7 @@ class WORC(object):
 
                         if self.images_test or self.features_test:
                             # Add the features from this modality to the classifier node input
-                            self.network.links_C1_test[label] = self.network.classify.inputs['features_test'][label] << self.network.calcfeatures_test[label].outputs['features']
+                            self.network.links_C1_test[label] = self.network.classify.inputs['features_test'][str(label)] << self.network.calcfeatures_test[label].outputs['features']
                             self.network.links_C1_test[label].collapse = 'test'
 
                         # Save output

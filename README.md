@@ -78,6 +78,12 @@ mounts['test'] = os.path.join(packagedir, 'WORC', 'resources', 'fastr_tests')
 
 Note that the Python site package does not work properly in virtual environments. You must then manually locate the packagedir.
 
+### Optional: Graphviz
+WORC can draw the network and save it as a SVG image using [graphviz](https://www.graphviz.org/). In order to do so,
+please make sure you install graphviz:
+
+      apt install graphiv
+
 ### Optional: Elastix
 Image registration is included in WORC through [elastix and transformix](http://elastix.isi.uu.nl/).
 In order to use elastix, please download the binaries and place them in your
