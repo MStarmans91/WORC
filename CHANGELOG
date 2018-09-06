@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-Unreleased
+Unreleased - rc2.1.1
 ------------------
 
 Added
@@ -25,6 +25,7 @@ Changed
 Fixed
 ~~~~~
 - Minor bug in test worklflow: needed str of label in appending to classify.
+- There was a bug in using a .ini file as a config.
 
 
 2.1.0 - 2018-08-09

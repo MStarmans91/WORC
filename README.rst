@@ -48,12 +48,19 @@ The documentation can then be viewed in a browser by opening
 ``PACKAGE_ROOT\build\sphinx\html\index.html``.
 
 Installation
--------------
+------------
 
 WORC currently only supports Unix with Python 2 (>2.7.6) systems.
 Windows is not supported, although WORC can still work under windows.
 
-The package can be installed by running the setup file:
+The package can be installed through pip (Note due to a bug, the
+versioning like this is needed):
+
+::
+
+      pip install "WORC==2.1.0_2"
+
+Alternatively, you can directly install WORC from this repository:
 
 ::
 
@@ -68,6 +75,18 @@ Make sure you install the requirements first:
 Several tools have some (mandatory) prerequisites which are listed
 below. We highly recommend you to install these to maximally profit from
 our toolbox.
+
+PREDICT
+~~~~~~~
+
+Most of the default tools in WORC use
+`PREDICT <https://github.com/Svdvoort/PREDICTFastr>`__, our in-house
+feature extraction and classification toolbox. Currently, you do need to
+manually install PREDICT from the Github or with pip:
+
+::
+
+      pip install PREDICT
 
 Fastr Configuration
 ~~~~~~~~~~~~~~~~~~~
@@ -100,6 +119,17 @@ tools, datatypes and mounts to your FASTR configuration
 
 Note that the Python site package does not work properly in virtual
 environments. You must then manually locate the packagedir.
+
+Optional: Graphviz
+~~~~~~~~~~~~~~~~~~
+
+WORC can draw the network and save it as a SVG image using
+`graphviz <https://www.graphviz.org/>`__. In order to do so, please make
+sure you install graphviz:
+
+::
+
+      apt install graphiv
 
 Optional: Elastix
 ~~~~~~~~~~~~~~~~~
@@ -135,7 +165,7 @@ need to input them on every request:
     chmod 600 ~/.netrc
 
 3rd-party packages used in WORC:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------
 
 -  FASTR (Workflow design and building)
 -  xnat (Collecting data from XNAT)

@@ -1,0 +1,30 @@
+Metadata-Version: 1.1
+Name: dicom
+Version: 0.9.9.post1
+Summary: Pure python package for DICOM medical file reading and writing
+Home-page: https://github.com/darcymason/pydicom
+Author: Darcy Mason and contributors
+Author-email: darcymason@gmail.com
+License: MIT license
+Description: 
+            dicom is a historical version of the pydicom package, for versions < 1.0.
+            New code should target the pydicom package rather than this one.
+            
+Keywords: dicom python medical imaging
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Healthcare Industry
+Classifier: Intended Audience :: Science/Research
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.0
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Scientific/Engineering :: Medical Science Apps.
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Software Development :: Libraries

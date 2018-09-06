@@ -345,9 +345,9 @@ class WORC(object):
                 # BUG: We currently use the first configuration as general config
                 image_types = list()
                 for c in range(len(self.configs)):
-                    if type(self.configs[c]) == str():
+                    if type(self.configs[c]) == str:
                         # Probably, c is a configuration file
-                        self.configs[c] = config_io.load_config(c)
+                        self.configs[c] = config_io.load_config(self.configs[c])
                     image_types.append(self.configs[c]['ImageFeatures']['image_type'])
 
                 # Classification tool and label source
@@ -857,13 +857,18 @@ class WORC(object):
 
         # If the configuration files are confiparse objects, write to file
         for num, c in enumerate(self.configs):
-            if type(c) == configparser.ConfigParser:
-                cfile = os.path.join(fastr.config.mounts['tmp'], self.name, ("config_{}_{}.ini").format(self.name, num))
-                if not os.path.exists(os.path.dirname(cfile)):
-                    os.makedirs(os.path.dirname(cfile))
-                with open(cfile, 'w') as configfile:
-                    c.write(configfile)
-                self.fastrconfigs.append(os.path.join("vfs://tmp/", self.name, ("config_{}_{}.ini").format(self.name, num)))
+            if type(c) != configparser.ConfigParser:
+                # A filepath (not a fastr source) is provided. Hence we read
+                # the config file and convert it to a configparser object
+                config = configparser.ConfigParser()
+                config.read(c)
+                c = config
+            cfile = os.path.join(fastr.config.mounts['tmp'], self.name, ("config_{}_{}.ini").format(self.name, num))
+            if not os.path.exists(os.path.dirname(cfile)):
+                os.makedirs(os.path.dirname(cfile))
+            with open(cfile, 'w') as configfile:
+                c.write(configfile)
+            self.fastrconfigs.append(os.path.join("vfs://tmp/", self.name, ("config_{}_{}.ini").format(self.name, num)))
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
