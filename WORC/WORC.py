@@ -242,7 +242,13 @@ class WORC(object):
         config['SelectFeatGroup']['shape_features'] = 'True, False'
         config['SelectFeatGroup']['histogram_features'] = 'True, False'
         config['SelectFeatGroup']['orientation_features'] = 'True, False'
-        config['SelectFeatGroup']['texture_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_Gabor_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLCM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLCMMS_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLRLM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLSZM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_NGTDM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_LBP_features'] = 'True, False'
         config['SelectFeatGroup']['patient_features'] = 'False'
         config['SelectFeatGroup']['semantic_features'] = 'False'
         config['SelectFeatGroup']['coliage_features'] = 'False'
@@ -264,7 +270,7 @@ class WORC(object):
         config['Classification']['Kernel'] = 'polynomial'
 
         config['CrossValidation'] = dict()
-        config['CrossValidation']['N_iterations'] = '50'
+        config['CrossValidation']['N_iterations'] = '100'
         config['CrossValidation']['test_size'] = '0.2'
 
         # PREDICT - Options for the labels that are used (not only genetics)

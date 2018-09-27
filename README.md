@@ -133,6 +133,8 @@ WORC/resources/fastr_tests directory. The example is explained in more detail in
 ## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
 
+When using WORC, please cite this repository.
+
 ## Contact
 We are happy to help you with any questions. Please contact us on the [WORC google group](https://groups.google.com/forum/#!forum/worc-users).
 

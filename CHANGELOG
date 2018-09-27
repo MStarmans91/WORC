@@ -24,7 +24,7 @@ Changed
 
 Fixed
 ~~~~~
-- Minor bug in test worklflow: needed str of label in appending to classify.
+- Minor bug in test workflow: needed str of label in appending to classify.
 - There was a bug in using a .ini file as a config.
 
 
