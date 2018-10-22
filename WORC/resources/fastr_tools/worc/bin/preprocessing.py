@@ -76,10 +76,10 @@ def main():
             metadata.RescaleIntercept
 
     # Apply the preprocessing
-    if not config['Normalize']['ROI']:
+    if config['Normalize']['ROI'] == 'Full':
         print('Apply z-scoring on full image.')
         image = sitk.Normalize(image)
-    else:
+    elif config['Normalize']['ROI'] == 'True':
         print('Apply scaling of image based on a Region Of Interest.')
         if args.mask is None:
             raise IOError('Mask input required for ROI normalization.')
