@@ -878,7 +878,7 @@ class WORC(object):
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
-        self.source_data['config_classification'] = self.fastrconfigs
+        self.source_data['config_classification'] = self.fastrconfigs[0]
 
         # Set source and sink data
         self.source_data['patientclass_train'] = self.labels_train
@@ -961,24 +961,24 @@ class WORC(object):
             if self.features_test and len(self.features_test) - 1  >= num:
                 self.source_data['features_test_' + label] = self.features_test[num]
 
-            self.sink_data['segmentations_out_segmentix_train_' + label] = ("vfs://output/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-            self.sink_data['segmentations_out_elastix_train_' + label] = ("vfs://output/{}/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-            self.sink_data['images_out_elastix_train_' + label] = ("vfs://output/{}/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-            self.sink_data['features_train_' + label] = ("vfs://output/{}/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+            self.sink_data['segmentations_out_segmentix_train_' + label] = ("vfs://output/{}/Segmentations/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+            self.sink_data['segmentations_out_elastix_train_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+            self.sink_data['images_out_elastix_train_' + label] = ("vfs://output/{}/Elastix/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+            self.sink_data['features_train_' + label] = ("vfs://output/{}/Features/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
 
             if self.labels_test:
-                self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-                self.sink_data['segmentations_out_elastix_test_' + label] = ("vfs://output/{}/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-                self.sink_data['images_out_elastix_test_' + label] = ("vfs://output/{}/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-                self.sink_data['features_test_' + label] = ("vfs://output/{}/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/Segmentations/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['segmentations_out_elastix_test_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['images_out_elastix_test_' + label] = ("vfs://output/{}/Images/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['features_test_' + label] = ("vfs://output/{}/Features/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
 
             # Add elastix sinks if used
             if self.segmode:
                 # Segmode is only non-empty if segmentations are provided
                 if self.segmode == 'Register':
-                    self.sink_data['transformations_train_' + label] = ("vfs://output/{}/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                    self.sink_data['transformations_train_' + label] = ("vfs://output/{}/Elastix/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                     if self.images_test or self.features_test:
-                        self.sink_data['transformations_test_' + label] = ("vfs://output/{}/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                        self.sink_data['transformations_test_' + label] = ("vfs://output/{}/Elastix/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
 
     def execute(self):
         """ Execute the network through the fastr.network.execute command. """

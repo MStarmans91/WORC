@@ -26,7 +26,7 @@ class Evaluate(object):
     def __init__(self, label_type, ensemble=50, scores='percentages',
                  network=None, features=None,
                  fastr_plugin='ProcessPoolExecution',
-                 name='Evaluate'):
+                 name='Example'):
         '''
         Build a network that evaluates the performance of an estimator.
 
@@ -45,7 +45,7 @@ class Evaluate(object):
             self.network = fastr.Network(id_="Evaluate")
             self.mode = 'StandAlone'
             self.fastr_plugin = fastr_plugin
-            self.name = name
+            self.name = 'WORC_Evaluate_' + name
             self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
 
         if features is None and self.mode == 'StandAlone':

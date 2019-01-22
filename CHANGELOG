@@ -20,6 +20,8 @@ Added
 Changed
 ~~~~~~~
 - Major reduction in memory usage, especially due to PREDICT updates.
+- Only use first configuration in the classify config.
+- Outputs are now in multiple subfolders instead of one big folder.
 
 
 Fixed
