@@ -174,6 +174,7 @@ class WORC(object):
         config['Segmentix']['segtype'] = 'None'
         config['Segmentix']['segradius'] = '5'
         config['Segmentix']['N_blobs'] = '1'
+        config['Segmentix']['fillholes'] = 'False'
 
         # Preprocessing
         config['Normalize'] = dict()

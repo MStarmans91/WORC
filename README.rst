@@ -1,6 +1,6 @@
 |Build Status|
 
-WORC v2.1.0
+WORC v2.1.1
 ===========
 
 Workflow for Optimal Radiomics Classification
@@ -53,12 +53,18 @@ Installation
 WORC currently only supports Unix with Python 2 (>2.7.6) systems.
 Windows is not supported, although WORC can still work under windows.
 
-The package can be installed through pip (Note due to a bug, the
-versioning like this is needed):
+Please first install PREDICT:
 
 ::
 
-      pip install "WORC==2.1.0_2"
+      pip install PREDICT
+
+
+The package can be installed through pip:
+
+::
+
+      pip install WORC
 
 Alternatively, you can directly install WORC from this repository:
 
@@ -201,6 +207,8 @@ License
 
 This package is covered by the open source `APACHE 2.0
 License <APACHE-LICENSE-2.0>`__.
+
+When using WORC, please cite this repository.
 
 Contact
 -------

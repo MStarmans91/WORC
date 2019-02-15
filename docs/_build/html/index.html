@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to WORC’s documentation! &#8212; WORC 2.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-worc-s-documentation">
+<h1>Welcome to WORC&#8217;s documentation!<a class="headerlink" href="#welcome-to-worc-s-documentation" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p><a class="reference external" href="https://travis-ci.com/MStarmans91/WORC"><img alt="Build Status" src="https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&amp;branch=master" /></a></p>
+<p>WORC is an open-source python package for the easy execution of full
+Radiomics pipelines.</p>
+<p>We aim to establish a general Radiomics platform supporting easy
+integration of other tools. With our modular build and support of
+different software languages (python, MATLAB, ruby, java etc.), we want
+to facilitate and stimulate collaboration, standardisation and
+comparison of different Radiomics approaches. By combining this in a
+single framework, we hope to find a universal Radiomics strategy that
+can address various problems.</p>
+<p>This package is still under development. We try to thoroughly test and
+evaluate every new build and function, but bugs can off course still
+occur. Please contact us through the channels below if you find any and
+we will try to fix them as soon as possible, or create an issue on this
+Github.</p>
+<p>The WORC tutorial is hosted in a <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial">separate
+repository</a>.</p>
+<p>For more information, see our the Wiki on this Github.</p>
+<p>Alternatively, you can generate the documentation by checking out the
+master branch and running from the root directory:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_sphinx</span>
+</pre></div>
+</div>
+<p>The documentation can then be viewed in a browser by opening
+<code class="docutils literal"><span class="pre">PACKAGE_ROOT\build\sphinx\html\index.html</span></code>.</p>
+<p>WORC currently only supports Unix with Python 2 (&gt;2.7.6) systems.
+Windows is not supported, although WORC can still work under windows.</p>
+<p>The package can be installed through pip (Note due to a bug, the
+versioning like this is needed):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">WORC</span>
+</pre></div>
+</div>
+<p>Alternatively, you can directly install WORC from this repository:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>Make sure you install the requirements first:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>Several tools have some (mandatory) prerequisites which are listed
+below. We highly recommend you to install these to maximally profit from
+our toolbox.</p>
+<p>Most of the default tools in WORC use
+<a class="reference external" href="https://github.com/Svdvoort/PREDICTFastr">PREDICT</a>, our in-house
+feature extraction and classification toolbox. Currently, you do need to
+manually install PREDICT from the Github or with pip:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">PREDICT</span>
+</pre></div>
+</div>
+<p>The installation will create a FASTR configuration file in the
+$HOME/.fastr/config.d folder. This file is used for configuring fastr,
+the pipeline execution toolbox we use. More information can be found at
+<a class="reference external" href="http://fastr.readthedocs.io/en/stable/static/file_description.html#config-file">the FASTR
+website</a>.
+In this file, so called mounts are defined, which are used to locate the
+WORC tools and your inputs and outputs. Please inspect the mounts and
+change them if neccesary.</p>
+<p>Only if you are using FASTR &lt; 1.3.0, you need to manually add the WORC
+tools, datatypes and mounts to your FASTR configuration
+($HOME/.fastr/config.py). This concerns the following additions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Add the WORC FASTR tools and type paths</span>
+<span class="n">packagedir</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">getsitepackages</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">tools_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packagedir</span><span class="p">,</span> <span class="s1">&#39;WORC&#39;</span><span class="p">,</span> <span class="s1">&#39;resources&#39;</span><span class="p">,</span> <span class="s1">&#39;fastr_tools&#39;</span><span class="p">)]</span> <span class="o">+</span> <span class="n">tools_path</span>
+<span class="n">types_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packagedir</span><span class="p">,</span> <span class="s1">&#39;WORC&#39;</span><span class="p">,</span> <span class="s1">&#39;resources&#39;</span><span class="p">,</span> <span class="s1">&#39;fastr_types&#39;</span><span class="p">)]</span> <span class="o">+</span> <span class="n">types_path</span>
+
+<span class="c1"># Mounts accessible to fastr virtual file system</span>
+<span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;worc_example_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packagedir</span><span class="p">,</span> <span class="s1">&#39;WORC&#39;</span><span class="p">,</span> <span class="s1">&#39;exampledata&#39;</span><span class="p">)</span>
+<span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;apps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="s1">&#39;apps&#39;</span><span class="p">))</span>
+<span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">,</span> <span class="s1">&#39;WORC&#39;</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">))</span>
+<span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packagedir</span><span class="p">,</span> <span class="s1">&#39;WORC&#39;</span><span class="p">,</span> <span class="s1">&#39;resources&#39;</span><span class="p">,</span> <span class="s1">&#39;fastr_tests&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the Python site package does not work properly in virtual
+environments. You must then manually locate the packagedir.</p>
+<p>WORC can draw the network and save it as a SVG image using
+<a class="reference external" href="https://www.graphviz.org/">graphviz</a>. In order to do so, please make
+sure you install graphviz:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">apt</span> <span class="n">install</span> <span class="n">graphiv</span>
+</pre></div>
+</div>
+<p>Image registration is included in WORC through <a class="reference external" href="http://elastix.isi.uu.nl/">elastix and
+transformix</a>. In order to use elastix,
+please download the binaries and place them in your
+fastr.config.mounts[&#8216;apps&#8217;] path. Check the elastix tool description for
+the correct subdirectory structure. For example, on Linux, the binaries
+and libraries should be in &#8221;../apps/elastix/4.8/install/&#8221; and
+&#8221;../apps/elastix/4.8/install/lib&#8221; respectively.</p>
+<p>Note: optionally, you can tell WORC to copy the metadata from the image
+file to the segmentation file before applying the deformation field.
+This requires ITK and ITKTools: see the <a class="reference external" href="Install_ITK.md">Install_ITK
+file</a> for installation instructions. More info on
+using the copying of metadata can be found on our Github Wiki.</p>
+<p>We use the XNATpy package to connect the toolbox to the XNAT online
+database platforms. You will only need this when you want to download or
+upload data from or to XNAT. We advise you to specify your account
+settings in a .netrc file when using this feature, such that you do not
+need to input them on every request:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s2">&quot;machine images.xnat.org</span>
+<span class="o">&gt;</span>     <span class="n">login</span> <span class="n">admin</span>
+<span class="o">&gt;</span>     <span class="n">password</span> <span class="n">admin</span><span class="s2">&quot; &gt; ~/.netrc</span>
+<span class="n">chmod</span> <span class="mi">600</span> <span class="o">~/.</span><span class="n">netrc</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>FASTR (Workflow design and building)</li>
+<li>xnat (Collecting data from XNAT)</li>
+<li>SimpleITK (Image loading and preprocessing)</li>
+<li><a class="reference external" href="https://github.com/Radiomics/pyradiomics">Pyradiomics</a></li>
+<li>Our in-house package
+<a class="reference external" href="https://github.com/Svdvoort/PREDICTFastr">PREDICT</a></li>
+</ul>
+<p>See for other requirements the <a class="reference external" href="requirements.txt">requirements file</a>.</p>
+<p>We suggest you start with the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial">WORC
+Tutorial</a>. Besides a
+Jupter notebook with instructions, we provide there also an example
+script for you to get started with. Make sure you input your own data as
+the sources. Also, check out the unit tests of several tools in the
+WORC/resources/fastr_tests directory. The example is explained in more
+detail in the Wiki on this Github.</p>
+<ul class="simple">
+<li>We are working on improving the documentation.</li>
+<li>We are working on organizing clinically relevant datasets for
+examples and unit tests.</li>
+<li>We will merge to Python 3 support in the coming months (summer 2018),
+as soon as FASTR moves to Python 3.</li>
+</ul>
+<p>This package is covered by the open source <a class="reference external" href="APACHE-LICENSE-2.0">APACHE 2.0
+License</a>.</p>
+<p>When using WORC, please cite this repository.</p>
+<p>We are happy to help you with any questions. Please contact us on the
+<a class="reference external" href="https://groups.google.com/forum/#!forum/worc-users">WORC google
+group</a>.</p>
+<p>We welcome contributions to WORC. We will soon make some guidelines. For
+the moment, converting your toolbox into a FASTR tool will be
+satisfactory.</p>
+</div></blockquote>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to WORC&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Martijn Starmans.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

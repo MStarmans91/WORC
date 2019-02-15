@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: WORC
-Version: 2.1.0
+Version: 2.1.1
 Summary: Workflow for Optimal Radiomics Classification.
 Home-page: https://github.com/MStarmans91/WORC
 Author: M. Starmans
@@ -8,7 +8,7 @@ Author-email: m.starmans@erasmusmc.nl
 License: Apache License, Version 2.0
 Description: |Build Status|
         
-        WORC v2.1.0
+        WORC v2.1.1
         ===========
         
         Workflow for Optimal Radiomics Classification
@@ -66,7 +66,7 @@ Description: |Build Status|
         
         ::
         
-              pip install "WORC==2.1.0_2"
+              pip install WORC
         
         Alternatively, you can directly install WORC from this repository:
         
@@ -210,6 +210,8 @@ Description: |Build Status|
         This package is covered by the open source `APACHE 2.0
         License <APACHE-LICENSE-2.0>`__.
         
+        When using WORC, please cite this repository.
+        
         Contact
         -------
         
@@ -226,7 +228,7 @@ Description: |Build Status|
         
 Keywords: bioinformatics radiomics features
 Platform: UNKNOWN
-Classifier: Development Status :: 3 - Alpha
+Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Science/Research
 Classifier: Intended Audience :: Healthcare Industry

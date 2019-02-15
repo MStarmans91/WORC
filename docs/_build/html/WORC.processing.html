@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WORC.processing package &#8212; WORC 2.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="worc-processing-package">
+<h1>WORC.processing package<a class="headerlink" href="#worc-processing-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-WORC.processing.ExtractNLargestBlobsn">
+<span id="worc-processing-extractnlargestblobsn-module"></span><h2>WORC.processing.ExtractNLargestBlobsn module<a class="headerlink" href="#module-WORC.processing.ExtractNLargestBlobsn" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.processing.ExtractNLargestBlobsn.ExtractNLargestBlobsn">
+<code class="descclassname">WORC.processing.ExtractNLargestBlobsn.</code><code class="descname">ExtractNLargestBlobsn</code><span class="sig-paren">(</span><em>binaryImage</em>, <em>numberToExtract=1</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.ExtractNLargestBlobsn.ExtractNLargestBlobsn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract N largest blobs from binary image.</p>
+<dl class="docutils">
+<dt>Arguments:</dt>
+<dd>binaryImage: boolean numpy array one or several contours.
+numberToExtract: number of blobs to extract (integer).</dd>
+<dt>Returns:</dt>
+<dd><dl class="first last docutils">
+<dt>binaryImage: boolean numpy are containing only the N</dt>
+<dd>extracted blobs.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.processing.RTStructReader">
+<span id="worc-processing-rtstructreader-module"></span><h2>WORC.processing.RTStructReader module<a class="headerlink" href="#module-WORC.processing.RTStructReader" title="Permalink to this headline">¶</a></h2>
+<p>&#64;author: Zhenwei.Shi, Maastro</p>
+<p>usage:</p>
+<blockquote>
+<div><p>paste this file in same directory as your main script file
+and use the following lines</p>
+<p>import DCM_ImgRT_Reader_ZW</p>
+<p>path1=r&#8217;c:ABCFolderContainingDicomOfimageCTscan&#8217;
+path2=r&#8217;c:ABCFolderContainingDicomOfRTstruct&#8217;
+DCM_ImgRT_Reader_ZW.Img_Bimask(image_path=path1,rtstruct_path=path2,ROI_name)</p>
+</div></blockquote>
+<dl class="function">
+<dt id="WORC.processing.RTStructReader.ROI_ref">
+<code class="descclassname">WORC.processing.RTStructReader.</code><code class="descname">ROI_ref</code><span class="sig-paren">(</span><em>rtstruct_path</em>, <em>ROI_name</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.RTStructReader.ROI_ref" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.RTStructReader.RTStructReader">
+<code class="descclassname">WORC.processing.RTStructReader.</code><code class="descname">RTStructReader</code><span class="sig-paren">(</span><em>RTStructFile</em>, <em>ROI_name</em>, <em>image_folder</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.RTStructReader.RTStructReader" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Input:</dt>
+<dd><p class="first">image_path is directory containing dicom files
+rtstruct_path is directory containing RTstruct files</p>
+<blockquote class="last">
+<div>ROI_name is the ROI stored in RTstructure</div></blockquote>
+</dd>
+<dt>Output:</dt>
+<dd>mask file written in current directory
+image volume file written in current directory</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.RTStructReader.get_dicoms">
+<code class="descclassname">WORC.processing.RTStructReader.</code><code class="descname">get_dicoms</code><span class="sig-paren">(</span><em>input_dir</em>, <em>logfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.RTStructReader.get_dicoms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.RTStructReader.get_pixels">
+<code class="descclassname">WORC.processing.RTStructReader.</code><code class="descname">get_pixels</code><span class="sig-paren">(</span><em>scan</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.RTStructReader.get_pixels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.RTStructReader.load_dicom">
+<code class="descclassname">WORC.processing.RTStructReader.</code><code class="descname">load_dicom</code><span class="sig-paren">(</span><em>dicom_folder</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.RTStructReader.load_dicom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.RTStructReader.match_ROIid">
+<code class="descclassname">WORC.processing.RTStructReader.</code><code class="descname">match_ROIid</code><span class="sig-paren">(</span><em>rtstruct_path</em>, <em>ROI_number</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.RTStructReader.match_ROIid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.RTStructReader.poly2mask">
+<code class="descclassname">WORC.processing.RTStructReader.</code><code class="descname">poly2mask</code><span class="sig-paren">(</span><em>vertex_row_coords</em>, <em>vertex_col_coords</em>, <em>shape</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.RTStructReader.poly2mask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-WORC.processing.classes">
+<span id="worc-processing-classes-module"></span><h2>WORC.processing.classes module<a class="headerlink" href="#module-WORC.processing.classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.processing.classes.switch">
+<em class="property">class </em><code class="descclassname">WORC.processing.classes.</code><code class="descname">switch</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.classes.switch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Object to mimic the MATLAB switch - case statement.</p>
+<dl class="method">
+<dt id="WORC.processing.classes.switch.match">
+<code class="descname">match</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.processing.classes.switch.match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicate whether or not to enter a case suite</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.processing">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-WORC.processing" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">WORC.processing package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-WORC.processing.ExtractNLargestBlobsn">WORC.processing.ExtractNLargestBlobsn module</a></li>
+<li><a class="reference internal" href="#module-WORC.processing.RTStructReader">WORC.processing.RTStructReader module</a></li>
+<li><a class="reference internal" href="#module-WORC.processing.classes">WORC.processing.classes module</a></li>
+<li><a class="reference internal" href="#module-WORC.processing">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/WORC.processing.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Martijn Starmans.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/WORC.processing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
