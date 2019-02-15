@@ -36,27 +36,18 @@ def load_config(config_file_path):
                      'SVMFeatures': dict()}
 
     settings_dict['ImageFeatures']['image_type'] =\
-        [str(item).strip() for item in
-         settings['ImageFeatures']['image_type'].split(',')]
-
-    settings_dict['General']['patientclass'] =\
-        str(settings['General']['patientclass'])
+        str(settings['ImageFeatures']['image_type'])
 
     settings_dict['General']['FeatureCalculator'] =\
         str(settings['General']['FeatureCalculator'])
+
+    settings_dict['General']['Preprocessing'] =\
+        str(settings['General']['Preprocessing'])
 
     settings_dict['General']['PCE'] =\
         settings['General'].getboolean('PCE')
 
     settings_dict['General']['Segmentix'] =\
         settings['General'].getboolean('Segmentix')
-
-    # settings_dict['General']['gridsearch_SVM'] =\
-    #     str(settings['General']['gridsearch_SVM'])
-
-    # for key in settings['SVMFeatures'].keys():
-    #     settings_dict['SVMFeatures'][key] =\
-    #         [str(item).strip() for item in
-    #          settings['SVMFeatures'][key].split(',')]
 
     return settings_dict

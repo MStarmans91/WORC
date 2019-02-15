@@ -76,16 +76,16 @@ def main():
             metadata.RescaleIntercept
 
     # Apply the preprocessing
-    if not config['Normalize']['ROI']:
+    if config['Normalize']['ROI'] == 'Full':
         print('Apply z-scoring on full image.')
         image = sitk.Normalize(image)
-    else:
+    elif config['Normalize']['ROI'] == 'True':
         print('Apply scaling of image based on a Region Of Interest.')
         if args.mask is None:
             raise IOError('Mask input required for ROI normalization.')
         else:
             if config['Normalize']['Method'] == 'z_score':
-                # Apply scaling using z-scoring based on the ROI
+                print('Apply scaling using z-scoring based on the ROI')
 
                 # Cast to float to allow proper processing
                 image = sitk.Cast(image, 9)
@@ -99,7 +99,7 @@ def main():
                                         shift=-ROI_mean,
                                         scale=1.0/ROI_std)
             elif config['Normalize']['Method'] == 'minmed':
-                # Apply scaling using the minimum and mean of the ROI
+                print('Apply scaling using the minimum and mean of the ROI')
                 image = sitk.Cast(image, 9)
 
                 LabelFilter = sitk.LabelStatisticsImageFilter()
@@ -110,6 +110,8 @@ def main():
                 image = sitk.ShiftScale(image,
                                         shift=-ROI_minimum,
                                         scale=0.5/ROI_median)
+    else:
+        print('No preprocessing was applied.')
 
     # Save the output
     sitk.WriteImage(image, args.out)

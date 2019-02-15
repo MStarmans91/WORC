@@ -174,10 +174,11 @@ class WORC(object):
         config['Segmentix']['segtype'] = 'None'
         config['Segmentix']['segradius'] = '5'
         config['Segmentix']['N_blobs'] = '1'
+        config['Segmentix']['fillholes'] = 'False'
 
         # Preprocessing
         config['Normalize'] = dict()
-        config['Normalize']['ROI'] = 'False'
+        config['Normalize']['ROI'] = 'Full'
         config['Normalize']['Method'] = 'z_score'
 
         # PREDICT - Feature calculation
@@ -222,7 +223,7 @@ class WORC(object):
         # Vessel features radius for erosion to determine boudnary
         config['ImageFeatures']['vessel_radius'] = '5'
 
-        ## PREDICT - Feature selection
+        # PREDICT - Feature selection
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = 'True'
         config['Featsel']['SelectFromModel'] = 'False'
@@ -231,13 +232,24 @@ class WORC(object):
         config['Featsel']['StatisticalTestUse'] = 'False'
         config['Featsel']['StatisticalTestMetric'] = 'ttest, Welch, Wilcoxon, MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '0.02, 0.2'
+        config['Featsel']['ReliefUse'] = 'False'
+        config['Featsel']['ReliefNN'] = '2, 4'
+        config['Featsel']['ReliefSampleSize'] = '1, 1'
+        config['Featsel']['ReliefDistanceP'] = '1, 3'
+        config['Featsel']['ReliefNumFeatures'] = '25, 200'
 
         # PREDICT - Gridsearch options
         config['SelectFeatGroup'] = dict()
         config['SelectFeatGroup']['shape_features'] = 'True, False'
         config['SelectFeatGroup']['histogram_features'] = 'True, False'
         config['SelectFeatGroup']['orientation_features'] = 'True, False'
-        config['SelectFeatGroup']['texture_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_Gabor_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLCM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLCMMS_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLRLM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLSZM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_NGTDM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_LBP_features'] = 'True, False'
         config['SelectFeatGroup']['patient_features'] = 'False'
         config['SelectFeatGroup']['semantic_features'] = 'False'
         config['SelectFeatGroup']['coliage_features'] = 'False'
@@ -245,13 +257,13 @@ class WORC(object):
         config['SelectFeatGroup']['vessel_features'] = 'False'
         config['SelectFeatGroup']['phase_features'] = 'False'
 
-        ## PREDICT - Feature imputation
+        # PREDICT - Feature imputation
         config['Imputation'] = dict()
         config['Imputation']['use'] = 'False'
         config['Imputation']['strategy'] = 'mean'
         config['Imputation']['n_neighbors'] = '5'
 
-        ## PREDICT - Classification
+        # PREDICT - Classification
         config['Classification'] = dict()
         config['Classification']['fastr'] = 'False'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
@@ -259,12 +271,13 @@ class WORC(object):
         config['Classification']['Kernel'] = 'polynomial'
 
         config['CrossValidation'] = dict()
-        config['CrossValidation']['N_iterations'] = '50'
+        config['CrossValidation']['N_iterations'] = '100'
         config['CrossValidation']['test_size'] = '0.2'
 
         # PREDICT - Options for the labels that are used (not only genetics)
         config['Genetics'] = dict()
         config['Genetics']['label_names'] = 'Label1, Label2'
+        config['Genetics']['modus'] = 'singlelabel'
         config['Genetics']['url'] = 'WIP'
         config['Genetics']['projectID'] = 'WIP'
 
@@ -285,6 +298,7 @@ class WORC(object):
         config['SampleProcessing']['SMOTE'] = 'True'
         config['SampleProcessing']['SMOTE_ratio'] = '1.0'
         config['SampleProcessing']['SMOTE_neighbors'] = '10'
+        config['SampleProcessing']['Oversampling'] = 'False'
 
         # PREDICT - Ensemble options
         config['Ensemble'] = dict()
@@ -338,9 +352,9 @@ class WORC(object):
                 # BUG: We currently use the first configuration as general config
                 image_types = list()
                 for c in range(len(self.configs)):
-                    if type(self.configs[c]) == str():
+                    if type(self.configs[c]) == str:
                         # Probably, c is a configuration file
-                        self.configs[c] = config_io.load_config(c)
+                        self.configs[c] = config_io.load_config(self.configs[c])
                     image_types.append(self.configs[c]['ImageFeatures']['image_type'])
 
                 # Classification tool and label source
@@ -731,7 +745,7 @@ class WORC(object):
                             self.network.sinks_segmentations_segmentix_train[label].input = self.network.nodes_segmentix_train[label].outputs['segmentation_out']
 
                             if self.images_test or self.features_test:
-                                self.network.sinks_segmentations_segmentix_test[label] = self.network.create_sink('ITKImageFile', id_='segmentation_out_segmentix_test_' + label)
+                                self.network.sinks_segmentations_segmentix_test[label] = self.network.create_sink('ITKImageFile', id_='segmentations_out_segmentix_test_' + label)
                                 self.network.nodes_segmentix_test[label] = self.network.create_node('Segmentix', memory='6G', id_='segmentix_test_' + label)
                                 if hasattr(self.network, 'transformix_seg_nodes_test'):
                                     if label in self.network.transformix_seg_nodes_test.keys():
@@ -781,7 +795,7 @@ class WORC(object):
 
                         if self.images_test or self.features_test:
                             # Add the features from this modality to the classifier node input
-                            self.network.links_C1_test[label] = self.network.classify.inputs['features_test'][label] << self.network.calcfeatures_test[label].outputs['features']
+                            self.network.links_C1_test[label] = self.network.classify.inputs['features_test'][str(label)] << self.network.calcfeatures_test[label].outputs['features']
                             self.network.links_C1_test[label].collapse = 'test'
 
                         # Save output
@@ -850,17 +864,22 @@ class WORC(object):
 
         # If the configuration files are confiparse objects, write to file
         for num, c in enumerate(self.configs):
-            if type(c) == configparser.ConfigParser:
-                cfile = os.path.join(fastr.config.mounts['tmp'], self.name, ("config_{}_{}.ini").format(self.name, num))
-                if not os.path.exists(os.path.dirname(cfile)):
-                    os.makedirs(os.path.dirname(cfile))
-                with open(cfile, 'w') as configfile:
-                    c.write(configfile)
-                self.fastrconfigs.append(os.path.join("vfs://tmp/", self.name, ("config_{}_{}.ini").format(self.name, num)))
+            if type(c) != configparser.ConfigParser:
+                # A filepath (not a fastr source) is provided. Hence we read
+                # the config file and convert it to a configparser object
+                config = configparser.ConfigParser()
+                config.read(c)
+                c = config
+            cfile = os.path.join(fastr.config.mounts['tmp'], self.name, ("config_{}_{}.ini").format(self.name, num))
+            if not os.path.exists(os.path.dirname(cfile)):
+                os.makedirs(os.path.dirname(cfile))
+            with open(cfile, 'w') as configfile:
+                c.write(configfile)
+            self.fastrconfigs.append(os.path.join("vfs://tmp/", self.name, ("config_{}_{}.ini").format(self.name, num)))
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
-        self.source_data['config_classification'] = self.fastrconfigs
+        self.source_data['config_classification'] = self.fastrconfigs[0]
 
         # Set source and sink data
         self.source_data['patientclass_train'] = self.labels_train
@@ -943,24 +962,24 @@ class WORC(object):
             if self.features_test and len(self.features_test) - 1  >= num:
                 self.source_data['features_test_' + label] = self.features_test[num]
 
-            self.sink_data['segmentations_out_segmentix_train_' + label] = ("vfs://output/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-            self.sink_data['segmentations_out_elastix_train_' + label] = ("vfs://output/{}/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-            self.sink_data['images_out_elastix_train_' + label] = ("vfs://output/{}/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-            self.sink_data['features_train_' + label] = ("vfs://output/{}/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+            self.sink_data['segmentations_out_segmentix_train_' + label] = ("vfs://output/{}/Segmentations/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+            self.sink_data['segmentations_out_elastix_train_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+            self.sink_data['images_out_elastix_train_' + label] = ("vfs://output/{}/Elastix/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+            self.sink_data['features_train_' + label] = ("vfs://output/{}/Features/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
 
             if self.labels_test:
-                self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-                self.sink_data['segmentations_out_elastix_test_' + label] = ("vfs://output/{}/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-                self.sink_data['images_out_elastix_test_' + label] = ("vfs://output/{}/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-                self.sink_data['features_test_' + label] = ("vfs://output/{}/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/Segmentations/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['segmentations_out_elastix_test_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['images_out_elastix_test_' + label] = ("vfs://output/{}/Images/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['features_test_' + label] = ("vfs://output/{}/Features/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
 
             # Add elastix sinks if used
             if self.segmode:
                 # Segmode is only non-empty if segmentations are provided
                 if self.segmode == 'Register':
-                    self.sink_data['transformations_train_' + label] = ("vfs://output/{}/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                    self.sink_data['transformations_train_' + label] = ("vfs://output/{}/Elastix/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                     if self.images_test or self.features_test:
-                        self.sink_data['transformations_test_' + label] = ("vfs://output/{}/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                        self.sink_data['transformations_test_' + label] = ("vfs://output/{}/Elastix/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
 
     def execute(self):
         """ Execute the network through the fastr.network.execute command. """

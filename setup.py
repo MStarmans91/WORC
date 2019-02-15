@@ -90,46 +90,9 @@ class NoseTestCommand(TestCommand):
         nose.run_exit(argv=['nosetests'])
 
 
-class MyInstall(install):
-    def run(self):
-        try:
-            # note cwd - this makes the current directory
-            # the one with the Makefile.
-            # subprocess.call(['pip install -r requirements-setup.txt'])
-            regcommand = 'pip install -r requirements.txt'
-            print(regcommand)
-            proc = subprocess.Popen(regcommand,
-                                    shell=True,
-                                    stdin=subprocess.PIPE,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.STDOUT,
-                                    )
-            stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
-
-            # Install pyradiomics
-            commands = ['git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r pyradiomics;']
-            # commands = ['git clone https://github.com/Radiomics/pyradiomics; cd pyradiomics; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r pyradiomics;',
-            #             'git clone https://github.com/Svdvoort/PREDICTFastr PREDICT; cd PREDICT; pip install -r requirements.txt; python setup.py -q install; cd ..; rm -r PREDICT;']
-            for command in commands:
-                print(command)
-                proc = subprocess.Popen(commands,
-                                        shell=True,
-                                        stdin=subprocess.PIPE,
-                                        stdout=subprocess.PIPE,
-                                        stderr=subprocess.STDOUT,
-                                        )
-                stdout_value, stderr_value = proc.communicate('through stdin to stdout\n')
-
-        except Exception as e:
-            print(e)
-            exit(1)
-        else:
-            install.run(self)
-
-
 setup(
     name='WORC',
-    version='2.1.0',
+    version='2.1.1',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',
@@ -137,7 +100,7 @@ setup(
     author_email='m.starmans@erasmusmc.nl',
     license='Apache License, Version 2.0',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
         'Intended Audience :: Healthcare Industry',
@@ -167,7 +130,7 @@ setup(
     install_requires=_requires,
     tests_require=_tests_require,
     test_suite='nose.collector',
-    cmdclass={'test': NoseTestCommand, 'install': MyInstall},
+    cmdclass={'test': NoseTestCommand},
     entry_points=entry_points,
     setup_requires=_requires
 )

@@ -26,7 +26,7 @@ class Evaluate(object):
     def __init__(self, label_type, ensemble=50, scores='percentages',
                  network=None, features=None,
                  fastr_plugin='ProcessPoolExecution',
-                 name='Evaluate'):
+                 name='Example'):
         '''
         Build a network that evaluates the performance of an estimator.
 
@@ -45,7 +45,7 @@ class Evaluate(object):
             self.network = fastr.Network(id_="Evaluate")
             self.mode = 'StandAlone'
             self.fastr_plugin = fastr_plugin
-            self.name = name
+            self.name = 'WORC_Evaluate_' + name
             self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
 
         if features is None and self.mode == 'StandAlone':
@@ -65,17 +65,17 @@ class Evaluate(object):
 
         # Create all nodes
         self.network.node_ROC =\
-            self.network.create_node('PlotROC', memory='4G', id_='plot_ROC')
+            self.network.create_node('PlotROC', memory='20G', id_='plot_ROC')
         self.network.node_SVM =\
-            self.network.create_node('PlotSVM', memory='4G', id_='plot_SVM')
+            self.network.create_node('PlotSVM', memory='20G', id_='plot_SVM')
         self.network.node_Barchart =\
             self.network.create_node('PlotBarchart', memory='4G', id_='plot_Barchart')
         self.network.node_STest =\
             self.network.create_node('StatisticalTestFeatures', memory='4G', id_='statistical_test_features')
         self.network.node_Ranked_Percentages =\
-            self.network.create_node('PlotRankedScores', memory='4G', id_='plot_ranked_percentages')
+            self.network.create_node('PlotRankedScores', memory='20G', id_='plot_ranked_percentages')
         self.network.node_Ranked_Posteriors =\
-            self.network.create_node('PlotRankedScores', memory='4G', id_='plot_ranked_posteriors')
+            self.network.create_node('PlotRankedScores', memory='20G', id_='plot_ranked_posteriors')
 
         # Create sinks
         self.network.sink_ROC_PNG =\

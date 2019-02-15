@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master)](https://travis-ci.com/MStarmans91/WORC)
 
-# WORC v2.1.0
+# WORC v2.1.1
 
 ## Workflow for Optimal Radiomics Classification
 
@@ -34,9 +34,13 @@ The documentation can then be viewed in a browser by opening `PACKAGE_ROOT\build
 WORC currently only supports Unix with Python 2 (>2.7.6) systems. Windows is not supported,
 although WORC can still work under windows.
 
-The package can be installed through pip (Note due to a bug, the versioning like this is needed):
+Please first install PREDICT:
 
-      pip install "WORC==2.1.0_2"
+      pip install PREDICT
+
+The package can be installed through pip:
+
+      pip install WORC
 
 Alternatively, you can directly install WORC from this repository:
 
@@ -77,6 +81,12 @@ mounts['test'] = os.path.join(packagedir, 'WORC', 'resources', 'fastr_tests')
 ```
 
 Note that the Python site package does not work properly in virtual environments. You must then manually locate the packagedir.
+
+### Optional: Graphviz
+WORC can draw the network and save it as a SVG image using [graphviz](https://www.graphviz.org/). In order to do so,
+please make sure you install graphviz:
+
+      apt install graphiv
 
 ### Optional: Elastix
 Image registration is included in WORC through [elastix and transformix](http://elastix.isi.uu.nl/).
@@ -126,6 +136,8 @@ WORC/resources/fastr_tests directory. The example is explained in more detail in
 
 ## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
+
+When using WORC, please cite this repository.
 
 ## Contact
 We are happy to help you with any questions. Please contact us on the [WORC google group](https://groups.google.com/forum/#!forum/worc-users).

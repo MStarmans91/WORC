@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: WORC
-Version: 2.1.0
+Version: 2.1.1
 Summary: Workflow for Optimal Radiomics Classification.
 Home-page: https://github.com/MStarmans91/WORC
 Author: M. Starmans
@@ -8,7 +8,7 @@ Author-email: m.starmans@erasmusmc.nl
 License: Apache License, Version 2.0
 Description: |Build Status|
         
-        WORC v2.1.0
+        WORC v2.1.1
         ===========
         
         Workflow for Optimal Radiomics Classification
@@ -56,12 +56,19 @@ Description: |Build Status|
         ``PACKAGE_ROOT\build\sphinx\html\index.html``.
         
         Installation
-        -------------
+        ------------
         
         WORC currently only supports Unix with Python 2 (>2.7.6) systems.
         Windows is not supported, although WORC can still work under windows.
         
-        The package can be installed by running the setup file:
+        The package can be installed through pip (Note due to a bug, the
+        versioning like this is needed):
+        
+        ::
+        
+              pip install WORC
+        
+        Alternatively, you can directly install WORC from this repository:
         
         ::
         
@@ -76,6 +83,18 @@ Description: |Build Status|
         Several tools have some (mandatory) prerequisites which are listed
         below. We highly recommend you to install these to maximally profit from
         our toolbox.
+        
+        PREDICT
+        ~~~~~~~
+        
+        Most of the default tools in WORC use
+        `PREDICT <https://github.com/Svdvoort/PREDICTFastr>`__, our in-house
+        feature extraction and classification toolbox. Currently, you do need to
+        manually install PREDICT from the Github or with pip:
+        
+        ::
+        
+              pip install PREDICT
         
         Fastr Configuration
         ~~~~~~~~~~~~~~~~~~~
@@ -108,6 +127,17 @@ Description: |Build Status|
         
         Note that the Python site package does not work properly in virtual
         environments. You must then manually locate the packagedir.
+        
+        Optional: Graphviz
+        ~~~~~~~~~~~~~~~~~~
+        
+        WORC can draw the network and save it as a SVG image using
+        `graphviz <https://www.graphviz.org/>`__. In order to do so, please make
+        sure you install graphviz:
+        
+        ::
+        
+              apt install graphiv
         
         Optional: Elastix
         ~~~~~~~~~~~~~~~~~
@@ -143,7 +173,7 @@ Description: |Build Status|
             chmod 600 ~/.netrc
         
         3rd-party packages used in WORC:
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        --------------------------------
         
         -  FASTR (Workflow design and building)
         -  xnat (Collecting data from XNAT)
@@ -180,6 +210,8 @@ Description: |Build Status|
         This package is covered by the open source `APACHE 2.0
         License <APACHE-LICENSE-2.0>`__.
         
+        When using WORC, please cite this repository.
+        
         Contact
         -------
         
@@ -196,7 +228,7 @@ Description: |Build Status|
         
 Keywords: bioinformatics radiomics features
 Platform: UNKNOWN
-Classifier: Development Status :: 3 - Alpha
+Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Science/Research
 Classifier: Intended Audience :: Healthcare Industry
