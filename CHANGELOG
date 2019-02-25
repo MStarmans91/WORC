@@ -6,6 +6,23 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+Unreleased
+------------------
+
+Added
+~~~~~~~
+- Dummy workflow in segmentix and calcfeatures PREDICT tools.
+
+
+Changed
+~~~~~~~
+-
+
+Fixed
+~~~~~
+-Evaluate namework now correctly adopts the name you give it.
+
+
 2019-02-15 - 2.1.1
 ------------------
 

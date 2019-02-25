@@ -17,6 +17,7 @@
 
 import argparse
 from PREDICT.CalcFeatures import CalcFeatures
+import pandas as pd
 
 
 def main():
@@ -41,9 +42,26 @@ def main():
                         help='Patient features output (HDF)')
     args = parser.parse_args()
 
-    CalcFeatures(image=args.im, segmentation=args.seg, parameters=args.para,
-                 output=args.out, metadata_file=args.md,
-                 semantics_file=args.sem)
+    if 'Dummy' in str(args.im):
+        # Image is a dummy, so we write a feature file without features
+        panda_labels = ['image_type', 'parameters', 'feature_values',
+                        'feature_labels']
+        image_type = 'Dummy'
+        parameters = list()
+        feature_labels = list()
+        feature_values = list()
+        panda_data = pd.Series([image_type, parameters, feature_values,
+                                feature_labels],
+                               index=panda_labels,
+                               name='Image features'
+                               )
+
+        print('Saving image features')
+        panda_data.to_hdf(args.out, 'image_features')
+    else:
+        CalcFeatures(image=args.im, segmentation=args.seg, parameters=args.para,
+                     output=args.out, metadata_file=args.md,
+                     semantics_file=args.sem)
 
 
 if __name__ == '__main__':
