@@ -1,4 +1,4 @@
-fastr>=1.1.2
+fastr==2.1.1
 xnat>=0.2.2
 configparser>=3.5.0
 natsort>=5.0.1

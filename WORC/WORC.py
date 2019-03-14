@@ -225,7 +225,8 @@ class WORC(object):
 
         # PREDICT - Feature selection
         config['Featsel'] = dict()
-        config['Featsel']['Variance'] = 'True'
+        config['Featsel']['Variance'] = 'True, False'
+        config['Featsel']['GroupwiseSearch'] = 'True'
         config['Featsel']['SelectFromModel'] = 'False'
         config['Featsel']['UsePCA'] = 'False'
         config['Featsel']['PCAType'] = '95variance'
@@ -267,9 +268,30 @@ class WORC(object):
         config['Classification'] = dict()
         config['Classification']['fastr'] = 'False'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
-        config['Classification']['classifier'] = 'SVM'
-        config['Classification']['Kernel'] = 'polynomial'
+        config['Classification']['classifiers'] = 'SVM'
+        config['Classification']['max_iter'] = '100000'
+        config['Classification']['SVMKernel'] = 'poly'
+        config['Classification']['SVMC'] = '0, 6'
+        config['Classification']['SVMdegree'] = '1, 6'
+        config['Classification']['SVMcoef0'] = '0, 1'
+        config['Classification']['SVMgamma'] = '-5, 5'
+        config['Classification']['RFn_estimators'] = '10, 190'
+        config['Classification']['RFmin_samples_split'] = '2, 3'
+        config['Classification']['RFmax_depth'] = '5, 5'
+        config['Classification']['LRpenalty'] = 'l2, l1'
+        config['Classification']['LRC'] = '0.01, 1.0'
+        config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
+        config['Classification']['LDA_shrinkage'] = '-5, 5'
+        config['Classification']['QDA_reg_param'] = '-5, 5'
+        config['Classification']['ElasticNet_alpha'] = '-5, 5'
+        config['Classification']['ElasticNet_l1_ratio'] = '0, 1'
+        config['Classification']['SGD_alpha'] = '-5, 5'
+        config['Classification']['SGD_l1_ratio'] = '0, 1'
+        config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
+        config['Classification']['SGD_penalty'] = 'none, l2, l1'
+        config['Classification']['CNB_alpha'] = '0, 1'
 
+        # PREDICT - CrossValidation
         config['CrossValidation'] = dict()
         config['CrossValidation']['N_iterations'] = '100'
         config['CrossValidation']['test_size'] = '0.2'
@@ -295,9 +317,9 @@ class WORC(object):
 
         # PREDICT - Sample processing options
         config['SampleProcessing'] = dict()
-        config['SampleProcessing']['SMOTE'] = 'True'
-        config['SampleProcessing']['SMOTE_ratio'] = '1.0'
-        config['SampleProcessing']['SMOTE_neighbors'] = '10'
+        config['SampleProcessing']['SMOTE'] = 'True, False'
+        config['SampleProcessing']['SMOTE_ratio'] = '1, 0'
+        config['SampleProcessing']['SMOTE_neighbors'] = '5, 15'
         config['SampleProcessing']['Oversampling'] = 'False'
 
         # PREDICT - Ensemble options

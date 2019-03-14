@@ -12,6 +12,7 @@ Unreleased
 Added
 ~~~~~~~
 - Dummy workflow in segmentix and calcfeatures PREDICT tools.
+- Added several new PREDICT parameters.
 
 
 Changed
