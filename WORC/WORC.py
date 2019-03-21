@@ -641,12 +641,12 @@ class WORC(object):
                                 # NOTE: Assume elastix node type is on first configuration
                                 elastix_node = str(self.configs[0]['General']['RegistrationNode'])
                                 transformix_node = str(self.configs[0]['General']['TransformationNode'])
-                                self.network.elastix_nodes_train[label] = self.network.create_node(elastix_node, id_='elastix_train_' + label)
+                                self.network.elastix_nodes_train[label] = self.network.create_node(elastix_node, memory='4G', id_='elastix_train_' + label)
                                 self.network.transformix_seg_nodes_train[label] = self.network.create_node(transformix_node, id_='transformix_seg_train_' + label)
                                 self.network.transformix_im_nodes_train[label] = self.network.create_node(transformix_node, id_='transformix_im_train_' + label)
 
                                 if self.images_test or self.features_test:
-                                    self.network.elastix_nodes_test[label] = self.network.create_node(elastix_node, id_='elastix_test_' + label)
+                                    self.network.elastix_nodes_test[label] = self.network.create_node(elastix_node, memory='4G', id_='elastix_test_' + label)
                                     self.network.transformix_seg_nodes_test[label] = self.network.create_node(transformix_node, id_='transformix_seg_test_' + label)
                                     self.network.transformix_im_nodes_test[label] = self.network.create_node(transformix_node, id_='transformix_im_test_' + label)
 
