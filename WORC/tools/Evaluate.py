@@ -42,10 +42,10 @@ class Evaluate(object):
             self.network = network
             self.mode = 'WORC'
         else:
-            self.network = fastr.Network(id_="Evaluate")
             self.mode = 'StandAlone'
             self.fastr_plugin = fastr_plugin
             self.name = 'WORC_Evaluate_' + name
+            self.network = fastr.Network(id_=self.name)
             self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
 
         if features is None and self.mode == 'StandAlone':
@@ -198,7 +198,7 @@ class Evaluate(object):
             self.network.link_segmentations_post.collapse = 'patients'
         else:
             # Sources from the WORC network are used
-            print 'WIP'
+            print('WIP')
 
     def set(self, estimator=None, pinfo=None, images=None,
             segmentations=None, config=None, features=None,

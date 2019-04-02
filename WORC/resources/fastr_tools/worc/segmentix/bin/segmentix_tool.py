@@ -17,6 +17,7 @@
 
 import argparse
 from segmentix import segmentix
+from shutil import copyfile
 
 
 def main():
@@ -41,8 +42,14 @@ def main():
                         help='Segmentation output (ITK Image)')
     args = parser.parse_args()
 
-    segmentix(image=args.im, segmentation=args.seg, parameters=args.para,
-              output=args.out, metadata_file=args.md, mask=args.mask)
+    if 'Dummy' in str(args.im):
+        # Image is a dummy, so we do not do anything with the segmentation but
+        # simply copy the input to the output
+        if args.out is not None:
+            copyfile(str(args.seg), str(args.out))
+    else:
+        segmentix(image=args.im, segmentation=args.seg, parameters=args.para,
+                  output=args.out, metadata_file=args.md, mask=args.mask)
 
 
 if __name__ == '__main__':
