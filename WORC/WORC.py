@@ -261,8 +261,8 @@ class WORC(object):
         # PREDICT - Feature imputation
         config['Imputation'] = dict()
         config['Imputation']['use'] = 'False'
-        config['Imputation']['strategy'] = 'mean'
-        config['Imputation']['n_neighbors'] = '5'
+        config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
+        config['Imputation']['n_neighbors'] = '5, 5'
 
         # PREDICT - Classification
         config['Classification'] = dict()
@@ -275,7 +275,7 @@ class WORC(object):
         config['Classification']['SVMdegree'] = '1, 6'
         config['Classification']['SVMcoef0'] = '0, 1'
         config['Classification']['SVMgamma'] = '-5, 5'
-        config['Classification']['RFn_estimators'] = '10, 190'
+        config['Classification']['RFn_estimators'] = '10, 90'
         config['Classification']['RFmin_samples_split'] = '2, 3'
         config['Classification']['RFmax_depth'] = '5, 5'
         config['Classification']['LRpenalty'] = 'l2, l1'
