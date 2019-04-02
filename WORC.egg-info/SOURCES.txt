@@ -23,6 +23,7 @@ WORC/IOparser/__init__.py
 WORC/IOparser/config_WORC.py
 WORC/IOparser/config_preprocessing.py
 WORC/IOparser/config_segmentix.py
+WORC/exampledata/dummies/dummy.nii.gz
 WORC/exampledata/elastix/parAslice.txt
 WORC/exampledata/elastix/parBslice.txt
 WORC/exampledata/elastix/img0/slice047.mhd
@@ -97,11 +98,13 @@ WORC/resources/fastr_tools/predict/bin/StatisticalTestFeatures_tool.py
 WORC/resources/fastr_tools/predict/bin/TrainClassifier.py
 WORC/resources/fastr_tools/worc/PreProcess.xml
 WORC/resources/fastr_tools/worc/RTStructReader.xml
+WORC/resources/fastr_tools/worc/Slicer.xml
 WORC/resources/fastr_tools/worc/combineresults.xml
 WORC/resources/fastr_tools/worc/worccastconvert.xml
 WORC/resources/fastr_tools/worc/bin/RTStructReader_Tool.py
 WORC/resources/fastr_tools/worc/bin/combineresults.py
 WORC/resources/fastr_tools/worc/bin/preprocessing.py
+WORC/resources/fastr_tools/worc/bin/slicer.py
 WORC/resources/fastr_tools/worc/bin/worccastconvert.py
 WORC/resources/fastr_tools/worc/segmentix/Segmentix.xml
 WORC/resources/fastr_tools/worc/segmentix/bin/segmentix.py
@@ -139,6 +142,7 @@ WORC/resources/fastr_types/XlsxFile.py
 WORC/resources/fastr_types/ZipFile.py
 WORC/tools/Elastix.py
 WORC/tools/Evaluate.py
+WORC/tools/Slicer.py
 WORC/tools/Transformix.py
 WORC/tools/__init__.py
 docs/_build/html/.buildinfo
@@ -150,7 +154,6 @@ docs/_build/html/genindex.html
 docs/_build/html/index.html
 docs/_build/html/modules.html
 docs/_build/html/objects.inv
-docs/_build/html/py-modindex.html
 docs/_build/html/search.html
 docs/_build/html/searchindex.js
 docs/_build/html/_sources/WORC.IOparser.rst.txt

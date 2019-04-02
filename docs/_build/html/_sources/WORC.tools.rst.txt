@@ -20,6 +20,14 @@ WORC.tools.Evaluate module
     :undoc-members:
     :show-inheritance:
 
+WORC.tools.Slicer module
+------------------------
+
+.. automodule:: WORC.tools.Slicer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 WORC.tools.Transformix module
 -----------------------------
 

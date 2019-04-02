@@ -1,6 +1,6 @@
 |Build Status|
 
-WORC v2.1.1
+WORC v2.1.2
 ===========
 
 Workflow for Optimal Radiomics Classification
@@ -59,7 +59,6 @@ Please first install PREDICT:
 
       pip install PREDICT
 
-
 The package can be installed through pip:
 
 ::
@@ -109,22 +108,6 @@ change them if neccesary.
 Only if you are using FASTR < 1.3.0, you need to manually add the WORC
 tools, datatypes and mounts to your FASTR configuration
 ($HOME/.fastr/config.py). This concerns the following additions:
-
-::
-
-    # Add the WORC FASTR tools and type paths
-    packagedir = site.getsitepackages()[0]
-    tools_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_tools')] + tools_path
-    types_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_types')] + types_path
-
-    # Mounts accessible to fastr virtual file system
-    mounts['worc_example_data'] = os.path.join(packagedir, 'WORC', 'exampledata')
-    mounts['apps'] = os.path.expanduser(os.path.join('~', 'apps'))
-    mounts['output'] = os.path.expanduser(os.path.join('~', 'WORC', 'output'))
-    mounts['test'] = os.path.join(packagedir, 'WORC', 'resources', 'fastr_tests')
-
-Note that the Python site package does not work properly in virtual
-environments. You must then manually locate the packagedir.
 
 Optional: Graphviz
 ~~~~~~~~~~~~~~~~~~
@@ -199,7 +182,7 @@ WIP
 -  We are working on improving the documentation.
 -  We are working on organizing clinically relevant datasets for
    examples and unit tests.
--  We will merge to Python 3 support in the coming months (summer 2018),
+-  We will merge to Python 3 support in the coming months (April 2019),
    as soon as FASTR moves to Python 3.
 
 License
