@@ -154,6 +154,7 @@ docs/_build/html/genindex.html
 docs/_build/html/index.html
 docs/_build/html/modules.html
 docs/_build/html/objects.inv
+docs/_build/html/py-modindex.html
 docs/_build/html/search.html
 docs/_build/html/searchindex.js
 docs/_build/html/_sources/WORC.IOparser.rst.txt

@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: WORC
-Version: 2.1.2
+Version: 2.1.3
 Summary: Workflow for Optimal Radiomics Classification.
 Home-page: https://github.com/MStarmans91/WORC
 Author: M. Starmans
@@ -8,7 +8,7 @@ Author-email: m.starmans@erasmusmc.nl
 License: Apache License, Version 2.0
 Description: |Build Status|
         
-        WORC v2.1.2
+        WORC v2.1.3
         ===========
         
         Workflow for Optimal Radiomics Classification

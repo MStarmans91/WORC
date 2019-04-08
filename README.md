@@ -1,10 +1,12 @@
 [![Build Status](https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master)](https://travis-ci.com/MStarmans91/WORC)
 
-# WORC v2.1.2
+# WORC v2.1.3
 
 ## Workflow for Optimal Radiomics Classification
 
 WORC is an open-source python package for the easy execution of full Radiomics pipelines.
+
+<img src="images/WORC.jpg" alt="Overview"/>
 
 We aim to establish a general Radiomics platform supporting easy integration of other tools. With our modular build
 and support of different software languages (python, MATLAB, ruby, java etc.), we want to facilitate and stimulate
