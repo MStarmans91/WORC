@@ -76,6 +76,7 @@ entry_points = {
 # Determine the fastr config path
 USER_DIR = os.path.expanduser(os.path.join('~', '.fastr'))
 config_d = os.path.join(USER_DIR, 'config.d')
+worc_config = os.path.join('WORC', 'fastrconfig', 'WORC_config.py')
 
 
 class NoseTestCommand(TestCommand):
@@ -126,7 +127,7 @@ setup(
                   'WORC': ['versioninfo'],
                   # If any package contains *.ini files, include them
                   'src': ['IOparser/*.ini']},
-    data_files=[(config_d, ['WORC/fastrconfig/WORC_config.py'])],
+    data_files=[(config_d, [worc_config])],
     install_requires=_requires,
     tests_require=_tests_require,
     test_suite='nose.collector',

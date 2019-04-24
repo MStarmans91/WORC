@@ -6,6 +6,26 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+Unreleased
+------------------
+
+Added
+~~~~~~~
+- Compatibility for Windows. Some small changes in functions, as some packages
+  behaviour differently under Windows. Also, adjusted sink and source paths
+  to use OS file separator. 
+
+
+Changed
+~~~~~~~
+- PCE and DTI node removed, as they were not open source.
+
+
+Fixed
+~~~~~
+- WORC_config.py was not correctly copied in Windows due to incorrect path separation.
+- Source creation for the config was only for Linux.
+
 2.1.3 - 2019-04-08
 ------------------
 
@@ -34,7 +54,7 @@ Fixed
 -Evaluate framework now correctly adopts the name you give it.
 
 
-2019-02-15 - 2.1.1
+2.1.1 - 2019-02-15
 ------------------
 
 Added

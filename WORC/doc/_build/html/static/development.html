@@ -1,0 +1,636 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Development and Design Documentation &mdash; WORC 2.1.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Resource File Formats" href="file_description.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development and Design Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sample-flow-in-fastr">Sample flow in Fastr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network-execution">Network Execution</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#schedulingplugins">SchedulingPlugins</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#secrets">Secrets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-secrets">Using secrets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementing-a-secretprovider">Implementing a SecretProvider</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_reference/user_reference.html">Fastr User Reference</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Development and Design Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/static/development.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="development-and-design-documentation">
+<h1>Development and Design Documentation<a class="headerlink" href="#development-and-design-documentation" title="Permalink to this headline">¶</a></h1>
+<p>In this chapter we will discuss the design of Fastr in more detail. We give
+pointers for development and add the design documents as we currently envision
+Fastr. This is both for people who are interested in the Fastr develop and for
+current developers to have an archive of the design decision agreed upon.</p>
+<div class="section" id="sample-flow-in-fastr">
+<h2>Sample flow in Fastr<a class="headerlink" href="#sample-flow-in-fastr" title="Permalink to this headline">¶</a></h2>
+<p>The current Sample flow is the following:</p>
+digraph sampleflow {
+   Output [
+      shape=plaintext
+      label=&lt;
+        &lt;table border=&quot;0&quot;&gt;
+          &lt;tr&gt;
+            &lt;td border=&quot;1px&quot; width=&quot;120&quot; height=&quot;40&quot; port=&quot;port&quot;&gt;Output&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;140&quot; height=&quot;40&quot;&gt;&lt;b&gt;ContainsSamples&lt;/b&gt;&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;120&quot; height=&quot;40&quot; align=&quot;left&quot;&gt;&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/table&gt;
+      &gt;
+   ];
+   SubOutput [
+      shape=plaintext
+      label=&lt;
+        &lt;table border=&quot;0&quot;&gt;
+          &lt;tr&gt;
+            &lt;td border=&quot;1px&quot; width=&quot;120&quot; height=&quot;40&quot; port=&quot;port&quot;&gt;SubOutput&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;140&quot; height=&quot;40&quot;&gt;&lt;b&gt;ForwardsSamples&lt;/b&gt;&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;120&quot; height=&quot;40&quot; align=&quot;left&quot;&gt;selects cardinality&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/table&gt;
+      &gt;
+   ];
+   Link [
+      shape=plaintext
+      label=&lt;
+        &lt;table border=&quot;0&quot;&gt;
+          &lt;tr&gt;
+            &lt;td border=&quot;1px&quot; width=&quot;120&quot; height=&quot;40&quot; port=&quot;port&quot;&gt;Link&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;140&quot; height=&quot;40&quot;&gt;&lt;b&gt;ForwardsSamples&lt;/b&gt;&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;120&quot; height=&quot;40&quot; align=&quot;left&quot;&gt;collapse + expand (changes cardinality and dimensions)&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/table&gt;
+      &gt;
+   ];
+   SubInput [
+      shape=plaintext
+      label=&lt;
+        &lt;table border=&quot;0&quot;&gt;
+          &lt;tr&gt;
+            &lt;td border=&quot;1px&quot; width=&quot;120&quot; height=&quot;40&quot; port=&quot;port&quot;&gt;SubInput&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;140&quot; height=&quot;40&quot;&gt;&lt;b&gt;ForwardsSamples&lt;/b&gt;&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;120&quot; height=&quot;40&quot; align=&quot;left&quot;&gt;direct forward&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/table&gt;
+      &gt;
+   ];
+   Input [
+      shape=plaintext
+      label=&lt;
+        &lt;table border=&quot;0&quot;&gt;
+          &lt;tr&gt;
+            &lt;td border=&quot;1px&quot; width=&quot;120&quot; height=&quot;40&quot; port=&quot;port&quot;&gt;Input&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;140&quot; height=&quot;40&quot;&gt;&lt;b&gt;ForwardsSamples&lt;/b&gt;&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;120&quot; height=&quot;40&quot; align=&quot;left&quot;&gt;broadcast matching (combine samples in cardinality)&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/table&gt;
+      &gt;
+   ];
+   InputGroup [
+      shape=plaintext
+      label=&lt;
+        &lt;table border=&quot;0&quot;&gt;
+          &lt;tr&gt;
+            &lt;td border=&quot;1px&quot; width=&quot;120&quot; height=&quot;40&quot; port=&quot;port&quot;&gt;InputGroup&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;140&quot; height=&quot;40&quot;&gt;&lt;b&gt;ForwardsSamples&lt;/b&gt;&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;120&quot; height=&quot;40&quot; align=&quot;left&quot;&gt;broadcast matching (combine samples in payload)&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/table&gt;
+      &gt;
+   ];
+   NodeC [
+      shape=plaintext
+      label=&lt;
+        &lt;table border=&quot;0&quot;&gt;
+          &lt;tr&gt;
+            &lt;td border=&quot;1px&quot; width=&quot;120&quot; height=&quot;40&quot; port=&quot;port&quot;&gt;NodeRun&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;140&quot; height=&quot;40&quot;&gt;&lt;b&gt;ForwardsSamples&lt;/b&gt;&lt;/td&gt;
+            &lt;td border=&quot;0&quot; width=&quot;120&quot; height=&quot;40&quot; align=&quot;left&quot;&gt;combines payloads (plugin based, e.g. cross product)&lt;/td&gt;
+          &lt;/tr&gt;
+        &lt;/table&gt;
+      &gt;
+   ];
+
+   Output:port -&gt; SubOutput:port [weight=25];
+   Output:port -&gt; Link:port [weight=10];
+   SubOutput:port -&gt; SubOutput:port [weight=0];
+   SubOutput:port -&gt; Link:port [weight=25];
+   Link:port -&gt; SubInput:port;
+   SubInput:port -&gt; Input:port;
+   Input:port -&gt; InputGroup:port;
+   InputGroup:port -&gt; NodeC:port;
+}<p>The idea is that we make a common interface for all classes that are related
+to the flow of Samples. For this we propose the following mixin classes that
+provide the interface and allow for better code sharing. The basic structure
+of the classes is given in the following diagram:</p>
+digraph mixins {
+     node [
+        fontname = &quot;Bitstream Vera Sans&quot;
+        fontsize = 9
+        shape = &quot;record&quot;
+    ]
+
+    edge [
+        arrowtail = &quot;empty&quot;
+    ]
+
+    HasDimensions [
+        shape = record
+        label = &quot;{HasDimensions|dimensions|+ size\l+ dimnames\l}&quot;
+    ];
+    HasSamples [
+        shape = record
+        label = &quot;{HasSamples|__getitem__()|+ __contains__\l+ __iter__\l+ iteritems()\l+ items()\l+ indexes\l+ ids \l}&quot;
+    ];
+    ContainsSamples [
+        shape = record
+        label = &quot;{ContainsSamples|samples|+ __getitem__()\l+ __setitem__()\l+ dimensions\l}&quot;
+    ];
+    ForwardsSamples [
+        shape = record
+        label = &quot;{ForwardsSamples|source\lindex_to_target\lindex_to_source\lcombine_samples\lcombine_dimensions|+ __getitem__\l+ dimensions\l}&quot;
+    ];
+
+    HasDimensions -&gt; HasSamples [dir=back];
+    HasSamples -&gt; ContainsSamples [dir=back];
+    HasSamples -&gt; ForwardsSamples [dir=back];
+}<p>The abstract and mixin methods are as follows:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 22%" />
+<col style="width: 30%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>ABC</p></th>
+<th class="head"><p>Inherits from</p></th>
+<th class="head"><p>Abstract Methods</p></th>
+<th class="head"><p>Mixin methods</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HasDimensions</span></code></p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dimensions</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">size</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dimnames</span></code></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HasSamples</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HasDimensions</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__contains__</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__iter__</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">iteritems</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">items</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">indexes</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ids</span></code></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ContainsSamples</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HasSamples</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">samples</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__setitem__</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dimensions</span></code></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ForwardsSamples</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HasSamples</span></code></p></td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">source</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">index_to_target</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">index_to_source</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">combine_samples</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">combine_dimensions</span></code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line"><code class="docutils literal notranslate"><span class="pre">__getitem__</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">dimensions</span></code></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Though the flow is currently working like this, the mixins are not yet created.</p>
+</div>
+</div>
+<div class="section" id="network-execution">
+<h2>Network Execution<a class="headerlink" href="#network-execution" title="Permalink to this headline">¶</a></h2>
+<p>The network execution should contain a number of steps:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Network</span></code></p>
+<ul>
+<li><p>Creates a <code class="docutils literal notranslate"><span class="pre">NetworkRun</span></code> based on the current layout</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NetworkRun</span></code></p>
+<ul>
+<li><p>Transform the <code class="docutils literal notranslate"><span class="pre">Network</span></code> (possibly joining Nodes of certain interface into a combined NodeRun etc)</p></li>
+<li><p>Start generation of the Job Direct Acyclic Graph (DAG)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SchedulingPlugin</span></code></p>
+<ul>
+<li><p>Prioritize Jobs based on some predefined rules</p></li>
+<li><p>Combine certain <code class="docutils literal notranslate"><span class="pre">Jobs</span></code> to improve efficiency (e.g. minimize i/o on a grid)</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExecutionPlugin</span></code></p>
+<ul>
+<li><p>Run a (list of) <code class="docutils literal notranslate"><span class="pre">Jobs</span></code>. If there is more than one jobs, run them sequentially on
+same execution host using a local temp for intermediate files.</p></li>
+<li><p>On finished callback: Updated DAG with newly ready jobs, or remove cancelled jobs</p></li>
+</ul>
+</li>
+</ul>
+<p>This could be visualized as the following loop:</p>
+digraph execution {
+     node [
+        fontname = &quot;Bitstream Vera Sans&quot;
+        fontsize = 11
+        shape = &quot;box&quot;
+    ]
+
+    Network;
+    NetworkRun;
+    NodeRun;
+    JobDAG;
+    SchedulingPlugin;
+    ExecutionPlugin;
+
+    Network -&gt; NetworkRun [label=creates];
+    NetworkRun -&gt; JobDAG [label=creates];
+    NetworkRun -&gt; NodeRun [label=executes];
+    NodeRun -&gt; JobDAG [label=&quot;adds jobs&quot;];
+    JobDAG -&gt; SchedulingPlugin [label=&quot;analyzes and selects jobs&quot;];
+    SchedulingPlugin -&gt; ExecutionPlugin [label=&quot;(list of) Jobs to execute&quot;];
+    ExecutionPlugin -&gt; NetworkRun [label=callback];
+}<p>The callback of the <code class="docutils literal notranslate"><span class="pre">ExecutionPlugin</span></code> to the <code class="docutils literal notranslate"><span class="pre">NetworkRun</span></code> would trigger
+the execution of the relevant <code class="docutils literal notranslate"><span class="pre">NodeRuns</span></code> and the addition of more <code class="docutils literal notranslate"><span class="pre">Jobs</span></code>
+to the <code class="docutils literal notranslate"><span class="pre">JobDAG</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Job DAG should be thread-safe as it could be both read and
+extended at the same time.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a list of jobs is send to the <code class="docutils literal notranslate"><span class="pre">ExecutionPlugin</span></code> to be run as
+on Job on an external execution platform, the resources should be
+combined as follows: memory=max, cores=max, runtime=sum</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If there are execution hosts that have mutliple cores the
+<code class="docutils literal notranslate"><span class="pre">ExecutionPlugin</span></code> should manage this (for example by using pilot
+jobs). The <code class="docutils literal notranslate"><span class="pre">SchedulingPlugin</span></code> creates units that should be run
+sequentially on the resources noted and will not attempt
+parallelization</p>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">NetworkRun</span></code> would be contain similar information as the <code class="docutils literal notranslate"><span class="pre">Network</span></code> but
+not have functionality for editting/changing it. It would contain the
+functionality to execute the Network and track the status and samples. This
+would allow <code class="docutils literal notranslate"><span class="pre">Network.execute</span></code> to create multiple concurent runs that operate
+indepent of each other. Also editting a <code class="docutils literal notranslate"><span class="pre">Network</span></code> after the run started would
+have no effect on that run.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a plan, not yet implemented</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For this to work, it would be important for a Jobs to have forward
+and backward dependency links.</p>
+</div>
+<div class="section" id="schedulingplugins">
+<h3>SchedulingPlugins<a class="headerlink" href="#schedulingplugins" title="Permalink to this headline">¶</a></h3>
+<p>The idea of the plugin is that it would give a priority on Jobs created by a
+<code class="docutils literal notranslate"><span class="pre">Network</span></code>. This could be done based on different strategies:</p>
+<ul class="simple">
+<li><p>Based on (sorted) sample id’s, so that one sample is always prioritized over
+others. The idea is that samples are process as much as possible in order,
+finishing the first sample first. Only processing other samples if there is
+left-over capacity.</p></li>
+<li><p>Based on distance to a (particular) <code class="docutils literal notranslate"><span class="pre">Sink</span></code>. This is to generate specific
+results as quick as possible. It would not focus on specific samples, but
+give priority to whatever sample is closest to being finished.</p></li>
+<li><p>Based on the distance to from a <code class="docutils literal notranslate"><span class="pre">Souce</span></code>. Based on the sign of the weight
+it would either keep all samples on the same stage as much as possible, only
+progressing to a new <code class="docutils literal notranslate"><span class="pre">NodeRun</span></code> when all samples are done with the previous
+<code class="docutils literal notranslate"><span class="pre">NodeRun</span></code>, or it would push samples with accelerated rates.</p></li>
+</ul>
+<p>Additionally it will group <code class="docutils literal notranslate"><span class="pre">Jobs</span></code> to be executed on a single host. This could
+reduce i/o and limited the number of jobs an external scheduler has to track.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The interface for such a plugin has not yet been established.</p>
+</div>
+</div>
+</div>
+<div class="section" id="secrets">
+<h2>Secrets<a class="headerlink" href="#secrets" title="Permalink to this headline">¶</a></h2>
+<p>“Something that is kept or meant to be kept unknown or unseen by others.”</p>
+<div class="section" id="using-secrets">
+<h3>Using secrets<a class="headerlink" href="#using-secrets" title="Permalink to this headline">¶</a></h3>
+<p>Fastr IOPlugins that need authentication data should use the Fastr SecretService for retrieving such data. The SecretService can be used as follows.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fastr.utils.secrets</span> <span class="kn">import</span> <span class="n">SecretService</span>
+<span class="kn">from</span> <span class="nn">fastr.utils.secrets.exceptions</span> <span class="kn">import</span> <span class="n">CouldNotRetrieveCredentials</span>
+
+<span class="n">secret_service</span> <span class="o">=</span> <span class="n">SecretService</span><span class="p">()</span>
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="n">secret_service</span><span class="o">.</span><span class="n">find_password_for_user</span><span class="p">(</span><span class="s1">&#39;testserver.lan:9000&#39;</span><span class="p">,</span> <span class="s1">&#39;john-doe&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">CouldNotRetrieveCredentials</span><span class="p">:</span>
+  <span class="c1"># the password was not found</span>
+  <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="implementing-a-secretprovider">
+<h3>Implementing a SecretProvider<a class="headerlink" href="#implementing-a-secretprovider" title="Permalink to this headline">¶</a></h3>
+<p>A SecretProvider is implemented as follows:</p>
+<ol class="arabic simple">
+<li><p>Create a file in fastr/utils/secrets/providers/&lt;yourprovidername&gt;.py</p></li>
+<li><p>Use the template below to write your SecretProvider</p></li>
+<li><p>Add the secret provider to fastr/utils/secrets/providers/__init__.py</p></li>
+<li><p>Add the secret provider to fastr/utils/secrets/secretservice.py: import it and add it to the array in function _init_providers</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fastr.utils.secrets.secretprovider</span> <span class="kn">import</span> <span class="n">SecretProvider</span>
+<span class="kn">from</span> <span class="nn">fastr.utils.secrets.exceptions</span> <span class="kn">import</span> <span class="n">CouldNotRetrieveCredentials</span><span class="p">,</span> <span class="n">CouldNotSetCredentials</span><span class="p">,</span> <span class="n">CouldNotDeleteCredentials</span><span class="p">,</span> <span class="bp">NotImplemented</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+  <span class="c1"># this is where libraries can be imported</span>
+  <span class="c1"># we don&#39;t want fastr to crash if a specific</span>
+  <span class="c1"># library is unavailable</span>
+  <span class="c1"># import my-libary</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">KeyringProvider</span><span class="p">(</span><span class="n">SecretProvider</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># if libraries are imported in the code above</span>
+    <span class="c1"># we need to check if import was succesfull</span>
+    <span class="c1"># if it was not, raise a RuntimeError</span>
+    <span class="c1"># so that FASTR ignores this SecretProvider</span>
+    <span class="c1"># if &#39;my-library&#39; not in globals():</span>
+    <span class="c1">#   raise RuntimeError(&quot;my-library module required&quot;)</span>
+    <span class="k">pass</span>
+
+  <span class="k">def</span> <span class="nf">get_password_for_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">machine</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+    <span class="c1"># This function should return the password as a string</span>
+    <span class="c1"># or raise a CouldNotRetrieveCredentials error if the password</span>
+    <span class="c1"># is not found.</span>
+    <span class="c1"># In the event that this function is unsupported a</span>
+    <span class="c1"># NotImplemented exception should be thrown</span>
+    <span class="k">raise</span> <span class="bp">NotImplemented</span><span class="p">()</span>
+
+  <span class="k">def</span> <span class="nf">set_password_for_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">machine</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="c1"># This function should set the password for a specified</span>
+    <span class="c1"># machine + user. If anything goes wrong while setting</span>
+    <span class="c1"># the password a CouldNotSetCredentials error should be raised.</span>
+    <span class="c1"># In the event that this function is unsupported a</span>
+    <span class="c1"># NotImplemented exception should be thrown</span>
+    <span class="k">raise</span> <span class="bp">NotImplemented</span><span class="p">()</span>
+
+  <span class="k">def</span> <span class="nf">del_password_for_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">machine</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+    <span class="c1"># This function should delete the password for a specified</span>
+    <span class="c1"># machine + user. If anything goes wrong while setting</span>
+    <span class="c1"># the password a CouldNotDeleteCredentials error should be raised.</span>
+    <span class="c1"># In the event that this function is unsupported a</span>
+    <span class="c1"># NotImplemented exception should be thrown</span>
+    <span class="k">raise</span> <span class="bp">NotImplemented</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="file_description.html" class="btn btn-neutral float-left" title="Resource File Formats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
