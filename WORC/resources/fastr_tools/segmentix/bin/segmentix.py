@@ -98,7 +98,7 @@ def segmentix(parameters=None, image=None, segmentation=None,
                 for ind in range(contour.shape[2]):
                     contour_d = morphology.binary_dilation(contour[:, :, ind], disk)
                     contour_e = morphology.binary_erosion(contour[:, :, ind], disk)
-                    contour[:, :, ind] = np.subtract(contour_d, contour_e)
+                    contour[:, :, ind] = np.bitwise_xor(contour_d, contour_e)
 
             # Mask the segmentation if necessary
             if mask is not None:
@@ -111,7 +111,7 @@ def segmentix(parameters=None, image=None, segmentation=None,
                 mask = mask.astype(bool)
                 method = config['Segmentix']['mask']
                 if method == 'subtract':
-                    contour = contour - mask
+                    contour = np.bitwise_xor(contour, mask)
                 elif method == "multiply":
                     contour = np.multiply(contour, mask)
 

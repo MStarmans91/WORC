@@ -376,6 +376,9 @@ class WORC(object):
                         self.configs[c] = config_io.load_config(self.configs[c])
                     image_types.append(self.configs[c]['ImageFeatures']['image_type'])
 
+                # Create config source
+                self.source_class_config = self.network.create_source('ParameterFile', id='config_classification_source', node_group='conf')
+
                 # Classification tool and label source
                 self.source_patientclass_train = self.network.create_source('PatientInfoFile', id='patientclass_train', node_group='pctrain')
                 if self.labels_test:
@@ -386,11 +389,10 @@ class WORC(object):
                 # Outputs
                 self.sink_classification = self.network.create_sink('HDF5', id='classification')
                 self.sink_performance = self.network.create_sink('JsonFile', id='performance')
+                self.sink_class_config = self.network.create_sink('ParameterFile', id='config_classification_sink', node_group='conf')
 
                 # Links
-                self.source_class_config = self.network.create_source('ParameterFile', id='config_classification', node_group='conf')
-                # self.source_class_parameters = self.network.create_source('JsonFile', id_='parameters_classification')
-                # self.classify.inputs['parameters'] = self.source_class_parameters.output
+                self.sink_class_config.input = self.source_class_config.output
                 self.link_class_1 = self.network.create_link(self.source_class_config.output, self.classify.inputs['config'])
                 self.link_class_2 = self.network.create_link(self.source_patientclass_train.output, self.classify.inputs['patientclass_train'])
                 self.link_class_1.collapse = 'conf'
@@ -880,7 +882,7 @@ class WORC(object):
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
-        self.source_data['config_classification'] = self.fastrconfigs[0]
+        self.source_data['config_classification_source'] = self.fastrconfigs[0]
 
         # Set source and sink data
         self.source_data['patientclass_train'] = self.labels_train
@@ -888,6 +890,7 @@ class WORC(object):
 
         self.sink_data['classification'] = ("vfs://output/{}/svm_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.source_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         # NOTE: Below bug should be fixed, need to check
         # BUG: this is a bug in the FASTR package. Workaround for nifti XNAT links using expansion of FASTR XNAT plugin.
