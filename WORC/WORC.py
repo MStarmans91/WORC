@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -805,7 +805,7 @@ class WORC(object):
 
                         # Classification nodes -----------------------------------------------------
                         # Add the features from this modality to the classifier node input
-                        print(label)
+                        # self.links_C1_train[label] = self.classify.inputs['features_train'][str(label)] << self.calcfeatures_train[label].outputs['features']
                         self.links_C1_train[label] = self.classify.inputs['features_train'][str(label)] << self.calcfeatures_train[label].outputs['features']
                         self.links_C1_train[label].collapse = 'train'
 
@@ -890,7 +890,7 @@ class WORC(object):
 
         self.sink_data['classification'] = ("vfs://output/{}/svm_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
-        self.source_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         # NOTE: Below bug should be fixed, need to check
         # BUG: this is a bug in the FASTR package. Workaround for nifti XNAT links using expansion of FASTR XNAT plugin.
@@ -985,8 +985,8 @@ class WORC(object):
         """ Execute the network through the fastr.network.execute command. """
         # Draw and execute nwtwork
         self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
-        # self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
-        self.network.execute(self.source_data, self.sink_data)
+        self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
+        # self.network.execute(self.source_data, self.sink_data)
 
 
 class Tools(object):

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -134,29 +134,48 @@ def fit_and_score(X, y, scoring,
         and parameters_all.
 
     GroupSel: WORC GroupSel Object
-        Either None if the GroupSelFitted GroupSel Object.
+        Either None if the groupwise feature selection is not used, or
+        the fitted object.
 
-    VarSel: WORC GroupSel Object
-        Either None if the GroupSelFitted GroupSel Object.
+    VarSel: WORC VarSel Object
+        Either None if the variance threshold feature selection is not used, or
+        the fitted object.
 
-    SelectModel: WORC GroupSel Object
-        Either None if the GroupSelFitted GroupSel Object.
+    SelectModel: WORC SelectModel Object
+        Either None if the feature selection based on a fittd model is not
+        used, or the fitted object.
 
-    feature_labels
+    feature_labels: list
+        Labels of the features. Only one list is returned, not one per
+        feature object, as we assume all samples have the same feature names.
 
-    scaler
+    scaler: scaler object
+        Either None if feature scaling is not used, or
+        the fitted object.
 
-    imputer: WORC GroupSel Object
-        Either None if the GroupSelFitted GroupSel Object.
+    imputer: WORC Imputater Object
+        Either None if feature imputation is not used, or
+        the fitted object.
 
-    pca: WORC GroupSel Object
-        Either None if the GroupSelFitted GroupSel Object.
+    pca: WORC PCA Object
+        Either None if PCA based feature selection is not used, or
+        the fitted object.
 
-    StatisticalSel: WORC GroupSel Object
-        Either None if the GroupSelFitted GroupSel Object.
+    StatisticalSel: WORC StatisticalSel Object
+        Either None if the statistical test feature selection is not used, or
+        the fitted object.
 
-    ReliefSel: WORC GroupSel Object
-        Either None if the GroupSelFitted GroupSel Object.
+    ReliefSel: WORC ReliefSel Object
+        Either None if the RELIEF feature selection is not used, or
+        the fitted object.
+
+    sm: WORC SMOTE Object
+        Either None if the SMOTE oversampling is not used, or
+        the fitted object.
+
+    ros: WORC ROS Object
+        Either None if Random Oversampling is not used, or
+        the fitted object.
 
     '''
     # We copy the parameter object so we can alter it and keep the original
