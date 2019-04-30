@@ -777,11 +777,11 @@ class WORC(object):
                                 self.calcfeatures_test[label].inputs['segmentation'] = self.nodes_segmentix_test[label].outputs['segmentation_out']
                                 self.sinks_segmentations_segmentix_test[label].input = self.nodes_segmentix_test[label].outputs['segmentation_out']
 
-                            if self.masks_train:
+                            if self.masks_train and len(self.masks_train) >= nmod + 1:
                                 # Use masks
                                 self.nodes_segmentix_train[label].inputs['mask'] = self.converters_masks_train[label].outputs['image']
 
-                            if self.masks_test:
+                            if self.masks_test and len(self.masks_test) >= nmod + 1:
                                 # Use masks
                                 self.nodes_segmentix_test[label].inputs['mask'] = self.converters_masks_test[label].outputs['image']
 
