@@ -878,7 +878,7 @@ class WORC(object):
                 os.makedirs(os.path.dirname(cfile))
             with open(cfile, 'w') as configfile:
                 c.write(configfile)
-            self.fastrconfigs.append(os.path.join("vfs://tmp", self.name, ("config_{}_{}.ini").format(self.name, num)))
+            self.fastrconfigs.append(("vfs://tmp/{}/config_{}_{}.ini").format(self.name, self.name, num))
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality

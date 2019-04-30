@@ -28,6 +28,7 @@ Fixed
 - Source creation for the config was only for Linux.
 - In numpy 1.15>, booleans cannot be subtracted. Fixed an error due to this in
   segmentix by using bitwise_xor instead.
+- Cardinality of classify node was incorrect.
 
 2.1.3 - 2019-04-08
 ------------------

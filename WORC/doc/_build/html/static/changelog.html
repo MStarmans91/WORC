@@ -212,6 +212,7 @@ and this project adheres to <a class="reference external" href="http://semver.or
 <li><p>Compatibility for Windows. Some small changes in functions, as some packages
 behaviour differently under Windows. Also, adjusted sink and source paths
 to use OS file separator.</p></li>
+<li><p>Config is now also a sink.</p></li>
 </ul>
 </div>
 <div class="section" id="changed">
@@ -225,6 +226,8 @@ to use OS file separator.</p></li>
 <ul class="simple">
 <li><p>WORC_config.py was not correctly copied in Windows due to incorrect path separation.</p></li>
 <li><p>Source creation for the config was only for Linux.</p></li>
+<li><p>In numpy 1.15&gt;, booleans cannot be subtracted. Fixed an error due to this in
+segmentix by using bitwise_xor instead.</p></li>
 </ul>
 </div>
 </div>

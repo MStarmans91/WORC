@@ -432,7 +432,7 @@ by default 1 level is expanded</p></li>
 
 <dl class="method">
 <dt id="fastr.api.Network.execute">
-<code class="descname">execute</code><span class="sig-paren">(</span><em>source_data</em>, <em>sink_data</em>, <em>tmpdir=None</em>, <em>timestamp=None</em>, <em>blocking=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.execute" title="Permalink to this definition">¶</a></dt>
+<code class="descname">execute</code><span class="sig-paren">(</span><em>source_data</em>, <em>sink_data</em>, <em>tmpdir=None</em>, <em>timestamp=None</em>, <em>blocking=True</em>, <em>execution_plugin=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.execute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Execute the network with the given source and sink data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -441,11 +441,12 @@ by default 1 level is expanded</p></li>
 <li><p><strong>sink_data</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – Sink rules to use for determining the outputs</p></li>
 <li><p><strong>tmpdir</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The scratch directory to use for this network run, if
 an existing directory is given, fastr will try to resume
-a network run (see <a class="reference internal" href="../static/user_manual.html#continuing-network"><span class="std std-ref">Continuing a Network</span></a>)</p></li>
+a network run (see <span class="xref std std-ref">continuing-network</span>)</p></li>
 <li><p><strong>timestamp</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/datetime.html#datetime.datetime" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The timestamp of the network run (useful for retrying
 or continuing previous runs)</p></li>
 <li><p><strong>blocking</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Flag to indicate if the execution should be blocking
 or launched in a background thread</p></li>
+<li><p><strong>execution_plugin</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The execution plugin to use for this run</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -702,7 +703,7 @@ See the <a class="reference internal" href="#fastr.api.Input.__lshift__" title="
 <code class="descname">input_group</code><a class="headerlink" href="#fastr.api.Input.input_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>The input group of this Input. This property can be read and changed.
 Changing the input group of an Input will influence the data flow in
-a Node (see <a class="reference internal" href="../static/user_manual.html#advanced-flow-node"><span class="std std-ref">Advanced flows in a Node</span></a> for details).</p>
+a Node (see <span class="xref std std-ref">advanced-flow-node</span> for details).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
