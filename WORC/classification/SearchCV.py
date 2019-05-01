@@ -40,6 +40,7 @@ import os
 import random
 import string
 import fastr
+from fastr.api import ResourceLimit
 from joblib import Parallel, delayed
 from WORC.classification.fitandscore import fit_and_score
 from WORC.classification.fitandscore import delete_nonestimator_parameters
@@ -1256,7 +1257,7 @@ class BaseSearchCVfastr(BaseSearchCV):
             raise PREDICTexceptions.PREDICTValueError(message)
 
         # Split the parameters files in equal parts
-        keys = parameters_temp.keys()
+        keys = list(parameters_temp.keys())
         keys = chunks(keys, self.n_jobspercore)
         parameter_files = dict()
         for num, k in enumerate(keys):
@@ -1323,13 +1324,13 @@ class BaseSearchCVfastr(BaseSearchCV):
         estimatordata = ("vfs://tmp/{}/{}/{}").format('GS', name, fname)
 
         # Create the fastr network
-        network = fastr.Network('PREDICT_GridSearch_' + name)
-        estimator_data = network.create_source('HDF5', id_='estimator_source')
-        traintest_data = network.create_source('HDF5', id_='traintest')
-        parameter_data = network.create_source('JsonFile', id_='parameters')
-        sink_output = network.create_sink('HDF5', id_='output')
+        network = fastr.create_network('PREDICT_GridSearch_' + name)
+        estimator_data = network.create_source('HDF5', id='estimator_source')
+        traintest_data = network.create_source('HDF5', id='traintest')
+        parameter_data = network.create_source('JsonFile', id='parameters')
+        sink_output = network.create_sink('HDF5', id='output')
 
-        fitandscore = network.create_node('fitandscore', memory='2G', id_='fitandscore')
+        fitandscore = network.create_node('worc/fitandscore:1.0', tool_version='1.0', id='fitandscore', resources=ResourceLimit(memory='2G'))
         fitandscore.inputs['estimatordata'].input_group = 'estimator'
         fitandscore.inputs['traintest'].input_group = 'traintest'
         fitandscore.inputs['parameters'].input_group = 'parameters'

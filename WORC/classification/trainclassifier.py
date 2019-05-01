@@ -26,7 +26,7 @@ from WORC.plotting.plot_SVR import plot_single_SVR
 import WORC.IOparser.file_io as file_io
 import WORC.IOparser.config_io_classifier as config_io
 from scipy.stats import uniform
-from WORC.processing.AdvancedSampler import discrete_uniform
+from WORC.classification.AdvancedSampler import discrete_uniform
 
 
 def trainclassifier(feat_train, patientinfo_train, config,
@@ -213,32 +213,33 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
-    if feat_test is None:
-        trained_classifier = cv.crossval(config, label_data_train,
-                                         image_features_train,
-                                         param_grid,
-                                         modus=modus,
-                                         use_fastr=config['Classification']['fastr'],
-                                         fastr_plugin=config['Classification']['fastr_plugin'],
-                                         fixedsplits=fixedsplits,
-                                         ensemble=config['Ensemble'],
-                                         outputfolder=outputfolder,
-                                         tempsave=config['General']['tempsave'])
-    else:
-        trained_classifier = cv.nocrossval(config, label_data_train,
-                                           label_data_test,
-                                           image_features_train,
-                                           image_features_test,
-                                           param_grid,
-                                           modus=modus,
-                                           use_fastr=config['Classification']['fastr'],
-                                           fastr_plugin=config['Classification']['fastr_plugin'],
-                                           ensemble=config['Ensemble'])
-
-    if not os.path.exists(os.path.dirname(output_hdf)):
-        os.makedirs(os.path.dirname(output_hdf))
-
-    trained_classifier.to_hdf(output_hdf, 'SVMdata')
+    # if feat_test is None:
+    #     trained_classifier = cv.crossval(config, label_data_train,
+    #                                      image_features_train,
+    #                                      param_grid,
+    #                                      modus=modus,
+    #                                      use_fastr=config['Classification']['fastr'],
+    #                                      fastr_plugin=config['Classification']['fastr_plugin'],
+    #                                      fixedsplits=fixedsplits,
+    #                                      ensemble=config['Ensemble'],
+    #                                      outputfolder=outputfolder,
+    #                                      tempsave=config['General']['tempsave'])
+    # else:
+    #     trained_classifier = cv.nocrossval(config, label_data_train,
+    #                                        label_data_test,
+    #                                        image_features_train,
+    #                                        image_features_test,
+    #                                        param_grid,
+    #                                        modus=modus,
+    #                                        use_fastr=config['Classification']['fastr'],
+    #                                        fastr_plugin=config['Classification']['fastr_plugin'],
+    #                                        ensemble=config['Ensemble'])
+    #
+    # if not os.path.exists(os.path.dirname(output_hdf)):
+    #     os.makedirs(os.path.dirname(output_hdf))
+    #
+    # trained_classifier.to_hdf(output_hdf, 'SVMdata')
+    trained_classifier = output_hdf
 
     # Check whether we do regression or classification
     regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']

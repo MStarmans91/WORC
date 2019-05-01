@@ -11,6 +11,8 @@ Unreleased
 
 Added
 ~~~~~~~
+- Now ported to Python3.6+ (Python 2 is no longer supported!). Thereby also
+  to fastr3.
 - Compatibility for Windows. Some small changes in functions, as some packages
   behaviour differently under Windows. Also, adjusted sink and source paths
   to use OS file separator.
@@ -20,6 +22,10 @@ Added
 Changed
 ~~~~~~~
 - PCE and DTI node removed, as they were not open source.
+- Pinfo file can now also be a csv. Txt is still supported.
+- Use fastr as default for hyperparameter search parallelization instead
+  of Joblib, as this is much more flexible.
+- When the conffidence interval cannot be computed, just use the mean.
 
 
 Fixed

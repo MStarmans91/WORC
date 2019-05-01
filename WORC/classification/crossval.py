@@ -21,7 +21,7 @@ import logging
 import os
 from sklearn.model_selection import train_test_split
 import xlrd
-import parameter_optimization as po
+from .parameter_optimization import random_search_parameters
 import WORC.addexceptions as ae
 
 
@@ -288,7 +288,7 @@ def crossval(config, label_data, image_features,
             config['HyperOptimization']['use_fastr'] = use_fastr
             config['HyperOptimization']['fastr_plugin'] = fastr_plugin
             n_cores = config['General']['Joblib_ncores']
-            trained_classifier = po.random_search_parameters(features=X_train,
+            trained_classifier = random_search_parameters(features=X_train,
                                                              labels=Y_train,
                                                              param_grid=param_grid,
                                                              n_cores=n_cores,
@@ -459,7 +459,7 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
         config['HyperOptimization']['use_fastr'] = use_fastr
         config['HyperOptimization']['fastr_plugin'] = fastr_plugin
         n_cores = config['General']['Joblib_ncores']
-        trained_classifier = po.random_search_parameters(features=X_train,
+        trained_classifier = random_search_parameters(features=X_train,
                                                          labels=Y_train,
                                                          param_grid=param_grid,
                                                          n_cores=n_cores,

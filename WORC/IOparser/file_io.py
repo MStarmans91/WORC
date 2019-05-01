@@ -19,6 +19,7 @@
 import pandas as pd
 import WORC.processing.label_processing as lp
 import WORC.addexceptions as WORCexceptions
+import numpy as np
 
 
 def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):

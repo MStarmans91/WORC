@@ -32,6 +32,7 @@ def load_config(config_file_path):
 
     settings = configparser.ConfigParser()
     settings.read(config_file_path)
+    print(settings.keys())
 
     settings_dict = {'General': dict(), 'CrossValidation': dict(),
                      'Labels': dict(), 'HyperOptimization': dict(),

@@ -18,7 +18,7 @@
 
 import numpy as np
 import sys
-import compute_CI
+import WORC.plotting.compute_CI as compute_CI
 import pandas as pd
 import os
 import WORC.processing.label_processing as lp
@@ -154,7 +154,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
     # iterations
     for i in range(0, len(Y_test)):
         print("\n")
-        print("Cross validation {} / {}.").format(str(i + 1), str(len(Y_test)))
+        print(("Cross validation {} / {}.").format(str(i + 1), str(len(Y_test))))
         test_patient_IDs = prediction[label_type]['patient_ID_test'][i]
         train_patient_IDs = prediction[label_type]['patient_ID_train'][i]
         X_test_temp = X_test[i]

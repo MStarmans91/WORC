@@ -23,6 +23,7 @@ import numpy as np
 import os
 import configparser
 import PREDICT.addexceptions as ae
+import pandas as pd
 
 
 def load_labels(label_file, label_type):
@@ -38,7 +39,10 @@ def load_labels(label_file, label_type):
     """
     _, extension = os.path.splitext(label_file)
     if extension == '.txt':
-        label_names, patient_IDs, label_status = load_label_file(
+        label_names, patient_IDs, label_status = load_label_txt(
+            label_file)
+    elif extension == '.csv':
+        label_names, patient_IDs, label_status = load_label_csv(
             label_file)
     elif extension == '.ini':
         label_names, patient_IDs, label_status = load_label_XNAT(
@@ -63,7 +67,7 @@ def load_labels(label_file, label_type):
     return label_data
 
 
-def load_label_file(input_file):
+def load_label_txt(input_file):
     """
     Load the patient IDs and label data from the label file
 
@@ -92,6 +96,40 @@ def load_label_file(input_file):
 
     # label status is stored in all remaining columns
     label_status = data[1:, 1:]
+    label_status = label_status.astype(np.float)
+
+    return label_names, patient_ID, label_status
+
+
+def load_label_csv(input_file):
+    """
+    Load the patient IDs and label data from the label file
+
+    Args:
+        input_file (string): Path of the label file
+
+    Returns:
+        label_names (numpy array): Names of the different labels
+        patient_ID (numpy array): IDs of patients for which label data is
+         loaded
+        label_status (numpy array): The status of the different labels
+         for each patient
+    """
+    data = pd.read_csv(input_file, header=0)
+
+    # Load and check the header
+    header = data.keys()
+    if header[0] != 'Patient':
+        raise ae.PREDICTAssertionError('First column should be patient ID!')
+    else:
+        # cut out the first header, only keep label header
+        label_names = header[1::]
+
+    # Patient IDs are stored in the first column
+    patient_ID = data['Patient'].values
+
+    # label status is stored in all remaining columns
+    label_status = data.values[:, 1:]
     label_status = label_status.astype(np.float)
 
     return label_names, patient_ID, label_status
@@ -180,22 +218,31 @@ def findlabeldata(patientinfo, label_type, filenames,
     label_data_temp = load_labels(patientinfo, label_type)
     label_data = dict()
     patient_IDs = list()
-    label_name = list()
+    label_value = list()
     for i_len in range(len(label_data_temp['label_name'])):
-        label_name.append(list())
+        label_value.append(list())
 
+    # Check per feature file if there is a match in the label data
     image_features = list()
     for i_feat, feat in enumerate(filenames):
         ifound = 0
         matches = list()
         for i_num, i_patient in enumerate(label_data_temp['patient_IDs']):
             if i_patient in str(feat):
+
+                # Match: add the patient ID to the ID's and to the matches
                 patient_IDs.append(i_patient)
                 matches.append(i_patient)
+
+                # If there are feature files given, add it to the list
                 if image_features_temp is not None:
                     image_features.append(image_features_temp[i_feat])
+
+                # For each label that we have, add the value to the label list
                 for i_len in range(len(label_data_temp['label_name'])):
-                    label_name[i_len].append(label_data_temp['label_name'][i_len][i_num])
+                    label_value[i_len].append(label_data_temp['label'][i_len][i_num])
+
+                # Calculate how many matches we found for this (feature) file: should be one
                 ifound += 1
 
         if ifound > 1:
@@ -210,11 +257,11 @@ def findlabeldata(patientinfo, label_type, filenames,
     #     image_features = np.asarray(image_features)
 
     # Convert to arrays
-    for i_len in range(len(label_name)):
-        label_name[i_len] = np.asarray(label_name[i_len])
+    for i_len in range(len(label_value)):
+        label_value[i_len] = np.asarray(label_value[i_len])
 
     label_data['patient_IDs'] = np.asarray(patient_IDs)
-    label_data['label'] = np.asarray(label_name)
+    label_data['label'] = np.asarray(label_value)
     label_data['label_name'] = label_data_temp['label_name']
 
     return label_data, image_features

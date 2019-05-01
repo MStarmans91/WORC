@@ -135,9 +135,8 @@ class WORC(object):
         self.fastr_plugin = 'ProcessPoolExecution'
         if name == '':
             name = [randint(0, 9) for p in range(0, 5)]
-            self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], 'fastr' + str(name))
-        else:
-            self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], name)
+        self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], 'WORC_' + str(name))
+        
         self.additions = dict()
         self.CopyMetadata = True
         self.segmode = []
@@ -264,7 +263,7 @@ class WORC(object):
 
         # Classification
         config['Classification'] = dict()
-        config['Classification']['fastr'] = 'False'
+        config['Classification']['fastr'] = 'True'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
         config['Classification']['classifiers'] = 'SVM'
         config['Classification']['max_iter'] = '100000'
@@ -294,12 +293,12 @@ class WORC(object):
         config['CrossValidation']['N_iterations'] = '100'
         config['CrossValidation']['test_size'] = '0.2'
 
-        # Options for the labels that are used (not only genetics)
-        config['Genetics'] = dict()
-        config['Genetics']['label_names'] = 'Label1, Label2'
-        config['Genetics']['modus'] = 'singlelabel'
-        config['Genetics']['url'] = 'WIP'
-        config['Genetics']['projectID'] = 'WIP'
+        # Options for the object/patient labels that are used
+        config['Labels'] = dict()
+        config['Labels']['label_names'] = 'Label1, Label2'
+        config['Labels']['modus'] = 'singlelabel'
+        config['Labels']['url'] = 'WIP'
+        config['Labels']['projectID'] = 'WIP'
 
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()

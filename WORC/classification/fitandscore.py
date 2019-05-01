@@ -31,11 +31,11 @@ from sklearn.metrics import make_scorer, average_precision_score
 from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.classification.metrics import check_scoring
-from WORC.featureprocessingn.Relief import SelectMulticlassRelief
+from WORC.featureprocessing.Relief import SelectMulticlassRelief
 from WORC.featureprocessing.Imputer import Imputer
-from WORC.featureprocessingn.VarianceThreshold import selfeat_variance
-from WORC.featureprocessingn.StatisticalTestThreshold import StatisticalTestThreshold
-from WORC.featureprocessingn.SelectGroups import SelectGroups
+from WORC.featureprocessing.VarianceThreshold import selfeat_variance
+from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
+from WORC.featureprocessing.SelectGroups import SelectGroups
 
 
 def fit_and_score(X, y, scoring,

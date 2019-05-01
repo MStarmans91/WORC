@@ -20,4 +20,5 @@ from fastr.datatypes import URLType
 class PatientInfoFile(URLType):
     description = 'Patient info such as genetic data'
     _members = frozenset(['TextFile',
+                          'CSVFile',
                           'ConfigFile'])

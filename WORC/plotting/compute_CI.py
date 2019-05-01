@@ -50,6 +50,9 @@ def compute_confidence(metric, N_train, N_test, alpha=0.95):
 
         CI = st.t.interval(alpha, N_iterations-1, loc=metric_average, scale=metric_std)
 
+    if np.isnan(CI[0]) and np.isnan(CI[1]):
+        # When we cannot compute a CI, just give the averages
+        CI = (metric_average, metric_average)
     return CI
 
 
