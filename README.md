@@ -18,27 +18,15 @@ This package is still under development. We try to thoroughly test and evaluate 
 bugs can off course still occur. Please contact us through the channels below if you find any and we will try to fix
 them as soon as possible, or create an issue on this Github.
 
-## Tutorial
+## Tutorial and Documentation
 The WORC tutorial is hosted in a [separate repository](https://github.com/MStarmans91/WORCTutorial).
 
-## Documentation
-
-For more information, see our the Wiki on this Github.
-
-Alternatively, you can generate the documentation by checking out the master branch and running from the root directory:
-
-    python setup.py build_sphinx
-
-The documentation can then be viewed in a browser by opening `PACKAGE_ROOT\build\sphinx\html\index.html`.
+The official documentation can be found at [https://worc.readthedocs.io](https://worc.readthedocs.io).
 
 ## Installation
 
-WORC currently only supports Unix with Python 2 (>2.7.6) systems. Windows is not supported,
-although WORC can still work under windows.
-
-Please first install PREDICT:
-
-      pip install PREDICT
+WORC currently only supports Unix with Python 3 (tested on 3.7.2) systems and
+has been tested on Ubuntu 16.04 and 18.04 and Windows 10.
 
 The package can be installed through pip:
 
@@ -52,26 +40,16 @@ Make sure you install the requirements first:
 
       pip install -r requirements.txt
 
-Several tools have some (mandatory) prerequisites which are listed below. We highly recommend you to install these to
-maximally profit from our toolbox.
-
-### PREDICT
-Most of the default tools in WORC use [PREDICT](https://github.com/Svdvoort/PREDICTFastr), our in-house feature extraction and classification toolbox.
-Currently, you do need to manually install PREDICT from the Github or with pip:
-
-      pip install PREDICT
-
 ### Fastr Configuration
-The installation will create a FASTR configuration file in the $HOME/.fastr/config.d folder. This file is used for configuring
-fastr, the pipeline execution toolbox we use. More information can be found at [the FASTR website](http://fastr.readthedocs.io/en/stable/static/file_description.html#config-file).
+The installation will create a FASTR configuration file in the $HOME/.fastr/config.d folder called WORC_config.py.
+This file is used for configuring fastr, the pipeline execution toolbox we use. More information can be found at
+[the FASTR website](http://fastr.readthedocs.io/en/stable/static/file_description.html#config-file).
 In this file, so called mounts are defined, which are used to locate the WORC tools and your inputs and outputs.
 Please inspect the mounts and change them if neccesary.
 
-Only if you are using FASTR < 1.3.0, you need to manually add the WORC tools, datatypes and mounts to your FASTR configuration ($HOME/.fastr/config.py). This concerns the following additions:
-
 ### Optional: Graphviz
 WORC can draw the network and save it as a SVG image using [graphviz](https://www.graphviz.org/). In order to do so,
-please make sure you install graphviz:
+please make sure you install graphviz. On Ubuntu, simply run
 
       apt install graphiv
 
@@ -84,9 +62,8 @@ subdirectory structure. For example, on Linux, the binaries and libraries should
 
 Note: optionally, you can tell WORC to copy the metadata from the image file
 to the segmentation file before applying the deformation field. This requires
-ITK and ITKTools: see the [Install_ITK file](Install_ITK.md) for installation
-instructions. More info on using the copying of metadata can
-be found on our Github Wiki.
+ITK and ITKTools: see  [the ITKTools github](https://github.com/ITKTools/ITKTools)
+for installation instructions.
 
 ### Optional: XNAT
 We use the XNATpy package to connect the toolbox to the XNAT online database platforms. You will only
@@ -102,17 +79,17 @@ chmod 600 ~/.netrc
 
 ## 3rd-party packages used in WORC:
 
- - FASTR (Workflow design and building)
+ - [FASTR (Workflow design and building)](http://fastr.readthedocs.io)
  - xnat (Collecting data from XNAT)
  - SimpleITK (Image loading and preprocessing)
  - [Pyradiomics](https://github.com/Radiomics/pyradiomics)
- - Our in-house package [PREDICT](https://github.com/Svdvoort/PREDICTFastr)
+ - [PREDICT](https://github.com/Svdvoort/PREDICTFastr)
 
 See for other requirements the [requirements file](requirements.txt).
 
 ## Start
 We suggest you start with the [WORC Tutorial](https://github.com/MStarmans91/WORCTutorial).
-Besides a Jupter notebook with instructions, we provide there also an example script for you to get started with.
+Besides a Jupyter notebook with instructions, we provide there also an example script for you to get started with.
 Make sure you input your own data as the sources. Also, check out the unit tests of several tools in the
 WORC/resources/fastr_tests directory. The example is explained in more detail in the Wiki on this Github.
 
@@ -127,7 +104,6 @@ This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2
 When using WORC, please cite this repository.
 
 ## Contact
-We are happy to help you with any questions. Please contact us on the [WORC google group](https://groups.google.com/forum/#!forum/worc-users).
+We are happy to help you with any questions. Please sent us a mail or place an issue on the Github.
 
-We welcome contributions to WORC. We will soon make some guidelines. For the moment, converting your toolbox into a FASTR tool
-will be satisfactory.
+We welcome contributions to WORC. For the moment, converting your toolbox into a FASTR tool is satisfactory.

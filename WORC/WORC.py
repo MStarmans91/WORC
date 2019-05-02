@@ -136,7 +136,7 @@ class WORC(object):
         if name == '':
             name = [randint(0, 9) for p in range(0, 5)]
         self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], 'WORC_' + str(name))
-        
+
         self.additions = dict()
         self.CopyMetadata = True
         self.segmode = []
@@ -156,7 +156,6 @@ class WORC(object):
         config['General'] = dict()
         config['General']['cross_validation'] = 'True'
         config['General']['Segmentix'] = 'False'
-        config['General']['PCE'] = 'False'  # We do not yet provide this module
         config['General']['FeatureCalculator'] = 'predict/CalcFeatures:1.0'
         config['General']['Preprocessing'] = 'worc/PreProcess:1.0'
         config['General']['RegistrationNode'] = "'elastix4.8/Elastix:4.8'"
@@ -179,15 +178,24 @@ class WORC(object):
         config['Normalize']['Method'] = 'z_score'
 
         # PREDICT - Feature calculation
+        # Determine which features are calculated
         config['ImageFeatures'] = dict()
+        config['ImageFeatures']['shape'] = 'True'
+        config['ImageFeatures']['histogram'] = 'True'
         config['ImageFeatures']['orientation'] = 'True'
-        config['ImageFeatures']['texture'] = 'all'
+        config['ImageFeatures']['texture_Gabor'] = 'False'
+        config['ImageFeatures']['texture_LBP'] = 'True'
+        config['ImageFeatures']['texture_GLCM'] = 'True'
+        config['ImageFeatures']['texture_GLCMMS'] = 'True'
+        config['ImageFeatures']['texture_GLRLM'] = 'True'
+        config['ImageFeatures']['texture_GLSZM'] = 'True'
+        config['ImageFeatures']['texture_NGTDM'] = 'True'
         config['ImageFeatures']['coliage'] = 'False'
         config['ImageFeatures']['vessel'] = 'False'
         config['ImageFeatures']['log'] = 'False'
         config['ImageFeatures']['phase'] = 'False'
 
-        ## Parameter settings for PREDICT feature calculation
+        # Parameter settings for PREDICT feature calculation
         # Defines what should be done with the images
         config['ImageFeatures']['image_type'] = 'CT'
 
@@ -236,7 +244,7 @@ class WORC(object):
         config['Featsel']['ReliefDistanceP'] = '1, 3'
         config['Featsel']['ReliefNumFeatures'] = '25, 200'
 
-        # Groupwie Featureselection options
+        # Groupwise Featureselection options
         config['SelectFeatGroup'] = dict()
         config['SelectFeatGroup']['shape_features'] = 'True, False'
         config['SelectFeatGroup']['histogram_features'] = 'True, False'
