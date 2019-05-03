@@ -22,7 +22,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import numpy as np
 import os
 import configparser
-import PREDICT.addexceptions as ae
+import WORC.addexceptions as ae
 import pandas as pd
 
 
@@ -48,14 +48,14 @@ def load_labels(label_file, label_type):
         label_names, patient_IDs, label_status = load_label_XNAT(
             label_file)
     else:
-        raise ae.PREDICTIOError(extension + ' is not valid label file extension.')
+        raise ae.WORCIOError(extension + ' is not valid label file extension.')
 
     print("Label names to extract: " + str(label_type))
     labels = list()
     for i_label in label_type:
         label_index = np.where(label_names == i_label)[0]
         if label_index.size == 0:
-            raise ae.PREDICTValueError('Could not find label: ' + str(i_label))
+            raise ae.WORCValueError('Could not find label: ' + str(i_label))
         else:
             labels.append(label_status[:, label_index])
 
@@ -86,7 +86,7 @@ def load_label_txt(input_file):
     # Load and check the header
     header = data[0, :]
     if header[0] != 'Patient':
-        raise ae.PREDICTAssertionError('First column should be patient ID!')
+        raise ae.WORCAssertionError('First column should be patient ID!')
     else:
         # cut out the first header, only keep label header
         label_names = header[1::]
@@ -120,7 +120,7 @@ def load_label_csv(input_file):
     # Load and check the header
     header = data.keys()
     if header[0] != 'Patient':
-        raise ae.PREDICTAssertionError('First column should be patient ID!')
+        raise ae.WORCAssertionError('First column should be patient ID!')
     else:
         # cut out the first header, only keep label header
         label_names = header[1::]
@@ -247,11 +247,11 @@ def findlabeldata(patientinfo, label_type, filenames,
 
         if ifound > 1:
             message = ('Multiple matches ({}) found in labeling for feature file {}.').format(str(matches), str(feat))
-            raise ae.PREDICTIOError(message)
+            raise ae.WORCIOError(message)
 
         elif ifound == 0:
             message = ('No entry found in labeling for feature file {}.').format(str(feat))
-            raise ae.PREDICTIOError(message)
+            raise ae.WORCIOError(message)
 
     # if image_features_temp is not None:
     #     image_features = np.asarray(image_features)

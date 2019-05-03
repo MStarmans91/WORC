@@ -93,3 +93,30 @@ class WORCTypeError(WORCError, TypeError):
     TypeError in the WORC system
     """
     pass
+
+
+class WORCValueError(WORCError, ValueError):
+    """
+    ValueError in the WORC system
+    """
+    pass
+
+
+class WORCKeyError(WORCError, KeyError):
+    """
+    KeyError in the WORC system
+    """
+    pass
+
+
+class WORCAssertionError(WORCError, AssertionError):
+    """
+    AssertionError in the WORC system
+    """
+    pass
+
+class WORCIndexError(WORCError, IndexError):
+    """
+    IndexError in the WORC system
+    """
+    pass

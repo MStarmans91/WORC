@@ -80,8 +80,9 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                                  verbose=1, cv=cv)
     random_search.fit(features, labels)
     print("Best found parameters:")
-    print(random_search.best_params_)
-    print("Best score using best parameters:")
+    for i in random_search.best_params_:
+        print(f'{i}: {random_search.best_params_[i]}.')
+    print("\n Best score using best parameters:")
     print(random_search.best_score_)
 
     return random_search

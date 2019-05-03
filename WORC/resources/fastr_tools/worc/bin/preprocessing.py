@@ -17,7 +17,7 @@
 
 import SimpleITK as sitk
 import argparse
-import dicom as pydicom
+import pydicom
 import WORC.IOparser.config_preprocessing as config_io
 import os
 

@@ -87,12 +87,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/development.html">Development and Design Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user_reference/user_reference.html">Fastr User Reference</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
@@ -211,6 +208,9 @@
 
         <span class="n">CI</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">N_iterations</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">metric_average</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">metric_std</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">CI</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">CI</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="c1"># When we cannot compute a CI, just give the averages</span>
+        <span class="n">CI</span> <span class="o">=</span> <span class="p">(</span><span class="n">metric_average</span><span class="p">,</span> <span class="n">metric_average</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">CI</span></div>
 
 

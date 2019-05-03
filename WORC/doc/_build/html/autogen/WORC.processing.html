@@ -89,18 +89,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/development.html">Development and Design Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../user_reference/user_reference.html">Fastr User Reference</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="WORC.html">WORC Package</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="WORC.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.WORCpy27"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORCpy27</span></code> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.addexceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="WORC.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a></li>
@@ -300,8 +296,28 @@ patient_ID (numpy array): IDs of patients for which label data is</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="WORC.processing.label_processing.load_label_file">
-<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_label_file</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_file" title="Permalink to this definition">¶</a></dt>
+<dt id="WORC.processing.label_processing.load_label_csv">
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_label_csv</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the patient IDs and label data from the label file</p>
+<dl>
+<dt>Args:</dt><dd><p>input_file (string): Path of the label file</p>
+</dd>
+<dt>Returns:</dt><dd><p>label_names (numpy array): Names of the different labels
+patient_ID (numpy array): IDs of patients for which label data is</p>
+<blockquote>
+<div><p>loaded</p>
+</div></blockquote>
+<dl class="simple">
+<dt>label_status (numpy array): The status of the different labels</dt><dd><p>for each patient</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.label_processing.load_label_txt">
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_label_txt</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_txt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the patient IDs and label data from the label file</p>
 <dl>
 <dt>Args:</dt><dd><p>input_file (string): Path of the label file</p>

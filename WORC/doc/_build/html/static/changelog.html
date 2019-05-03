@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Fastr User Reference" href="../user_reference/user_reference.html" />
-    <link rel="prev" title="Development and Design Documentation" href="development.html" /> 
+    <link rel="prev" title="Resource File Formats" href="file_description.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,8 +89,9 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_manual.html#the-worc-object">The WORC object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="development.html">Development and Design Documentation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
@@ -209,6 +210,8 @@ and this project adheres to <a class="reference external" href="http://semver.or
 <div class="section" id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p>Now ported to Python3.6+ (Python 2 is no longer supported!). Thereby also
+to fastr3.</p></li>
 <li><p>Compatibility for Windows. Some small changes in functions, as some packages
 behaviour differently under Windows. Also, adjusted sink and source paths
 to use OS file separator.</p></li>
@@ -219,6 +222,10 @@ to use OS file separator.</p></li>
 <h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>PCE and DTI node removed, as they were not open source.</p></li>
+<li><p>Pinfo file can now also be a csv. Txt is still supported.</p></li>
+<li><p>Use fastr as default for hyperparameter search parallelization instead
+of Joblib, as this is much more flexible.</p></li>
+<li><p>When the conffidence interval cannot be computed, just use the mean.</p></li>
 </ul>
 </div>
 <div class="section" id="fixed">
@@ -228,6 +235,8 @@ to use OS file separator.</p></li>
 <li><p>Source creation for the config was only for Linux.</p></li>
 <li><p>In numpy 1.15&gt;, booleans cannot be subtracted. Fixed an error due to this in
 segmentix by using bitwise_xor instead.</p></li>
+<li><p>Bug when using masks, but not for all images, and segmentix.</p></li>
+<li><p>Cardinality of classify node was incorrect.</p></li>
 </ul>
 </div>
 </div>
@@ -385,7 +394,7 @@ put the reference segmentation on the first modality!</p></li>
         <a href="../user_reference/user_reference.html" class="btn btn-neutral float-right" title="Fastr User Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="development.html" class="btn btn-neutral float-left" title="Development and Design Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="file_description.html" class="btn btn-neutral float-left" title="Resource File Formats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

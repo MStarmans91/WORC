@@ -73,8 +73,15 @@ def read_file(name, opts):
     if opts.dryrun:
         return
     fname = os.path.abspath(os.path.join(opts.destdir, '..', "%s.template" % (name)))
+    fname2 = os.path.join(os.path.dirname(fname), 'doc', os.path.basename(fname))
     if os.path.isfile(fname):
         f = open(fname, 'r')
+        data = f.read()
+        f.close()
+        return data
+    elif os.path.isfile(fname2):
+        # BUG in index.template
+        f = open(fname2, 'r')
         data = f.read()
         f.close()
         return data

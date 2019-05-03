@@ -19,15 +19,6 @@ WORC Package
     :show-inheritance:
     :special-members:
 
-:mod:`WORCpy27` Module
-----------------------
-
-.. automodule:: WORC.WORCpy27
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :special-members:
-
 :mod:`addexceptions` Module
 ---------------------------
 

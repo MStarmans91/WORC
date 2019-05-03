@@ -87,12 +87,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/development.html">Development and Design Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user_reference/user_reference.html">Fastr User Reference</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
@@ -180,6 +177,7 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">WORC.processing.label_processing</span> <span class="k">as</span> <span class="nn">lp</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
 <div class="viewcode-block" id="load_data"><a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.load_data">[docs]</a><span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="n">featurefiles</span><span class="p">,</span> <span class="n">patientinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">modnames</span><span class="o">=</span><span class="p">[]):</span>
@@ -251,9 +249,9 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span> <span class="o">=</span>\
                 <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">patientinfo</span><span class="p">,</span>
-                                    <span class="n">label_names</span><span class="p">,</span>
-                                    <span class="n">pfiles</span><span class="p">,</span>
-                                    <span class="n">image_features</span><span class="p">)</span>
+                                 <span class="n">label_names</span><span class="p">,</span>
+                                 <span class="n">pfiles</span><span class="p">,</span>
+                                 <span class="n">image_features</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span> <span class="o">+</span> <span class="s1">&#39;. Please take a look at your labels&#39;</span> <span class="o">+</span>\
                 <span class="s1">&#39; file and make sure it is formatted correctly. &#39;</span> <span class="o">+</span>\

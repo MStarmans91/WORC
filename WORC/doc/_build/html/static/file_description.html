@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Development and Design Documentation" href="development.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="configuration.html" /> 
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,18 +89,9 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Resource File Formats</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#config-file">Config file</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#splitting-up-config-files">Splitting up config files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#example-config-file">Example config file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#format">Format</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuration-fields">Configuration fields</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#tool-description"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tool</span></code> description</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="development.html">Development and Design Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_manual.html#the-worc-object">The WORC object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 <ul>
@@ -174,227 +165,9 @@
             
   <div class="section" id="resource-file-formats">
 <h1>Resource File Formats<a class="headerlink" href="#resource-file-formats" title="Permalink to this headline">¶</a></h1>
-<p>This chapter describes the various files fastr uses. The function and format
-of the files is described allowing the user to configure fastr and add
+<p>This chapter describes the various files WORC uses. The function and format
+of the files is described allowing the user to configure WORC and add
 DataTypes and Tools.</p>
-<div class="section" id="config-file">
-<span id="id1"></span><h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
-<p>Fastr reads the config files from <code class="docutils literal notranslate"><span class="pre">$FASTRHOME/config.py</span></code> by default. If the
-<code class="docutils literal notranslate"><span class="pre">$FASTRHOME</span></code> environment variable is not set it will default to <code class="docutils literal notranslate"><span class="pre">~/.fastr</span></code>.
-As a result it read:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">$FASTRHOME/config.py</span></code> (if environment variable set)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">~/.fastr/config.py</span></code> (otherwise)</p></li>
-</ul>
-<p>Reading a new config file change or override settings, making the last config
-file read have the highest priority. All settings have a default value, making
-config files and all settings within optional.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>To verify which config files have been read you can see
-<code class="docutils literal notranslate"><span class="pre">fastr.config.read_config_files</span></code> which contains a list
-of the read config files (in read order).</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">$FASTRHOME</span></code> is set, <code class="docutils literal notranslate"><span class="pre">$FASTRHOME/tools</span></code> is automatically added
-as a tool directory if it exists and <code class="docutils literal notranslate"><span class="pre">$FASTRHOME/datatypes</span></code> is automatically
-added as a type directory if it exists.</p>
-</div>
-<div class="section" id="splitting-up-config-files">
-<h3>Splitting up config files<a class="headerlink" href="#splitting-up-config-files" title="Permalink to this headline">¶</a></h3>
-<p>Sometimes it is nice to have config files split in multiple smaller files. Next
-to the <code class="docutils literal notranslate"><span class="pre">config.py</span></code> you can also created a directory <code class="docutils literal notranslate"><span class="pre">config.d</span></code> and all
-<code class="docutils literal notranslate"><span class="pre">.py</span></code> files in this directory will be sourced in alphabetical order.</p>
-<p>Given the following layout of the <code class="docutils literal notranslate"><span class="pre">$FASTRHOME</span></code> directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">config</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">a</span><span class="o">.</span><span class="n">py</span>
-<span class="o">./</span><span class="n">config</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">b</span><span class="o">.</span><span class="n">txt</span>
-<span class="o">./</span><span class="n">config</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">c</span><span class="o">.</span><span class="n">py</span>
-<span class="o">./</span><span class="n">config</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>The following files will be read in order:</p>
-<ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">./config.py</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">./config.d/a.py</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">./config.d/c.py</span></code></p></li>
-</ol>
-</div>
-<div class="section" id="example-config-file">
-<h3>Example config file<a class="headerlink" href="#example-config-file" title="Permalink to this headline">¶</a></h3>
-<p>Here is a minimal config file:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable debugging output</span>
-<span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
-
-<span class="c1"># Define the path to the tool definitions</span>
-<span class="n">tools_path</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/path/to/tools&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;/path/to/other/tools&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">tools_path</span>
-<span class="n">types_path</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/path/to/datatypes&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;/path/to/other/datatypes&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">types_path</span>
-
-
-<span class="c1"># Specify what your preferred output types are.</span>
-<span class="n">preferred_types</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;NiftiImageFileCompressed&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;NiftiImageFile&quot;</span><span class="p">]</span>
-
-<span class="c1"># Set the tmp mount</span>
-<span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;/path/to/tmpdir&#39;</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="format">
-<h3>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h3>
-<p>The config file is actually a python source file. The next syntax applies to
-setting configuration values:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Simple values</span>
-<span class="n">float_value</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">int_value</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">str_value</span> <span class="o">=</span> <span class="s2">&quot;Some value&quot;</span>
-<span class="n">other_str_value</span> <span class="o">=</span> <span class="s1">&#39;name&#39;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
-
-<span class="c1"># List-like values</span>
-<span class="n">list_value</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;over&#39;</span><span class="p">,</span> <span class="s1">&#39;ride&#39;</span><span class="p">,</span> <span class="s1">&#39;values&#39;</span><span class="p">]</span>
-<span class="n">other_list_value</span><span class="o">.</span><span class="n">prepend</span><span class="p">(</span><span class="s1">&#39;first&#39;</span><span class="p">)</span>
-<span class="n">other_list_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;list&#39;</span><span class="p">)</span>
-
-<span class="c1"># Dict-like values</span>
-<span class="n">dict_value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;this&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;is&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;fixed&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
-<span class="n">other_dict_value</span><span class="p">[</span><span class="s1">&#39;added&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;this key&#39;</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Dictionaries and list always have a default, so you can always append
-or assign elements to them and do not have to create them in a config
-file. Best practice is to only edit them unless you really want to
-block out the earliers config files.</p>
-</div>
-<p>Most operations will be assigning values, but for list and dict values
-a special wrapper object is used that allows manipulations from the default.
-This limits the operations allowed.</p>
-<p>List values in the <code class="docutils literal notranslate"><span class="pre">config.py</span></code> have the following supported operators/methods:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">__add__</span></code> and <code class="docutils literal notranslate"><span class="pre">__radd__</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">+=</span></code> or <code class="docutils literal notranslate"><span class="pre">__iadd__</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">append</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">prepend</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">extend</span></code></p></li>
-</ul>
-<p>Mapping (dict-like) values in the <code class="docutils literal notranslate"><span class="pre">config.py</span></code> have the following supported operators/methods:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">update</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">[]</span></code> or <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>, <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code> and <code class="docutils literal notranslate"><span class="pre">__delitem__</span></code></p></li>
-</ul>
-</div>
-<div class="section" id="configuration-fields">
-<h3>Configuration fields<a class="headerlink" href="#configuration-fields" title="Permalink to this headline">¶</a></h3>
-<p>This is a table the known config fields on the system:</p>
-</div>
-</div>
-<div class="section" id="tool-description">
-<h2><code class="xref py py-class docutils literal notranslate"><span class="pre">Tool</span></code> description<a class="headerlink" href="#tool-description" title="Permalink to this headline">¶</a></h2>
-<p id="tool-schema"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tools</span></code> are the building blocks in the fastr network. To add new
-<code class="xref py py-class docutils literal notranslate"><span class="pre">Tools</span></code> to fastr, XML/json files containing a <code class="xref py py-class docutils literal notranslate"><span class="pre">Tool</span></code>
-definition can be added. These files have the following layout:</p>
-<table class="docutils align-center">
-<colgroup>
-<col style="width: 12%" />
-<col style="width: 12%" />
-<col style="width: 13%" />
-<col style="width: 63%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head" colspan="3"><p>Attribute</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td colspan="3"><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
-<td><p>The id of this Tool (used internally in fastr)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
-<td colspan="2"></td>
-<td><p>The name of the Tool, for human readability</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
-<td colspan="2"></td>
-<td><p>The version of the Tool wrapper (not the binary)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">url</span></code></p></td>
-<td colspan="2"></td>
-<td><p>The url of the Tool wrapper</p></td>
-</tr>
-<tr class="row-even"><td rowspan="4"><p><code class="docutils literal notranslate"><span class="pre">authors[]</span></code></p></td>
-<td colspan="2"></td>
-<td><p>List of authors of the Tools wrapper</p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
-<td><p>Name of the author</p></td>
-</tr>
-<tr class="row-even"><td colspan="2"><p><code class="docutils literal notranslate"><span class="pre">email</span></code></p></td>
-<td><p>Email address of the author</p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p><code class="docutils literal notranslate"><span class="pre">url</span></code></p></td>
-<td><p>URL of the website of the author</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tags</span></code></p></td>
-<td colspan="2"><p><code class="docutils literal notranslate"><span class="pre">tag[]</span></code></p></td>
-<td><p>List of tags describing the Tool</p></td>
-</tr>
-<tr class="row-odd"><td rowspan="13"><p><code class="docutils literal notranslate"><span class="pre">command</span></code></p></td>
-<td colspan="2"></td>
-<td><p>Description of the underlying command</p></td>
-</tr>
-<tr class="row-even"><td colspan="2"><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
-<td><p>Version of the tool that is wrapped</p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p><code class="docutils literal notranslate"><span class="pre">url</span></code></p></td>
-<td><p>Website where the tools that is wrapped can be obtained</p></td>
-</tr>
-<tr class="row-even"><td rowspan="4"><p><code class="docutils literal notranslate"><span class="pre">targets[]</span></code></p></td>
-<td></td>
-<td><p>Description of the target binaries/script of this Tool</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">os</span></code></p></td>
-<td><p>OS targeted (windows, linux, macos or * (for any)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">arch</span></code></p></td>
-<td><p>Architecture targeted 32, 64 or * (for any)</p></td>
-</tr>
-<tr class="row-odd"><td><p>…</p></td>
-<td><p>Extra variables based on the target used, see <span class="xref std std-ref">Targets</span></p></td>
-</tr>
-<tr class="row-even"><td colspan="2"><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
-<td><p>Description of the Tool</p></td>
-</tr>
-<tr class="row-odd"><td colspan="2"><p><code class="docutils literal notranslate"><span class="pre">license</span></code></p></td>
-<td><p>License of the Tool, either full license or a clear name (e.g. LGPL, GPL v2)</p></td>
-</tr>
-<tr class="row-even"><td rowspan="4"><p><code class="docutils literal notranslate"><span class="pre">authors[]</span></code></p></td>
-<td></td>
-<td><p>List of authors of the Tool (not the wrapper!)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
-<td><p>Name of the authors</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">email</span></code></p></td>
-<td><p>Email address of the author</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">url</span></code></p></td>
-<td><p>URL of the website of the author</p></td>
-</tr>
-<tr class="row-even"><td colspan="3"><p><code class="docutils literal notranslate"><span class="pre">interface</span></code></p></td>
-<td><p>The interface definition see <span class="xref std std-ref">Interfaces</span></p></td>
-</tr>
-<tr class="row-odd"><td colspan="3"><p><code class="docutils literal notranslate"><span class="pre">help</span></code></p></td>
-<td><p>Help text explaining the use of the Tool</p></td>
-</tr>
-<tr class="row-even"><td colspan="3"><p><code class="docutils literal notranslate"><span class="pre">cite</span></code></p></td>
-<td><p>Bibtext of the Citation(s) to reference when using this Tool for a publication</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 </div>
 
 
@@ -405,10 +178,10 @@ definition can be added. These files have the following layout:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="development.html" class="btn btn-neutral float-right" title="Development and Design Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="configuration.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

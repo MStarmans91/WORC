@@ -97,6 +97,7 @@ class WORC(object):
         CopyMetadata: Boolean, default True
             when using elastix, copy metadata from image to segmentation or not
 
+
     """
 
     def __init__(self, name='WORC'):
@@ -322,7 +323,7 @@ class WORC(object):
 
         # Sample processing options
         config['SampleProcessing'] = dict()
-        config['SampleProcessing']['SMOTE'] = 'True, False'
+        config['SampleProcessing']['SMOTE'] = 'True'
         config['SampleProcessing']['SMOTE_ratio'] = '1, 0'
         config['SampleProcessing']['SMOTE_neighbors'] = '5, 15'
         config['SampleProcessing']['Oversampling'] = 'False'
@@ -330,12 +331,6 @@ class WORC(object):
         # Ensemble options
         config['Ensemble'] = dict()
         config['Ensemble']['Use'] = 'False'  # Still WIP
-
-        # BUG: the FASTR XNAT plugin can only retreive folders. We therefore need to add the filenames of the resources manually
-        # This should be fixed from fastr > 2.0.0: need to update.
-        config['FASTR_bugs'] = dict()
-        config['FASTR_bugs']['images'] = 'image.nii.gz'
-        config['FASTR_bugs']['segmentations'] = 'mask.nii.gz'
 
         return config
 
@@ -812,7 +807,6 @@ class WORC(object):
 
                         # Classification nodes -----------------------------------------------------
                         # Add the features from this modality to the classifier node input
-                        # self.links_C1_train[label] = self.classify.inputs['features_train'][str(label)] << self.calcfeatures_train[label].outputs['features']
                         self.links_C1_train[label] = self.classify.inputs['features_train'][str(label)] << self.calcfeatures_train[label].outputs['features']
                         self.links_C1_train[label].collapse = 'train'
 
@@ -880,12 +874,12 @@ class WORC(object):
                 config = configparser.ConfigParser()
                 config.read(c)
                 c = config
-            cfile = os.path.join(fastr.config.mounts['tmp'], self.name, ("config_{}_{}.ini").format(self.name, num))
+            cfile = os.path.join(fastr.config.mounts['tmp'], 'WORC_' + self.name, ("config_{}_{}.ini").format(self.name, num))
             if not os.path.exists(os.path.dirname(cfile)):
                 os.makedirs(os.path.dirname(cfile))
             with open(cfile, 'w') as configfile:
                 c.write(configfile)
-            self.fastrconfigs.append(("vfs://tmp/{}/config_{}_{}.ini").format(self.name, self.name, num))
+            self.fastrconfigs.append(("vfs://tmp/{}/config_{}_{}.ini").format('WORC_' + self.name, self.name, num))
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
@@ -898,24 +892,6 @@ class WORC(object):
         self.sink_data['classification'] = ("vfs://output/{}/svm_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
-
-        # NOTE: Below bug should be fixed, need to check
-        # BUG: this is a bug in the FASTR package. Workaround for nifti XNAT links using expansion of FASTR XNAT plugin.
-        for num, im in enumerate(self.images_train):
-            if im is not None and 'xnat' in im:
-                if 'DICOM' not in im:
-                    fastr.ioplugins['xnat']
-                    # metalink = im_m1.replace('NIFTI','DICOM')
-                    im = fastr.ioplugins['xnat'].expand_url(im)
-                    imagename = self.configs[num]['FASTR_bugs']['images']
-                    self.images_train[num] = {v[(v.find('subjects') + 9):v.find('/experiments')]: v + imagename + '?insecure=true' for k, v in im}
-
-        for num, seg in enumerate(self.segmentations_train):
-            if seg is not None and 'xnat' in seg:
-                fastr.ioplugins['xnat']
-                seg = fastr.ioplugins['xnat'].expand_url(seg)
-                segname = self.configs[num]['FASTR_bugs']['segmentations']
-                self.segmentations_train[num] = {v[(v.find('subjects') + 9):v.find('/experiments')]: v + segname + '?insecure=true' for k, v in seg}
 
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):

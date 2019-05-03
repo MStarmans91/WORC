@@ -67,7 +67,18 @@ WORC Documentation
     static/user_manual.rst
     static/configuration.rst
     static/file_description.rst
+    autogen/fastr.reference.rst
+    static/development.rst
     static/changelog.rst
+
+WORC User reference
+====================
+
+.. toctree::
+    :maxdepth: 3
+    :glob:
+
+    user_reference/*
 
 WORC Developer Module reference
 ================================

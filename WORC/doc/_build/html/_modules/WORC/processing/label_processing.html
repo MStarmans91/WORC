@@ -87,12 +87,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/development.html">Development and Design Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user_reference/user_reference.html">Fastr User Reference</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
@@ -183,7 +180,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">configparser</span>
-<span class="kn">import</span> <span class="nn">PREDICT.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
+<span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 
 <div class="viewcode-block" id="load_labels"><a class="viewcode-back" href="../../../autogen/WORC.processing.html#WORC.processing.label_processing.load_labels">[docs]</a><span class="k">def</span> <span class="nf">load_labels</span><span class="p">(</span><span class="n">label_file</span><span class="p">,</span> <span class="n">label_type</span><span class="p">):</span>
@@ -199,20 +197,23 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span class="s1">&#39;.txt&#39;</span><span class="p">:</span>
-        <span class="n">label_names</span><span class="p">,</span> <span class="n">patient_IDs</span><span class="p">,</span> <span class="n">label_status</span> <span class="o">=</span> <span class="n">load_label_file</span><span class="p">(</span>
+        <span class="n">label_names</span><span class="p">,</span> <span class="n">patient_IDs</span><span class="p">,</span> <span class="n">label_status</span> <span class="o">=</span> <span class="n">load_label_txt</span><span class="p">(</span>
+            <span class="n">label_file</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">extension</span> <span class="o">==</span> <span class="s1">&#39;.csv&#39;</span><span class="p">:</span>
+        <span class="n">label_names</span><span class="p">,</span> <span class="n">patient_IDs</span><span class="p">,</span> <span class="n">label_status</span> <span class="o">=</span> <span class="n">load_label_csv</span><span class="p">(</span>
             <span class="n">label_file</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">extension</span> <span class="o">==</span> <span class="s1">&#39;.ini&#39;</span><span class="p">:</span>
         <span class="n">label_names</span><span class="p">,</span> <span class="n">patient_IDs</span><span class="p">,</span> <span class="n">label_status</span> <span class="o">=</span> <span class="n">load_label_XNAT</span><span class="p">(</span>
             <span class="n">label_file</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">PREDICTIOError</span><span class="p">(</span><span class="n">extension</span> <span class="o">+</span> <span class="s1">&#39; is not valid label file extension.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="n">extension</span> <span class="o">+</span> <span class="s1">&#39; is not valid label file extension.&#39;</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Label names to extract: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">label_type</span><span class="p">))</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">i_label</span> <span class="ow">in</span> <span class="n">label_type</span><span class="p">:</span>
         <span class="n">label_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">label_names</span> <span class="o">==</span> <span class="n">i_label</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">label_index</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">PREDICTValueError</span><span class="p">(</span><span class="s1">&#39;Could not find label: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i_label</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="s1">&#39;Could not find label: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i_label</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label_status</span><span class="p">[:,</span> <span class="n">label_index</span><span class="p">])</span>
 
@@ -224,7 +225,7 @@
     <span class="k">return</span> <span class="n">label_data</span></div>
 
 
-<div class="viewcode-block" id="load_label_file"><a class="viewcode-back" href="../../../autogen/WORC.processing.html#WORC.processing.label_processing.load_label_file">[docs]</a><span class="k">def</span> <span class="nf">load_label_file</span><span class="p">(</span><span class="n">input_file</span><span class="p">):</span>
+<div class="viewcode-block" id="load_label_txt"><a class="viewcode-back" href="../../../autogen/WORC.processing.html#WORC.processing.label_processing.load_label_txt">[docs]</a><span class="k">def</span> <span class="nf">load_label_txt</span><span class="p">(</span><span class="n">input_file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load the patient IDs and label data from the label file</span>
 
@@ -243,7 +244,7 @@
     <span class="c1"># Load and check the header</span>
     <span class="n">header</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
     <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Patient&#39;</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">PREDICTAssertionError</span><span class="p">(</span><span class="s1">&#39;First column should be patient ID!&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCAssertionError</span><span class="p">(</span><span class="s1">&#39;First column should be patient ID!&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># cut out the first header, only keep label header</span>
         <span class="n">label_names</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="mi">1</span><span class="p">::]</span>
@@ -253,6 +254,40 @@
 
     <span class="c1"># label status is stored in all remaining columns</span>
     <span class="n">label_status</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">1</span><span class="p">:]</span>
+    <span class="n">label_status</span> <span class="o">=</span> <span class="n">label_status</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">label_names</span><span class="p">,</span> <span class="n">patient_ID</span><span class="p">,</span> <span class="n">label_status</span></div>
+
+
+<div class="viewcode-block" id="load_label_csv"><a class="viewcode-back" href="../../../autogen/WORC.processing.html#WORC.processing.label_processing.load_label_csv">[docs]</a><span class="k">def</span> <span class="nf">load_label_csv</span><span class="p">(</span><span class="n">input_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the patient IDs and label data from the label file</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_file (string): Path of the label file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        label_names (numpy array): Names of the different labels</span>
+<span class="sd">        patient_ID (numpy array): IDs of patients for which label data is</span>
+<span class="sd">         loaded</span>
+<span class="sd">        label_status (numpy array): The status of the different labels</span>
+<span class="sd">         for each patient</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Load and check the header</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;Patient&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCAssertionError</span><span class="p">(</span><span class="s1">&#39;First column should be patient ID!&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># cut out the first header, only keep label header</span>
+        <span class="n">label_names</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="mi">1</span><span class="p">::]</span>
+
+    <span class="c1"># Patient IDs are stored in the first column</span>
+    <span class="n">patient_ID</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Patient&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="c1"># label status is stored in all remaining columns</span>
+    <span class="n">label_status</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
     <span class="n">label_status</span> <span class="o">=</span> <span class="n">label_status</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">label_names</span><span class="p">,</span> <span class="n">patient_ID</span><span class="p">,</span> <span class="n">label_status</span></div>
@@ -341,41 +376,50 @@
     <span class="n">label_data_temp</span> <span class="o">=</span> <span class="n">load_labels</span><span class="p">(</span><span class="n">patientinfo</span><span class="p">,</span> <span class="n">label_type</span><span class="p">)</span>
     <span class="n">label_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">patient_IDs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-    <span class="n">label_name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">label_value</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">i_len</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_data_temp</span><span class="p">[</span><span class="s1">&#39;label_name&#39;</span><span class="p">])):</span>
-        <span class="n">label_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">())</span>
+        <span class="n">label_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">())</span>
 
+    <span class="c1"># Check per feature file if there is a match in the label data</span>
     <span class="n">image_features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">i_feat</span><span class="p">,</span> <span class="n">feat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
         <span class="n">ifound</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">matches</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">i_num</span><span class="p">,</span> <span class="n">i_patient</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">label_data_temp</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]):</span>
             <span class="k">if</span> <span class="n">i_patient</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">feat</span><span class="p">):</span>
+
+                <span class="c1"># Match: add the patient ID to the ID&#39;s and to the matches</span>
                 <span class="n">patient_IDs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i_patient</span><span class="p">)</span>
                 <span class="n">matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i_patient</span><span class="p">)</span>
+
+                <span class="c1"># If there are feature files given, add it to the list</span>
                 <span class="k">if</span> <span class="n">image_features_temp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">image_features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image_features_temp</span><span class="p">[</span><span class="n">i_feat</span><span class="p">])</span>
+
+                <span class="c1"># For each label that we have, add the value to the label list</span>
                 <span class="k">for</span> <span class="n">i_len</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_data_temp</span><span class="p">[</span><span class="s1">&#39;label_name&#39;</span><span class="p">])):</span>
-                    <span class="n">label_name</span><span class="p">[</span><span class="n">i_len</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label_data_temp</span><span class="p">[</span><span class="s1">&#39;label_name&#39;</span><span class="p">][</span><span class="n">i_len</span><span class="p">][</span><span class="n">i_num</span><span class="p">])</span>
+                    <span class="n">label_value</span><span class="p">[</span><span class="n">i_len</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label_data_temp</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">][</span><span class="n">i_len</span><span class="p">][</span><span class="n">i_num</span><span class="p">])</span>
+
+                <span class="c1"># Calculate how many matches we found for this (feature) file: should be one</span>
                 <span class="n">ifound</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">ifound</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Multiple matches (</span><span class="si">{}</span><span class="s1">) found in labeling for feature file </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">matches</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">feat</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">PREDICTIOError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">ifound</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;No entry found in labeling for feature file </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">feat</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">PREDICTIOError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
     <span class="c1"># if image_features_temp is not None:</span>
     <span class="c1">#     image_features = np.asarray(image_features)</span>
 
     <span class="c1"># Convert to arrays</span>
-    <span class="k">for</span> <span class="n">i_len</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_name</span><span class="p">)):</span>
-        <span class="n">label_name</span><span class="p">[</span><span class="n">i_len</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">label_name</span><span class="p">[</span><span class="n">i_len</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i_len</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_value</span><span class="p">)):</span>
+        <span class="n">label_value</span><span class="p">[</span><span class="n">i_len</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">label_value</span><span class="p">[</span><span class="n">i_len</span><span class="p">])</span>
 
     <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">patient_IDs</span><span class="p">)</span>
-    <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">label_name</span><span class="p">)</span>
+    <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">label_value</span><span class="p">)</span>
     <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label_data_temp</span><span class="p">[</span><span class="s1">&#39;label_name&#39;</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span></div>

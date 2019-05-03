@@ -846,7 +846,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if type(method) is int:
             # Simply take the top50 best hyperparameters
             if verbose:
-                print('Creating ensemble using top {} individual classifiers.').format(str(method))
+                print(f'Creating ensemble using top {str(method)} individual classifiers.')
             ensemble = range(0, method)
 
         elif method == 'FitNumber':
@@ -863,7 +863,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             performances = np.zeros((n_iter, n_classifiers))
             for it, (train, valid) in enumerate(self.cv_iter):
                 if verbose:
-                    print(' - iteration {} / {}.').format(str(it + 1), str(n_iter))
+                    print(f' - iteration {it + 1} / {n_iter}.')
                 Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
                 # Loop over the 100 best estimators
@@ -971,9 +971,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 best_performance = new_performance
 
                 # Print the performance gain
-                print("Ensembling best {}: {}.").format(scoring, str(best_performance))
-                print("Single estimator best {}: {}.").format(scoring, str(single_estimator_performance))
-                print('Ensemble consists of {} estimators {}.').format(str(len(ensemble)), str(ensemble))
+                print(f"Ensembling best {scoring}: {best_performance}.")
+                print(f"Single estimator best {scoring}: {single_estimator_performance}.")
+                print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
 
         elif method == 'Caruana':
             # Use the method from Caruana
@@ -999,7 +999,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             performances = np.zeros((n_iter, n_classifiers))
             for it, (train, valid) in enumerate(self.cv_iter):
                 if verbose:
-                    print(' - iteration {} / {}.').format(str(it + 1), str(n_iter))
+                    print(f' - iteration {it + 1} / {n_iter}.')
                 Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
                 # Loop over the 100 best estimators
@@ -1107,9 +1107,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 best_performance = new_performance
 
                 # Print the performance gain
-                print("Ensembling best {}: {}.").format(scoring, str(best_performance))
-                print("Single estimator best {}: {}.").format(scoring, str(single_estimator_performance))
-                print('Ensemble consists of {} estimators {}.').format(str(len(ensemble)), str(ensemble))
+                print(f"Ensembling best {scoring}: {best_performance}.")
+                print(f"Single estimator best {scoring}: {single_estimator_performance}.")
+                print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
 
             # Greedy selection  -----------------------------------------------
             # Initialize variables
@@ -1123,7 +1123,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             while new_performance > best_performance:
                 # Score is better, so expand ensemble and replace new best score
                 if verbose:
-                    print("Iteration: {}, best {}: {}.").format(str(iteration), scoring, str(new_performance))
+                    print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
                 best_performance = new_performance
 
                 if iteration > 1:
@@ -1169,9 +1169,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 iteration += 1
 
             # Print the performance gain
-            print("Ensembling best {}: {}.").format(scoring, str(best_performance))
-            print("Single estimator best {}: {}.").format(scoring, str(single_estimator_performance))
-            print('Ensemble consists of {} estimators {}.').format(str(len(ensemble)), str(ensemble))
+            print(f"Ensembling best {scoring}: {best_performance}.")
+            print(f"Single estimator best {scoring}: {single_estimator_performance}.")
+            print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
         else:
             print('[PREDICT WARNING] No valid ensemble method given: {}. Not ensembling').format(str(method))
             return self
@@ -1185,7 +1185,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         nest = len(ensemble)
         for enum, (p_est, p_all) in enumerate(zip(parameters_est, parameters_all)):
             # Refit a SearchCV object with the provided parameters
-            print("Refitting estimator {} / {}.").format(str(enum+1), str(nest))
+            print(f"Refitting estimator {enum+1} / {nest}.")
             base_estimator = clone(base_estimator)
 
             # # Check if we need to create a multiclass estimator
@@ -1221,9 +1221,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         n_splits = cv.get_n_splits(X, y, groups)
         if self.verbose > 0 and isinstance(parameter_iterable, Sized):
             n_candidates = len(parameter_iterable)
-            print("Fitting {0} folds for each of {1} candidates, totalling"
-                  " {2} fits".format(n_splits, n_candidates,
-                                     n_candidates * n_splits))
+            print(f"Fitting {n_splits} folds for each of {n_candidates} candidates, totalling {n_candidates * n_splits} fits.")
 
         cv_iter = list(cv.split(X, y, groups))
         name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))

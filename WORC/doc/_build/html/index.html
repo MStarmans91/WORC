@@ -88,12 +88,9 @@
 <li class="toctree-l1"><a class="reference internal" href="static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="static/development.html">Development and Design Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="user_reference/user_reference.html">Fastr User Reference</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="autogen/WORC.html">WORC Package</a></li>
@@ -214,40 +211,46 @@ can address various problems.</p>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#configuration">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#creating-a-simple-network">Creating a simple network</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#creating-nodes">Creating nodes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#creating-links">Creating links</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#create-an-image-of-the-network">Create an image of the Network</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#running-a-network">Running a Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#the-worc-object">The WORC object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#attributes-sources">Attributes: Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#attributes-settings">Attributes: Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#attributes-functions">Attributes: Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#images-and-segmentations">Images and segmentations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#semantics">Semantics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#labels">Labels</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/file_description.html#config-file">Config file</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/file_description.html#splitting-up-config-files">Splitting up config files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/file_description.html#example-config-file">Example config file</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/file_description.html#format">Format</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/file_description.html#configuration-fields">Configuration fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#masks">Masks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#metadata">Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#elastix-para">Elastix_Para</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#fastr-settings">FASTR settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#construction-and-execution-commands">Construction and execution commands</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/file_description.html#tool-description"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tool</span></code> description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#predictgeneral">PREDICTGeneral</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#segmentix">Segmentix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#preprocessing">Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#imagefeatures">Imagefeatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#featsel">Featsel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#selectfeatgroup">SelectFeatGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#imputation">Imputation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#classification">Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#crossvalidation">CrossValidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#labels">Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#hyperoptimization">Hyperoptimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#featurescaling">FeatureScaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#sampleprocessing">SampleProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#ensemble">Ensemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#fastr-bugs">FASTR_bugs</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="static/development.html">Development and Design Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/development.html#sample-flow-in-fastr">Sample flow in Fastr</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/development.html#network-execution">Network Execution</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/development.html#schedulingplugins">SchedulingPlugins</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="static/development.html#secrets">Secrets</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/development.html#using-secrets">Using secrets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/development.html#implementing-a-secretprovider">Implementing a SecretProvider</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="static/changelog.html#unreleased">Unreleased</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#added">Added</a></li>
@@ -292,9 +295,6 @@ can address various problems.</p>
 <div class="section" id="worc-user-reference">
 <h3>WORC User reference<a class="headerlink" href="#worc-user-reference" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="user_reference/user_reference.html">Fastr User Reference</a></li>
-</ul>
 </div>
 </div>
 <div class="section" id="worc-developer-module-reference">
@@ -304,7 +304,6 @@ can address various problems.</p>
 <li class="toctree-l1"><a class="reference internal" href="autogen/WORC.html">WORC Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="autogen/WORC.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="autogen/WORC.html#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="autogen/WORC.html#module-WORC.WORCpy27"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORCpy27</span></code> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="autogen/WORC.html#module-WORC.addexceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="autogen/WORC.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.IOparser.html">IOparser Package</a><ul>
@@ -318,14 +317,14 @@ can address various problems.</p>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.classification.html">classification Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.AdvancedSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">AdvancedSampler</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.RankedSVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#searchcv-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.SearchCV"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.construct_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">construct_classifier</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#crossval-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">crossval</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.crossval"><code class="xref py py-mod docutils literal notranslate"><span class="pre">crossval</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.estimators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">estimators</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#fitandscore-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitandscore</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.fitandscore"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitandscore</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">metrics</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#parameter-optimization-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_optimization</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#trainclassifier-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trainclassifier</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.parameter_optimization"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_optimization</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.trainclassifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trainclassifier</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.featureprocessing.html">featureprocessing Package</a><ul>
@@ -342,13 +341,13 @@ can address various problems.</p>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.plotting.html">plotting Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.compute_CI"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compute_CI</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.linstretch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">linstretch</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#plot-roc-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ROC</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#plot-svm-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_SVM</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_ROC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ROC</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_SVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_SVM</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_SVR"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_SVR</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_barchart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_barchart</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_boxplot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_images"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#plot-ranked-scores-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#plotminmaxresponse-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#scatterplot-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scatterplot</span></code> Module</a></li>
 </ul>

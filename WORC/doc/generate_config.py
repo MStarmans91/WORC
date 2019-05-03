@@ -5,7 +5,7 @@ import WORC
 from fastr.helpers.rest_generation import create_rest_table
 
 
-def generate_config(fields):
+def generate_config():
     field_key = []
     field_subkey = []
     field_default = []
@@ -16,17 +16,22 @@ def generate_config(fields):
 
     config_defaults = a.defaultconfig()
     config_options = generate_config_options()
-    config_desciptions = generate_config_descriptions()
+    config_descriptions = generate_config_descriptions()
 
     for key in config_defaults.keys():
-        for subkey in config_defaults[key].keys():
+        for num, subkey in enumerate(config_defaults[key].keys()):
             print(f'[generate_config.py] Documenting field {key}: {subkey}')
-            field_key.append(key)
+            if num == 0:
+                field_key.append(key)
+            else:
+                # After the first field of this key is generated, we do not append the key for better readability
+                field_key.append('')
+
             field_subkey.append(subkey)
             field_default.append(config_defaults[key][subkey])
 
             try:
-                field_description.append(config_desciptions[key][subkey])
+                field_description.append(config_descriptions[key][subkey])
             except KeyError:
                 print(f'[WARNING] No description for {key}: {subkey}')
                 field_description.append('')
@@ -36,7 +41,6 @@ def generate_config(fields):
             except KeyError:
                 print(f'[WARNING] No options for {key}: {subkey}')
                 field_option.append(config_defaults[key][subkey])
-
 
     data = [field_key, field_subkey, field_description, field_default, field_option]
     headers = ['Key', 'Subkey', 'Description', 'Default', 'Options',]
@@ -49,7 +53,7 @@ def generate_config_doc():
     filename = os.path.join(os.path.dirname(__file__), 'autogen', 'WORC.config.rst')
 
     with open(filename, 'w') as fh_out:
-        fh_out.write(generate_config(fastr.config.DEFAULT_FIELDS))
+        fh_out.write(generate_config())
 
     print(f'[generate_config.py] Config reference saved to {filename}')
 
@@ -120,8 +124,8 @@ def generate_config_options():
     config['ImageFeatures']['LBP_npoints'] = 'Integer(s) > 0'
 
     # Phase features minimal wavelength and number of scales
-    config['ImageFeatures']['phase_minwavelength'] = 'Integer(s)'
-    config['ImageFeatures']['phase_nscale'] = 'Integer(s) > 0'
+    config['ImageFeatures']['phase_minwavelength'] = 'Integer > 0'
+    config['ImageFeatures']['phase_nscale'] = 'Integer > 0'
 
     # Log features sigma of Gaussian in pixels
     config['ImageFeatures']['log_sigma'] = 'Integer(s)'
@@ -223,7 +227,7 @@ def generate_config_options():
     # Feature scaling options
     config['FeatureScaling'] = dict()
     config['FeatureScaling']['scale_features'] = 'Boolean(s)'
-    config['FeatureScaling']['scaling_method'] = 'z_score'
+    config['FeatureScaling']['scaling_method'] = 'z_score, minmax'
 
     # Sample processing options
     config['SampleProcessing'] = dict()
@@ -236,12 +240,6 @@ def generate_config_options():
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Boolean or Integer'
 
-    # BUG: the FASTR XNAT plugin can only retreive folders. We therefore need to add the filenames of the resources manually
-    # This should be fixed from fastr > 2.0.0: need to update.
-    config['FASTR_bugs'] = dict()
-    config['FASTR_bugs']['images'] = 'String'
-    config['FASTR_bugs']['segmentations'] = 'String'
-
     return config
 
 
@@ -250,23 +248,22 @@ def generate_config_descriptions():
 
     # General configuration of WORC
     config['General'] = dict()
-    config['General']['cross_validation'] = 'True, False'
-    config['General']['Segmentix'] = 'Use Segmentix tool for segmentation preprocessing'
-    config['General']['PCE'] = 'True, False'
-    config['General']['FeatureCalculator'] = 'Specifies which feature calculation tool should be used'
-    config['General']['Preprocessing'] = 'Specifies which tool will be used for image preprocessing'
-    config['General']['RegistrationNode'] = "Specifies which tool will be used for image registration"
-    config['General']['TransformationNode'] = "Specifies which tool will be used for applying image transformations"
+    config['General']['cross_validation'] = 'Determine whether a cross validation will be performed or not. Obsolete, will be removed.'
+    config['General']['Segmentix'] = 'Determine whether to use Segmentix tool for segmentation preprocessing.'
+    config['General']['FeatureCalculator'] = 'Specifies which feature calculation tool should be used.'
+    config['General']['Preprocessing'] = 'Specifies which tool will be used for image preprocessing.'
+    config['General']['RegistrationNode'] = "Specifies which tool will be used for image registration."
+    config['General']['TransformationNode'] = "Specifies which tool will be used for applying image transformations."
     config['General']['Joblib_ncores'] = 'Number of cores to be used by joblib for multicore processing.'
     config['General']['Joblib_backend'] = 'Type of backend to be used by joblib for multicore processing.'
     config['General']['tempsave'] = 'Determines whether after every cross validation iteration the result will be saved, in addition to the result after all iterations. Especially useful for debugging.'
 
     # Segmentix
     config['Segmentix'] = dict()
-    config['Segmentix']['mask'] = 'If a mask is supplied, should the mask be subtracted from the contour or multiplied'
+    config['Segmentix']['mask'] = 'If a mask is supplied, should the mask be subtracted from the contour or multiplied.'
     config['Segmentix']['segtype'] = 'If Ring, then a ring around the segmentation will be used as contour.'
-    config['Segmentix']['segradius'] = 'Define the radius of the ring used if segtype is Ring'
-    config['Segmentix']['N_blobs'] = 'How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used'
+    config['Segmentix']['segradius'] = 'Define the radius of the ring used if segtype is Ring.'
+    config['Segmentix']['N_blobs'] = 'How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.'
     config['Segmentix']['fillholes'] = 'Determines whether hole filling will be used.'
 
     # Preprocessing
@@ -279,7 +276,14 @@ def generate_config_descriptions():
     config['ImageFeatures'] = dict()
     config['ImageFeatures']['shape'] = 'Determine whether orientation features are computed or not.'
     config['ImageFeatures']['histogram'] = 'Determine whether histogram features are computed or not.'
+    config['ImageFeatures']['orientation'] = 'Determine whether orientation features are computed or not.'
     config['ImageFeatures']['texture_Gabor'] = 'Determine whether Gabor texture features are computed or not.'
+    config['ImageFeatures']['texture_LBP'] ='Determine whether LBP texture features are computed or not.'
+    config['ImageFeatures']['texture_GLCM'] = 'Determine whether GLCM texture features are computed or not.'
+    config['ImageFeatures']['texture_GLCMMS'] = 'Determine whether GLCM Multislice texture features are computed or not.'
+    config['ImageFeatures']['texture_GLRLM'] = 'Determine whether GLRLM texture features are computed or not.'
+    config['ImageFeatures']['texture_GLSZM'] = 'Determine whether GLSZM texture features are computed or not.'
+    config['ImageFeatures']['texture_NGTDM'] = 'Determine whether NGTDM texture features are computed or not.'
     config['ImageFeatures']['coliage'] = 'Determine whether coliage features are computed or not.'
     config['ImageFeatures']['vessel'] = 'Determine whether vessel features are computed or not.'
     config['ImageFeatures']['log'] = 'Determine whether LoG features are computed or not.'
@@ -294,138 +298,133 @@ def generate_config_descriptions():
 
     # Gabor, GLCM angles in degrees and radians, respectively
     config['ImageFeatures']['gabor_angles'] = 'Angles of Gabor filters in degrees: can be a single integer or a list.'
-    config['ImageFeatures']['GLCM_angles'] = '0, 0.79, 1.57, 2.36'
+    config['ImageFeatures']['GLCM_angles'] = 'Angles used in GLCM computation in radians: can be a single float or a list.'
 
     # GLCM discretization levels, distances in pixels
-    config['ImageFeatures']['GLCM_levels'] = '16'
-    config['ImageFeatures']['GLCM_distances'] = '1, 3'
+    config['ImageFeatures']['GLCM_levels'] = 'Number of grayscale levels used in discretization before GLCM computation.'
+    config['ImageFeatures']['GLCM_distances'] = 'Distance(s) used in GLCM computation in pixels: can be a single integer or a list.'
 
     # LBP radius, number of points in pixels
-    config['ImageFeatures']['LBP_radius'] = '3, 8, 15'
-    config['ImageFeatures']['LBP_npoints'] = '12, 24, 36'
+    config['ImageFeatures']['LBP_radius'] = 'Radii used for LBP computation: can be a single integer or a list.'
+    config['ImageFeatures']['LBP_npoints'] = 'Number(s) of points used in LBP computation: can be a single integer or a list.'
 
     # Phase features minimal wavelength and number of scales
-    config['ImageFeatures']['phase_minwavelength'] = '3'
-    config['ImageFeatures']['phase_nscale'] = '5'
+    config['ImageFeatures']['phase_minwavelength'] = 'Minimal wavelength in pixels used for phase features.'
+    config['ImageFeatures']['phase_nscale'] = 'Number of scales used in phase feature computation.'
 
     # Log features sigma of Gaussian in pixels
-    config['ImageFeatures']['log_sigma'] = '1, 5, 10'
+    config['ImageFeatures']['log_sigma'] = 'Standard deviation(s) in pixels used in log feature computation: can be a single integer or a list.'
 
     # Vessel features scale range, steps for the range
-    config['ImageFeatures']['vessel_scale_range'] = '1, 10'
-    config['ImageFeatures']['vessel_scale_step'] = '2'
+    config['ImageFeatures']['vessel_scale_range'] = 'Scale in pixels used for Frangi vessel filter. Given as a minimum and a maximum.'
+    config['ImageFeatures']['vessel_scale_step'] = 'Step size used to go from minimum to maximum scale on Frangi vessel filter.'
 
     # Vessel features radius for erosion to determine boudnary
-    config['ImageFeatures']['vessel_radius'] = '5'
+    config['ImageFeatures']['vessel_radius'] = 'Radius to determine boundary of between inner part and edge in Frangi vessel filter.'
 
     # Feature selection
     config['Featsel'] = dict()
-    config['Featsel']['Variance'] = 'Boolean(s)'
-    config['Featsel']['GroupwiseSearch'] = 'True, False
-    config['Featsel']['SelectFromModel'] = 'True, False
-    config['Featsel']['UsePCA'] = 'True, False
-    config['Featsel']['PCAType'] = '95variance'
-    config['Featsel']['StatisticalTestUse'] = 'True, False
-    config['Featsel']['StatisticalTestMetric'] = 'ttest, Welch, Wilcoxon, MannWhitneyU'
-    config['Featsel']['StatisticalTestThreshold'] = '0.02, 0.2'
-    config['Featsel']['ReliefUse'] = 'True, False
-    config['Featsel']['ReliefNN'] = '2, 4'
-    config['Featsel']['ReliefSampleSize'] = '1, 1'
-    config['Featsel']['ReliefDistanceP'] = '1, 3'
-    config['Featsel']['ReliefNumFeatures'] = '25, 200'
+    config['Featsel']['Variance'] = 'If True, exclude features which have a variance < 0.01. Based on [sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html).'
+    config['Featsel']['GroupwiseSearch'] = 'Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.'
+    config['Featsel']['SelectFromModel'] = 'Select features by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also [sklearn](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html).'
+    config['Featsel']['UsePCA'] = 'If True, Use Principle Component Analysis (PCA) to select features.'
+    config['Featsel']['PCAType'] = 'Method to select number of components using PCA: Either the number of components that explains 95% of the variance, or use a fixed number of components.95variance'
+    config['Featsel']['StatisticalTestUse'] = 'If True, use statistical test to select features.'
+    config['Featsel']['StatisticalTestMetric'] = 'Define the type of statistical test to be used.'
+    config['Featsel']['StatisticalTestThreshold'] = 'Specify a threshold for the p-value threshold used in the statistical test to select features. The first element defines the lower boundary, the other the upper boundary. Random sampling will occur between the boundaries.'
+    config['Featsel']['ReliefUse'] = 'If True, use Relief to select features.'
+    config['Featsel']['ReliefNN'] = 'Min and max of number of nearest neighbors search range in Relief.'
+    config['Featsel']['ReliefSampleSize'] = 'Min and max of sample size search range in Relief.'
+    config['Featsel']['ReliefDistanceP'] = 'Min and max of positive distance search range in Relief.'
+    config['Featsel']['ReliefNumFeatures'] = 'Min and max of number of features that is selected search range in Relief.'
 
     # Groupwie Featureselection options
     config['SelectFeatGroup'] = dict()
-    config['SelectFeatGroup']['shape_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['histogram_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['orientation_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['texture_Gabor_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['texture_GLCM_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['texture_GLCMMS_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['texture_GLRLM_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['texture_GLSZM_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['texture_NGTDM_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['texture_LBP_features'] = 'True, False'
-    config['SelectFeatGroup']['patient_features'] = 'True, False
-    config['SelectFeatGroup']['semantic_features'] = 'True, False
-    config['SelectFeatGroup']['coliage_features'] = 'True, False
-    config['SelectFeatGroup']['log_features'] = 'True, False
-    config['SelectFeatGroup']['vessel_features'] = 'True, False
-    config['SelectFeatGroup']['phase_features'] = 'True, False
+    config['SelectFeatGroup']['shape_features'] = 'If True, use shape features in model.'
+    config['SelectFeatGroup']['histogram_features'] = 'If True, use histogram features in model.'
+    config['SelectFeatGroup']['orientation_features'] = 'If True, use orientation features in model.'
+    config['SelectFeatGroup']['texture_Gabor_features'] = 'If True, use Gabor texture features in model.'
+    config['SelectFeatGroup']['texture_GLCM_features'] = 'If True, use GLCM texture features in model.'
+    config['SelectFeatGroup']['texture_GLCMMS_features'] = 'If True, use GLCM Multislice texture features in model.'
+    config['SelectFeatGroup']['texture_GLRLM_features'] = 'If True, use GLRLM texture features in model.'
+    config['SelectFeatGroup']['texture_GLSZM_features'] = 'If True, use GLSZM texture features in model.'
+    config['SelectFeatGroup']['texture_NGTDM_features'] = 'If True, use NGTDM texture features in model.'
+    config['SelectFeatGroup']['texture_LBP_features'] = 'If True, use LBP texture features in model.'
+    config['SelectFeatGroup']['patient_features'] = 'If True, use patient features in model.'
+    config['SelectFeatGroup']['semantic_features'] = 'If True, use semantic features in model.'
+    config['SelectFeatGroup']['coliage_features'] = 'If True, use coliage features in model.'
+    config['SelectFeatGroup']['log_features'] = 'If True, use log features in model.'
+    config['SelectFeatGroup']['vessel_features'] = 'If True, use vessel features in model.'
+    config['SelectFeatGroup']['phase_features'] = 'If True, use phase features in model.'
 
     # Feature imputation
     config['Imputation'] = dict()
-    config['Imputation']['use'] = 'True, False
-    config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
-    config['Imputation']['n_neighbors'] = '5, 5'
+    config['Imputation']['use'] = 'If True, use feature imputation methods to replace NaN values. If False, all NaN features will be set to zero.'
+    config['Imputation']['strategy'] = 'Method to be used for imputation.'
+    config['Imputation']['n_neighbors'] = 'When using k-Nearest Neighbors (kNN) for feature imputation, determines the number of neighbors used for imputation. Can be a single integer or a list.'
 
     # Classification
     config['Classification'] = dict()
-    config['Classification']['fastr'] = 'True, False
-    config['Classification']['fastr_plugin'] = self.fastr_plugin
-    config['Classification']['classifiers'] = 'SVM'
-    config['Classification']['max_iter'] = '100000'
-    config['Classification']['SVMKernel'] = 'poly'
-    config['Classification']['SVMC'] = '0, 6'
-    config['Classification']['SVMdegree'] = '1, 6'
-    config['Classification']['SVMcoef0'] = '0, 1'
-    config['Classification']['SVMgamma'] = '-5, 5'
-    config['Classification']['RFn_estimators'] = '10, 90'
-    config['Classification']['RFmin_samples_split'] = '2, 3'
-    config['Classification']['RFmax_depth'] = '5, 5'
-    config['Classification']['LRpenalty'] = 'l2, l1'
-    config['Classification']['LRC'] = '0.01, 1.0'
-    config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
-    config['Classification']['LDA_shrinkage'] = '-5, 5'
-    config['Classification']['QDA_reg_param'] = '-5, 5'
-    config['Classification']['ElasticNet_alpha'] = '-5, 5'
-    config['Classification']['ElasticNet_l1_ratio'] = '0, 1'
-    config['Classification']['SGD_alpha'] = '-5, 5'
-    config['Classification']['SGD_l1_ratio'] = '0, 1'
-    config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
-    config['Classification']['SGD_penalty'] = 'none, l2, l1'
-    config['Classification']['CNB_alpha'] = '0, 1'
+    config['Classification']['fastr'] = 'Use fastr for the optimization gridsearch (recommended on clusters, default) or if set to False , joblib (recommended for PCs but not on Windows).'
+    config['Classification']['fastr_plugin'] = 'Name of execution plugin to be used. Default use the same as the self.fastr_plugin for the WORC object.'
+    config['Classification']['classifiers'] = "Select the estimator(s) to use. Most are implemented using [sklearn](https://scikit-learn.org/stable/). For abbreviations, see above."
+    config['Classification']['max_iter'] = 'Maximum number of iterations to use in training an estimator. Only for specific estimators, see [sklearn](https://scikit-learn.org/stable/).'
+    config['Classification']['SVMKernel'] = 'When using a SVM, specify the kernel type.'
+    config['Classification']['SVMC'] = 'Range of the SVM slack parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
+    config['Classification']['SVMdegree'] = 'Range of the SVM polynomial degree when using a polynomial kernel. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['Classification']['SVMcoef0'] = 'Range of SVM homogeneity parameter. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['Classification']['SVMgamma'] = 'Range of the SVM gamma parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b)'
+    config['Classification']['RFn_estimators'] = 'Range of number of trees in a RF. We sample on a uniform scale: the parameters specify the range (a, a + b).'
+    config['Classification']['RFmin_samples_split'] = 'Range of minimum number of samples required to split a branch in a RF. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['Classification']['RFmax_depth'] = 'Range of maximum depth of a RF. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['Classification']['LRpenalty'] = 'Penalty term used in LR.'
+    config['Classification']['LRC'] = 'Range of regularization strength in LR. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['Classification']['LDA_solver'] = 'Solver used in LDA.'
+    config['Classification']['LDA_shrinkage'] = 'Range of the LDA shrinkage parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
+    config['Classification']['QDA_reg_param'] = 'Range of the QDA regularization parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b). '
+    config['Classification']['ElasticNet_alpha'] = 'Range of the ElasticNet penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
+    config['Classification']['ElasticNet_l1_ratio'] = 'Range of l1 ratio in LR. We sample on a uniform scale: the parameters specify the range (a, a + b).'
+    config['Classification']['SGD_alpha'] = 'Range of the SGD penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
+    config['Classification']['SGD_l1_ratio'] = 'Range of l1 ratio in SGD. We sample on a uniform scale: the parameters specify the range (a, a + b).'
+    config['Classification']['SGD_loss'] = 'hinge, Loss function of SG'
+    config['Classification']['SGD_penalty'] = 'Penalty term in SGD.'
+    config['Classification']['CNB_alpha'] = 'Regularization strenght in ComplementNB. We sample on a uniform scale: the parameters specify the range (a, a + b)'
 
     # CrossValidation
     config['CrossValidation'] = dict()
-    config['CrossValidation']['N_iterations'] = '100'
-    config['CrossValidation']['test_size'] = '0.2'
+    config['CrossValidation']['N_iterations'] = 'Number of times the data is split in training and test in the outer cross-validation.'
+    config['CrossValidation']['test_size'] = 'The percentage of data to be used for testing.'
 
     # Options for the object/patient labels that are used
     config['Labels'] = dict()
-    config['Labels']['label_names'] = 'Label1, Label2'
-    config['Labels']['modus'] = 'singlelabel'
+    config['Labels']['label_names'] = 'The labels used from your label file for classification.'
+    config['Labels']['modus'] = 'Determine whether multilabel or singlelabel classification or regression will be performed.'
     config['Labels']['url'] = 'WIP'
     config['Labels']['projectID'] = 'WIP'
 
     # Hyperparameter optimization options
     config['HyperOptimization'] = dict()
-    config['HyperOptimization']['scoring_method'] = 'f1_weighted'
-    config['HyperOptimization']['test_size'] = '0.15'
-    config['HyperOptimization']['N_iterations'] = '10000'
-    config['HyperOptimization']['n_jobspercore'] = '2000'  # only relevant when using fastr in classification
+    config['HyperOptimization']['scoring_method'] = 'Specify the optimization metric for your hyperparameter search.'
+    config['HyperOptimization']['test_size'] = 'Size of test set in the hyperoptimization cross validation, given as a percentage of the whole dataset.'
+    config['HyperOptimization']['N_iterations'] = 'Number of iterations used in the hyperparameter optimization. This corresponds to the number of samples drawn from the parameter grid.'
+    config['HyperOptimization']['n_jobspercore'] = 'Number of jobs assigned to a single core. Only used if fastr is set to true in the classfication.'  # only relevant when using fastr in classification
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
-    config['FeatureScaling']['scale_features'] = 'True, False
-    config['FeatureScaling']['scaling_method'] = 'z_score'
+    config['FeatureScaling']['scale_features'] = 'Determine whether to use feature scaling is.'
+    config['FeatureScaling']['scaling_method'] = 'Determine the scaling method.'
 
     # Sample processing options
     config['SampleProcessing'] = dict()
-    config['SampleProcessing']['SMOTE'] = 'Boolean(s)'
-    config['SampleProcessing']['SMOTE_ratio'] = '1, 0'
-    config['SampleProcessing']['SMOTE_neighbors'] = '5, 15'
-    config['SampleProcessing']['Oversampling'] = 'True, False
+    config['SampleProcessing']['SMOTE'] = 'Determine whether to use SMOTE oversampling, see also [imbalanced learn](https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.SMOTE.html). '
+    config['SampleProcessing']['SMOTE_ratio'] = 'Determine the ratio of oversampling. If 1, the minority class will be oversampled to the same size as the majority class. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['SampleProcessing']['SMOTE_neighbors'] = 'Number of neighbors used in SMOTE. This should be much smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (a, a + b).'
+    config['SampleProcessing']['Oversampling'] = 'Determine whether to random oversampling.'
 
     # Ensemble options
     config['Ensemble'] = dict()
-    config['Ensemble']['Use'] = 'True, False  # Still WIP
+    config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Either provide an integer to state how many estimators to include, or True, which will use the default ensembling method.'
 
-    # BUG: the FASTR XNAT plugin can only retreive folders. We therefore need to add the filenames of the resources manually
-    # This should be fixed from fastr > 2.0.0: need to update.
-    config['FASTR_bugs'] = dict()
-    config['FASTR_bugs']['images'] = 'image.nii.gz'
-    config['FASTR_bugs']['segmentations'] = 'mask.nii.gz'
 
     return config
 

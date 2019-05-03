@@ -87,12 +87,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/development.html">Development and Design Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../user_reference/user_reference.html">Fastr User Reference</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
@@ -193,6 +190,7 @@
 
     <span class="n">settings</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
     <span class="n">settings</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">config_file_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
     <span class="n">settings_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;General&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;CrossValidation&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
                      <span class="s1">&#39;Labels&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;HyperOptimization&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
