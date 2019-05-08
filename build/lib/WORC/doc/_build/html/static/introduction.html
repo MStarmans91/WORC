@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Quick start guide" href="quick_start.html" />
+    <link rel="prev" title="WORC" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#radiomics-terminology">Radiomics Terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modularity-and-standardization-fastr">Modularity and standardization: fastr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optimization">Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Introduction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/static/introduction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>When I started my PhD at the Erasmus MC in 2016 on radiomics, the idea was to start with a straight-forward radiomics study to get familiar with the field.
+Both the field of radiomics and my group at the Erasmus MC had existed for quite some time.
+Therefore,  I naively expected that all previously created methods and software were nicely organized and would be straight forward to apply and compare.
+However, I found that of all the radiomics studies, only a few actually released their software open-source.
+Moreover, the software that was available was very diverse in terms of programming language and often difficult to understand.
+Each developer used its own ontology, workflow and implementation.</p>
+<p>Hence I wondered which method would work best for my specific application.
+It seemed that many of my fellow PhD students started out with the same question.
+I did not like the foresight to start out my PhD by tediously working on finding a decent baseline and trying out all kinds of methods.
+Moreover, it felt inefficient that every time a new study is started, someone like me had to go through the whole process over and over again.</p>
+<p>I therefore decided to create one radiomics platform in which multiple approaches could easily be integrated.
+I tried to make it as flexible as possible and modular, such that researcher can easily integrate their own components into the workflow.</p>
+<p>Including all these methods brought along many choices in terms of both the methods to use and their parameters.
+Similar to the above, I also did not like the foresight of manual tuning, which both feels inefficient and a non-optimal approach.
+Hence, I decided to create an automatic optimization routine for the platform which includes all the choices in the workflow that have to be made.</p>
+<p>The result is WORC, which has made my research a lot easier and more fun, as I can very easily create a decent radiomics baseline for any study with little effort.</p>
+<div class="section" id="radiomics-terminology">
+<h2>Radiomics Terminology<a class="headerlink" href="#radiomics-terminology" title="Permalink to this headline">¶</a></h2>
+<p>Radiomics concerns the use of quantitative medical image features to predict clinically relevant outcomes.
+In WORC, the computational radiomics workflow is divided in five steps:</p>
+<div class="figure align-center">
+<img alt="../_images/RadiomicsSteps.png" src="../_images/RadiomicsSteps.png" />
+</div>
+<ol class="arabic simple">
+<li><p>Image Acquisition, which we assume has already been done.</p></li>
+<li><p>Preprocessing</p></li>
+<li><p>Segmentation</p></li>
+<li><p>Feature Extraction</p></li>
+<li><p>Data Mining</p></li>
+</ol>
+<p>Preprocessing is defined as anything that is done to the image before the feature extraction.
+This may include normalization, cropping, masking, and registration. Filtering may be included as well, although several features may already implicitly use a filter.</p>
+<p>Data mining is defined as anything that is used to go from features to the actual label or outcome.
+This may include feature selection, feature imputation, feature scaling, dimensionality reduction, and oversampling.
+Note that we always define the last step in data mining as a machine learning approach.
+Although several radiomics studies do not use machine learning but directly correlate features with outcome,
+we feel that in clinical practice a prediction model is most of the time required.</p>
+<p>Due to the shear amount of tools available in the data mining node, this node in itself is another fastr (micro)network.</p>
+</div>
+<div class="section" id="modularity-and-standardization-fastr">
+<h2>Modularity and standardization: fastr<a class="headerlink" href="#modularity-and-standardization-fastr" title="Permalink to this headline">¶</a></h2>
+<p>The first step of building WORC was to standardize radiomics in components to create a modular workflow.
+The available radiomics methods were all in different software languages, hence my framework had to support this as well.
+Luckily, some of my colleagues had the same issues and decided to create a new workflow engine: <a href="#id1"><span class="problematic" id="id2">`fastr http://journal.frontiersin.org/article/10.3389/fict.2016.00015/full/&gt;`_</span></a>.
+I highly recommend to read at least <a class="reference external" href="https://fastr.readthedocs.io/en/stable/static/introduction.html/">the introductory page of the manual</a> in order to get familiar with the basic concept of fastr .</p>
+<p>To illustrate the principles of fastr, one of the simpler workflows created by WORC using fastr is shown in the figure below.</p>
+<div class="figure align-center">
+<img alt="../_images/WORC_small.png" src="../_images/WORC_small.png" />
+</div>
+<p>The radiomics workflow is split in nodes. We define four types of nodes:
+* Sources, which serve as the input for the workflow.
+* Nodes, which is where the actual algorithms run.
+* Sinks, which serve as the output for the workflow.
+* Constants</p>
+<p>In each node, the inputs, outputs and thereby the task is fixed. However, the actual algorithm that is used within a node is node.
+For example, in a feature extraction node, the inputs are an image, possibly a segmentation and parameters, from which features are extracted, which are thereby the output.
+Which methods is actually used to extract the features and the features extracted may vary.</p>
+<p>Using fastr in WORC gives us several benefits:
+* You can use any tool that can be run on the command line: thus languages or interpreters like MATLAB, Python, R, but also executables.
+* As the workflow is standardized, the outputs are as well. Hence workflows can be easily compared.
+* fastr automatic keeps a history of how an output was created, or the provenance, and extensive logging. This facilitates high reproducability.
+* Wrapping a tool in fastr is easy: you only need to determine the inputs, outputs, interpreter and script.
+* fastr supports various execution plugins, thus execution of a pipeline on a cluster or a simple laptop can be adapted to the resources at hand.
+* Data can be imported and exported to various sources, also online!</p>
+</div>
+<div class="section" id="optimization">
+<h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">¶</a></h2>
+<p>When starting a new radiomics study, e.g. trying to find a imaging biomarker on a new dataset, you would normally have to design a workflow yourself from all methods available in WORC.
+Not only would you have to determine which methods you are going to use, but also which parameters for all methods. Many studies have shown that these are often not independent:
+the performance of many methods highly depends on the parameters used. Thus, we need to simultanously look for the best combination of these.</p>
+<p>As these parameters are set before the actual learning step in the machine learning part, we refer to these as hyperparameters.
+As the performance of the machine learning algorithm may depend on the previous steps
+(e.g. preprocessing, feature extraction, and all other steps in the data mining node),
+we decided to include all parameters from all nodes as hyperparameters.</p>
+<p>Optimization is done through a variant of combined algorithm selection and hyperparameter (CASH) optimization problem.
+Currently, WORC solves the problem as following:</p>
+<div class="figure align-center">
+<img alt="../_images/CASH.png" src="../_images/CASH.png" />
+</div>
+<ol class="arabic simple">
+<li><p>Generate a large number of different pipelines.</p></li>
+<li><p>Execute them and rank them.</p></li>
+<li><p>Create and ensemble of the X best performing pipelines.</p></li>
+</ol>
+<p>More information on this can be found in X.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="quick_start.html" class="btn btn-neutral float-right" title="Quick start guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="WORC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

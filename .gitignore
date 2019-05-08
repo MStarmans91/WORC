@@ -3,3 +3,5 @@
 .env
 /Elastix/*.txt
 /Elastix/*.log
+.idea
+

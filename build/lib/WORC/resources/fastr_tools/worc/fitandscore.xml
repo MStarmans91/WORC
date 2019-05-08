@@ -1,0 +1,36 @@
+<tool id="fitandscore" name="fitandscore" version="1.0">
+    <description>A wrapper around the _fit_and_score function of SKLearn.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="fitandscore_tool.py" />
+    </targets>
+    <description>
+       fitandscore.py input output
+       output = fitted estimator
+    </description>
+    <authors>
+        <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+      </authors>
+    </command>
+    <repository />
+    <interface>
+      <inputs>
+          <input id="estimatordata" name="Unfitted estimator plus side data" datatype="HDF5" prefix="--ed" cardinality="1" repeat_prefix="false" required="true" />
+          <input id="traintest" name="Training and test split data" datatype="HDF5" prefix="--tt" cardinality="1" repeat_prefix="false" required="true" />
+          <input id="parameters" name="Parameters from the gridsearch" datatype="JsonFile" prefix="--para" cardinality="1" repeat_prefix="false" required="true" />
+       </inputs>
+      <outputs>
+        <output id="fittedestimator" name="Fitted Estimator" datatype="HDF5" cardinality="1" nospace="False" order="0" prefix="--out" required="true"/>
+      </outputs>
+    </interface>
+    <requirements />
+    <tests />
+    <help> TODO
+    </help>
+    <cite>
+    </cite>
+    <references />
+  </tool>

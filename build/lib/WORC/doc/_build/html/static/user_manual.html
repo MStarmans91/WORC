@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>User Manual &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Configuration" href="configuration.html" />
+    <link rel="prev" title="Quick start guide" href="quick_start.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">User Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-worc-object">The WORC object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attributes-sources">Attributes: Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attributes-settings">Attributes: Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#attributes-functions">Attributes: Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#images-and-segmentations">Images and segmentations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#semantics">Semantics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#labels">Labels</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#masks">Masks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metadata">Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#elastix-para">Elastix_Para</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fastr-settings">FASTR settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#construction-and-execution-commands">Construction and execution commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>User Manual</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/static/user_manual.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="user-manual">
+<h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
+<p>In this chapter we will discuss the parts of Fastr in more detail. We will give a more complete overview of the system
+and describe the more advanced features.</p>
+<div class="section" id="the-worc-object">
+<span id="tools"></span><h2>The WORC object<a class="headerlink" href="#the-worc-object" title="Permalink to this headline">¶</a></h2>
+<p>The WORC toolbox consists of one main object, the WORC object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It’s attributes are split in a couple of categories. We will not discuss
+the WORC.defaultconfig() function here, which generates the default
+configuration, as it is listed in a separate page, see the  <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">config file section</span></a>.</p>
+</div>
+<div class="section" id="attributes-sources">
+<h2>Attributes: Sources<a class="headerlink" href="#attributes-sources" title="Permalink to this headline">¶</a></h2>
+<p>There are numerous WORC attributes which serve as source nodes for the
+FASTR network. These are:</p>
+<ul class="simple">
+<li><p>images_train and images_test</p></li>
+<li><p>segmentations_train and segmentations_test</p></li>
+<li><p>semantics_train and semantics_test</p></li>
+<li><p>labels_train and labels_test</p></li>
+<li><p>masks_train and masks_test</p></li>
+<li><p>features_train and features_test</p></li>
+<li><p>metadata_train and metadata_test</p></li>
+<li><p>Elastix_Para</p></li>
+<li><p>fastrconfigs</p></li>
+</ul>
+<p>When using a single dataset for both training and evaluation, you should
+supply all sources in train objects. You can use several kinds of
+validation methods (e.g.cross validation) to compute the performance on
+this dataset. Optionally, you can supply a separate training and test
+set.</p>
+<p>Each source should be given as a dictionary of strings corresponding to
+the source files. Each element should correspond to a single object,
+e.g. tumor, or patient. The keys are used to match the features to the
+label and semantics sources, so make sure these correspond to the label
+file. The values should refer to the actual source files corresponding
+to the FASTR formats, see
+<a class="reference external" href="http://fastr.readthedocs.io/en/stable/fastr.reference.html#ioplugin-reference">http://fastr.readthedocs.io/en/stable/fastr.reference.html#ioplugin-reference</a>.</p>
+<p>You can off course have multiple images or ROIs per object, e.g. a liver
+ROI and a tumor ROI. This can be easily done by appending to the
+sources. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">MR</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">MR</span><span class="o">.</span><span class="n">nii</span><span class="p">}</span>
+<span class="n">segmentations1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">tumor</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">tumor</span><span class="o">.</span><span class="n">nii</span><span class="p">}</span>
+<span class="n">segmentations2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">liver</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">liver</span><span class="o">.</span><span class="n">nii</span><span class="p">}</span>
+
+<span class="n">network</span><span class="o">.</span><span class="n">images_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">images1</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">images_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">images1</span><span class="p">)</span>
+
+<span class="n">network</span><span class="o">.</span><span class="n">segmentations_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segmentations1</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">segmentations_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segmentations2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When using multiple sequences per patients (e.g. T1 and T2), the same
+appending procedure can be used.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You have to make sure the images and segmentation sources match in size.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You have to supply a configuration file for each image or feature source you append.
+Thus, in above example, you need to append two configurations!</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When you use
+multiple image sequences, you can supply a ROI for each sequence by
+appending to to segmentations object. Alternatively, when you do not
+supply a segmentation for a specific sequence, WORC will use Elastix to
+align this sequence to another through image registration. It will then
+warp the segmentation from this sequence to the sequence for which you
+did not supply a segmentation. <strong>WORC will always align these sequences with no segmentations to the first sequence, i.e. the first object in the images_train list.</strong>
+Hence make sure you supply the sequence for which you have a ROI as the first object.</p>
+</div>
+</div>
+<div class="section" id="attributes-settings">
+<h2>Attributes: Settings<a class="headerlink" href="#attributes-settings" title="Permalink to this headline">¶</a></h2>
+<p>There are several attributes in WORC which define how your pipeline is
+executed:</p>
+<ul class="simple">
+<li><p>fastr_plugin</p></li>
+<li><p>fastr_tmpdir</p></li>
+<li><p>Tools: additional workflows are stored here. Currently only includes
+a pipeline for image registration without any Radiomics.</p></li>
+<li><p>CopyMetadata: Whether to automatically copy the metadata info
+(e.g. direction of cosines) from the images to the segmentations
+before applying transformix.</p></li>
+</ul>
+<p>An explanation of the FASTR settings is given below.</p>
+</div>
+<div class="section" id="attributes-functions">
+<h2>Attributes: Functions<a class="headerlink" href="#attributes-functions" title="Permalink to this headline">¶</a></h2>
+<p>The WORC.configs() attribute contains the configparser files, which you
+can easily edit. The WORC.set() function saves these objects in a
+temporary folder and converts the filename into as FASTR source, which
+is then put in the WORC.fastrconfigs() objects. Hence you do not need to
+edit the fastrconfigs object manually.</p>
+<div class="section" id="images-and-segmentations">
+<h3>Images and segmentations<a class="headerlink" href="#images-and-segmentations" title="Permalink to this headline">¶</a></h3>
+<p>The minimal input for a Radiomics pipeline consists of either images
+(plus a segmentation if you have not implemented an automatic
+segmentation tool) or features plus a label file (and a configuration,
+but you can just use the default one.</p>
+<p>If you supply these, features will be computed within the segmentations
+on the images. They are read out using SimpleITK, which supports various
+image formats such as DICOM, NIFTI, TIFF, NRRD and MHD.</p>
+</div>
+<div class="section" id="semantics">
+<h3>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h3>
+<p>Semantic features are used in the PREDICT CalcFeatures tool. You can
+supply these as a .csv listing your features per patient. The first
+column should always be named <code class="docutils literal notranslate"><span class="pre">Patient</span></code> and contain the Patient ID. The
+other columns should contain a label for the feature and their values.
+For example:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 31%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Patient</p></th>
+<th class="head"><p>Label1</p></th>
+<th class="head"><p>Label2</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>patient1</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>patient2</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>patient3</p></td>
+<td><p>1</p></td>
+<td><p>5</p></td>
+</tr>
+</tbody>
+</table>
+<p>Similar to the patient labels, the semantic features are matched to the
+correct image/features by the name of the image/features. So in this
+case, your sources should look as following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images_train</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;source1.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;source2.nii.gz&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
+<span class="n">segmentations_train</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;seg1.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;seg2.nii.gz&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="labels">
+<h3>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h3>
+<p>The labels are used in classification. For PREDICT, these should be
+supplied as a .txt file. Similar to the semantics, the first column
+should head <code class="docutils literal notranslate"><span class="pre">Patient</span></code> and contain the patient ID. The next columns can
+contain things you want to predict. Hence the format is similar to the
+semantics file.</p>
+</div>
+</div>
+<div class="section" id="masks">
+<h2>Masks<a class="headerlink" href="#masks" title="Permalink to this headline">¶</a></h2>
+<p>WORC contains a segmentation preprocessing tool, called segmentix. This
+tool is still under development. The idea is that you can manipulate
+your segmentation, e.g. using dilation, then use a mask to make sure it
+is still valid. Currently, you can only let it take a ring of a certain
+radius around your ROI and mask it.</p>
+</div>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>If you already computed your features, e.g. from a previous run, you can
+directly supply the features instead of the images and segmentations and
+skip the feature computation step. These should be stored in .hdf5 files
+matching the PREDICT CalcFeatures format.</p>
+</div>
+<div class="section" id="metadata">
+<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
+<p>This source can be used if you want to use tags from the DICOM header as
+features, e.g. patient age and sex. In this case, this source should
+contain a single DICOM per patient from which the tags that are read.
+Check the PREDICT.imagefeatures.patient_feature module for the currently
+implemented tags.</p>
+</div>
+<div class="section" id="elastix-para">
+<h2>Elastix_Para<a class="headerlink" href="#elastix-para" title="Permalink to this headline">¶</a></h2>
+<p>If you have multiple images for each patient, e.g. T1 and T2, but only a
+single segmentation, you can use image registration to align and
+transform the segmentation to the other modality. This is done in WORC
+using Elastix <a class="reference external" href="http://elastix.isi.uu.nl/">http://elastix.isi.uu.nl/</a>. In this source, you can supply
+a parameter file for Elastix to be used in the registration in .txt.
+format. Alternatively, you can use SimpleElastix to generate a parameter
+map and pass this object to WORC. <strong>Note: WORC assume your segmentation
+is made on the first WORC.images source you supply. The segmentation
+will be alingned to all other image sources.</strong></p>
+</div>
+<div class="section" id="fastr-settings">
+<h2>FASTR settings<a class="headerlink" href="#fastr-settings" title="Permalink to this headline">¶</a></h2>
+<p>There are two WORC attributes which contain settings on running FASTR.
+In WORC.fastr_plugin, you can specify which Execution Plugin should be
+used: see also
+<a class="reference external" href="http://fastr.readthedocs.io/en/stable/fastr.reference.html#executionplugin-reference">http://fastr.readthedocs.io/en/stable/fastr.reference.html#executionplugin-reference</a>.</p>
+<p>The default is the ProcessPollExecution plugin. The WORC.fastr_tempdir
+sets the temporary directory used in your run.</p>
+</div>
+<div class="section" id="construction-and-execution-commands">
+<h2>Construction and execution commands<a class="headerlink" href="#construction-and-execution-commands" title="Permalink to this headline">¶</a></h2>
+<p>After supplying your sources, you need to build the FASTR network. This
+can be done through the WORC.build() command. Depending on your sources,
+several nodes will be added and linked. This creates the WORC.network()
+object, which is a fastr.network() object. You can edit this network
+freely, e.g. add another source or node. You can print the network with
+the WORC.network.draw_network() command.</p>
+<p>Next, we have to tell the network which sources should be used in the
+source nodes. This can be done through the WORC.set() command. This will
+put your supplied sources into the source nodes and also creates the
+needed sink nodes. You can check these by looking at the created
+WORC.source_data_data and WORC.sink objects.</p>
+<p>Finally, after completing above steps, you can execute the network
+through the WORC.execute() command.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="configuration.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quick_start.html" class="btn btn-neutral float-left" title="Quick start guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

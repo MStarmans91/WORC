@@ -6,6 +6,38 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.0.0 - 2019-05-08
+------------------
+
+Added
+~~~~~~~
+- Now ported to Python3.6+ (Python 2 is no longer supported!). Thereby also
+  to fastr3.
+- Compatibility for Windows. Some small changes in functions, as some packages
+  behaviour differently under Windows. Also, adjusted sink and source paths
+  to use OS file separator.
+- Config is now also a sink.
+
+
+Changed
+~~~~~~~
+- PCE and DTI node removed, as they were not open source.
+- Pinfo file can now also be a csv. Txt is still supported.
+- Use fastr as default for hyperparameter search parallelization instead
+  of Joblib, as this is much more flexible.
+- When the conffidence interval cannot be computed, just use the mean.
+
+
+Fixed
+~~~~~
+- WORC_config.py was not correctly copied in Windows due to incorrect path separation.
+- Source creation for the config was only for Linux.
+- In numpy 1.15>, booleans cannot be subtracted. Fixed an error due to this in
+  segmentix by using bitwise_xor instead.
+- Bug when using masks, but not for all images, and segmentix.
+- Cardinality of classify node was incorrect.
+
+
 2.1.3 - 2019-04-08
 ------------------
 
@@ -34,7 +66,7 @@ Fixed
 -Evaluate framework now correctly adopts the name you give it.
 
 
-2019-02-15 - 2.1.1
+2.1.1 - 2019-02-15
 ------------------
 
 Added

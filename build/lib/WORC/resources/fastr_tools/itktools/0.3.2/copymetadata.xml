@@ -1,0 +1,35 @@
+<tool id="CopyMetadata" name="CopyMetadata" version="1.0">
+    <description>Copy the metadata from one file to another.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="copymetadata.py" />
+    </targets>
+    <description>
+       copymetadata.py source destination output
+       output = ITK image with correct metadata
+    </description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="source" name="source metadata file" datatype="ITKImageFile" prefix="--source" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="destination" name="destination metadata file" datatype="ITKImageFile" prefix="--dest" cardinality="1" repeat_prefix="false" required="true" />
+     </inputs>
+    <outputs>
+      <output id="output" name="Output file" datatype="ITKImageFile" cardinality="1" nospace="False" order="0" prefix="--out" required="false"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: copymetadata.py [-h] -source IMAGE.ITKIM -dest SEGMENTATION.ITKIM-out OUTPUT.ITKIM
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

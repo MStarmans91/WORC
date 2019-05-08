@@ -1,0 +1,953 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC.classification.RankedSVM &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>WORC.classification.RankedSVM</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for WORC.classification.RankedSVM</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">linprog</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">fminbound</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">linalg</span>
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
+
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This code is based on the original RankSVM Matlab Code from [1] and [2].</span>
+<span class="sd">Only the multi-classification variant has been ported.</span>
+
+
+<span class="sd">RanKSVM_train trains a multi-label ranking svm using the method described in</span>
+<span class="sd">[1] and [2] and originally implemented in MATLAB.</span>
+
+<span class="sd">[1] Elisseeff A, Weston J. Kernel methods for multi-labelled classfication</span>
+<span class="sd">      and categorical regression problems. Technical Report,</span>
+<span class="sd">      BIOwulf Technologies, 2001.</span>
+<span class="sd">[2] Elisseeff A,Weston J. A kernel method for multi-labelled classification.</span>
+<span class="sd">      In: Dietterich T G, Becker S, Ghahramani Z, eds. Advances in</span>
+<span class="sd">      Neural Information Processing Systems 14, Cambridge,</span>
+<span class="sd">      MA: MIT Press, 2002, 681-687.</span>
+
+<span class="sd">Translated by Mumtaz Hussain Soomro (mumtazhussain.soomro@uniroma3.tk) in August 2018</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="neg_dual_func"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.RankedSVM.neg_dual_func">[docs]</a><span class="k">def</span> <span class="nf">neg_dual_func</span><span class="p">(</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">Alpha_old</span><span class="p">,</span> <span class="n">Alpha_new</span><span class="p">,</span> <span class="n">c_value</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span>
+                  <span class="n">num_training</span><span class="p">,</span> <span class="n">num_class</span><span class="p">,</span> <span class="n">Label</span><span class="p">,</span> <span class="n">not_Label</span><span class="p">,</span>
+                  <span class="n">Label_size</span><span class="p">,</span> <span class="n">size_alpha</span><span class="p">):</span>
+
+    <span class="c1"># Local Variables: kernel, num_class, Alpha_new, index, i, num_training, k, size_alpha, m, c_value, Label, Alpha, Beta, n, not_Label, output, Lambda, Label_size, Alpha_old</span>
+    <span class="c1"># Function calls: sum, zeros, neg_dual_func</span>
+
+    <span class="n">Alpha</span> <span class="o">=</span> <span class="n">Alpha_old</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">Alpha_new</span><span class="o">-</span><span class="n">Alpha_old</span><span class="p">)</span>
+    <span class="n">Beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span> <span class="n">num_training</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+              <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                  <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                      <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="n">n</span>
+
+                      <span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c_value</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+                      <span class="n">r1</span> <span class="o">=</span> <span class="n">Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>    <span class="c1">####this supports for only for multiclass</span>
+                                     <span class="c1">### if you want to work on multilabel then try this: r1 = Label[i]</span>
+                                     <span class="c1">#################################################### r1 = r1[m]</span>
+                      <span class="n">c1</span> <span class="o">=</span> <span class="n">not_Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                      <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                      <span class="n">Beta</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Beta</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">ak</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">r1</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)]</span><span class="o">*</span><span class="n">Alpha</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span>
+
+
+    <span class="n">output</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+        <span class="n">fg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Beta</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),:],</span> <span class="n">kernel</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">fg</span> <span class="o">=</span> <span class="n">fg</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">gf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Beta</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),:],</span> <span class="n">fg</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">output</span> <span class="o">+</span> <span class="n">gf</span>
+
+    <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Alpha</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">output</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="is_empty"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.RankedSVM.is_empty">[docs]</a><span class="k">def</span> <span class="nf">is_empty</span><span class="p">(</span><span class="n">any_structure</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">any_structure</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="RankSVM_train_old"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.RankedSVM.RankSVM_train_old">[docs]</a><span class="k">def</span> <span class="nf">RankSVM_train_old</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_target</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lambda_tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                  <span class="n">norm_tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">svm</span><span class="o">=</span><span class="s1">&#39;Poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                  <span class="n">coefficient</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="c1"># NOTE: Only multilabel classification, not multiclass! Make a check.</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">         Weights,Bias,SVs = RankSVM_train(train_data,train_target,cost,lambda_tol,norm_tol,max_iter,svm,gamma,coefficient,degree)</span>
+
+<span class="sd">      Description</span>
+
+<span class="sd">         RankSVM_train takes,</span>
+<span class="sd">             train_data   - An MxN array, the ith instance of training instance is stored in train_data[i,:]</span>
+<span class="sd">             train_target - A QxM array, if the ith training instance belongs to the jth class, then train_target[j,i] equals +1, otherwise train_target(j,i) equals -1</span>
+<span class="sd">              svm          - svm gives the type of svm used in training, which can take the value of &#39;RBF&#39;, &#39;Poly&#39; or &#39;Linear&#39;; svm.para gives the corresponding parameters used for the svm:</span>
+<span class="sd">                             1) if svm is &#39;RBF&#39;, then gamma gives the value of gamma, where the kernel is exp(-Gamma*|x[i]-x[j]|^2)</span>
+<span class="sd">                            2) if svm is &#39;Poly&#39;, then three values are used gamma, coefficient, and degree respectively, where the kernel is (gamma*&lt;x[i],x[j]&gt;+coefficient)^degree.</span>
+<span class="sd">                            3) if svm is &#39;Linear&#39;, then svm is [].</span>
+<span class="sd">             cost         - The value of &#39;C&#39; used in the SVM, default=1</span>
+<span class="sd">             lambda_tol   - The tolerance value for lambda described in the appendix of [1]; default value is 1e-6</span>
+<span class="sd">             norm_tol     - The tolerance value for difference between alpha(p+1) and alpha(p) described in the appendix of [1]; default value is 1e-4</span>
+<span class="sd">             max_iter     - The maximum number of iterations for RankSVM, default=500</span>
+
+<span class="sd">         and returns,</span>
+<span class="sd">              Weights          - The value for beta[ki] as described in the appendix of [1] is stored in Weights[k,i]</span>
+<span class="sd">              Bias             - The value for b[i] as described in the appendix of [1] is stored in Bias[1,i]</span>
+<span class="sd">              SVs              - The ith support vector is stored in SVs[:,i]</span>
+
+
+<span class="sd">       For more details,please refer to [1] and [2].</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># RankedSVM only works for multilabel problems, not multiclass, so check</span>
+    <span class="c1"># Whether patients have no class or multiple classes</span>
+    <span class="n">n_class</span> <span class="o">=</span> <span class="n">train_target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_object</span> <span class="o">=</span> <span class="n">train_target</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_object</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">train_target</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="o">-</span><span class="n">n_class</span> <span class="o">+</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="s1">&#39;RankedSVM only works &#39;</span> <span class="o">+</span>
+                                                   <span class="s1">&#39;for multilabel problems,&#39;</span> <span class="o">+</span>
+                                                   <span class="s1">&#39; not multiclass. One or &#39;</span> <span class="o">+</span>
+                                                   <span class="s1">&#39;more objects belong &#39;</span> <span class="o">+</span>
+                                                   <span class="s1">&#39;either to no class or&#39;</span> <span class="o">+</span>
+                                                   <span class="s1">&#39; multiple classes. &#39;</span> <span class="o">+</span>
+                                                   <span class="s1">&#39;Please check your data&#39;</span> <span class="o">+</span>
+                                                   <span class="s1">&#39; again.&#39;</span><span class="p">)</span>
+
+    <span class="n">num_training</span><span class="p">,</span> <span class="n">tempvalue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+
+    <span class="n">SVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">tempvalue</span><span class="p">,</span><span class="n">num_training</span><span class="p">))</span>
+
+    <span class="n">num_class</span><span class="p">,</span> <span class="n">tempvalue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">train_target</span><span class="p">)</span>
+    <span class="n">lc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_class</span><span class="p">))</span>
+
+    <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span> <span class="n">tempvalue</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">train_target</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_class</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="n">num_class</span><span class="p">):</span>
+              <span class="c1">#SVs =  (SVs, train_data[int(i),:].conj().T)</span>
+            <span class="n">SVs</span> <span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span>  <span class="n">train_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),:]</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">target</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+
+
+    <span class="n">Dim</span><span class="p">,</span> <span class="n">num_training</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">SVs</span><span class="p">)</span>
+    <span class="n">Label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_training</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">not_Label</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Label_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_training</span><span class="p">))</span>
+    <span class="n">size_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_training</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+        <span class="n">temp1</span> <span class="o">=</span> <span class="n">train_target</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="n">Label_size</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp1</span> <span class="o">==</span> <span class="n">lc</span><span class="p">)</span>
+        <span class="n">lds</span> <span class="o">=</span> <span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="n">size_alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">lds</span><span class="p">,</span> <span class="n">Label_size</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">temp1</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                 <span class="n">Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                 <span class="n">not_Label</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">))</span>
+
+    <span class="n">not_Label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">not_Label</span><span class="p">,</span> <span class="p">(</span><span class="n">num_training</span><span class="p">,</span><span class="n">num_class</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span><span class="p">(</span><span class="n">num_training</span><span class="p">,</span> <span class="n">num_training</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">svm</span> <span class="o">==</span> <span class="s1">&#39;RBF&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">SVs</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">SVs</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">svm</span> <span class="o">==</span> <span class="s1">&#39;Poly&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                    <span class="n">ab</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]])),((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]]))</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">gamma</span><span class="o">*</span><span class="n">ab</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">ab</span><span class="o">+</span><span class="n">coefficient</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">ab</span><span class="o">**</span><span class="n">degree</span>
+            <span class="c1">#kernel[int(i),int(j)] = (gamma*(SVs[:,int(i)].conj().T)*SVs[:,int(j)]+coefficient)**degree</span>
+                    <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ab</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                        <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]])),((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]]))</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+
+    <span class="n">svm_used</span><span class="o">=</span><span class="n">svm</span><span class="p">;</span>
+
+    <span class="c1">#Begin training phase</span>
+
+    <span class="c1">#data initializing</span>
+
+    <span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">Alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ak</span><span class="p">))</span>
+
+    <span class="c1">####creating a cell c_value</span>
+
+    <span class="n">c_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_class</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+        <span class="n">c_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">num_class</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+        <span class="n">ak</span> <span class="o">=</span> <span class="n">c_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">ak</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_class</span><span class="p">))</span>
+        <span class="n">ak</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,))</span>
+        <span class="n">c_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ak</span>
+
+    <span class="c1">#print Label_size</span>
+     <span class="c1">### Find the Alpha value using Franke and Wolfe method [1]</span>
+
+    <span class="n">continuing</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span><span class="p">(</span><span class="n">continuing</span><span class="p">):</span>
+
+    <span class="c1">#computing Beta</span>
+    <span class="c1">#iteration=iteration+1;</span>
+
+    <span class="c1">#disp(strcat(&#39;current iteration: &#39;,num2str(iteration)))</span>
+        <span class="n">Beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">num_training</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                    <span class="c1">#index = np.sum(size_alpha[:,0:i])+(m-1)*(num_class-Label_size[i])+n</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="n">n</span>
+
+                        <span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c_value</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+                        <span class="n">r1</span> <span class="o">=</span> <span class="n">Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>    <span class="c1">####this supports for only for multiclass</span>
+                                     <span class="c1">### if you want to work on multilabel then try this: r1 = Label[i]</span>
+                                     <span class="c1">#################################################### r1 = r1[m]</span>
+                        <span class="n">c1</span> <span class="o">=</span> <span class="n">not_Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                        <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                        <span class="n">Beta</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Beta</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">ak</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">r1</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)]</span><span class="o">*</span><span class="n">Alpha</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span>
+
+    <span class="c1">####computing gradient(ikl)</span>
+
+        <span class="n">inner</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">num_training</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="n">inner</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Beta</span><span class="p">[</span><span class="n">k</span><span class="p">,:],</span> <span class="n">kernel</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span>
+
+        <span class="n">gradient</span><span class="o">=</span><span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                    <span class="n">r1</span> <span class="o">=</span> <span class="n">Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>    <span class="c1">####this supports only for multiclass</span>
+                                     <span class="c1">### if you want to work on multilabel then try this: r1 = Label[i]</span>
+                                     <span class="c1">#################################################### r1 = r1[m]</span>
+                    <span class="n">c1</span> <span class="o">=</span> <span class="n">not_Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                    <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="n">inner</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">r1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">-</span><span class="n">inner</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">-</span><span class="mi">1</span>
+            <span class="c1">#gradient=np.array([gradient,temp])</span>
+                    <span class="n">gradient</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>
+
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">gradient</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+
+
+    <span class="c1">###Find Alpha_new</span>
+        <span class="n">Aeq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="n">counter</span><span class="o">=</span><span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                <span class="c1">#counter+=1</span>
+                        <span class="n">r1</span> <span class="o">=</span> <span class="n">Label</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>    <span class="c1">####this supports only for multiclass</span>
+                                     <span class="c1">### if you want to work on multilabel then try this: r1 = Label[i]</span>
+                                     <span class="c1">#################################################### r1 = r1[m]</span>
+                        <span class="n">c1</span> <span class="o">=</span> <span class="n">not_Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                        <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                        <span class="n">ak</span> <span class="o">=</span> <span class="n">c_value</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                        <span class="n">Aeq</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">counter</span><span class="p">]</span> <span class="o">=</span> <span class="n">ak</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">r1</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)]</span>
+                        <span class="n">counter</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="c1">#print Aeq</span>
+        <span class="n">beq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,))</span>
+        <span class="n">LB</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">UB</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">counter</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+            <span class="c1">#counter+=1</span>
+                    <span class="n">UB</span><span class="p">[</span><span class="n">counter</span><span class="p">,:]</span><span class="o">=</span><span class="n">cost</span><span class="o">/</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
+                    <span class="n">counter</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="c1">#print UB</span>
+        <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">LB</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">UB</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+        <span class="n">cc</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">Alpha_new</span><span class="o">=</span><span class="n">linprog</span><span class="p">(</span><span class="n">gradient</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">A_ub</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">b_ub</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">A_eq</span><span class="o">=</span><span class="n">Aeq</span><span class="p">,</span> <span class="n">b_eq</span><span class="o">=</span><span class="n">beq</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="n">Alpha_new</span> <span class="o">=</span> <span class="n">Alpha_new</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">Alpha_new</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Alpha_new</span><span class="p">))</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="n">Lambda</span> <span class="o">=</span><span class="n">fminbound</span><span class="p">(</span><span class="n">neg_dual_func</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span><span class="n">args</span><span class="o">=</span>  <span class="p">(</span><span class="n">Alpha</span><span class="p">,</span><span class="n">Alpha_new</span><span class="p">,</span><span class="n">c_value</span><span class="p">,</span><span class="n">kernel</span><span class="p">,</span><span class="n">num_training</span><span class="p">,</span><span class="n">num_class</span><span class="p">,</span><span class="n">Label</span><span class="p">,</span><span class="n">not_Label</span><span class="p">,</span><span class="n">Label_size</span><span class="p">,</span><span class="n">size_alpha</span><span class="p">))</span>
+
+
+    <span class="c1">#print Lambda</span>
+    <span class="c1">#Test convergence</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Lambda</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">lambda_tol</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">Alpha_new</span><span class="o">-</span><span class="n">Alpha</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span><span class="p">))))</span><span class="o">&lt;=</span><span class="n">norm_tol</span><span class="p">):</span>
+            <span class="n">continuing</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># np.disp(&#39;program terminated normally&#39;)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;=</span> <span class="n">max_iter</span><span class="p">:</span>
+                <span class="n">continuing</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Alpha</span> <span class="o">=</span> <span class="n">Alpha</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">Alpha_new</span><span class="o">-</span><span class="n">Alpha</span><span class="p">)</span>
+
+                <span class="n">iteration</span><span class="o">+=</span><span class="mi">1</span>
+
+
+    <span class="n">Weights</span> <span class="o">=</span> <span class="n">Beta</span>
+
+    <span class="c1">#Computing Bias</span>
+
+    <span class="n">Left</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Right</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>  <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="n">n</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Alpha</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)])</span> <span class="o">&gt;=</span> <span class="n">lambda_tol</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Alpha</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span><span class="o">-</span><span class="n">cost</span><span class="o">/</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">[:,</span><span class="n">i</span><span class="p">]))</span> <span class="o">&gt;=</span> <span class="n">lambda_tol</span><span class="p">):</span>
+                    <span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_class</span><span class="p">))</span>
+                    <span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">Label</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">c1</span> <span class="o">=</span> <span class="n">not_Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                    <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                    <span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span>
+                    <span class="n">Left</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+                    <span class="n">Right</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">gradient</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)])</span>
+
+
+    <span class="k">if</span> <span class="n">is_empty</span><span class="p">(</span><span class="n">Left</span><span class="p">):</span>
+        <span class="n">Bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">train_target</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Right</span><span class="p">])</span>
+        <span class="n">ss1</span><span class="p">,</span><span class="n">ss2</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">aa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Left</span><span class="p">)</span>
+        <span class="n">aa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">aa</span><span class="p">,(</span><span class="n">ss2</span><span class="p">,</span><span class="n">num_class</span><span class="p">))</span>
+
+        <span class="c1">##### Proper way to solve linear equation with non-square matrix</span>
+        <span class="n">Bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">rcond</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#Bias = Bias.T</span>
+
+    <span class="k">return</span> <span class="n">Weights</span><span class="p">,</span> <span class="n">Bias</span><span class="p">,</span> <span class="n">SVs</span></div>
+
+
+<div class="viewcode-block" id="RankSVM_train"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.RankedSVM.RankSVM_train">[docs]</a><span class="k">def</span> <span class="nf">RankSVM_train</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">train_target</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lambda_tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                  <span class="n">norm_tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">svm</span><span class="o">=</span><span class="s1">&#39;Poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                  <span class="n">coefficient</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training Ranked SVM ...&#39;</span><span class="p">)</span>
+    <span class="n">num_training</span><span class="p">,</span> <span class="n">tempvalue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+
+    <span class="n">SVs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">tempvalue</span><span class="p">,</span><span class="n">num_training</span><span class="p">))</span>
+    <span class="n">num_class</span><span class="p">,</span> <span class="n">tempvalue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">train_target</span><span class="p">)</span>
+    <span class="n">lc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_class</span><span class="p">))</span>
+    <span class="c1">#print SVs.shape</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span> <span class="n">tempvalue</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">train_target</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_class</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="n">num_class</span><span class="p">):</span>
+              <span class="c1">#SVs =  (SVs, train_data[int(i),:].conj().T)</span>
+            <span class="c1">#print (train_data[int(i),:]).conj().T</span>
+            <span class="n">SVs</span> <span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span>  <span class="n">train_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),:]</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+            <span class="c1">#SVs [i,:] =  train_data[int(i),:].T</span>
+
+            <span class="n">target</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+
+    <span class="c1">#SVs = SVs.T</span>
+    <span class="n">Dim</span><span class="p">,</span> <span class="n">num_training</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">SVs</span><span class="p">)</span>
+    <span class="n">Label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_training</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">not_Label</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Label_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_training</span><span class="p">))</span>
+    <span class="n">size_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_training</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+        <span class="n">temp1</span> <span class="o">=</span> <span class="n">train_target</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="n">Label_size</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp1</span> <span class="o">==</span> <span class="n">lc</span><span class="p">)</span>
+        <span class="n">lds</span> <span class="o">=</span> <span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="n">size_alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">lds</span><span class="p">,</span> <span class="n">Label_size</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">temp1</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                 <span class="n">Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                 <span class="n">not_Label</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">))</span>
+    <span class="n">not_Label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">not_Label</span><span class="p">,</span> <span class="p">(</span><span class="n">num_training</span><span class="p">,</span><span class="n">num_class</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span><span class="p">(</span><span class="n">num_training</span><span class="p">,</span> <span class="n">num_training</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">svm</span> <span class="o">==</span> <span class="s1">&#39;RBF&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">SVs</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">SVs</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">svm</span> <span class="o">==</span> <span class="s1">&#39;Poly&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                    <span class="n">ab</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]])),((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]]))</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">gamma</span><span class="o">*</span><span class="n">ab</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">ab</span><span class="o">+</span><span class="n">coefficient</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">ab</span><span class="o">**</span><span class="n">degree</span>
+            <span class="c1">#kernel[int(i),int(j)] = (gamma*(SVs[:,int(i)].conj().T)*SVs[:,int(j)]+coefficient)**degree</span>
+                    <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ab</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                        <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]])),((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]]))</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+
+    <span class="n">svm_used</span><span class="o">=</span><span class="n">svm</span><span class="p">;</span>
+
+    <span class="c1">#Begin training phase</span>
+
+    <span class="c1">#data initializing</span>
+
+    <span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">Alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ak</span><span class="p">))</span>
+
+    <span class="c1">####creating a cell c_value</span>
+
+    <span class="n">c_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_class</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+        <span class="n">c_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">num_class</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+        <span class="n">ak</span> <span class="o">=</span> <span class="n">c_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">ak</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_class</span><span class="p">))</span>
+        <span class="n">ak</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,))</span>
+        <span class="n">c_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ak</span>
+
+    <span class="c1">#print Label_size</span>
+     <span class="c1">### Find the Alpha value using Franke and Wolfe method [1]</span>
+
+    <span class="n">continuing</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span><span class="p">(</span><span class="n">continuing</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iteration </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span>
+        <span class="c1">#computing Beta</span>
+        <span class="c1">#iteration=iteration+1;</span>
+
+        <span class="c1">#disp(strcat(&#39;current iteration: &#39;,num2str(iteration)))</span>
+        <span class="n">Beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">num_training</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                    <span class="c1">#index = np.sum(size_alpha[:,0:i])+(m-1)*(num_class-Label_size[i])+n</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="n">n</span>
+
+                        <span class="n">ak</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c_value</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+                        <span class="n">r1</span> <span class="o">=</span> <span class="n">Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>    <span class="c1">####this supports for only for multiclass</span>
+                                     <span class="c1">### if you want to work on multilabel then try this: r1 = Label[i]</span>
+                                     <span class="c1">#################################################### r1 = r1[m]</span>
+                        <span class="n">c1</span> <span class="o">=</span> <span class="n">not_Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                        <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                        <span class="n">Beta</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Beta</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">ak</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">r1</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)]</span><span class="o">*</span><span class="n">Alpha</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span>
+
+        <span class="c1">####computing gradient(ikl)</span>
+
+        <span class="n">inner</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">num_training</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="n">inner</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Beta</span><span class="p">[</span><span class="n">k</span><span class="p">,:],</span> <span class="n">kernel</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span>
+
+        <span class="n">gradient</span><span class="o">=</span><span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                    <span class="n">r1</span> <span class="o">=</span> <span class="n">Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>    <span class="c1">####this supports only for multiclass</span>
+                                     <span class="c1">### if you want to work on multilabel then try this: r1 = Label[i]</span>
+                                     <span class="c1">#################################################### r1 = r1[m]</span>
+                    <span class="n">c1</span> <span class="o">=</span> <span class="n">not_Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                    <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="n">inner</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">r1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">-</span><span class="n">inner</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="o">-</span><span class="mi">1</span>
+            <span class="c1">#gradient=np.array([gradient,temp])</span>
+                    <span class="n">gradient</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>
+
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">gradient</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+
+
+        <span class="c1">###Find Alpha_new</span>
+
+        <span class="n">Aeq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="n">counter</span><span class="o">=</span><span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                <span class="c1">#counter+=1</span>
+                        <span class="n">r1</span> <span class="o">=</span> <span class="n">Label</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>    <span class="c1">####this supports only for multiclass</span>
+                                     <span class="c1">### if you want to work on multilabel then try this: r1 = Label[i]</span>
+                                     <span class="c1">#################################################### r1 = r1[m]</span>
+                        <span class="n">c1</span> <span class="o">=</span> <span class="n">not_Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                        <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                        <span class="n">ak</span> <span class="o">=</span> <span class="n">c_value</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                        <span class="n">Aeq</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">counter</span><span class="p">]</span> <span class="o">=</span> <span class="n">ak</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">r1</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)]</span>
+                        <span class="n">counter</span><span class="o">+=</span><span class="mi">1</span>
+                        <span class="c1">#print Aeq</span>
+        <span class="n">beq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,))</span>
+        <span class="n">LB</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">UB</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">counter</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+            <span class="c1">#counter+=1</span>
+                    <span class="n">UB</span><span class="p">[</span><span class="n">counter</span><span class="p">,:]</span><span class="o">=</span><span class="n">cost</span><span class="o">/</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">[:,</span><span class="n">i</span><span class="p">])</span>
+                    <span class="n">counter</span><span class="o">+=</span><span class="mi">1</span>
+                    <span class="c1">#print UB</span>
+        <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">LB</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">UB</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
+        <span class="n">cc</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cc</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="n">bounds</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">Alpha_new</span> <span class="o">=</span> <span class="n">linprog</span><span class="p">(</span><span class="n">gradient</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">A_ub</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">b_ub</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">A_eq</span><span class="o">=</span><span class="n">Aeq</span><span class="p">,</span> <span class="n">b_eq</span><span class="o">=</span><span class="n">beq</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+            <span class="n">Alpha_new</span> <span class="o">=</span> <span class="n">Alpha_new</span><span class="o">.</span><span class="n">x</span>
+            <span class="n">Alpha_new</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Alpha_new</span><span class="p">))</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] RankedSVM could not be fit to data. Returning zero classifier.&#39;</span><span class="p">)</span>
+            <span class="n">Alpha_new</span> <span class="o">=</span> <span class="n">Alpha</span>
+
+        <span class="n">Lambda</span> <span class="o">=</span><span class="n">fminbound</span><span class="p">(</span><span class="n">neg_dual_func</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span><span class="n">args</span><span class="o">=</span>  <span class="p">(</span><span class="n">Alpha</span><span class="p">,</span><span class="n">Alpha_new</span><span class="p">,</span><span class="n">c_value</span><span class="p">,</span><span class="n">kernel</span><span class="p">,</span><span class="n">num_training</span><span class="p">,</span><span class="n">num_class</span><span class="p">,</span><span class="n">Label</span><span class="p">,</span><span class="n">not_Label</span><span class="p">,</span><span class="n">Label_size</span><span class="p">,</span><span class="n">size_alpha</span><span class="p">))</span>
+
+
+        <span class="c1">#print Lambda</span>
+        <span class="c1">#Test convergence</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Lambda</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">lambda_tol</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">Alpha_new</span><span class="o">-</span><span class="n">Alpha</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span><span class="p">))))</span><span class="o">&lt;=</span><span class="n">norm_tol</span><span class="p">):</span>
+            <span class="n">continuing</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># np.disp(&#39;program terminated normally&#39;)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;=</span> <span class="n">max_iter</span><span class="p">:</span>
+                <span class="n">continuing</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Alpha</span> <span class="o">=</span> <span class="n">Alpha</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Lambda</span><span class="p">,</span> <span class="n">Alpha_new</span><span class="o">-</span><span class="n">Alpha</span><span class="p">)</span>
+
+                <span class="n">iteration</span><span class="o">+=</span><span class="mi">1</span>
+
+    <span class="n">Weights</span> <span class="o">=</span> <span class="n">Beta</span>
+
+    <span class="c1">#Computing Bias</span>
+    <span class="n">Left</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Right</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>  <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]):</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="n">n</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Alpha</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)])</span> <span class="o">&gt;=</span> <span class="n">lambda_tol</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Alpha</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span><span class="o">-</span><span class="n">cost</span><span class="o">/</span><span class="p">(</span><span class="n">size_alpha</span><span class="p">[:,</span><span class="n">i</span><span class="p">]))</span> <span class="o">&gt;=</span> <span class="n">lambda_tol</span><span class="p">):</span>
+                    <span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_class</span><span class="p">))</span>
+                    <span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">Label</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="n">c1</span> <span class="o">=</span> <span class="n">not_Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+                    <span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                    <span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">c1</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span>
+                    <span class="n">Left</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+                    <span class="n">Right</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">gradient</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)])</span>
+
+    <span class="k">if</span> <span class="n">is_empty</span><span class="p">(</span><span class="n">Left</span><span class="p">):</span>
+        <span class="n">Bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">train_target</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Right</span><span class="p">])</span>
+        <span class="n">ss1</span><span class="p">,</span><span class="n">ss2</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">aa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">Left</span><span class="p">)</span>
+        <span class="n">aa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">aa</span><span class="p">,(</span><span class="n">ss2</span><span class="p">,</span><span class="n">num_class</span><span class="p">))</span>
+
+        <span class="c1">##### Proper way to solve linear equation with non-square matrix</span>
+        <span class="n">Bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">rcond</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#Bias = Bias.T</span>
+
+    <span class="k">if</span> <span class="n">Bias</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">():</span>
+        <span class="c1"># Error in Alpha, create empty bias</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] Error in Alpha, create empty bias.&#39;</span><span class="p">)</span>
+        <span class="n">Bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">Weights</span><span class="p">,</span><span class="n">Bias</span><span class="p">,</span><span class="n">SVs</span></div>
+
+<div class="viewcode-block" id="RankSVM_test_original"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.RankedSVM.RankSVM_test_original">[docs]</a><span class="k">def</span> <span class="nf">RankSVM_test_original</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">test_target</span><span class="p">,</span> <span class="n">Weights</span><span class="p">,</span> <span class="n">Bias</span><span class="p">,</span> <span class="n">SVs</span><span class="p">,</span>
+                 <span class="n">svm</span><span class="o">=</span><span class="s1">&#39;Poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                 <span class="n">coefficient</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">num_testing</span><span class="p">,</span> <span class="n">tempvalue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+    <span class="n">num_class</span><span class="p">,</span> <span class="n">tempvalue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">test_target</span><span class="p">)</span>
+    <span class="n">tempvalue</span><span class="p">,</span><span class="n">num_training</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">SVs</span><span class="p">)</span>
+    <span class="n">Label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_testing</span><span class="p">,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">not_Label</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">Label_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_testing</span><span class="p">))</span>
+    <span class="n">size_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_training</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">lc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">num_class</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">test_target</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="n">Label_size</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="n">lc</span><span class="p">)</span>
+        <span class="n">lds</span> <span class="o">=</span> <span class="n">num_class</span><span class="o">-</span><span class="n">Label_size</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+        <span class="n">size_alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">lds</span><span class="p">,</span> <span class="n">Label_size</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">temp</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">Label</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">not_Label</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">j</span><span class="p">))</span>
+
+    <span class="n">not_Label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">not_Label</span><span class="p">,</span> <span class="p">(</span><span class="n">num_testing</span><span class="p">,</span><span class="n">num_class</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span><span class="p">(</span><span class="n">num_testing</span><span class="p">,</span> <span class="n">num_training</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">svm</span> <span class="o">==</span> <span class="s1">&#39;RBF&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">test_data</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">.</span><span class="n">conj</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">-</span><span class="n">SVs</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">svm</span> <span class="o">==</span> <span class="s1">&#39;Poly&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                    <span class="n">ab</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]])),(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">test_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),:]])</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">gamma</span><span class="o">*</span><span class="n">ab</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">ab</span><span class="o">+</span><span class="n">coefficient</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">ab</span><span class="o">**</span><span class="n">degree</span>
+            <span class="c1">#kernel[int(i),int(j)] = (gamma*(SVs[:,int(i)].conj().T)*SVs[:,int(j)]+coefficient)**degree</span>
+                    <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ab</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                     <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]])),(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">test_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),:]])))</span>
+
+    <span class="n">Outputs</span> <span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">num_testing</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+
+                <span class="n">temp</span><span class="o">=</span><span class="n">temp</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Weights</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">],</span><span class="n">kernel</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span>
+                <span class="c1">#temp = np.array([temp], dtype=int)</span>
+                <span class="c1">#temp.append(int(temp))</span>
+            <span class="n">temp</span><span class="o">=</span><span class="n">temp</span><span class="o">+</span><span class="n">Bias</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">Outputs</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">temp</span>
+    <span class="c1">#hh = Outputs</span>
+    <span class="c1">#mm, nn = np.shape(Outputs)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>       <span class="c1">########### this logic is only for 3 classes and can be modified for further classes</span>
+
+        <span class="n">idx</span><span class="p">,</span><span class="n">val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">Outputs</span><span class="p">[:,</span><span class="n">i</span><span class="p">]),</span> <span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+           <span class="n">Outputs</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+           <span class="n">Outputs</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+           <span class="n">Outputs</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+           <span class="n">Outputs</span><span class="p">[</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+           <span class="n">Outputs</span><span class="p">[</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+           <span class="n">Outputs</span><span class="p">[</span><span class="n">idx</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+
+    <span class="n">Pre_Labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">num_testing</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Outputs</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="n">Pre_Labels</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+             <span class="n">Pre_Labels</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">Outputs</span><span class="p">,</span> <span class="n">Pre_Labels</span></div>
+
+
+<div class="viewcode-block" id="RankSVM_test"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.RankedSVM.RankSVM_test">[docs]</a><span class="k">def</span> <span class="nf">RankSVM_test</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">num_class</span><span class="p">,</span> <span class="n">Weights</span><span class="p">,</span> <span class="n">Bias</span><span class="p">,</span> <span class="n">SVs</span><span class="p">,</span>
+                 <span class="n">svm</span><span class="o">=</span><span class="s1">&#39;Poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                 <span class="n">coefficient</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">num_testing</span><span class="p">,</span> <span class="n">tempvalue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+    <span class="c1"># num_class, tempvalue = np.shape(test_target)</span>
+    <span class="n">tempvalue</span><span class="p">,</span> <span class="n">num_training</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">SVs</span><span class="p">)</span>
+    <span class="c1"># Label = np.array(np.zeros(shape=(num_testing,1)), dtype=float)</span>
+    <span class="c1"># not_Label = []</span>
+    <span class="c1"># Label_size = np.zeros(shape=(1,num_testing))</span>
+    <span class="c1"># size_alpha = np.zeros(shape=(1,num_training), dtype=float)</span>
+    <span class="c1"># lc = np.ones(shape=(1,num_class))</span>
+    <span class="c1"># for i in range(num_testing):</span>
+    <span class="c1">#     temp = test_target[:,int(i)]</span>
+    <span class="c1">#     Label_size[0,int(i)] = np.sum(temp == lc)</span>
+    <span class="c1">#     lds = num_class-Label_size[0,int(i)]</span>
+    <span class="c1">#     size_alpha[0,int(i)] = np.dot(lds, Label_size[0,int(i)])</span>
+    <span class="c1">#     for j in range(num_class):</span>
+    <span class="c1">#         if temp[int(j)] == 1:</span>
+    <span class="c1">#             Label[int(i),0] = np.array([j])</span>
+    <span class="c1">#         else:</span>
+    <span class="c1">#             not_Label.append((j))</span>
+    <span class="c1">#</span>
+    <span class="c1"># not_Label = np.reshape(not_Label, (num_testing,num_class-1))</span>
+
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span><span class="p">(</span><span class="n">num_testing</span><span class="p">,</span> <span class="n">num_training</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">svm</span> <span class="o">==</span> <span class="s1">&#39;RBF&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">test_data</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">.</span><span class="n">conj</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">-</span><span class="n">SVs</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">svm</span> <span class="o">==</span> <span class="s1">&#39;Poly&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                    <span class="n">ab</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]])),(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">test_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),:]])</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">gamma</span><span class="o">*</span><span class="n">ab</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">ab</span><span class="o">+</span><span class="n">coefficient</span>
+                    <span class="n">ab</span><span class="o">=</span><span class="n">ab</span><span class="o">**</span><span class="n">degree</span>
+            <span class="c1">#kernel[int(i),int(j)] = (gamma*(SVs[:,int(i)].conj().T)*SVs[:,int(j)]+coefficient)**degree</span>
+                    <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ab</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+                 <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+                     <span class="n">kernel</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">SVs</span><span class="p">[:,</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]])),(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">test_data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">),:]])))</span>
+
+    <span class="n">Probabilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_class</span><span class="p">,</span><span class="n">num_testing</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_class</span><span class="p">):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_training</span><span class="p">):</span>
+
+                <span class="n">temp</span><span class="o">=</span><span class="n">temp</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Weights</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">],</span><span class="n">kernel</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span>
+                <span class="c1">#temp = np.array([temp], dtype=int)</span>
+                <span class="c1">#temp.append(int(temp))</span>
+            <span class="n">temp</span><span class="o">=</span><span class="n">temp</span><span class="o">+</span><span class="n">Bias</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="n">Probabilities</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">temp</span>
+    <span class="c1">#hh = Outputs</span>
+    <span class="c1">#mm, nn = np.shape(Outputs)</span>
+
+    <span class="c1"># Class with maximum probability is predicted as label</span>
+    <span class="n">Predicted_Labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Probabilities</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># Probabilities = np.asarray([np.argmax(Probabilities[:, i]) for i in range(num_testing)])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_testing</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">Probabilities</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+        <span class="n">Predicted_Labels</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Transpose in order to be compatible with sklearn</span>
+    <span class="n">Probabilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Probabilities</span><span class="p">)</span>
+    <span class="n">Predicted_Labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Predicted_Labels</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Probabilities</span><span class="p">,</span> <span class="n">Predicted_Labels</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

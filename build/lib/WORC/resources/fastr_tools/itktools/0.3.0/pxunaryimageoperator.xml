@@ -1,0 +1,69 @@
+<tool id="PxUnaryImageOperator" name="ITKTools UnaryImageOperator" version="0.1">
+  <description>A wrapper around ITK Tools, as set of simple command line tools for image analysis.</description>
+  <authors>
+    <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.3.0" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="windows" arch="*" paths="vfs://apps/itktools/0.3.0/install/bin" bin="pxunaryimageoperator.exe"/>
+      <target os="linux" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxunaryimageoperator"/>
+      <target os="darwin" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxunaryimageoperator"/>
+    </targets>
+    <description>
+      ITKTools v0.2.2
+      Unary operations on one image.
+      Usage:
+      pxunaryimageoperator
+      -in inputFilename
+      -ops UnaryOperator of the following form:
+      {+,-,*,/,^,%}
+      notation:
+      {PLUS,{R,L}MINUS,TIMES,{R,L}DIVIDE,{R,L}POWER,{R,L}MOD,
+      NEG,SIGN,ABS,FLOOR,CEIL,ROUND,
+      LN,LOG10,NLOG,EXP,[ARC]SIN,[ARC]COS,[ARC]TAN,
+      ERRFUNC,NORMCDF,QFUNC,LINEAR}
+      notation examples:
+      RMINUS = A - arg
+      LMINUS = arg - A
+      SIN = sin(A)
+      RPOWER = A ^ arg
+      TIMES = A * arg
+      LINEAR = arg1 * A + arg2
+      NORMCDF = NORMCDF(mean=arg1, std=arg2)
+      QFUNC = QFUNC(mean=arg1, std=arg2)
+      [-arg] argument, necessary for some ops
+      [-out] outputFilename, default in + &lt;ops&gt; + &lt;arg&gt; + .mhd
+      [-z] compression flag; if provided, the output image is compressed
+      [-opct] outputPixelComponentType, default: same as input image
+      Supported: 2D, 3D, (unsigned) char, (unsigned) short, (unsigned) int, float.
+    </description>
+    <license/>
+    <authors>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="image" name="Input Image" datatype="ITKImageFile" prefix="-in" cardinality="1" required="true"/>
+
+      <input id="operator" name="Unary Operator" datatype="String" prefix="-ops" cardinality="1" required="true"/>
+      <input id="argument" name="Operator Arguments" datatype="Float" prefix="-arg" cardinality="0-2" required="false"/>
+      <input id="compression_flag" name="Compression Flag" datatype="String" prefix="-z" cardinality="0" required="false"/>
+      <input id="component_type" name="Output Pixel Component Type" datatype="String" prefix="-opct" cardinality="1"
+             required="false"/>
+    </inputs>
+    <outputs>
+      <output id="image" name="output image" datatype="ITKImageFile" prefix="-out" cardinality="1"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references/>
+</tool>

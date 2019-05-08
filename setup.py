@@ -15,20 +15,17 @@
 
 import os
 import sys
-import subprocess
-from setuptools import setup
-from setuptools.command.install import install
 from setuptools.command.test import test as TestCommand
-from setuptools import setup, find_packages
+from setuptools import setup
+
+if sys.version_info < (3, 6):
+    sys.exit('Sorry, Python < 3.6 is not supported')
 
 with open('requirements.txt', 'r') as fh:
     _requires = fh.read().splitlines()
 
 with open('README.rst', 'r') as fh:
     _description = fh.read()
-
-with open('version', 'r') as fh:
-    __version__ = fh.read().splitlines()[0]
 
 with open('test_requirements.txt', 'r') as fh:
     _tests_require = fh.read().splitlines()
@@ -76,6 +73,7 @@ entry_points = {
 # Determine the fastr config path
 USER_DIR = os.path.expanduser(os.path.join('~', '.fastr'))
 config_d = os.path.join(USER_DIR, 'config.d')
+worc_config = os.path.join('WORC', 'fastrconfig', 'WORC_config.py')
 
 
 class NoseTestCommand(TestCommand):
@@ -92,7 +90,7 @@ class NoseTestCommand(TestCommand):
 
 setup(
     name='WORC',
-    version='2.1.3',
+    version='3.0.0',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',
@@ -109,7 +107,9 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering :: Information Analysis',
         'Topic :: System :: Distributed Computing',
         'Topic :: System :: Logging',
@@ -121,12 +121,13 @@ setup(
               'WORC.resources',
               'WORC.IOparser',
               'WORC.processing'],
+    python_requires=">=3.6",
     include_package_data=True,
     package_data={'fastr.resources': resources_list,
                   'WORC': ['versioninfo'],
                   # If any package contains *.ini files, include them
                   'src': ['IOparser/*.ini']},
-    data_files=[(config_d, ['WORC/fastrconfig/WORC_config.py'])],
+    data_files=[(config_d, [worc_config])],
     install_requires=_requires,
     tests_require=_tests_require,
     test_suite='nose.collector',

@@ -1,0 +1,512 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC.tools.Elastix &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>WORC.tools.Elastix</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for WORC.tools.Elastix</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">SimpleITK</span> <span class="k">as</span> <span class="nn">sitk</span>
+<span class="kn">import</span> <span class="nn">fastr</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
+
+
+<div class="viewcode-block" id="Elastix"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Elastix.Elastix">[docs]</a><span class="k">class</span> <span class="nc">Elastix</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Elastix.__init__"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Which version of elastix and transformix tools should be used</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elastix_toolname</span> <span class="o">=</span> <span class="s1">&#39;Elastix&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transformix_toolname</span> <span class="o">=</span> <span class="s1">&#39;Transformix&#39;</span>
+
+        <span class="c1"># self.Elastix = sitk.SimpleElastix()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_network</span><span class="p">(</span><span class="s1">&#39;pairwise&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FixedImage</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MovingImage</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FixedMask</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MovingMask</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ToTransform</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ParameterMaps</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># sitk.VectorOfParameterMap()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">TransformedImage</span> <span class="o">=</span> <span class="s1">&#39;vfs://tmp/WORC_Elastix/results/elastix_output_image_</span><span class="si">{sample_id}</span><span class="s1">_</span><span class="si">{cardinality}</span><span class="s1">.nii.gz&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TransformedSeg</span> <span class="o">=</span> <span class="s1">&#39;vfs://tmp/WORC_Elastix/results/elastix_output_seg_</span><span class="si">{sample_id}</span><span class="s1">_</span><span class="si">{cardinality}</span><span class="s1">.nii.gz&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TransformParameters</span> <span class="o">=</span> <span class="s1">&#39;vfs://tmp/WORC_Elastix/results/elastix_output_trans_</span><span class="si">{sample_id}</span><span class="s1">_</span><span class="si">{cardinality}</span><span class="s1">.txt&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">],</span> <span class="s1">&#39;WORC_Elastix&#39;</span><span class="p">)</span></div>
+        <span class="c1"># TODO: Add initial transformation</span>
+
+<div class="viewcode-block" id="Elastix.getparametermap"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.getparametermap">[docs]</a>    <span class="k">def</span> <span class="nf">getparametermap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;affine&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">128</span><span class="p">)):</span>
+        <span class="n">nvoxels</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">size</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;rigid&#39;</span><span class="p">:</span>
+            <span class="n">parameter_map</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetDefaultParameterMap</span><span class="p">(</span><span class="s2">&quot;rigid&quot;</span><span class="p">)</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;AutomaticTransformInitialization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">]</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;Metric&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AdvancedMattesMutualInformation&quot;</span><span class="p">]</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;NumberOfResolutions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;4&quot;</span><span class="p">]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;NumberOfSpatialSamples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">nvoxels</span><span class="o">*</span><span class="mf">0.0001</span><span class="p">)]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;MaximumNumberOfIterations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1000&quot;</span><span class="p">]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;WriteResultImage&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;ErodeMask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;affine&#39;</span><span class="p">:</span>
+            <span class="n">parameter_map</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetDefaultParameterMap</span><span class="p">(</span><span class="s2">&quot;affine&quot;</span><span class="p">)</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;AutomaticTransformInitialization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;false&quot;</span><span class="p">]</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;Metric&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AdvancedMattesMutualInformation&quot;</span><span class="p">]</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;NumberOfResolutions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;4&quot;</span><span class="p">]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;NumberOfSpatialSamples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">nvoxels</span><span class="o">*</span><span class="mf">0.0001</span><span class="p">)]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;MaximumNumberOfIterations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1000&quot;</span><span class="p">]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;WriteResultImage&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;ErodeMask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;bspline&#39;</span><span class="p">:</span>
+            <span class="n">parameter_map</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetDefaultParameterMap</span><span class="p">(</span><span class="s2">&quot;bspline&quot;</span><span class="p">)</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;AutomaticTransformInitialization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;false&quot;</span><span class="p">]</span>
+            <span class="c1"># parameter_map[&quot;Metric&quot;] = [&quot;AdvancedMattesMutualInformation&quot;]</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;Metric&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AdvancedMattesMutualInformation&quot;</span><span class="p">,</span> <span class="s2">&quot;TransformBendingEnergyPenalty&quot;</span><span class="p">]</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;Metric0Weight&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1.0&quot;</span><span class="p">]</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;Metric1Weight&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;750.0&quot;</span><span class="p">]</span> <span class="c1"># *100 is about 5 percent</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;NumberOfResolutions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;4&quot;</span><span class="p">]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;NumberOfSpatialSamples&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">nvoxels</span><span class="o">*</span><span class="mf">0.0001</span><span class="p">)]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;WriteResultImage&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">]</span>  <span class="c1"># save time/memory</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;MaximumNumberOfIterations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1000&quot;</span><span class="p">]</span>  <span class="c1"># save time/memory</span>
+            <span class="c1"># parameter_map[&quot;ImageSampler&quot;] = [&quot;RandomSamplerSparseMask&quot;]</span>
+            <span class="n">parameter_map</span><span class="p">[</span><span class="s2">&quot;ErodeMask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;true&quot;</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Model </span><span class="si">{}</span><span class="s2"> cannot be found!&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">parameter_map</span></div>
+
+<div class="viewcode-block" id="Elastix.create_network"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.create_network">[docs]</a>    <span class="k">def</span> <span class="nf">create_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nettype</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">nettype</span> <span class="o">==</span> <span class="s1">&#39;pairwise&#39;</span><span class="p">:</span>
+            <span class="c1"># Create the network</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="n">fastr</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">id_</span><span class="o">=</span><span class="s2">&quot;elastix_pair&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Create Sources</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FixedImageSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;FixedImage&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FixedMaskSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;FixedMask&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MovingImageSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;MovingImage&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MovingMaskSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;MovingMask&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ToTransformSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;ToTransform&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ParameterMapSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ElastixParameterFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;ParameterMaps&#39;</span><span class="p">,</span> <span class="n">nodegroup</span><span class="o">=</span><span class="s1">&#39;par&#39;</span><span class="p">)</span>
+            <span class="c1"># Elastix requires the output folder as a sink</span>
+            <span class="c1"># self.OutputFolderSource = self.network.create_sink(&#39;Directory&#39;, id_=&#39;Out&#39;)</span>
+
+            <span class="c1"># Create Elastix node and links</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elastix_toolname</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;elastix&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;fixed_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FixedImageSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;fixed_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FixedMaskSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;moving_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MovingImageSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;moving_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MovingMaskSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="c1"># self.OutputFolderSource.input = self.elastix_node.outputs[&#39;directory&#39;]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ParameterMapSource</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_param</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;par&#39;</span>
+
+            <span class="c1"># Create Sinks</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outtrans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;ElastixTransformFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;sink_trans&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;sink_image&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;sink_seg&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outtrans</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Transform output image</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transformix_toolname</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;transformix&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MovingImageSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outimage</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span>
+
+            <span class="c1"># First change the FinalBSplineInterpolationOrder to  0 for the segmentation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">changeorder_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;EditElastixTransformFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;editelpara&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_trans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">changeorder_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">])</span>
+            <span class="c1"># self.link_trans.converge = 0</span>
+            <span class="c1"># self.link_trans.collapse = &#39;FixedImage&#39;</span>
+            <span class="c1"># self.link_trans.expand = True</span>
+
+            <span class="c1"># Co[y metadata from image to segmentation as Elastix uses this</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">copymetadata_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;CopyMetadata&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;copymetadata&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">copymetadata_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MovingImageSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">copymetadata_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;destination&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToTransformSource</span><span class="o">.</span><span class="n">output</span>
+
+            <span class="c1"># Then transform the segmentation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node_seg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transformix_toolname</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;transformix_seg&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node_seg</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copymetadata_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node_seg</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">changeorder_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outseg</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node_seg</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Create the network</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">network</span> <span class="o">=</span> <span class="n">fastr</span><span class="o">.</span><span class="n">Network</span><span class="p">(</span><span class="n">id_</span><span class="o">=</span><span class="s2">&quot;elastix_group&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Create Sources</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FixedImageSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;FixedImage&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FixedMaskSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;FixedMask&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ToTransformSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;ToTransform&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ParameterMapSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ElastixParameterFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;ParameterMaps&#39;</span><span class="p">,</span> <span class="n">nodegroup</span><span class="o">=</span><span class="s1">&#39;par&#39;</span><span class="p">)</span>
+            <span class="c1"># Elastix requires the output folder as a sink</span>
+            <span class="c1"># self.OutputFolderSource = self.network.create_sink(&#39;Directory&#39;, id_=&#39;Out&#39;)</span>
+
+            <span class="c1"># Create Elastix node and links</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elastix_toolname</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;elastix&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;fixed_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FixedImageSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;fixed_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FixedMaskSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;moving_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FixedImageSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;moving_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FixedMaskSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="c1"># self.OutputFolderSource.input = self.elastix_node.outputs[&#39;directory&#39;]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ParameterMapSource</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_param</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;par&#39;</span>
+
+            <span class="c1"># Create Sinks</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outtrans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;ElastixTransformFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;sink_trans&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outimage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;sink_image&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outseg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;sink_seg&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outtrans</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Transform output image</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transformix_toolname</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;transformix&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MovingImageSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outimage</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span>
+
+            <span class="c1"># First change the FinalBSplineInterpolationOrder to  0 for the segmentation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">changeorder_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;EditElastixTransformFile&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;editelpara&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">changeorder_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;FinalBSplineInterpolationOrder=0&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_trans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elastix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">changeorder_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="c1"># self.link_trans.converge = 0</span>
+            <span class="c1"># self.link_trans.collapse = &#39;FixedImage&#39;</span>
+            <span class="c1"># self.link_trans.expand = True</span>
+
+            <span class="c1"># Co[y metadata from image to segmentation as Elastix uses this</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">copymetadata_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;CopyMetadata&#39;</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;copymetadata&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">copymetadata_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MovingImageSource</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">copymetadata_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;destination&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToTransformSource</span><span class="o">.</span><span class="n">output</span>
+
+            <span class="c1"># Then transform the segmentation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node_seg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transformix_toolname</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="s1">&#39;transformix_seg&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node_seg</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copymetadata_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node_seg</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">changeorder_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outseg</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformix_node_seg</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Elastix.addchangeorder"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.addchangeorder">[docs]</a>    <span class="k">def</span> <span class="nf">addchangeorder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># For the last file, change also the dependence on the previous files</span>
+        <span class="n">N_parameterfiles</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">sources</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_parameterfiles</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">num</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># We also need to refer to the correct initial transform files</span>
+                <span class="n">intrans</span> <span class="o">=</span> <span class="s1">&#39;InitialTransformParametersFileName=&#39;</span> <span class="o">+</span>\
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">,</span> <span class="s1">&#39;editelpara&#39;</span><span class="p">,</span> <span class="s1">&#39;transform_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.txt&#39;</span><span class="p">)</span>
+                <span class="n">sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;FinalBSplineInterpolationOrder=0&quot;</span> <span class="o">+</span> <span class="n">intrans</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;FinalBSplineInterpolationOrder=0&quot;</span><span class="p">)</span>
+
+        <span class="c1"># self.set = self.network.create_source(&quot;AnyType&quot;, id_=&#39;setorder&#39;)</span>
+        <span class="c1"># self.source_data[&#39;setorder&#39;] = sources</span>
+        <span class="c1"># self.changeorder_node.inputs[&#39;set&#39;] = self.set.output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">changeorder_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;set&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sources</span></div>
+
+<div class="viewcode-block" id="Elastix.create_bbox"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.create_bbox">[docs]</a>    <span class="k">def</span> <span class="nf">create_bbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seg</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">]):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Create a bounding box around an input segmentation</span>
+<span class="sd">        with a certain padding</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">segim</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">ReadImage</span><span class="p">(</span><span class="n">seg</span><span class="p">)</span>
+        <span class="n">segim</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetArrayFromImage</span><span class="p">(</span><span class="n">segim</span><span class="p">)</span>
+        <span class="n">segim</span><span class="p">[</span><span class="n">segim</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">nonzero_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">segim</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nonzero_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">segim</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nonzero_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">segim</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">nonzero_x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nonzero_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">nonzero_y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nonzero_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">nonzero_z</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">nonzero_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">segim</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">segim</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x2</span> <span class="o">+</span> <span class="n">pad</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">y2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">segim</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">y2</span> <span class="o">+</span> <span class="n">pad</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">z1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">pad</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">z2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">segim</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">z2</span> <span class="o">+</span> <span class="n">pad</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">x1</span><span class="p">:</span><span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span><span class="n">y2</span><span class="p">,</span> <span class="n">z1</span><span class="p">:</span><span class="n">z2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetImageFromArray</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mask</span></div>
+
+<div class="viewcode-block" id="Elastix.execute"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Check if minimal input is supplied</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">FixedImage</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;You need to supply a fixed image for registration.&quot;</span>
+            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCNotImplementedError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">MovingImage</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;You need to supply a moving image for registration.&quot;</span>
+            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCNotImplementedError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ParameterMaps</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;You need to supply at leat one parameter map for registration.&quot;</span>
+            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCNotImplementedError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="c1"># Set moving and fixed image sources</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="s1">&#39;FixedImage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FixedImage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="s1">&#39;MovingImage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MovingImage</span>
+
+        <span class="c1"># Create a temporary directory to use</span>
+        <span class="n">tempdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">],</span> <span class="s1">&#39;WORC_Elastix&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tempdir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">tempdir</span><span class="p">)</span>
+
+        <span class="c1"># Set the parameter map sources</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ParameterMaps</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="c1"># Files, thus just provide them to the elastix node</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="s1">&#39;ParameterMaps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ParameterMaps</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Use SimpleTransformix to save the maps and add them</span>
+            <span class="n">SimpleElastix</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">SimpleElastix</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="s1">&#39;ParameterMaps&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ParameterMaps</span><span class="p">):</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;ParameterMap</span><span class="si">{}</span><span class="s1">.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">))</span>
+                <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempdir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                <span class="n">SimpleElastix</span><span class="o">.</span><span class="n">WriteParameterFile</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+                <span class="n">sourcename</span> <span class="o">=</span> <span class="s1">&#39;vfs://tmp/WORC_Elastix/&#39;</span> <span class="o">+</span> <span class="n">filename</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="s1">&#39;ParameterMaps&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sourcename</span><span class="p">)</span>
+
+        <span class="c1"># Based on number of parameterfiles, add nodes to train FinalBSplineInterpolationOrder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addchangeorder</span><span class="p">()</span>
+
+        <span class="c1"># Set the mask sources if provided</span>
+        <span class="c1"># if self.FixedMask is not None:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="s1">&#39;FixedMask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FixedMask</span>
+
+        <span class="c1"># if self.MovingMask is not None:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="s1">&#39;MovingMask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MovingMask</span>
+
+        <span class="c1"># Add other images to transform if given</span>
+        <span class="c1"># if self.ToTransform is not None:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="s1">&#39;ToTransform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToTransform</span>
+
+        <span class="c1"># Set the network sinks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;sink_trans&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TransformParameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;sink_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TransformedImage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;sink_seg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TransformedSeg</span>
+
+        <span class="c1"># Set outputfolder if given</span>
+        <span class="c1"># if self.OutputFolder:</span>
+        <span class="c1">#     self.sink_data[&#39;Out&#39;] = self.OutputFolder</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     self.sink_data[&#39;Out&#39;] = &#39;vfs://tmp/WORC_Elastix/output&#39;</span>
+
+        <span class="c1"># print self.sink_data[&#39;Out&#39;]</span>
+
+        <span class="c1"># Execute the network</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">draw_network</span><span class="p">(</span><span class="s1">&#39;WORC_Elastix&#39;</span><span class="p">,</span> <span class="n">img_format</span><span class="o">=</span><span class="s1">&#39;svg&#39;</span><span class="p">,</span> <span class="n">draw_dimension</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">dumpf</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.json&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">,</span> <span class="n">tmpdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span></div></div>
+
+        <span class="c1"># Automatically read in the images (and parameter maps if requested?)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

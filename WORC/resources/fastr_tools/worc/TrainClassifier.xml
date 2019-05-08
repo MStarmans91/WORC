@@ -1,0 +1,49 @@
+<tool id="TrainClassifier" name="TrainClassifier" version="1.0">
+    <description>A wrapper around PREDICT's Radiomics patient classification.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="TrainClassifier.py" />
+    </targets>
+    <description>
+       SVMGS.py images patientinfo seg parameters
+       output = Radiomics classification
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+      <author  name="Sebastian van der Voort" email="s.vandervoort@erasmusmc.nl" url="http://www.bigr.nl/people/SebastianvanderVoort" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="features_train" name="Input feature files of first modality" datatype="HDF5" prefix="--feat_train" cardinality="1-*" repeat_prefix="false" required="true" />
+        <input id="features_test" name="Input feature files of first modality" datatype="HDF5" prefix="--feat_test" cardinality="*" repeat_prefix="false" required="false" />
+        <input id="patientclass_train" name="patientclass" datatype="PatientInfoFile" prefix="--pc_train" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="patientclass_test" name="patientclass" datatype="PatientInfoFile" prefix="--pc_test" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="config" name="config" datatype="ParameterFile" prefix="--conf" cardinality="1-*" repeat_prefix="false" required="true" />
+        <input id="fixedsplits" name="File containing fixed splits for cross validation" datatype="XlsxFile" prefix="--fs" cardinality="1" repeat_prefix="false" required="false" />
+     </inputs>
+    <outputs>
+      <output id="classification" name="Radiomics classification" datatype="HDF5" cardinality="as:config" nospace="False" order="0" prefix="--class" required="true"/>
+      <output id="performance" name="Radiomics classification performance" datatype="JsonFile" cardinality="as:config" nospace="False" order="0" prefix="--perf" required="true"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: TrainClassifier.py [-h] -feat_m1/m2/m3 FEATURES.hdf5 -pc PATIENTCLASS.txt-conf CONFIGURATION.ini -parameters PARAMETERS.ini -class CLASSIFICATION.hdf5 -perf PERFORMANCE.json
+    Perform a grid search over several features types to train multiple Support Vector Machine (SVM) classifiers.
+
+    -feat_m1, ..m2, ..m3 FEATURES.HDF5 File containing the features for an object. Support up to three feature files for a single object.
+    -pc PATIENTCLASS.txt File containing the labels for an object.
+    -conf CONFIGURATION.ini File specifiying the configurations for the SVM optimization.
+    -parameters PARAMETERS.ini File specifying the grid search parameters containing the feature groups to use.
+    -class CLASSIFICATION.hdf5 File to write the SVM output to.
+    -perf PERFORMANCE.json File containing the performance statistics of the fitted SVM.
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

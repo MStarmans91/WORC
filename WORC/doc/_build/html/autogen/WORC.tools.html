@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tools Package &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="processing Package" href="WORC.processing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="WORC.html">WORC Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="WORC.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.addexceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="WORC.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.classification.html">classification Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.featureprocessing.html">featureprocessing Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.plotting.html">plotting Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">tools Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Elastix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Elastix</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Evaluate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Evaluate</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Slicer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Slicer</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Transformix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Transformix</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="WORC.html">WORC Package</a> &raquo;</li>
+        
+      <li>tools Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/autogen/WORC.tools.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tools-package">
+<h1>tools Package<a class="headerlink" href="#tools-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WORC.tools.Elastix">
+<span id="elastix-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Elastix</span></code> Module<a class="headerlink" href="#module-WORC.tools.Elastix" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.tools.Elastix.Elastix">
+<em class="property">class </em><code class="descclassname">WORC.tools.Elastix.</code><code class="descname">Elastix</code><a class="reference internal" href="../_modules/WORC/tools/Elastix.html#Elastix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Elastix.Elastix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.tools.Elastix.Elastix.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.tools.Elastix', '__init__': &lt;function Elastix.__init__&gt;, 'getparametermap': &lt;function Elastix.getparametermap&gt;, 'create_network': &lt;function Elastix.create_network&gt;, 'addchangeorder': &lt;function Elastix.addchangeorder&gt;, 'create_bbox': &lt;function Elastix.create_bbox&gt;, 'execute': &lt;function Elastix.execute&gt;, '__dict__': &lt;attribute '__dict__' of 'Elastix' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Elastix' objects&gt;, '__doc__': None})</em><a class="headerlink" href="#WORC.tools.Elastix.Elastix.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Elastix.Elastix.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Elastix.html#Elastix.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Elastix.Elastix.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Elastix.Elastix.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.tools.Elastix'</em><a class="headerlink" href="#WORC.tools.Elastix.Elastix.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Elastix.Elastix.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.tools.Elastix.Elastix.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Elastix.Elastix.addchangeorder">
+<code class="descname">addchangeorder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Elastix.html#Elastix.addchangeorder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Elastix.Elastix.addchangeorder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Elastix.Elastix.create_bbox">
+<code class="descname">create_bbox</code><span class="sig-paren">(</span><em>seg, pad=[2, 25, 25]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Elastix.html#Elastix.create_bbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Elastix.Elastix.create_bbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a bounding box around an input segmentation
+with a certain padding</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Elastix.Elastix.create_network">
+<code class="descname">create_network</code><span class="sig-paren">(</span><em>nettype</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Elastix.html#Elastix.create_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Elastix.Elastix.create_network" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Elastix.Elastix.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Elastix.html#Elastix.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Elastix.Elastix.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Elastix.Elastix.getparametermap">
+<code class="descname">getparametermap</code><span class="sig-paren">(</span><em>model='affine'</em>, <em>size=(512</em>, <em>512</em>, <em>128)</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Elastix.html#Elastix.getparametermap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Elastix.Elastix.getparametermap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.tools.Evaluate">
+<span id="evaluate-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Evaluate</span></code> Module<a class="headerlink" href="#module-WORC.tools.Evaluate" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.tools.Evaluate.Evaluate">
+<em class="property">class </em><code class="descclassname">WORC.tools.Evaluate.</code><code class="descname">Evaluate</code><span class="sig-paren">(</span><em>label_type</em>, <em>ensemble=50</em>, <em>scores='percentages'</em>, <em>network=None</em>, <em>features=None</em>, <em>fastr_plugin='ProcessPoolExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.tools.Evaluate.Evaluate.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.tools.Evaluate', '__init__': &lt;function Evaluate.__init__&gt;, 'create_network': &lt;function Evaluate.create_network&gt;, 'set': &lt;function Evaluate.set&gt;, 'execute': &lt;function Evaluate.execute&gt;, '__dict__': &lt;attribute '__dict__' of 'Evaluate' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Evaluate' objects&gt;, '__doc__': None})</em><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Evaluate.Evaluate.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>label_type</em>, <em>ensemble=50</em>, <em>scores='percentages'</em>, <em>network=None</em>, <em>features=None</em>, <em>fastr_plugin='ProcessPoolExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a network that evaluates the performance of an estimator.</p>
+<dl class="simple">
+<dt>network: fastr network, default None</dt><dd><p>If you input a network, the evaluate network is added
+to the existing network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Evaluate.Evaluate.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.tools.Evaluate'</em><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Evaluate.Evaluate.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Evaluate.Evaluate.create_network">
+<code class="descname">create_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate.create_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.create_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add evaluate components to network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Evaluate.Evaluate.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the network through the fastr.network.execute command.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Evaluate.Evaluate.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>estimator=None</em>, <em>pinfo=None</em>, <em>images=None</em>, <em>segmentations=None</em>, <em>config=None</em>, <em>features=None</em>, <em>sink_data={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the sources and sinks based on the provided attributes.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.tools.Slicer">
+<span id="slicer-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Slicer</span></code> Module<a class="headerlink" href="#module-WORC.tools.Slicer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.tools.Slicer.Slicer">
+<em class="property">class </em><code class="descclassname">WORC.tools.Slicer.</code><code class="descname">Slicer</code><span class="sig-paren">(</span><em>images=None</em>, <em>segmentations=None</em>, <em>network=None</em>, <em>fastr_plugin='ProcessPoolExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Slicer.html#Slicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Slicer.Slicer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.tools.Slicer.Slicer.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.tools.Slicer', '__init__': &lt;function Slicer.__init__&gt;, 'create_network': &lt;function Slicer.create_network&gt;, 'set': &lt;function Slicer.set&gt;, 'execute': &lt;function Slicer.execute&gt;, '__dict__': &lt;attribute '__dict__' of 'Slicer' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Slicer' objects&gt;, '__doc__': None})</em><a class="headerlink" href="#WORC.tools.Slicer.Slicer.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Slicer.Slicer.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>images=None</em>, <em>segmentations=None</em>, <em>network=None</em>, <em>fastr_plugin='ProcessPoolExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Slicer.html#Slicer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Slicer.Slicer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a network that evaluates the performance of an estimator.</p>
+<dl class="simple">
+<dt>network: fastr network, default None</dt><dd><p>If you input a network, the evaluate network is added
+to the existing network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Slicer.Slicer.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.tools.Slicer'</em><a class="headerlink" href="#WORC.tools.Slicer.Slicer.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Slicer.Slicer.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.tools.Slicer.Slicer.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Slicer.Slicer.create_network">
+<code class="descname">create_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Slicer.html#Slicer.create_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Slicer.Slicer.create_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add evaluate components to network.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Slicer.Slicer.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Slicer.html#Slicer.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Slicer.Slicer.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the network through the fastr.network.execute command.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Slicer.Slicer.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>images=None</em>, <em>segmentations=None</em>, <em>sink_data={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Slicer.html#Slicer.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Slicer.Slicer.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the sources and sinks based on the provided attributes.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.tools.Transformix">
+<span id="transformix-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Transformix</span></code> Module<a class="headerlink" href="#module-WORC.tools.Transformix" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.tools.Transformix.Transformix">
+<em class="property">class </em><code class="descclassname">WORC.tools.Transformix.</code><code class="descname">Transformix</code><a class="reference internal" href="../_modules/WORC/tools/Transformix.html#Transformix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Transformix.Transformix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.tools.Transformix.Transformix.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.tools.Transformix', '__init__': &lt;function Transformix.__init__&gt;, 'create_network': &lt;function Transformix.create_network&gt;, 'execute': &lt;function Transformix.execute&gt;, '__dict__': &lt;attribute '__dict__' of 'Transformix' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Transformix' objects&gt;, '__doc__': None})</em><a class="headerlink" href="#WORC.tools.Transformix.Transformix.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Transformix.Transformix.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Transformix.html#Transformix.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Transformix.Transformix.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Transformix.Transformix.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.tools.Transformix'</em><a class="headerlink" href="#WORC.tools.Transformix.Transformix.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Transformix.Transformix.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.tools.Transformix.Transformix.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Transformix.Transformix.create_network">
+<code class="descname">create_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Transformix.html#Transformix.create_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Transformix.Transformix.create_network" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Transformix.Transformix.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Transformix.html#Transformix.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Transformix.Transformix.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="WORC.processing.html" class="btn btn-neutral float-left" title="processing Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

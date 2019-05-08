@@ -1,0 +1,36 @@
+<tool  id="combineresults" name="combineresults" version="1.0">
+    <description>Combine different performance results into a CSV file.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="combineresults.py" />
+    </targets>
+    <description>
+      combineresults.py svm parameters SI
+      output = Radiomics classification
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+      <input id="svm" name="SVM file" datatype="HDF5" prefix="--svm" cardinality="1-*" repeat_prefix="false" required="true" />
+      <input id="parameters" name="parameters" datatype="JSONFile" prefix="--para" cardinality="as:svm" repeat_prefix="false" required="true" />
+      <input id="TS" name="Total Sensitivity" datatype="CSVFile" cardinality="as:svm" nospace="False" order="0" prefix="--ts" required="false"/>
+     </inputs>
+    <outputs>
+      <output id="results" name="Radiomics results" datatype="CSVFile" cardinality="as:svm" nospace="False" order="0" prefix="--res" required="true"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: combineresults.py [-h] -svm SVM.hdf5 -parameters PARA.json -SI SI.mat -res RESULTS.csv
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

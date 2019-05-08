@@ -1,0 +1,705 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>WORC.plotting.plot_ranked_scores</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for WORC.plotting.plot_ranked_scores</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVM</span> <span class="k">import</span> <span class="n">plot_SVM</span>
+<span class="kn">import</span> <span class="nn">WORC.processing.label_processing</span> <span class="k">as</span> <span class="nn">lp</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">WORC.plotting.plot_images</span> <span class="k">as</span> <span class="nn">pi</span>
+<span class="kn">import</span> <span class="nn">SimpleITK</span> <span class="k">as</span> <span class="nn">sitk</span>
+<span class="kn">from</span> <span class="nn">WORC.addexceptions</span> <span class="k">import</span> <span class="n">WORCKeyError</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+
+
+<span class="c1"># NOTE: Need to add thresholds of plot_ranked_images to arguments</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Plot distances to hyperplane&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-estimator&#39;</span><span class="p">,</span> <span class="s1">&#39;--estimator&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;est&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;est&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to HDF5 file containing a fitted estimator.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-pinfo&#39;</span><span class="p">,</span> <span class="s1">&#39;--pinfo&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;pinfo&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;pinfo&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Patient Info File (txt)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-images&#39;</span><span class="p">,</span> <span class="s1">&#39;--images&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;images&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;ims&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Images of patients (ITK Image files)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-segmentations&#39;</span><span class="p">,</span> <span class="s1">&#39;--segmentations&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;segmentations&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;segs&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Segmentations of patients (ITK Image files)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-ensemble&#39;</span><span class="p">,</span> <span class="s1">&#39;--ensemble&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;ensemble&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;ens&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Either length of ensemble (int) or Caruana (string)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-label_type&#39;</span><span class="p">,</span> <span class="s1">&#39;--label_type&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;label_type&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;label_type&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Label name that is predicted by estimator (string)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-scores&#39;</span><span class="p">,</span> <span class="s1">&#39;--scores&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;scores&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;scores&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Type of scoring: percentages or posteriors (string)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-output_csv&#39;</span><span class="p">,</span> <span class="s1">&#39;--output_csv&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;output_csv&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;output_csv&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output file for scores (CSV).&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-output_zip&#39;</span><span class="p">,</span> <span class="s1">&#39;--output_zip&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;output_zip&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;output_zip&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output file for images (zip).&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># convert inputs that should be single arguments to lists</span>
+    <span class="n">pinfo</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">pinfo</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">pinfo</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">pinfo</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pinfo</span><span class="p">)</span>
+
+    <span class="n">estimator</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">est</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">estimator</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
+
+    <span class="n">ensemble</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">ens</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ensemble</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">ensemble</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ensemble</span><span class="p">)</span>
+
+    <span class="n">label_type</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">label_type</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">label_type</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">label_type</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">label_type</span><span class="p">)</span>
+
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">scores</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+
+    <span class="n">output_csv</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">output_csv</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_csv</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">output_csv</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_csv</span><span class="p">)</span>
+
+    <span class="n">output_zip</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">output_zip</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_zip</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">output_zip</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_zip</span><span class="p">)</span>
+
+    <span class="n">plot_ranked_scores</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+                       <span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
+                       <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
+                       <span class="n">scores</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span>
+                       <span class="n">images</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">ims</span><span class="p">,</span>
+                       <span class="n">segmentations</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">segs</span><span class="p">,</span>
+                       <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                       <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">,</span>
+                       <span class="n">output_zip</span><span class="o">=</span><span class="n">output_zip</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_ranked_percentages"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.plot_ranked_percentages">[docs]</a><span class="k">def</span> <span class="nf">plot_ranked_percentages</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">pinfo</span><span class="p">,</span> <span class="n">label_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">ensemble</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">output_csv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="c1"># Read the inputs</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
+    <span class="n">label_type</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># NOTE: Assume we want to have the first key</span>
+
+    <span class="c1"># Determine the predicted score per patient</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determining score per patient.&#39;</span><span class="p">)</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
+                     <span class="n">pinfo</span><span class="p">,</span>
+                     <span class="n">label_type</span><span class="p">,</span>
+                     <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+                     <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                     <span class="n">output</span><span class="o">=</span><span class="s1">&#39;stats&#39;</span><span class="p">)</span>
+
+    <span class="n">percentages</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span>
+    <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">percentages</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">ranked_percentages_temp</span> <span class="o">=</span> <span class="p">[</span><span class="n">percentages</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+    <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">percentages</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+
+    <span class="n">ranked_percentages</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">ranked_truths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_percentages_temp</span><span class="p">:</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+        <span class="n">ranked_truths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">id</span><span class="p">]))</span>
+        <span class="n">ranked_percentages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="nb">id</span><span class="o">+</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="c1"># Write output to csv</span>
+    <span class="k">if</span> <span class="n">output_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing output scores to CSV.&quot;</span><span class="p">)</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PatientID&#39;</span><span class="p">,</span> <span class="s1">&#39;TrueLabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Percentage&#39;</span><span class="p">]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">perc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ranked_PIDs</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_percentages</span><span class="p">):</span>
+                <span class="n">towrite</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">truth</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">perc</span><span class="p">)]</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">towrite</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ranked_percentages</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_PIDs</span></div>
+
+
+<div class="viewcode-block" id="plot_ranked_images"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.plot_ranked_images">[docs]</a><span class="k">def</span> <span class="nf">plot_ranked_images</span><span class="p">(</span><span class="n">pinfo</span><span class="p">,</span> <span class="n">label_type</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">segmentations</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span>
+                       <span class="n">ranked_scores</span><span class="p">,</span> <span class="n">ranked_PIDs</span><span class="p">,</span> <span class="n">output_zip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">output_itk</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zoomfactor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="c1"># Match the images to the label data</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matching image and segmentation data to labels.&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+    <span class="n">label_data</span><span class="p">,</span> <span class="n">images</span> <span class="o">=</span>\
+        <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">pinfo</span><span class="p">,</span>
+                         <span class="p">[[</span><span class="n">label_type</span><span class="p">]],</span>
+                         <span class="n">images</span><span class="p">,</span>
+                         <span class="n">images</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">segmentations</span> <span class="o">=</span>\
+        <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">pinfo</span><span class="p">,</span>
+                         <span class="p">[[</span><span class="n">label_type</span><span class="p">]],</span>
+                         <span class="n">segmentations</span><span class="p">,</span>
+                         <span class="n">segmentations</span><span class="p">)</span>
+
+    <span class="n">PIDs_images</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">PIDs_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">PIDs_images</span><span class="p">]</span>
+    <span class="k">del</span> <span class="n">label_data</span>
+
+    <span class="c1"># Order the images and segmentations in the scores ordering</span>
+    <span class="n">ordering</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">PIDs_images</span><span class="p">:</span>
+            <span class="n">ordering</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PIDs_images</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pid</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] Patient </span><span class="si">{}</span><span class="s1"> not in images list!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">))</span>
+
+    <span class="n">PIDs_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">PIDs_images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ordering</span><span class="p">]</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ordering</span><span class="p">]</span>
+    <span class="n">segmentations</span> <span class="o">=</span> <span class="p">[</span><span class="n">segmentations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ordering</span><span class="p">]</span>
+
+    <span class="c1"># Print the middle segmented slice from each patient based on ranking</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Print the middle segmented slice from each patient based on ranking.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">zipf</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">output_zip</span><span class="p">,</span>
+                               <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_DEFLATED</span><span class="p">,</span> <span class="n">allowZip64</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">output_itk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Determine spacing factor</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Determining spacings factor.&quot;</span><span class="p">)</span>
+        <span class="n">spacings_x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">spacings_y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">im</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;Processing patient </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)),</span> <span class="n">PIDs_images</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
+            <span class="n">im</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">ReadImage</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
+            <span class="n">spacings_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">GetSpacing</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">spacings_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">GetSpacing</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># NOTE: Used in future feature</span>
+        <span class="n">resample</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">spacings_x</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">spacings_y</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;Processing patient </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)),</span> <span class="n">PIDs_images</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">ReadImage</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="n">seg</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">ReadImage</span><span class="p">(</span><span class="n">segmentations</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="n">PIDs_images</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">+</span> <span class="s1">&#39;_TrueLabel_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ranked_truths</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_slice.png&#39;</span>
+
+        <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">output_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_zip</span><span class="p">),</span> <span class="n">fname</span><span class="p">)</span>
+            <span class="n">output_name_zoom</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_zip</span><span class="p">),</span> <span class="s1">&#39;zoom&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">zoomfactor</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output_name</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">output_name_zoom</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span> <span class="o">=</span> <span class="n">pi</span><span class="o">.</span><span class="n">slicer</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">seg</span><span class="p">,</span> <span class="n">output_name</span><span class="p">,</span>
+                                       <span class="n">output_name_zoom</span><span class="p">,</span> <span class="n">output_itk</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Print PNGs and comine in ZIP</span>
+            <span class="n">zipf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_name</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+            <span class="n">zipf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output_name_zoom</span><span class="p">,</span> <span class="s1">&#39;zoom_&#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_name</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">output_name_zoom</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">output_itk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Combine slices in 3D image</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WIP&#39;</span><span class="p">)</span>
+
+        <span class="k">del</span> <span class="n">im</span><span class="p">,</span> <span class="n">seg</span><span class="p">,</span> <span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span></div>
+
+
+<div class="viewcode-block" id="plot_ranked_posteriors"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.plot_ranked_posteriors">[docs]</a><span class="k">def</span> <span class="nf">plot_ranked_posteriors</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">pinfo</span><span class="p">,</span> <span class="n">label_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">ensemble</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">output_csv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># Read the inputs</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">label_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Assume we want to have the first key</span>
+        <span class="n">label_type</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Determine the predicted score per patient</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determining posterior per patient.&#39;</span><span class="p">)</span>
+    <span class="n">y_truths</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">,</span> <span class="n">y_predictions</span><span class="p">,</span> <span class="n">PIDs_scores</span> <span class="o">=</span>\
+        <span class="n">plot_SVM</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
+                 <span class="n">pinfo</span><span class="p">,</span>
+                 <span class="n">label_type</span><span class="p">,</span>
+                 <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+                 <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                 <span class="n">output</span><span class="o">=</span><span class="s1">&#39;scores&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Extract all scores for each patient</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Aggregating scores per patient over all crossval iterations.&#39;</span><span class="p">)</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">truths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">y_truths_flat</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">y_truths</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+    <span class="n">y_scores_flat</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">y_scores</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+    <span class="n">PIDs_scores_flat</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">PIDs_scores</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y_truths_flat</span><span class="p">,</span> <span class="n">y_scores_flat</span><span class="p">,</span> <span class="n">PIDs_scores_flat</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c1"># No scores yet for patient, create list</span>
+            <span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">truths</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="n">yt</span>
+        <span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+
+    <span class="c1"># Take the mean for each patient and rank them</span>
+    <span class="n">scores_means</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">maxlen</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">scores_means</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">maxlen</span><span class="p">:</span>
+            <span class="n">maxlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span>
+
+    <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">scores_means</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores_means</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+
+    <span class="n">ranked_mean_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores_means</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+    <span class="n">ranked_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+    <span class="n">ranked_truths</span> <span class="o">=</span> <span class="p">[</span><span class="n">truths</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+
+    <span class="c1"># Write output to csv</span>
+    <span class="k">if</span> <span class="n">output_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing output scores to CSV.&quot;</span><span class="p">)</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PatientID&#39;</span><span class="p">,</span> <span class="s1">&#39;TrueLabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Probability&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">):</span>
+            <span class="n">header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Score&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">smean</span><span class="p">,</span> <span class="n">scores</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ranked_PIDs</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_mean_scores</span><span class="p">,</span> <span class="n">ranked_scores</span><span class="p">):</span>
+                <span class="n">towrite</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">truth</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">smean</span><span class="p">)]</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+                    <span class="n">towrite</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">towrite</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ranked_mean_scores</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_PIDs</span></div>
+
+
+<div class="viewcode-block" id="plot_ranked_scores"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.plot_ranked_scores">[docs]</a><span class="k">def</span> <span class="nf">plot_ranked_scores</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">pinfo</span><span class="p">,</span> <span class="n">label_type</span><span class="p">,</span> <span class="n">scores</span><span class="o">=</span><span class="s1">&#39;percentages&#39;</span><span class="p">,</span>
+                       <span class="n">images</span><span class="o">=</span><span class="p">[],</span> <span class="n">segmentations</span><span class="o">=</span><span class="p">[],</span> <span class="n">ensemble</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                       <span class="n">output_csv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_zip</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_itk</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Rank the patients according to their average score. The score can either</span>
+<span class="sd">    be the average posterior or the percentage of times the patient was</span>
+<span class="sd">    classified correctly in the cross validations. Additionally,</span>
+<span class="sd">    the middle slice of each patient is plot and saved according to the ranking.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    estimator: filepath, mandatory</span>
+<span class="sd">        Path pointing to the .hdf5 file which was is the output of the</span>
+<span class="sd">        trainclassifier function.</span>
+
+<span class="sd">    pinfo: filepath, mandatory</span>
+<span class="sd">        Path pointint to the .txt file which contains the patient label</span>
+<span class="sd">        information.</span>
+
+<span class="sd">    label_type: string, default None</span>
+<span class="sd">        The name of the label predicted by the estimator. If None,</span>
+<span class="sd">        the first label from the prediction file will be used.</span>
+
+<span class="sd">    scores: string, default percentages</span>
+<span class="sd">        Type of scoring to be used. Either &#39;posteriors&#39; or &#39;percentages&#39;.</span>
+
+<span class="sd">    images: list, optional</span>
+<span class="sd">        List containing the filepaths to the ITKImage image files of the</span>
+<span class="sd">        patients.</span>
+
+<span class="sd">    segmentations: list, optional</span>
+<span class="sd">        List containing the filepaths to the ITKImage segmentation files of</span>
+<span class="sd">        the patients.</span>
+
+<span class="sd">    ensemble: integer or string, optional</span>
+<span class="sd">        Method to be used for ensembling. Either an integer for a fixed size</span>
+<span class="sd">        or &#39;Caruana&#39; for the Caruana method, see the SearchCV function for more</span>
+<span class="sd">        details.</span>
+
+<span class="sd">    output_csv: filepath, optional</span>
+<span class="sd">        If given, the scores will be written to this csv file.</span>
+
+<span class="sd">    output_zip: filepath, optional</span>
+<span class="sd">        If given, the images will be plotted and the pngs saved to this</span>
+<span class="sd">        zip file.</span>
+
+<span class="sd">    output_itk: filepath, optional</span>
+<span class="sd">        WIP</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">label_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Assume we want to have the first key</span>
+        <span class="n">label_type</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">scores</span> <span class="o">==</span> <span class="s1">&#39;posteriors&#39;</span><span class="p">:</span>
+        <span class="n">ranked_scores</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_PIDs</span> <span class="o">=</span>\
+            <span class="n">plot_ranked_posteriors</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+                                   <span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
+                                   <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
+                                   <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                                   <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">scores</span> <span class="o">==</span> <span class="s1">&#39;percentages&#39;</span><span class="p">:</span>
+        <span class="n">ranked_scores</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_PIDs</span> <span class="o">=</span>\
+            <span class="n">plot_ranked_percentages</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+                                    <span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
+                                    <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
+                                    <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                                    <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid scoring method!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">WORCKeyError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">output_itk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Rerank the scores split per ground truth class: negative for 0, positive for 1</span>
+        <span class="n">ranked_scores_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_scores</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">p</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="n">ranked_scores</span> <span class="o">=</span> <span class="n">ranked_scores_temp</span>
+        <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">)</span>
+        <span class="n">ranked_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+        <span class="n">ranked_truths</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_truths</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+        <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_PIDs</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+
+        <span class="c1"># Convert to lower to later on overcome matching errors</span>
+        <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+
+        <span class="n">plot_ranked_images</span><span class="p">(</span><span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
+                           <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
+                           <span class="n">images</span><span class="o">=</span><span class="n">images</span><span class="p">,</span>
+                           <span class="n">segmentations</span><span class="o">=</span><span class="n">segmentations</span><span class="p">,</span>
+                           <span class="n">ranked_truths</span><span class="o">=</span><span class="n">ranked_truths</span><span class="p">,</span>
+                           <span class="n">ranked_scores</span><span class="o">=</span><span class="n">ranked_scores</span><span class="p">,</span>
+                           <span class="n">ranked_PIDs</span><span class="o">=</span><span class="n">ranked_PIDs</span><span class="p">,</span>
+                           <span class="n">output_zip</span><span class="o">=</span><span class="n">output_zip</span><span class="p">,</span>
+                           <span class="n">output_itk</span><span class="o">=</span><span class="n">output_itk</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="example"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.example">[docs]</a><span class="k">def</span> <span class="nf">example</span><span class="p">():</span>
+    <span class="n">case</span> <span class="o">=</span> <span class="s1">&#39;MESFIB&#39;</span>
+    <span class="k">if</span> <span class="n">case</span> <span class="o">==</span> <span class="s1">&#39;CLM&#39;</span><span class="p">:</span>
+        <span class="n">label_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">estimator</span> <span class="o">=</span> <span class="s1">&#39;/media/martijn/DATA/tmp/classification_0_nonewfeat.hdf5&#39;</span>
+        <span class="n">ensemble</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="s1">&#39;percentages&#39;</span>
+        <span class="n">pinfo</span> <span class="o">=</span> <span class="s1">&#39;/home/martijn/git/RadTools/CLM/pinfo_CLM_KM.txt&#39;</span>
+        <span class="n">images_temp</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;/media/martijn/DATA/CLM/*/*/*/image.nii.gz&#39;</span><span class="p">)</span>
+        <span class="n">segmentations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">images_temp</span><span class="p">:</span>
+            <span class="n">segs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/seg_*session2*.nii.gz&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">segmentations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">segmentations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">segs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/seg_*session1*.nii.gz&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">segmentations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">segmentations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="n">output_csv</span> <span class="o">=</span> <span class="s1">&#39;/media/martijn/DATA/tmp/classification_0_nonewfeat_percentages.csv&#39;</span>
+        <span class="n">output_zip</span> <span class="o">=</span> <span class="s1">&#39;/media/martijn/DATA/tmp/classification_0_nonewfeat_percentages.zip&#39;</span>
+    <span class="k">elif</span> <span class="n">case</span> <span class="o">==</span> <span class="s1">&#39;MESFIB&#39;</span><span class="p">:</span>
+        <span class="n">label_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">estimator</span> <span class="o">=</span> <span class="s1">&#39;/media/martijn/DATA/MESFIB/Results_0704/classification_100crossval_nonewfeat.hdf5&#39;</span>
+        <span class="n">ensemble</span> <span class="o">=</span> <span class="mi">50</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="s1">&#39;percentages&#39;</span>
+        <span class="n">pinfo</span> <span class="o">=</span> <span class="s1">&#39;/home/martijn/git/RadTools/MESFIB/pinfo_MESFIB.txt&#39;</span>
+        <span class="n">images_temp</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;/media/martijn/DATA/MESFIB/*/*/*/image.nii.gz&#39;</span><span class="p">)</span>
+        <span class="n">segmentations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">images_temp</span><span class="p">:</span>
+            <span class="n">segs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/seg*Mass*.nii.gz&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">segmentations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">segmentations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">segs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/seg_*mass*.nii.gz&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">segmentations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">segs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">segmentations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="n">output_csv</span> <span class="o">=</span> <span class="s1">&#39;/media/martijn/DATA/MESFIB/Results_0704/classification_100crossval_nonewfeat_percentages.csv&#39;</span>
+        <span class="n">output_zip</span> <span class="o">=</span> <span class="s1">&#39;/media/martijn/DATA/MESFIB/Results_0704/classification_100crossval_nonewfeat_percentages.zip&#39;</span>
+
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">label_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Assume we want to have the first key</span>
+        <span class="n">label_type</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">scores</span> <span class="o">==</span> <span class="s1">&#39;posteriors&#39;</span><span class="p">:</span>
+        <span class="n">ranked_scores</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_PIDs</span> <span class="o">=</span>\
+            <span class="n">plot_ranked_posteriors</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+                                   <span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
+                                   <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
+                                   <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                                   <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">scores</span> <span class="o">==</span> <span class="s1">&#39;percentages&#39;</span><span class="p">:</span>
+        <span class="n">ranked_scores</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_PIDs</span> <span class="o">=</span>\
+            <span class="n">plot_ranked_percentages</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+                                    <span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
+                                    <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
+                                    <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                                    <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid scoring method!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="n">WORCKeyError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Convert to lower to later on overcome matching errors</span>
+        <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+
+        <span class="n">plot_ranked_images</span><span class="p">(</span><span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
+                           <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
+                           <span class="n">images</span><span class="o">=</span><span class="n">images</span><span class="p">,</span>
+                           <span class="n">segmentations</span><span class="o">=</span><span class="n">segmentations</span><span class="p">,</span>
+                           <span class="n">ranked_truths</span><span class="o">=</span><span class="n">ranked_truths</span><span class="p">,</span>
+                           <span class="n">ranked_scores</span><span class="o">=</span><span class="n">ranked_scores</span><span class="p">,</span>
+                           <span class="n">ranked_PIDs</span><span class="o">=</span><span class="n">ranked_PIDs</span><span class="p">,</span>
+                           <span class="n">output_zip</span><span class="o">=</span><span class="n">output_zip</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

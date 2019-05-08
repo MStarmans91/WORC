@@ -1,0 +1,414 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Configuration &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Resource File Formats" href="file_description.html" />
+    <link rel="prev" title="User Manual" href="user_manual.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#predictgeneral">PREDICTGeneral</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#segmentix">Segmentix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preprocessing">Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#imagefeatures">Imagefeatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#featsel">Featsel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#selectfeatgroup">SelectFeatGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#imputation">Imputation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#classification">Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#crossvalidation">CrossValidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#labels">Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hyperoptimization">Hyperoptimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#featurescaling">FeatureScaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sampleprocessing">SampleProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ensemble">Ensemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fastr-bugs">FASTR_bugs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/static/configuration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuration">
+<span id="config-chapter"></span><h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>As <code class="docutils literal notranslate"><span class="pre">WORC</span></code> and the default tools used are mostly Python based, we’ve chosen
+to put our configuration in a <code class="docutils literal notranslate"><span class="pre">configparser</span></code> object. This has several
+advantages:</p>
+<ol class="arabic simple">
+<li><p>The object can be treated as a python dictionary and thus is easily adjusted.</p></li>
+<li><p>Second, each tool can be set to parse only specific parts of the configuration,
+enabling us to supply one file to all tools instead of needing many parameter files.</p></li>
+</ol>
+<p>The default configuration is generated through the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">WORC.defaultconfig()</span></code>
+function. You can then change things as you would in a dictionary and
+then append it to the configs source:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">network</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">defaultconfig</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;classifier&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;RF&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">network</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When executing the <code class="xref py py-meth docutils literal notranslate"><span class="pre">WORC.set()</span></code> command, the config objects are saved as
+.ini files in the <code class="docutils literal notranslate"><span class="pre">WORC.fastr_tempdir</span></code> folder and added to the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">WORC.fastrconfigs()</span></code> source.</p>
+<p>Below are some details on several of the fields in the configuration.
+Note that for many of the fields, we currently only provide one default
+value. However, when adding your own tools, these fields can be adjusted
+to your specific settings.</p>
+<p>WORC performs Combined Algorithm Selection and Hyperparameter (CASH)
+optimization. The configuration determines how the optimization is
+performed and which hyperparameters and models will be included.
+Repeating specific models/parameters in the config will make them more
+likely to be used, e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;SVM, SVM, LR&#39;</span>
+</pre></div>
+</div>
+<p>means that the SVM is 2x more likely to be tested in the model selection than LR.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All fields in the config must either be supplied as strings. A
+list can be created by using commas for separation, e.g.
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">Network.create_source</span></code>.</p>
+</div>
+<div class="section" id="general">
+<h2>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="predictgeneral">
+<h2>PREDICTGeneral<a class="headerlink" href="#predictgeneral" title="Permalink to this headline">¶</a></h2>
+<p>These fields contain general settings for when using PREDICT.
+For more info on the Joblib settings, which are used in the Joblib
+Parallel function, see <a class="reference external" href="https://pythonhosted.org/joblib/parallel.html">here</a>. When you run
+WORC on a cluster with nodes supporting only a single core to be used
+per node, e.g. the BIGR cluster, use only 1 core and threading as a
+backend.</p>
+</div>
+<div class="section" id="segmentix">
+<h2>Segmentix<a class="headerlink" href="#segmentix" title="Permalink to this headline">¶</a></h2>
+<p>These fields are only important if you specified using the segmentix
+tool in the general configuration.</p>
+</div>
+<div class="section" id="preprocessing">
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">¶</a></h2>
+<p>The preprocessing node acts before the feature extraction on the image.
+Currently, only normalization is included: hence the dictionary name is
+<em>Normalize</em>. Additionally, scans with image type CT (see later in the
+tutorial) provided as DICOM are scaled to Hounsfield Units.</p>
+</div>
+<div class="section" id="imagefeatures">
+<h2>Imagefeatures<a class="headerlink" href="#imagefeatures" title="Permalink to this headline">¶</a></h2>
+<p>If using the PREDICT toolbox, you can specify some settings for the
+feature computation here. Also, you can select if the certain features
+are computed or not.</p>
+</div>
+<div class="section" id="featsel">
+<h2>Featsel<a class="headerlink" href="#featsel" title="Permalink to this headline">¶</a></h2>
+<p>When using the PREDICT toolbox for classification, these settings can be
+used for feature selection methods. Note that these settings are
+actually used in the hyperparameter optimization. Hence you can provide
+multiple values per field, of which random samples will be drawn of
+which finally the best setting in combination with the other
+hyperparameters is selected. Again, these should be formatted as string
+containing the actual values, e.g. value1, value2.</p>
+</div>
+<div class="section" id="selectfeatgroup">
+<h2>SelectFeatGroup<a class="headerlink" href="#selectfeatgroup" title="Permalink to this headline">¶</a></h2>
+<p>If the PREDICT feature computation and classification tools are used,
+then you can do a gridsearch among the various feature groups for the
+optimal combination. If you do not want this, set all fields to a single
+value.</p>
+<p>Previously, there was a single parameter for the texture features,
+selecting all, none or a single group. This is still supported, but not
+recommended, and looks as follows:</p>
+</div>
+<div class="section" id="imputation">
+<h2>Imputation<a class="headerlink" href="#imputation" title="Permalink to this headline">¶</a></h2>
+<p>When using the PREDICT toolbox for classification, these settings are
+used for feature imputation.Note that these settings are actually used
+in the hyperparameter optimization. Hence you can provide multiple
+values per field, of which random samples will be drawn of which finally
+the best setting in combination with the other hyperparameters is
+selected.</p>
+</div>
+<div class="section" id="classification">
+<h2>Classification<a class="headerlink" href="#classification" title="Permalink to this headline">¶</a></h2>
+<p>When using the PREDICT toolbox for classification, you can specify the
+following settings. Almost all of these are used in CASH. Most of the
+classifiers are implemented using sklearn; hence descriptions of the
+hyperparameters can also be found there.</p>
+</div>
+<div class="section" id="crossvalidation">
+<h2>CrossValidation<a class="headerlink" href="#crossvalidation" title="Permalink to this headline">¶</a></h2>
+<p>When using the PREDICT toolbox for classification and you specified
+using cross validation, specify the following settings.</p>
+</div>
+<div class="section" id="labels">
+<h2>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h2>
+<p>When using the PREDICT toolbox for classification, you have to set the
+label used for classification.</p>
+<p>This part is really important, as it should match your label file.
+Suppose your patientclass.txt file you supplied as source for labels
+looks like this:</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 31%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Patient</p></th>
+<th class="head"><p>Label1</p></th>
+<th class="head"><p>Label2</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>patient1</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>patient2</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>patient3</p></td>
+<td><p>1</p></td>
+<td><p>5</p></td>
+</tr>
+</tbody>
+</table>
+<p>You can supply a single label or multiple labels split by commas, for
+each of which an estimator will be fit. For example, suppose you simply
+want to use Label1 for classification, then set:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;label_names&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Label1&#39;</span>
+</pre></div>
+</div>
+<p>If you want to first train a classifier on Label1 and then Label2,
+set: <code class="docutils literal notranslate"><span class="pre">config[Genetics][label_names]</span> <span class="pre">=</span> <span class="pre">Label1,</span> <span class="pre">Label2</span></code></p>
+</div>
+<div class="section" id="hyperoptimization">
+<h2>Hyperoptimization<a class="headerlink" href="#hyperoptimization" title="Permalink to this headline">¶</a></h2>
+<p>When using the PREDICT toolbox for classification, you have to supply
+your hyperparameter optimization procedure here.</p>
+</div>
+<div class="section" id="featurescaling">
+<h2>FeatureScaling<a class="headerlink" href="#featurescaling" title="Permalink to this headline">¶</a></h2>
+<p>Determines which method is applied to scale each feature.</p>
+</div>
+<div class="section" id="sampleprocessing">
+<h2>SampleProcessing<a class="headerlink" href="#sampleprocessing" title="Permalink to this headline">¶</a></h2>
+<p>Before performing the hyperoptimization, you can use SMOTE: Synthetic
+Minority Over-sampling Technique to oversample your data.</p>
+</div>
+<div class="section" id="ensemble">
+<h2>Ensemble<a class="headerlink" href="#ensemble" title="Permalink to this headline">¶</a></h2>
+<p>WORC supports ensembling of workflows. This is not a default approach in
+radiomics, hence the default is to not use it and select only the best
+performing workflow.</p>
+</div>
+<div class="section" id="fastr-bugs">
+<h2>FASTR_bugs<a class="headerlink" href="#fastr-bugs" title="Permalink to this headline">¶</a></h2>
+<p>Currently, when using XNAT as a source, FASTR can only retrieve DICOM
+directories. We made a workaround for this for the images and
+segmentations, but this only works if all your files have the same name
+and extension. These are provided in this configuration part.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="file_description.html" class="btn btn-neutral float-right" title="Resource File Formats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="user_manual.html" class="btn btn-neutral float-left" title="User Manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

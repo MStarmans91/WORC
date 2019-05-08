@@ -1,0 +1,37 @@
+<tool id="PlotBarchart" name="PlotBarchart" version="1.0">
+    <description>A wrapper around PREDICT's Barchart Plotting Function.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="PlotBarchart.py" />
+    </targets>
+    <description>
+       PlotBarchart.py prediction estimators label_type output_png output_tex output_csv
+       output = output_png output_tex
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="prediction" name="Radiomics estimator object from PREDICT Trainclassifier function" datatype="HDF5" prefix="--prediction" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="estimators" name="Number of estimators for which to evaluate hyperparameters" datatype="String" prefix="--estimators" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="label_type" name="Name of label predicted by the estimator to plot barchart for." datatype="String" prefix="--label_type" cardinality="1" repeat_prefix="false" required="false" />
+     </inputs>
+    <outputs>
+      <output id="output_png" name="Output PNG File." datatype="PNGFile" prefix="--output_png" cardinality="1" nospace="False" order="0" required="false" />
+      <output id="output_tex" name="Output TEX File." datatype="TexFile" prefix="--output_tex" cardinality="1" nospace="False" order="0" required="false" />
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: to write
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

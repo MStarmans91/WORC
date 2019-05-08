@@ -1,0 +1,593 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC Package &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IOparser Package" href="WORC.IOparser.html" />
+    <link rel="prev" title="Changelog" href="../static/changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">WORC Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-WORC.addexceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.classification.html">classification Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.featureprocessing.html">featureprocessing Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.plotting.html">plotting Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>WORC Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/autogen/WORC.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="worc-package">
+<h1>WORC Package<a class="headerlink" href="#worc-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-WORC.__init__"></span></div>
+<div class="section" id="module-WORC.WORC">
+<span id="worc-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module<a class="headerlink" href="#module-WORC.WORC" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.WORC.Tools">
+<em class="property">class </em><code class="descclassname">WORC.WORC.</code><code class="descname">Tools</code><a class="reference internal" href="../_modules/WORC/WORC.html#Tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.Tools" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>This object can be used to create other pipelines besides the default
+Radiomics executions. Currently only includes a registratio pipeline.</p>
+<dl class="attribute">
+<dt id="WORC.WORC.Tools.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.WORC', '__doc__': '\n    This object can be used to create other pipelines besides the default\n    Radiomics executions. Currently only includes a registratio pipeline.\n    ', '__init__': &lt;function Tools.__init__&gt;, '__dict__': &lt;attribute '__dict__' of 'Tools' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Tools' objects&gt;})</em><a class="headerlink" href="#WORC.WORC.Tools.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.WORC.Tools.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#Tools.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.Tools.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.WORC.Tools.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.WORC'</em><a class="headerlink" href="#WORC.WORC.Tools.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.WORC.Tools.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.WORC.Tools.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="WORC.WORC.WORC">
+<em class="property">class </em><code class="descclassname">WORC.WORC.</code><code class="descname">WORC</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A Workflow for Optimal Radiomics Classification (WORC) object that
+serves as a pipeline spawner and manager for optimizating radiomics
+studies. Depending on the attributes set, the object will spawn an
+appropriate pipeline and manage it.</p>
+<p>Note that many attributes are lists and can therefore contain multiple
+instances. For example, when providing two sequences per patient,
+the “images” list contains two items. The type of items in the lists
+is described below.</p>
+<p>All objects that serve as source for your network, i.e. refer to
+actual files to be used, should be formatted as fastr sources suited for
+one of the fastr plugings, see also
+<a class="reference external" href="http://fastr.readthedocs.io/en/stable/fastr.reference.html#ioplugin-reference">http://fastr.readthedocs.io/en/stable/fastr.reference.html#ioplugin-reference</a>
+The objects should be lists of these fastr sources or dictionaries with the
+sample ID’s, e.g.</p>
+<dl>
+<dt>images_train = [{‘Patient001’: vfs://input/CT001.nii.gz,</dt><dd><blockquote>
+<div><p>‘Patient002’: vfs://input/CT002.nii.gz},</p>
+</div></blockquote>
+<dl class="simple">
+<dt>{‘Patient001’: vfs://input/MR001.nii.gz,</dt><dd><p>‘Patient002’: vfs://input/MR002.nii.gz}]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<blockquote>
+<div><dl class="simple">
+<dt>name: String, default ‘WORC’</dt><dd><p>name of the network.</p>
+</dd>
+<dt>configs: list, required</dt><dd><p>Configuration parameters, either ConfigParser objects
+created through the defaultconfig function or paths of config .ini
+files. (list, required)</p>
+</dd>
+<dt>labels: list, required</dt><dd><p>Paths to files containing patient labels (.txt files).</p>
+</dd>
+<dt>network: automatically generated</dt><dd><p>The FASTR network generated through the “build” function.</p>
+</dd>
+<dt>images: list, optional</dt><dd><p>Paths refering to the images used for Radiomics computation. Images
+should be of the ITK Image type.</p>
+</dd>
+<dt>segmentations: list, optional</dt><dd><p>Paths refering to the segmentations used for Radiomics computation.
+Segmentations should be of the ITK Image type.</p>
+</dd>
+</dl>
+<p>semantics: semantic features per image type (list, optional)</p>
+<p>masks: state which pixels of images are valid (list, optional)</p>
+<p>features: input Radiomics features for classification (list, optional)</p>
+<p>metadata: DICOM headers belonging to images (list, optional)</p>
+<p>Elastix_Para: parameter files for Elastix (list, optional)</p>
+<p>fastr_plugin: plugin to use for FASTR execution</p>
+<p>fastr_tempdir: temporary directory to use for FASTR execution</p>
+<p>additions: additional inputs for your network (dict, optional)</p>
+<p>source_data: data to use as sources for FASTR (dict)</p>
+<p>sink_data: data to use as sinks for FASTR (dict)</p>
+<dl class="simple">
+<dt>CopyMetadata: Boolean, default True</dt><dd><p>when using elastix, copy metadata from image to segmentation or not</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="attribute">
+<dt id="WORC.WORC.WORC.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.WORC', '__doc__': '\n    A Workflow for Optimal Radiomics Classification (WORC) object that\n    serves as a pipeline spawner and manager for optimizating radiomics\n    studies. Depending on the attributes set, the object will spawn an\n    appropriate pipeline and manage it.\n\n    Note that many attributes are lists and can therefore contain multiple\n    instances. For example, when providing two sequences per patient,\n    the &quot;images&quot; list contains two items. The type of items in the lists\n    is described below.\n\n    All objects that serve as source for your network, i.e. refer to\n    actual files to be used, should be formatted as fastr sources suited for\n    one of the fastr plugings, see also\n    http://fastr.readthedocs.io/en/stable/fastr.reference.html#ioplugin-reference\n    The objects should be lists of these fastr sources or dictionaries with the\n    sample ID\'s, e.g.\n\n    images_train = [{\'Patient001\': vfs://input/CT001.nii.gz,\n                     \'Patient002\': vfs://input/CT002.nii.gz},\n                    {\'Patient001\': vfs://input/MR001.nii.gz,\n                     \'Patient002\': vfs://input/MR002.nii.gz}]\n\n    Attributes\n    ------------------\n        name: String, default \'WORC\'\n            name of the network.\n\n        configs: list, required\n            Configuration parameters, either ConfigParser objects\n            created through the defaultconfig function or paths of config .ini\n            files. (list, required)\n\n        labels: list, required\n            Paths to files containing patient labels (.txt files).\n\n        network: automatically generated\n            The FASTR network generated through the &quot;build&quot; function.\n\n        images: list, optional\n            Paths refering to the images used for Radiomics computation. Images\n            should be of the ITK Image type.\n\n        segmentations: list, optional\n            Paths refering to the segmentations used for Radiomics computation.\n            Segmentations should be of the ITK Image type.\n\n        semantics: semantic features per image type (list, optional)\n\n        masks: state which pixels of images are valid (list, optional)\n\n        features: input Radiomics features for classification (list, optional)\n\n        metadata: DICOM headers belonging to images (list, optional)\n\n        Elastix_Para: parameter files for Elastix (list, optional)\n\n        fastr_plugin: plugin to use for FASTR execution\n\n        fastr_tempdir: temporary directory to use for FASTR execution\n\n        additions: additional inputs for your network (dict, optional)\n\n        source_data: data to use as sources for FASTR (dict)\n\n        sink_data: data to use as sinks for FASTR (dict)\n\n        CopyMetadata: Boolean, default True\n            when using elastix, copy metadata from image to segmentation or not\n\n\n    ', '__init__': &lt;function WORC.__init__&gt;, 'defaultconfig': &lt;function WORC.defaultconfig&gt;, 'add_tools': &lt;function WORC.add_tools&gt;, 'build': &lt;function WORC.build&gt;, 'build_training': &lt;function WORC.build_training&gt;, 'build_testing': &lt;function WORC.build_testing&gt;, 'set': &lt;function WORC.set&gt;, 'execute': &lt;function WORC.execute&gt;, '__dict__': &lt;attribute '__dict__' of 'WORC' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'WORC' objects&gt;})</em><a class="headerlink" href="#WORC.WORC.WORC.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.WORC.WORC.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Initialize WORC object. Set the initial variables all to None,</dt><dd><p>except for some defaults.</p>
+</dd>
+<dt>Arguments:</dt><dd><p>name: name of the nework (string, optional)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.WORC.WORC.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.WORC'</em><a class="headerlink" href="#WORC.WORC.WORC.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.WORC.WORC.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.WORC.WORC.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.WORC.WORC.add_tools">
+<code class="descname">add_tools</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_tools"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.add_tools" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.WORC.WORC.build">
+<code class="descname">build</code><span class="sig-paren">(</span><em>wtype='training'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the  network based on the given attributes.</p>
+<dl>
+<dt>wtype: string, default ‘training’</dt><dd><p>Specify the WORC execution type.
+- testing: use if you have a trained classifier and want to</p>
+<blockquote>
+<div><p>train it on some new images.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>training: use if you want to train a classifier from a dataset.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.WORC.WORC.build_testing">
+<code class="descname">build_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.build_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.build_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>todo</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.WORC.WORC.build_training">
+<code class="descname">build_training</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.build_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.build_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the training network based on the given attributes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.WORC.WORC.defaultconfig">
+<code class="descname">defaultconfig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.defaultconfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.defaultconfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a configparser object holding all default configuration values.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>config: configparser configuration file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.WORC.WORC.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the network through the fastr.network.execute command.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.WORC.WORC.set">
+<code class="descname">set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the FASTR source and sink data based on the given attributes.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.addexceptions">
+<span id="addexceptions-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module<a class="headerlink" href="#module-WORC.addexceptions" title="Permalink to this headline">¶</a></h2>
+<p>This module contains all WORC-related Exceptions</p>
+<dl class="exception">
+<dt id="WORC.addexceptions.WORCAssertionError">
+<em class="property">exception </em><code class="descclassname">WORC.addexceptions.</code><code class="descname">WORCAssertionError</code><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCAssertionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.addexceptions.WORCAssertionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#AssertionError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertionError</span></code></a></p>
+<p>AssertionError in the WORC system</p>
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCAssertionError.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.addexceptions'</em><a class="headerlink" href="#WORC.addexceptions.WORCAssertionError.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="WORC.addexceptions.WORCError">
+<em class="property">exception </em><code class="descclassname">WORC.addexceptions.</code><code class="descname">WORCError</code><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.addexceptions.WORCError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#Exception" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>This is the base class for all WORC related exceptions. Catching this
+class of exceptions should ensure a proper execution of WORC.</p>
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCError.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.addexceptions'</em><a class="headerlink" href="#WORC.addexceptions.WORCError.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCError.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.addexceptions.WORCError.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="WORC.addexceptions.WORCIOError">
+<em class="property">exception </em><code class="descclassname">WORC.addexceptions.</code><code class="descname">WORCIOError</code><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCIOError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.addexceptions.WORCIOError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#OSError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OSError</span></code></a></p>
+<p>IOError in WORC</p>
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCIOError.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.addexceptions'</em><a class="headerlink" href="#WORC.addexceptions.WORCIOError.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCIOError.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.addexceptions.WORCIOError.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="WORC.addexceptions.WORCIndexError">
+<em class="property">exception </em><code class="descclassname">WORC.addexceptions.</code><code class="descname">WORCIndexError</code><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCIndexError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.addexceptions.WORCIndexError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#IndexError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexError</span></code></a></p>
+<p>IndexError in the WORC system</p>
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCIndexError.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.addexceptions'</em><a class="headerlink" href="#WORC.addexceptions.WORCIndexError.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="WORC.addexceptions.WORCKeyError">
+<em class="property">exception </em><code class="descclassname">WORC.addexceptions.</code><code class="descname">WORCKeyError</code><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCKeyError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.addexceptions.WORCKeyError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">KeyError</span></code></a></p>
+<p>KeyError in the WORC system</p>
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCKeyError.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.addexceptions'</em><a class="headerlink" href="#WORC.addexceptions.WORCKeyError.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="WORC.addexceptions.WORCNotImplementedError">
+<em class="property">exception </em><code class="descclassname">WORC.addexceptions.</code><code class="descname">WORCNotImplementedError</code><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCNotImplementedError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.addexceptions.WORCNotImplementedError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a></p>
+<p>This function/method has not been implemented on purpose (e.g. should be
+overwritten in a sub-class)</p>
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCNotImplementedError.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.addexceptions'</em><a class="headerlink" href="#WORC.addexceptions.WORCNotImplementedError.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="WORC.addexceptions.WORCTypeError">
+<em class="property">exception </em><code class="descclassname">WORC.addexceptions.</code><code class="descname">WORCTypeError</code><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCTypeError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.addexceptions.WORCTypeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#TypeError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></a></p>
+<p>TypeError in the WORC system</p>
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCTypeError.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.addexceptions'</em><a class="headerlink" href="#WORC.addexceptions.WORCTypeError.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="WORC.addexceptions.WORCValueError">
+<em class="property">exception </em><code class="descclassname">WORC.addexceptions.</code><code class="descname">WORCValueError</code><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.addexceptions.WORCValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a></p>
+<p>ValueError in the WORC system</p>
+<dl class="attribute">
+<dt id="WORC.addexceptions.WORCValueError.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.addexceptions'</em><a class="headerlink" href="#WORC.addexceptions.WORCValueError.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="WORC.IOparser.html#module-WORC.IOparser.config_WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_WORC</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.IOparser.html#module-WORC.IOparser.config_io_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_io_classifier</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.IOparser.html#module-WORC.IOparser.config_preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_preprocessing</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.IOparser.html#module-WORC.IOparser.config_segmentix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_segmentix</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.IOparser.html#module-WORC.IOparser.file_io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">file_io</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WORC.classification.html">classification Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#module-WORC.classification.AdvancedSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">AdvancedSampler</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#module-WORC.classification.RankedSVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#searchcv-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#module-WORC.classification.construct_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">construct_classifier</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#crossval-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">crossval</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#module-WORC.classification.estimators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">estimators</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#fitandscore-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitandscore</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#module-WORC.classification.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">metrics</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#parameter-optimization-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_optimization</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html#trainclassifier-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trainclassifier</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WORC.featureprocessing.html">featureprocessing Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">featureprocessing</span></code> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html#module-WORC.featureprocessing.Imputer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Imputer</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html#module-WORC.featureprocessing.Relief"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Relief</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html#module-WORC.featureprocessing.SelectGroups"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SelectGroups</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html#module-WORC.featureprocessing.SelectIndividuals"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SelectIndividuals</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html#statisticaltestfeatures-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StatisticalTestFeatures</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html#module-WORC.featureprocessing.StatisticalTestThreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StatisticalTestThreshold</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html#variancethreshold-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">VarianceThreshold</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WORC.plotting.html">plotting Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.compute_CI"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compute_CI</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.linstretch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">linstretch</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plot_ROC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ROC</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plot_SVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_SVM</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#plot-svr-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_SVR</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plot_barchart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_barchart</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plot_boxplot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plot_images"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#plotminmaxresponse-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#scatterplot-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scatterplot</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WORC.processing.html">processing Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="WORC.processing.html#module-WORC.processing.ExtractNLargestBlobsn"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ExtractNLargestBlobsn</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.processing.html#rtstructreader-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RTStructReader</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.processing.html#module-WORC.processing.classes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classes</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.processing.html#module-WORC.processing.label_processing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WORC.tools.html">tools Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="WORC.tools.html#module-WORC.tools.Elastix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Elastix</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.tools.html#module-WORC.tools.Evaluate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Evaluate</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.tools.html#module-WORC.tools.Slicer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Slicer</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.tools.html#module-WORC.tools.Transformix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Transformix</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="WORC.IOparser.html" class="btn btn-neutral float-right" title="IOparser Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../static/changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

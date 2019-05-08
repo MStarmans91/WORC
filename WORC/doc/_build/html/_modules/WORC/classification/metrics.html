@@ -1,0 +1,493 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC.classification.metrics &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>WORC.classification.metrics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for WORC.classification.metrics</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">roc_auc_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">f1_score</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">metrics</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">pearsonr</span><span class="p">,</span> <span class="n">spearmanr</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">make_scorer</span><span class="p">,</span> <span class="n">average_precision_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">check_scoring</span> <span class="k">as</span> <span class="n">check_scoring_sklearn</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">pinv</span>
+
+
+<div class="viewcode-block" id="performance_singlelabel"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.performance_singlelabel">[docs]</a><span class="k">def</span> <span class="nf">performance_singlelabel</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Singleclass performance metrics</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">regression</span><span class="p">:</span>
+        <span class="n">r2score</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">r2_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">)</span>
+        <span class="n">MSE</span> <span class="o">=</span> <span class="n">metrics</span><span class="o">.</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">)</span>
+        <span class="n">coefICC</span> <span class="o">=</span> <span class="n">ICC</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">y_prediction</span><span class="p">,</span> <span class="n">y_truth</span><span class="p">)))</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">pearsonr</span><span class="p">(</span><span class="n">y_prediction</span><span class="p">,</span> <span class="n">y_truth</span><span class="p">)</span>
+        <span class="n">PearsonC</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">PearsonP</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">y_prediction</span><span class="p">,</span> <span class="n">y_truth</span><span class="p">)</span>
+        <span class="n">SpearmanC</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">correlation</span>
+        <span class="n">SpearmanP</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">pvalue</span>
+
+        <span class="k">return</span> <span class="n">r2score</span><span class="p">,</span> <span class="n">MSE</span><span class="p">,</span> <span class="n">coefICC</span><span class="p">,</span> <span class="n">PearsonC</span><span class="p">,</span> <span class="n">PearsonP</span><span class="p">,</span> <span class="n">SpearmanC</span><span class="p">,</span> <span class="n">SpearmanP</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Compute confuction matrics and extract measures</span>
+        <span class="n">c_mat</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">)</span>
+        <span class="n">TN</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">FN</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">TP</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">FP</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># compute confusion metric based statistics</span>
+        <span class="k">if</span> <span class="n">FN</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">TP</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sensitivity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sensitivity</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FN</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">FP</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">TN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">specificity</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">specificity</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">TN</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">FP</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">TP</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">FP</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">precision</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">precision</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FP</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">TN</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">FN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">NPV</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">NPV</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">TN</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
+
+        <span class="c1"># Additionally, compute accuracy, AUC and f1-score</span>
+        <span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">)</span>
+        <span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">)</span>
+        <span class="n">f1_score_out</span> <span class="o">=</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">accuracy</span><span class="p">,</span> <span class="n">sensitivity</span><span class="p">,</span> <span class="n">specificity</span><span class="p">,</span> <span class="n">precision</span><span class="p">,</span> <span class="n">f1_score_out</span><span class="p">,</span> <span class="n">auc</span></div>
+
+
+<div class="viewcode-block" id="performance_multilabel"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.performance_multilabel">[docs]</a><span class="k">def</span> <span class="nf">performance_multilabel</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">,</span> <span class="n">y_score</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Multiclass performance metrics.</span>
+
+<span class="sd">    y_truth and y_prediction should both be lists with the multiclass label of each</span>
+<span class="sd">    object, e.g.</span>
+
+<span class="sd">    y_truth = [0, 0,	0,	0,	0,	0,	2,	2,	1,	1,	2]    ### Groundtruth</span>
+<span class="sd">    y_prediction = [0, 0,	0,	0,	0,	0,	1,	2,	1,	2,	2]    ### Predicted labels</span>
+
+
+<span class="sd">    Calculation of accuracy accorading to formula suggested in CAD Dementia Grand Challege http://caddementia.grand-challenge.org</span>
+<span class="sd">    Calculation of Multi Class AUC according to classpy: https://bitbucket.org/bigr_erasmusmc/classpy/src/master/classpy/multi_class_auc.py</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">)</span>
+
+    <span class="c1"># Determine no. of classes</span>
+    <span class="n">labels_class</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_truth</span><span class="p">)</span>
+    <span class="n">n_class</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels_class</span><span class="p">)</span>
+
+    <span class="c1"># Splits confusion matrix in true and false positives and negatives</span>
+    <span class="n">TP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_class</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">FN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_class</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">FP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_class</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">TN</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_class</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_class</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_class</span><span class="p">):</span>
+        <span class="n">TP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="n">FN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span><span class="o">-</span><span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="n">FP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span><span class="o">-</span><span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="n">TN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">[:])</span><span class="o">-</span><span class="n">TP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">FP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">FN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+        <span class="n">n</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
+
+    <span class="c1"># Calculation of accuracy accorading to formula suggested in CAD Dementia Grand Challege http://caddementia.grand-challenge.org</span>
+    <span class="n">Accuracy</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">TP</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+
+    <span class="c1"># Determine total positives and negatives</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">TP</span> <span class="o">+</span> <span class="n">FN</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">FP</span> <span class="o">+</span> <span class="n">TN</span>
+
+    <span class="c1"># Calculation of sensitivity</span>
+    <span class="n">Sensitivity</span> <span class="o">=</span> <span class="n">TP</span><span class="o">/</span><span class="n">P</span>
+    <span class="n">Sensitivity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Sensitivity</span><span class="p">)</span>
+
+    <span class="c1"># Calculation of specifitity</span>
+    <span class="n">Specificity</span> <span class="o">=</span> <span class="n">TN</span><span class="o">/</span><span class="n">N</span>
+    <span class="n">Specificity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Specificity</span><span class="p">)</span>
+
+    <span class="c1"># Calculation of precision</span>
+    <span class="n">Precision</span> <span class="o">=</span> <span class="n">TP</span><span class="o">/</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FP</span><span class="p">)</span>
+    <span class="n">Precision</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Precision</span><span class="p">)</span>
+    <span class="n">Precision</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Precision</span><span class="p">)</span>
+
+    <span class="c1"># Calculation  of F1_Score</span>
+    <span class="n">F1_score</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">beta</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">Sensitivity</span><span class="o">*</span><span class="n">Precision</span><span class="p">))</span><span class="o">/</span><span class="p">((</span><span class="n">beta</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Precision</span> <span class="o">+</span> <span class="n">Sensitivity</span><span class="p">))</span>
+    <span class="n">F1_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">F1_score</span><span class="p">)</span>
+    <span class="n">F1_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">F1_score</span><span class="p">)</span>
+
+    <span class="c1"># Calculation of Multi Class AUC according to classpy: https://bitbucket.org/bigr_erasmusmc/classpy/src/master/classpy/multi_class_auc.py</span>
+    <span class="k">if</span> <span class="n">y_score</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">AUC</span> <span class="o">=</span> <span class="n">multi_class_auc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">AUC</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">Accuracy</span><span class="p">,</span> <span class="n">Sensitivity</span><span class="p">,</span> <span class="n">Specificity</span><span class="p">,</span> <span class="n">Precision</span><span class="p">,</span> <span class="n">F1_score</span><span class="p">,</span> <span class="n">AUC</span></div>
+
+
+<div class="viewcode-block" id="pairwise_auc"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.pairwise_auc">[docs]</a><span class="k">def</span> <span class="nf">pairwise_auc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">class_i</span><span class="p">,</span> <span class="n">class_j</span><span class="p">):</span>
+    <span class="c1"># Filter out the probabilities for class_i and class_j</span>
+    <span class="n">y_score</span> <span class="o">=</span> <span class="p">[</span><span class="n">est</span><span class="p">[</span><span class="n">class_i</span><span class="p">]</span> <span class="k">for</span> <span class="n">ref</span><span class="p">,</span> <span class="n">est</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">)</span> <span class="k">if</span> <span class="n">ref</span> <span class="ow">in</span> <span class="p">(</span><span class="n">class_i</span><span class="p">,</span> <span class="n">class_j</span><span class="p">)]</span>
+    <span class="n">y_truth</span> <span class="o">=</span> <span class="p">[</span><span class="n">ref</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">y_truth</span> <span class="k">if</span> <span class="n">ref</span> <span class="ow">in</span> <span class="p">(</span><span class="n">class_i</span><span class="p">,</span> <span class="n">class_j</span><span class="p">)]</span>
+
+    <span class="c1"># Sort the y_truth by the estimated probabilities</span>
+    <span class="n">sorted_y_truth</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">y_score</span><span class="p">,</span> <span class="n">y_truth</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+
+    <span class="c1"># Calculated the sum of ranks for class_i</span>
+    <span class="n">sum_rank</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_y_truth</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">element</span> <span class="o">==</span> <span class="n">class_i</span><span class="p">:</span>
+            <span class="n">sum_rank</span> <span class="o">+=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">sum_rank</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sum_rank</span><span class="p">)</span>
+
+    <span class="c1"># Get the counts for class_i and class_j</span>
+    <span class="n">n_class_i</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">y_truth</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">class_i</span><span class="p">))</span>
+    <span class="n">n_class_j</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">y_truth</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">class_j</span><span class="p">))</span>
+
+    <span class="c1"># If a class in empty, AUC is 0.0</span>
+    <span class="k">if</span> <span class="n">n_class_i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n_class_j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+    <span class="c1"># Calculate the pairwise AUC</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">sum_rank</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">n_class_i</span> <span class="o">*</span> <span class="p">(</span><span class="n">n_class_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_class_i</span> <span class="o">*</span> <span class="n">n_class_j</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="multi_class_auc"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.multi_class_auc">[docs]</a><span class="k">def</span> <span class="nf">multi_class_auc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">):</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_truth</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_score</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No AUC is calculated, output probabilities are missing&#39;</span><span class="p">)</span>
+
+    <span class="n">pairwise_auc_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">pairwise_auc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">+</span>
+                                <span class="n">pairwise_auc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">classes</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">classes</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">]</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pairwise_auc_list</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="multi_class_auc_score"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.multi_class_auc_score">[docs]</a><span class="k">def</span> <span class="nf">multi_class_auc_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">metrics</span><span class="o">.</span><span class="n">make_scorer</span><span class="p">(</span><span class="n">multi_class_auc</span><span class="p">,</span> <span class="n">needs_proba</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_scoring"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.check_scoring">[docs]</a><span class="k">def</span> <span class="nf">check_scoring</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Surrogate for sklearn&#39;s check_scoring to enable use of some other</span>
+<span class="sd">    scoring metrics.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">scoring</span> <span class="o">==</span> <span class="s1">&#39;average_precision_weighted&#39;</span><span class="p">:</span>
+        <span class="n">scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">average_precision_score</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">scorer</span> <span class="o">=</span> <span class="n">check_scoring_sklearn</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scorer</span></div>
+
+
+<div class="viewcode-block" id="ICC"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.ICC">[docs]</a><span class="k">def</span> <span class="nf">ICC</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">ICCtype</span><span class="o">=</span><span class="s1">&#39;inter&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Input:</span>
+<span class="sd">        M is matrix of observations. Rows: patients, columns: observers.</span>
+<span class="sd">        type: ICC type, currently &quot;inter&quot; or &quot;intra&quot;.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">n</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">SStotal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">MSR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">k</span>
+    <span class="n">MSW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="n">MSC</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span>
+    <span class="n">MSE</span> <span class="o">=</span> <span class="p">(</span><span class="n">SStotal</span> <span class="o">-</span> <span class="n">MSR</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">MSC</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="p">((</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">ICCtype</span> <span class="o">==</span> <span class="s1">&#39;intra&#39;</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">MSR</span> <span class="o">-</span> <span class="n">MSW</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">MSR</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">MSW</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ICCtype</span> <span class="o">==</span> <span class="s1">&#39;inter&#39;</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">MSR</span> <span class="o">-</span> <span class="n">MSE</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">MSR</span> <span class="o">+</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">MSE</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="p">(</span><span class="n">MSC</span><span class="o">-</span><span class="n">MSE</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No valid ICC type given.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">r</span></div>
+
+
+<div class="viewcode-block" id="ICC_anova"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.ICC_anova">[docs]</a><span class="k">def</span> <span class="nf">ICC_anova</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">ICCtype</span><span class="o">=</span><span class="s1">&#39;inter&#39;</span><span class="p">,</span> <span class="n">more</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Adopted from Nipype with a slight alteration to distinguish inter and intra.</span>
+<span class="sd">    the data Y are entered as a &#39;table&#39; ie subjects are in rows and repeated</span>
+<span class="sd">    measures in columns</span>
+<span class="sd">    One Sample Repeated measure ANOVA</span>
+<span class="sd">    Y = XB + E with X = [FaTor / Subjects]</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="p">[</span><span class="n">nb_subjects</span><span class="p">,</span> <span class="n">nb_conditions</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">dfc</span> <span class="o">=</span> <span class="n">nb_conditions</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">dfe</span> <span class="o">=</span> <span class="p">(</span><span class="n">nb_subjects</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">dfc</span>
+    <span class="n">dfr</span> <span class="o">=</span> <span class="n">nb_subjects</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="c1"># Compute the repeated measure effect</span>
+    <span class="c1"># ------------------------------------</span>
+
+    <span class="c1"># Sum Square Total</span>
+    <span class="n">mean_Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+    <span class="n">SST</span> <span class="o">=</span> <span class="p">((</span><span class="n">Y</span> <span class="o">-</span> <span class="n">mean_Y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="c1"># create the design matrix for the different levels</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">nb_conditions</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nb_subjects</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>  <span class="c1"># sessions</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">nb_subjects</span><span class="p">),</span> <span class="p">(</span><span class="n">nb_conditions</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># subjects</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">])</span>
+
+    <span class="c1"># Sum Square Error</span>
+    <span class="n">predicted_Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">pinv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">X</span><span class="p">))),</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">))</span>
+    <span class="n">residuals</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">predicted_Y</span>
+    <span class="n">SSE</span> <span class="o">=</span> <span class="p">(</span><span class="n">residuals</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+    <span class="n">residuals</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">MSE</span> <span class="o">=</span> <span class="n">SSE</span> <span class="o">/</span> <span class="n">dfe</span>
+
+    <span class="c1"># Sum square session effect - between colums/sessions</span>
+    <span class="n">SSC</span> <span class="o">=</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">mean_Y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="n">nb_subjects</span>
+    <span class="n">MSC</span> <span class="o">=</span> <span class="n">SSC</span> <span class="o">/</span> <span class="n">dfc</span> <span class="o">/</span> <span class="n">nb_subjects</span>
+
+    <span class="n">session_effect_F</span> <span class="o">=</span> <span class="n">MSC</span> <span class="o">/</span> <span class="n">MSE</span>
+
+    <span class="c1"># Sum Square subject effect - between rows/subjects</span>
+    <span class="n">SSR</span> <span class="o">=</span> <span class="n">SST</span> <span class="o">-</span> <span class="n">SSC</span> <span class="o">-</span> <span class="n">SSE</span>
+    <span class="n">MSR</span> <span class="o">=</span> <span class="n">SSR</span> <span class="o">/</span> <span class="n">dfr</span>
+
+    <span class="c1"># ICC(3,1) = (mean square subjeT - mean square error) / (mean square subjeT + (k-1)*-mean square error)</span>
+    <span class="k">if</span> <span class="n">ICCtype</span> <span class="o">==</span> <span class="s1">&#39;intra&#39;</span><span class="p">:</span>
+        <span class="n">ICC</span> <span class="o">=</span> <span class="p">(</span><span class="n">MSR</span> <span class="o">-</span> <span class="n">MSE</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">MSR</span> <span class="o">+</span> <span class="n">dfc</span><span class="o">*</span><span class="n">MSE</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ICCtype</span> <span class="o">==</span> <span class="s1">&#39;inter&#39;</span><span class="p">:</span>
+        <span class="n">ICC</span> <span class="o">=</span> <span class="p">(</span><span class="n">MSR</span> <span class="o">-</span> <span class="n">MSE</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">MSR</span> <span class="o">+</span> <span class="n">dfc</span><span class="o">*</span><span class="n">MSE</span> <span class="o">+</span> <span class="n">nb_conditions</span><span class="o">*</span><span class="p">(</span><span class="n">MSC</span><span class="o">-</span><span class="n">MSE</span><span class="p">)</span><span class="o">/</span><span class="n">nb_subjects</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No valid ICC type given.&#39;</span><span class="p">)</span>
+
+    <span class="n">e_var</span> <span class="o">=</span> <span class="n">MSE</span>  <span class="c1"># variance of error</span>
+    <span class="n">r_var</span> <span class="o">=</span> <span class="p">(</span><span class="n">MSR</span> <span class="o">-</span> <span class="n">MSE</span><span class="p">)</span> <span class="o">/</span> <span class="n">nb_conditions</span>  <span class="c1"># variance between subjects</span>
+
+    <span class="k">if</span> <span class="n">more</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ICC</span><span class="p">,</span> <span class="n">r_var</span><span class="p">,</span> <span class="n">e_var</span><span class="p">,</span> <span class="n">session_effect_F</span><span class="p">,</span> <span class="n">dfc</span><span class="p">,</span> <span class="n">dfe</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ICC</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

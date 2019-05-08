@@ -1,0 +1,36 @@
+<tool id="Slicer" name="Slicer" version="1.0">
+    <description>Slice the images at the center of a ROI segmentation and print the output to png.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="slicer.py" />
+    </targets>
+    <description>
+       slicer.py image segmentation output
+       output = Radiomics features
+    </description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="image" name="image" datatype="ITKImageFile" prefix="--im" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="segmentation" name="input segmentation" datatype="ITKImageFile" prefix="--seg" cardinality="1" repeat_prefix="false" required="true" />
+     </inputs>
+    <outputs>
+      <output id="out" name="Output PNG" datatype="PNGFile" cardinality="1" nospace="False" order="0" prefix="--out" required="true"/>
+      <output id="outzoom" name="Output PNG zoomed in" datatype="PNGFile" cardinality="1" nospace="False" order="0" prefix="--outzoom" required="false"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: Slicer.py [-h] -im IMAGE.ITKIM -seg SEGMENTATION.ITKIM -out OUTPUT.png -outzoom OUTPUTzoom.png
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

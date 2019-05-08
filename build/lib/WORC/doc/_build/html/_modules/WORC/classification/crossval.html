@@ -1,0 +1,701 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC.classification.crossval &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>WORC.classification.crossval</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for WORC.classification.crossval</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span> <span class="nn">xlrd</span>
+<span class="kn">from</span> <span class="nn">.parameter_optimization</span> <span class="k">import</span> <span class="n">random_search_parameters</span>
+<span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
+
+
+<div class="viewcode-block" id="crossval"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.crossval">[docs]</a><span class="k">def</span> <span class="nf">crossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span><span class="p">,</span>
+             <span class="n">param_grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tempsave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Use&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="n">outputfolder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Constructs multiple individual classifiers based on the label settings</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config: dict, mandatory</span>
+<span class="sd">            Dictionary with config settings. See the Github Wiki for the</span>
+<span class="sd">            available fields and formatting.</span>
+
+<span class="sd">    label_data: dict, mandatory</span>
+<span class="sd">            Should contain the following:</span>
+<span class="sd">            patient_IDs (list): IDs of the patients, used to keep track of test and</span>
+<span class="sd">                     training sets, and label data</span>
+<span class="sd">            label (list): List of lists, where each list contains the</span>
+<span class="sd">                                   label status for that patient for each</span>
+<span class="sd">                                   label</span>
+<span class="sd">            label_name (list): Contains the different names that are stored</span>
+<span class="sd">                                  in the label object</span>
+
+<span class="sd">    image_features: numpy array, mandatory</span>
+<span class="sd">            Consists of a tuple of two lists for each patient:</span>
+<span class="sd">            (feature_values, feature_labels)</span>
+
+<span class="sd">    param_grid: dictionary, optional</span>
+<span class="sd">            Contains the parameters and their values wich are used in the</span>
+<span class="sd">            grid or randomized search hyperparamater optimization. See the</span>
+<span class="sd">            construct_classifier function for some examples.</span>
+
+<span class="sd">    use_fastr: boolean, default False</span>
+<span class="sd">            If False, parallel execution through Joblib is used for fast</span>
+<span class="sd">            execution of the hyperparameter optimization. Especially suited</span>
+<span class="sd">            for execution on mutlicore (H)PC&#39;s. The settings used are</span>
+<span class="sd">            specified in the config.ini file in the IOparser folder, which you</span>
+<span class="sd">            can adjust to your system.</span>
+
+<span class="sd">            If True, fastr is used to split the hyperparameter optimization in</span>
+<span class="sd">            separate jobs. Parameters for the splitting can be specified in the</span>
+<span class="sd">            config file. Especially suited for clusters.</span>
+
+<span class="sd">    fastr_plugin: string, default None</span>
+<span class="sd">            Determines which plugin is used for fastr executions.</span>
+<span class="sd">            When None, uses the default plugin from the fastr config.</span>
+
+<span class="sd">    tempsave: boolean, default False</span>
+<span class="sd">            If True, create a .hdf5 file after each cross validation containing</span>
+<span class="sd">            the classifier and results from that that split. This is written to</span>
+<span class="sd">            the GSOut folder in your fastr output mount. If False, only</span>
+<span class="sd">            the result of all combined cross validations will be saved to a .hdf5</span>
+<span class="sd">            file. This will also be done if set to True.</span>
+
+<span class="sd">    fixedsplits: string, optional</span>
+<span class="sd">            By default, random split cross validation is used to train and</span>
+<span class="sd">            evaluate the machine learning methods. Optionally, you can provide</span>
+<span class="sd">            a .xlsx file containing fixed splits to be used. See the Github Wiki</span>
+<span class="sd">            for the format.</span>
+
+<span class="sd">    ensemble: dictionary, optional</span>
+<span class="sd">            Contains the configuration for constructing an ensemble.</span>
+
+<span class="sd">    modus: string, default &#39;singlelabel&#39;</span>
+<span class="sd">            Determine whether one-vs-all classification (or regression) for</span>
+<span class="sd">            each single label is used (&#39;singlelabel&#39;) or if multilabel</span>
+<span class="sd">            classification is performed (&#39;multilabel&#39;).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    panda_data: pandas dataframe</span>
+<span class="sd">            Contains all information on the trained classifier.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tempsave</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">fastr</span>
+
+
+    <span class="c1"># Define all possible regressors</span>
+    <span class="n">regressors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SVR&#39;</span><span class="p">,</span> <span class="s1">&#39;RFR&#39;</span><span class="p">,</span> <span class="s1">&#39;SGDR&#39;</span><span class="p">,</span> <span class="s1">&#39;Lasso&#39;</span><span class="p">,</span> <span class="s1">&#39;ElasticNet&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Process input data</span>
+    <span class="n">patient_IDs</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span>
+    <span class="n">label_value</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+    <span class="n">label_name</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label_name&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">outputfolder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">logfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s1">&#39;classifier.log&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputfolder</span><span class="p">,</span> <span class="s1">&#39;classifier.log&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Logging to file &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">logfilename</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">[:]:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">logfilename</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">N_iterations</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span>
+    <span class="n">test_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;test_size&#39;</span><span class="p">]</span>
+
+    <span class="n">classifier_labelss</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Starting classifier&#39;</span><span class="p">)</span>
+
+    <span class="c1"># We only need one label instance, assuming they are all the sample</span>
+    <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">image_features</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Check if we need to use fixedsplits:</span>
+    <span class="k">if</span> <span class="n">fixedsplits</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;.xlsx&#39;</span> <span class="ow">in</span> <span class="n">fixedsplits</span><span class="p">:</span>
+        <span class="c1"># fixedsplits = &#39;/home/mstarmans/Settings/RandomSufflingOfData.xlsx&#39;</span>
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">xlrd</span><span class="o">.</span><span class="n">open_workbook</span><span class="p">(</span><span class="n">fixedsplits</span><span class="p">)</span>
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">sheet_by_index</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Performing Single class classification.&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Performing Single class classification.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;multilabel&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Performing Multi label classification.&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Performing Multi class classification.&#39;</span><span class="p">)</span>
+        <span class="n">label_value</span> <span class="o">=</span> <span class="p">[</span><span class="n">label_value</span><span class="p">]</span>
+        <span class="n">label_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">label_name</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid modus!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">modus</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i_class</span><span class="p">,</span> <span class="n">i_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">label_value</span><span class="p">,</span> <span class="n">label_name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
+            <span class="n">i_class_temp</span> <span class="o">=</span> <span class="n">i_class</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+        <span class="n">save_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_iterations</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;Cross validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">N_iterations</span><span class="p">)))</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">((</span><span class="s1">&#39;Cross validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">N_iterations</span><span class="p">)))</span>
+            <span class="n">random_seed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+
+            <span class="c1"># Split into test and training set, where the percentage of each</span>
+            <span class="c1"># label is maintained</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">clf</span> <span class="ow">in</span> <span class="n">regressors</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]):</span>
+                <span class="c1"># We cannot do a stratified shuffle split with regression</span>
+                <span class="n">stratify</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
+                    <span class="n">stratify</span> <span class="o">=</span> <span class="n">i_class_temp</span>
+                <span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;multilabel&#39;</span><span class="p">:</span>
+                    <span class="c1"># Create a stratification object from the labels</span>
+                    <span class="c1"># Label = 0 means no label equals one</span>
+                    <span class="c1"># Other label numbers refer to the label name that is 1</span>
+                    <span class="n">stratify</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">pnum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">i_class</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+                        <span class="n">plabel</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">for</span> <span class="n">lnum</span><span class="p">,</span> <span class="n">slabel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">i_class</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">slabel</span><span class="p">[</span><span class="n">pnum</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="n">plabel</span> <span class="o">=</span> <span class="n">lnum</span> <span class="o">+</span> <span class="mi">1</span>
+                        <span class="n">stratify</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plabel</span><span class="p">)</span>
+
+                    <span class="c1"># Sklearn multiclass requires rows to be objects/patients</span>
+                    <span class="c1"># i_class = i_class.reshape(i_class.shape[1], i_class.shape[0])</span>
+                    <span class="n">i_class_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">i_class</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">i_class</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="k">for</span> <span class="n">n_patient</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i_class</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                        <span class="k">for</span> <span class="n">n_label</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i_class</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                            <span class="n">i_class_temp</span><span class="p">[</span><span class="n">n_patient</span><span class="p">,</span> <span class="n">n_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">i_class</span><span class="p">[</span><span class="n">n_label</span><span class="p">,</span> <span class="n">n_patient</span><span class="p">]</span>
+                    <span class="n">i_class_temp</span> <span class="o">=</span> <span class="n">i_class_temp</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid modus!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">modus</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">fixedsplits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Use Random Split. Split per patient, not per sample</span>
+                <span class="n">unique_patient_IDs</span><span class="p">,</span> <span class="n">unique_indices</span> <span class="o">=</span>\
+                    <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">patient_IDs</span><span class="p">),</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">clf</span> <span class="ow">in</span> <span class="n">regressors</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]):</span>
+                    <span class="n">unique_stratify</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">unique_stratify</span> <span class="o">=</span> <span class="p">[</span><span class="n">stratify</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">unique_indices</span><span class="p">]</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">unique_PID_train</span><span class="p">,</span> <span class="n">indices_PID_test</span>\
+                        <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">unique_patient_IDs</span><span class="p">,</span>
+                                           <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
+                                           <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+                                           <span class="n">stratify</span><span class="o">=</span><span class="n">unique_stratify</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">e</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; Increase the size of your validation set.&#39;</span>
+                    <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+                <span class="c1"># Check for all IDs if they are in test or training</span>
+                <span class="n">indices_train</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="n">indices_test</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="n">patient_ID_train</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="n">patient_ID_test</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">patient_IDs</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">unique_PID_train</span><span class="p">:</span>
+                        <span class="n">indices_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+
+                        <span class="c1"># Make sure we get a unique ID</span>
+                        <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">patient_ID_train</span><span class="p">:</span>
+                            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+                            <span class="k">while</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="ow">in</span> <span class="n">patient_ID_train</span><span class="p">:</span>
+                                <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">pid</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+                        <span class="n">patient_ID_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">indices_test</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+
+                        <span class="c1"># Make sure we get a unique ID</span>
+                        <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">patient_ID_test</span><span class="p">:</span>
+                            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+                            <span class="k">while</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="ow">in</span> <span class="n">patient_ID_test</span><span class="p">:</span>
+                                <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">pid</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+                        <span class="n">patient_ID_test</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+
+                <span class="c1"># Split features and labels accordingly</span>
+                <span class="n">X_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">image_features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices_train</span><span class="p">]</span>
+                <span class="n">X_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">image_features</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices_test</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
+                    <span class="n">Y_train</span> <span class="o">=</span> <span class="n">i_class_temp</span><span class="p">[</span><span class="n">indices_train</span><span class="p">]</span>
+                    <span class="n">Y_test</span> <span class="o">=</span> <span class="n">i_class_temp</span><span class="p">[</span><span class="n">indices_test</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;multilabel&#39;</span><span class="p">:</span>
+                    <span class="n">Y_train</span> <span class="o">=</span> <span class="n">i_class_temp</span><span class="p">[</span><span class="n">indices_train</span><span class="p">,</span> <span class="p">:]</span>
+                    <span class="n">Y_test</span> <span class="o">=</span> <span class="n">i_class_temp</span><span class="p">[</span><span class="n">indices_test</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid modus!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">modus</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Use pre defined splits</span>
+                <span class="n">indices</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">col_values</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>  <span class="c1"># First element is &quot;Iteration x&quot;</span>
+                <span class="n">train</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">121</span><span class="p">]</span>
+                <span class="n">test</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="mi">121</span><span class="p">:]</span>
+
+                <span class="c1"># Convert the numbers to the correct indices</span>
+                <span class="n">ind_train</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">train</span><span class="p">:</span>
+                    <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">patient_IDs</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]:</span>
+                            <span class="n">ind_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+                            <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="s2">&quot;Patient &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; is not included!&quot;</span><span class="p">)</span>
+
+                <span class="n">ind_test</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">test</span><span class="p">:</span>
+                    <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">patient_IDs</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]:</span>
+                            <span class="n">ind_test</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+                            <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="s2">&quot;Patient &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; is not included!&quot;</span><span class="p">)</span>
+
+                <span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">image_features</span><span class="p">)[</span><span class="n">ind_train</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">Y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">i_class_temp</span><span class="p">)[</span><span class="n">ind_train</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">patient_ID_train</span> <span class="o">=</span> <span class="n">patient_IDs</span><span class="p">[</span><span class="n">ind_train</span><span class="p">]</span>
+                <span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">image_features</span><span class="p">)[</span><span class="n">ind_test</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">Y_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">i_class_temp</span><span class="p">)[</span><span class="n">ind_test</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">patient_ID_test</span> <span class="o">=</span> <span class="n">patient_IDs</span><span class="p">[</span><span class="n">ind_test</span><span class="p">]</span>
+
+            <span class="c1"># Find best hyperparameters and construct classifier</span>
+            <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;use_fastr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_fastr</span>
+            <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fastr_plugin</span>
+            <span class="n">n_cores</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Joblib_ncores&#39;</span><span class="p">]</span>
+            <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">random_search_parameters</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+                                                             <span class="n">labels</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
+                                                             <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+                                                             <span class="n">n_cores</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
+                                                             <span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">])</span>
+
+            <span class="c1"># Create an ensemble if required</span>
+            <span class="k">if</span> <span class="n">ensemble</span><span class="p">[</span><span class="s1">&#39;Use&#39;</span><span class="p">]:</span>
+                <span class="n">trained_classifier</span><span class="o">.</span><span class="n">create_ensemble</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
+
+            <span class="c1"># We only want to save the feature values and one label array</span>
+            <span class="n">X_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">]</span>
+            <span class="n">X_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_test</span><span class="p">]</span>
+
+            <span class="n">temp_save_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span>
+                              <span class="n">Y_test</span><span class="p">,</span> <span class="n">patient_ID_train</span><span class="p">,</span> <span class="n">patient_ID_test</span><span class="p">,</span> <span class="n">random_seed</span><span class="p">)</span>
+
+            <span class="n">save_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_save_data</span><span class="p">)</span>
+
+            <span class="c1"># Create a temporary save</span>
+            <span class="k">if</span> <span class="n">tempsave</span><span class="p">:</span>
+                <span class="n">panda_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;trained_classifier&#39;</span><span class="p">,</span> <span class="s1">&#39;X_train&#39;</span><span class="p">,</span> <span class="s1">&#39;X_test&#39;</span><span class="p">,</span> <span class="s1">&#39;Y_train&#39;</span><span class="p">,</span> <span class="s1">&#39;Y_test&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;patient_ID_train&#39;</span><span class="p">,</span> <span class="s1">&#39;patient_ID_test&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;random_seed&#39;</span><span class="p">]</span>
+
+                <span class="n">panda_data_temp</span> <span class="o">=</span>\
+                    <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span>
+                               <span class="n">Y_test</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">patient_ID_train</span><span class="p">,</span>
+                               <span class="n">patient_ID_test</span><span class="p">,</span> <span class="n">random_seed</span><span class="p">],</span>
+                              <span class="n">index</span><span class="o">=</span><span class="n">panda_labels</span><span class="p">,</span>
+                              <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Constructed crossvalidation&#39;</span><span class="p">)</span>
+
+                <span class="n">panda_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">panda_data_temp</span><span class="p">)</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">],</span> <span class="s1">&#39;GSout&#39;</span><span class="p">,</span> <span class="s1">&#39;RS_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.hdf5&#39;</span><span class="p">)</span>
+                <span class="k">while</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+                    <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">],</span> <span class="s1">&#39;GSout&#39;</span><span class="p">,</span> <span class="s1">&#39;RS_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.hdf5&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">)):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+
+                <span class="n">panda_data</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;SVMdata&#39;</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">panda_data</span><span class="p">,</span> <span class="n">panda_data_temp</span>
+
+        <span class="p">[</span><span class="n">classifiers</span><span class="p">,</span> <span class="n">X_train_set</span><span class="p">,</span> <span class="n">X_test_set</span><span class="p">,</span> <span class="n">Y_train_set</span><span class="p">,</span> <span class="n">Y_test_set</span><span class="p">,</span>
+         <span class="n">patient_ID_train_set</span><span class="p">,</span> <span class="n">patient_ID_test_set</span><span class="p">,</span> <span class="n">seed_set</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+
+        <span class="n">panda_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">,</span> <span class="s1">&#39;X_train&#39;</span><span class="p">,</span> <span class="s1">&#39;X_test&#39;</span><span class="p">,</span> <span class="s1">&#39;Y_train&#39;</span><span class="p">,</span> <span class="s1">&#39;Y_test&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;patient_ID_train&#39;</span><span class="p">,</span> <span class="s1">&#39;patient_ID_test&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;feature_labels&#39;</span><span class="p">]</span>
+
+        <span class="n">panda_data_temp</span> <span class="o">=</span>\
+            <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">classifiers</span><span class="p">,</span> <span class="n">X_train_set</span><span class="p">,</span> <span class="n">X_test_set</span><span class="p">,</span> <span class="n">Y_train_set</span><span class="p">,</span>
+                       <span class="n">Y_test_set</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">patient_ID_train_set</span><span class="p">,</span>
+                       <span class="n">patient_ID_test_set</span><span class="p">,</span> <span class="n">seed_set</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">],</span>
+                      <span class="n">index</span><span class="o">=</span><span class="n">panda_labels</span><span class="p">,</span>
+                      <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Constructed crossvalidation&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
+            <span class="n">i_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i_name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;multilabel&#39;</span><span class="p">:</span>
+            <span class="n">i_name</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i_name</span><span class="p">)</span>
+
+        <span class="n">classifier_labelss</span><span class="p">[</span><span class="n">i_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">panda_data_temp</span>
+
+    <span class="n">panda_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">classifier_labelss</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">panda_data</span></div>
+
+
+<div class="viewcode-block" id="nocrossval"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.nocrossval">[docs]</a><span class="k">def</span> <span class="nf">nocrossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span> <span class="n">label_data_test</span><span class="p">,</span> <span class="n">image_features_train</span><span class="p">,</span>
+               <span class="n">image_features_test</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Use&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+               <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Constructs multiple individual classifiers based on the label settings</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        config (Dict): Dictionary with config settings</span>
+<span class="sd">        label_data (Dict): should contain:</span>
+<span class="sd">        patient_IDs (list): IDs of the patients, used to keep track of test and</span>
+<span class="sd">                 training sets, and label data</span>
+<span class="sd">        label (list): List of lists, where each list contains the</span>
+<span class="sd">                               label status for that patient for each</span>
+<span class="sd">                               label</span>
+<span class="sd">        label_name (list): Contains the different names that are stored</span>
+<span class="sd">                              in the label object</span>
+<span class="sd">        image_features (numpy array): Consists of a tuple of two lists for each patient:</span>
+<span class="sd">                                    (feature_values, feature_labels)</span>
+
+<span class="sd">        ensemble: dictionary, optional</span>
+<span class="sd">                Contains the configuration for constructing an ensemble.</span>
+
+<span class="sd">        modus: string, default &#39;singlelabel&#39;</span>
+<span class="sd">                Determine whether one-vs-all classification (or regression) for</span>
+<span class="sd">                each single label is used (&#39;singlelabel&#39;) or if multilabel</span>
+<span class="sd">                classification is performed (&#39;multilabel&#39;).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        classifier_data (pandas dataframe)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">patient_IDs_train</span> <span class="o">=</span> <span class="n">label_data_train</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span>
+    <span class="n">label_value_train</span> <span class="o">=</span> <span class="n">label_data_train</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+    <span class="n">label_name_train</span> <span class="o">=</span> <span class="n">label_data_train</span><span class="p">[</span><span class="s1">&#39;label_name&#39;</span><span class="p">]</span>
+
+    <span class="n">patient_IDs_test</span> <span class="o">=</span> <span class="n">label_data_test</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;label&#39;</span> <span class="ow">in</span> <span class="n">label_data_test</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">label_value_test</span> <span class="o">=</span> <span class="n">label_data_test</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">label_value_test</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">patient_IDs_test</span><span class="p">)</span>
+
+    <span class="n">logfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s1">&#39;classifier.log&#39;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">logfilename</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+    <span class="n">classifier_labelss</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Starting classifier&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_features_train</span><span class="p">))</span>
+
+    <span class="c1"># Determine modus</span>
+    <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Performing Single class classification.&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Performing Single class classification.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;multilabel&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Performing Multi label classification.&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Performing Multi class classification.&#39;</span><span class="p">)</span>
+        <span class="n">label_name_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">label_name_train</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid modus!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">modus</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+    <span class="c1"># We only need one label instance, assuming they are all the sample</span>
+    <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">image_features_train</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i_name</span> <span class="ow">in</span> <span class="n">label_name_train</span><span class="p">:</span>
+
+        <span class="n">save_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="n">random_seed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+
+        <span class="c1"># Split into test and training set, where the percentage of each</span>
+        <span class="c1"># label is maintained</span>
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">image_features_train</span>
+        <span class="n">X_test</span> <span class="o">=</span> <span class="n">image_features_test</span>
+        <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
+            <span class="n">Y_train</span> <span class="o">=</span> <span class="n">label_value_train</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+            <span class="n">Y_test</span> <span class="o">=</span> <span class="n">label_value_test</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Sklearn multiclass requires rows to be objects/patients</span>
+            <span class="n">Y_train</span> <span class="o">=</span> <span class="n">label_value_train</span>
+            <span class="n">Y_train_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">n_patient</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">n_label</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">Y_train_temp</span><span class="p">[</span><span class="n">n_patient</span><span class="p">,</span> <span class="n">n_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y_train</span><span class="p">[</span><span class="n">n_label</span><span class="p">,</span> <span class="n">n_patient</span><span class="p">]</span>
+            <span class="n">Y_train</span> <span class="o">=</span> <span class="n">Y_train_temp</span>
+
+            <span class="n">Y_test</span> <span class="o">=</span> <span class="n">label_value_test</span>
+            <span class="n">Y_test_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">n_patient</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">n_label</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">Y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">Y_test_temp</span><span class="p">[</span><span class="n">n_patient</span><span class="p">,</span> <span class="n">n_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y_test</span><span class="p">[</span><span class="n">n_label</span><span class="p">,</span> <span class="n">n_patient</span><span class="p">]</span>
+            <span class="n">Y_test</span> <span class="o">=</span> <span class="n">Y_test_temp</span>
+
+        <span class="c1"># Find best hyperparameters and construct classifier</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;use_fastr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_fastr</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fastr_plugin</span>
+        <span class="n">n_cores</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Joblib_ncores&#39;</span><span class="p">]</span>
+        <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">random_search_parameters</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+                                                         <span class="n">labels</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
+                                                         <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+                                                         <span class="n">n_cores</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
+                                                         <span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">])</span>
+
+        <span class="c1"># Create an ensemble if required</span>
+        <span class="k">if</span> <span class="n">ensemble</span><span class="p">[</span><span class="s1">&#39;Use&#39;</span><span class="p">]:</span>
+            <span class="n">trained_classifier</span><span class="o">.</span><span class="n">create_ensemble</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
+
+        <span class="c1"># Extract the feature values</span>
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">])</span>
+        <span class="n">X_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_test</span><span class="p">])</span>
+
+        <span class="n">temp_save_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span>
+                          <span class="n">Y_test</span><span class="p">,</span> <span class="n">patient_IDs_train</span><span class="p">,</span> <span class="n">patient_IDs_test</span><span class="p">,</span> <span class="n">random_seed</span><span class="p">)</span>
+
+        <span class="n">save_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_save_data</span><span class="p">)</span>
+
+        <span class="p">[</span><span class="n">classifiers</span><span class="p">,</span> <span class="n">X_train_set</span><span class="p">,</span> <span class="n">X_test_set</span><span class="p">,</span> <span class="n">Y_train_set</span><span class="p">,</span> <span class="n">Y_test_set</span><span class="p">,</span>
+         <span class="n">patient_ID_train_set</span><span class="p">,</span> <span class="n">patient_ID_test_set</span><span class="p">,</span> <span class="n">seed_set</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+
+        <span class="n">panda_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">,</span> <span class="s1">&#39;X_train&#39;</span><span class="p">,</span> <span class="s1">&#39;X_test&#39;</span><span class="p">,</span> <span class="s1">&#39;Y_train&#39;</span><span class="p">,</span> <span class="s1">&#39;Y_test&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;patient_ID_train&#39;</span><span class="p">,</span> <span class="s1">&#39;patient_ID_test&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;feature_labels&#39;</span><span class="p">]</span>
+
+        <span class="n">panda_data_temp</span> <span class="o">=</span>\
+            <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">classifiers</span><span class="p">,</span> <span class="n">X_train_set</span><span class="p">,</span> <span class="n">X_test_set</span><span class="p">,</span> <span class="n">Y_train_set</span><span class="p">,</span>
+                       <span class="n">Y_test_set</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">patient_ID_train_set</span><span class="p">,</span>
+                       <span class="n">patient_ID_test_set</span><span class="p">,</span> <span class="n">seed_set</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">],</span>
+                      <span class="n">index</span><span class="o">=</span><span class="n">panda_labels</span><span class="p">,</span>
+                      <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Constructed crossvalidation&#39;</span><span class="p">)</span>
+
+        <span class="n">i_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i_name</span><span class="p">)</span>
+        <span class="n">classifier_labelss</span><span class="p">[</span><span class="n">i_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">panda_data_temp</span>
+
+    <span class="n">panda_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">classifier_labelss</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">panda_data</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

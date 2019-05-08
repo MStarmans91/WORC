@@ -1,0 +1,38 @@
+<tool id="EditElastixParameterFile" name="Elastix parameter file editor" version="0.1">
+  <description>A tool that can substitute fields in an ElastixParameterFile</description>
+  <tags>
+    <tag>registration</tag>
+  </tags>
+  <authors>
+    <author name="Hakim Achterberg" email="hakim.achterberg@gmail.com" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.1" url="">
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths="bin/" bin="elastixparameterfile.py"/>
+    </targets>
+    <description>
+    </description>
+    <license>
+    </license>
+    <authors>
+      <author name="Hakim Achterberg" email="hakim.achterberg@gmail.com"
+              url="http://www.bigr.nl/people/HakimAchterberg"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="parameters" name="input parameter files" datatype="ElastixParameterFile" prefix="-i" cardinality="1"
+             required="true"/>
+      <input id="set" name="set fields as specified" datatype="AnyType" prefix="-s" cardinality="1-*"
+             repeat_prefix="false" class="MappedInput"/>
+    </inputs>
+    <outputs>
+      <output id="parameters" name="output parameter file" datatype="ElastixParameterFile" prefix="-o" cardinality="1"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+</tool>

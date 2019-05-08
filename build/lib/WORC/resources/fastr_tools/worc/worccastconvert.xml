@@ -1,0 +1,36 @@
+<tool id="WORCCastConvert" name="ITKTools image conversion tool" version="0.1">
+  <description>A wrapper around SimplITK for conversion of image types.</description>
+  <authors>
+    <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+  </authors>
+  <command version="0.3.2" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="worccastconvert.py" />
+    </targets>
+    <description>
+      Description:
+      This program converts between many image formats.
+      This is done by reading in an image, possibly casting of the image,
+      and subsequently writing the image to the user-specified format.
+    </description>
+    <license/>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="image" name="Input Image" datatype="ITKImageFile" prefix="-in" cardinality="1" required="true"/>
+    </inputs>
+    <outputs>
+      <output id="image" name="output image" datatype="ITKImageFile" prefix="-out" cardinality="1"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references/>
+</tool>

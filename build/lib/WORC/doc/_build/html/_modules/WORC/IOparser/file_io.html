@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC.IOparser.file_io &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>WORC.IOparser.file_io</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for WORC.IOparser.file_io</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">WORC.processing.label_processing</span> <span class="k">as</span> <span class="nn">lp</span>
+<span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="load_data"><a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.load_data">[docs]</a><span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="n">featurefiles</span><span class="p">,</span> <span class="n">patientinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">modnames</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&#39;&#39;&#39; Read feature files and stack the features per patient in an array.</span>
+<span class="sd">        Additionally, if a patient label file is supplied, the features from</span>
+<span class="sd">        a patient will be matched to the labels.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        featurefiles: list, mandatory</span>
+<span class="sd">                List containing all paths to the .hdf5 feature files to be loaded.</span>
+<span class="sd">                The argument should contain a list per modelity, e.g.</span>
+<span class="sd">                [[features_mod1_patient1, features_mod1_patient2, ...],</span>
+<span class="sd">                 [features_mod2_patient1, features_mod2_patient2, ...]].</span>
+
+<span class="sd">        patientinfo: string, optional</span>
+<span class="sd">                Path referring to the .txt file to be used to read patient</span>
+<span class="sd">                labels from. See the Github Wiki for the format.</span>
+
+<span class="sd">        label_names: list, optional</span>
+<span class="sd">                List containing all the labels that should be extracted from</span>
+<span class="sd">                the patientinfo file.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># Read out all feature values and labels</span>
+    <span class="n">image_features_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">feature_labels_all</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i_patient</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">featurefiles</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+        <span class="n">feature_values_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">feature_labels_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i_mod</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">featurefiles</span><span class="p">)):</span>
+            <span class="n">feat_temp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">featurefiles</span><span class="p">[</span><span class="n">i_mod</span><span class="p">][</span><span class="n">i_patient</span><span class="p">])</span>
+            <span class="n">feature_values_temp</span> <span class="o">+=</span> <span class="n">feat_temp</span><span class="o">.</span><span class="n">feature_values</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">modnames</span><span class="p">:</span>
+                <span class="c1"># Create artificial names</span>
+                <span class="n">feature_labels_temp</span> <span class="o">+=</span> <span class="p">[</span><span class="n">f</span> <span class="o">+</span> <span class="s1">&#39;_M&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i_mod</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feat_temp</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Use the provides modality names</span>
+                <span class="n">feature_labels_temp</span> <span class="o">+=</span> <span class="p">[</span><span class="n">f</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">modnames</span><span class="p">[</span><span class="n">i_mod</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feat_temp</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">]</span>
+
+        <span class="n">image_features_temp</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">feature_values_temp</span><span class="p">,</span> <span class="n">feature_labels_temp</span><span class="p">))</span>
+
+        <span class="c1"># Also make a list of all unique label names</span>
+        <span class="n">feature_labels_all</span> <span class="o">=</span> <span class="n">feature_labels_all</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">feature_labels_temp</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">feature_labels_all</span><span class="p">))</span>
+
+    <span class="c1"># If some objects miss certain features, we will identify these with NaN values</span>
+    <span class="n">feature_labels_all</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="n">image_features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">patient</span> <span class="ow">in</span> <span class="n">image_features_temp</span><span class="p">:</span>
+        <span class="n">feat_temp</span> <span class="o">=</span> <span class="n">patient</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">label_temp</span> <span class="o">=</span> <span class="n">patient</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">feat</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feature_labels_all</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">label_temp</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">label_temp</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="n">fv</span> <span class="o">=</span> <span class="n">feat_temp</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+            <span class="n">feat</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fv</span><span class="p">)</span>
+
+        <span class="n">image_features</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">feat</span><span class="p">,</span> <span class="n">feature_labels_all</span><span class="p">))</span>
+
+    <span class="c1"># Get the labels and patient IDs</span>
+    <span class="k">if</span> <span class="n">patientinfo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># We use the feature files of the first modality to match to patient name</span>
+        <span class="n">pfiles</span> <span class="o">=</span> <span class="n">featurefiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span> <span class="o">=</span>\
+                <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">patientinfo</span><span class="p">,</span>
+                                 <span class="n">label_names</span><span class="p">,</span>
+                                 <span class="n">pfiles</span><span class="p">,</span>
+                                 <span class="n">image_features</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span> <span class="o">+</span> <span class="s1">&#39;. Please take a look at your labels&#39;</span> <span class="o">+</span>\
+                <span class="s1">&#39; file and make sure it is formatted correctly. &#39;</span> <span class="o">+</span>\
+                <span class="s1">&#39;See also https://github.com/MStarmans91/WORC/wiki/The-WORC-configuration#genetics.&#39;</span>
+            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Labels:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total of &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span>
+              <span class="s1">&#39; patients&#39;</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+        <span class="n">neg</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pos</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> positives, </span><span class="si">{}</span><span class="s1"> negatives&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">neg</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Use filenames as patient ID s</span>
+        <span class="n">patient_IDs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">featurefiles</span><span class="p">:</span>
+            <span class="n">patient_IDs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">label_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">patient_IDs</span>
+
+    <span class="k">return</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

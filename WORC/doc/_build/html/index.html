@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="static/introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>WORC</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="worc">
+<h1>WORC<a class="headerlink" href="#worc" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="workflow-for-optimal-radiomics-classification">
+<h2>Workflow for Optimal Radiomics Classification<a class="headerlink" href="#workflow-for-optimal-radiomics-classification" title="Permalink to this headline">¶</a></h2>
+<p>WORC is an open-source python package for the easy execution of end-to-end
+radiomics pipelines.</p>
+<p>We aim to establish a general radiomics platform supporting easy
+integration of other tools. With our modular build and support of
+different software languages (Python, MATLAB, R, executables etc.), we want
+to facilitate and stimulate collaboration, standardisation and
+comparison of different radiomics approaches. By combining this in a
+single framework, we hope to find an universal radiomics strategy that
+can address various problems.</p>
+<p>WORC is open-source (licensed under the Apache 2.0 license) and hosted on Github at <a class="reference external" href="https://github.com/MStarmans91/WORC">https://github.com/MStarmans91/WORC</a></p>
+<p>For support, go to the issues on the Gibhub page: <a class="reference external" href="https://github.com/MStarmans91/WORC/issues">https://github.com/MStarmans91/WORC/issues</a></p>
+<p>To get yourself a copy, see the <a class="reference internal" href="static/quick_start.html#installation-chapter"><span class="std std-ref">Installation</span></a></p>
+<p>The official documentation can be found at <a class="reference external" href="http://WORC.readthedocs.io">WORC.readthedocs.io</a></p>
+<p>For Tutorials on WORC, both for beginner and advanced WORCflows, please</p>
+<p>see our Tutorial repository <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial">https://github.com/MStarmans91/WORCTutorial</a>.</p>
+<p>The article on WORC is currently in press. WORC has been presented in the following:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://ecronline.myesr.org/ecr2019/index.php?p=recording&amp;t=recorded&amp;lecture=fully-automatic-construction-of-optimal-radiomics-workflows">M. P. A. Starmans, S. R. van der Voort, M. Vos, F. Incekara, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen and S. Klein. “Fully automatic construction of optimal radiomics workflows.” European Conference of Radiology (ECR) 2019.</a></p>
+<p><a class="reference external" href="https://www.eusomii.org/events/eusomii-annual-meeting-2018/">Martijn P. A. Starmans, Sebastian R. van der Voort, Razvan L. Miclea, Melissa Vos, Fatih Incekara, Milea J.M. Timbergen, Maarten M.J. Wijnenga, Guillaume A. Padmos, G.H.J. van Leenders, George Kapsas, Martin J. van den Bent, Arnaud J.P.E. Vincent, Dirk J. Grünhagen, Cornelis Verhoef, Stefan Sleijfer, Jacob J. Visser, Marion Smits, Maarten, G. Thomeer, Wiro J. Niessen, and Stefan Klein. “Harmonizing radiomics among applications through adaptive workflow optimization.” European Society of Medical Imaging Informatics (EuSoMII) Annual Meeting 2019.</a></p>
+</div></blockquote>
+<p>WORC has been used in the following studies:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://doi.org/10.1117/12.2293609">M. P. A. Starmans, R. Miclea, S. R. van der Voort, W. J. Niessen, M. G. Thomeer and S. Klein. “Classification of malignant and benign liver tumors using a radiomics approach.” Proceedings Volume 10574, Medical Imaging 2018: Image Processing; 105741D (2018) .</a></p>
+<p><a class="reference external" href="https://dtrf.org/wp-content/uploads/2018/10/Timbergen-2018.pdf">Milea J.M. Timbergen*, Martijn P. A. Starmans*, Melissa Vos, Sebastian R. van der Voort, Guillaume A. Padmos, Wouter Kessels, Wiro J. Niessen, Geert J.L.H. van Leenders, Dirk J. Grünhagen, Stefan Sleijfer, Cornelis Verhoef, Stefan Klein and Jacob J. Visser. “Mutation stratification of desmoid-type fibromatosis using a Radiomics approach.” Desmoid Tumor Research Foundation (DTRF) 2018.</a></p>
+<p><a href="#id1"><span class="problematic" id="id2">`Melissa Vos*, Martijn P. A. Starmans*, Milea J.M. Timbergen, Sebastian R. van der Voort, Guillaume A. Padmos, Wouter Kessels, Wiro J. Niessen, Geert J.L.H. van Leenders, Dirk J. Grünhagen, Stefan Sleijfer, Cornelis Verhoef, Stefan Klein and Jacob J. Visser. &quot;Differentiating well-differentiated liposarcomas from lipomas using a Radiomics approach.&quot; ConnectiveTissueOncologySociety (CTOS) 2018.`_</span></a></p>
+<p><a href="#id3"><span class="problematic" id="id4">`Milea J.M. Timbergen*, Martijn P. A. Starmans*, Melissa Vos, Sebastian R. van der Voort, Guillaume A. Padmos, Wouter Kessels, Wiro J. Niessen, Geert J.L.H. van Leenders, Dirk J. Grünhagen, Stefan Sleijfer, Cornelis Verhoef, Stefan Klein and Jacob J. Visser. &quot;Mutation stratification of desmoid-type fibromatosis using a Radiomics approach.&quot; ConnectiveTissueOncologySociety (CTOS) 2018.`_</span></a></p>
+<p><a class="reference external" href="https://www.bme2019.nl/mobview/presentation/58/">Martijn P. A. Starmans, Sebastian R. van der Voort, Razvan L. Miclea, Melissa Vos, Fatih Incekara, Milea J.M. Timbergen, Maarten M.J. Wijnenga, Guillaume A. Padmos, Wouter Kessels, G.H.J. van Leenders, George Kapsas, Martin J. van den Bent, Arnaud J.P.E. Vincent, Dirk J. Grünhagen, Cornelis Verhoef, Stefan Sleijfer, Jacob J. Visser, Marion Smits, Maarten, G. Thomeer, Wiro J. Niessen, and Stefan Klein. “Fully Automatic Construction of Optimal Radiomics Workflows .” Bio-Medical Engineering (BME) Conference 2019.</a></p>
+<p><a class="reference external" href="https://ecronline.myesr.org/ecr2019/index.php?p=recording&amp;t=recorded&amp;lecture=classification-of-malignant-and-benign-liver-tumours-using-a-radiomics-approach">M. P. A. Starmans, R. Miclea, S. R. van der Voort, W. J. Niessen, S. Klein and M. G. Thomeer. “Classification of malignant and benign liver tumours using a radiomics approach.” European Conference of Radiology (ECR) 2019.</a></p>
+<p><a class="reference external" href="https://ecronline.myesr.org/ecr2019/index.php?p=recording&amp;t=recorded&amp;lecture=prediction-of-surgery-requirement-in-mesenteric-fibrosis-on-ct-using-a-radiomics-approach">M. P. A. Starmans, A. Blazevic, S. R. van der Voort, T. Brabander, J. Hofland, W. J. Niessen, W. W. de Herder and S. Klein. “Prediction of surgery requirement in mesenteric fibrosis on CT using a radiomics approach.” European Conference of Radiology (ECR) 2019.</a></p>
+<p><a class="reference external" href="https://embs.papercept.net/conferences/conferences/ISBI19/program/ISBI19_ContentListWeb_3.html">Jose M. Castillo T., Martijn P. A. Starmans, Ivo Schoots, Wiro J. Niessen, Stefan Klein, Jifke F. Veenland. “CLASSIFICATION OF PROSTATE CANCER: HIGH GRADE VERSUS LOW GRADE USING A RADIOMICS APPROACH.” IEEE International Symposium on Biomedical Imaging (ISBI) 2019.</a></p>
+</div></blockquote>
+<p>WORC is made possible by contributions from the following people: Martijn Starmans, and Stefan Klein</p>
+<div class="section" id="worc-documentation">
+<h3>WORC Documentation<a class="headerlink" href="#worc-documentation" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="static/introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/introduction.html#radiomics-terminology">Radiomics Terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/introduction.html#modularity-and-standardization-fastr">Modularity and standardization: fastr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/introduction.html#optimization">Optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static/quick_start.html">Quick start guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#installing-via-pip">Installing via pip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#installing-from-source-code">Installing from source code</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#tutorial">Tutorial</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#the-worc-object">The WORC object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#attributes-sources">Attributes: Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#attributes-settings">Attributes: Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#attributes-functions">Attributes: Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#images-and-segmentations">Images and segmentations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#semantics">Semantics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#labels">Labels</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#masks">Masks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#metadata">Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#elastix-para">Elastix_Para</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#fastr-settings">FASTR settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#construction-and-execution-commands">Construction and execution commands</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static/configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#predictgeneral">PREDICTGeneral</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#segmentix">Segmentix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#preprocessing">Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#imagefeatures">Imagefeatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#featsel">Featsel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#selectfeatgroup">SelectFeatGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#imputation">Imputation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#classification">Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#crossvalidation">CrossValidation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#labels">Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#hyperoptimization">Hyperoptimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#featurescaling">FeatureScaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#sampleprocessing">SampleProcessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#ensemble">Ensemble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/configuration.html#fastr-bugs">FASTR_bugs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id1">3.0.0 - 2019-05-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#added">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#changed">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#fixed">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id2">2.1.3 - 2019-04-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id3">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id4">2.1.2 - 2019-04-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id5">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id6">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id7">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id8">2.1.1 - 2019-02-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id10">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id11">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id12">2.1.0 - 2018-08-09</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id13">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id14">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id15">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id16">2.0.0 - 2018-02-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id17">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id18">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id19">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#rc1-2017-05-08">1.0.0rc1 - 2017-05-08</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="worc-user-reference">
+<h3>WORC User reference<a class="headerlink" href="#worc-user-reference" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="worc-developer-module-reference">
+<h3>WORC Developer Module reference<a class="headerlink" href="#worc-developer-module-reference" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/WORC.html">WORC Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autogen/WORC.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/WORC.html#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/WORC.html#module-WORC.addexceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autogen/WORC.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autogen/WORC.IOparser.html">IOparser Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_WORC</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_io_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_io_classifier</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_preprocessing</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_segmentix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_segmentix</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.IOparser.html#module-WORC.IOparser.file_io"><code class="xref py py-mod docutils literal notranslate"><span class="pre">file_io</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/WORC.classification.html">classification Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.AdvancedSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">AdvancedSampler</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.RankedSVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#searchcv-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.construct_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">construct_classifier</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#crossval-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">crossval</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.estimators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">estimators</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#fitandscore-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitandscore</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">metrics</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#parameter-optimization-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_optimization</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#trainclassifier-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trainclassifier</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/WORC.featureprocessing.html">featureprocessing Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">featureprocessing</span></code> Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.Imputer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Imputer</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.Relief"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Relief</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.SelectGroups"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SelectGroups</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.SelectIndividuals"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SelectIndividuals</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#statisticaltestfeatures-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StatisticalTestFeatures</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.StatisticalTestThreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StatisticalTestThreshold</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#variancethreshold-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">VarianceThreshold</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/WORC.plotting.html">plotting Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.compute_CI"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compute_CI</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.linstretch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">linstretch</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_ROC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ROC</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_SVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_SVM</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#plot-svr-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_SVR</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_barchart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_barchart</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_boxplot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_images"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#plotminmaxresponse-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#scatterplot-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scatterplot</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/WORC.processing.html">processing Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.processing.html#module-WORC.processing.ExtractNLargestBlobsn"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ExtractNLargestBlobsn</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.processing.html#rtstructreader-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RTStructReader</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.processing.html#module-WORC.processing.classes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classes</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.processing.html#module-WORC.processing.label_processing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/WORC.tools.html">tools Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tools.html#module-WORC.tools.Elastix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Elastix</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tools.html#module-WORC.tools.Evaluate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Evaluate</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tools.html#module-WORC.tools.Slicer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Slicer</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tools.html#module-WORC.tools.Transformix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Transformix</span></code> Module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h3>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="static/introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

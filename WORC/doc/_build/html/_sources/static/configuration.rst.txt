@@ -1,0 +1,216 @@
+.. _config-chapter:
+
+Configuration
+=============
+
+
+As ``WORC`` and the default tools used are mostly Python based, we've chosen
+to put our configuration in a ``configparser`` object. This has several
+advantages:
+
+1. The object can be treated as a python dictionary and thus is easily adjusted.
+2. Second, each tool can be set to parse only specific parts of the configuration,
+   enabling us to supply one file to all tools instead of needing many parameter files.
+
+The default configuration is generated through the
+:py:meth:`WORC.defaultconfig() <WORC.defaultconfig()>`
+function. You can then change things as you would in a dictionary and
+then append it to the configs source:
+
+
+.. code-block:: python
+
+    >>> network = WORC.WORC('somename')
+    >>> config = network.defaultconfig()
+    >>> config['Classification']['classifier'] = 'RF'
+    >>> network.configs.append(config)
+
+When executing the :py:meth:`WORC.set() <WORC.set()>` command, the config objects are saved as
+.ini files in the ``WORC.fastr_tempdir`` folder and added to the
+:py:meth:`WORC.fastrconfigs() <WORC.fastrconfigs()>` source.
+
+Below are some details on several of the fields in the configuration.
+Note that for many of the fields, we currently only provide one default
+value. However, when adding your own tools, these fields can be adjusted
+to your specific settings.
+
+WORC performs Combined Algorithm Selection and Hyperparameter (CASH)
+optimization. The configuration determines how the optimization is
+performed and which hyperparameters and models will be included.
+Repeating specific models/parameters in the config will make them more
+likely to be used, e.g.
+
+.. code-block:: python
+
+    >>> config['Classification']['classifiers'] = 'SVM, SVM, LR'
+
+means that the SVM is 2x more likely to be tested in the model selection than LR.
+
+.. note::
+
+    All fields in the config must either be supplied as strings. A
+    list can be created by using commas for separation, e.g.
+    :py:meth:`Network.create_source <'value1, value2, ... ')>`.
+
+
+General
+-------
+
+
+PREDICTGeneral
+--------------
+
+These fields contain general settings for when using PREDICT.
+For more info on the Joblib settings, which are used in the Joblib
+Parallel function, see `here <https://pythonhosted.org/joblib/parallel.html>`__. When you run
+WORC on a cluster with nodes supporting only a single core to be used
+per node, e.g. the BIGR cluster, use only 1 core and threading as a
+backend.
+
+
+
+Segmentix
+---------
+These fields are only important if you specified using the segmentix
+tool in the general configuration.
+
+
+Preprocessing
+-------------
+The preprocessing node acts before the feature extraction on the image.
+Currently, only normalization is included: hence the dictionary name is
+*Normalize*. Additionally, scans with image type CT (see later in the
+tutorial) provided as DICOM are scaled to Hounsfield Units.
+
+
+Imagefeatures
+-------------
+
+If using the PREDICT toolbox, you can specify some settings for the
+feature computation here. Also, you can select if the certain features
+are computed or not.
+
+
+Featsel
+-------
+
+When using the PREDICT toolbox for classification, these settings can be
+used for feature selection methods. Note that these settings are
+actually used in the hyperparameter optimization. Hence you can provide
+multiple values per field, of which random samples will be drawn of
+which finally the best setting in combination with the other
+hyperparameters is selected. Again, these should be formatted as string
+containing the actual values, e.g. value1, value2.
+
+
+SelectFeatGroup
+---------------
+If the PREDICT feature computation and classification tools are used,
+then you can do a gridsearch among the various feature groups for the
+optimal combination. If you do not want this, set all fields to a single
+value.
+
+Previously, there was a single parameter for the texture features,
+selecting all, none or a single group. This is still supported, but not
+recommended, and looks as follows:
+
+Imputation
+----------------
+When using the PREDICT toolbox for classification, these settings are
+used for feature imputation.Note that these settings are actually used
+in the hyperparameter optimization. Hence you can provide multiple
+values per field, of which random samples will be drawn of which finally
+the best setting in combination with the other hyperparameters is
+selected.
+
+
+Classification
+--------------
+When using the PREDICT toolbox for classification, you can specify the
+following settings. Almost all of these are used in CASH. Most of the
+classifiers are implemented using sklearn; hence descriptions of the
+hyperparameters can also be found there.
+
+
+CrossValidation
+---------------
+When using the PREDICT toolbox for classification and you specified
+using cross validation, specify the following settings.
+
+Labels
+--------
+When using the PREDICT toolbox for classification, you have to set the
+label used for classification.
+
+
+This part is really important, as it should match your label file.
+Suppose your patientclass.txt file you supplied as source for labels
+looks like this:
+
+
++----------+--------+--------+
+| Patient  | Label1 | Label2 |
++==========+========+========+
+| patient1 | 1      | 0      |
++----------+--------+--------+
+| patient2 | 2      | 1      |
++----------+--------+--------+
+| patient3 | 1      | 5      |
++----------+--------+--------+
+
+You can supply a single label or multiple labels split by commas, for
+each of which an estimator will be fit. For example, suppose you simply
+want to use Label1 for classification, then set:
+
+
+
+.. code-block:: python
+
+   config['Labels']['label_names'] = 'Label1'
+
+
+If you want to first train a classifier on Label1 and then Label2,
+set: ``config[Genetics][label_names] = Label1, Label2``
+
+
+
+
+Hyperoptimization
+-----------------
+When using the PREDICT toolbox for classification, you have to supply
+your hyperparameter optimization procedure here.
+
+
+FeatureScaling
+--------------
+Determines which method is applied to scale each feature.
+
+
+
+SampleProcessing
+----------------
+Before performing the hyperoptimization, you can use SMOTE: Synthetic
+Minority Over-sampling Technique to oversample your data.
+
+
+
+
+
+Ensemble
+--------
+WORC supports ensembling of workflows. This is not a default approach in
+radiomics, hence the default is to not use it and select only the best
+performing workflow.
+
+
+
+
+FASTR_bugs
+----------
+Currently, when using XNAT as a source, FASTR can only retrieve DICOM
+directories. We made a workaround for this for the images and
+segmentations, but this only works if all your files have the same name
+and extension. These are provided in this configuration part.
+
+
+.. include:: ../autogen/WORC.config.rst

@@ -1,0 +1,526 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC.classification.trainclassifier &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>WORC.classification.trainclassifier</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for WORC.classification.trainclassifier</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sklearn</span>
+
+<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
+<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVM</span> <span class="k">import</span> <span class="n">plot_SVM</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVR</span> <span class="k">import</span> <span class="n">plot_single_SVR</span>
+<span class="kn">import</span> <span class="nn">WORC.IOparser.file_io</span> <span class="k">as</span> <span class="nn">file_io</span>
+<span class="kn">import</span> <span class="nn">WORC.IOparser.config_io_classifier</span> <span class="k">as</span> <span class="nn">config_io</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">uniform</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">discrete_uniform</span>
+
+
+<div class="viewcode-block" id="trainclassifier"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.trainclassifier.trainclassifier">[docs]</a><span class="k">def</span> <span class="nf">trainclassifier</span><span class="p">(</span><span class="n">feat_train</span><span class="p">,</span> <span class="n">patientinfo_train</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span>
+                    <span class="n">output_hdf</span><span class="p">,</span> <span class="n">output_json</span><span class="p">,</span>
+                    <span class="n">feat_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">patientinfo_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Train a classifier using machine learning from features. By default, if no</span>
+<span class="sd">    split in training and test is supplied, a cross validation</span>
+<span class="sd">    will be performed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    feat_train: string, mandatory</span>
+<span class="sd">            contains the paths to all .hdf5 feature files used.</span>
+<span class="sd">            modalityname1=file1,file2,file3,... modalityname2=file1,...</span>
+<span class="sd">            Thus, modalities names are always between a space and a equal</span>
+<span class="sd">            sign, files are split by commas. We assume that the lists of</span>
+<span class="sd">            files for each modality has the same length. Files on the</span>
+<span class="sd">            same position on each list should belong to the same patient.</span>
+
+<span class="sd">    patientinfo: string, mandatory</span>
+<span class="sd">            Contains the path referring to a .txt file containing the</span>
+<span class="sd">            patient label(s) and value(s) to be used for learning. See</span>
+<span class="sd">            the Github Wiki for the format.</span>
+
+<span class="sd">    config: string, mandatory</span>
+<span class="sd">            path referring to a .ini file containing the parameters</span>
+<span class="sd">            used for feature extraction. See the Github Wiki for the possible</span>
+<span class="sd">            fields and their description.</span>
+
+<span class="sd">    output_hdf: string, mandatory</span>
+<span class="sd">            path refering to a .hdf5 file to which the final classifier and</span>
+<span class="sd">            it&#39;s properties will be written to.</span>
+
+<span class="sd">    output_json: string, mandatory</span>
+<span class="sd">            path refering to a .json file to which the performance of the final</span>
+<span class="sd">            classifier will be written to. This file is generated through one of</span>
+<span class="sd">            the WORC plotting functions.</span>
+
+<span class="sd">    feat_test: string, optional</span>
+<span class="sd">            When this argument is supplied, the machine learning will not be</span>
+<span class="sd">            trained using a cross validation, but rather using a fixed training</span>
+<span class="sd">            and text split. This field should contain paths of the test set</span>
+<span class="sd">            feature files, similar to the feat_train argument.</span>
+
+<span class="sd">    patientinfo_test: string, optional</span>
+<span class="sd">            When feat_test is supplied, you can supply optionally a patient label</span>
+<span class="sd">            file through which the performance will be evaluated.</span>
+
+<span class="sd">    fixedsplits: string, optional</span>
+<span class="sd">            By default, random split cross validation is used to train and</span>
+<span class="sd">            evaluate the machine learning methods. Optionally, you can provide</span>
+<span class="sd">            a .xlsx file containing fixed splits to be used. See the Github Wiki</span>
+<span class="sd">            for the format.</span>
+
+<span class="sd">    verbose: boolean, default True</span>
+<span class="sd">            print final feature values and labels to command line or not.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># Convert inputs from lists to strings</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">patientinfo_train</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">patientinfo_train</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">patientinfo_train</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">patientinfo_test</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">patientinfo_test</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">patientinfo_test</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># FIXME</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] You provided multiple configuration files: only the first one will be used!&#39;</span><span class="p">)</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">output_hdf</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># FIXME</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] You provided multiple output hdf files: only the first one will be used!&#39;</span><span class="p">)</span>
+            <span class="n">output_hdf</span> <span class="o">=</span> <span class="n">output_hdf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_json</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_json</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">output_json</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_json</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># FIXME</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] You provided multiple output json files: only the first one will be used!&#39;</span><span class="p">)</span>
+            <span class="n">output_json</span> <span class="o">=</span> <span class="n">output_json</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Load variables from the config file</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">config_io</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="n">label_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;label_names&#39;</span><span class="p">]</span>
+    <span class="n">modus</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;modus&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Load the feature files and match to label data</span>
+    <span class="n">label_data_train</span><span class="p">,</span> <span class="n">image_features_train</span> <span class="o">=</span>\
+        <span class="n">load_features</span><span class="p">(</span><span class="n">feat_train</span><span class="p">,</span> <span class="n">patientinfo_train</span><span class="p">,</span> <span class="n">label_type</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">feat_test</span><span class="p">:</span>
+        <span class="n">label_data_test</span><span class="p">,</span> <span class="n">image_features_test</span> <span class="o">=</span>\
+            <span class="n">load_features</span><span class="p">(</span><span class="n">feat_test</span><span class="p">,</span> <span class="n">patientinfo_test</span><span class="p">,</span> <span class="n">label_type</span><span class="p">)</span>
+
+    <span class="c1"># Create tempdir name from patientinfo file name</span>
+    <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">patientinfo_train</span><span class="p">)</span>
+    <span class="n">filename</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">basename</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">patientinfo_train</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="c1"># Use temp dir: result -&gt; sample# -&gt; parameters - &gt; temppath</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;trainclassifier&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1"># Construct the required classifier grid</span>
+    <span class="n">param_grid</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">create_param_grid</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># IF at least once groupwise search is turned on, add it to the param grid</span>
+    <span class="k">if</span> <span class="s1">&#39;True&#39;</span><span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;GroupwiseSearch&#39;</span><span class="p">]:</span>
+        <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SelectGroups&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;GroupwiseSearch&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">param_grid</span><span class="p">[</span><span class="n">group</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="n">group</span><span class="p">]</span>
+
+    <span class="c1"># If scaling is to be applied, add to parameters</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scale_features&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Add parameters for oversampling methods</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_ratio&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_ratio&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_ratio&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_neighbors&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_neighbors&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_n_cores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Joblib_ncores&#39;</span><span class="p">]]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_Oversampling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;Oversampling&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Extract hyperparameter grid settings for SearchCV from config</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Featsel_Variance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;Variance&#39;</span><span class="p">]</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ImputationMethod&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ImputationNeighbours&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;StatisticalTestUse&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestUse&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ReliefNN&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefNN&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefNN&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ReliefSampleSize&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefSampleSize&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefSampleSize&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ReliefDistanceP&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefDistanceP&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefDistanceP&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># For N_iter, perform k-fold crossvalidation</span>
+    <span class="n">outputfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">feat_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">crossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
+                                         <span class="n">image_features_train</span><span class="p">,</span>
+                                         <span class="n">param_grid</span><span class="p">,</span>
+                                         <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
+                                         <span class="n">use_fastr</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr&#39;</span><span class="p">],</span>
+                                         <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">],</span>
+                                         <span class="n">fixedsplits</span><span class="o">=</span><span class="n">fixedsplits</span><span class="p">,</span>
+                                         <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">],</span>
+                                         <span class="n">outputfolder</span><span class="o">=</span><span class="n">outputfolder</span><span class="p">,</span>
+                                         <span class="n">tempsave</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;tempsave&#39;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">nocrossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
+                                           <span class="n">label_data_test</span><span class="p">,</span>
+                                           <span class="n">image_features_train</span><span class="p">,</span>
+                                           <span class="n">image_features_test</span><span class="p">,</span>
+                                           <span class="n">param_grid</span><span class="p">,</span>
+                                           <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
+                                           <span class="n">use_fastr</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr&#39;</span><span class="p">],</span>
+                                           <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">],</span>
+                                           <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">))</span>
+
+    <span class="n">trained_classifier</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">,</span> <span class="s1">&#39;SVMdata&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Check whether we do regression or classification</span>
+    <span class="n">regressors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SVR&#39;</span><span class="p">,</span> <span class="s1">&#39;RFR&#39;</span><span class="p">,</span> <span class="s1">&#39;SGDR&#39;</span><span class="p">,</span> <span class="s1">&#39;Lasso&#39;</span><span class="p">,</span> <span class="s1">&#39;ElasticNet&#39;</span><span class="p">]</span>
+    <span class="n">isclassifier</span> <span class="o">=</span>\
+        <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">clf</span> <span class="ow">in</span> <span class="n">regressors</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;classifiers&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Calculate statistics of performance</span>
+    <span class="k">if</span> <span class="n">feat_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">isclassifier</span><span class="p">:</span>
+            <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_single_SVR</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
+                                         <span class="n">label_type</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
+                                  <span class="n">label_type</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">patientinfo_test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">isclassifier</span><span class="p">:</span>
+                <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_single_SVR</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
+                                             <span class="n">label_data_test</span><span class="p">,</span>
+                                             <span class="n">label_type</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
+                                      <span class="n">label_data_test</span><span class="p">,</span>
+                                      <span class="n">label_type</span><span class="p">,</span>
+                                      <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">statistics</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Save output</span>
+    <span class="n">savedict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">savedict</span><span class="p">[</span><span class="s2">&quot;Statistics&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">statistics</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_json</span><span class="p">)):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_json</span><span class="p">))</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_json</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">savedict</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saved data!&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_features"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.trainclassifier.load_features">[docs]</a><span class="k">def</span> <span class="nf">load_features</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">patientinfo</span><span class="p">,</span> <span class="n">label_type</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Read feature files and stack the features per patient in an array.</span>
+<span class="sd">        Additionally, if a patient label file is supplied, the features from</span>
+<span class="sd">        a patient will be matched to the labels.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        featurefiles: list, mandatory</span>
+<span class="sd">                List containing all paths to the .hdf5 feature files to be loaded.</span>
+<span class="sd">                The argument should contain a list per modelity, e.g.</span>
+<span class="sd">                [[features_mod1_patient1, features_mod1_patient2, ...],</span>
+<span class="sd">                 [features_mod2_patient1, features_mod2_patient2, ...]].</span>
+
+<span class="sd">        patientinfo: string, optional</span>
+<span class="sd">                Path referring to the .txt file to be used to read patient</span>
+<span class="sd">                labels from. See the Github Wiki for the format.</span>
+
+<span class="sd">        label_names: list, optional</span>
+<span class="sd">                List containing all the labels that should be extracted from</span>
+<span class="sd">                the patientinfo file.</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Split the feature files per modality</span>
+    <span class="n">feat_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">modnames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">feat_mod</span> <span class="ow">in</span> <span class="n">feat</span><span class="p">:</span>
+        <span class="n">feat_mod_temp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">feat_mod</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+        <span class="c1"># The first item contains the name of the modality, followed by a = sign</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">feat_mod_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)]</span>
+        <span class="n">modnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">feat_mod_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Append the files to the main list</span>
+        <span class="n">feat_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feat_mod_temp</span><span class="p">)</span>
+
+    <span class="n">feat</span> <span class="o">=</span> <span class="n">feat_temp</span>
+
+    <span class="c1"># Read the features and classification data</span>
+    <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span> <span class="o">=</span>\
+        <span class="n">file_io</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">patientinfo</span><span class="p">,</span>
+                          <span class="n">label_type</span><span class="p">,</span> <span class="n">modnames</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

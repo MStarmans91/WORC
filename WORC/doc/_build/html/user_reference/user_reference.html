@@ -1,0 +1,803 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Fastr User Reference &mdash; WORC 2.1.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="WORC Package" href="../autogen/WORC.html" />
+    <link rel="prev" title="Changelog" href="../static/changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2.1.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html#the-worc-object">The WORC object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fastr User Reference</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Fastr User Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/user_reference/user_reference.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fastr-user-reference">
+<h1>Fastr User Reference<a class="headerlink" href="#fastr-user-reference" title="Permalink to this headline">¶</a></h1>
+<dl class="attribute">
+<dt id="fastr.tools">
+<code class="descclassname">fastr.</code><code class="descname">tools</code><a class="headerlink" href="#fastr.tools" title="Permalink to this definition">¶</a></dt>
+<dd><p>A ToolManager containing all versions of all Tools loaded into the FASTR
+environment. The ToolManager can be indexed using the Tool id string or
+a tool id string and a version. For example if you have two versions (4.5
+and 4.8) of a tool called <em>Elastix</em>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fastr</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="s1">&#39;elastix.Elastix&#39;</span><span class="p">]</span>
+<span class="go">Tool Elastix v4.8 (Elastix Registration)</span>
+<span class="go">                           Inputs                              |             Outputs</span>
+<span class="go">--------------------------------------------------------------------------------------------------</span>
+<span class="go">fixed_image       (ITKImageFile)                               |  directory (Directory)</span>
+<span class="go">moving_image      (ITKImageFile)                               |  transform (ElastixTransformFile)</span>
+<span class="go">parameters        (ElastixParameterFile)                       |  log_file  (ElastixLogFile)</span>
+<span class="go">fixed_mask        (ITKImageFile)                               |</span>
+<span class="go">moving_mask       (ITKImageFile)                               |</span>
+<span class="go">initial_transform (ElastixTransformFile)                       |</span>
+<span class="go">priority          (__Elastix_4.8_interface__priority__Enum__)  |</span>
+<span class="go">threads           (Int)                                        |</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fastr</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="s1">&#39;elastix.Elastix&#39;</span><span class="p">,</span> <span class="s1">&#39;4.5&#39;</span><span class="p">]</span>
+<span class="go">Tool Elastix v4.5 (Elastix Registration)</span>
+<span class="go">                           Inputs                              |             Outputs</span>
+<span class="go">--------------------------------------------------------------------------------------------------</span>
+<span class="go">fixed_image       (ITKImageFile)                               |  directory (Directory)</span>
+<span class="go">moving_image      (ITKImageFile)                               |  transform (ElastixTransformFile)</span>
+<span class="go">parameters        (ElastixParameterFile)                       |  log_file  (ElastixLogFile)</span>
+<span class="go">fixed_mask        (ITKImageFile)                               |</span>
+<span class="go">moving_mask       (ITKImageFile)                               |</span>
+<span class="go">initial_transform (ElastixTransformFile)                       |</span>
+<span class="go">priority          (__Elastix_4.5_interface__priority__Enum__)  |</span>
+<span class="go">threads           (Int)                                        |</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.types">
+<code class="descclassname">fastr.</code><code class="descname">types</code><a class="headerlink" href="#fastr.types" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary containing all types loaded into the FASTR environment. The keys are the typenames and the values are the classes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.networks">
+<code class="descclassname">fastr.</code><code class="descname">networks</code><a class="headerlink" href="#fastr.networks" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary containing all networks loaded in fastr</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.create_network">
+<code class="descclassname">api.</code><code class="descname">create_network</code><span class="sig-paren">(</span><em>version=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fastr.api.create_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new Network object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – id of the network</p></li>
+<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Version</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – version of the network</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fastr.api.Network" title="fastr.api.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.create_network_copy">
+<code class="descclassname">api.</code><code class="descname">create_network_copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fastr.api.create_network_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a network based on another Network state. The network state can be a Network
+or the state gotten from a Network with __getstate__.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_state</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#fastr.api.Network" title="fastr.api.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>]) – Network (state) to create a copy of</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fastr.api.Network" title="fastr.api.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The rebuilt network</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="fastr.api.Network">
+<em class="property">class </em><code class="descclassname">fastr.api.</code><code class="descname">Network</code><span class="sig-paren">(</span><em>id</em>, <em>version=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of a Network for the creating and adapting Networks</p>
+<dl class="method">
+<dt id="fastr.api.Network.create_constant">
+<code class="descname">create_constant</code><span class="sig-paren">(</span><em>datatype</em>, <em>data</em>, <em>id=None</em>, <em>step_id=None</em>, <em>resources=None</em>, <em>node_group=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.create_constant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.create_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a ConstantNode in this Network. The Node will be automatically added to
+the Network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datatype</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataType</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The DataType of the constant node</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.List" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, …]]], <a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, …]]]]]) – The data to hold in the constant node</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The id of the constant node to be created</p></li>
+<li><p><strong>step_id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The step to add the created constant node to</p></li>
+<li><p><strong>resources</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceLimit</span></code>]) – The resources required to run this node</p></li>
+<li><p><strong>node_group</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The group the node belongs to, this can be
+important for FlowNodes and such, as they
+will have matching dimension names.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fastr.api.Node" title="fastr.api.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the newly created constant node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Network.create_link">
+<code class="descname">create_link</code><span class="sig-paren">(</span><em>source</em>, <em>target</em>, <em>id=None</em>, <em>collapse=None</em>, <em>expand=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.create_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.create_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a link between two Nodes and add it to the current Network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#fastr.api.Input" title="fastr.api.Input"><code class="xref py py-class docutils literal notranslate"><span class="pre">Input</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseInput</span></code>]) – the output that is the source of the link</p></li>
+<li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#fastr.api.Output" title="fastr.api.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">Output</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseOutput</span></code>]) – the input that is the target of the link</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – the id of the link</p></li>
+<li><p><strong>collapse</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], …]]) – The dimensions to collapse in this link.</p></li>
+<li><p><strong>expand</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Flag to expand cardinality into a new dimension</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fastr.api.Link" title="fastr.api.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the created link</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Network.create_macro">
+<code class="descname">create_macro</code><span class="sig-paren">(</span><em>network</em>, <em>id=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.create_macro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.create_macro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create macro node (a node which actually contains a network used as node
+inside another network).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#fastr.api.Network" title="fastr.api.Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Network</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tool</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The network to use, this can be a network (state), a
+macro tool, or the path to a python file that contains
+a function create_network which returns the desired
+network.</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The id of the node to be created</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fastr.api.Node" title="fastr.api.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the newly created node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Network.create_node">
+<code class="descname">create_node</code><span class="sig-paren">(</span><em>tool</em>, <em>tool_version</em>, <em>id=None</em>, <em>step_id=None</em>, <em>resources=None</em>, <em>node_group=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.create_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Node in this Network. The Node will be automatically added to
+the Network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tool</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Tool</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The Tool to base the Node on in the form: <code class="docutils literal notranslate"><span class="pre">name/space/toolname:version</span></code></p></li>
+<li><p><strong>tool_version</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The version of the tool wrapper to use</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The id of the node to be created</p></li>
+<li><p><strong>step_id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The step to add the created node to</p></li>
+<li><p><strong>resources</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceLimit</span></code>]) – The resources required to run this node</p></li>
+<li><p><strong>node_group</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The group the node belongs to, this can be
+important for FlowNodes and such, as they
+will have matching dimension names.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fastr.api.Node" title="fastr.api.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the newly created node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Network.create_sink">
+<code class="descname">create_sink</code><span class="sig-paren">(</span><em>datatype</em>, <em>id=None</em>, <em>step_id=None</em>, <em>resources=None</em>, <em>node_group=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.create_sink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.create_sink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a SinkNode in this Network. The Node will be automatically added to
+the Network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datatype</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataType</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The DataType of the sink node</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The id of the sink node to be created</p></li>
+<li><p><strong>step_id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The step to add the created sink node to</p></li>
+<li><p><strong>resources</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceLimit</span></code>]) – The resources required to run this node</p></li>
+<li><p><strong>node_group</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The group the node belongs to, this can be
+important for FlowNodes and such, as they
+will have matching dimension names.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fastr.api.Node" title="fastr.api.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the newly created sink node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Network.create_source">
+<code class="descname">create_source</code><span class="sig-paren">(</span><em>datatype</em>, <em>id=None</em>, <em>step_id=None</em>, <em>resources=None</em>, <em>node_group=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.create_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.create_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a SourceNode in this Network. The Node will be automatically added to
+the Network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datatype</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataType</span></code>) – The DataType of the source source_node</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The id of the source source_node to be created</p></li>
+<li><p><strong>step_id</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The step to add the created source source_node to</p></li>
+<li><p><strong>resources</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceLimit</span></code>]) – The resources required to run this node</p></li>
+<li><p><strong>node_group</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The group the node belongs to, this can be
+important for FlowNodes and such, as they
+will have matching dimension names.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the newly created source source_node</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceNode</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Network.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>draw_dimensions=True</em>, <em>hide_unconnected=True</em>, <em>expand_macros=1</em>, <em>font_size=14</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a graphical representation of the Network</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The path of the file to create, the extension will control the image type</p></li>
+<li><p><strong>draw_dimensions</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Flag to control if the dimension sizes should be drawn
+in the figure, default is true</p></li>
+<li><p><strong>expand_macros</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Flag to control if and how macro nodes should be expanded,
+by default 1 level is expanded</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>path of the image created or None if failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Network.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><em>source_data</em>, <em>sink_data</em>, <em>tmpdir=None</em>, <em>timestamp=None</em>, <em>blocking=True</em>, <em>execution_plugin=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the network with the given source and sink data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_data</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.List" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, …]]], <a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, …]]]]]) – Source data to use as an input</p></li>
+<li><p><strong>sink_data</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – Sink rules to use for determining the outputs</p></li>
+<li><p><strong>tmpdir</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The scratch directory to use for this network run, if
+an existing directory is given, fastr will try to resume
+a network run (see <span class="xref std std-ref">continuing-network</span>)</p></li>
+<li><p><strong>timestamp</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/datetime.html#datetime.datetime" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The timestamp of the network run (useful for retrying
+or continuing previous runs)</p></li>
+<li><p><strong>blocking</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Flag to indicate if the execution should be blocking
+or launched in a background thread</p></li>
+<li><p><strong>execution_plugin</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The execution plugin to use for this run</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">NetworkRun</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The network run object for the started execution</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Network.id">
+<code class="descname">id</code><a class="headerlink" href="#fastr.api.Network.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique id describing this resource</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="fastr.api.Network.load">
+<em class="property">classmethod </em><code class="descname">load</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load Network froma  file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>loaded network</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fastr.api.Network" title="fastr.api.Network">Network</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Network.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>filename</em>, <em>indent=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Network.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Network.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the Network to a JSON file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Path of the file to save to</p></li>
+<li><p><strong>indent</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Indentation to use (None for no indentation)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Network.version">
+<code class="descname">version</code><a class="headerlink" href="#fastr.api.Network.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Version of the Network (so users can keep track of their version)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Version</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fastr.api.Link">
+<em class="property">class </em><code class="descclassname">fastr.api.</code><code class="descname">Link</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of a link for editing the Network</p>
+<dl class="attribute">
+<dt id="fastr.api.Link.collapse">
+<code class="descname">collapse</code><a class="headerlink" href="#fastr.api.Link.collapse" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dimensions which the link will collapse into the cardinality</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], …]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Link.expand">
+<code class="descname">expand</code><a class="headerlink" href="#fastr.api.Link.expand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag that indicates if the Link will expand the cardinality into a new
+dimension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Link.id">
+<code class="descname">id</code><a class="headerlink" href="#fastr.api.Link.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique id describing this resource</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fastr.api.Node">
+<em class="property">class </em><code class="descclassname">fastr.api.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of Node for editing the Network</p>
+<dl class="attribute">
+<dt id="fastr.api.Node.id">
+<code class="descname">id</code><a class="headerlink" href="#fastr.api.Node.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique id describing this resource</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Node.input">
+<code class="descname">input</code><a class="headerlink" href="#fastr.api.Node.input" title="Permalink to this definition">¶</a></dt>
+<dd><p>In case there is only a single Inputs in a Node, this can be used as a short hand.
+In that case it is basically the same as <code class="docutils literal notranslate"><span class="pre">list(node.inputs.values()[0])</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fastr.api.Input" title="fastr.api.Input"><code class="xref py py-class docutils literal notranslate"><span class="pre">Input</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Node.inputs">
+<code class="descname">inputs</code><a class="headerlink" href="#fastr.api.Node.inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping object containing all Inputs of a Node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">InputMap</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Node.output">
+<code class="descname">output</code><a class="headerlink" href="#fastr.api.Node.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>In case there is only a single Outputs in a Node, this can be used as a short hand.
+In that case it is basically the same as <code class="docutils literal notranslate"><span class="pre">list(node.outputs.values()[0])</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fastr.api.Output" title="fastr.api.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">Output</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Node.outputs">
+<code class="descname">outputs</code><a class="headerlink" href="#fastr.api.Node.outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping object containing all Outputs of a Node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Subobjectmap</span></code>[<a class="reference internal" href="#fastr.api.Output" title="fastr.api.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">Output</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fastr.api.Input">
+<em class="property">class </em><code class="descclassname">fastr.api.</code><code class="descname">Input</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of an Input of a Node</p>
+<dl class="method">
+<dt id="fastr.api.Input.__lshift__">
+<code class="descname">__lshift__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Input.__lshift__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Input.__lshift__" title="Permalink to this definition">¶</a></dt>
+<dd><p>This operator allows the easy creation of Links to this Input using the <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> operator.
+Creating links can be done by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generic form</span>
+<span class="o">&gt;&gt;</span> <span class="n">link</span> <span class="o">=</span> <span class="nb">input</span> <span class="o">&lt;&lt;</span> <span class="n">output</span>
+<span class="o">&gt;&gt;</span> <span class="n">link</span> <span class="o">=</span> <span class="nb">input</span> <span class="o">&lt;&lt;</span> <span class="p">[</span><span class="s1">&#39;some&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">]</span>  <span class="c1"># Create a constant node</span>
+
+<span class="c1"># Examples</span>
+<span class="o">&gt;&gt;</span> <span class="n">link1</span> <span class="o">=</span> <span class="n">addint</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;left_hand&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">source1</span><span class="o">.</span><span class="n">input</span>
+<span class="o">&gt;&gt;</span> <span class="n">link2</span> <span class="o">=</span> <span class="n">addint</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;right_hand&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># Mutliple links</span>
+<span class="o">&gt;&gt;</span> <span class="n">links</span> <span class="o">=</span> <span class="n">addints</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;left_hand&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">source1</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">source2</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">source3</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The last example would return a tuple with three links.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#fastr.api.Output" title="fastr.api.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">Output</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseOutput</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#tuple" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>]) – the target to create the link from, this can be an Output, a tuple of Outputs, or a data
+structure that can be used as the data for a ConstantNode</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#fastr.api.Link" title="fastr.api.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference internal" href="#fastr.api.Link" title="fastr.api.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>, …]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Newly created link(s)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Input.__rrshift__">
+<code class="descname">__rrshift__</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Input.__rrshift__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Input.__rrshift__" title="Permalink to this definition">¶</a></dt>
+<dd><p>This operator allows to use the <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> operator as alternative to using the <code class="docutils literal notranslate"><span class="pre">&lt;&lt;</span></code> operator.
+See the <a class="reference internal" href="#fastr.api.Input.__lshift__" title="fastr.api.Input.__lshift__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__lshift__</span> <span class="pre">operator</span></code></a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#fastr.api.Output" title="fastr.api.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">Output</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseOutput</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#tuple" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>]) – the target to create the link from</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#fastr.api.Link" title="fastr.api.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<a class="reference internal" href="#fastr.api.Link" title="fastr.api.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a>, …]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Newly created link(s)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fastr.api.Input.append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Input.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Input.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a link from give resource to a new SubInput.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference internal" href="#fastr.api.Output" title="fastr.api.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">Output</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseOutput</span></code>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#tuple" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>]) – The source for the link to be created</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fastr.api.Link" title="fastr.api.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The newly created link</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Input.id">
+<code class="descname">id</code><a class="headerlink" href="#fastr.api.Input.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique id describing this resource</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Input.input_group">
+<code class="descname">input_group</code><a class="headerlink" href="#fastr.api.Input.input_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>The input group of this Input. This property can be read and changed.
+Changing the input group of an Input will influence the data flow in
+a Node (see <span class="xref std std-ref">advanced-flow-node</span> for details).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fastr.api.Output">
+<em class="property">class </em><code class="descclassname">fastr.api.</code><code class="descname">Output</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of an Output of a Node</p>
+<dl class="method">
+<dt id="fastr.api.Output.__getitem__">
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fastr/api.html#Output.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fastr.api.Output.__getitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a SubOuput of this Ouput. The SubOutput selects some data from the
+parent Output based on an index or slice of the cardinalty.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – the key of the requested item, can be an index or slice</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#fastr.api.Output" title="fastr.api.Output"><code class="xref py py-class docutils literal notranslate"><span class="pre">Output</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the requested SubOutput with a view of the data in this Output</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fastr.api.Output.id">
+<code class="descname">id</code><a class="headerlink" href="#fastr.api.Output.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique id describing this resource</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../autogen/WORC.html" class="btn btn-neutral float-right" title="WORC Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../static/changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

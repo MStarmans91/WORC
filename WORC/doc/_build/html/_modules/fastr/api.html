@@ -1,0 +1,947 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fastr.api &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>fastr.api</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fastr.api</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2011-2014 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module provides the API for fastr that users should use. This API will be</span>
+<span class="sd">considered stable between major versions. If users only interact via this API</span>
+<span class="sd">(and refrain from operating on ``parent`` attributes), their code should be</span>
+<span class="sd">compatible within major version of fastr.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span> <span class="nn">..planning.network</span> <span class="k">import</span> <span class="n">Network</span> <span class="k">as</span> <span class="n">CoreNetwork</span>
+<span class="kn">from</span> <span class="nn">..planning.inputoutput</span> <span class="k">import</span> <span class="n">BaseInput</span><span class="p">,</span> <span class="n">BaseOutput</span>
+<span class="kn">from</span> <span class="nn">..core.resourcelimit</span> <span class="k">import</span> <span class="n">ResourceLimit</span>
+<span class="kn">from</span> <span class="nn">..core.tool</span> <span class="k">import</span> <span class="n">Tool</span>
+<span class="kn">from</span> <span class="nn">..core.version</span> <span class="k">import</span> <span class="n">Version</span>
+<span class="kn">from</span> <span class="nn">..datatypes</span> <span class="k">import</span> <span class="n">BaseDataType</span>
+<span class="kn">from</span> <span class="nn">..execution.networkrun</span> <span class="k">import</span> <span class="n">NetworkRun</span>
+
+
+<span class="c1"># Expose only the main functions to users, rest will follow from there</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;create_network&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;create_network_copy&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ResourceLimit&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="n">CollapseType</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="o">...</span><span class="p">]</span>
+
+<span class="n">VersionType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Version</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+
+<span class="n">DataTypeType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseDataType</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+<span class="n">ToolType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
+    <span class="n">Tool</span><span class="p">,</span>
+    <span class="nb">str</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># The data structure used for source data, base structure can be dict of list or dict</span>
+<span class="n">SourceDataType</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span>
+    <span class="c1"># List of values (str or tuple)</span>
+    <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]],</span>
+
+    <span class="c1"># Dict of str (id) -&gt; value (str or tuple)</span>
+    <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]]</span>
+<span class="p">]]</span>
+
+<span class="c1"># The data structure used for sink data</span>
+<span class="n">SinkDataType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+
+<span class="c1"># Different data structures that describe a state</span>
+<span class="n">NetworkStateType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="s1">&#39;Network&#39;</span><span class="p">,</span> <span class="n">CoreNetwork</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span>
+
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">SubObjectMap</span><span class="p">(</span><span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">T</span><span class="p">],</span> <span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generic object to retrieve wrapped objects from a collection</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;_parent&#39;</span><span class="p">,</span> <span class="s1">&#39;_attribute&#39;</span><span class="p">,</span> <span class="s1">&#39;_type&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">attribute</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">type_</span><span class="p">:</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_attribute</span> <span class="o">=</span> <span class="n">attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">type_</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;</span><span class="si">{}</span><span class="s1"> map, items: </span><span class="si">{}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_type</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">key</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">collection</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">BaseWrapper</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generic base class for wrapping fastr internal objects in a user-exposed</span>
+<span class="sd">    API objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;_parent&#39;</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The unique id describing this resource</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The parent object for this wrapper. This point to a non-api object</span>
+<span class="sd">        in the internals of fastr and should not be used by normal users.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span>
+
+
+<span class="k">def</span> <span class="nf">cast_basewrapper</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cast a value to non have BaseWrappers. BaseWrappers will be replaced by their parent.</span>
+<span class="sd">    In Tuples each element is cast if needed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">BaseWrapper</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">parent</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">parent</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">BaseWrapper</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+
+<div class="viewcode-block" id="Output"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Output">[docs]</a><span class="k">class</span> <span class="nc">Output</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Representation of an Output of a Node</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Output.__getitem__"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Output.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">slice</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s1">&#39;Output&#39;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a SubOuput of this Ouput. The SubOutput selects some data from the</span>
+<span class="sd">        parent Output based on an index or slice of the cardinalty.</span>
+
+<span class="sd">        :param key: the key of the requested item, can be an index or slice</span>
+<span class="sd">        :return: the requested SubOutput with a view of the data in this Output</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">item</span><span class="p">))</span></div></div>
+
+
+<span class="c1"># The data structure that can be used for the source of linking</span>
+<span class="n">LinkSourceType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Output</span><span class="p">,</span> <span class="n">BaseOutput</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Link"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Link">[docs]</a><span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Representation of a link for editing the Network</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">collapse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CollapseType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The dimensions which the link will collapse into the cardinality</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">collapse</span>
+
+    <span class="nd">@collapse</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">collapse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">CollapseType</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Flag that indicates if the Link will expand the cardinality into a new</span>
+<span class="sd">        dimension.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">expand</span>
+
+    <span class="nd">@expand</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">expand</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="Input"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Input">[docs]</a><span class="k">class</span> <span class="nc">Input</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Representation of an Input of a Node</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;NamedSubInput&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Can only manipulate named sub inputs directly&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">NamedSubInput</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Can only manipulate named sub inputs directly&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">cast_basewrapper</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Input.append"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Input.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">LinkSourceType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Link</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a link from give resource to a new SubInput.</span>
+
+<span class="sd">        :param value: The source for the link to be created</span>
+<span class="sd">        :return: The newly created link</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cast_basewrapper</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">input_group</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The input group of this Input. This property can be read and changed.</span>
+<span class="sd">        Changing the input group of an Input will influence the data flow in</span>
+<span class="sd">        a Node (see :ref:`advanced-flow-node` for details).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">input_group</span>
+
+    <span class="nd">@input_group</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">input_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">input_group</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="Input.__lshift__"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Input.__lshift__">[docs]</a>    <span class="k">def</span> <span class="nf">__lshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">LinkSourceType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Link</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Link</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This operator allows the easy creation of Links to this Input using the ``&lt;&lt;`` operator.</span>
+<span class="sd">        Creating links can be done by:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Generic form</span>
+<span class="sd">            &gt;&gt; link = input &lt;&lt; output</span>
+<span class="sd">            &gt;&gt; link = input &lt;&lt; [&#39;some&#39;, &#39;data&#39;]  # Create a constant node</span>
+
+<span class="sd">            # Examples</span>
+<span class="sd">            &gt;&gt; link1 = addint.inputs[&#39;left_hand&#39;] &lt;&lt; source1.input</span>
+<span class="sd">            &gt;&gt; link2 = addint.inputs[&#39;right_hand&#39;] &lt;&lt; [1, 2, 3]</span>
+
+<span class="sd">            # Mutliple links</span>
+<span class="sd">            &gt;&gt; links = addints.inputs[&#39;left_hand&#39;] &lt;&lt; (source1.output, source2.output, source3.output)</span>
+
+<span class="sd">        The last example would return a tuple with three links.</span>
+
+<span class="sd">        :param other: the target to create the link from, this can be an Output, a tuple of Outputs, or a data</span>
+<span class="sd">                      structure that can be used as the data for a ConstantNode</span>
+<span class="sd">        :return: Newly created link(s)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Make sure wrappers are cast to non-wrappers</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="n">cast_basewrapper</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">&lt;&lt;</span> <span class="n">other</span></div>
+
+<div class="viewcode-block" id="Input.__rrshift__"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Input.__rrshift__">[docs]</a>    <span class="k">def</span> <span class="nf">__rrshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">LinkSourceType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Link</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Link</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This operator allows to use the ``&gt;&gt;`` operator as alternative to using the ``&lt;&lt;`` operator.</span>
+<span class="sd">        See the :py:meth:`__lshift__ operator &lt;fastr.api.Input.__lshift__&gt;` for details.</span>
+
+<span class="sd">        :param other: the target to create the link from</span>
+<span class="sd">        :return: Newly created link(s)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Make sure wrappers are cast to non-wrappers</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="n">cast_basewrapper</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">other</span> <span class="o">&gt;&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">NamedSubInput</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A named sub-input. This is only used in cases where a tool accepts a mapping</span>
+<span class="sd">    as an input. For example, if a command-line tool would accept::</span>
+
+<span class="sd">        --set key1=value1 key2=value2</span>
+
+<span class="sd">    Or something similar, where key1 and key2 are arbitrary strings. This can</span>
+<span class="sd">    be translated in fastr to::</span>
+
+<span class="sd">        tool.inputs[&#39;set&#39;][&#39;key1&#39;] &lt;&lt; value1</span>
+<span class="sd">        tool.inputs[&#39;set&#39;][&#39;key2&#39;] &lt;&lt; value2</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__lshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">LinkSourceType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Link</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Link</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This operator allows the easy creation of Links to this Input using the ``&lt;&lt;`` operator.</span>
+<span class="sd">        Creating links can be done by:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Generic form</span>
+<span class="sd">            &gt;&gt; link = input &lt;&lt; output</span>
+<span class="sd">            &gt;&gt; link = input &lt;&lt; [&#39;some&#39;, &#39;data&#39;]  # Create a constant node</span>
+
+<span class="sd">            # Examples</span>
+<span class="sd">            &gt;&gt; link1 = addint.inputs[&#39;left_hand&#39;] &lt;&lt; source1.input</span>
+<span class="sd">            &gt;&gt; link2 = addint.inputs[&#39;right_hand&#39;] &lt;&lt; [1, 2, 3]</span>
+
+<span class="sd">            # Mutliple links</span>
+<span class="sd">            &gt;&gt; links = addints.inputs[&#39;left_hand&#39;] &lt;&lt; (source1.output, source2.output, source3.output)</span>
+
+<span class="sd">        The last example would return a tuple with three links.</span>
+
+<span class="sd">        :param other: the target to create the link from, this can be an Output, a tuple of Outputs, or a data</span>
+<span class="sd">                      structure that can be used as the data for a ConstantNode</span>
+<span class="sd">        :return: Newly created link(s)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Make sure wrappers are cast to non-wrappers</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="n">cast_basewrapper</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">&lt;&lt;</span> <span class="n">other</span>
+
+    <span class="k">def</span> <span class="nf">__rrshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">LinkSourceType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Link</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Link</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This operator allows to use the ``&gt;&gt;`` operator as alternative to using the ``&lt;&lt;`` operator.</span>
+<span class="sd">        See the :py:meth:`__lshift__ operator &lt;fastr.api.Input.__lshift__&gt;` for details.</span>
+
+<span class="sd">        :param other: the target to create the link from</span>
+<span class="sd">        :return: Newly created link(s)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Make sure wrappers are cast to non-wrappers</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="n">cast_basewrapper</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">other</span> <span class="o">&gt;&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span>
+
+    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">LinkSourceType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Link</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a link from give resource to a new SubInput.</span>
+
+<span class="sd">        :param value: The source for the link to be created</span>
+<span class="sd">        :return: The newly created link</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cast_basewrapper</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+
+
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Representation of Node for editing the Network</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;_inputs&#39;</span><span class="p">,</span> <span class="s1">&#39;_outputs&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span> <span class="o">=</span> <span class="n">InputMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;inputs&#39;</span><span class="p">,</span> <span class="n">Input</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span> <span class="o">=</span> <span class="n">SubObjectMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;outputs&#39;</span><span class="p">,</span> <span class="n">Output</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;InputMap&#39;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mapping object containing all Inputs of a Node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inputs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubObjectMap</span><span class="p">[</span><span class="n">Output</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mapping object containing all Outputs of a Node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputs</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Input</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        In case there is only a single Inputs in a Node, this can be used as a short hand.</span>
+<span class="sd">        In that case it is basically the same as ``list(node.inputs.values()[0])``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;There is not 1 unique input, cannot use short-cut!&#39;</span><span class="p">)</span>
+
+    <span class="nd">@input</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">input</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+            <span class="nb">input</span> <span class="o">&lt;&lt;</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;There is not 1 unique input, cannot use short-cut!&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Output</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        In case there is only a single Outputs in a Node, this can be used as a short hand.</span>
+<span class="sd">        In that case it is basically the same as ``list(node.outputs.values()[0])``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;There is not 1 unique outputs, cannot use short-cut!&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">merge_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">merge_dimensions</span>
+
+    <span class="nd">@merge_dimensions</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">merge_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">merge_dimensions</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+<span class="k">class</span> <span class="nc">InputMap</span><span class="p">(</span><span class="n">SubObjectMap</span><span class="p">[</span><span class="n">Input</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># Make sure wrappers are cast to non-wrappers</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">cast_basewrapper</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+
+<div class="viewcode-block" id="Network"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network">[docs]</a><span class="k">class</span> <span class="nc">Network</span><span class="p">(</span><span class="n">BaseWrapper</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Representation of a Network for the creating and adapting Networks</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;_node_map&#39;</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">CoreNetwork</span><span class="p">(</span><span class="n">id_</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node_map</span> <span class="o">=</span> <span class="n">SubObjectMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;nodelist&#39;</span><span class="p">,</span> <span class="n">Node</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubObjectMap</span><span class="p">[</span><span class="n">Node</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_map</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Version</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Version of the Network (so users can keep track of their version)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">version</span>
+
+<div class="viewcode-block" id="Network.create_node"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.create_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">tool</span><span class="p">:</span> <span class="n">ToolType</span><span class="p">,</span>
+                    <span class="n">tool_version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">step_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">resources</span><span class="p">:</span> <span class="n">ResourceLimit</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">node_group</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a Node in this Network. The Node will be automatically added to</span>
+<span class="sd">        the Network.</span>
+
+<span class="sd">        :param tool: The Tool to base the Node on in the form: ``name/space/toolname:version``</span>
+<span class="sd">        :param tool_version: The version of the tool wrapper to use</span>
+<span class="sd">        :param id: The id of the node to be created</span>
+<span class="sd">        :param step_id: The step to add the created node to</span>
+<span class="sd">        :param resources: The resources required to run this node</span>
+<span class="sd">        :param node_group: The group the node belongs to, this can be</span>
+<span class="sd">                           important for FlowNodes and such, as they</span>
+<span class="sd">                           will have matching dimension names.</span>
+<span class="sd">        :return: the newly created node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tool</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tool</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">FastrTypeError</span><span class="p">(</span><span class="s1">&#39;The tool argument should be either a Tool or a str&#39;</span><span class="p">)</span>
+
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">resources</span> <span class="ow">or</span> <span class="n">ResourceLimit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span>
+            <span class="n">tool</span><span class="o">=</span><span class="n">tool</span><span class="p">,</span>
+            <span class="n">tool_version</span><span class="o">=</span><span class="n">tool_version</span><span class="p">,</span>
+            <span class="n">id_</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+            <span class="n">stepid</span><span class="o">=</span><span class="n">step_id</span><span class="p">,</span>
+            <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="n">nodegroup</span><span class="o">=</span><span class="n">node_group</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Network.create_macro"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.create_macro">[docs]</a>    <span class="k">def</span> <span class="nf">create_macro</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">network</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">NetworkStateType</span><span class="p">,</span> <span class="n">Tool</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+                     <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create macro node (a node which actually contains a network used as node</span>
+<span class="sd">        inside another network).</span>
+
+<span class="sd">        :param network: The network to use, this can be a network (state), a</span>
+<span class="sd">                        macro tool, or the path to a python file that contains</span>
+<span class="sd">                        a function create_network which returns the desired</span>
+<span class="sd">                        network.</span>
+<span class="sd">        :param id: The id of the node to be created</span>
+<span class="sd">        :return: the newly created node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">create_macro</span><span class="p">(</span><span class="n">network</span><span class="o">=</span><span class="n">network</span><span class="p">,</span> <span class="n">id_</span><span class="o">=</span><span class="nb">id</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Network.create_constant"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.create_constant">[docs]</a>    <span class="k">def</span> <span class="nf">create_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                        <span class="n">datatype</span><span class="p">:</span> <span class="n">DataTypeType</span><span class="p">,</span>
+                        <span class="n">data</span><span class="p">:</span> <span class="n">SourceDataType</span><span class="p">,</span>
+                        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">step_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">resources</span><span class="p">:</span> <span class="n">ResourceLimit</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">node_group</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a ConstantNode in this Network. The Node will be automatically added to</span>
+<span class="sd">        the Network.</span>
+
+<span class="sd">        :param datatype: The DataType of the constant node</span>
+<span class="sd">        :param data: The data to hold in the constant node</span>
+<span class="sd">        :param id: The id of the constant node to be created</span>
+<span class="sd">        :param step_id: The step to add the created constant node to</span>
+<span class="sd">        :param resources: The resources required to run this node</span>
+<span class="sd">        :param node_group: The group the node belongs to, this can be</span>
+<span class="sd">                              important for FlowNodes and such, as they</span>
+<span class="sd">                              will have matching dimension names.</span>
+<span class="sd">        :return: the newly created constant node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">resources</span> <span class="ow">or</span> <span class="n">ResourceLimit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">create_constant</span><span class="p">(</span>
+            <span class="n">datatype</span><span class="o">=</span><span class="n">datatype</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">id_</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+            <span class="n">stepid</span><span class="o">=</span><span class="n">step_id</span><span class="p">,</span>
+            <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="n">nodegroup</span><span class="o">=</span><span class="n">node_group</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Network.create_link"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.create_link">[docs]</a>    <span class="k">def</span> <span class="nf">create_link</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">source</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Input</span><span class="p">,</span> <span class="n">BaseInput</span><span class="p">],</span>
+                    <span class="n">target</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Output</span><span class="p">,</span> <span class="n">BaseOutput</span><span class="p">],</span>
+                    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">collapse</span><span class="p">:</span> <span class="n">CollapseType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">expand</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Link</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a link between two Nodes and add it to the current Network.</span>
+
+<span class="sd">        :param source: the output that is the source of the link</span>
+<span class="sd">        :param target: the input that is the target of the link</span>
+<span class="sd">        :param id: the id of the link</span>
+<span class="sd">        :param collapse: The dimensions to collapse in this link.</span>
+<span class="sd">        :param expand: Flag to expand cardinality into a new dimension</span>
+<span class="sd">        :return: the created link</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">Output</span><span class="p">):</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">parent</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Input</span><span class="p">):</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">parent</span>
+
+        <span class="k">return</span> <span class="n">Link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span>
+            <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">target</span><span class="p">,</span>
+            <span class="n">id_</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+            <span class="n">collapse</span><span class="o">=</span><span class="n">collapse</span><span class="p">,</span>
+            <span class="n">expand</span><span class="o">=</span><span class="n">expand</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Network.create_source"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.create_source">[docs]</a>    <span class="k">def</span> <span class="nf">create_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">datatype</span><span class="p">:</span> <span class="n">DataTypeType</span><span class="p">,</span>
+                      <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">step_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">resources</span><span class="p">:</span> <span class="n">ResourceLimit</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">node_group</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a SourceNode in this Network. The Node will be automatically added to</span>
+<span class="sd">        the Network.</span>
+
+<span class="sd">        :param datatype: The DataType of the source source_node</span>
+<span class="sd">        :type datatype: :py:class:`BaseDataType &lt;fastr.plugins.managers.datatypemanager.BaseDataType&gt;`</span>
+<span class="sd">        :param str id: The id of the source source_node to be created</span>
+<span class="sd">        :param str step_id: The step to add the created source source_node to</span>
+<span class="sd">        :param resources: The resources required to run this node</span>
+<span class="sd">        :param str node_group: The group the node belongs to, this can be</span>
+<span class="sd">                              important for FlowNodes and such, as they</span>
+<span class="sd">                              will have matching dimension names.</span>
+<span class="sd">        :return: the newly created source source_node</span>
+<span class="sd">        :rtype: :py:class:`SourceNode &lt;fastr.core.source_node.SourceNode&gt;`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">resources</span> <span class="ow">or</span> <span class="n">ResourceLimit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span>
+            <span class="n">datatype</span><span class="o">=</span><span class="n">datatype</span><span class="p">,</span>
+            <span class="n">id_</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+            <span class="n">stepid</span><span class="o">=</span><span class="n">step_id</span><span class="p">,</span>
+            <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="n">nodegroup</span><span class="o">=</span><span class="n">node_group</span>
+        <span class="p">))</span></div>
+
+<div class="viewcode-block" id="Network.create_sink"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.create_sink">[docs]</a>    <span class="k">def</span> <span class="nf">create_sink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">datatype</span><span class="p">:</span> <span class="n">DataTypeType</span><span class="p">,</span>
+                    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">step_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">resources</span><span class="p">:</span> <span class="n">ResourceLimit</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                    <span class="n">node_group</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Node</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a SinkNode in this Network. The Node will be automatically added to</span>
+<span class="sd">        the Network.</span>
+
+<span class="sd">        :param datatype: The DataType of the sink node</span>
+<span class="sd">        :param id: The id of the sink node to be created</span>
+<span class="sd">        :param step_id: The step to add the created sink node to</span>
+<span class="sd">        :param resources: The resources required to run this node</span>
+<span class="sd">        :param str node_group: The group the node belongs to, this can be</span>
+<span class="sd">                              important for FlowNodes and such, as they</span>
+<span class="sd">                              will have matching dimension names.</span>
+<span class="sd">        :return: the newly created sink node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">resources</span> <span class="ow">or</span> <span class="n">ResourceLimit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span>
+            <span class="n">datatype</span><span class="o">=</span><span class="n">datatype</span><span class="p">,</span>
+            <span class="n">id_</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+            <span class="n">stepid</span><span class="o">=</span><span class="n">step_id</span><span class="p">,</span>
+            <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+            <span class="n">nodegroup</span><span class="o">=</span><span class="n">node_group</span><span class="p">,</span>
+        <span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">create_reference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                         <span class="n">source_data</span><span class="p">:</span> <span class="n">SourceDataType</span><span class="p">,</span>
+                         <span class="n">output_directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                         <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create reference data to test a Network against</span>
+
+<span class="sd">        :param source_data: The source data to use for the reference</span>
+<span class="sd">        :param output_directory: The directory to store the reference</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">create_reference</span><span class="p">(</span><span class="n">source_data</span><span class="o">=</span><span class="n">source_data</span><span class="p">,</span>
+                                      <span class="n">output_directory</span><span class="o">=</span><span class="n">output_directory</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Network.draw"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+             <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+             <span class="n">draw_dimensions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+             <span class="n">hide_unconnected</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+             <span class="n">expand_macros</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+             <span class="n">font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw a graphical representation of the Network</span>
+
+<span class="sd">        :param str file_path: The path of the file to create, the extension will control the image type</span>
+<span class="sd">        :param bool draw_dimensions: Flag to control if the dimension sizes should be drawn</span>
+<span class="sd">                                     in the figure, default is true</span>
+<span class="sd">        :param bool expand_macros: Flag to control if and how macro nodes should be expanded,</span>
+<span class="sd">                                   by default 1 level is expanded</span>
+<span class="sd">        :return: path of the image created or None if failed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">file_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">file_path</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">ext</span> <span class="o">=</span> <span class="s1">&#39;svg&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ext</span><span class="p">:</span>
+            <span class="n">ext</span> <span class="o">=</span> <span class="s1">&#39;svg&#39;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">draw_network</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span>
+                                        <span class="n">img_format</span><span class="o">=</span><span class="n">ext</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span>
+                                        <span class="n">draw_dimension</span><span class="o">=</span><span class="n">draw_dimensions</span><span class="p">,</span>
+                                        <span class="n">hide_unconnected</span><span class="o">=</span><span class="n">hide_unconnected</span><span class="p">,</span>
+                                        <span class="n">expand_macro</span><span class="o">=</span><span class="n">expand_macros</span><span class="p">,</span>
+                                        <span class="n">font_size</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Network.execute"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">source_data</span><span class="p">:</span> <span class="n">SourceDataType</span><span class="p">,</span>
+                <span class="n">sink_data</span><span class="p">:</span> <span class="n">SinkDataType</span><span class="p">,</span>
+                <span class="n">tmpdir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">timestamp</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">blocking</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="n">execution_plugin</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NetworkRun</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute the network with the given source and sink data.</span>
+
+<span class="sd">        :param source_data: Source data to use as an input</span>
+<span class="sd">        :param sink_data: Sink rules to use for determining the outputs</span>
+<span class="sd">        :param tmpdir: The scratch directory to use for this network run, if</span>
+<span class="sd">                       an existing directory is given, fastr will try to resume</span>
+<span class="sd">                       a network run (see :ref:`continuing-network`)</span>
+<span class="sd">        :param timestamp: The timestamp of the network run (useful for retrying</span>
+<span class="sd">                          or continuing previous runs)</span>
+<span class="sd">        :param blocking: Flag to indicate if the execution should be blocking</span>
+<span class="sd">                         or launched in a background thread</span>
+<span class="sd">        :param execution_plugin: The execution plugin to use for this run</span>
+<span class="sd">        :return: The network run object for the started execution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="n">sourcedata</span><span class="o">=</span><span class="n">source_data</span><span class="p">,</span>
+            <span class="n">sinkdata</span><span class="o">=</span><span class="n">sink_data</span><span class="p">,</span>
+            <span class="n">tmpdir</span><span class="o">=</span><span class="n">tmpdir</span><span class="p">,</span>
+            <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span>
+            <span class="n">blocking</span><span class="o">=</span><span class="n">blocking</span><span class="p">,</span>
+            <span class="n">execution_plugin</span><span class="o">=</span><span class="n">execution_plugin</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Network.load"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.load">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Network&#39;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load Network froma  file</span>
+
+<span class="sd">        :param str filename:</span>
+<span class="sd">        :return: loaded network</span>
+<span class="sd">        :rtype: Network</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">BaseWrapper</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">Network</span><span class="p">)</span>
+
+        <span class="c1"># Load Network and create correct node map</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">CoreNetwork</span><span class="o">.</span><span class="n">loadf</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">_node_map</span> <span class="o">=</span> <span class="n">SubObjectMap</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;nodelist&#39;</span><span class="p">,</span> <span class="n">Node</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Network.save"><a class="viewcode-back" href="../../user_reference/user_reference.html#fastr.Network.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+             <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+             <span class="n">indent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the Network to a JSON file</span>
+
+<span class="sd">        :param filename: Path of the file to save to</span>
+<span class="sd">        :param indent: Indentation to use (None for no indentation)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">dumpf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span></div>
+
+
+<span class="k">def</span> <span class="nf">create_network</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                   <span class="n">version</span><span class="p">:</span> <span class="n">VersionType</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Network</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new Network object</span>
+
+<span class="sd">    :param id: id of the network</span>
+<span class="sd">    :param version: version of the network</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Network</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">create_network_copy</span><span class="p">(</span><span class="n">network_state</span><span class="p">:</span> <span class="n">NetworkStateType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Network</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a network based on another Network state. The network state can be a Network</span>
+<span class="sd">    or the state gotten from a Network with __getstate__.</span>
+
+<span class="sd">    :param network_state: Network (state) to create a copy of</span>
+<span class="sd">    :return: The rebuilt network</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">network_state</span><span class="p">,</span> <span class="n">Network</span><span class="p">):</span>
+        <span class="n">network_state</span> <span class="o">=</span> <span class="n">network_state</span><span class="o">.</span><span class="n">parent</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">network_state</span><span class="p">,</span> <span class="n">CoreNetwork</span><span class="p">):</span>
+        <span class="n">network_state</span> <span class="o">=</span> <span class="n">network_state</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
+
+    <span class="c1"># Create the copy of the Network</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">BaseWrapper</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">Network</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">CoreNetwork</span><span class="o">.</span><span class="n">createobj</span><span class="p">(</span><span class="n">network_state</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">_node_map</span> <span class="o">=</span> <span class="n">SubObjectMap</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;nodelist&#39;</span><span class="p">,</span> <span class="n">Node</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
