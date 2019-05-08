@@ -1,0 +1,36 @@
+<tool id="CreateMeanTransform" name="Create Mean Transform" version="0.1">
+  <description>A tool that creates a mean transform based on a list of ElastixTransformFile files</description>
+  <tags>
+    <tag>registration</tag>
+  </tags>
+  <authors>
+    <author name="Hakim Achterberg" email="hakim.achterberg@gmail.com" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.1" url="">
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths="bin/" bin="create_mean_transform.py"/>
+    </targets>
+    <description>
+    </description>
+    <license>
+    </license>
+    <authors>
+      <author name="Hakim Achterberg" email="hakim.achterberg@gmail.com"
+              url="http://www.bigr.nl/people/HakimAchterberg"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="transforms" name="input transform file" datatype="ElastixTransformFile" prefix="--in" cardinality="1-*"
+             required="true"/>
+    </inputs>
+    <outputs>
+      <output id="transform" name="output transform file" datatype="ElastixTransformFile" prefix="--out" cardinality="1"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+</tool>

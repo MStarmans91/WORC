@@ -1,0 +1,75 @@
+featureprocessing Package
+=========================
+
+:mod:`featureprocessing` Package
+--------------------------------
+
+.. automodule:: WORC.featureprocessing
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`Imputer` Module
+---------------------
+
+.. automodule:: WORC.featureprocessing.Imputer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`Relief` Module
+--------------------
+
+.. automodule:: WORC.featureprocessing.Relief
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`SelectGroups` Module
+--------------------------
+
+.. automodule:: WORC.featureprocessing.SelectGroups
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`SelectIndividuals` Module
+-------------------------------
+
+.. automodule:: WORC.featureprocessing.SelectIndividuals
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`StatisticalTestFeatures` Module
+-------------------------------------
+
+.. automodule:: WORC.featureprocessing.StatisticalTestFeatures
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`StatisticalTestThreshold` Module
+--------------------------------------
+
+.. automodule:: WORC.featureprocessing.StatisticalTestThreshold
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`VarianceThreshold` Module
+-------------------------------
+
+.. automodule:: WORC.featureprocessing.VarianceThreshold
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+

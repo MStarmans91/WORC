@@ -60,23 +60,11 @@ General
 PREDICTGeneral
 --------------
 
-
-
 These fields contain general settings for when using PREDICT.
-
-
-
-
 For more info on the Joblib settings, which are used in the Joblib
-
-Parallel function, see
-
-`here <https://pythonhosted.org/joblib/parallel.html>`__. When you run
-
+Parallel function, see `here <https://pythonhosted.org/joblib/parallel.html>`__. When you run
 WORC on a cluster with nodes supporting only a single core to be used
-
 per node, e.g. the BIGR cluster, use only 1 core and threading as a
-
 backend.
 
 

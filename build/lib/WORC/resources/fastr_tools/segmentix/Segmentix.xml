@@ -1,0 +1,38 @@
+<tool id="Segmentix" name="Segmentix" version="1.0">
+    <description>Segmentation toolbox.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="segmentix_tool.py" />
+    </targets>
+    <description>
+       Segmentix.py image metadata segmentation parameters
+       output = Radiomics features
+    </description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="image" name="image" datatype="ITKImageFile" prefix="--im" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="metadata" name="metadata" datatype="DicomImageFile" prefix="--md" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="segmentation_in" name="input segmentation" datatype="ITKImageFile" prefix="--segin" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="mask" name="mask" datatype="ITKImageFile" prefix="--mask" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="parameters" name="parameters" datatype="ParameterFile" prefix="--para" cardinality="1-*" repeat_prefix="false" required="false" />
+     </inputs>
+    <outputs>
+      <output id="segmentation_out" name="Output segmentation" datatype="ITKImageFile" cardinality="as:segmentation_in" nospace="False" order="0" prefix="--segout" required="false"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: Segmentix.py [-h] [-im IMAGE.ITKIM] [-pi Pinfo.txt] [-seg SEGMENTATION.ITKIM] -para PARAMETERS.ini -out OUTPUT.ITKIM
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

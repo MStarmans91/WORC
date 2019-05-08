@@ -1,0 +1,35 @@
+<tool id="StatisticalTestFeatures" name="StatisticalTestFeatures" version="1.0">
+    <description>A wrapper around PREDICT's Radiomics statistical test function for funtion.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="StatisticalTestFeatures_tool.py" />
+    </targets>
+    <description>
+       WIP
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="features" name="Input feature files of first modality" datatype="HDF5" prefix="--feat" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="patientclass" name="patientclass" datatype="PatientInfoFile" prefix="--pc" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="config" name="config" datatype="ParameterFile" prefix="--conf" cardinality="1-*" repeat_prefix="false" required="true" />
+     </inputs>
+    <outputs>
+      <output id="performance" name="Radiomics classification performance" datatype="CSVFile" cardinality="as:config" nospace="False" order="0" prefix="--perf" required="true"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> WIP
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

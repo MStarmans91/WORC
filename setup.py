@@ -90,7 +90,7 @@ class NoseTestCommand(TestCommand):
 
 setup(
     name='WORC',
-    version='2.1.3',
+    version='3.0.0',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',

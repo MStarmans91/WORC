@@ -1,0 +1,97 @@
+<tool id="PxCastConvert" name="ITKTools image conversion tool" version="0.1">
+  <description>A wrapper around ITK Tools, as set of simple command line tools for image analysis.</description>
+  <authors>
+    <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.3.0" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="windows" arch="*" paths="vfs://apps/itktools/0.3.0/install/bin" bin="pxcastconvert.exe"/>
+      <target os="linux" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxcastconvert"/>
+      <target os="darwin" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxcastconvert"/>
+    </targets>
+    <description>
+      ITKTools v0.3.1
+      Description:
+      This program converts between many image formats.
+      This is done by reading in an image, possibly casting of the image,
+      and subsequently writing the image to the user-specified format.
+
+      Definitions:
+      - converting: changing the extension of the image, e.g. bmp, mhd, etc.
+      - casting: changing the component type of a voxel, e.g. short, float,
+      unsigned long, etc.
+
+      Notes:
+      - Casting of scalar images is done by the itk::ShiftScaleImageFilter,
+      where values are mapped to itself, leaving the intensity range
+      the same. NB: When casting to a component type with smaller dynamic
+      range, information might get lost.
+      - Casting of multi-component images, such as vector or RGB images, is
+      done using the itk::VectorCastImageFilter.
+      - Input images can be in all file formats ITK supports and for which
+      the itk::ImageFileReader works, and additionally 3D dicom series.
+      It is also possible to extract a specific DICOM series from a directory
+      by supplying the seriesUID.
+      - Output images can be in all file formats ITK supports and for which
+      the itk::ImageFileWriter works. Dicom output is not supported yet.
+
+
+      Usage:
+      pxcastconvert
+      -in inputfilename
+      -out outputfilename
+      [-opct] outputPixelComponentType, default equal to input
+      [-z] compression flag; if provided, the output image is compressed
+      OR pxcastconvert
+      -in dicomDirectory
+      -out outputfilename
+      [-opct] outputPixelComponentType, default equal to input
+      [-s] seriesUID, default the first UID found
+      [-r] add restrictions to generate a unique seriesUID
+      e.g. "0020|0012" to add a check for acquisition number.
+      [-z] compression flag; if provided, the output image is compressed
+
+      OutputPixelComponentType should be one of {[unsigned_]char, [unsigned_]short,
+      [unsigned_]int, [unsigned_]long, float, double}.
+      NB: Not every image format supports all OutputPixelComponentTypes.
+      NB2: Not every image format supports the compression flag "-z".
+    </description>
+    <license/>
+    <authors>
+      <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl"
+              url="http://www.bigr.nl/people/HakimAchterberg"/>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="image" name="Input Image" datatype="ITKImageFile" prefix="-in" cardinality="1" required="true"/>
+      <input id="component_type" name="Output Component Type" prefix="-opct" cardinality="1" required="false">
+        <enum>unsigned_char</enum>
+        <enum>char</enum>
+        <enum>unsigned_short</enum>
+        <enum>short</enum>
+        <enum>unsigned_int</enum>
+        <enum>int</enum>
+        <enum>unsigned_long</enum>
+        <enum>long</enum>
+        <enum>float</enum>
+        <enum>double</enum>
+      </input>
+      <input id="compression_flag" name="Compression Flag" datatype="Boolean" prefix="-z" cardinality="1" required="false"/>
+    </inputs>
+    <outputs>
+      <output id="image" name="output image" datatype="ITKImageFile" prefix="-out" cardinality="1"/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests/>
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references/>
+</tool>

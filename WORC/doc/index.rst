@@ -69,6 +69,15 @@ WORC Documentation
     static/file_description.rst
     static/changelog.rst
 
+WORC User reference
+====================
+
+.. toctree::
+    :maxdepth: 3
+    :glob:
+
+    user_reference/*
+
 WORC Developer Module reference
 ================================
 .. toctree::

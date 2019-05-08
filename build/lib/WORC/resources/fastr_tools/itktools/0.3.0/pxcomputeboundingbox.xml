@@ -1,0 +1,67 @@
+<tool id="PxComputeBoundingBox" name="ITKTools Get Image Information" version="0.1">
+  <description>A wrapper around ITK Tools, as set of simple command line tools for image analysis.</description>
+  <authors>
+    <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl" url="http://www.bigr.nl/people/HakimAchterberg"/>
+  </authors>
+  <command version="0.3.0" url="https://github.com/ITKTools/ITKTools">
+    <targets>
+      <target os="windows" arch="*" paths="vfs://apps/itktools/0.3.0/install/bin" bin="pxcomputeboundingbox.exe"/>
+      <target os="linux" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxcomputeboundingbox"/>
+      <target os="darwin" arch="*" modules="itktools/0.3.0" paths="vfs://apps/itktools/0.3.0/install/bin"
+              bin="pxcomputeboundingbox"/>
+    </targets>
+    <description>
+
+    </description>
+    <license/>
+    <authors>
+      <author name="Hakim Achterberg" email="h.achterberg@erasmusmc.nl"
+              url="http://www.bigr.nl/people/HakimAchterberg"/>
+      <author name="Stefan Klein" email="s.klein@erasmusmc.nl" url="http://www.bigr.nl/people/StefanKlein"/>
+      <author name="Marius Staring" email="m.staring@lumc.nl" url="http://elastix.isi.uu.nl/marius/index.html"/>
+    </authors>
+  </command>
+  <interface>
+    <inputs>
+      <input id="image" name="Input Image" datatype="ITKImageFile" prefix="-in" cardinality="1" required="true"/>
+    </inputs>
+    <outputs>
+      <output id="lower_index" name="Lowest index of the image" datatype="Int" cardinality="unknown" automatic="True"
+              location="MinimumIndex = \[(.*)\]" method="stdout" separator=", "/>
+      <output id="upper_index" name="Highest index of the image" datatype="Int" cardinality="unknown" automatic="True"
+              location="MaximumIndex = \[(.*)\]" method="stdout" separator=", "/>
+      <output id="lower_point" name="World coordinates of lowest index of the image" datatype="Float" cardinality="unknown"
+              automatic="True" location="MinimumPoint = \[(.*)\]" method="stdout" separator=", "/>
+      <output id="upper_point" name="World coordinates of highest index of the image" datatype="Float"
+              cardinality="unknown"
+              automatic="True" location="MaximumPoint = \[(.*)\]" method="stdout" separator=", "/>
+    </outputs>
+  </interface>
+  <requirements/>
+  <tests>
+    <test>
+      <input>
+        <input>slice047.mhd</input>
+      </input>
+      <command>{bin}</command>
+      <command>-in</command>
+      <command>{input.input[0]}</command>
+      <output>
+        <minindex>0</minindex>
+        <minindex>0</minindex>
+        <maxindex>255</maxindex>
+        <maxindex>255</maxindex>
+        <minpoint>-57.6875</minpoint>
+        <minpoint>-250.738</minpoint>
+        <maxpoint>101.688</maxpoint>
+        <maxpoint>-91.3630</maxpoint>
+      </output>
+    </test>
+  </tests>
+  <help>
+  </help>
+  <cite>
+  </cite>
+  <references/>
+</tool>

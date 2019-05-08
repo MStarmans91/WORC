@@ -1,0 +1,117 @@
+// Affine Tranformation
+
+//ImageTypes
+(FixedInternalImagePixelType "float")
+(MovingInternalImagePixelType "float")
+(FixedImageDimension 2)
+(MovingImageDimension 2)
+
+//Components
+(Registration "MultiResolutionRegistration")
+(FixedImagePyramid "FixedRecursiveImagePyramid")
+(MovingImagePyramid "MovingRecursiveImagePyramid")
+(Interpolator "BSplineInterpolator")
+(ResampleInterpolator "FinalBSplineInterpolator")
+(Resampler "DefaultResampler")
+(Transform "AffineTransform")
+(Optimizer "AdaptiveStochasticGradientDescent")
+(Metric "AdvancedMattesMutualInformation")
+
+// Scales the rotations compared to the translations, to make
+// sure they are in the same range. The higher this parameter,
+// the smaller the changes in rotation angle in each iteration.
+// If you have the feeling that rotations are not found by elastix,
+// decrease it; if elastix crashes after a few iterations, with
+// the message that all samples map outside the moving image 
+// buffer, you may have to increase this parameter.
+//(Scales 50000.0)
+// Better use automatic scales estimation
+(AutomaticScalesEstimation "true")
+// Automatically guess an initial translation.
+(AutomaticTransformInitialization "true")
+
+// The number of resolutions. 
+// 1 Is only enough if the expected deformations are small. 3 or 4 mostly works fine.
+// Less smoothing in Z-direction
+(NumberOfResolutions 3)
+(ImagePyramidSchedule 4 4 2 2 1 1 )
+
+// If you use a mask, this option is important. You can 
+// set it for each resolution differently.
+// If the mask serves as region of interest, set it to false.
+// If the mask indicates which pixels are valid, then set it to true.
+// If you do not use a mask, the option doesn't matter.
+(ErodeMask "false" )
+
+// Whether transforms are combined by composition or by addition.
+// In generally, Compose is the best option in most cases.
+// It does not influence the results very much.
+(HowToCombineTransforms "Compose")
+
+// Number of spatial samples used
+(ImageSampler "RandomCoordinate")
+(FixedImageBSplineInterpolationOrder 3 )
+(UseRandomSampleRegion "false")
+(NewSamplesEveryIteration "true")
+(CheckNumberOfSamples "false")
+(MaximumNumberOfSamplingAttempts 10)
+(NumberOfSpatialSamples 256 )
+
+
+//Number of grey level bins in each resolution level,
+// for the mutual information. 16 or 32 usually works fine.
+(NumberOfHistogramBins 32 )
+(FixedLimitRangeRatio 0.0)
+(MovingLimitRangeRatio 0.0)
+(FixedKernelBSplineOrder 3)
+(MovingKernelBSplineOrder 3)
+
+//Order of B-Spline interpolation used in each resolution level:
+// It may improve accuracy if you set this to 3. Never use 0.
+(BSplineInterpolationOrder 1)
+
+//Order of B-Spline interpolation used for applying the final
+// deformation.
+// 3 gives good accuracy.
+// 1 gives worse accuracy (linear interpolation)
+// 0 gives worst accuracy, but may be appropriate for 
+// binary images; this would be equivalent to nearest neighbor
+// interpolation.
+(FinalBSplineInterpolationOrder 3)
+
+//Default pixel value for pixels that come from outside the picture:
+(DefaultPixelValue 0)
+
+
+// The following parameters are for the StandardGradientDescent
+// optimizer. They determine the step size.
+// Especially SP_a needs to be tuned for each specific application.
+// The number of iterations is also important. 
+
+//Maximum step size of the RSGD optimizer for each resolution level.
+// The higher you set this, the more aggressive steps are taken.
+(MaximumStepLength 0.7 )
+
+(WriteTransformParametersEachIteration "false")
+(WriteResultImage "false")
+(CompressResultImage "true")
+(WriteResultImageAfterEachResolution "false") 
+(ShowExactMetricValue "false")
+
+//Maximum number of iterations in each resolution level:
+// 100-500 works usually fine.
+(MaximumNumberOfIterations 512 )
+
+//SP: Param_a in each resolution level. a_k = a/(A+k+1)^alpha
+// For MI, NC, NMI, you could start around a = 1000.0
+//(SP_a 1000.0 )
+
+//SP: Param_A in each resolution level. a_k = a/(A+k+1)^alpha
+(SP_A 20.0 )
+
+//SP: Param_alpha in each resolution level. a_k = a/(A+k+1)^alpha
+(SP_alpha 1.0 ) 
+
+
+
+

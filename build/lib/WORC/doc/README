@@ -1,0 +1,10 @@
+This readme explains how to generate the docs.
+
+There are two scripts you may need: doc_generate.py and doc_clean.py
+- doc_generate.py
+This script calls the generate_modules.py script to generate the documentation of the complete bigr-fastr package family. Before doing this all *.rst are removed with doc_clean.py.
+After cleaning and creating the rst files, `make html` is called which generates the html output in ./_build/html.
+
+- doc_clean.py
+This script basically removes all *.rst files from this directory.
+

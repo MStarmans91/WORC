@@ -1,0 +1,43 @@
+<tool id="RTStructReader" name="RTStructReader" version="1.0">
+    <description>Tool to read an RTstruct, convert to a binary mask and save as ITK Image file..</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="RTStructReader_tool.py" />
+    </targets>
+    <description>
+       RTStructReader.py RTStruct ROI_name Output
+       output = ITK image of binary mask
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="rtstruct" name="rtstruct" datatype="RTStructFile" prefix="--rt" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="roiname" name="roiname" datatype="String" prefix="--roiname" cardinality="1-*" repeat_prefix="false" required="true" />
+     </inputs>
+    <outputs>
+      <output id="output" name="Output image file" datatype="ITKImageFile" cardinality="as:roinames" nospace="False" order="0" prefix="--out" required="true"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: RTStructReader.py [-h] -rt RTStruct.dcm -roinames ROINAMEString -output ITKImageFile
+
+        Convert ROI with a specific name from the RTStruct to a binary mask and save as ITKImage.
+
+        optional arguments:
+        -h, --help show this help message and exit.
+        -rt RTStruct.dcm RTStruct file to extract contours from.
+        -roiname String with name of contours/rois to extract from RTStruct.
+        -output List of ITKImagefiles with names and extensions to write output to. Should match the cardinality of
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>
