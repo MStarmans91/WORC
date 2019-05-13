@@ -290,6 +290,11 @@ WORC/exampledata/elastix/img1/slice086.mhd
 WORC/exampledata/elastix/img1/slice086.raw
 WORC/exampledata/elastix/img1/slice091.mhd
 WORC/exampledata/elastix/img1/slice091.raw
+WORC/facade/__init__.py
+WORC/facade/jipenjannekefacade/__init__.py
+WORC/facade/jipenjannekefacade/binaryclassificationbuilder.py
+WORC/facade/jipenjannekefacade/jipenjannekefacade.py
+WORC/facade/jipenjannekefacade/regressionanalysisbuilder.py
 WORC/fastrconfig/WORC_config.py
 WORC/featureprocessing/Imputer.py
 WORC/featureprocessing/Relief.py
