@@ -8,7 +8,7 @@
   </authors>
   <command version="0.1" url="">
     <targets>
-      <target os="*" arch="*" interpreter="python" paths="bin/" bin="transformixpoint2json.py"/>
+      <target os="*" arch="*" interpreter="python3" paths="bin/" bin="transformixpoint2json.py"/>
     </targets>
     <description>
     </description>
