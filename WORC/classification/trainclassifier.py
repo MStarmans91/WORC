@@ -17,12 +17,10 @@
 
 import json
 import os
-import sklearn
 
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
 from WORC.plotting.plot_SVM import plot_SVM
-from WORC.plotting.plot_SVR import plot_single_SVR
 import WORC.IOparser.file_io as file_io
 import WORC.IOparser.config_io_classifier as config_io
 from scipy.stats import uniform
@@ -248,17 +246,17 @@ def trainclassifier(feat_train, patientinfo_train, config,
     # Calculate statistics of performance
     if feat_test is None:
         if not isclassifier:
-            statistics = plot_single_SVR(trained_classifier, label_data_train,
-                                         label_type)
+            statistics = plot_SVM(trained_classifier, label_data_train,
+                                  label_type)
         else:
             statistics = plot_SVM(trained_classifier, label_data_train,
                                   label_type, modus=modus)
     else:
         if patientinfo_test is not None:
             if not isclassifier:
-                statistics = plot_single_SVR(trained_classifier,
-                                             label_data_test,
-                                             label_type)
+                statistics = plot_SVM(trained_classifier,
+                                      label_data_test,
+                                      label_type)
             else:
                 statistics = plot_SVM(trained_classifier,
                                       label_data_test,

@@ -6,6 +6,27 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+Unreleased
+------------------
+
+Added
+~~~~~~~
+- Thresholding option in plot_SVM.
+- NPV (Negative Preditive Value) to classification metrics.
+
+
+Changed
+~~~~~~~
+- Plot_SVR is removed: it's now embedded in plot_SVM.
+
+Fixed
+~~~~~
+- Metric computation can now handle it when both the truth and the predicted
+  labels are from a single class.
+- Plotting module now correctly initialized.
+- Plot_SVM now also works properly for regression.
+
+
 3.0.0 - 2019-05-08
 ------------------
 

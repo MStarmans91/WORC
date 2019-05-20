@@ -21,6 +21,7 @@ import sys
 import WORC.plotting.compute_CI as compute_CI
 import pandas as pd
 import os
+import lifelines as ll
 import WORC.processing.label_processing as lp
 from WORC.classification import metrics
 import WORC.addexceptions as ae
@@ -30,7 +31,8 @@ from sklearn.base import is_regressor
 def plot_SVM(prediction, label_data, label_type, show_plots=False,
              alpha=0.95, ensemble=False, verbose=True,
              ensemble_scoring=None, output='stats',
-             modus='singlelabel'):
+             modus='singlelabel',
+             thresholds=None, survival=False):
     '''
     Plot the output of a single binary estimator, e.g. a SVM.
 
@@ -72,6 +74,11 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
     output: string, default stats
         Determine which results are put out. If stats, the statistics of the
         estimator will be returned. If scores, the scores will be returned.
+
+    thresholds: list of integer(s), default None
+        If None, use default threshold of sklearn (0.5) on posteriors to
+        converge to a binary prediction. If one integer is provided, use that one.
+        If two integers are provided, posterior < thresh[0] = 0, posterior > thresh[1] = 1.
 
     Returns
     ----------
@@ -136,13 +143,29 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
     feature_labels = prediction[label_type]['feature_labels']
 
     # Create lists for performance measures
-    sensitivity = list()
-    specificity = list()
-    precision = list()
-    accuracy = list()
-    auc = list()
-    f1_score_list = list()
+    if not regression:
+        sensitivity = list()
+        specificity = list()
+        precision = list()
+        npv = list()
+        accuracy = list()
+        auc = list()
+        f1_score_list = list()
+    else:
+        r2score = list()
+        MSE = list()
+        coefICC = list()
+        PearsonC = list()
+        PearsonP = list()
+        SpearmanC = list()
+        SpearmanP = list()
+        cindex = list()
+        coxcoef = list()
+        coxp = list()
+
     patient_classification_list = dict()
+    percentages_selected = list()
+
     if output in ['scores', 'decision']:
         # Keep track of all groundth truths and scores
         y_truths = list()
@@ -200,6 +223,32 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         else:
             y_score = SVMs[i].predict_proba(X_test_temp)[:, 1]
 
+        # Create a new binary score based on the thresholds if given
+        if thresholds is not None:
+            if len(thresholds) == 1:
+                y_prediction = y_score >= thresholds[0]
+            elif len(thresholds) == 2:
+                y_score_temp = list()
+                y_prediction_temp = list()
+                y_truth_temp = list()
+                test_patient_IDs_temp = list()
+                for pnum in range(len(y_score)):
+                    if y_score[pnum] <= thresholds[0] or y_score[pnum] > thresholds[1]:
+                        y_score_temp.append(y_score[pnum])
+                        y_prediction_temp.append(y_prediction[pnum])
+                        y_truth_temp.append(y_truth[pnum])
+                        test_patient_IDs_temp.append(test_patient_IDs[pnum])
+
+                perc = float(len(y_prediction_temp))/float(len(y_prediction))
+                percentages_selected.append(perc)
+                print(f"Selected {len(y_prediction_temp)} from {len(y_prediction)} ({perc}%) patients using two thresholds.")
+                y_score = y_score_temp
+                y_prediction = y_prediction_temp
+                y_truth = y_truth_temp
+                test_patient_IDs = test_patient_IDs_temp
+            else:
+                raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
+
         print("Truth: " + str(y_truth))
         print("Prediction: " + str(y_prediction))
 
@@ -214,8 +263,6 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                 patient_classification_list[i_test_ID]['N_correct'] += 1
             else:
                 patient_classification_list[i_test_ID]['N_wrong'] += 1
-
-        y_score = SVMs[i].predict_proba(X_test_temp)[:, 1]
 
         if output == 'decision':
             # Output the posteriors
@@ -238,14 +285,15 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                 # Compute singlelabel performance metrics
                 if not regression:
                     accuracy_temp, sensitivity_temp, specificity_temp,\
-                        precision_temp, f1_score_temp, auc_temp =\
+                        precision_temp, npv_temp, f1_score_temp, auc_temp =\
                         metrics.performance_singlelabel(y_truth,
                                                         y_prediction,
                                                         y_score,
                                                         regression)
                 else:
-                    r2score, MSE, coefICC, PearsonC, PearsonP, SpearmanC,\
-                        SpearmanP =\
+                    r2score_temp, MSE_temp, coefICC_temp, PearsonC_temp,\
+                        PearsonP_temp, SpearmanC_temp,\
+                        SpearmanP_temp =\
                         metrics.performance_singlelabel(y_truth,
                                                         y_prediction,
                                                         y_score,
@@ -269,7 +317,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
 
                 # Compute multilabel performance metrics
                 accuracy_temp, sensitivity_temp, specificity_temp,\
-                    precision_temp, f1_score_temp, auc_temp =\
+                    precision_temp, npv_temp, f1_score_temp, auc_temp =\
                     metrics.performance_multilabel(y_truth,
                                                    y_prediction,
                                                    y_score)
@@ -278,15 +326,45 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                 raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
 
             # Print AUC to keep you up to date
-            print('AUC: ' + str(auc_temp))
+            if not regression:
+                print('AUC: ' + str(auc_temp))
 
-            # Append performance to lists for all cross validations
-            accuracy.append(accuracy_temp)
-            sensitivity.append(sensitivity_temp)
-            specificity.append(specificity_temp)
-            auc.append(auc_temp)
-            f1_score_list.append(f1_score_temp)
-            precision.append(precision_temp)
+                # Append performance to lists for all cross validations
+                accuracy.append(accuracy_temp)
+                sensitivity.append(sensitivity_temp)
+                specificity.append(specificity_temp)
+                auc.append(auc_temp)
+                f1_score_list.append(f1_score_temp)
+                precision.append(precision_temp)
+                npv.append(npv_temp)
+            else:
+                print('R2 Score: ' + str(r2score_temp))
+
+                r2score.append(r2score_temp)
+                MSE.append(MSE_temp)
+                coefICC.append(coefICC_temp)
+                PearsonC.append(PearsonC_temp)
+                PearsonP.append(PearsonP_temp)
+                SpearmanC.append(SpearmanC_temp)
+                SpearmanP.append(SpearmanP_temp)
+
+        if survival:
+            # Extract time to event and event from label data
+            E_truth = np.asarray([labels[1][k][0] for k in test_indices])
+            T_truth = np.asarray([labels[2][k][0] for k in test_indices])
+
+            # Concordance index
+            cindex.append(1 - ll.utils.concordance_index(T_truth, y_prediction, E_truth))
+
+            # Fit Cox model using SVR output, time to event and event
+            data = {'predict': y_prediction, 'E': E_truth, 'T': T_truth}
+            data = pd.DataFrame(data=data, index=test_patient_IDs)
+
+            cph = ll.CoxPHFitter()
+            cph.fit(data, duration_col='T', event_col='E')
+
+            coxcoef.append(cph.summary['coef']['predict'])
+            coxp.append(cph.summary['p']['predict'])
 
     if output in ['scores', 'decision']:
         # Return the scores and true values of all patients
@@ -297,58 +375,66 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         N_1 = float(len(train_patient_IDs))
         N_2 = float(len(test_patient_IDs))
 
-        # Compute alpha confidence intervallen
+        # Compute alpha confidence intervals (CIs)
         stats = dict()
-        stats["Accuracy 95%:"] = str(compute_CI.compute_confidence(accuracy, N_1, N_2, alpha))
+        if not regression:
+            stats["Accuracy 95%:"] = str(compute_CI.compute_confidence(accuracy, N_1, N_2, alpha))
+            stats["AUC 95%:"] = str(compute_CI.compute_confidence(auc, N_1, N_2, alpha))
+            stats["F1-score 95%:"] = str(compute_CI.compute_confidence(f1_score_list, N_1, N_2, alpha))
+            stats["Precision 95%:"] = str(compute_CI.compute_confidence(precision, N_1, N_2, alpha))
+            stats["NPV 95%:"] = str(compute_CI.compute_confidence(npv, N_1, N_2, alpha))
+            stats["Sensitivity 95%: "] = str(compute_CI.compute_confidence(sensitivity, N_1, N_2, alpha))
+            stats["Specificity 95%:"] = str(compute_CI.compute_confidence(specificity, N_1, N_2, alpha))
 
-        stats["AUC 95%:"] = str(compute_CI.compute_confidence(auc, N_1, N_2, alpha))
+            if thresholds is not None:
+                if len(thresholds) == 2:
+                    # Compute percentage of patients that was selected
+                    stats["Percentage Selected 95%:"] = str(compute_CI.compute_confidence(percentages_selected, N_1, N_2, alpha))
 
-        stats["F1-score 95%:"] = str(compute_CI.compute_confidence(f1_score_list, N_1, N_2, alpha))
+            # Extract statistics on how often patients got classified correctly
+            alwaysright = dict()
+            alwayswrong = dict()
+            percentages = dict()
+            for i_ID in patient_classification_list:
+                percentage_right = patient_classification_list[i_ID]['N_correct'] / float(patient_classification_list[i_ID]['N_test'])
 
-        stats["Precision 95%:"] = str(compute_CI.compute_confidence(precision, N_1, N_2, alpha))
+                if i_ID in patient_IDs:
+                    label = labels[0][np.where(i_ID == patient_IDs)]
+                else:
+                    # Multiple instance of one patient
+                    label = labels[0][np.where(i_ID.split('_')[0] == patient_IDs)]
 
-        stats["Sensitivity 95%: "] = str(compute_CI.compute_confidence(sensitivity, N_1, N_2, alpha))
+                label = label[0][0]
+                percentages[i_ID] = str(label) + ': ' + str(round(percentage_right, 2) * 100) + '%'
+                if percentage_right == 1.0:
+                    alwaysright[i_ID] = label
+                    print(("Always Right: {}, label {}").format(i_ID, label))
 
-        stats["Specificity 95%:"] = str(compute_CI.compute_confidence(specificity, N_1, N_2, alpha))
+                elif percentage_right == 0:
+                    alwayswrong[i_ID] = label
+                    print(("Always Wrong: {}, label {}").format(i_ID, label))
 
-        print("Accuracy 95%:" + str(compute_CI.compute_confidence(accuracy, N_1, N_2, alpha)))
+            stats["Always right"] = alwaysright
+            stats["Always wrong"] = alwayswrong
+            stats['Percentages'] = percentages
+        else:
+            # Regression
+            stats['R2-score 95%: '] = str(compute_CI.compute_confidence(r2score, N_1, N_2, alpha))
+            stats['MSE 95%: '] = str(compute_CI.compute_confidence(MSE, N_1, N_2, alpha))
+            stats['ICC 95%: '] = str(compute_CI.compute_confidence(coefICC, N_1, N_2, alpha))
+            stats['PearsonC 95%: '] = str(compute_CI.compute_confidence(PearsonC, N_1, N_2, alpha))
+            stats['PearsonP 95%: '] = str(compute_CI.compute_confidence(PearsonP, N_1, N_2, alpha))
+            stats['SpearmanC 95%: '] = str(compute_CI.compute_confidence(SpearmanC, N_1, N_2, alpha))
+            stats['SpearmanP 95%: '] = str(compute_CI.compute_confidence(SpearmanP, N_1, N_2, alpha))
 
-        print("AUC 95%:" + str(compute_CI.compute_confidence(auc, N_1, N_2, alpha)))
+            if survival:
+                stats["Concordance 95%:"] = str(compute_CI.compute_confidence(cindex, N_1, N_2, alpha))
+                stats["Cox coef. 95%:"] = str(compute_CI.compute_confidence(coxcoef, N_1, N_2, alpha))
+                stats["Cox p 95%:"] = str(compute_CI.compute_confidence(coxp, N_1, N_2, alpha))
 
-        print("F1-score 95%:" + str(compute_CI.compute_confidence(f1_score_list, N_1, N_2, alpha)))
-
-        print("Precision 95%:" + str(compute_CI.compute_confidence(precision, N_1, N_2, alpha)))
-
-        print("Sensitivity 95%: " + str(compute_CI.compute_confidence(sensitivity, N_1, N_2, alpha)))
-
-        print("Specificity 95%:" + str(compute_CI.compute_confidence(specificity, N_1, N_2, alpha)))
-
-        # Extract statistics on how often patients got classified correctly
-        alwaysright = dict()
-        alwayswrong = dict()
-        percentages = dict()
-        for i_ID in patient_classification_list:
-            percentage_right = patient_classification_list[i_ID]['N_correct'] / float(patient_classification_list[i_ID]['N_test'])
-
-            if i_ID in patient_IDs:
-                label = labels[0][np.where(i_ID == patient_IDs)]
-            else:
-                # Multiple instance of one patient
-                label = labels[0][np.where(i_ID.split('_')[0] == patient_IDs)]
-
-            label = label[0][0]
-            percentages[i_ID] = str(label) + ': ' + str(round(percentage_right, 2) * 100) + '%'
-            if percentage_right == 1.0:
-                alwaysright[i_ID] = label
-                print(("Always Right: {}, label {}").format(i_ID, label))
-
-            elif percentage_right == 0:
-                alwayswrong[i_ID] = label
-                print(("Always Wrong: {}, label {}").format(i_ID, label))
-
-        stats["Always right"] = alwaysright
-        stats["Always wrong"] = alwayswrong
-        stats['Percentages'] = percentages
+        # Print all CI's
+        for k, v in stats.items():
+            print(f"{k} : {v}.")
 
         if show_plots:
             # Plot some characteristics in boxplots
@@ -384,6 +470,19 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             plt.boxplot(precision)
             plt.ylim([-0.05, 1.05])
             plt.ylabel('Precision')
+            plt.tick_params(
+                axis='x',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom='off',      # ticks along the bottom edge are off
+                top='off',         # ticks along the top edge are off
+                labelbottom='off')  # labels along the bottom edge are off
+            plt.tight_layout()
+            plt.show()
+
+            plt.figure()
+            plt.boxplot(npv)
+            plt.ylim([-0.05, 1.05])
+            plt.ylabel('NPV')
             plt.tick_params(
                 axis='x',          # changes apply to the x-axis
                 which='both',      # both major and minor ticks are affected
