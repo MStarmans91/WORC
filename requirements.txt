@@ -18,7 +18,7 @@ pydicom>=1.2.2
 ghalton>=0.6.1
 imbalanced-learn>=0.4.3
 scikit-learn==0.20.3
-scipy>=1.2.1
+scipy==1.2.1
 SimpleITK>=1.2.0
 missingpy>=0.2.0
 matplotlib2tikz>=0.7.4
