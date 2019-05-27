@@ -8,7 +8,7 @@ class ConfigBuilder():
         self._custom_overrides = {}
 
     def build_config(self, defaultconfig):
-        defaultconfig.read_dict(self._config.update(self._custom_overrides))
+        defaultconfig.read_dict({**self._config, **self._custom_overrides})
 
     def custom_config_overrides(self, config):
         self._custom_overrides = config
