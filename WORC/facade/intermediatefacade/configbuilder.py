@@ -4,7 +4,7 @@ from WORC.detectors.detectors import BigrClusterDetector, CartesiusClusterDetect
 
 class ConfigBuilder():
     def __init__(self):
-        self._config = {}
+        self._config = {**self._cluster_config_overrides()}
         self._custom_overrides = {}
 
     def build_config(self, defaultconfig):
@@ -14,7 +14,7 @@ class ConfigBuilder():
     def custom_config_overrides(self, config):
         self._custom_overrides = config
 
-    def cluster_config_overrides(self):
+    def _cluster_config_overrides(self):
         if BigrClusterDetector().do_detection():
             return {
                 'General': {'Joblib_ncores': '1'},
@@ -29,6 +29,8 @@ class ConfigBuilder():
                 'Classification': {'fastr_plugin': 'ProcessPoolExecution'},
                 'HyperOptimization': {'n_jobspercore': '4000'}
             }
+
+        return {}  # not a cluster or unsupported
 
     def estimator_scoring_overrides(self, estimators, scoring_method):
         return {
