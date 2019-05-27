@@ -1,1 +1,2 @@
 from .jipenjannekefacade import JipEnJannekeFacade as I
+from .intermediatefacade.intermediatefacade import IntermediateFacade
