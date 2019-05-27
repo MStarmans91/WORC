@@ -1,2 +1,2 @@
 from WORC.WORC import WORC
-from WORC import classification, featureprocessing, processing
+from WORC import classification, featureprocessing, processing, plotting

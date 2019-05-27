@@ -17,7 +17,7 @@
 
 import pandas as pd
 import argparse
-import WORC.labels.label_processing as lp
+import WORC.processing.label_processing as lp
 import os
 import glob
 from natsort import natsorted
@@ -135,8 +135,6 @@ def main():
             features = featvect[fl]['all']
             maxind = np.argmax(features)
             minind = np.argmin(features)
-            print fl, 'min', patient_IDs[minind]
-            print fl, 'max', patient_IDs[maxind]
 
             if args.im is not None:
                 im_min = glob.glob(os.path.join(args.im, patient_IDs[minind]) + imname)

@@ -48,10 +48,23 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
     else:
         # Compute confuction matrics and extract measures
         c_mat = confusion_matrix(y_truth, y_prediction)
-        TN = c_mat[0, 0]
-        FN = c_mat[1, 0]
-        TP = c_mat[1, 1]
-        FP = c_mat[0, 1]
+        if c_mat.shape[0] == 1:
+            print('[WORC Warning] Only a single class represented in y_truth and y_prediction.')
+            if 0 in c_mat:
+                TN = c_mat[0, 0]
+                FN = 0
+                TP = 0
+                FP = 0
+            else:
+                TN = 0
+                FN = 0
+                TP = c_mat[0, 0]
+                FP = 0
+        else:
+            TN = c_mat[0, 0]
+            FN = c_mat[1, 0]
+            TP = c_mat[1, 1]
+            FP = c_mat[0, 1]
 
         # compute confusion metric based statistics
         if FN == 0 and TP == 0:
@@ -76,10 +89,15 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
 
         # Additionally, compute accuracy, AUC and f1-score
         accuracy = accuracy_score(y_truth, y_prediction)
-        auc = roc_auc_score(y_truth, y_score)
+        try:
+            auc = roc_auc_score(y_truth, y_score)
+        except ValueError as e:
+            print('[WORC Warning] ' + e.message + '. Setting AUC to 0.5.')
+            auc = 0.5
+
         f1_score_out = f1_score(y_truth, y_prediction, average='weighted')
 
-        return accuracy, sensitivity, specificity, precision, f1_score_out, auc
+        return accuracy, sensitivity, specificity, precision, NPV, f1_score_out, auc
 
 
 def performance_multilabel(y_truth, y_prediction, y_score=None, beta=1):
