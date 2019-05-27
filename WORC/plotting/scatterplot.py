@@ -18,11 +18,11 @@
 try:
     import matplotlib.pyplot as plt
 except ImportError:
-    print("[PREDICT Warning] Cannot use scatterplot function, as _tkinter is not installed")
+    print("[WORC Warning] Cannot use scatterplot function, as _tkinter is not installed")
 
 import pandas as pd
 import argparse
-import genetics.genetic_processing as gp
+import WORC.processing.label_processing as lp
 import os
 import glob
 from natsort import natsorted
@@ -75,7 +75,7 @@ def main():
 
     # Get the mutation labels and patient IDs
     mutation_type = [['GP']]
-    mutation_data, image_features = gp.findmutationdata(args.classs,
+    mutation_data, image_features = lp.findmutationdata(args.classs,
                                                         mutation_type,
                                                         args.feat,
                                                         image_features_temp)
@@ -90,7 +90,6 @@ def main():
     patient_IDs = mutation_data['patient_IDs'].tolist()
 
     for imfeat, label, pid in zip(image_features, mutation_label, patient_IDs):
-        print imfeat[args.lab[0]], pid
         if label[0] == 0:
             feat1_c0.append(imfeat[args.lab[0]])
             feat2_c0.append(imfeat[args.lab[1]])
