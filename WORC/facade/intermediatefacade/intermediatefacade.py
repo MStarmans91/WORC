@@ -105,10 +105,10 @@ class IntermediateFacade():
         self._worc.execute()
 
     def binary_classification(self, estimators=['SVM'], scoring_method='f1', coarse=True):
-        self._set_estimators(estimators, scoring_method, 'classification', coarse)
+        self._set_and_validate_estimators(estimators, scoring_method, 'classification', coarse)
 
     def regression(self, estimators=['SVR'], scoring_method='r2', coarse=True):
-        self._set_estimators(estimators, scoring_method, 'regression', coarse)
+        self._set_and_validate_estimators(estimators, scoring_method, 'regression', coarse)
 
     def survival(self, estimators, scoring_method, coarse=True):
         raise NotImplementedError()
