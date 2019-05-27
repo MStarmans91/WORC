@@ -31,9 +31,6 @@ except AttributeError:
         if os.path.isdir(p) and os.path.basename(p) == 'site-packages':
             packagedir = p
 
-
-import WORC.worcfastrconfig
-
 # Add the WORC FASTR tools and type paths
 tools_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_tools')] + tools_path
 types_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_types')] + types_path
