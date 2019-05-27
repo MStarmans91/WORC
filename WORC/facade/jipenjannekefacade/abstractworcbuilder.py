@@ -49,7 +49,7 @@ class AbstractWorcBuilder(ABC):
 
         return self
 
-    def using_segmentations_from_this_directory(self, directory, segmentation_file_name='segmentation.nii', glob='*/'):
+    def using_segmentations_from_this_directory(self, directory, segmentation_file_name='segmentation.nii.gz', glob='*/'):
         directory = Path(directory).expanduser()
         if not directory.exists():
             raise PathNotFoundException(directory)
