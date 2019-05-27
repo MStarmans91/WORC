@@ -5,7 +5,7 @@
     </authors>
   <command version="1.0" url="" >
     <targets>
-      <target os="*" arch="*" interpreter="python3" paths='bin/' bin="PlotBarchart.py" />
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="PlotBarchart.py" />
     </targets>
     <description>
        PlotBarchart.py prediction estimators label_type output_png output_tex output_csv

@@ -5,7 +5,7 @@
   </authors>
   <command version="0.3.2" url="https://github.com/ITKTools/ITKTools">
     <targets>
-      <target os="*" arch="*" interpreter="python3" paths='bin/' bin="worccastconvert.py" />
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="worccastconvert.py" />
     </targets>
     <description>
       Description:

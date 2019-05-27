@@ -5,7 +5,7 @@
     </authors>
   <command version="1.0" url="" >
     <targets>
-      <target os="*" arch="*" interpreter="python3" paths='bin/' bin="segmentix_tool.py" />
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="segmentix_tool.py" />
     </targets>
     <description>
        Segmentix.py image metadata segmentation parameters

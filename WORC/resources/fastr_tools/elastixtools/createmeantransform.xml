@@ -8,7 +8,7 @@
   </authors>
   <command version="0.1" url="">
     <targets>
-      <target os="*" arch="*" interpreter="python3" paths="bin/" bin="create_mean_transform.py"/>
+      <target os="*" arch="*" interpreter="python" paths="bin/" bin="create_mean_transform.py"/>
     </targets>
     <description>
     </description>
