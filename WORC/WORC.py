@@ -131,6 +131,7 @@ class WORC(object):
         self.metadata_test = list()
 
         self.Elastix_Para = list()
+        self.label_names = 'Label1, Label2'
 
         # Set some defaults, name
         self.fastr_plugin = 'ProcessPoolExecution'
@@ -250,7 +251,7 @@ class WORC(object):
         config['SelectFeatGroup']['shape_features'] = 'True, False'
         config['SelectFeatGroup']['histogram_features'] = 'True, False'
         config['SelectFeatGroup']['orientation_features'] = 'True, False'
-        config['SelectFeatGroup']['texture_Gabor_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_Gabor_features'] = 'False'
         config['SelectFeatGroup']['texture_GLCM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLCMMS_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLRLM_features'] = 'True, False'
