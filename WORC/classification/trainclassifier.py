@@ -117,6 +117,9 @@ def trainclassifier(feat_train, patientinfo_train, config,
             print('[WORC Warning] You provided multiple output json files: only the first one will be used!')
             output_json = output_json[0]
 
+    if type(fixedsplits) is list:
+        fixedsplits = ''.join(fixedsplits)
+
     # Load variables from the config file
     config = config_io.load_config(config)
     label_type = config['Labels']['label_names']

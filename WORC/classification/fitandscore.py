@@ -234,7 +234,7 @@ def fit_and_score(X, y, scoring,
             # NOTE: need to save random state for this one as well!
             sm = SMOTE(random_state=None,
                        ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
-                       m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
+                       k_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
                        kind='borderline1',
                        n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
 

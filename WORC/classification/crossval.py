@@ -132,10 +132,8 @@ def crossval(config, label_data, image_features,
     feature_labels = image_features[0][1]
 
     # Check if we need to use fixedsplits:
-    if fixedsplits is not None and '.xlsx' in fixedsplits:
-        # fixedsplits = '/home/mstarmans/Settings/RandomSufflingOfData.xlsx'
-        wb = xlrd.open_workbook(fixedsplits)
-        wb = wb.sheet_by_index(1)
+    if fixedsplits is not None and '.csv' in fixedsplits:
+        fixedsplits = pd.read_csv(fixedsplits, header=0)
 
     if modus == 'singlelabel':
         print('Performing Single class classification.')
@@ -251,17 +249,15 @@ def crossval(config, label_data, image_features,
 
             else:
                 # Use pre defined splits
-                indices = wb.col_values(i)
-                indices = [int(j) for j in indices[1:]]  # First element is "Iteration x"
-                train = indices[0:121]
-                test = indices[121:]
+                train = fixedsplits[str(i) + '_train'].values
+                test = fixedsplits[str(i) + '_val'].values
 
                 # Convert the numbers to the correct indices
                 ind_train = list()
                 for j in train:
                     success = False
                     for num, p in enumerate(patient_IDs):
-                        if str(j).zfill(3) == p[0:3]:
+                        if j == p:
                             ind_train.append(num)
                             success = True
                     if not success:
@@ -271,18 +267,26 @@ def crossval(config, label_data, image_features,
                 for j in test:
                     success = False
                     for num, p in enumerate(patient_IDs):
-                        if str(j).zfill(3) == p[0:3]:
+                        if j == p:
                             ind_test.append(num)
                             success = True
                     if not success:
                         raise ae.WORCIOError("Patient " + str(j).zfill(3) + " is not included!")
 
-                X_train = np.asarray(image_features)[ind_train].tolist()
-                Y_train = np.asarray(i_class_temp)[ind_train].tolist()
+                X_train = [image_features[i] for i in ind_train]
+                X_test = [image_features[i] for i in ind_test]
+
                 patient_ID_train = patient_IDs[ind_train]
-                X_test = np.asarray(image_features)[ind_test].tolist()
-                Y_test = np.asarray(i_class_temp)[ind_test].tolist()
                 patient_ID_test = patient_IDs[ind_test]
+
+                if modus == 'singlelabel':
+                    Y_train = i_class_temp[ind_train]
+                    Y_test = i_class_temp[ind_test]
+                elif modus == 'multilabel':
+                    Y_train = i_class_temp[ind_train, :]
+                    Y_test = i_class_temp[ind_test, :]
+                else:
+                    raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
 
             # Find best hyperparameters and construct classifier
             config['HyperOptimization']['use_fastr'] = use_fastr
