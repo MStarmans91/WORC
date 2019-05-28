@@ -52,7 +52,6 @@ def scan_dir(path, prefix=None):
 
     return file_list
 
-
 # Determine the extra resources and scripts to pack
 resources_list = scan_dir('./WORC/resources')
 
