@@ -13,7 +13,8 @@ Added
 ~~~~~~~
 - Thresholding option in plot_SVM.
 - NPV (Negative Preditive Value) to classification metrics.
-
+- Facade for easier interaction with WORC.
+- Thresholding option in plot_SVM.
 
 Changed
 ~~~~~~~

@@ -47,6 +47,8 @@ class IntermediateFacade():
         self._images_test = []
         self._segmentations_train = []
         self._segmentations_test = []
+        self._semantics_file_train = None
+        self._semantics_file_test = None
 
         self._labels_file_train = None
         self._labels_file_test = None
@@ -100,14 +102,27 @@ class IntermediateFacade():
 
         # TODO: implement sanity check labels file e.g. is it a labels file and are there labels available
         if is_training:
-            # self._worc.labels_train = labels_file.absolute()
             self._labels_file_train = labels_file.absolute()
         else:
-            # self._worc.labels_test = labels_file.absolute()
             self._labels_file_test = labels_file.absolute()
 
+    def semantics_from_this_file(self, file_path, is_training=True):
+        semantics_file = Path(file_path).expanduser()
+
+        if not semantics_file.is_file():
+            raise PathNotFoundException(file_path)
+
+        if not CsvDetector(semantics_file.absolute()):
+            raise InvalidCsvFileException(semantics_file.absolute())
+
+        # TODO: implement sanity check semantics file e.g. is it a semantics file and are there semantics available
+        if is_training:
+            self._semantics_file_train = semantics_file.absolute()
+        else:
+            self._semantics_file_test = semantics_file.absolute()
+
     def predict_labels(self, label_names: list):
-        if not self._labels_file_train or not self._labels_file_test:
+        if not self._labels_file_train:
             raise ValueError('No labels file set trough labels_from_this_file')
 
         if not isinstance(label_names, list):
@@ -181,9 +196,10 @@ class IntermediateFacade():
         # this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well
         self._validate()  # do some final sanity checking before we execute the thing
 
-        self._worc.sources_images_train = self._images_train
+        self._worc.images_train = self._images_train
         self._worc.segmentations_train = self._segmentations_train
         self._worc.labels_train = self._labels_file_train
+        self._worc.semantics_train = self._semantics_file_train
 
         if self._images_test:
             self._worc.images_test = self._images_test

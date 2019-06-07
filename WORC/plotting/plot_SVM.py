@@ -28,6 +28,53 @@ import WORC.addexceptions as ae
 from sklearn.base import is_regressor
 
 
+def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_scoring):
+    print('Fitting thresholds on validation set')
+    if not hasattr(estimator, 'cv_iter'):
+        cv_iter = list(estimator.cv.split(X_train, Y_train))
+        estimator.cv_iter = cv_iter
+
+    p_est = estimator.cv_results_['params'][0]
+    p_all = estimator.cv_results_['params_all'][0]
+    n_iter = len(estimator.cv_iter)
+
+    thresholds_low = list()
+    thresholds_high = list()
+    for it, (train, valid) in enumerate(estimator.cv_iter):
+        print((' - iteration {} / {}.').format(it + 1, n_iter))
+        # NOTE: Explicitly exclude validation set, elso refit and score
+        # somehow still seems to use it.
+        X_train_temp = [X_train[i] for i in train]
+        Y_train_temp = [Y_train[i] for i in train]
+        train_temp = range(0, len(train))
+
+        # Refit a SearchCV object with the provided parameters
+        if ensemble:
+            estimator.create_ensemble(X_train_temp, Y_train_temp,
+                                      method=ensemble, verbose=False,
+                                      scoring=ensemble_scoring)
+        else:
+            estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
+                                      p_est, train_temp, train_temp,
+                                      verbose=False)
+
+        # Predict and save scores
+        X_train_values = [x[0] for x in X_train] # Throw away labels
+        X_train_values_valid = [X_train_values[i] for i in valid]
+        Y_valid_score_temp = estimator.predict_proba(X_train_values_valid)
+
+        # Only take the probabilities for the second class
+        Y_valid_score_temp = Y_valid_score_temp[:, 1]
+
+        # Select thresholds
+        thresholds_low.append(np.percentile(Y_valid_score_temp, thresholds[0]*100.0))
+        thresholds_high.append(np.percentile(Y_valid_score_temp, thresholds[1]*100.0))
+
+    thresholds_val = [np.mean(thresholds_low), np.mean(thresholds_high)]
+    print('Thresholds {} converted to {}').format(thresholds, thresholds_val)
+    return thresholds_val
+
+
 def plot_SVM(prediction, label_data, label_type, show_plots=False,
              alpha=0.95, ensemble=False, verbose=True,
              ensemble_scoring=None, output='stats',
@@ -100,7 +147,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
     y_predictions: list
         Contains the predicted label for each object.
 
-    PIDs: list
+    pids: list
         Contains the patient ID/name for each object.
     '''
 
@@ -171,14 +218,14 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         y_truths = list()
         y_scores = list()
         y_predictions = list()
-        PIDs = list()
+        pids = list()
 
     # Loop over the test sets, which probably correspond with cross validation
     # iterations
     for i in range(0, len(Y_test)):
         print("\n")
         print(("Cross validation {} / {}.").format(str(i + 1), str(len(Y_test))))
-        test_patient_IDs = prediction[label_type]['patient_ID_test'][i]
+        test_patient_ids = prediction[label_type]['patient_ID_test'][i]
         train_patient_IDs = prediction[label_type]['patient_ID_train'][i]
         X_test_temp = X_test[i]
         X_train_temp = X_train[i]
@@ -187,7 +234,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         test_indices = list()
 
         # Check which patients are in the test set.
-        for i_ID in test_patient_IDs:
+        for i_ID in test_patient_ids:
             test_indices.append(np.where(patient_IDs == i_ID)[0][0])
 
             # Initiate counting how many times a patient is classified correctly
@@ -228,16 +275,21 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             if len(thresholds) == 1:
                 y_prediction = y_score >= thresholds[0]
             elif len(thresholds) == 2:
+                # X_train_temp = [x[0] for x in X_train_temp]
+
                 y_score_temp = list()
                 y_prediction_temp = list()
                 y_truth_temp = list()
-                test_patient_IDs_temp = list()
+                test_patient_ids_temp = list()
+
+                thresholds_val = fit_thresholds(thresholds, SVMs[i], X_train_temp, Y_train_temp, ensemble,
+                                                ensemble_scoring)
                 for pnum in range(len(y_score)):
-                    if y_score[pnum] <= thresholds[0] or y_score[pnum] > thresholds[1]:
+                    if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
                         y_score_temp.append(y_score[pnum])
                         y_prediction_temp.append(y_prediction[pnum])
                         y_truth_temp.append(y_truth[pnum])
-                        test_patient_IDs_temp.append(test_patient_IDs[pnum])
+                        test_patient_ids_temp.append(test_patient_ids[pnum])
 
                 perc = float(len(y_prediction_temp))/float(len(y_prediction))
                 percentages_selected.append(perc)
@@ -245,7 +297,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                 y_score = y_score_temp
                 y_prediction = y_prediction_temp
                 y_truth = y_truth_temp
-                test_patient_IDs = test_patient_IDs_temp
+                test_patient_ids = test_patient_ids_temp
             else:
                 raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
 
@@ -253,7 +305,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         print("Prediction: " + str(y_prediction))
 
         # Add if patient was classified correctly or not to counting
-        for i_truth, i_predict, i_test_ID in zip(y_truth, y_prediction, test_patient_IDs):
+        for i_truth, i_predict, i_test_ID in zip(y_truth, y_prediction, test_patient_ids):
             if modus == 'multilabel':
                 success = (i_truth == i_predict).all()
             else:
@@ -269,14 +321,14 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             y_scores.append(y_score)
             y_truths.append(y_truth)
             y_predictions.append(y_prediction)
-            PIDs.append(test_patient_IDs)
+            pids.append(test_patient_ids)
 
         elif output == 'scores':
             # Output the posteriors
             y_scores.append(y_score)
             y_truths.append(y_truth)
             y_predictions.append(y_prediction)
-            PIDs.append(test_patient_IDs)
+            pids.append(test_patient_ids)
 
         elif output == 'stats':
             # Compute statistics
@@ -358,7 +410,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
 
             # Fit Cox model using SVR output, time to event and event
             data = {'predict': y_prediction, 'E': E_truth, 'T': T_truth}
-            data = pd.DataFrame(data=data, index=test_patient_IDs)
+            data = pd.DataFrame(data=data, index=test_patient_ids)
 
             cph = ll.CoxPHFitter()
             cph.fit(data, duration_col='T', event_col='E')
@@ -368,28 +420,28 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
 
     if output in ['scores', 'decision']:
         # Return the scores and true values of all patients
-        return y_truths, y_scores, y_predictions, PIDs
+        return y_truths, y_scores, y_predictions, pids
     elif output == 'stats':
         # Compute statistics
         # Extract sample size
         N_1 = float(len(train_patient_IDs))
-        N_2 = float(len(test_patient_IDs))
+        N_2 = float(len(test_patient_ids))
 
         # Compute alpha confidence intervals (CIs)
         stats = dict()
         if not regression:
-            stats["Accuracy 95%:"] = str(compute_CI.compute_confidence(accuracy, N_1, N_2, alpha))
-            stats["AUC 95%:"] = str(compute_CI.compute_confidence(auc, N_1, N_2, alpha))
-            stats["F1-score 95%:"] = str(compute_CI.compute_confidence(f1_score_list, N_1, N_2, alpha))
-            stats["Precision 95%:"] = str(compute_CI.compute_confidence(precision, N_1, N_2, alpha))
-            stats["NPV 95%:"] = str(compute_CI.compute_confidence(npv, N_1, N_2, alpha))
-            stats["Sensitivity 95%: "] = str(compute_CI.compute_confidence(sensitivity, N_1, N_2, alpha))
-            stats["Specificity 95%:"] = str(compute_CI.compute_confidence(specificity, N_1, N_2, alpha))
+            stats["Accuracy 95%:"] = f"{np.average(accuracy)} {str(compute_CI.compute_confidence(accuracy, N_1, N_2, alpha))}"
+            stats["AUC 95%:"] = f"{np.average(auc)} {str(compute_CI.compute_confidence(auc, N_1, N_2, alpha))}"
+            stats["F1-score 95%:"] = f"{np.average(f1_score_list)} {str(compute_CI.compute_confidence(f1_score_list, N_1, N_2, alpha))}"
+            stats["Precision 95%:"] = f"{np.average(precision)} {str(compute_CI.compute_confidence(precision, N_1, N_2, alpha))}"
+            stats["NPV 95%:"] = f"{np.average(npv)} {str(compute_CI.compute_confidence(npv, N_1, N_2, alpha))}"
+            stats["Sensitivity 95%: "] = f"{np.average(sensitivity)} {str(compute_CI.compute_confidence(sensitivity, N_1, N_2, alpha))}"
+            stats["Specificity 95%:"] = f"{np.average(specificity)} {str(compute_CI.compute_confidence(specificity, N_1, N_2, alpha))}"
 
             if thresholds is not None:
                 if len(thresholds) == 2:
                     # Compute percentage of patients that was selected
-                    stats["Percentage Selected 95%:"] = str(compute_CI.compute_confidence(percentages_selected, N_1, N_2, alpha))
+                    stats["Percentage Selected 95%:"] = f"{np.average(percentages_selected)} {str(compute_CI.compute_confidence(percentages_selected, N_1, N_2, alpha))}"
 
             # Extract statistics on how often patients got classified correctly
             alwaysright = dict()
@@ -419,18 +471,18 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             stats['Percentages'] = percentages
         else:
             # Regression
-            stats['R2-score 95%: '] = str(compute_CI.compute_confidence(r2score, N_1, N_2, alpha))
-            stats['MSE 95%: '] = str(compute_CI.compute_confidence(MSE, N_1, N_2, alpha))
-            stats['ICC 95%: '] = str(compute_CI.compute_confidence(coefICC, N_1, N_2, alpha))
-            stats['PearsonC 95%: '] = str(compute_CI.compute_confidence(PearsonC, N_1, N_2, alpha))
-            stats['PearsonP 95%: '] = str(compute_CI.compute_confidence(PearsonP, N_1, N_2, alpha))
-            stats['SpearmanC 95%: '] = str(compute_CI.compute_confidence(SpearmanC, N_1, N_2, alpha))
-            stats['SpearmanP 95%: '] = str(compute_CI.compute_confidence(SpearmanP, N_1, N_2, alpha))
+            stats['R2-score 95%: '] = f"{np.average(r2_score)} {str(compute_CI.compute_confidence(r2score, N_1, N_2, alpha))}"
+            stats['MSE 95%: '] = f"{np.average(MSE)} {str(compute_CI.compute_confidence(MSE, N_1, N_2, alpha))}"
+            stats['ICC 95%: '] = f"{np.average(coefICC)} {str(compute_CI.compute_confidence(coefICC, N_1, N_2, alpha))}"
+            stats['PearsonC 95%: '] = f"{np.average(PearsonC)} {str(compute_CI.compute_confidence(PearsonC, N_1, N_2, alpha))}"
+            stats['PearsonP 95%: '] = f"{np.average(PearsonP)} {str(compute_CI.compute_confidence(PearsonP, N_1, N_2, alpha))}"
+            stats['SpearmanC 95%: '] = f"{np.average(SpearmanC)} {str(compute_CI.compute_confidence(SpearmanC, N_1, N_2, alpha))}"
+            stats['SpearmanP 95%: '] = f"{np.average(SpearmanP)} {str(compute_CI.compute_confidence(SpearmanP, N_1, N_2, alpha))}"
 
             if survival:
-                stats["Concordance 95%:"] = str(compute_CI.compute_confidence(cindex, N_1, N_2, alpha))
-                stats["Cox coef. 95%:"] = str(compute_CI.compute_confidence(coxcoef, N_1, N_2, alpha))
-                stats["Cox p 95%:"] = str(compute_CI.compute_confidence(coxp, N_1, N_2, alpha))
+                stats["Concordance 95%:"] = f"{np.average(cindex)} {str(compute_CI.compute_confidence(cindex, N_1, N_2, alpha))}"
+                stats["Cox coef. 95%:"] = f"{np.average(coxcoef)} {str(compute_CI.compute_confidence(coxcoef, N_1, N_2, alpha))}"
+                stats["Cox p 95%:"] = f"{np.average(coxp)} {str(compute_CI.compute_confidence(coxp, N_1, N_2, alpha))}"
 
         # Print all CI's
         for k, v in stats.items():

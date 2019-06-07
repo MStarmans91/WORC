@@ -26,6 +26,7 @@ from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics import make_scorer, average_precision_score
 from sklearn.metrics import check_scoring as check_scoring_sklearn
 from scipy.linalg import pinv
+from imblearn.metrics import geometric_mean_score
 
 
 def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
@@ -92,7 +93,7 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
         try:
             auc = roc_auc_score(y_truth, y_score)
         except ValueError as e:
-            print('[WORC Warning] ' + e.message + '. Setting AUC to 0.5.')
+            print('[WORC Warning] ' + str(e) + '. Setting AUC to 0.5.')
             auc = 0.5
 
         f1_score_out = f1_score(y_truth, y_prediction, average='weighted')
@@ -209,7 +210,7 @@ def multi_class_auc(y_truth, y_score):
 
 
 def multi_class_auc_score(y_truth, y_score):
-    return metrics.make_scorer(multi_class_auc, needs_proba=True)
+    return make_scorer(multi_class_auc, needs_proba=True)
 
 
 def check_scoring(estimator, scoring=None, allow_none=False):
@@ -218,7 +219,9 @@ def check_scoring(estimator, scoring=None, allow_none=False):
     scoring metrics.
     '''
     if scoring == 'average_precision_weighted':
-        scorer = make_scorer(average_precision_score, average='weighted')
+        scorer = make_scorer(average_precision_score, average='weighted', needs_proba=True)
+    elif scoring == 'gmean':
+        scorer = make_scorer(geometric_mean_score(), needs_proba=True)
     else:
         scorer = check_scoring_sklearn(estimator, scoring=scoring)
     return scorer
