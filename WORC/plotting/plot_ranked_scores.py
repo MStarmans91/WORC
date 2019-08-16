@@ -23,7 +23,7 @@ import glob
 import numpy as np
 import csv
 import os
-import WORC.plotting.plot_images as pi
+from WORC.plotting import plot_images as pi
 import SimpleITK as sitk
 from WORC.addexceptions import WORCKeyError
 import zipfile
@@ -204,7 +204,9 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
         im = sitk.ReadImage(images[idx])
         seg = sitk.ReadImage(segmentations[idx])
         pid = PIDs_images[idx]
-        fname = str(int(ranked_scores[idx])) + '_' + pid + '_TrueLabel_' + str(ranked_truths[idx]) + '_slice.png'
+        fname = str(abs(int(ranked_scores[idx]))) + '_' + pid + '_TrueLabel_' + str(ranked_truths[idx]) + '_slice.png'
+        if int(ranked_scores[idx]) < 0:
+            fname = 'min' + fname
 
         if output_zip is not None:
             output_name = os.path.join(os.path.dirname(output_zip), fname)

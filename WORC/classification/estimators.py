@@ -19,7 +19,8 @@ import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.utils.validation import check_is_fitted
 from sklearn.utils.multiclass import unique_labels
-import WORC.classification.RankedSVM as RSVM
+from WORC.classification.RankedSVM import RankSVM_train, RankSVM_test
+from autosklearn.classification import AutoSklearnClassifier
 
 
 class RankedSVM(BaseEstimator, ClassifierMixin):
@@ -77,7 +78,7 @@ class RankedSVM(BaseEstimator, ClassifierMixin):
         self.num_class = y.shape[0]
 
         Weights, Bias, SVs =\
-            RSVM.RankSVM_train(train_data=X,
+            RankSVM_train(train_data=X,
                                train_target=y,
                                cost=self.cost,
                                lambda_tol=self.lambda_tol,
@@ -111,14 +112,14 @@ class RankedSVM(BaseEstimator, ClassifierMixin):
         check_is_fitted(self, ['X_', 'y_'])
 
         _, Predicted_Labels =\
-            RSVM.RankSVM_test(test_data=X,
-                              num_class=self.num_class,
-                              Weights=self.Weights,
-                              Bias=self.Bias,
-                              SVs=self.SVs,
-                              svm=self.svm, gamma=self.gamma,
-                              coefficient=self.coefficient,
-                              degree=self.degree)
+            RankSVM_test(test_data=X,
+                         num_class=self.num_class,
+                         Weights=self.Weights,
+                         Bias=self.Bias,
+                         SVs=self.SVs,
+                         svm=self.svm, gamma=self.gamma,
+                         coefficient=self.coefficient,
+                         degree=self.degree)
 
         return Predicted_Labels
 
@@ -140,12 +141,18 @@ class RankedSVM(BaseEstimator, ClassifierMixin):
         check_is_fitted(self, ['X_', 'y_'])
 
         Probs, _ =\
-            RSVM.RankSVM_test(test_data=X,
-                              num_class=self.num_class,
-                              Weights=self.Weights,
-                              Bias=self.Bias,
-                              svm=self.svm, gamma=self.gamma,
-                              coefficient=self.coefficient,
-                              degree=self.degree)
+            RankSVM_test(test_data=X,
+                         num_class=self.num_class,
+                         Weights=self.Weights,
+                         Bias=self.Bias,
+                         svm=self.svm, gamma=self.gamma,
+                         coefficient=self.coefficient,
+                         degree=self.degree)
 
         return Probs
+
+
+class AutoClassifier(AutoSklearnClassifier):
+    def __init__(self, ensemble_memory_limit=2048, time_left_for_this_task=900, **kwargs):
+
+        super(AutoClassifier, self).__init__(**kwargs)

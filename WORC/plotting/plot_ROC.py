@@ -52,7 +52,19 @@ def plot_single_ROC(y_truth, y_score, verbose=False):
     fprev = -np.inf
     i = 0
     N = float(np.bincount(y_truth)[0])
-    P = float(np.bincount(y_truth)[1])
+    if len(np.bincount(y_truth)) == 1:
+        # No class = 1 present.
+        P = 0
+    else:
+        P = float(np.bincount(y_truth)[1])
+
+    if N == 0:
+        print('[WORC Warning] No negative class samples found, cannot determine ROC. Skipping iteration.')
+        return fpr, tpr, thresholds
+    elif P == 0:
+        print('[WORC Warning] No positive class samples found, cannot determine ROC. Skipping iteration.')
+        return fpr, tpr, thresholds
+        
     while i < len(y_truth_sorted):
         if y_score[i] != fprev:
             fpr.append(1 - FP/N)
@@ -130,10 +142,11 @@ def plot_ROC_CIc(y_truth, y_score, N_1, N_2, plot='default', alpha=0.95,
     thresholds = list()
     for yt, ys in zip(y_truth, y_score):
         fpr_temp, tpr_temp, thresholds_temp = plot_single_ROC(yt, ys)
-        roc_auc.append(roc_auc_score(yt, ys))
-        fprt.append(fpr_temp)
-        tprt.append(tpr_temp)
-        thresholds.append(thresholds_temp)
+        if fpr_temp:
+            roc_auc.append(roc_auc_score(yt, ys))
+            fprt.append(fpr_temp)
+            tprt.append(tpr_temp)
+            thresholds.append(thresholds_temp)
 
     # Sample FPR and TPR at numerous points
     fpr, tpr, th = ROC_thresholding(fprt, tprt, thresholds, tsamples)

@@ -71,17 +71,40 @@ class StatisticalTestThreshold(BaseEstimator, SelectorMixin):
             self.parameters = {}
 
         # Perform the statistical test for each feature
+        multilabel = type(Y_train[0]) is np.ndarray
         for n_feat in range(0, X_train.shape[1]):
+            # Select only this specific feature for all objects
+
             fv = X_train[:, n_feat]
+            if multilabel:
+                # print('Multilabel: take minimum p-value for all label tests.')
+                # We do a statistical test per label and take the minimum p-value
+                n_label = Y_train[0].shape[0]
+                metric_values = list()
+                for i in range(n_label):
+                    class1 = [i for j, i in enumerate(fv) if np.argmax(Y_train[j]) == n_label]
+                    class2 = [i for j, i in enumerate(fv) if np.argmax(Y_train[j]) != n_label]
 
-            class1 = [i for j, i in enumerate(fv) if Y_train[j] == 1]
-            class2 = [i for j, i in enumerate(fv) if Y_train[j] == 0]
+                    try:
+                        metric_value_temp = self.metric_function(class1, class2, **self.parameters)[1]
+                    except ValueError as e:
+                        print("[PREDICT Warning] " + str(e) + '. Replacing metric value by 1.')
+                        metric_value_temp
 
-            try:
-                metric_value = self.metric_function(class1, class2, **self.parameters)[1]
-            except ValueError as e:
-                print("[PREDICT Warning] " + str(e) + '. Replacing metric value by 1.')
-                metric_value = 1
+                    metric_values.append(metric_value_temp)
+
+                metric_value = np.min(metric_values)
+
+            else:
+                # Singlelabel
+                class1 = [i for j, i in enumerate(fv) if Y_train[j] == 1]
+                class2 = [i for j, i in enumerate(fv) if Y_train[j] == 0]
+
+                try:
+                    metric_value = self.metric_function(class1, class2, **self.parameters)[1]
+                except ValueError as e:
+                    print("[PREDICT Warning] " + str(e) + '. Replacing metric value by 1.')
+                    metric_value = 1
 
             self.metric_values.append(metric_value)
             if metric_value < self.threshold:

@@ -32,6 +32,12 @@ def compute_confidence(metric, N_train, N_test, alpha=0.95):
     alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 95%
     """
 
+    # Remove NaN values if they are there
+    if np.isnan(metric).any():
+        print('[WORC Warning] Array contains nan: removing.')
+        metric = np.asarray(metric)
+        metric = metric[np.logical_not(np.isnan(metric))]
+
     # Convert to floats, as python 2 rounds the divisions if we have integers
     N_train = float(N_train)
     N_test = float(N_test)

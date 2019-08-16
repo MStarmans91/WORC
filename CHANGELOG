@@ -15,10 +15,23 @@ Added
 - NPV (Negative Preditive Value) to classification metrics.
 - Facade for easier interaction with WORC.
 - Thresholding option in plot_SVM.
+- Function to create fixed splits for cross validation.
+- n_splits parameter for train-test cross validation. Default is now also
+  10 instead of 5.
+- Added generalization score.
+- Parameter to choose how many of the optimal settings to save (maxlen).
+- Option to combine multiple onevsrest models in plot_SVM.
+- StatsticalTestThreshold feature selection for multilabel problems.
+- Support for test sets in which only one class is present in various
+  plotting functions and the metrics.
 
 Changed
 ~~~~~~~
 - Plot_SVR is removed: it's now embedded in plot_SVM.
+- Moved statistical feature selection to last step in fit and score.
+- Also the minimum train and validation score are now saved.
+- Put scaler at top of fitandscore function.
+- Make link in file conversion if output is same format as input.
 
 Fixed
 ~~~~~
@@ -26,6 +39,11 @@ Fixed
   labels are from a single class.
 - Plotting module now correctly initialized.
 - Plot_SVM now also works properly for regression.
+- Masks for ROI normalization now properly added.
+- Preprocessing: mask needed to be cast to binary.
+- Failed workflows now return nan instead of zero for performance.
+- Several bugs in multilabel performance evaluation
+- Ring in segmentix was in sagital instead of axial direction.
 
 
 3.0.0 - 2019-05-08

@@ -18,7 +18,7 @@
 
 import numpy as np
 import sys
-import WORC.plotting.compute_CI as compute_CI
+from WORC.plotting.compute_CI import compute_confidence
 import pandas as pd
 import os
 import lifelines as ll
@@ -79,7 +79,571 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
              alpha=0.95, ensemble=False, verbose=True,
              ensemble_scoring=None, output='stats',
              modus='singlelabel',
-             thresholds=None, survival=False):
+             thresholds=None, survival=False,
+             generalization=False, shuffle_estimators=False):
+    '''
+    Plot the output of a single binary estimator, e.g. a SVM.
+
+    Parameters
+    ----------
+    prediction: pandas dataframe or string, mandatory
+        output of trainclassifier function, either a pandas dataframe
+        or a HDF5 file
+
+    label_data: string, mandatory
+        Contains the path referring to a .txt file containing the
+        patient label(s) and value(s) to be used for learning. See
+        the Github Wiki for the format.
+
+    label_type: string, mandatory
+        Name of the label to extract from the label data to test the
+        estimator on.
+
+    show_plots: Boolean, default False
+        Determine whether matplotlib performance plots are made.
+
+    alpha: float, default 0.95
+        Significance of confidence intervals.
+
+    ensemble: False, integer or 'Caruana'
+        Determine whether an ensemble will be created. If so,
+        either provide an integer to determine how many of the
+        top performing classifiers should be in the ensemble, or use
+        the string "Caruana" to use smart ensembling based on
+        Caruana et al. 2004.
+
+    verbose: boolean, default True
+        Plot intermedate messages.
+
+    ensemble_scoring: string, default None
+        Metric to be used for evaluating the ensemble. If None,
+        the option set in the prediction object will be used.
+
+    output: string, default stats
+        Determine which results are put out. If stats, the statistics of the
+        estimator will be returned. If scores, the scores will be returned.
+
+    thresholds: list of integer(s), default None
+        If None, use default threshold of sklearn (0.5) on posteriors to
+        converge to a binary prediction. If one integer is provided, use that one.
+        If two integers are provided, posterior < thresh[0] = 0, posterior > thresh[1] = 1.
+
+    Returns
+    ----------
+    Depending on the output parameters, the following outputs are returned:
+
+    If output == 'stats':
+    stats: dictionary
+        Contains the confidence intervals of the performance metrics
+        and the number of times each patient was classifier correctly
+        or incorrectly.
+
+    If output == 'scores':
+    y_truths: list
+        Contains the true label for each object.
+
+    y_scores: list
+        Contains the score (e.g. posterior) for each object.
+
+    y_predictions: list
+        Contains the predicted label for each object.
+
+    pids: list
+        Contains the patient ID/name for each object.
+    '''
+
+    # Load the prediction object if it's a hdf5 file
+    if type(prediction) is not pd.core.frame.DataFrame:
+        if os.path.isfile(prediction):
+            prediction = pd.read_hdf(prediction)
+        else:
+            raise ae.WORCIOError(('{} is not an existing file!').format(str(prediction)))
+
+    # Select the estimator from the pandas dataframe to use
+    keys = prediction.keys()
+    SVMs = list()
+    if label_type is None:
+        label_type = keys[0]
+
+    # Load the label data
+    if type(label_data) is not dict:
+        if os.path.isfile(label_data):
+            if type(label_type) is not list:
+                # Singlelabel: convert to list
+                label_type = [[label_type]]
+            label_data = lp.load_labels(label_data, label_type)
+
+    n_labels = len(label_type)
+    patient_IDs = label_data['patient_IDs']
+    labels = label_data['label']
+
+    if type(label_type) is list:
+        # FIXME: Support for multiple label types not supported yet.
+        print('[WORC Warning] Support for multiple label types not supported yet. Taking first label for plot_SVM.')
+        original_label_type = label_type[:]
+        label_type = keys[0]
+
+    # Extract the estimators, features and labels
+    SVMs = prediction[label_type]['classifiers']
+    regression = is_regressor(SVMs[0].best_estimator_)
+    Y_test = prediction[label_type]['Y_test']
+    X_test = prediction[label_type]['X_test']
+    X_train = prediction[label_type]['X_train']
+    Y_train = prediction[label_type]['Y_train']
+    feature_labels = prediction[label_type]['feature_labels']
+
+    # Create lists for performance measures
+    if not regression:
+        sensitivity = list()
+        specificity = list()
+        precision = list()
+        npv = list()
+        accuracy = list()
+        auc = list()
+        f1_score_list = list()
+
+        if modus == 'multilabel':
+            acc_av = list()
+
+            # Also add scoring measures for all single label scores
+            sensitivity_single = list()
+            specificity_single = list()
+            precision_single = list()
+            npv_single = list()
+            accuracy_single = list()
+            auc_single = list()
+            f1_score_list_single = list()
+
+    else:
+        r2score = list()
+        MSE = list()
+        coefICC = list()
+        PearsonC = list()
+        PearsonP = list()
+        SpearmanC = list()
+        SpearmanP = list()
+        cindex = list()
+        coxcoef = list()
+        coxp = list()
+
+    patient_classification_list = dict()
+    percentages_selected = list()
+
+    if output in ['scores', 'decision']:
+        # Keep track of all groundth truths and scores
+        y_truths = list()
+        y_scores = list()
+        y_predictions = list()
+        pids = list()
+
+    # Loop over the test sets, which probably correspond with cross validation
+    # iterations
+    for i in range(0, len(Y_test)):
+        print("\n")
+        print(("Cross validation {} / {}.").format(str(i + 1), str(len(Y_test))))
+        test_patient_ids = prediction[label_type]['patient_ID_test'][i]
+        train_patient_ids = prediction[label_type]['patient_ID_train'][i]
+        X_test_temp = X_test[i]
+        X_train_temp = X_train[i]
+        Y_train_temp = Y_train[i]
+        Y_test_temp = Y_test[i]
+        test_indices = list()
+
+        # Check which patients are in the test set.
+        for i_ID in test_patient_ids:
+            test_indices.append(np.where(patient_IDs == i_ID)[0][0])
+
+            # Initiate counting how many times a patient is classified correctly
+            if i_ID not in patient_classification_list:
+                patient_classification_list[i_ID] = dict()
+                patient_classification_list[i_ID]['N_test'] = 0
+                patient_classification_list[i_ID]['N_correct'] = 0
+                patient_classification_list[i_ID]['N_wrong'] = 0
+
+            patient_classification_list[i_ID]['N_test'] += 1
+
+        # Extract ground truth
+        y_truth = Y_test_temp
+
+        # If required, shuffle estimators for "Random" ensembling
+        if shuffle_estimators:
+            # Compute generalization score
+            print('Shuffling estimators for random ensembling.')
+            shuffle(SVMs[i].cv_results_['params'])
+            shuffle(SVMs[i].cv_results_['params_all'])
+
+        # If required, rank according to generalization score instead of mean_validation_score
+        if generalization:
+            # Compute generalization score
+            print('Using generalization score for estimator ranking.')
+            difference_score = abs(SVMs[i].cv_results_['mean_train_score'] - SVMs[i].cv_results_['mean_test_score'])
+            generalization_score = SVMs[i].cv_results_['mean_test_score'] - difference_score
+
+            # Rerank based on score
+            indices = np.argsort(generalization_score)
+            SVMs[i].cv_results_['params'] = [SVMs[i].cv_results_['params'][i] for i in indices[::-1]]
+            SVMs[i].cv_results_['params_all'] = [SVMs[i].cv_results_['params_all'][i] for i in indices[::-1]]
+
+        # If requested, first let the SearchCV object create an ensemble
+        if ensemble:
+            # NOTE: Added for backwards compatability
+            if not hasattr(SVMs[i], 'cv_iter'):
+                cv_iter = list(SVMs[i].cv.split(X_train_temp, Y_train_temp))
+                SVMs[i].cv_iter = cv_iter
+
+            # Create the ensemble
+            X_train_temp = [(x, feature_labels) for x in X_train_temp]
+            SVMs[i].create_ensemble(X_train_temp, Y_train_temp,
+                                    method=ensemble, verbose=verbose,
+                                    scoring=ensemble_scoring)
+
+        # Create prediction
+        y_prediction = SVMs[i].predict(X_test_temp)
+
+        if regression:
+            y_score = y_prediction
+        elif modus == 'multilabel':
+            y_score = SVMs[i].predict_proba(X_test_temp)
+        else:
+            y_score = SVMs[i].predict_proba(X_test_temp)[:, 1]
+
+        # Create a new binary score based on the thresholds if given
+        if thresholds is not None:
+            if len(thresholds) == 1:
+                y_prediction = y_score >= thresholds[0]
+            elif len(thresholds) == 2:
+                # X_train_temp = [x[0] for x in X_train_temp]
+
+                y_score_temp = list()
+                y_prediction_temp = list()
+                y_truth_temp = list()
+                test_patient_ids_temp = list()
+
+                thresholds_val = fit_thresholds(thresholds, SVMs[i], X_train_temp, Y_train_temp, ensemble,
+                                                ensemble_scoring)
+                for pnum in range(len(y_score)):
+                    if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
+                        y_score_temp.append(y_score[pnum])
+                        y_prediction_temp.append(y_prediction[pnum])
+                        y_truth_temp.append(y_truth[pnum])
+                        test_patient_ids_temp.append(test_patient_ids[pnum])
+
+                perc = float(len(y_prediction_temp))/float(len(y_prediction))
+                percentages_selected.append(perc)
+                print(f"Selected {len(y_prediction_temp)} from {len(y_prediction)} ({perc}%) patients using two thresholds.")
+                y_score = y_score_temp
+                y_prediction = y_prediction_temp
+                y_truth = y_truth_temp
+                test_patient_ids = test_patient_ids_temp
+            else:
+                raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
+
+        print("Truth: " + str(y_truth))
+        print("Prediction: " + str(y_prediction))
+
+        # Add if patient was classified correctly or not to counting
+        for i_truth, i_predict, i_test_ID in zip(y_truth, y_prediction, test_patient_ids):
+            if modus == 'multilabel':
+                success = (i_truth == i_predict).all()
+            else:
+                success = i_truth == i_predict
+
+            if success:
+                patient_classification_list[i_test_ID]['N_correct'] += 1
+            else:
+                patient_classification_list[i_test_ID]['N_wrong'] += 1
+
+        if output == 'decision':
+            # Output the posteriors
+            y_scores.append(y_score)
+            y_truths.append(y_truth)
+            y_predictions.append(y_prediction)
+            pids.append(test_patient_ids)
+
+        elif output == 'scores':
+            # Output the posteriors
+            y_scores.append(y_score)
+            y_truths.append(y_truth)
+            y_predictions.append(y_prediction)
+            pids.append(test_patient_ids)
+
+        elif output == 'stats':
+            # Compute statistics
+            # Compute confusion matrix and use for sensitivity/specificity
+            if modus == 'singlelabel':
+                # Compute singlelabel performance metrics
+                if not regression:
+                    accuracy_temp, sensitivity_temp, specificity_temp,\
+                        precision_temp, npv_temp, f1_score_temp, auc_temp =\
+                        metrics.performance_singlelabel(y_truth,
+                                                        y_prediction,
+                                                        y_score,
+                                                        regression)
+                else:
+                    r2score_temp, MSE_temp, coefICC_temp, PearsonC_temp,\
+                        PearsonP_temp, SpearmanC_temp,\
+                        SpearmanP_temp =\
+                        metrics.performance_singlelabel(y_truth,
+                                                        y_prediction,
+                                                        y_score,
+                                                        regression)
+
+            elif modus == 'multilabel':
+                # Convert class objects to single label per patient
+                y_truth_temp = list()
+                y_prediction_temp = list()
+                for yt, yp in zip(y_truth, y_prediction):
+                    label = np.where(yt == 1)
+                    if len(label) > 1:
+                        raise ae.WORCNotImplementedError('Multiclass classification evaluation is not supported in WORC.')
+
+                    y_truth_temp.append(label[0][0])
+                    label = np.where(yp == 1)
+                    y_prediction_temp.append(label[0][0])
+
+                y_truth = y_truth_temp
+                y_prediction = y_prediction_temp
+
+                # Compute multilabel performance metrics
+                accuracy_temp, sensitivity_temp, specificity_temp,\
+                    precision_temp, npv_temp, f1_score_temp, auc_temp, acc_av_temp =\
+                    metrics.performance_multilabel(y_truth,
+                                                   y_prediction,
+                                                   y_score)
+
+                # Compute all single label performance metrics as well
+                for i_label in range(n_labels):
+                    y_truth_single = [i == i_label for i in y_truth]
+                    y_prediction_single = [i == i_label for i in y_prediction]
+                    y_score_single = y_score[:, i_label]
+
+                    accuracy_temp_single, sensitivity_temp_single, specificity_temp_single,\
+                        precision_temp_single, npv_temp_single, f1_score_temp_single, auc_temp_single =\
+                        metrics.performance_singlelabel(y_truth_single,
+                                                        y_prediction_single,
+                                                        y_score_single,
+                                                        regression)
+
+            else:
+                raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
+
+            # Print AUC to keep you up to date
+            if not regression:
+                print('AUC: ' + str(auc_temp))
+
+                # Append performance to lists for all cross validations
+                accuracy.append(accuracy_temp)
+                sensitivity.append(sensitivity_temp)
+                specificity.append(specificity_temp)
+                auc.append(auc_temp)
+                f1_score_list.append(f1_score_temp)
+                precision.append(precision_temp)
+                npv.append(npv_temp)
+
+                if modus == 'multilabel':
+                    acc_av.append(acc_av_temp)
+
+                    accuracy_single.append(accuracy_temp_single)
+                    sensitivity_single.append(sensitivity_temp_single)
+                    specificity_single.append(specificity_temp_single)
+                    auc_single.append(auc_temp_single)
+                    f1_score_list_single.append(f1_score_temp_single)
+                    precision_single.append(precision_temp_single)
+                    npv_single.append(npv_temp_single)
+
+            else:
+                print('R2 Score: ' + str(r2score_temp))
+
+                r2score.append(r2score_temp)
+                MSE.append(MSE_temp)
+                coefICC.append(coefICC_temp)
+                PearsonC.append(PearsonC_temp)
+                PearsonP.append(PearsonP_temp)
+                SpearmanC.append(SpearmanC_temp)
+                SpearmanP.append(SpearmanP_temp)
+
+        if survival:
+            # Extract time to event and event from label data
+            E_truth = np.asarray([labels[1][k][0] for k in test_indices])
+            T_truth = np.asarray([labels[2][k][0] for k in test_indices])
+
+            # Concordance index
+            cindex.append(1 - ll.utils.concordance_index(T_truth, y_prediction, E_truth))
+
+            # Fit Cox model using SVR output, time to event and event
+            data = {'predict': y_prediction, 'E': E_truth, 'T': T_truth}
+            data = pd.DataFrame(data=data, index=test_patient_ids)
+
+            cph = ll.CoxPHFitter()
+            cph.fit(data, duration_col='T', event_col='E')
+
+            coxcoef.append(cph.summary['coef']['predict'])
+            coxp.append(cph.summary['p']['predict'])
+
+    if output in ['scores', 'decision']:
+        # Return the scores and true values of all patients
+        return y_truths, y_scores, y_predictions, pids
+    elif output == 'stats':
+        # Compute statistics
+        # Extract sample size
+        N_1 = float(len(train_patient_ids))
+        N_2 = float(len(test_patient_ids))
+
+        # Compute alpha confidence intervals (CIs)
+        stats = dict()
+        if not regression:
+            stats["Accuracy 95%:"] = f"{np.nanmean(accuracy)} {str(compute_confidence(accuracy, N_1, N_2, alpha))}"
+            stats["AUC 95%:"] = f"{np.nanmean(auc)} {str(compute_confidence(auc, N_1, N_2, alpha))}"
+            stats["F1-score 95%:"] = f"{np.nanmean(f1_score_list)} {str(compute_confidence(f1_score_list, N_1, N_2, alpha))}"
+            stats["Precision 95%:"] = f"{np.nanmean(precision)} {str(compute_confidence(precision, N_1, N_2, alpha))}"
+            stats["NPV 95%:"] = f"{np.nanmean(npv)} {str(compute_confidence(npv, N_1, N_2, alpha))}"
+            stats["Sensitivity 95%: "] = f"{np.nanmean(sensitivity)} {str(compute_confidence(sensitivity, N_1, N_2, alpha))}"
+            stats["Specificity 95%:"] = f"{np.nanmean(specificity)} {str(compute_confidence(specificity, N_1, N_2, alpha))}"
+
+            if modus == 'multilabel':
+                stats["Average Accuracy 95%:"] = f"{np.nanmean(acc_av)} {str(compute_confidence(acc_av, N_1, N_2, alpha))}"
+
+            if thresholds is not None:
+                if len(thresholds) == 2:
+                    # Compute percentage of patients that was selected
+                    stats["Percentage Selected 95%:"] = f"{np.nanmean(percentages_selected)} {str(compute_confidence(percentages_selected, N_1, N_2, alpha))}"
+
+            # Extract statistics on how often patients got classified correctly
+            alwaysright = dict()
+            alwayswrong = dict()
+            percentages = dict()
+            for i_ID in patient_classification_list:
+                percentage_right = patient_classification_list[i_ID]['N_correct'] / float(patient_classification_list[i_ID]['N_test'])
+
+                if i_ID in patient_IDs:
+                    label = labels[0][np.where(i_ID == patient_IDs)]
+                else:
+                    # Multiple instance of one patient
+                    label = labels[0][np.where(i_ID.split('_')[0] == patient_IDs)]
+
+                label = label[0][0]
+                percentages[i_ID] = str(label) + ': ' + str(round(percentage_right, 2) * 100) + '%'
+                if percentage_right == 1.0:
+                    alwaysright[i_ID] = label
+                    print(("Always Right: {}, label {}").format(i_ID, label))
+
+                elif percentage_right == 0:
+                    alwayswrong[i_ID] = label
+                    print(("Always Wrong: {}, label {}").format(i_ID, label))
+
+            stats["Always right"] = alwaysright
+            stats["Always wrong"] = alwayswrong
+            stats['Percentages'] = percentages
+        else:
+            # Regression
+            stats['R2-score 95%: '] = f"{np.nanmean(r2_score)} {str(compute_confidence(r2score, N_1, N_2, alpha))}"
+            stats['MSE 95%: '] = f"{np.nanmean(MSE)} {str(compute_confidence(MSE, N_1, N_2, alpha))}"
+            stats['ICC 95%: '] = f"{np.nanmean(coefICC)} {str(compute_confidence(coefICC, N_1, N_2, alpha))}"
+            stats['PearsonC 95%: '] = f"{np.nanmean(PearsonC)} {str(compute_confidence(PearsonC, N_1, N_2, alpha))}"
+            stats['PearsonP 95%: '] = f"{np.nanmean(PearsonP)} {str(compute_confidence(PearsonP, N_1, N_2, alpha))}"
+            stats['SpearmanC 95%: '] = f"{np.nanmean(SpearmanC)} {str(compute_confidence(SpearmanC, N_1, N_2, alpha))}"
+            stats['SpearmanP 95%: '] = f"{np.nanmean(SpearmanP)} {str(compute_confidence(SpearmanP, N_1, N_2, alpha))}"
+
+            if survival:
+                stats["Concordance 95%:"] = f"{np.nanmean(cindex)} {str(compute_confidence(cindex, N_1, N_2, alpha))}"
+                stats["Cox coef. 95%:"] = f"{np.nanmean(coxcoef)} {str(compute_confidence(coxcoef, N_1, N_2, alpha))}"
+                stats["Cox p 95%:"] = f"{np.nanmean(coxp)} {str(compute_confidence(coxp, N_1, N_2, alpha))}"
+
+        # Print all CI's
+        for k, v in stats.items():
+            print(f"{k} : {v}.")
+
+        if show_plots:
+            # Plot some characteristics in boxplots
+            import matplotlib.pyplot as plt
+
+            plt.figure()
+            plt.boxplot(accuracy)
+            plt.ylim([-0.05, 1.05])
+            plt.ylabel('Accuracy')
+            plt.tick_params(
+                axis='x',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom='off',      # ticks along the bottom edge are off
+                top='off',         # ticks along the top edge are off
+                labelbottom='off')  # labels along the bottom edge are off
+            plt.tight_layout()
+            plt.show()
+
+            plt.figure()
+            plt.boxplot(auc)
+            plt.ylim([-0.05, 1.05])
+            plt.ylabel('AUC')
+            plt.tick_params(
+                axis='x',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom='off',      # ticks along the bottom edge are off
+                top='off',         # ticks along the top edge are off
+                labelbottom='off')  # labels along the bottom edge are off
+            plt.tight_layout()
+            plt.show()
+
+            plt.figure()
+            plt.boxplot(precision)
+            plt.ylim([-0.05, 1.05])
+            plt.ylabel('Precision')
+            plt.tick_params(
+                axis='x',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom='off',      # ticks along the bottom edge are off
+                top='off',         # ticks along the top edge are off
+                labelbottom='off')  # labels along the bottom edge are off
+            plt.tight_layout()
+            plt.show()
+
+            plt.figure()
+            plt.boxplot(npv)
+            plt.ylim([-0.05, 1.05])
+            plt.ylabel('NPV')
+            plt.tick_params(
+                axis='x',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom='off',      # ticks along the bottom edge are off
+                top='off',         # ticks along the top edge are off
+                labelbottom='off')  # labels along the bottom edge are off
+            plt.tight_layout()
+            plt.show()
+
+            plt.figure()
+            plt.boxplot(sensitivity)
+            plt.ylim([-0.05, 1.05])
+            plt.ylabel('Sensitivity')
+            plt.tick_params(
+                axis='x',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom='off',      # ticks along the bottom edge are off
+                top='off',         # ticks along the top edge are off
+                labelbottom='off')  # labels along the bottom edge are off
+            plt.tight_layout()
+            plt.show()
+
+            plt.figure()
+            plt.boxplot(specificity)
+            plt.ylim([-0.05, 1.05])
+            plt.ylabel('Specificity')
+            plt.tick_params(
+                axis='x',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom='off',      # ticks along the bottom edge are off
+                top='off',         # ticks along the top edge are off
+                labelbottom='off')  # labels along the bottom edge are off
+            plt.tight_layout()
+            plt.show()
+
+        return stats
+
+
+def plot_SVM(prediction, label_data, label_type, show_plots=False,
+             alpha=0.95, ensemble=False, verbose=True,
+             ensemble_scoring=None, output='stats',
+             modus='singlelabel',
+             thresholds=None, survival=False,
+             generalization=False, shuffle_estimators=False):
     '''
     Plot the output of a single binary estimator, e.g. a SVM.
 
@@ -213,12 +777,18 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
     patient_classification_list = dict()
     percentages_selected = list()
 
-    if output in ['scores', 'decision']:
+    if output in ['scores', 'decision', 'allscores']:
         # Keep track of all groundth truths and scores
         y_truths = list()
         y_scores = list()
         y_predictions = list()
         pids = list()
+    if output == 'allscores':
+        # Also add objects for the training dataset
+        y_truths_train = list()
+        y_scores_train = list()
+        y_predictions_train = list()
+        pids_train = list()
 
     # Loop over the test sets, which probably correspond with cross validation
     # iterations
@@ -226,7 +796,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         print("\n")
         print(("Cross validation {} / {}.").format(str(i + 1), str(len(Y_test))))
         test_patient_ids = prediction[label_type]['patient_ID_test'][i]
-        train_patient_IDs = prediction[label_type]['patient_ID_train'][i]
+        train_patient_ids = prediction[label_type]['patient_ID_train'][i]
         X_test_temp = X_test[i]
         X_train_temp = X_train[i]
         Y_train_temp = Y_train[i]
@@ -248,6 +818,25 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
 
         # Extract ground truth
         y_truth = Y_test_temp
+
+        # If required, shuffle estimators for "Random" ensembling
+        if shuffle_estimators:
+            # Compute generalization score
+            print('Shuffling estimators for random ensembling.')
+            shuffle(SVMs[i].cv_results_['params'])
+            shuffle(SVMs[i].cv_results_['params_all'])
+
+        # If required, rank according to generalization score instead of mean_validation_score
+        if generalization:
+            # Compute generalization score
+            print('Using generalization score for estimator ranking.')
+            difference_score = abs(SVMs[i].cv_results_['mean_train_score'] - SVMs[i].cv_results_['mean_test_score'])
+            generalization_score = SVMs[i].cv_results_['mean_test_score'] - difference_score
+
+            # Rerank based on score
+            indices = np.argsort(generalization_score)
+            SVMs[i].cv_results_['params'] = [SVMs[i].cv_results_['params'][j] for j in indices[::-1]]
+            SVMs[i].cv_results_['params_all'] = [SVMs[i].cv_results_['params_all'][j] for j in indices[::-1]]
 
         # If requested, first let the SearchCV object create an ensemble
         if ensemble:
@@ -329,6 +918,29 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             y_truths.append(y_truth)
             y_predictions.append(y_prediction)
             pids.append(test_patient_ids)
+
+        elif output == 'allscores':
+            # Output the posteriors
+            y_scores.append(y_score)
+            y_truths.append(y_truth)
+            y_predictions.append(y_prediction)
+            pids.append(test_patient_ids)
+
+            # Output the training scores as well
+            y_truths_train.append(Y_train_temp)
+            pids_train.append(train_patient_ids)
+
+            # Create prediction
+            y_prediction_train = SVMs[i].predict(X_train[i])
+
+            if regression:
+                y_score_train = y_prediction
+            else:
+                y_score_train = SVMs[i].predict_proba(X_train[i])[:, 1]
+
+            y_scores_train.append(y_score_train)
+            y_predictions_train.append(y_prediction_train)
+
 
         elif output == 'stats':
             # Compute statistics
@@ -421,27 +1033,32 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
     if output in ['scores', 'decision']:
         # Return the scores and true values of all patients
         return y_truths, y_scores, y_predictions, pids
+
+    elif output == 'allscores':
+        # Return the scores and true values of all patients, test and train
+        return y_truths, y_scores, y_predictions, pids, y_truths_train, y_scores_train, y_predictions_train, pids_train
+
     elif output == 'stats':
         # Compute statistics
         # Extract sample size
-        N_1 = float(len(train_patient_IDs))
+        N_1 = float(len(train_patient_ids))
         N_2 = float(len(test_patient_ids))
 
         # Compute alpha confidence intervals (CIs)
         stats = dict()
         if not regression:
-            stats["Accuracy 95%:"] = f"{np.average(accuracy)} {str(compute_CI.compute_confidence(accuracy, N_1, N_2, alpha))}"
-            stats["AUC 95%:"] = f"{np.average(auc)} {str(compute_CI.compute_confidence(auc, N_1, N_2, alpha))}"
-            stats["F1-score 95%:"] = f"{np.average(f1_score_list)} {str(compute_CI.compute_confidence(f1_score_list, N_1, N_2, alpha))}"
-            stats["Precision 95%:"] = f"{np.average(precision)} {str(compute_CI.compute_confidence(precision, N_1, N_2, alpha))}"
-            stats["NPV 95%:"] = f"{np.average(npv)} {str(compute_CI.compute_confidence(npv, N_1, N_2, alpha))}"
-            stats["Sensitivity 95%: "] = f"{np.average(sensitivity)} {str(compute_CI.compute_confidence(sensitivity, N_1, N_2, alpha))}"
-            stats["Specificity 95%:"] = f"{np.average(specificity)} {str(compute_CI.compute_confidence(specificity, N_1, N_2, alpha))}"
+            stats["Accuracy 95%:"] = f"{np.nanmean(accuracy)} {str(compute_confidence(accuracy, N_1, N_2, alpha))}"
+            stats["AUC 95%:"] = f"{np.nanmean(auc)} {str(compute_confidence(auc, N_1, N_2, alpha))}"
+            stats["F1-score 95%:"] = f"{np.nanmean(f1_score_list)} {str(compute_confidence(f1_score_list, N_1, N_2, alpha))}"
+            stats["Precision 95%:"] = f"{np.nanmean(precision)} {str(compute_confidence(precision, N_1, N_2, alpha))}"
+            stats["NPV 95%:"] = f"{np.nanmean(npv)} {str(compute_confidence(npv, N_1, N_2, alpha))}"
+            stats["Sensitivity 95%: "] = f"{np.nanmean(sensitivity)} {str(compute_confidence(sensitivity, N_1, N_2, alpha))}"
+            stats["Specificity 95%:"] = f"{np.nanmean(specificity)} {str(compute_confidence(specificity, N_1, N_2, alpha))}"
 
             if thresholds is not None:
                 if len(thresholds) == 2:
                     # Compute percentage of patients that was selected
-                    stats["Percentage Selected 95%:"] = f"{np.average(percentages_selected)} {str(compute_CI.compute_confidence(percentages_selected, N_1, N_2, alpha))}"
+                    stats["Percentage Selected 95%:"] = f"{np.nanmean(percentages_selected)} {str(compute_confidence(percentages_selected, N_1, N_2, alpha))}"
 
             # Extract statistics on how often patients got classified correctly
             alwaysright = dict()
@@ -471,18 +1088,18 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             stats['Percentages'] = percentages
         else:
             # Regression
-            stats['R2-score 95%: '] = f"{np.average(r2_score)} {str(compute_CI.compute_confidence(r2score, N_1, N_2, alpha))}"
-            stats['MSE 95%: '] = f"{np.average(MSE)} {str(compute_CI.compute_confidence(MSE, N_1, N_2, alpha))}"
-            stats['ICC 95%: '] = f"{np.average(coefICC)} {str(compute_CI.compute_confidence(coefICC, N_1, N_2, alpha))}"
-            stats['PearsonC 95%: '] = f"{np.average(PearsonC)} {str(compute_CI.compute_confidence(PearsonC, N_1, N_2, alpha))}"
-            stats['PearsonP 95%: '] = f"{np.average(PearsonP)} {str(compute_CI.compute_confidence(PearsonP, N_1, N_2, alpha))}"
-            stats['SpearmanC 95%: '] = f"{np.average(SpearmanC)} {str(compute_CI.compute_confidence(SpearmanC, N_1, N_2, alpha))}"
-            stats['SpearmanP 95%: '] = f"{np.average(SpearmanP)} {str(compute_CI.compute_confidence(SpearmanP, N_1, N_2, alpha))}"
+            stats['R2-score 95%: '] = f"{np.nanmean(r2_score)} {str(compute_confidence(r2score, N_1, N_2, alpha))}"
+            stats['MSE 95%: '] = f"{np.nanmean(MSE)} {str(compute_confidence(MSE, N_1, N_2, alpha))}"
+            stats['ICC 95%: '] = f"{np.nanmean(coefICC)} {str(compute_confidence(coefICC, N_1, N_2, alpha))}"
+            stats['PearsonC 95%: '] = f"{np.nanmean(PearsonC)} {str(compute_confidence(PearsonC, N_1, N_2, alpha))}"
+            stats['PearsonP 95%: '] = f"{np.nanmean(PearsonP)} {str(compute_confidence(PearsonP, N_1, N_2, alpha))}"
+            stats['SpearmanC 95%: '] = f"{np.nanmean(SpearmanC)} {str(compute_confidence(SpearmanC, N_1, N_2, alpha))}"
+            stats['SpearmanP 95%: '] = f"{np.nanmean(SpearmanP)} {str(compute_confidence(SpearmanP, N_1, N_2, alpha))}"
 
             if survival:
-                stats["Concordance 95%:"] = f"{np.average(cindex)} {str(compute_CI.compute_confidence(cindex, N_1, N_2, alpha))}"
-                stats["Cox coef. 95%:"] = f"{np.average(coxcoef)} {str(compute_CI.compute_confidence(coxcoef, N_1, N_2, alpha))}"
-                stats["Cox p 95%:"] = f"{np.average(coxp)} {str(compute_CI.compute_confidence(coxp, N_1, N_2, alpha))}"
+                stats["Concordance 95%:"] = f"{np.nanmean(cindex)} {str(compute_confidence(cindex, N_1, N_2, alpha))}"
+                stats["Cox coef. 95%:"] = f"{np.nanmean(coxcoef)} {str(compute_confidence(coxcoef, N_1, N_2, alpha))}"
+                stats["Cox p 95%:"] = f"{np.nanmean(coxp)} {str(compute_confidence(coxp, N_1, N_2, alpha))}"
 
         # Print all CI's
         for k, v in stats.items():
@@ -571,6 +1188,117 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             plt.show()
 
         return stats
+
+
+def combine_multiple_estimators(predictions, label_data, multilabel_type, label_types,
+                                ensemble=1, strategy='argmax', alpha=0.95):
+    '''
+    Combine multiple estimators in a single model.
+
+    Note: the multilabel_type labels should correspond to the ordering in label_types.
+    Hence, if multilabel_type = 0, the prediction is label_type[0] etc.
+    '''
+
+    # Load the multilabel label data
+    label_data = lp.load_labels(label_data, multilabel_type)
+    patient_IDs = label_data['patient_IDs']
+    labels = label_data['label']
+
+    # Initialize some objects
+    y_truths = list()
+    y_scores = list()
+    y_predictions = list()
+    pids = list()
+
+    y_truths_train = list()
+    y_scores_train = list()
+    y_predictions_train = list()
+    pids_train = list()
+
+    accuracy = list()
+    sensitivity = list()
+    specificity = list()
+    auc = list()
+    f1_score_list = list()
+    precision = list()
+    npv = list()
+    acc_av = list()
+
+    # Extract all the predictions from the estimators
+    for prediction, label_type in zip(predictions, label_types):
+        y_truth, y_score, y_prediction, pid,\
+            y_truth_train, y_score_train, y_prediction_train, pid_train =\
+            plot_SVM(prediction, label_data, label_type,
+                     ensemble=ensemble, output='allscores')
+        y_truths.append(y_truth)
+        y_scores.append(y_score)
+        y_predictions.append(y_prediction)
+        pids.append(pid)
+
+        y_truths_train.append(y_truth_train)
+        y_scores_train.append(y_score_train)
+        y_predictions_train.append(y_prediction_train)
+        pids_train.append(pid_train)
+
+    # Combine the predictions
+    for i_crossval in range(0, len(y_truths[0])):
+        # Extract all values for this cross validation iteration from all objects
+        y_truth = [t[i_crossval] for t in y_truths]
+        y_score = [t[i_crossval] for t in y_scores]
+        pid = [t[i_crossval] for t in pids]
+
+        if strategy == 'argmax':
+            # For each patient, take the maximum posterior
+            y_prediction = np.argmax(y_score, axis=0)
+            y_score = np.max(y_score, axis=0)
+        elif strategy == 'decisiontree':
+            # Fit a decision tree on the training set
+            a = 1
+        else:
+            raise ae.WORCValueError(f"{strategy} is not a valid estimation combining strategy! Should be one of [argmax].")
+
+        # Compute multilabel performance metrics
+        y_truth = np.argmax(y_truth, axis=0)
+        accuracy_temp, sensitivity_temp, specificity_temp, \
+            precision_temp, npv_temp, f1_score_temp, auc_temp, accav_temp = \
+            metrics.performance_multilabel(y_truth,
+                                           y_prediction,
+                                           y_score)
+
+        print("Truth: " + str(y_truth))
+        print("Prediction: " + str(y_prediction))
+        print('AUC: ' + str(auc_temp))
+
+        # Append performance to lists for all cross validations
+        accuracy.append(accuracy_temp)
+        sensitivity.append(sensitivity_temp)
+        specificity.append(specificity_temp)
+        auc.append(auc_temp)
+        f1_score_list.append(f1_score_temp)
+        precision.append(precision_temp)
+        npv.append(npv_temp)
+        acc_av.append(acc_av_temp)
+
+    # Extract sample size
+    N_1 = float(len(train_patient_ids))
+    N_2 = float(len(test_patient_IDs))
+
+    # Compute confidence intervals
+    stats = dict()
+    stats["Accuracy 95%:"] = f"{np.nanmean(accuracy)} {str(compute_confidence(accuracy, N_1, N_2, alpha))}"
+    stats["Average Accuracy 95%:"] = f"{np.nanmean(acc_av)} {str(compute_confidence(accuracy, N_1, N_2, alpha))}"
+    stats["AUC 95%:"] = f"{np.nanmean(auc)} {str(compute_confidence(auc, N_1, N_2, alpha))}"
+    stats["F1-score 95%:"] = f"{np.nanmean(f1_score_list)} {str(compute_confidence(f1_score_list, N_1, N_2, alpha))}"
+    stats["Precision 95%:"] = f"{np.nanmean(precision)} {str(compute_confidence(precision, N_1, N_2, alpha))}"
+    stats["NPV 95%:"] = f"{np.nanmean(npv)} {str(compute_confidence(npv, N_1, N_2, alpha))}"
+    stats["Sensitivity 95%: "] = f"{np.nanmean(sensitivity)} {str(compute_confidence(sensitivity, N_1, N_2, alpha))}"
+    stats["Specificity 95%:"] = f"{np.nanmean(specificity)} {str(compute_confidence(specificity, N_1, N_2, alpha))}"
+
+    # Print all CI's
+    for k, v in stats.items():
+        print(f"{k} : {v}.")
+
+    return stats
 
 
 def main():

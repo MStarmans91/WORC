@@ -23,6 +23,7 @@ from sklearn.model_selection import train_test_split
 import xlrd
 from .parameter_optimization import random_search_parameters
 import WORC.addexceptions as ae
+from WORC.classification.regressors import regressors
 
 
 def crossval(config, label_data, image_features,
@@ -102,10 +103,6 @@ def crossval(config, label_data, image_features,
     """
     if tempsave:
         import fastr
-
-
-    # Define all possible regressors
-    regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
 
     # Process input data
     patient_IDs = label_data['patient_IDs']
@@ -250,7 +247,7 @@ def crossval(config, label_data, image_features,
             else:
                 # Use pre defined splits
                 train = fixedsplits[str(i) + '_train'].values
-                test = fixedsplits[str(i) + '_val'].values
+                test = fixedsplits[str(i) + '_test'].values
 
                 # Convert the numbers to the correct indices
                 ind_train = list()
@@ -315,12 +312,12 @@ def crossval(config, label_data, image_features,
             if tempsave:
                 panda_labels = ['trained_classifier', 'X_train', 'X_test', 'Y_train', 'Y_test',
                                 'config', 'patient_ID_train', 'patient_ID_test',
-                                'random_seed']
+                                'random_seed', 'feature_labels']
 
                 panda_data_temp =\
                     pd.Series([trained_classifier, X_train, X_test, Y_train,
                                Y_test, config, patient_ID_train,
-                               patient_ID_test, random_seed],
+                               patient_ID_test, random_seed, feature_labels],
                               index=panda_labels,
                               name='Constructed crossvalidation')
 

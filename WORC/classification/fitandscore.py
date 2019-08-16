@@ -24,6 +24,7 @@ from sklearn.feature_selection import SelectFromModel
 import scipy
 from sklearn.decomposition import PCA
 from sklearn.multiclass import OneVsRestClassifier
+from sklearn.ensemble import RandomForestClassifier
 from imblearn.over_sampling import SMOTE, RandomOverSampler
 from sklearn.utils import check_random_state
 import random
@@ -36,6 +37,10 @@ from WORC.featureprocessing.Imputer import Imputer
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
+
+# Specific imports for error management
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+from numpy.linalg import LinAlgError
 
 
 def fit_and_score(X, y, scoring,
@@ -178,7 +183,18 @@ def fit_and_score(X, y, scoring,
         the fitted object.
 
     '''
+    # Set some defaults for if a part fails and we return a dummy
+    test_sample_counts = len(test)
+    fit_time = np.inf
+    score_time = np.inf
+    train_score = np.nan
+    test_score = np.nan
+
     # We copy the parameter object so we can alter it and keep the original
+    if verbose:
+        print("\n")
+        print('#######################################')
+        print('Starting fit and score of new workflow.')
     para_estimator = para.copy()
     estimator = cc.construct_classifier(para_estimator)
     if scoring != 'average_precision_weighted':
@@ -193,13 +209,35 @@ def fit_and_score(X, y, scoring,
     feature_labels = np.asarray([x[1] for x in X])
 
     # ------------------------------------------------------------------------
+    # Feature scaling
+    if 'FeatureScaling' in para_estimator:
+        if verbose:
+            print("Fitting scaler and transforming features.")
+
+        if para_estimator['FeatureScaling'] == 'z_score':
+            scaler = StandardScaler().fit(feature_values)
+        elif para_estimator['FeatureScaling'] == 'minmax':
+            scaler = MinMaxScaler().fit(feature_values)
+        else:
+            scaler = None
+
+        if scaler is not None:
+            feature_values = scaler.transform(feature_values)
+        del para_estimator['FeatureScaling']
+    else:
+        scaler = None
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del scaler
+
+    # ------------------------------------------------------------------------
     # Feature imputation
     if 'Imputation' in para_estimator.keys():
         if para_estimator['Imputation'] == 'True':
             imp_type = para_estimator['ImputationMethod']
             if verbose:
-                message = ('Imputing NaN with {}.').format(imp_type)
-                print(message)
+                print(f'Imputing NaN with {imp_type}.')
             imp_nn = para_estimator['ImputationNeighbours']
 
             imputer = Imputer(missing_values=np.nan, strategy=imp_type,
@@ -220,6 +258,9 @@ def fit_and_score(X, y, scoring,
     if not return_all:
         del imputer
 
+    # Replace NaN feature values if those are left
+    feature_values = replacenan(feature_values)
+
     # ------------------------------------------------------------------------
     # Use SMOTE oversampling
     if 'SampleProcessing_SMOTE' in para_estimator.keys():
@@ -234,7 +275,7 @@ def fit_and_score(X, y, scoring,
             # NOTE: need to save random state for this one as well!
             sm = SMOTE(random_state=None,
                        ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
-                       k_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
+                       m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
                        kind='borderline1',
                        n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
 
@@ -248,12 +289,8 @@ def fit_and_score(X, y, scoring,
             pos = int(np.sum(y))
             neg = int(len(y) - pos)
             if verbose:
-                message = ("Sampling with SMOTE from {} ({} pos, {} neg) to {} ({} pos, {} neg) patients.").format(str(len_in),
-                                                                                                                   str(pos_initial),
-                                                                                                                   str(neg_initial),
-                                                                                                                   str(len(y)),
-                                                                                                                   str(pos),
-                                                                                                                   str(neg))
+                message = f"Sampling with SMOTE from {len_in} ({pos_initial} pos," +\
+                          f" {neg_initial} neg) to {len(y)} ({pos} pos, {neg} neg) patients."
                 print(message)
         else:
             sm = None
@@ -385,7 +422,9 @@ def fit_and_score(X, y, scoring,
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
-        ret = [0, 0, 0, 0, 0, para_estimator, para]
+        ret = [train_score, test_score, test_sample_counts,
+               fit_time, score_time, para_estimator, para]
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
         else:
@@ -438,42 +477,13 @@ def fit_and_score(X, y, scoring,
         SelectModel = None
         pca = None
         StatisticalSel = None
-        ret = [0, 0, 0, 0, 0, para_estimator, para]
+        ret = [train_score, test_score, test_sample_counts,
+               fit_time, score_time, para_estimator, para]
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
-
-    # --------------------------------------------------------------------
-    # Feature selection based on a statistical test
-    if 'StatisticalTestUse' in para_estimator.keys():
-        if para_estimator['StatisticalTestUse'] == 'True':
-            metric = para_estimator['StatisticalTestMetric']
-            threshold = para_estimator['StatisticalTestThreshold']
-            if verbose:
-                print("Selecting features based on statistical test. Method {}, threshold {}.").format(metric, str(round(threshold, 2)))
-            if verbose:
-                print("Original Length: " + str(len(feature_values[0])))
-
-            StatisticalSel = StatisticalTestThreshold(metric=metric,
-                                                      threshold=threshold)
-
-            StatisticalSel.fit(feature_values, y)
-            feature_values = StatisticalSel.transform(feature_values)
-            feature_labels = StatisticalSel.transform(feature_labels)
-            if verbose:
-                print("New Length: " + str(len(feature_values[0])))
-        else:
-            StatisticalSel = None
-        del para_estimator['StatisticalTestUse']
-        del para_estimator['StatisticalTestMetric']
-        del para_estimator['StatisticalTestThreshold']
-    else:
-        StatisticalSel = None
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del StatisticalSel
 
     # Check whether there are any features left
     if len(feature_values[0]) == 0:
@@ -488,34 +498,13 @@ def fit_and_score(X, y, scoring,
         scaler = None
         SelectModel = None
         pca = None
-        ret = [0, 0, 0, 0, 0, para_estimator, para]
+        ret = [train_score, test_score, test_sample_counts,
+               fit_time, score_time, para_estimator, para]
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
-
-    # ------------------------------------------------------------------------
-    # Feature scaling
-    if 'FeatureScaling' in para_estimator:
-        if verbose:
-            print("Fitting scaler and transforming features.")
-
-        if para_estimator['FeatureScaling'] == 'z_score':
-            scaler = StandardScaler().fit(feature_values)
-        elif para_estimator['FeatureScaling'] == 'minmax':
-            scaler = MinMaxScaler().fit(feature_values)
-        else:
-            scaler = None
-
-        if scaler is not None:
-            feature_values = scaler.transform(feature_values)
-        del para_estimator['FeatureScaling']
-    else:
-        scaler = None
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del scaler
 
     # --------------------------------------------------------------------
     # Relief feature selection, possibly multi classself.
@@ -617,9 +606,14 @@ def fit_and_score(X, y, scoring,
         else:
             # Assume a fixed number of components
             n_components = int(para_estimator['PCAType'])
-            pca = PCA(n_components=n_components)
-            pca.fit(feature_values)
-            feature_values = pca.transform(feature_values)
+
+            if n_components >= len(feature_values[0]):
+                print(f"[WORC WARNING] PCA n_components ({n_components})> n_features ({len(feature_values[0])}): skipping PCA.")
+                pca = None
+            else:
+                pca = PCA(n_components=n_components)
+                pca.fit(feature_values)
+                feature_values = pca.transform(feature_values)
 
         if verbose:
             print("New Length: " + str(len(feature_values[0])))
@@ -633,6 +627,37 @@ def fit_and_score(X, y, scoring,
     if 'UsePCA' in para_estimator.keys():
         del para_estimator['UsePCA']
         del para_estimator['PCAType']
+
+    # --------------------------------------------------------------------
+    # Feature selection based on a statistical test
+    if 'StatisticalTestUse' in para_estimator.keys():
+        if para_estimator['StatisticalTestUse'] == 'True':
+            metric = para_estimator['StatisticalTestMetric']
+            threshold = para_estimator['StatisticalTestThreshold']
+            if verbose:
+                print(f"Selecting features based on statistical test. Method {metric}, threshold {round(threshold, 2)}.")
+            if verbose:
+                print("Original Length: " + str(len(feature_values[0])))
+
+            StatisticalSel = StatisticalTestThreshold(metric=metric,
+                                                      threshold=threshold)
+
+            StatisticalSel.fit(feature_values, y)
+            feature_values = StatisticalSel.transform(feature_values)
+            feature_labels = StatisticalSel.transform(feature_labels)
+            if verbose:
+                print("New Length: " + str(len(feature_values[0])))
+        else:
+            StatisticalSel = None
+        del para_estimator['StatisticalTestUse']
+        del para_estimator['StatisticalTestMetric']
+        del para_estimator['StatisticalTestThreshold']
+    else:
+        StatisticalSel = None
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del StatisticalSel
 
     # ----------------------------------------------------------------
     # Fitting and scoring
@@ -653,21 +678,36 @@ def fit_and_score(X, y, scoring,
         except IndexError:
             labellength = 1
 
-    if labellength > 1 and type(estimator) != RankedSVM:
-        # Multiclass, hence employ a multiclass classifier for e.g. SVM, RF
+    if labellength > 1 and type(estimator) not in [RankedSVM,
+                                                   RandomForestClassifier]:
+        # Multiclass, hence employ a multiclass classifier for e.g. SVM, LR
         estimator.set_params(**para_estimator)
         estimator = OneVsRestClassifier(estimator)
         para_estimator = {}
 
     if verbose:
         print("Fitting ML.")
-    ret = _fit_and_score(estimator, feature_values, y,
-                         scorer, train,
-                         test, verbose,
-                         para_estimator, fit_params, return_train_score,
-                         return_parameters,
-                         return_n_test_samples,
-                         return_times, error_score)
+
+    try:
+        ret = _fit_and_score(estimator, feature_values, y,
+                             scorer, train,
+                             test, verbose,
+                             para_estimator, fit_params, return_train_score,
+                             return_parameters,
+                             return_n_test_samples,
+                             return_times, error_score)
+    except (ValueError, LinAlgError) as e:
+        if type(estimator) == LDA:
+            print('[WARNING]: skipping this setting due to LDA Error: ' + e.message)
+            ret = [train_score, test_score, test_sample_counts,
+                   fit_time, score_time, para_estimator, para]
+
+            if return_all:
+                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            else:
+                return ret
+        else:
+            raise e
 
     # Remove 'estimator object', it's the causes of a bug.
     # Somewhere between scikit-learn 0.18.2 and 0.20.2
@@ -739,9 +779,9 @@ def replacenan(image_features, verbose=True, feature_labels=None):
             if np.isnan(value):
                 if verbose:
                     if feature_labels is not None:
-                        print("[WORC WARNING] NaN found, patient {}, label {}. Replacing with zero.").format(pnum, feature_labels[fnum])
+                        print(f"[WORC WARNING] NaN found, patient {pnum}, label {feature_labels[fnum]}. Replacing with zero.")
                     else:
-                        print("[WORC WARNING] NaN found, patient {}, label {}. Replacing with zero.").format(pnum, fnum)
+                        print(f"[WORC WARNING] NaN found, patient {pnum}, label {fnum}. Replacing with zero.")
                 # Note: X is a list of lists, hence we cannot index the element directly
                 image_features_temp[pnum, fnum] = 0
 

@@ -72,12 +72,12 @@ def segmentix(parameters=None, image=None, segmentation=None,
                 segmentation = ''.join(segmentation)
 
             # Convert to binary image and clean up small errors/areas
-            contour = sitk.ReadImage(segmentation)
-            contour = sitk.GetArrayFromImage(contour)
+            contour_original = sitk.ReadImage(segmentation)
+            contour = sitk.GetArrayFromImage(contour_original)
 
             # BUG: remove first and last slice, fault in liver segmentations
-            contour[:,:,-1] = np.zeros([contour.shape[0], contour.shape[1]])
-            contour[:,:, 0] = np.zeros([contour.shape[0], contour.shape[1]])
+            contour[:, :, -1] = np.zeros([contour.shape[0], contour.shape[1]])
+            contour[:, :, 0] = np.zeros([contour.shape[0], contour.shape[1]])
 
             if config['Segmentix']['fillholes']:
                 contour = nd.binary_fill_holes(contour)
@@ -94,11 +94,11 @@ def segmentix(parameters=None, image=None, segmentation=None,
                 radius = int(config['Segmentix']['radius'])
                 disk = morphology.disk(radius)
 
-                # Dilation with radius
-                for ind in range(contour.shape[2]):
-                    contour_d = morphology.binary_dilation(contour[:, :, ind], disk)
-                    contour_e = morphology.binary_erosion(contour[:, :, ind], disk)
-                    contour[:, :, ind] = np.bitwise_xor(contour_d, contour_e)
+                # Dilation with radius in axial direction
+                for ind in range(contour.shape[0]):
+                    contour_d = morphology.binary_dilation(contour[ind, :, :], disk)
+                    contour_e = morphology.binary_erosion(contour[ind, :, :], disk)
+                    contour[ind, :, :] = np.bitwise_xor(contour_d, contour_e)
 
             # Mask the segmentation if necessary
             if mask is not None:
@@ -118,6 +118,7 @@ def segmentix(parameters=None, image=None, segmentation=None,
             # Output contour
             contour = contour.astype(np.uint8)
             contour = sitk.GetImageFromArray(contour)
+            contour.CopyInformation(contour_original)
             if output is not None:
                 sitk.WriteImage(contour, output)
         else:

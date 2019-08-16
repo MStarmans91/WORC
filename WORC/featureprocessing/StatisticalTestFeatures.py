@@ -17,15 +17,15 @@
 
 
 import numpy as np
-import PREDICT.IOparser.config_io_classifier as config_io
+import WORC.IOparser.config_io_classifier as config_io
 import os
 from scipy.stats import ttest_ind, ranksums, mannwhitneyu
 import csv
-from PREDICT.trainclassifier import load_features
+from WORC.trainclassifier import load_features
 
 
 def StatisticalTestFeatures(features, patientinfo, config, output=None,
-                            verbose=True):
+                            verbose=True, label_type=None):
     '''
     Perform several statistical tests on features, such as a student t-test.
     Useage is similar to trainclassifier.
@@ -72,7 +72,8 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
     if not os.path.exists(os.path.dirname(output)):
         os.makedirs(os.path.dirname(output))
 
-    label_type = config['Genetics']['label_names']
+    if label_type is not None:
+        label_type = config['Labels']['label_names']
 
     # Read the features and classification data
     print("Reading features and label data.")

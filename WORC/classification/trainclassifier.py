@@ -24,7 +24,7 @@ from WORC.plotting.plot_SVM import plot_SVM
 import WORC.IOparser.file_io as file_io
 import WORC.IOparser.config_io_classifier as config_io
 from scipy.stats import uniform
-from WORC.classification.AdvancedSampler import discrete_uniform
+from WORC.classification.AdvancedSampler import discrete_uniform, log_uniform
 
 
 def trainclassifier(feat_train, patientinfo_train, config,
@@ -190,8 +190,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
     param_grid['StatisticalTestMetric'] =\
         config['Featsel']['StatisticalTestMetric']
     param_grid['StatisticalTestThreshold'] =\
-        uniform(loc=config['Featsel']['StatisticalTestThreshold'][0],
-                scale=config['Featsel']['StatisticalTestThreshold'][1])
+        log_uniform(loc=config['Featsel']['StatisticalTestThreshold'][0],
+                    scale=config['Featsel']['StatisticalTestThreshold'][1])
 
     param_grid['ReliefUse'] =\
         config['Featsel']['ReliefUse']

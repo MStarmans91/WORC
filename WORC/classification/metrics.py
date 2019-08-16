@@ -49,7 +49,13 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
     else:
         # Compute confuction matrics and extract measures
         c_mat = confusion_matrix(y_truth, y_prediction)
-        if c_mat.shape[0] == 1:
+        if c_mat.shape[0] == 0:
+            print('[WORC Warning] No samples in y_truth and y_prediction.')
+            TN = 0
+            FN = 0
+            TP = 0
+            FP = 0
+        elif c_mat.shape[0] == 1:
             print('[WORC Warning] Only a single class represented in y_truth and y_prediction.')
             if 0 in c_mat:
                 TN = c_mat[0, 0]
@@ -67,38 +73,49 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
             TP = c_mat[1, 1]
             FP = c_mat[0, 1]
 
-        # compute confusion metric based statistics
         if FN == 0 and TP == 0:
-            sensitivity = 0
+            if c_mat.shape[0] != 2:
+                sensitivity = np.NaN
+            else:
+                sensitivity = 0
         else:
             sensitivity = float(TP)/(TP+FN)
 
         if FP == 0 and TN == 0:
-            specificity = 0
+            if c_mat.shape[0] != 2:
+                specificity = np.NaN
+            else:
+                specificity = 0
         else:
             specificity = float(TN)/(FP+TN)
 
         if TP == 0 and FP == 0:
-            precision = 0
+            if c_mat.shape[0] != 2:
+                precision = np.NaN
+            else:
+                precision = 0
         else:
             precision = float(TP)/(TP+FP)
 
         if TN == 0 and FN == 0:
-            NPV = 0
+            if c_mat.shape[0] != 2:
+                npv = np.NaN
+            else:
+                npv = 0
         else:
-            NPV = float(TN) / (TN + FN)
+            npv = float(TN) / (TN + FN)
 
         # Additionally, compute accuracy, AUC and f1-score
         accuracy = accuracy_score(y_truth, y_prediction)
         try:
             auc = roc_auc_score(y_truth, y_score)
         except ValueError as e:
-            print('[WORC Warning] ' + str(e) + '. Setting AUC to 0.5.')
-            auc = 0.5
+            print('[WORC Warning] ' + e.message + '. Setting AUC to NaN.')
+            auc = np.NaN
 
         f1_score_out = f1_score(y_truth, y_prediction, average='weighted')
 
-        return accuracy, sensitivity, specificity, precision, NPV, f1_score_out, auc
+        return accuracy, sensitivity, specificity, precision, npv, f1_score_out, auc
 
 
 def performance_multilabel(y_truth, y_prediction, y_score=None, beta=1):
@@ -110,9 +127,11 @@ def performance_multilabel(y_truth, y_prediction, y_score=None, beta=1):
 
     y_truth = [0, 0,	0,	0,	0,	0,	2,	2,	1,	1,	2]    ### Groundtruth
     y_prediction = [0, 0,	0,	0,	0,	0,	1,	2,	1,	2,	2]    ### Predicted labels
+    y_score = [[0.3, 0.3, 0.4], [0.2, 0.6, 0.2], ... ] # Normalized score per patient for all labels (three in this example)
 
 
     Calculation of accuracy accorading to formula suggested in CAD Dementia Grand Challege http://caddementia.grand-challenge.org
+    and the TADPOLE challenge https://tadpole.grand-challenge.org/Performance_Metrics/
     Calculation of Multi Class AUC according to classpy: https://bitbucket.org/bigr_erasmusmc/classpy/src/master/classpy/multi_class_auc.py
 
     '''
@@ -133,10 +152,19 @@ def performance_multilabel(y_truth, y_prediction, y_score=None, beta=1):
         FN[:, i] = np.sum(cm[i, :])-cm[i, i]
         FP[:, i] = np.sum(cm[:, i])-cm[i, i]
         TN[:, i] = np.sum(cm[:])-TP[:, i]-FP[:, i]-FN[:, i]
-        n[:, i] = np.sum(cm[:, i])
 
-    # Calculation of accuracy accorading to formula suggested in CAD Dementia Grand Challege http://caddementia.grand-challenge.org
-    Accuracy = (np.sum(TP))/(np.sum(n))
+    n = np.sum(cm)
+
+    # Determine Accuracy
+    Accuracy = (np.sum(TP))/n
+
+    # BCA: Balanced Class Accuracy
+    BCA = list()
+    for i in range(n_class):
+        BCAi = 1/2*(TP[:, i]/(TP[:, i] + FN[:, i]) + TN[:, i]/(TN[:, i] + FP[:, i]))
+        BCA.append(BCAi)
+
+    AverageAccuracy = np.mean(BCA)
 
     # Determine total positives and negatives
     P = TP + FN
@@ -155,6 +183,11 @@ def performance_multilabel(y_truth, y_prediction, y_score=None, beta=1):
     Precision = np.nan_to_num(Precision)
     Precision = np.mean(Precision)
 
+    # Calculation of NPV
+    NPV = TN/(TN+FN)
+    NPV = np.nan_to_num(NPV)
+    NPV = np.mean(NPV)
+
     # Calculation  of F1_Score
     F1_score = ((1+(beta**2))*(Sensitivity*Precision))/((beta**2)*(Precision + Sensitivity))
     F1_score = np.nan_to_num(F1_score)
@@ -166,7 +199,7 @@ def performance_multilabel(y_truth, y_prediction, y_score=None, beta=1):
     else:
         AUC = None
 
-    return Accuracy, Sensitivity, Specificity, Precision, F1_score, AUC
+    return Accuracy, Sensitivity, Specificity, Precision, NPV, F1_score, AUC, AverageAccuracy
 
 
 def pairwise_auc(y_truth, y_score, class_i, class_j):
@@ -199,8 +232,8 @@ def pairwise_auc(y_truth, y_score, class_i, class_j):
 def multi_class_auc(y_truth, y_score):
     classes = np.unique(y_truth)
 
-    if any(t == 0.0 for t in np.sum(y_score, axis=1)):
-        raise ValueError('No AUC is calculated, output probabilities are missing')
+    # if any(t == 0.0 for t in np.sum(y_score, axis=1)):
+    #     raise ValueError('No AUC is calculated, output probabilities are missing')
 
     pairwise_auc_list = [0.5 * (pairwise_auc(y_truth, y_score, i, j) +
                                 pairwise_auc(y_truth, y_score, j, i)) for i in classes for j in classes if i < j]

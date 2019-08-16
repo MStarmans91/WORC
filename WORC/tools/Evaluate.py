@@ -17,6 +17,7 @@
 
 import WORC.addexceptions as WORCexceptions
 import fastr
+from fastr.api import ResourceLimit
 import os
 
 # NOTE: Very important to give images and segmentations as dict with patient names!
@@ -45,7 +46,7 @@ class Evaluate(object):
             self.mode = 'StandAlone'
             self.fastr_plugin = fastr_plugin
             self.name = 'WORC_Evaluate_' + name
-            self.network = fastr.Network(id_=self.name)
+            self.network = fastr.create_network(id=self.name)
             self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
 
         if features is None and self.mode == 'StandAlone':
@@ -65,46 +66,46 @@ class Evaluate(object):
 
         # Create all nodes
         self.network.node_ROC =\
-            self.network.create_node('PlotROC', memory='20G', id_='plot_ROC')
+            self.network.create_node('worc/PlotROC:1.0', tool_version='1.0', id='plot_ROC', resources=ResourceLimit(memory='20G'))
         self.network.node_SVM =\
-            self.network.create_node('PlotSVM', memory='20G', id_='plot_SVM')
+            self.network.create_node('worc/PlotSVM:1.0', tool_version='1.0', id='plot_SVM', resources=ResourceLimit(memory='20G'))
         self.network.node_Barchart =\
-            self.network.create_node('PlotBarchart', memory='4G', id_='plot_Barchart')
+            self.network.create_node('worc/PlotBarchart:1.0', tool_version='1.0', id='plot_Barchart', resources=ResourceLimit(memory='4G'))
         self.network.node_STest =\
-            self.network.create_node('StatisticalTestFeatures', memory='4G', id_='statistical_test_features')
+            self.network.create_node('worc/StatisticalTestFeatures:1.0', tool_version='1.0', id='statistical_test_features', resources=ResourceLimit(memory='4G'))
         self.network.node_Ranked_Percentages =\
-            self.network.create_node('PlotRankedScores', memory='20G', id_='plot_ranked_percentages')
+            self.network.create_node('worc/PlotRankedScores:1.0', tool_version='1.0', id='plot_ranked_percentages', resources=ResourceLimit(memory='20G'))
         self.network.node_Ranked_Posteriors =\
-            self.network.create_node('PlotRankedScores', memory='20G', id_='plot_ranked_posteriors')
+            self.network.create_node('worc/PlotRankedScores:1.0', tool_version='1.0', id='plot_ranked_posteriors', resources=ResourceLimit(memory='20G'))
 
         # Create sinks
         self.network.sink_ROC_PNG =\
-            self.network.create_sink('PNGFile', id_='ROC_PNG')
+            self.network.create_sink('PNGFile', id='ROC_PNG')
         self.network.sink_ROC_Tex =\
-            self.network.create_sink('TexFile', id_='ROC_Tex')
+            self.network.create_sink('TexFile', id='ROC_Tex')
         self.network.sink_ROC_CSV =\
-            self.network.create_sink('CSVFile', id_='ROC_CSV')
+            self.network.create_sink('CSVFile', id='ROC_CSV')
 
         self.network.sink_SVM_Json =\
-            self.network.create_sink('JsonFile', id_='SVM_Json')
+            self.network.create_sink('JsonFile', id='SVM_Json')
 
         self.network.sink_Barchart_PNG =\
-            self.network.create_sink('PNGFile', id_='Barchart_PNG')
+            self.network.create_sink('PNGFile', id='Barchart_PNG')
         self.network.sink_Barchart_Tex =\
-            self.network.create_sink('TexFile', id_='Barchart_Tex')
+            self.network.create_sink('TexFile', id='Barchart_Tex')
 
         self.network.sink_STest_CSV =\
-            self.network.create_sink('CSVFile', id_='StatisticalTestFeatures_CSV')
+            self.network.create_sink('CSVFile', id='StatisticalTestFeatures_CSV')
 
         self.network.sink_Ranked_Percentages_Zip =\
-            self.network.create_sink('ZipFile', id_='RankedPercentages_Zip')
+            self.network.create_sink('ZipFile', id='RankedPercentages_Zip')
         self.network.sink_Ranked_Percentages_CSV =\
-            self.network.create_sink('CSVFile', id_='RankedPercentages_CSV')
+            self.network.create_sink('CSVFile', id='RankedPercentages_CSV')
 
         self.network.sink_Ranked_Posteriors_Zip =\
-            self.network.create_sink('ZipFile', id_='RankedPosteriors_Zip')
+            self.network.create_sink('ZipFile', id='RankedPosteriors_Zip')
         self.network.sink_Ranked_Posteriors_CSV =\
-            self.network.create_sink('CSVFile', id_='RankedPosteriors_CSV')
+            self.network.create_sink('CSVFile', id='RankedPosteriors_CSV')
 
         # Create links to sinks
         self.network.sink_ROC_PNG.input = self.network.node_ROC.outputs['output_png']
@@ -129,25 +130,25 @@ class Evaluate(object):
         self.network.node_Ranked_Posteriors.inputs['scores'] = ['posteriors']
 
         # Create sources that are not in WORC and set them
-        self.network.source_LabelType = self.network.create_source('String', id_='LabelType')
-        self.network.source_Ensemble = self.network.create_source('String', id_='Ensemble')
+        self.network.source_LabelType = self.network.create_source('String', id='LabelType')
+        self.network.source_Ensemble = self.network.create_source('String', id='Ensemble')
         self.network.source_LabelType.input = [self.label_type]
         self.network.source_Ensemble.input = [self.ensemble]
 
         # Create sources if not supplied by a WORC network
         if self.mode == 'StandAlone':
-            self.network.source_Estimator = self.network.create_source('HDF5', id_='Estimator')
-            self.network.source_PatientInfo = self.network.create_source('PatientInfoFile', id_='PatientInfo')
-            self.network.source_Images = self.network.create_source('ITKImageFile', id_='Images', nodegroup='patients')
-            self.network.source_Segmentations = self.network.create_source('ITKImageFile', id_='Segmentations', nodegroup='patients')
-            self.network.source_Config = self.network.create_source('ParameterFile', id_='Config')
+            self.network.source_Estimator = self.network.create_source('HDF5', id='Estimator')
+            self.network.source_PatientInfo = self.network.create_source('PatientInfoFile', id='PatientInfo')
+            self.network.source_Images = self.network.create_source('ITKImageFile', id='Images', node_group='patients')
+            self.network.source_Segmentations = self.network.create_source('ITKImageFile', id='Segmentations', node_group='patients')
+            self.network.source_Config = self.network.create_source('ParameterFile', id='Config')
 
             self.labels = list()
             self.network.source_Features = list()
             for idx in range(0, len(self.features)):
                 label = 'Features_' + str(idx)
                 self.labels.append(label)
-                self.network.source_Features.append(self.network.create_source('HDF5', id_=label, nodegroup='features'))
+                self.network.source_Features.append(self.network.create_source('HDF5', id=label, node_group='features'))
 
         # Create links to sources that are not supplied by a WORC network
         self.network.node_ROC.inputs['ensemble'] = self.network.source_Ensemble.output
@@ -255,5 +256,5 @@ class Evaluate(object):
     def execute(self):
         """ Execute the network through the fastr.network.execute command. """
         # Draw and execute nwtwork
-        self.network.draw_network(self.network.id, draw_dimension=True)
+        self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)

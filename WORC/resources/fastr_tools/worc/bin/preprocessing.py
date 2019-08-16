@@ -89,6 +89,7 @@ def main():
 
                 # Cast to float to allow proper processing
                 image = sitk.Cast(image, 9)
+                mask = sitk.Cast(mask, 0)
 
                 LabelFilter = sitk.LabelStatisticsImageFilter()
                 LabelFilter.Execute(image, mask)
@@ -101,6 +102,7 @@ def main():
             elif config['Normalize']['Method'] == 'minmed':
                 print('Apply scaling using the minimum and mean of the ROI')
                 image = sitk.Cast(image, 9)
+                mask = sitk.Cast(mask, 0)
 
                 LabelFilter = sitk.LabelStatisticsImageFilter()
                 LabelFilter.Execute(image, mask)

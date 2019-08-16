@@ -97,6 +97,9 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
     """Ensemble of BaseSearchCV Estimators."""
     # @abstractmethod
     def __init__(self, estimators):
+        if not estimators:
+            message = 'You supplied an empty list of estimators: No ensemble creation possible.'
+            raise WORCexceptions.WORCValueError(message)
         self.estimators = estimators
         self.n_estimators = len(estimators)
 
@@ -115,19 +118,35 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
         """
         self.estimators[0]._check_is_fitted('predict')
 
-        # NOTE: Check if we are dealing with multilabel
-        if type(self.estimators[0].best_estimator_) == OneVsRestClassifier:
-            # Multilabel
+        # Check if we are dealing with multilabel
+        if len(self.estimators[0].predict(X).shape) == 1:
+            nlabels = 1
+        else:
             nlabels = self.estimators[0].predict(X).shape[1]
+
+        if type(self.estimators[0].best_estimator_) == OneVsRestClassifier:
+            multilabel = True
+        elif nlabels > 1:
+            multilabel = True
+        else:
+            multilabel = False
+
+        if multilabel:
+            # Multilabel
             outcome = np.zeros((self.n_estimators, len(X), nlabels))
             for num, est in enumerate(self.estimators):
                 if hasattr(est, 'predict_proba'):
                     # BUG: SVM kernel can be wrong type
                     if hasattr(est.best_estimator_, 'kernel'):
                         est.best_estimator_.kernel = str(est.best_estimator_.kernel)
-                    outcome[num, :, :] = est.predict_proba(X)[:, 1]
+                    outcome[num, :, :] = est.predict_proba(X)
                 else:
                     outcome[num, :, :] = est.predict(X)
+
+            # Replace NAN if they are there
+            if np.isnan(outcome).any():
+                print('[WARNING] Predictions contain NaN, removing those rows.')
+                outcome = outcome[~np.isnan(outcome).any(axis=1)]
 
             outcome = np.squeeze(np.mean(outcome, axis=0))
 
@@ -148,6 +167,9 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                     outcome[num, :] = est.predict_proba(X)[:, 1]
                 else:
                     outcome[num, :] = est.predict(X)
+
+            # Replace NAN if they are there
+            outcome = outcome[~np.isnan(outcome).any(axis=1)]
 
             outcome = np.squeeze(np.mean(outcome, axis=0))
 
@@ -175,19 +197,53 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
         """
         self.estimators[0]._check_is_fitted('predict_proba')
 
-        # For probabilities, we get both a class0 and a class1 score
-        outcome = np.zeros((len(X), 2))
-        outcome_class1 = np.zeros((self.n_estimators, len(X)))
-        outcome_class2 = np.zeros((self.n_estimators, len(X)))
-        for num, est in enumerate(self.estimators):
-            # BUG: SVM kernel can be wrong type
-            if hasattr(est.best_estimator_, 'kernel'):
-                est.best_estimator_.kernel = str(est.best_estimator_.kernel)
-            outcome_class1[num, :] = est.predict_proba(X)[:, 0]
-            outcome_class2[num, :] = est.predict_proba(X)[:, 1]
+        # Check if we are dealing with multilabel
+        if len(self.estimators[0].predict(X).shape) == 1:
+            nlabels = 1
+        else:
+            nlabels = self.estimators[0].predict(X).shape[1]
 
-        outcome[:, 0] = np.squeeze(np.mean(outcome_class1, axis=0))
-        outcome[:, 1] = np.squeeze(np.mean(outcome_class2, axis=0))
+        if type(self.estimators[0].best_estimator_) == OneVsRestClassifier:
+            multilabel = True
+        elif nlabels > 1:
+            multilabel = True
+        else:
+            multilabel = False
+
+        if multilabel:
+            # Multilabel
+            outcome = np.zeros((self.n_estimators, len(X), nlabels))
+            for num, est in enumerate(self.estimators):
+                if hasattr(est, 'predict_proba'):
+                    # BUG: SVM kernel can be wrong type
+                    if hasattr(est.best_estimator_, 'kernel'):
+                        est.best_estimator_.kernel = str(est.best_estimator_.kernel)
+                    outcome[num, :, :] = est.predict_proba(X)
+                else:
+                    outcome[num, :, :] = est.predict(X)
+
+            # Replace NAN if they are there
+            if np.isnan(outcome).any():
+                print('[WARNING] Predictions contain NaN, removing those rows.')
+                outcome = outcome[~np.isnan(outcome).any(axis=1)]
+
+            outcome = np.squeeze(np.mean(outcome, axis=0))
+        else:
+            # Single label
+            # For probabilities, we get both a class0 and a class1 score
+            outcome = np.zeros((len(X), 2))
+            outcome_class1 = np.zeros((self.n_estimators, len(X)))
+            outcome_class2 = np.zeros((self.n_estimators, len(X)))
+            for num, est in enumerate(self.estimators):
+                # BUG: SVM kernel can be wrong type
+                if hasattr(est.best_estimator_, 'kernel'):
+                    est.best_estimator_.kernel = str(est.best_estimator_.kernel)
+                outcome_class1[num, :] = est.predict_proba(X)[:, 0]
+                outcome_class2[num, :] = est.predict_proba(X)[:, 1]
+
+            outcome[:, 0] = np.squeeze(np.mean(outcome_class1, axis=0))
+            outcome[:, 1] = np.squeeze(np.mean(outcome_class2, axis=0))
+
         return outcome
 
     def predict_log_proba(self, X):
@@ -300,7 +356,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                  fit_params=None, n_jobs=1, iid=True,
                  refit=True, cv=None, verbose=0, pre_dispatch='2*n_jobs',
                  random_state=None, error_score='raise', return_train_score=True,
-                 n_jobspercore=100, maxlen=100, fastr_plugin=None):
+                 n_jobspercore=100, maxlen=100, fastr_plugin=None,
+                 ranking_score='test_score'):
 
         # Added for fastr and joblib executions
         self.param_distributions = param_distributions
@@ -322,6 +379,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.error_score = error_score
         self.return_train_score = return_train_score
         self.maxlen = maxlen
+        self.ranking_score = ranking_score
 
     @property
     def _estimator_type(self):
@@ -507,6 +565,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
     def preprocess(self, X, y=None):
         '''Apply the available preprocssing methods to the features'''
+        if self.best_scaler is not None:
+            X = self.best_scaler.transform(X)
+
         if self.best_imputer is not None:
             X = self.best_imputer.transform(X)
 
@@ -526,9 +587,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         if self.best_statisticalsel is not None:
             X = self.best_statisticalsel.transform(X)
-
-        if self.best_scaler is not None:
-            X = self.best_scaler.transform(X)
 
         if self.best_reliefsel is not None:
             X = self.best_reliefsel.transform(X)
@@ -609,18 +667,22 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             try:
                 array_means = np.average(array, axis=1, weights=weights)
             except ZeroDivisionError as e:
-                e = ('[PREDICT Warning] {}. Setting {} to unweighted.').format(e, key_name)
+                e = ('[WORC Warning] {}. Setting {} to unweighted.').format(e, key_name)
                 print(e)
                 array_means = np.average(array, axis=1)
 
             results['mean_%s' % key_name] = array_means
+
+            array_mins = np.min(array, axis=1)
+            results['min_%s' % key_name] = array_mins
+
             # Weighted std is not directly available in numpy
             try:
                 array_stds = np.sqrt(np.average((array -
                                                  array_means[:, np.newaxis]) ** 2,
                                                 axis=1, weights=weights))
             except ZeroDivisionError as e:
-                e = ('[PREDICT Warning] {}. Setting {} to unweighted.').format(e, key_name)
+                e = ('[WORC Warning] {}. Setting {} to unweighted.').format(e, key_name)
                 print(e)
                 array_stds = np.sqrt(np.average((array -
                                                  array_means[:, np.newaxis]) ** 2,
@@ -639,8 +701,15 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         _store('fit_time', fit_time)
         _store('score_time', score_time)
 
+        # Compute the "Generalization" score
+        difference_score = abs(results['mean_train_score'] - results['mean_test_score'])
+        generalization_score = results['mean_test_score'] - difference_score
+        results['generalization_score'] = generalization_score
+        results['rank_generalization_score'] = np.asarray(
+            rankdata(-results['generalization_score'], method='min'), dtype=np.int32)
+
         # Rank the indices of scores from all parameter settings
-        ranked_test_scores = results["rank_test_score"]
+        ranked_test_scores = results["rank_" + self.ranking_score]
         indices = range(0, len(ranked_test_scores))
         sortedindices = [x for _, x in sorted(zip(ranked_test_scores, indices))]
 
@@ -656,7 +725,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         n_candidates = len(candidate_params_est)
 
         # Store the atributes of the best performing estimator
-        best_index = np.flatnonzero(results["rank_test_score"] == 1)[0]
+        best_index = np.flatnonzero(results["rank_" + self.ranking_score] == 1)[0]
         best_parameters_est = candidate_params_est[best_index]
         best_parameters_all = candidate_params_all[best_index]
 
@@ -780,7 +849,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
     def create_ensemble(self, X_train, Y_train, verbose=None, initialize=True,
                         scoring=None, method=50):
-        # NOTE: Function is still WIP, do not actually use this.
         '''
 
         Create an (optimal) ensemble of a combination of hyperparameter settings
@@ -821,7 +889,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             elif scoring == 'sar':
                 perf = sar_score(Y_valid_truth, Y_valid_score)
             else:
-                raise KeyError('[PREDICT Warning] No valid score method given in ensembling: ' + str(scoring))
+                raise KeyError('[WORC Warning] No valid score method given in ensembling: ' + str(scoring))
 
             return perf
 
@@ -1173,7 +1241,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             print(f"Single estimator best {scoring}: {single_estimator_performance}.")
             print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
         else:
-            print('[PREDICT WARNING] No valid ensemble method given: {}. Not ensembling').format(str(method))
+            print('[WORC WARNING] No valid ensemble method given: {}. Not ensembling').format(str(method))
             return self
 
         # Create the ensemble --------------------------------------------------
@@ -1200,9 +1268,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             estimators.append(base_estimator)
 
         self.ensemble = Ensemble(estimators)
-
+        self.best_estimator_ = self.ensemble
         print("\n")
-        return self
 
 
 class BaseSearchCVfastr(BaseSearchCV):
@@ -1252,7 +1319,7 @@ class BaseSearchCVfastr(BaseSearchCV):
                       'is either not iterable, or the distribution cannot ' +\
                       'generate valid samples. Please check your  ' +\
                       (' parameters. At least {} gives an error.').format(k)
-            raise PREDICTexceptions.PREDICTValueError(message)
+            raise WORCexceptions.WORCValueError(message)
 
         # Split the parameters files in equal parts
         keys = list(parameters_temp.keys())
@@ -1309,7 +1376,7 @@ class BaseSearchCVfastr(BaseSearchCV):
                             'error_score']
 
         estimator_data = pd.Series([X, y, self.scoring,
-                                    self.verbose,
+                                    False,
                                     self.fit_params, self.return_train_score,
                                     True, True, True,
                                     self.error_score],
@@ -1322,7 +1389,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         estimatordata = ("vfs://tmp/{}/{}/{}").format('GS', name, fname)
 
         # Create the fastr network
-        network = fastr.create_network('PREDICT_GridSearch_' + name)
+        network = fastr.create_network('WORC_GridSearch_' + name)
         estimator_data = network.create_source('HDF5', id='estimator_source')
         traintest_data = network.create_source('HDF5', id='traintest')
         parameter_data = network.create_source('JsonFile', id='parameters')
@@ -1372,7 +1439,7 @@ class BaseSearchCVfastr(BaseSearchCV):
                        'Probably your fitting and scoring failed: check out ' +
                        'the tmp/fitandscore folder within the tempfolder for ' +
                        'the fastr job temporary results.').format(tempfolder)
-            raise PREDICTexceptions.PREDICTValueError(message)
+            raise WORCexceptions.WORCValueError(message)
 
         # Remove the temporary folder used
         shutil.rmtree(tempfolder)
@@ -1603,13 +1670,15 @@ class RandomizedSearchCVfastr(BaseSearchCVfastr):
                  fit_params=None, n_jobs=1, iid=True, refit=True, cv=None,
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
                  error_score='raise', return_train_score=True,
-                 n_jobspercore=100, fastr_plugin=None):
+                 n_jobspercore=100, fastr_plugin=None, maxlen=100,
+                 ranking_score='test_score'):
         super(RandomizedSearchCVfastr, self).__init__(
              param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
              n_iter=n_iter, random_state=random_state, n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
              pre_dispatch=pre_dispatch, error_score=error_score,
              return_train_score=return_train_score,
-             n_jobspercore=n_jobspercore, fastr_plugin=None)
+             n_jobspercore=n_jobspercore, fastr_plugin=fastr_plugin,
+             maxlen=maxlen, ranking_score=ranking_score)
 
     def fit(self, X, y=None, groups=None):
         """Run fit on the estimator with randomly drawn parameters.
@@ -1668,7 +1737,7 @@ class BaseSearchCVJoblib(BaseSearchCV):
                                  return_n_test_samples=True,
                                  return_times=True, return_parameters=True,
                                  error_score=self.error_score,
-                                 verbose=self.verbose,
+                                 verbose=False,
                                  return_all=False)
           for parameters in parameter_iterable
           for train, test in cv_iter)
@@ -2174,14 +2243,15 @@ class RandomizedSearchCVJoblib(BaseSearchCVJoblib):
                  fit_params=None, n_jobs=1, iid=True, refit=True, cv=None,
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
                  error_score='raise', return_train_score=True,
-                 n_jobspercore=100):
+                 n_jobspercore=100, maxlen=100, ranking_score='test_score'):
         super(RandomizedSearchCVJoblib, self).__init__(
              param_distributions=param_distributions,
              n_iter=n_iter, scoring=scoring, fit_params=fit_params,
              n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
              pre_dispatch=pre_dispatch, error_score=error_score,
              return_train_score=return_train_score,
-             n_jobspercore=n_jobspercore, random_state=random_state)
+             n_jobspercore=n_jobspercore, random_state=random_state,
+             maxlen=maxlen, ranking_score=ranking_score)
 
     def fit(self, X, y=None, groups=None):
         """Run fit on the estimator with randomly drawn parameters.

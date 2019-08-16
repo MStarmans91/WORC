@@ -26,7 +26,7 @@ import matplotlib.colors as colors
 
 
 def slicer(image, mask, output_name, output_name_zoom, thresholds=[-240, 160],
-           zoomfactor=4):
+           zoomfactor=4, reverse=True, flipud=True):
     '''
     image and mask should both be arrays
     '''
@@ -41,6 +41,15 @@ def slicer(image, mask, output_name, output_name_zoom, thresholds=[-240, 160],
     # Convert images to numpy arrays
     image = sitk.GetArrayFromImage(image)
     mask = sitk.GetArrayFromImage(mask)
+
+    # Manipulate mask if required
+    if reverse:
+        print('Reversing mask in zero axis.')
+        mask = mask[::-1, :, :]
+
+    if flipud:
+        print("Flipping scan on first axis.")
+        mask = np.flip(mask, 1)
 
     # Determine which axial slice has the largest area
     areas = np.sum(mask, axis=1).tolist()

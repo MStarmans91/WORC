@@ -241,8 +241,14 @@ def load_config(config_file_path):
         settings['HyperOptimization'].getfloat('test_size')
     settings_dict['HyperOptimization']['N_iter'] =\
         settings['HyperOptimization'].getint('N_iterations')
+    settings_dict['HyperOptimization']['n_splits'] =\
+        settings['HyperOptimization'].getint('n_splits')
     settings_dict['HyperOptimization']['n_jobspercore'] =\
         int(settings['HyperOptimization']['n_jobspercore'])
+    settings_dict['HyperOptimization']['maxlen'] = \
+        settings['HyperOptimization'].getint('maxlen')
+    settings_dict['HyperOptimization']['ranking_score'] = \
+        str(settings['HyperOptimization']['ranking_score'])
 
     settings_dict['FeatureScaling']['scale_features'] =\
         settings['FeatureScaling'].getboolean('scale_features')

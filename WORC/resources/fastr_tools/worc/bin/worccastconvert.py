@@ -17,6 +17,7 @@
 
 import argparse
 import SimpleITK as sitk
+import os
 
 
 def main():
@@ -35,8 +36,16 @@ def main():
     if type(args.out) is list:
         args.out = ''.join(args.out)
 
-    image = sitk.ReadImage(args.im)
-    sitk.WriteImage(image, args.out)
+    # Check if input and output have the same format
+    extension_input = os.path.splitext(args.im)[-1]
+    extension_output = os.path.splitext(args.out)[-1]
+    if extension_input == extension_output:
+        # Make link
+        os.symlink(args.im, args.out)
+    else:
+        # Read and Write file using SimpleITK
+        image = sitk.ReadImage(args.im)
+        sitk.WriteImage(image, args.out)
 
 
 if __name__ == '__main__':

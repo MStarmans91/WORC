@@ -24,6 +24,7 @@ import WORC.addexceptions as WORCexceptions
 import WORC.IOparser.config_WORC as config_io
 from WORC.tools.Elastix import Elastix
 from WORC.tools.Evaluate import Evaluate
+from WORC.tools.Slicer import Slicer
 
 
 class WORC(object):
@@ -119,6 +120,7 @@ class WORC(object):
         self.semantics_train = list()
         self.labels_train = list()
         self.masks_train = list()
+        self.masks_normalize_train = list()
         self.features_train = list()
         self.metadata_train = list()
 
@@ -127,6 +129,7 @@ class WORC(object):
         self.semantics_test = list()
         self.labels_test = list()
         self.masks_test = list()
+        self.masks_normalize_test = list()
         self.features_test = list()
         self.metadata_test = list()
 
@@ -239,7 +242,7 @@ class WORC(object):
         config['Featsel']['PCAType'] = '95variance'
         config['Featsel']['StatisticalTestUse'] = 'False'
         config['Featsel']['StatisticalTestMetric'] = 'ttest, Welch, Wilcoxon, MannWhitneyU'
-        config['Featsel']['StatisticalTestThreshold'] = '0.02, 0.2'
+        config['Featsel']['StatisticalTestThreshold'] = '-2, 1.5'
         config['Featsel']['ReliefUse'] = 'False'
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '1, 1'
@@ -314,8 +317,11 @@ class WORC(object):
         config['HyperOptimization'] = dict()
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.15'
+        config['HyperOptimization']['n_splits'] = '10'
         config['HyperOptimization']['N_iterations'] = '10000'
         config['HyperOptimization']['n_jobspercore'] = '2000'  # only relevant when using fastr in classification
+        config['HyperOptimization']['maxlen'] = '100'
+        config['HyperOptimization']['ranking_score'] = 'test_score'
 
         # Feature scaling options
         config['FeatureScaling'] = dict()
@@ -408,6 +414,12 @@ class WORC(object):
 
                 self.sink_classification.input = self.classify.outputs['classification']
                 self.sink_performance.input = self.classify.outputs['performance']
+
+                if self.masks_normalize_train:
+                    self.sources_masks_normalize_train = dict()
+
+                if self.masks_normalize_test:
+                    self.sources_masks_normalize_test = dict()
 
                 if not self.features_train:
                     # Create nodes to compute features
@@ -575,12 +587,21 @@ class WORC(object):
                         if self.metadata_test and len(self.metadata_test) >= nmod + 1:
                             self.preprocessing_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
 
+                        # If there are masks to use in normalization, add them here
+                        if self.masks_normalize_train:
+                            self.sources_masks_normalize_train[label] = self.network.create_source('ITKImageFile', id='masks_normalize_train_' + label, node_group='train')
+                            self.preprocessing_train[label].inputs['mask'] = self.sources_masks_normalize_train[label].output
+
+                        if self.masks_normalize_test:
+                            self.sources_masks_normalize_test[label] = self.network.create_source('ITKImageFile', id='masks_normalize_test_' + label, node_group='test')
+                            self.preprocessing_test[label].inputs['mask'] = self.sources_masks_normalize_test[label].output
+
                         # -----------------------------------------------------
                         # Create a feature calculator node
                         calcfeat_node = str(self.configs[nmod]['General']['FeatureCalculator'])
-                        self.calcfeatures_train[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_train_' + label, resources=ResourceLimit(memory='14G'))
+                        self.calcfeatures_train[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_train_' + self.configs[nmod]['General']['FeatureCalculator'] + label, resources=ResourceLimit(memory='14G'))
                         if self.images_test or self.features_test:
-                            self.calcfeatures_test[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_test_' + label, resources=ResourceLimit(memory='14G'))
+                            self.calcfeatures_test[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_test_' + self.configs[nmod]['General']['FeatureCalculator'] + label, resources=ResourceLimit(memory='14G'))
 
                         # Create required links
                         self.calcfeatures_train[label].inputs['parameters'] = self.sources_parameters[label].output
@@ -905,6 +926,9 @@ class WORC(object):
             if self.masks_train and len(self.masks_train) - 1 >= num:
                 self.source_data['mask_train_' + label] = self.masks_train[num]
 
+            if self.masks_normalize_train and len(self.masks_normalize_train) - 1 >= num:
+                self.source_data['masks_normalize_train_' + label] = self.masks_normalize_train[num]
+
             if self.metadata_train and len(self.metadata_train) - 1 >= num:
                 self.source_data['metadata_train_' + label] = self.metadata_train[num]
 
@@ -933,6 +957,9 @@ class WORC(object):
 
             if self.masks_test and len(self.masks_test) - 1 >= num:
                 self.source_data['mask_test_' + label] = self.masks_test[num]
+
+            if self.masks_normalize_test and len(self.masks_normalize_test) - 1 >= num:
+                self.source_data['masks_normalize_test_' + label] = self.masks_normalize_test[num]
 
             if self.metadata_test and len(self.metadata_test) - 1 >= num:
                 self.source_data['metadata_test_' + label] = self.metadata_test[num]
@@ -981,3 +1008,4 @@ class Tools(object):
     def __init__(self):
         self.Elastix = Elastix()
         self.Evaluate = Evaluate()
+        self.Slicer = Slicer()
