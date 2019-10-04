@@ -3,7 +3,20 @@
 Configuration
 =============
 
+WORC has defaults for all settings so it can be run out of the box to test the examples.
+However, you may want to alter the fastr configuration to your system settings, e.g.
+to locate your input and output folders and how much you want to parallelize the execution.
 
+Fastr will search for a config file named ``config.py`` in the ``$FASTRHOME`` directory
+(which defaults to ``~/.fastr/`` if it is not set). So if ``$FASTRHOME`` is set the ``~/.fastr/``
+will be ignored. Additionally, .py files from the ``$FASTRHOME/config.d`` folder will be parsed
+as well. You will see that upon installation, WORC has already put a ``WORC_config.py`` file in the
+``config.d`` folder.
+
+For a sample configuration file and a complete overview of the options in ``config.py`` see
+the :ref:`Config file <config-chapter>` section.
+
+% Note: Above was originally from quick start
 As ``WORC`` and the default tools used are mostly Python based, we've chosen
 to put our configuration in a ``configparser`` object. This has several
 advantages:

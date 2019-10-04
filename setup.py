@@ -69,9 +69,12 @@ entry_points = {
     ]
 }
 
-# Determine the fastr config path
-USER_DIR = os.path.expanduser(os.path.join('~', '.fastr'))
-config_d = os.path.join(USER_DIR, 'config.d')
+# Determine the fastr config path: create if non-existent
+fastr_home = os.path.expanduser(os.path.join('~', '.fastr'))
+if not os.path.exists(fastr_home):
+    os.makedirs(fastr_home)
+
+config_d = os.path.join(fastr_home, 'config.d')
 worc_config = os.path.join('WORC', 'fastrconfig', 'WORC_config.py')
 
 

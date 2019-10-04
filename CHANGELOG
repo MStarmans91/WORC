@@ -24,6 +24,7 @@ Added
 - StatsticalTestThreshold feature selection for multilabel problems.
 - Support for test sets in which only one class is present in various
   plotting functions and the metrics.
+- Installation: create fastr home if it does not exist yet.
 
 Changed
 ~~~~~~~
