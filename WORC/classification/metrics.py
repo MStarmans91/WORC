@@ -16,7 +16,7 @@
 # limitations under the License.
 
 from __future__ import division
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, balanced_accuracy_score
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
@@ -107,6 +107,7 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
 
         # Additionally, compute accuracy, AUC and f1-score
         accuracy = accuracy_score(y_truth, y_prediction)
+        BCA = balanced_accuracy_score(y_truth, y_prediction)
         try:
             auc = roc_auc_score(y_truth, y_score)
         except ValueError as e:
@@ -115,7 +116,7 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
 
         f1_score_out = f1_score(y_truth, y_prediction, average='weighted')
 
-        return accuracy, sensitivity, specificity, precision, npv, f1_score_out, auc
+        return accuracy, BCA, sensitivity, specificity, precision, npv, f1_score_out, auc
 
 
 def performance_multilabel(y_truth, y_prediction, y_score=None, beta=1):

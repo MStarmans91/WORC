@@ -47,12 +47,21 @@ library. For Ubuntu this is in the ``/usr/local/lib/python3.x/dist-packages/`` f
 
 .. note:: If you want to develop WORC, you might want to use ``pip install -e .`` to get an editable install
 
-.. note:: You might want to consider installing ``WORC`` in a `virtualenv <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_
+.. note:: You might want to consider installing ``WORC`` in a
+    `virtualenv <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_
 
 Windows installation
 ````````````````````
 
-Visual studio
+On Windows, we strongly recommend to install python through the
+`Anaconda distribution <https://www.anaconda.com/distribution/#windows>`_.
+
+Regardless of your installation, you will need `Microsoft Visual Studio <https://visualstudio.microsoft.com/vs/features/python>`_: the Community
+edition can be downloaded and installed for free.
+
+If you still get an error similar to error: ``Microsoft Visual C++ 14.0 is required. Get it with``
+`Microsoft Visual C++ Build Tools   <https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019>`_
+, please follow the respective link and install the requirements.
 
 
 Hello World

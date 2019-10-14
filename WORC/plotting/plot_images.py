@@ -25,8 +25,8 @@ import matplotlib.colors as colors
 import SimpleITK as sitk
 
 
-def slicer(image, mask, output_name, output_name_zoom, thresholds=[-240, 160],
-           zoomfactor=4):
+def slicer(image, mask, output_name, output_name_zoom=None, thresholds=[-240, 160],
+           zoomfactor=4, dpi=500, normalize=False, expand=False):
     '''
     image and mask should both be arrays
     '''
@@ -35,8 +35,6 @@ def slicer(image, mask, output_name, output_name_zoom, thresholds=[-240, 160],
     spacing = float(image.GetSpacing()[0])
     imsize = [float(image.GetSize()[0]), float(image.GetSize()[1])]
     figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
-    # dpi = int(200/spacing)
-    dpi = 100.0
 
     # Convert images to numpy arrays
     image = sitk.GetArrayFromImage(image)
@@ -47,6 +45,29 @@ def slicer(image, mask, output_name, output_name_zoom, thresholds=[-240, 160],
     max_ind = areas.index(max(areas))
     imslice = image[max_ind, :, :]
     maskslice = mask[max_ind, :, :]
+
+    if expand:
+        print('\t Expanding.')
+        imslice = sitk.GetImageFromArray(imslice)
+        maskslice = sitk.GetImageFromArray(maskslice)
+
+        newsize = (4, 4)
+        imslice = sitk.Expand(imslice, newsize)
+        maskslice = sitk.Expand(maskslice, newsize)
+
+        # Adjust the size
+        spacing = float(imslice.GetSpacing()[0])
+        imsize = [float(imslice.GetSize()[0]), float(imslice.GetSize()[1])]
+        figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
+
+        imslice = sitk.GetArrayFromImage(imslice)
+        maskslice = sitk.GetArrayFromImage(maskslice)
+
+    if normalize:
+        print('\t Normalizing.')
+        imslice = sitk.GetImageFromArray(imslice)
+        imslice = sitk.Normalize(imslice)
+        imslice = sitk.GetArrayFromImage(imslice)
 
     # Threshold the image if desired
     if thresholds:
@@ -62,23 +83,25 @@ def slicer(image, mask, output_name, output_name_zoom, thresholds=[-240, 160],
     # Save some memory
     del fig
 
-    # Create a bounding box and save zoomed image
-    imslice, maskslice = bbox_2D(imslice, maskslice, padding=[20, 20])
-    imsize = [float(imslice.shape[0]), float(imslice.shape[1])]
+    if output_name_zoom is not None:
+        # Create a bounding box and save zoomed image
+        imslice, maskslice = bbox_2D(imslice, maskslice, padding=[20, 20])
+        imsize = [float(imslice.shape[0]), float(imslice.shape[1])]
 
-    # NOTE: As these zoomed images get small, we double the spacing
-    spacing = spacing * zoomfactor
-    figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
-    fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize)
-    fig.savefig(output_name_zoom, bbox_inches='tight', pad_inches=0, dpi=dpi)
-    plt.close('all')
+        # NOTE: As these zoomed images get small, we double the spacing
+        spacing = spacing * zoomfactor
+        figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
+        fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize)
+        fig.savefig(output_name_zoom, bbox_inches='tight', pad_inches=0, dpi=dpi)
+        plt.close('all')
 
-    # Save some memory
-    del fig, image, mask
+        # Save some memory
+        del fig, image, mask
+
     return imslice, maskslice
 
 
-def plot_im_and_overlay(image, mask, figsize=(3, 3), alpha=0.15):
+def plot_im_and_overlay(image, mask, figsize=(3, 3), alpha=0.40):
     '''
     Plot an image in a matplotlib figure and overlay with a mask.
     '''

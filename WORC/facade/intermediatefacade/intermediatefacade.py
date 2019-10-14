@@ -57,6 +57,7 @@ class IntermediateFacade():
         self._method = None
 
         self._config_builder = ConfigBuilder()
+        self._add_evaluation = False
 
     def images_from_this_directory(self, directory, image_file_name='image.nii.gz', glob='*/', is_training=True):
         directory = Path(directory).expanduser()
@@ -211,9 +212,14 @@ class IntermediateFacade():
             self._worc.labels_test = self._labels_file_test
 
         self._worc.label_names = ', '.join(self._label_names)
+        self._config_builder._custom_overrides['Labels'] = dict()
+        self._config_builder._custom_overrides['Labels']['label_names'] = self._worc.label_names
 
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())]
         self._worc.build()
+        if self._add_evaluation:
+            self._worc.add_evaluation(label_type=self._label_names[self._selected_label])
+
         self._worc.set()
         self._worc.execute()
 
@@ -228,3 +234,7 @@ class IntermediateFacade():
 
     def add_config_overrides(self, config):
         self._config_builder.custom_config_overrides(config)
+
+    def add_evaluation(self, selected_label=0):
+        self._add_evaluation = True
+        self._selected_label = 0

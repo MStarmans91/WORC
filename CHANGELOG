@@ -16,8 +16,7 @@ Added
 - Facade for easier interaction with WORC.
 - Thresholding option in plot_SVM.
 - Function to create fixed splits for cross validation.
-- n_splits parameter for train-test cross validation. Default is now also
-  10 instead of 5.
+- n_splits parameter for train-test cross validation.
 - Added generalization score.
 - Parameter to choose how many of the optimal settings to save (maxlen).
 - Option to combine multiple onevsrest models in plot_SVM.
@@ -25,6 +24,10 @@ Added
 - Support for test sets in which only one class is present in various
   plotting functions and the metrics.
 - Installation: create fastr home if it does not exist yet.
+- Boostrapping as performance evaluation in plot_SVM.
+- Confidence intervals for boostrapping based on percentile.
+- Catch for if patient is in the test set, but not the overall label set.
+- Downloader for downloading example datasets.
 
 Changed
 ~~~~~~~
@@ -33,6 +36,8 @@ Changed
 - Also the minimum train and validation score are now saved.
 - Put scaler at top of fitandscore function.
 - Make link in file conversion if output is same format as input.
+- Sort keys in performance output JSON.
+- VarianceThreshold features selection on by default.
 
 Fixed
 ~~~~~
@@ -45,6 +50,14 @@ Fixed
 - Failed workflows now return nan instead of zero for performance.
 - Several bugs in multilabel performance evaluation
 - Ring in segmentix was in sagital instead of axial direction.
+- Added replacenan in features before applying SMOTE.
+- Metadata test was not passed to calcfeatures: bugfix.
+- Bugfix: overide labels in facade when predict_labels is called.
+- Several bugfixes in the overrides in the facade configbuilder.
+- Various print commands converted to Python3: .format prints were still
+  left and sometimes buggy.
+- StatisticalTestFeatures and PlotRankedScores tools only accepted cardinality
+  of 1.
 
 
 3.0.0 - 2019-05-08

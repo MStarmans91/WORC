@@ -258,8 +258,8 @@ def fit_and_score(X, y, scoring,
     if not return_all:
         del imputer
 
-    # Replace NaN feature values if those are left
-    feature_values = replacenan(feature_values)
+    # Remove any NaN feature values if these are still left after imputation
+    feature_values = replacenan(feature_values, verbose=verbose, feature_labels=feature_labels[0])
 
     # ------------------------------------------------------------------------
     # Use SMOTE oversampling

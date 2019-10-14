@@ -39,7 +39,7 @@ def load_config(config_file_path):
                      'Classification': dict(), 'SelectFeatGroup': dict(),
                      'Featsel': dict(), 'FeatureScaling': dict(),
                      'SampleProcessing': dict(), 'Imputation': dict(),
-                     'Ensemble': dict()}
+                     'Ensemble': dict(), 'Bootstrap': dict()}
 
     settings_dict['General']['cross_validation'] =\
         settings['General'].getboolean('cross_validation')
@@ -255,6 +255,7 @@ def load_config(config_file_path):
     settings_dict['FeatureScaling']['scaling_method'] =\
         str(settings['FeatureScaling']['scaling_method'])
 
+    # Settings for sample processing, i.e. oversampling, undersampling etc
     settings_dict['SampleProcessing']['SMOTE'] =\
         [str(item).strip() for item in
          settings['SampleProcessing']['SMOTE'].split(',')]
@@ -271,7 +272,15 @@ def load_config(config_file_path):
         [str(item).strip() for item in
          settings['SampleProcessing']['Oversampling'].split(',')]
 
+    # Settings for ensembling
     settings_dict['Ensemble']['Use'] =\
         settings['Ensemble'].getboolean('Use')
+
+    # Settings for bootstrapping
+    settings_dict['Bootstrap']['Use'] =\
+        settings['Bootstrap'].getboolean('Use')
+
+    settings_dict['Bootstrap']['N_iterations'] =\
+        settings['Bootstrap'].getint('N_iterations')
 
     return settings_dict

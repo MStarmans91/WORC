@@ -42,7 +42,7 @@ import string
 import fastr
 from fastr.api import ResourceLimit
 from joblib import Parallel, delayed
-from WORC.classification.fitandscore import fit_and_score
+from WORC.classification.fitandscore import fit_and_score, replacenan
 from WORC.classification.fitandscore import delete_nonestimator_parameters
 import WORC.addexceptions as WORCexceptions
 import pandas as pd
@@ -571,6 +571,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if self.best_imputer is not None:
             X = self.best_imputer.transform(X)
 
+        # Replace nan if still left
+        X = replacenan(np.asarray(X)).tolist()
+
         # Only oversample in training phase, i.e. if we have the labels
         if y is not None:
             if self.best_SMOTE is not None:
@@ -667,7 +670,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             try:
                 array_means = np.average(array, axis=1, weights=weights)
             except ZeroDivisionError as e:
-                e = ('[WORC Warning] {}. Setting {} to unweighted.').format(e, key_name)
+                e = f'[WORC Warning] {e}. Setting {key_name} to unweighted.'
                 print(e)
                 array_means = np.average(array, axis=1)
 
@@ -682,7 +685,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                  array_means[:, np.newaxis]) ** 2,
                                                 axis=1, weights=weights))
             except ZeroDivisionError as e:
-                e = ('[WORC Warning] {}. Setting {} to unweighted.').format(e, key_name)
+                e = f'[WORC Warning] {e}. Setting {key_name} to unweighted.'
                 print(e)
                 array_stds = np.sqrt(np.average((array -
                                                  array_means[:, np.newaxis]) ** 2,
@@ -1241,7 +1244,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             print(f"Single estimator best {scoring}: {single_estimator_performance}.")
             print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
         else:
-            print('[WORC WARNING] No valid ensemble method given: {}. Not ensembling').format(str(method))
+            print(f'[WORC WARNING] No valid ensemble method given: {method}. Not ensembling')
             return self
 
         # Create the ensemble --------------------------------------------------
@@ -1318,7 +1321,7 @@ class BaseSearchCVfastr(BaseSearchCV):
             message = 'One or more of the values in your parameter sampler ' +\
                       'is either not iterable, or the distribution cannot ' +\
                       'generate valid samples. Please check your  ' +\
-                      (' parameters. At least {} gives an error.').format(k)
+                      f' parameters. At least {k} gives an error.'
             raise WORCexceptions.WORCValueError(message)
 
         # Split the parameters files in equal parts
@@ -1330,7 +1333,7 @@ class BaseSearchCVfastr(BaseSearchCV):
             for number in k:
                 temp_dict[number] = parameters_temp[number]
 
-            fname = ('settings_{}.json').format(str(num))
+            fname = f'settings_{num}.json'
             sourcename = os.path.join(tempfolder, 'parameters', fname)
             if not os.path.exists(os.path.dirname(sourcename)):
                 os.makedirs(os.path.dirname(sourcename))
@@ -1338,10 +1341,7 @@ class BaseSearchCVfastr(BaseSearchCV):
                 json.dump(temp_dict, fp, indent=4)
 
             parameter_files[str(num)] =\
-                ('vfs://tmp/{}/{}/{}/{}').format('GS',
-                                                 name,
-                                                 'parameters',
-                                                 fname)
+                f'vfs://tmp/GS/{name}/parameters/{fname}'
 
         # Create test-train splits
         traintest_files = dict()
@@ -1354,16 +1354,13 @@ class BaseSearchCVfastr(BaseSearchCV):
                                     index=source_labels,
                                     name='Train-test data')
 
-            fname = ('traintest_{}.hdf5').format(str(num))
+            fname = f'traintest_{num}.hdf5'
             sourcename = os.path.join(tempfolder, 'traintest', fname)
             if not os.path.exists(os.path.dirname(sourcename)):
                 os.makedirs(os.path.dirname(sourcename))
-            traintest_files[str(num)] = ('vfs://tmp/{}/{}/{}/{}').format('GS',
-                                                                         name,
-                                                                         'traintest',
-                                                                         fname)
+            traintest_files[str(num)] = f'vfs://tmp/GS/{name}/traintest/{fname}'
 
-            sourcelabel = ("Source Data Iteration {}").format(str(num))
+            sourcelabel = f"Source Data Iteration {num}"
             source_data.to_hdf(sourcename, sourcelabel)
 
             num += 1
@@ -1386,7 +1383,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         estimatorname = os.path.join(tempfolder, fname)
         estimator_data.to_hdf(estimatorname, 'Estimator Data')
 
-        estimatordata = ("vfs://tmp/{}/{}/{}").format('GS', name, fname)
+        estimatordata = f"vfs://tmp/GS/{name}/{fname}"
 
         # Create the fastr network
         network = fastr.create_network('WORC_GridSearch_' + name)
@@ -1408,7 +1405,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         source_data = {'estimator_source': estimatordata,
                        'traintest': traintest_files,
                        'parameters': parameter_files}
-        sink_data = {'output': ("vfs://tmp/{}/{}/output_{{sample_id}}_{{cardinality}}{{ext}}").format('GS', name)}
+        sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
 
         network.execute(source_data, sink_data,
                         tmpdir=os.path.join(tempfolder, 'tmp'),
@@ -1435,10 +1432,10 @@ class BaseSearchCVfastr(BaseSearchCV):
         except ValueError as e:
             print(e)
             message = ('Fitting classifiers has failed. The temporary ' +
-                       'results where not deleted and can be found in {}. ' +
+                       f'results where not deleted and can be found in {tempfolder}. ' +
                        'Probably your fitting and scoring failed: check out ' +
                        'the tmp/fitandscore folder within the tempfolder for ' +
-                       'the fastr job temporary results.').format(tempfolder)
+                       'the fastr job temporary results.')
             raise WORCexceptions.WORCValueError(message)
 
         # Remove the temporary folder used
@@ -1720,9 +1717,9 @@ class BaseSearchCVJoblib(BaseSearchCV):
         n_splits = cv.get_n_splits(X, y, groups)
         if self.verbose > 0 and isinstance(parameter_iterable, Sized):
             n_candidates = len(parameter_iterable)
-            print("Fitting {0} folds for each of {1} candidates, totalling"
-                  " {2} fits".format(n_splits, n_candidates,
-                                     n_candidates * n_splits))
+            print(f"Fitting {n_splits} folds for each of {n_candidates}" +\
+                  " candidates, totalling" +\
+                  " {n_candidates * n_splits} fits")
 
         pre_dispatch = self.pre_dispatch
         cv_iter = list(cv.split(X, y, groups))

@@ -137,7 +137,7 @@ class WORC(object):
         self.label_names = 'Label1, Label2'
 
         # Set some defaults, name
-        self.fastr_plugin = 'ProcessPoolExecution'
+        self.fastr_plugin = 'LinearExecution'
         if name == '':
             name = [randint(0, 9) for p in range(0, 5)]
         self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], 'WORC_' + str(name))
@@ -145,6 +145,7 @@ class WORC(object):
         self.additions = dict()
         self.CopyMetadata = True
         self.segmode = []
+        self._add_evaluation = False
 
     def defaultconfig(self):
         """Generate a configparser object holding all default configuration values.
@@ -235,7 +236,7 @@ class WORC(object):
 
         # Feature selection
         config['Featsel'] = dict()
-        config['Featsel']['Variance'] = 'True, False'
+        config['Featsel']['Variance'] = 'True'
         config['Featsel']['GroupwiseSearch'] = 'True'
         config['Featsel']['SelectFromModel'] = 'False'
         config['Featsel']['UsePCA'] = 'False'
@@ -317,7 +318,7 @@ class WORC(object):
         config['HyperOptimization'] = dict()
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.15'
-        config['HyperOptimization']['n_splits'] = '10'
+        config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '10000'
         config['HyperOptimization']['n_jobspercore'] = '2000'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
@@ -337,7 +338,12 @@ class WORC(object):
 
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Use'] = 'False'  # Still WIP
+        config['Ensemble']['Use'] = 'False'
+
+        # Bootstrap options
+        config['Bootstrap'] = dict()
+        config['Bootstrap']['Use'] = 'False'
+        config['Bootstrap']['N_iterations'] = '1000'
 
         return config
 
@@ -599,9 +605,12 @@ class WORC(object):
                         # -----------------------------------------------------
                         # Create a feature calculator node
                         calcfeat_node = str(self.configs[nmod]['General']['FeatureCalculator'])
-                        self.calcfeatures_train[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_train_' + self.configs[nmod]['General']['FeatureCalculator'] + label, resources=ResourceLimit(memory='14G'))
+                        node_ID = '_'.join([self.configs[nmod]['General']['FeatureCalculator'].replace(':', '_').replace('.', '_').replace('/', '_'),
+                                            label])
+
+                        self.calcfeatures_train[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_train_' + node_ID, resources=ResourceLimit(memory='14G'))
                         if self.images_test or self.features_test:
-                            self.calcfeatures_test[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_test_' + self.configs[nmod]['General']['FeatureCalculator'] + label, resources=ResourceLimit(memory='14G'))
+                            self.calcfeatures_test[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_test_' + node_ID, resources=ResourceLimit(memory='14G'))
 
                         # Create required links
                         self.calcfeatures_train[label].inputs['parameters'] = self.sources_parameters[label].output
@@ -614,8 +623,8 @@ class WORC(object):
                         if self.metadata_train and len(self.metadata_train) >= nmod + 1:
                             self.calcfeatures_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
 
-                        if self.metadata_train and len(self.metadata_test) >= nmod + 1:
-                            self.calcfeatures_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
+                        if self.metadata_test and len(self.metadata_test) >= nmod + 1:
+                            self.calcfeatures_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
 
                         if self.semantics_train and len(self.semantics_train) >= nmod + 1:
                             self.sources_semantics_train[label] = self.network.create_source('CSVFile', id='semantics_train_' + label)
@@ -911,7 +920,7 @@ class WORC(object):
         self.source_data['patientclass_train'] = self.labels_train
         self.source_data['patientclass_test'] = self.labels_test
 
-        self.sink_data['classification'] = ("vfs://output/{}/svm_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.sink_data['classification'] = ("vfs://output/{}/estimator_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
@@ -992,12 +1001,19 @@ class WORC(object):
                     if self.images_test or self.features_test:
                         self.sink_data['transformations_test_' + label] = ("vfs://output/{}/Elastix/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
 
+        if self._add_evaluation:
+            self.Evaluate.set()
+
     def execute(self):
         """ Execute the network through the fastr.network.execute command. """
         # Draw and execute nwtwork
         self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
         # self.network.execute(self.source_data, self.sink_data)
+
+    def add_evaluation(self, label_type):
+        self.Evaluate = Evaluate(label_type=label_type, parent=self)
+        self._add_evaluation = True
 
 
 class Tools(object):
