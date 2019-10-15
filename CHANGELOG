@@ -28,6 +28,7 @@ Added
 - Confidence intervals for boostrapping based on percentile.
 - Catch for if patient is in the test set, but not the overall label set.
 - Downloader for downloading example datasets.
+- ReadTheDocs.yml for configuration of documentation.
 
 Changed
 ~~~~~~~
@@ -61,7 +62,7 @@ Fixed
 - Bugfixes in many plotting functions: opening files with 'w' instead of 'wb'
   due to python3 conversion, Compatibility issues with plot_SVM due to
   conversion.
-  
+
 
 
 3.0.0 - 2019-05-08

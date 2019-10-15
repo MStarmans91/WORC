@@ -53,8 +53,8 @@ def main():
     if type(args.output_json) is list:
         args.output_json = ''.join(args.output_json)
 
-    if type(args.label_type) is list:
-        args.label_type = ''.join(args.label_type)
+    # if type(args.label_type) is list:
+    #     args.label_type = ''.join(args.label_type)
 
     # Plot the statistics
     stats = plot_SVM(prediction=args.prediction,
