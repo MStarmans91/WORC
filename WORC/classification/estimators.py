@@ -20,7 +20,6 @@ from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.utils.validation import check_is_fitted
 from sklearn.utils.multiclass import unique_labels
 from WORC.classification.RankedSVM import RankSVM_train, RankSVM_test
-from autosklearn.classification import AutoSklearnClassifier
 
 
 class RankedSVM(BaseEstimator, ClassifierMixin):
@@ -150,9 +149,3 @@ class RankedSVM(BaseEstimator, ClassifierMixin):
                          degree=self.degree)
 
         return Probs
-
-
-class AutoClassifier(AutoSklearnClassifier):
-    def __init__(self, ensemble_memory_limit=2048, time_left_for_this_task=900, **kwargs):
-
-        super(AutoClassifier, self).__init__(**kwargs)
