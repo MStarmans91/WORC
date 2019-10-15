@@ -20,13 +20,8 @@ def generate_config():
 
     for key in config_defaults.keys():
         for num, subkey in enumerate(config_defaults[key].keys()):
-            print(f'[generate_config.py] Documenting field {key}: {subkey}')
-            if num == 0:
-                field_key.append(key)
-            else:
-                # After the first field of this key is generated, we do not append the key for better readability
-                field_key.append('')
-
+            # print(f'[generate_config.py] Documenting field {key}: {subkey}')
+            field_key.append(key)
             field_subkey.append(subkey)
             field_default.append(config_defaults[key][subkey])
 
@@ -45,17 +40,63 @@ def generate_config():
     data = [field_key, field_subkey, field_description, field_default, field_option]
     headers = ['Key', 'Subkey', 'Description', 'Default', 'Options',]
 
-    return create_rest_table(data, headers)
+    return data, headers
 
 
 def generate_config_doc():
     print('[generate_config.py] Generating config reference...')
-    filename = os.path.join(os.path.dirname(__file__), 'autogen', 'WORC.config.rst')
+    data, headers = generate_config()
+    unique_keys = list(set(data[0]))
+    if type(unique_keys) is not list:
+        # Single number, convert to list
+        unique_keys = [unique_keys]
 
+    unique_keys.sort()
+
+    # Per main section, create relevant tables
+    for key in unique_keys:
+        indices = [i for i, x in enumerate(data[0]) if x == key]
+        subkeys = [data[1][i] for i in indices]
+        descriptions = [data[2][i] for i in indices]
+        defaults = [data[3][i] for i in indices]
+        options = [data[4][i] for i in indices]
+
+        # Create description table
+        filename = os.path.join(os.path.dirname(__file__),
+                                'autogen',
+                                'config',
+                                f'WORC.config_{key}_description.rst')
+        headers_temp = ['Subkey', 'Description']
+        data_temp = [subkeys, descriptions]
+        table = create_rest_table(data_temp, headers_temp)
+
+        with open(filename, 'w') as fh_out:
+            fh_out.write(table)
+
+        # Create defaults and options table
+        filename = os.path.join(os.path.dirname(__file__),
+                                'autogen',
+                                'config',
+                                f'WORC.config_{key}_defopts.rst')
+        headers_temp = ['Subkey', 'Default', 'Options']
+        data_temp = [subkeys, defaults, options]
+        table = create_rest_table(data_temp, headers_temp)
+
+        with open(filename, 'w') as fh_out:
+            fh_out.write(table)
+
+    # Create main table
+    headers = ['Key', 'Reference']
+    data = [unique_keys, [f':ref:`{h} <config-{h}>`' for h in unique_keys]]
+    table = create_rest_table(data, headers)
+
+    filename = os.path.join(os.path.dirname(__file__),
+                            'autogen',
+                            f'WORC.config.rst')
     with open(filename, 'w') as fh_out:
-        fh_out.write(generate_config())
+        fh_out.write(table)
 
-    print(f'[generate_config.py] Config reference saved to {filename}')
+    print(f'[generate_config.py] Config references saved!')
 
 
 def generate_config_options():
@@ -223,6 +264,9 @@ def generate_config_options():
     config['HyperOptimization']['test_size'] = 'Float'
     config['HyperOptimization']['N_iterations'] = 'Integer'
     config['HyperOptimization']['n_jobspercore'] = 'Integer'
+    config['HyperOptimization']['n_splits'] = 'Integer'
+    config['HyperOptimization']['maxlen'] = 'Integer'
+    config['HyperOptimization']['ranking_score'] = 'String'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
@@ -239,6 +283,11 @@ def generate_config_options():
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Integer'
+
+    # Bootstrap options
+    config['Bootstrap'] = dict()
+    config['Bootstrap']['Use'] = 'Boolean'
+    config['Bootstrap']['N_iterations'] = 'Integer'
 
     return config
 
@@ -408,6 +457,9 @@ def generate_config_descriptions():
     config['HyperOptimization']['test_size'] = 'Size of test set in the hyperoptimization cross validation, given as a percentage of the whole dataset.'
     config['HyperOptimization']['N_iterations'] = 'Number of iterations used in the hyperparameter optimization. This corresponds to the number of samples drawn from the parameter grid.'
     config['HyperOptimization']['n_jobspercore'] = 'Number of jobs assigned to a single core. Only used if fastr is set to true in the classfication.'  # only relevant when using fastr in classification
+    config['HyperOptimization']['n_splits'] = 'Number of iterations in train-validation cross-validation used for model optimization.'
+    config['HyperOptimization']['maxlen'] = 'Number of estimators for which the fitted outcomes and parameters are saved. Increasing this number will increase the memory usage.'
+    config['HyperOptimization']['ranking_score'] = 'Score used for ranking the performance of the evaluated workflows.'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
@@ -424,6 +476,11 @@ def generate_config_descriptions():
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.'
+
+    # Bootstrap options
+    config['Bootstrap'] = dict()
+    config['Bootstrap']['Use'] = 'Determine whether to use bootstrapping or not.'
+    config['Bootstrap']['N_iterations'] = 'Number of iterations to use for bootstrapping.'
 
     return config
 

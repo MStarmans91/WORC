@@ -1,1 +1,1 @@
-from .intermediatefacade.intermediatefacade import IntermediateFacade
+from .simpleworc.simpleworc import SimpleWORC

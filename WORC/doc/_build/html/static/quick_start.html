@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quick start guide &mdash; WORC 3.0.0 documentation</title>
+  <title>Quick start guide &mdash; WORC 3.1.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
             
           
@@ -94,7 +94,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#windows-installation">Windows installation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#hello-world-and-tutorials">Hello World and Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tutorials">Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world">Hello World</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#import-packages">Import packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#input">Input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-actual-experiment">The actual experiment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analysis-of-the-results">Analysis of the results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tips-and-tricks">Tips and Tricks</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
@@ -174,6 +182,10 @@
 <div class="section" id="installation">
 <span id="installation-chapter"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>You can install WORC either using pip, or from the source code.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The version of PyRadiomics which WORC currently uses requires numpy to be installed beforehand. Make sure you do so, e.g. <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">numpy</span></code>.</p>
+</div>
 <div class="section" id="installing-via-pip">
 <h3>Installing via pip<a class="headerlink" href="#installing-via-pip" title="Permalink to this headline">¶</a></h3>
 <p>You can simply install WORC using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
@@ -221,14 +233,200 @@ edition can be downloaded and installed for free.</p>
 , please follow the respective link and install the requirements.</p>
 </div>
 </div>
-<div class="section" id="hello-world-and-tutorials">
-<h2>Hello World and Tutorials<a class="headerlink" href="#hello-world-and-tutorials" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tutorials">
+<h2>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h2>
 <p>To start out using WORC, we recommend you to follow the tutorials located in the
 <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>. This repository
 contains tutorials for an introduction to WORC, as well as more advanced workflows.</p>
 <p>If you run into any issue, you can first debug your network using
 <a class="reference external" href="https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors/">the fastr trace tool</a>.
 If you’re stuck, feel free to post an issue on the <a class="reference external" href="https://github.com/MStarmans91/WORC/">WORC Github</a>.</p>
+</div>
+<div class="section" id="hello-world">
+<h2>Hello World<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h2>
+<p>Below is the same script as found in the SimpleWORC tutorial found in the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.</p>
+<div class="section" id="import-packages">
+<h3>Import packages<a class="headerlink" href="#import-packages" title="Permalink to this headline">¶</a></h3>
+<p>First, import WORC and some additional python packages.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">WORC</span> <span class="kn">import</span> <span class="n">SimpleWORC</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># These packages are only used in analysing the results</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">fastr</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="c1"># If you don&#39;t want to use your own data, we use the following example set,</span>
+<span class="c1"># see also the next code block in this example.</span>
+<span class="kn">from</span> <span class="nn">WORC.exampledata.datadownloader</span> <span class="kn">import</span> <span class="n">download_HeadAndNeck</span>
+
+<span class="c1"># Define the folder this script is in, so we can easily find the example data</span>
+<span class="n">script_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="input">
+<h3>Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h3>
+<p>The minimal inputs to WORC are:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Images</p></li>
+<li><p>Segmentations</p></li>
+<li><p>Labels</p></li>
+</ol>
+</div></blockquote>
+<p>In SimpleWORC, we assume you have a folder “datadir”, in which there is a
+folder for each patient, where in each folder there is a image.nii.gz and a mask.nii.gz:</p>
+<blockquote>
+<div><ul>
+<li><p>Datadir</p>
+<ul>
+<li><p>Patient_001</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>image.nii.gz</p></li>
+<li><p>mask.nii.gz</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Patient_002</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>image.nii.gz</p></li>
+<li><p>mask.nii.gz</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>…</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<p>In the example, we will use open source data from the online
+<a class="reference external" href="https://xnat.bmia.nl/data/archive/projects/stwstrategyhn1/">BMIA XNAT platform</a>
+This dataset consists of CT scans of patients with Head and Neck tumors. We will download
+a subset of 20 patients in this folder. You can change this settings if you like.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nsubjects</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># use &quot;all&quot; to download all patients</span>
+<span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">script_path</span><span class="p">,</span> <span class="s1">&#39;Data&#39;</span><span class="p">)</span>
+<span class="n">download_HeadAndNeck</span><span class="p">(</span><span class="n">datafolder</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span> <span class="n">nsubjects</span><span class="o">=</span><span class="n">nsubjects</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can skip this code block if you use your own data.</p>
+</div>
+<p>Identify our data structure: change the fields below accordingly if you use your own dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">imagedatadir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;stwstrategyhn1&#39;</span><span class="p">)</span>
+<span class="n">image_file_name</span> <span class="o">=</span> <span class="s1">&#39;image.nii.gz&#39;</span>
+<span class="n">segmentation_file_name</span> <span class="o">=</span> <span class="s1">&#39;mask.nii.gz&#39;</span>
+
+<span class="c1"># File in which the labels (i.e. outcome you want to predict) is stated</span>
+<span class="c1"># Again, change this accordingly if you use your own data.</span>
+<span class="n">label_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;Examplefiles&#39;</span><span class="p">,</span> <span class="s1">&#39;pinfo_HN.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Name of the label you want to predict</span>
+<span class="n">label_name</span> <span class="o">=</span> <span class="s1">&#39;imaginary_label_1&#39;</span>
+
+<span class="c1"># Determine whether we want to do a coarse quick experiment, or a full lengthy</span>
+<span class="c1"># one. Again, change this accordingly if you use your own data.</span>
+<span class="n">coarse</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c1"># Give your experiment a name</span>
+<span class="n">experiment_name</span> <span class="o">=</span> <span class="s1">&#39;Example_STWStrategyHN4&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-actual-experiment">
+<h3>The actual experiment<a class="headerlink" href="#the-actual-experiment" title="Permalink to this headline">¶</a></h3>
+<p>After defining the inputs, the following code can be used to run your first experiment.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Simple WORC object</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">SimpleWORC</span><span class="p">(</span><span class="n">experiment_name</span><span class="p">)</span>
+
+<span class="c1"># Set the input data according to the variables we defined earlier</span>
+<span class="n">network</span><span class="o">.</span><span class="n">images_from_this_directory</span><span class="p">(</span><span class="n">imagedatadir</span><span class="p">,</span>
+                             <span class="n">image_file_name</span><span class="o">=</span><span class="n">image_file_name</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">segmentations_from_this_directory</span><span class="p">(</span><span class="n">imagedatadir</span><span class="p">,</span>
+                                    <span class="n">segmentation_file_name</span><span class="o">=</span><span class="n">segmentation_file_name</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">labels_from_this_file</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">predict_labels</span><span class="p">([</span><span class="n">label_name</span><span class="p">])</span>
+
+<span class="c1"># Use the standard workflow for binary classification</span>
+<span class="n">network</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
+
+<span class="c1"># Run the experiment!</span>
+<span class="n">network</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precomputed features can be used instead of images and masks by instead using <code class="docutils literal notranslate"><span class="pre">network.features_from_this_directory()</span></code> in a similar fashion.</p>
+</div>
+</div>
+<div class="section" id="analysis-of-the-results">
+<h3>Analysis of the results<a class="headerlink" href="#analysis-of-the-results" title="Permalink to this headline">¶</a></h3>
+<p>There are two main outputs: the features for each patient/object, and the overall
+performance. These are stored as .hdf5 and .json files, respectively. By
+default, they are saved in the so-called “fastr output mount”, in a subfolder
+named after your experiment name.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Locate output folder</span>
+<span class="n">outputfolder</span> <span class="o">=</span> <span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
+<span class="n">experiment_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputfolder</span><span class="p">,</span> <span class="s1">&#39;WORC_&#39;</span> <span class="o">+</span> <span class="n">experiment_name</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Your output is stored in {experiment_folder}.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Read the features for the first patient</span>
+<span class="c1"># NOTE: we use the glob package for scanning a folder to find specific files</span>
+<span class="n">feature_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">experiment_folder</span><span class="p">,</span>
+                                       <span class="s1">&#39;Features&#39;</span><span class="p">,</span>
+                                       <span class="s1">&#39;features_*.hdf5&#39;</span><span class="p">))</span>
+<span class="n">featurefile_p1</span> <span class="o">=</span> <span class="n">feature_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">features_p1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">featurefile_p1</span><span class="p">)</span>
+
+<span class="c1"># Read the overall peformance</span>
+<span class="n">performance_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">experiment_folder</span><span class="p">,</span> <span class="s1">&#39;performance_all_0.json&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">performance_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+    <span class="n">performance</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+
+<span class="c1"># Print the feature values and names</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Feature values:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">features_p1</span><span class="o">.</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">features_p1</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> {l} : {v}.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Print the output performance</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Performance:&quot;</span><span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">performance</span><span class="p">[</span><span class="s1">&#39;Statistics&#39;</span><span class="p">]</span>
+<span class="k">del</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span>  <span class="c1"># Omitted for brevity</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> {k} {v}.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>the performance is probably horrible, which is expected as we ran the experiment on coarse settings. These settings are recommended to only use for testing: see also below.</p>
+</div>
+</div>
+<div class="section" id="tips-and-tricks">
+<h3>Tips and Tricks<a class="headerlink" href="#tips-and-tricks" title="Permalink to this headline">¶</a></h3>
+<p>For tips and tricks on running a full experiment instead of this simple
+example, adding more evaluation options, debugging a crashed network etcetera,
+please go to <span class="xref std std-ref">usermanual-chapter</span> or follow the intermediate
+or advanced tutorials on <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.</p>
+<p>Some things we would advice to always do:</p>
+<ul class="simple">
+<li><p>Run actual experiments on the full settings (coarse=False):</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">network</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Add extensive evaluation: <code class="docutils literal notranslate"><span class="pre">network.add_evaluation()</span></code> before <code class="docutils literal notranslate"><span class="pre">network.execute()</span></code>:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">network</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 

@@ -9,6 +9,7 @@ import platform
 class AbstractDetector(ABC):
     # noinspection PyBroadException
     def do_detection(self, *args, **kwargs):
+        print(self.is_detected(*args, **kwargs))
         try:
             return self.is_detected(*args, **kwargs)
         except:
@@ -17,6 +18,7 @@ class AbstractDetector(ABC):
     @abstractmethod
     def is_detected(self, *args, **kwargs):
         pass
+
 
 class CsvDetector(AbstractDetector):
     def __init__(self, csv_file_path):
@@ -71,6 +73,6 @@ class HostnameDetector(AbstractDetector):
 
 class LinuxDetector(AbstractDetector):
     def is_detected(self):
-        if platform.system.lower().strip() == 'linux':
+        if platform.system().lower().strip() == 'linux':
             return True
         return False

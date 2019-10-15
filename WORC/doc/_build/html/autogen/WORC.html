@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC Package &mdash; WORC 3.0.0 documentation</title>
+  <title>WORC Package &mdash; WORC 3.1.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
             
           
@@ -216,7 +216,7 @@ Radiomics executions. Currently only includes a registratio pipeline.</p>
 
 <dl class="class">
 <dt id="WORC.WORC.WORC">
-<em class="property">class </em><code class="descclassname">WORC.WORC.</code><code class="descname">WORC</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.WORC.</code><code class="descname">WORC</code><span class="sig-paren">(</span><em>name='test'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A Workflow for Optimal Radiomics Classification (WORC) object that
 serves as a pipeline spawner and manager for optimizating radiomics
@@ -283,7 +283,7 @@ Segmentations should be of the ITK Image type.</p>
 
 <dl class="method">
 <dt id="WORC.WORC.WORC.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name='test'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Initialize WORC object. Set the initial variables all to None,</dt><dd><p>except for some defaults.</p>
 </dd>
@@ -521,10 +521,10 @@ overwritten in a sub-class)</p>
 <li class="toctree-l1"><a class="reference internal" href="WORC.facade.html">facade Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="WORC.facade.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">facade</span></code> Package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WORC.facade.html#subpackages">Subpackages</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="WORC.facade.intermediatefacade.html">intermediatefacade Package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="WORC.facade.intermediatefacade.html#module-WORC.facade.intermediatefacade.configbuilder"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configbuilder</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="WORC.facade.intermediatefacade.html#module-WORC.facade.intermediatefacade.exceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exceptions</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="WORC.facade.intermediatefacade.html#module-WORC.facade.intermediatefacade.intermediatefacade"><code class="xref py py-mod docutils literal notranslate"><span class="pre">intermediatefacade</span></code> Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.simpleworc.html">simpleworc Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.simpleworc.html#module-WORC.facade.simpleworc.configbuilder"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configbuilder</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.simpleworc.html#module-WORC.facade.simpleworc.exceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exceptions</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.simpleworc.html#module-WORC.facade.simpleworc.simpleworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simpleworc</span></code> Module</a></li>
 </ul>
 </li>
 </ul>
@@ -553,7 +553,7 @@ overwritten in a sub-class)</p>
 <li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plot_boxplot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot</span></code> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plot_images"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#plotminmaxresponse-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.plotminmaxresponse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html#module-WORC.plotting.scatterplot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scatterplot</span></code> Module</a></li>
 </ul>
 </li>

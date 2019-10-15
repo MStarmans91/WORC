@@ -15,5 +15,5 @@ Subpackages
 
 .. toctree::
 
-    WORC.facade.intermediatefacade
+    WORC.facade.simpleworc
 

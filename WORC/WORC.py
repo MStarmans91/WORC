@@ -101,7 +101,7 @@ class WORC(object):
 
     """
 
-    def __init__(self, name='WORC'):
+    def __init__(self, name='test'):
         """Initialize WORC object. Set the initial variables all to None,
            except for some defaults.
 
@@ -109,7 +109,7 @@ class WORC(object):
             name: name of the nework (string, optional)
 
         """
-        self.name = name
+        self.name = 'WORC_' + name
 
         # Initialize several objects
         self.configs = list()
@@ -140,7 +140,7 @@ class WORC(object):
         self.fastr_plugin = 'LinearExecution'
         if name == '':
             name = [randint(0, 9) for p in range(0, 5)]
-        self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], 'WORC_' + str(name))
+        self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], str(name))
 
         self.additions = dict()
         self.CopyMetadata = True
@@ -381,7 +381,7 @@ class WORC(object):
                         self.configs = [self.defaultconfig()] * len(self.images_train)
                     else:
                         self.configs = [self.defaultconfig()] * len(self.features_train)
-                self.network = fastr.create_network('WORC_' + self.name)
+                self.network = fastr.create_network(self.name)
 
                 # BUG: We currently use the first configuration as general config
                 image_types = list()
@@ -905,12 +905,12 @@ class WORC(object):
                 config = configparser.ConfigParser()
                 config.read(c)
                 c = config
-            cfile = os.path.join(fastr.config.mounts['tmp'], 'WORC_' + self.name, ("config_{}_{}.ini").format(self.name, num))
+            cfile = os.path.join(fastr.config.mounts['tmp'], self.name, ("config_{}_{}.ini").format(self.name, num))
             if not os.path.exists(os.path.dirname(cfile)):
                 os.makedirs(os.path.dirname(cfile))
             with open(cfile, 'w') as configfile:
                 c.write(configfile)
-            self.fastrconfigs.append(("vfs://tmp/{}/config_{}_{}.ini").format('WORC_' + self.name, self.name, num))
+            self.fastrconfigs.append(("vfs://tmp/{}/config_{}_{}.ini").format(self.name, self.name, num))
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality

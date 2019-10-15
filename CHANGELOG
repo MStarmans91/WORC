@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-Unreleased
+3.1.0 - 2019-10-15
 ------------------
 
 Added
@@ -40,6 +40,7 @@ Changed
 - Sort keys in performance output JSON.
 - VarianceThreshold features selection on by default.
 - Removed grid_scores from SearchCV as support is dropped in sklearn > 0.20
+- Renamed IntermediateFacade to SimpleWORC
 
 Fixed
 ~~~~~

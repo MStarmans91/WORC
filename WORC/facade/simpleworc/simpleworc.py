@@ -2,8 +2,8 @@ from WORC import WORC
 
 from pathlib import Path
 
-from WORC.detectors.detectors import CsvDetector
-from WORC.facade.intermediatefacade.configbuilder import ConfigBuilder
+from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, CartesiusClusterDetector
+from WORC.facade.simpleworc.configbuilder import ConfigBuilder
 from .exceptions import PathNotFoundException, NoImagesFoundException, NoSegmentationsFoundException, \
     InvalidCsvFileException
 
@@ -38,7 +38,7 @@ def _error_buldozer(func):
 
 
 @_for_all_methods(_error_buldozer)
-class IntermediateFacade():
+class SimpleWORC():
     def __init__(self, name='WORC'):
         # Set some config values
         self._worc = WORC(name)
@@ -58,6 +58,13 @@ class IntermediateFacade():
 
         self._config_builder = ConfigBuilder()
         self._add_evaluation = False
+
+        # Detect wether we are on a cluster
+        if BigrClusterDetector().do_detection():
+            self._worc.fastr_plugin = 'DRMAAExecution'
+        elif CartesiusClusterDetector().do_detection():
+            self._worc.fastr_plugin = 'ProcessPoolExecution'
+
 
     def images_from_this_directory(self, directory, image_file_name='image.nii.gz', glob='*/', is_training=True):
         directory = Path(directory).expanduser()

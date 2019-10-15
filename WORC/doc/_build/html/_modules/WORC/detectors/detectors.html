@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.detectors.detectors &mdash; WORC 3.0.0 documentation</title>
+  <title>WORC.detectors.detectors &mdash; WORC 3.1.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
             
           
@@ -167,6 +167,7 @@
 <div class="viewcode-block" id="AbstractDetector"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.AbstractDetector">[docs]</a><span class="k">class</span> <span class="nc">AbstractDetector</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="c1"># noinspection PyBroadException</span>
 <div class="viewcode-block" id="AbstractDetector.do_detection"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.AbstractDetector.do_detection">[docs]</a>    <span class="k">def</span> <span class="nf">do_detection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_detected</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_detected</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
@@ -175,6 +176,7 @@
 <div class="viewcode-block" id="AbstractDetector.is_detected"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.AbstractDetector.is_detected">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">is_detected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">pass</span></div></div>
+
 
 <div class="viewcode-block" id="CsvDetector"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.CsvDetector">[docs]</a><span class="k">class</span> <span class="nc">CsvDetector</span><span class="p">(</span><span class="n">AbstractDetector</span><span class="p">):</span>
 <div class="viewcode-block" id="CsvDetector.__init__"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.CsvDetector.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csv_file_path</span><span class="p">):</span>
@@ -229,7 +231,7 @@
 
 <div class="viewcode-block" id="LinuxDetector"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.LinuxDetector">[docs]</a><span class="k">class</span> <span class="nc">LinuxDetector</span><span class="p">(</span><span class="n">AbstractDetector</span><span class="p">):</span>
 <div class="viewcode-block" id="LinuxDetector.is_detected"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.LinuxDetector.is_detected">[docs]</a>    <span class="k">def</span> <span class="nf">is_detected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;linux&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;linux&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span></div></div>
 </pre></div>

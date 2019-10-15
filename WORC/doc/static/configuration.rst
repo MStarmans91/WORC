@@ -3,6 +3,9 @@
 Configuration
 =============
 
+Introduction
+------------
+
 WORC has defaults for all settings so it can be run out of the box to test the examples.
 However, you may want to alter the fastr configuration to your system settings, e.g.
 to locate your input and output folders and how much you want to parallelize the execution.
@@ -24,6 +27,10 @@ advantages:
 1. The object can be treated as a python dictionary and thus is easily adjusted.
 2. Second, each tool can be set to parse only specific parts of the configuration,
    enabling us to supply one file to all tools instead of needing many parameter files.
+
+
+Creation and interaction
+-------------------------
 
 The default configuration is generated through the
 :py:meth:`WORC.defaultconfig() <WORC.defaultconfig()>`
@@ -65,10 +72,17 @@ means that the SVM is 2x more likely to be tested in the model selection than LR
     list can be created by using commas for separation, e.g.
     :py:meth:`Network.create_source <'value1, value2, ... ')>`.
 
-Sections
+Contents
 --------
+The config object can be indexed as ``config[key][subkey] = value``. The various keys, subkeys, and the values
+(description, defaults and options) can be found below.
 
-Below are details on each section of the configuration.
+.. include:: ../autogen/WORC.config.rst
+
+Details on each section of the config can be found below.
+
+
+.. _config-General:
 
 General
 ~~~~~~~
@@ -79,13 +93,31 @@ WORC on a cluster with nodes supporting only a single core to be used
 per node, e.g. the BIGR cluster, use only 1 core and threading as a
 backend.
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_General_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_General_defopts.rst
+
+
+.. _config-Segmentix:
 Segmentix
 ~~~~~~~~~
 These fields are only important if you specified using the segmentix
 tool in the general configuration.
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_Segmentix_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Segmentix_defopts.rst
+
+
+.. _config-Normalize:
 Normalize
 ~~~~~~~~~~~~~
 The preprocessing node acts before the feature extraction on the image.
@@ -93,14 +125,32 @@ Currently, only normalization is included: hence the dictionary name is
 *Normalize*. Additionally, scans with image type CT (see later in the
 tutorial) provided as DICOM are scaled to Hounsfield Units.
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_Normalize_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Normalize_defopts.rst
+
+
+.. _config-ImageFeatures:
 ImageFeatures
 ~~~~~~~~~~~~~
 If using the PREDICT toolbox, you can specify some settings for the
 feature computation here. Also, you can select if the certain features
 are computed or not.
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_ImageFeatures_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_ImageFeatures_defopts.rst
+
+
+.. _config-Featsel:
 Featsel
 ~~~~~~~
 When using the PREDICT toolbox for classification, these settings can be
@@ -111,7 +161,16 @@ which finally the best setting in combination with the other
 hyperparameters is selected. Again, these should be formatted as string
 containing the actual values, e.g. value1, value2.
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_Featsel_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Featsel_defopts.rst
+
+
+.. _config-SelectFeatGroup:
 SelectFeatGroup
 ~~~~~~~~~~~~~~~
 If the PREDICT feature computation and classification tools are used,
@@ -123,6 +182,16 @@ Previously, there was a single parameter for the texture features,
 selecting all, none or a single group. This is still supported, but not
 recommended, and looks as follows:
 
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_SelectFeatGroup_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_SelectFeatGroup_defopts.rst
+
+
+.. _config-Imputation:
 Imputation
 ~~~~~~~~~~~~~~~~
 When using the PREDICT toolbox for classification, these settings are
@@ -132,7 +201,16 @@ values per field, of which random samples will be drawn of which finally
 the best setting in combination with the other hyperparameters is
 selected.
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_Imputation_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Imputation_defopts.rst
+
+
+.. _config-Classification:
 Classification
 ~~~~~~~~~~~~~~
 When using the PREDICT toolbox for classification, you can specify the
@@ -140,12 +218,31 @@ following settings. Almost all of these are used in CASH. Most of the
 classifiers are implemented using sklearn; hence descriptions of the
 hyperparameters can also be found there.
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_Classification_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Classification_defopts.rst
+
+
+.. _config-CrossValidation:
 CrossValidation
 ~~~~~~~~~~~~~~~
 When using the PREDICT toolbox for classification and you specified
 using cross validation, specify the following settings.
 
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_CrossValidation_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_CrossValidation_defopts.rst
+
+
+.. _config-Labels:
 Labels
 ~~~~~~~~
 When using the PREDICT toolbox for classification, you have to set the
@@ -157,21 +254,19 @@ Suppose your patientclass.txt file you supplied as source for labels
 looks like this:
 
 
-+~~~~~~~~~~+~~~~~~~~+~~~~~~~~+
++----------+--------+--------+
 | Patient  | Label1 | Label2 |
 +==========+========+========+
 | patient1 | 1      | 0      |
-+~~~~~~~~~~+~~~~~~~~+~~~~~~~~+
++----------+--------+--------+
 | patient2 | 2      | 1      |
-+~~~~~~~~~~+~~~~~~~~+~~~~~~~~+
++----------+--------+--------+
 | patient3 | 1      | 5      |
-+~~~~~~~~~~+~~~~~~~~+~~~~~~~~+
++----------+--------+--------+
 
 You can supply a single label or multiple labels split by commas, for
 each of which an estimator will be fit. For example, suppose you simply
 want to use Label1 for classification, then set:
-
-
 
 .. code-block:: python
 
@@ -182,42 +277,86 @@ If you want to first train a classifier on Label1 and then Label2,
 set: ``config[Genetics][label_names] = Label1, Label2``
 
 
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_Labels_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Labels_defopts.rst
 
 
+.. _config-HyperOptimization:
 Hyperoptimization
 ~~~~~~~~~~~~~~~~~
 When using the PREDICT toolbox for classification, you have to supply
 your hyperparameter optimization procedure here.
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_HyperOptimization_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_HyperOptimization_defopts.rst
+
+
+.. _config-FeatureScaling:
 FeatureScaling
 ~~~~~~~~~~~~~~
 Determines which method is applied to scale each feature.
 
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_FeatureScaling_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_FeatureScaling_defopts.rst
+
+
+.. _config-SampleProcessing:
 SampleProcessing
 ~~~~~~~~~~~~~~~~
 Before performing the hyperoptimization, you can use SMOTE: Synthetic
 Minority Over-sampling Technique to oversample your data.
 
+**Description:**
 
+.. include:: ../autogen/config/WORC.config_SampleProcessing_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_SampleProcessing_defopts.rst
+
+
+.. _config-Ensemble:
 Ensemble
 ~~~~~~~~
 WORC supports ensembling of workflows. This is not a default approach in
 radiomics, hence the default is to not use it and select only the best
 performing workflow.
 
+**Description:**
 
-FASTR_bugs
-~~~~~~~~~~
-Currently, when using XNAT as a source, FASTR can only retrieve DICOM
-directories. We made a workaround for this for the images and
-segmentations, but this only works if all your files have the same name
-and extension. These are provided in this configuration part.
+.. include:: ../autogen/config/WORC.config_Ensemble_description.rst
 
-.. _configuration-chapter:
+**Defaults and Options:**
 
-Full Configuration
-------------------
-.. include:: ../autogen/WORC.config.rst
+.. include:: ../autogen/config/WORC.config_Ensemble_defopts.rst
+
+
+.. _config-Bootstrap:
+Bootstrap
+~~~~~~~~~
+Besides cross validation, WORC supports bootstrapping on the test set for performance evaluation.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_Bootstrap_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Bootstrap_defopts.rst
+

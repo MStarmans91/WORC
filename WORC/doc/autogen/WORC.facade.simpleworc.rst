@@ -1,10 +1,10 @@
-intermediatefacade Package
-==========================
+simpleworc Package
+==================
 
 :mod:`configbuilder` Module
 ---------------------------
 
-.. automodule:: WORC.facade.intermediatefacade.configbuilder
+.. automodule:: WORC.facade.simpleworc.configbuilder
     :members:
     :undoc-members:
     :show-inheritance:
@@ -13,16 +13,16 @@ intermediatefacade Package
 :mod:`exceptions` Module
 ------------------------
 
-.. automodule:: WORC.facade.intermediatefacade.exceptions
+.. automodule:: WORC.facade.simpleworc.exceptions
     :members:
     :undoc-members:
     :show-inheritance:
     :special-members:
 
-:mod:`intermediatefacade` Module
---------------------------------
+:mod:`simpleworc` Module
+------------------------
 
-.. automodule:: WORC.facade.intermediatefacade.intermediatefacade
+.. automodule:: WORC.facade.simpleworc.simpleworc
     :members:
     :undoc-members:
     :show-inheritance:

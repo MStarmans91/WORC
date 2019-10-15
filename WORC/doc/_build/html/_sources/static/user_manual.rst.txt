@@ -1,3 +1,5 @@
+..  usermanual-chapter:
+
 User Manual
 ===========
 
@@ -28,8 +30,6 @@ configuration, as it is listed in a separate page, see the :doc:`config file sec
 
 Attributes: Sources
 ~~~~~~~~~~~~~~~~~~~
-
-
 
 There are numerous WORC attributes which serve as source nodes for the
 FASTR network. These are:
