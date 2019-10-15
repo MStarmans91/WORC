@@ -27,7 +27,7 @@ from scipy.stats import rankdata
 from sklearn.externals import six
 from sklearn.utils.fixes import MaskedArray
 
-from sklearn.model_selection._search import _CVScoreTuple, ParameterSampler
+from sklearn.model_selection._search import ParameterSampler
 from sklearn.model_selection._search import ParameterGrid, _check_param_grid
 
 from abc import ABCMeta, abstractmethod
@@ -611,29 +611,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
     def best_score_(self):
         check_is_fitted(self, 'cv_results_')
         return self.cv_results_['mean_test_score'][self.best_index_]
-
-    @property
-    def grid_scores_(self):
-        warnings.warn(
-            "The grid_scores_ attribute was deprecated in version 0.18"
-            " in favor of the more elaborate cv_results_ attribute."
-            " The grid_scores_ attribute will not be available from 0.20",
-            DeprecationWarning)
-
-        check_is_fitted(self, 'cv_results_')
-        grid_scores = list()
-
-        for i, (params, mean, std) in enumerate(zip(
-                self.cv_results_['params'],
-                self.cv_results_['mean_test_score'],
-                self.cv_results_['std_test_score'])):
-            scores = np.array(list(self.cv_results_['split%d_test_score'
-                                                    % s][i]
-                                   for s in range(self.n_splits_)),
-                              dtype=np.float64)
-            grid_scores.append(_CVScoreTuple(params, mean, scores))
-
-        return grid_scores
 
     def process_fit(self, n_splits, parameters_est, parameters_all,
                     test_sample_counts, test_scores,

@@ -34,7 +34,7 @@ def generate_config():
                 field_description.append(config_descriptions[key][subkey])
             except KeyError:
                 print(f'[WARNING] No description for {key}: {subkey}')
-                field_description.append('')
+                field_description.append('WIP')
 
             try:
                 field_option.append(config_options[key][subkey])
@@ -238,7 +238,7 @@ def generate_config_options():
 
     # Ensemble options
     config['Ensemble'] = dict()
-    config['Ensemble']['Use'] = 'Boolean or Integer'
+    config['Ensemble']['Use'] = 'Integer'
 
     return config
 
@@ -423,8 +423,7 @@ def generate_config_descriptions():
 
     # Ensemble options
     config['Ensemble'] = dict()
-    config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Either provide an integer to state how many estimators to include, or True, which will use the default ensembling method.'
-
+    config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.'
 
     return config
 

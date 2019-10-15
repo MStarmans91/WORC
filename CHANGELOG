@@ -39,6 +39,7 @@ Changed
 - Make link in file conversion if output is same format as input.
 - Sort keys in performance output JSON.
 - VarianceThreshold features selection on by default.
+- Removed grid_scores from SearchCV as support is dropped in sklearn > 0.20
 
 Fixed
 ~~~~~

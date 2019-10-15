@@ -65,15 +65,14 @@ means that the SVM is 2x more likely to be tested in the model selection than LR
     list can be created by using commas for separation, e.g.
     :py:meth:`Network.create_source <'value1, value2, ... ')>`.
 
+Sections
+--------
+
+Below are details on each section of the configuration.
 
 General
--------
-
-
-PREDICTGeneral
---------------
-
-These fields contain general settings for when using PREDICT.
+~~~~~~~
+These fields contain general settings for when using WORC.
 For more info on the Joblib settings, which are used in the Joblib
 Parallel function, see `here <https://pythonhosted.org/joblib/parallel.html>`__. When you run
 WORC on a cluster with nodes supporting only a single core to be used
@@ -81,32 +80,29 @@ per node, e.g. the BIGR cluster, use only 1 core and threading as a
 backend.
 
 
-
 Segmentix
----------
+~~~~~~~~~
 These fields are only important if you specified using the segmentix
 tool in the general configuration.
 
 
-Preprocessing
--------------
+Normalize
+~~~~~~~~~~~~~
 The preprocessing node acts before the feature extraction on the image.
 Currently, only normalization is included: hence the dictionary name is
 *Normalize*. Additionally, scans with image type CT (see later in the
 tutorial) provided as DICOM are scaled to Hounsfield Units.
 
 
-Imagefeatures
--------------
-
+ImageFeatures
+~~~~~~~~~~~~~
 If using the PREDICT toolbox, you can specify some settings for the
 feature computation here. Also, you can select if the certain features
 are computed or not.
 
 
 Featsel
--------
-
+~~~~~~~
 When using the PREDICT toolbox for classification, these settings can be
 used for feature selection methods. Note that these settings are
 actually used in the hyperparameter optimization. Hence you can provide
@@ -117,7 +113,7 @@ containing the actual values, e.g. value1, value2.
 
 
 SelectFeatGroup
----------------
+~~~~~~~~~~~~~~~
 If the PREDICT feature computation and classification tools are used,
 then you can do a gridsearch among the various feature groups for the
 optimal combination. If you do not want this, set all fields to a single
@@ -128,7 +124,7 @@ selecting all, none or a single group. This is still supported, but not
 recommended, and looks as follows:
 
 Imputation
-----------------
+~~~~~~~~~~~~~~~~
 When using the PREDICT toolbox for classification, these settings are
 used for feature imputation.Note that these settings are actually used
 in the hyperparameter optimization. Hence you can provide multiple
@@ -138,7 +134,7 @@ selected.
 
 
 Classification
---------------
+~~~~~~~~~~~~~~
 When using the PREDICT toolbox for classification, you can specify the
 following settings. Almost all of these are used in CASH. Most of the
 classifiers are implemented using sklearn; hence descriptions of the
@@ -146,12 +142,12 @@ hyperparameters can also be found there.
 
 
 CrossValidation
----------------
+~~~~~~~~~~~~~~~
 When using the PREDICT toolbox for classification and you specified
 using cross validation, specify the following settings.
 
 Labels
---------
+~~~~~~~~
 When using the PREDICT toolbox for classification, you have to set the
 label used for classification.
 
@@ -161,15 +157,15 @@ Suppose your patientclass.txt file you supplied as source for labels
 looks like this:
 
 
-+----------+--------+--------+
++~~~~~~~~~~+~~~~~~~~+~~~~~~~~+
 | Patient  | Label1 | Label2 |
 +==========+========+========+
 | patient1 | 1      | 0      |
-+----------+--------+--------+
++~~~~~~~~~~+~~~~~~~~+~~~~~~~~+
 | patient2 | 2      | 1      |
-+----------+--------+--------+
++~~~~~~~~~~+~~~~~~~~+~~~~~~~~+
 | patient3 | 1      | 5      |
-+----------+--------+--------+
++~~~~~~~~~~+~~~~~~~~+~~~~~~~~+
 
 You can supply a single label or multiple labels split by commas, for
 each of which an estimator will be fit. For example, suppose you simply
@@ -189,37 +185,32 @@ set: ``config[Genetics][label_names] = Label1, Label2``
 
 
 Hyperoptimization
------------------
+~~~~~~~~~~~~~~~~~
 When using the PREDICT toolbox for classification, you have to supply
 your hyperparameter optimization procedure here.
 
 
 FeatureScaling
---------------
+~~~~~~~~~~~~~~
 Determines which method is applied to scale each feature.
 
 
 
 SampleProcessing
-----------------
+~~~~~~~~~~~~~~~~
 Before performing the hyperoptimization, you can use SMOTE: Synthetic
 Minority Over-sampling Technique to oversample your data.
 
 
-
-
-
 Ensemble
---------
+~~~~~~~~
 WORC supports ensembling of workflows. This is not a default approach in
 radiomics, hence the default is to not use it and select only the best
 performing workflow.
 
 
-
-
 FASTR_bugs
-----------
+~~~~~~~~~~
 Currently, when using XNAT as a source, FASTR can only retrieve DICOM
 directories. We made a workaround for this for the images and
 segmentations, but this only works if all your files have the same name
