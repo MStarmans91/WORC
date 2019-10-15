@@ -6,6 +6,7 @@ python:
 before_install:
 - sudo apt-get -qq update
 - sudo apt-get -qq -y install libblas-dev liblapack-dev libatlas-base-dev gfortran
+- sudo -E apt-get -yq --no-install-suggests --no-install-recommends install swig
 
 install:
 - pip install -r requirements.txt
