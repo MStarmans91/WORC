@@ -60,9 +60,9 @@ def main():
         from rdflib.namespace import RDF, FOAF
 
         # convert python object to RDF
-        print "-----------------------------------------------------------"
-        print "			RDF Output:"
-        print ""
+        print("-----------------------------------------------------------")
+        print("			RDF Output:")
+        print("")
         Img = Graph()
         lung1_image = URIRef("http://example.org/CT-Image")
         Img.add((lung1_image, RDF.type, FOAF.Image))
@@ -74,7 +74,7 @@ def main():
             tmp_name = list_key[i]
             Img.add((lung1_image, FOAF.tmp_name, tmp_value))
 
-        print Img.serialize(format='turtle')
+        print(Img.serialize(format='turtle'))
         # Create a rdf file for storing output
         Img.serialize(args.out, format="pretty-xml")
 

@@ -50,7 +50,6 @@ def main():
         args.perf = ''.join(args.perf)
 
     # If input is dir, use glob
-    print args.svm
     if os.path.isdir(args.svm):
         args.svm = glob.glob(args.svm + '/svm_*.hdf5')
         args.svm = natsorted(args.svm)
@@ -85,7 +84,6 @@ def main():
         if 'Too Few Features.' in svm.keys() or ' Too Few Features.' in svm.keys():
             print(("Too few features in {}.").format(svmfile))
         else:
-            print svm
             labels = svm[svm.keys()[0]].ix['feature_labels'] # .tolist()
             feature_labels.append(labels)
             all_feature_labels = all_feature_labels + list(set(labels) - set(all_feature_labels))

@@ -324,9 +324,9 @@ def generate_config_descriptions():
 
     # Feature selection
     config['Featsel'] = dict()
-    config['Featsel']['Variance'] = 'If True, exclude features which have a variance < 0.01. Based on ` sklearn's VarianceThreshold <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/>`_.'
+    config['Featsel']['Variance'] = 'If True, exclude features which have a variance < 0.01. Based on ` sklearn"s VarianceThreshold <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/>`_.'
     config['Featsel']['GroupwiseSearch'] = 'Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.'
-    config['Featsel']['SelectFromModel'] = 'Select features by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also `sklearn's SelectFromModel <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/>`_.'
+    config['Featsel']['SelectFromModel'] = 'Select features by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also `sklearn"s SelectFromModel <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/>`_.'
     config['Featsel']['UsePCA'] = 'If True, Use Principle Component Analysis (PCA) to select features.'
     config['Featsel']['PCAType'] = 'Method to select number of components using PCA: Either the number of components that explains 95% of the variance, or use a fixed number of components.95variance'
     config['Featsel']['StatisticalTestUse'] = 'If True, use statistical test to select features.'

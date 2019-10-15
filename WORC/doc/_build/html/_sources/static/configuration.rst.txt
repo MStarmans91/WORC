@@ -14,7 +14,7 @@ as well. You will see that upon installation, WORC has already put a ``WORC_conf
 ``config.d`` folder.
 
 For a sample configuration file and a complete overview of the options in ``config.py`` see
-the :ref:`Config file <config-chapter>` section.
+the :ref:`configuration-chapter` section.
 
 % Note: Above was originally from quick start
 As ``WORC`` and the default tools used are mostly Python based, we've chosen
@@ -225,5 +225,8 @@ directories. We made a workaround for this for the images and
 segmentations, but this only works if all your files have the same name
 and extension. These are provided in this configuration part.
 
+.. _configuration-chapter:
 
+Full Configuration
+------------------
 .. include:: ../autogen/WORC.config.rst

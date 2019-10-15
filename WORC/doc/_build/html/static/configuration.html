@@ -106,6 +106,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#sampleprocessing">SampleProcessing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ensemble">Ensemble</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fastr-bugs">FASTR_bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#full-configuration">Full Configuration</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
@@ -188,7 +189,7 @@ will be ignored. Additionally, .py files from the <code class="docutils literal 
 as well. You will see that upon installation, WORC has already put a <code class="docutils literal notranslate"><span class="pre">WORC_config.py</span></code> file in the
 <code class="docutils literal notranslate"><span class="pre">config.d</span></code> folder.</p>
 <p>For a sample configuration file and a complete overview of the options in <code class="docutils literal notranslate"><span class="pre">config.py</span></code> see
-the <a class="reference internal" href="#config-chapter"><span class="std std-ref">Config file</span></a> section.</p>
+the <a class="reference internal" href="#configuration-chapter"><span class="std std-ref">Full Configuration</span></a> section.</p>
 <p>% Note: Above was originally from quick start
 As <code class="docutils literal notranslate"><span class="pre">WORC</span></code> and the default tools used are mostly Python based, we’ve chosen
 to put our configuration in a <code class="docutils literal notranslate"><span class="pre">configparser</span></code> object. This has several
@@ -370,6 +371,9 @@ performing workflow.</p>
 directories. We made a workaround for this for the images and
 segmentations, but this only works if all your files have the same name
 and extension. These are provided in this configuration part.</p>
+</div>
+<div class="section" id="full-configuration">
+<span id="configuration-chapter"></span><h2>Full Configuration<a class="headerlink" href="#full-configuration" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-center">
 <colgroup>
 <col style="width: 3%" />
@@ -585,9 +589,9 @@ ReliefNN
 ReliefSampleSize
 ReliefDistanceP
 ReliefNumFeatures</p></td>
-<td><p>If True, exclude features which have a variance &lt; 0.01. Based on ` sklearn &lt;<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/">https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/</a>&gt;`_.
+<td><p>If True, exclude features which have a variance &lt; 0.01. Based on ` sklearn”s VarianceThreshold &lt;<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/">https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/</a>&gt;`_.
 Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.
-Select features by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/">sklearn</a>.
+Select features by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/">sklearn”s SelectFromModel</a>.
 If True, Use Principle Component Analysis (PCA) to select features.
 Method to select number of components using PCA: Either the number of components that explains 95% of the variance, or use a fixed number of components.95variance
 If True, use statistical test to select features.
