@@ -64,7 +64,7 @@ def plot_single_ROC(y_truth, y_score, verbose=False):
     elif P == 0:
         print('[WORC Warning] No positive class samples found, cannot determine ROC. Skipping iteration.')
         return fpr, tpr, thresholds
-        
+
     while i < len(y_truth_sorted):
         if y_score[i] != fprev:
             fpr.append(1 - FP/N)
@@ -361,7 +361,7 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
 
     # Determine the predicted score per patient
     print('Determining score per patient.')
-    y_truths, y_scores, _, _ = plot_SVM(prediction, pinfo, label_type,
+    y_truths, y_scores, _, _ = plot_SVM(prediction, pinfo, [label_type],
                                         show_plots=False,
                                         alpha=0.95, ensemble=ensemble,
                                         output='decision')
@@ -385,7 +385,7 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
 
     # Save ROC values as JSON
     if output_csv is not None:
-        with open(output_csv, 'wb') as csv_file:
+        with open(output_csv, 'w') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(['FPR', 'TPR'])
             for i in range(0, len(fpr)):

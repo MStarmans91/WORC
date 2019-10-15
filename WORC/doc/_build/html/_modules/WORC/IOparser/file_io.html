@@ -253,7 +253,7 @@
                                  <span class="n">pfiles</span><span class="p">,</span>
                                  <span class="n">image_features</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span> <span class="o">+</span> <span class="s1">&#39;. Please take a look at your labels&#39;</span> <span class="o">+</span>\
+            <span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;. Please take a look at your labels&#39;</span> <span class="o">+</span>\
                 <span class="s1">&#39; file and make sure it is formatted correctly. &#39;</span> <span class="o">+</span>\
                 <span class="s1">&#39;See also https://github.com/MStarmans91/WORC/wiki/The-WORC-configuration#genetics.&#39;</span>
             <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>

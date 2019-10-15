@@ -89,21 +89,25 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User Manual</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#the-worc-object">The WORC object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#attributes-sources">Attributes: Sources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#attributes-settings">Attributes: Settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#attributes-functions">Attributes: Functions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#images-and-segmentations">Images and segmentations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#semantics">Semantics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#labels">Labels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-worc-object">The WORC object</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#attributes-sources">Attributes: Sources</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#images-and-segmentations">Images and segmentations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#semantics">Semantics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#labels">Labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#masks">Masks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metadata">Metadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#elastix-para">Elastix_Para</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#masks">Masks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#metadata">Metadata</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#elastix-para">Elastix_Para</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fastr-settings">FASTR settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#construction-and-execution-commands">Construction and execution commands</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#attributes-settings">Attributes: Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#attributes-functions">Attributes: Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fastr-settings">FASTR settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#construction-and-execution-commands">Construction and execution commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#evaluation-of-your-network">Evaluation of your network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
@@ -189,10 +193,9 @@ and describe the more advanced features.</p>
 </div>
 <p>It’s attributes are split in a couple of categories. We will not discuss
 the WORC.defaultconfig() function here, which generates the default
-configuration, as it is listed in a separate page, see the  <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">config file section</span></a>.</p>
-</div>
+configuration, as it is listed in a separate page, see the <span class="xref std std-doc">config file section</span>.</p>
 <div class="section" id="attributes-sources">
-<h2>Attributes: Sources<a class="headerlink" href="#attributes-sources" title="Permalink to this headline">¶</a></h2>
+<h3>Attributes: Sources<a class="headerlink" href="#attributes-sources" title="Permalink to this headline">¶</a></h3>
 <p>There are numerous WORC attributes which serve as source nodes for the
 FASTR network. These are:</p>
 <ul class="simple">
@@ -254,31 +257,8 @@ warp the segmentation from this sequence to the sequence for which you
 did not supply a segmentation. <strong>WORC will always align these sequences with no segmentations to the first sequence, i.e. the first object in the images_train list.</strong>
 Hence make sure you supply the sequence for which you have a ROI as the first object.</p>
 </div>
-</div>
-<div class="section" id="attributes-settings">
-<h2>Attributes: Settings<a class="headerlink" href="#attributes-settings" title="Permalink to this headline">¶</a></h2>
-<p>There are several attributes in WORC which define how your pipeline is
-executed:</p>
-<ul class="simple">
-<li><p>fastr_plugin</p></li>
-<li><p>fastr_tmpdir</p></li>
-<li><p>Tools: additional workflows are stored here. Currently only includes
-a pipeline for image registration without any Radiomics.</p></li>
-<li><p>CopyMetadata: Whether to automatically copy the metadata info
-(e.g. direction of cosines) from the images to the segmentations
-before applying transformix.</p></li>
-</ul>
-<p>An explanation of the FASTR settings is given below.</p>
-</div>
-<div class="section" id="attributes-functions">
-<h2>Attributes: Functions<a class="headerlink" href="#attributes-functions" title="Permalink to this headline">¶</a></h2>
-<p>The WORC.configs() attribute contains the configparser files, which you
-can easily edit. The WORC.set() function saves these objects in a
-temporary folder and converts the filename into as FASTR source, which
-is then put in the WORC.fastrconfigs() objects. Hence you do not need to
-edit the fastrconfigs object manually.</p>
 <div class="section" id="images-and-segmentations">
-<h3>Images and segmentations<a class="headerlink" href="#images-and-segmentations" title="Permalink to this headline">¶</a></h3>
+<h4>Images and segmentations<a class="headerlink" href="#images-and-segmentations" title="Permalink to this headline">¶</a></h4>
 <p>The minimal input for a Radiomics pipeline consists of either images
 (plus a segmentation if you have not implemented an automatic
 segmentation tool) or features plus a label file (and a configuration,
@@ -288,7 +268,7 @@ on the images. They are read out using SimpleITK, which supports various
 image formats such as DICOM, NIFTI, TIFF, NRRD and MHD.</p>
 </div>
 <div class="section" id="semantics">
-<h3>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h3>
+<h4>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h4>
 <p>Semantic features are used in the PREDICT CalcFeatures tool. You can
 supply these as a .csv listing your features per patient. The first
 column should always be named <code class="docutils literal notranslate"><span class="pre">Patient</span></code> and contain the Patient ID. The
@@ -330,16 +310,15 @@ case, your sources should look as following:</p>
 </div>
 </div>
 <div class="section" id="labels">
-<h3>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h3>
+<h4>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h4>
 <p>The labels are used in classification. For PREDICT, these should be
 supplied as a .txt file. Similar to the semantics, the first column
 should head <code class="docutils literal notranslate"><span class="pre">Patient</span></code> and contain the patient ID. The next columns can
 contain things you want to predict. Hence the format is similar to the
 semantics file.</p>
 </div>
-</div>
 <div class="section" id="masks">
-<h2>Masks<a class="headerlink" href="#masks" title="Permalink to this headline">¶</a></h2>
+<h4>Masks<a class="headerlink" href="#masks" title="Permalink to this headline">¶</a></h4>
 <p>WORC contains a segmentation preprocessing tool, called segmentix. This
 tool is still under development. The idea is that you can manipulate
 your segmentation, e.g. using dilation, then use a mask to make sure it
@@ -347,14 +326,14 @@ is still valid. Currently, you can only let it take a ring of a certain
 radius around your ROI and mask it.</p>
 </div>
 <div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<h4>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h4>
 <p>If you already computed your features, e.g. from a previous run, you can
 directly supply the features instead of the images and segmentations and
 skip the feature computation step. These should be stored in .hdf5 files
 matching the PREDICT CalcFeatures format.</p>
 </div>
 <div class="section" id="metadata">
-<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h2>
+<h4>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h4>
 <p>This source can be used if you want to use tags from the DICOM header as
 features, e.g. patient age and sex. In this case, this source should
 contain a single DICOM per patient from which the tags that are read.
@@ -362,7 +341,7 @@ Check the PREDICT.imagefeatures.patient_feature module for the currently
 implemented tags.</p>
 </div>
 <div class="section" id="elastix-para">
-<h2>Elastix_Para<a class="headerlink" href="#elastix-para" title="Permalink to this headline">¶</a></h2>
+<h4>Elastix_Para<a class="headerlink" href="#elastix-para" title="Permalink to this headline">¶</a></h4>
 <p>If you have multiple images for each patient, e.g. T1 and T2, but only a
 single segmentation, you can use image registration to align and
 transform the segmentation to the other modality. This is done in WORC
@@ -373,8 +352,32 @@ map and pass this object to WORC. <strong>Note: WORC assume your segmentation
 is made on the first WORC.images source you supply. The segmentation
 will be alingned to all other image sources.</strong></p>
 </div>
+</div>
+<div class="section" id="attributes-settings">
+<h3>Attributes: Settings<a class="headerlink" href="#attributes-settings" title="Permalink to this headline">¶</a></h3>
+<p>There are several attributes in WORC which define how your pipeline is
+executed:</p>
+<ul class="simple">
+<li><p>fastr_plugin</p></li>
+<li><p>fastr_tmpdir</p></li>
+<li><p>Tools: additional workflows are stored here. Currently only includes
+a pipeline for image registration without any Radiomics.</p></li>
+<li><p>CopyMetadata: Whether to automatically copy the metadata info
+(e.g. direction of cosines) from the images to the segmentations
+before applying transformix.</p></li>
+</ul>
+<p>An explanation of the FASTR settings is given below.</p>
+</div>
+<div class="section" id="attributes-functions">
+<h3>Attributes: Functions<a class="headerlink" href="#attributes-functions" title="Permalink to this headline">¶</a></h3>
+<p>The WORC.configs() attribute contains the configparser files, which you
+can easily edit. The WORC.set() function saves these objects in a
+temporary folder and converts the filename into as FASTR source, which
+is then put in the WORC.fastrconfigs() objects. Hence you do not need to
+edit the fastrconfigs object manually.</p>
+</div>
 <div class="section" id="fastr-settings">
-<h2>FASTR settings<a class="headerlink" href="#fastr-settings" title="Permalink to this headline">¶</a></h2>
+<h3>FASTR settings<a class="headerlink" href="#fastr-settings" title="Permalink to this headline">¶</a></h3>
 <p>There are two WORC attributes which contain settings on running FASTR.
 In WORC.fastr_plugin, you can specify which Execution Plugin should be
 used: see also
@@ -383,7 +386,7 @@ used: see also
 sets the temporary directory used in your run.</p>
 </div>
 <div class="section" id="construction-and-execution-commands">
-<h2>Construction and execution commands<a class="headerlink" href="#construction-and-execution-commands" title="Permalink to this headline">¶</a></h2>
+<h3>Construction and execution commands<a class="headerlink" href="#construction-and-execution-commands" title="Permalink to this headline">¶</a></h3>
 <p>After supplying your sources, you need to build the FASTR network. This
 can be done through the WORC.build() command. Depending on your sources,
 several nodes will be added and linked. This creates the WORC.network()
@@ -397,6 +400,98 @@ needed sink nodes. You can check these by looking at the created
 WORC.source_data_data and WORC.sink objects.</p>
 <p>Finally, after completing above steps, you can execute the network
 through the WORC.execute() command.</p>
+</div>
+</div>
+<div class="section" id="evaluation-of-your-network">
+<h2>Evaluation of your network<a class="headerlink" href="#evaluation-of-your-network" title="Permalink to this headline">¶</a></h2>
+<p>In WORC, there are two options for testing your fitted models:</p>
+<ol class="arabic simple">
+<li><p>Single dataset: cross-validation (currently only random-split)</p></li>
+<li><p>Separate train and test dataset: bootstrapping on test dataset</p></li>
+</ol>
+<p>Within these evaluation settings, the following performance evaluation methods are used:</p>
+<ol class="arabic">
+<li><p>Confidence intervals on several metrics:</p>
+<blockquote>
+<div><p>For classification:</p>
+<ol class="loweralpha simple">
+<li><p>Area under the curve (AUC) of the receiver operating characteristic (ROC) curve. In a multiclass setting, weuse the multiclass AUC from the <a class="reference external" href="https://tadpole.grand-challenge.org/">TADPOLE Challenge</a>.</p></li>
+<li><p>Accuracy.</p></li>
+<li><p>Balanced classification accuracy as defined by the <a class="reference external" href="https://tadpole.grand-challenge.org/">TADPOLE Challenge</a>.</p></li>
+<li><p>F1-score</p></li>
+<li><p>Sensitivity, aka recall or true positive rate</p></li>
+<li><p>Specificity, aka true negative rate</p></li>
+<li><p>Negative predictive value (NPV)</p></li>
+<li><p>Precision, aka Positive predictive value (PPV)</p></li>
+</ol>
+<p>For regression:</p>
+<ol class="loweralpha simple">
+<li><p>R2-score</p></li>
+<li><p>Mean Squared Error (MSE)</p></li>
+<li><p>Intraclass Correlation Coefficient (ICC)</p></li>
+<li><p>Pearson correlation coefficient and p-value</p></li>
+<li><p>Spearmand correlation coefficient and p-value</p></li>
+</ol>
+<p>For survival, in addition to the regression scores:
+a) Concordance index
+b) Cox regression coefficient and p-value</p>
+<p>In cross-validation, by default, 95% confidence intervals for the mean performance measures are constructed using
+the corrected resampled t-test base on all cross-validation iterations, thereby taking into account that the samples
+in the cross-validation splits are not statistically independent. See als
+<cite>Nadeau C, Bengio Y. Inference for the generalization error. In Advances in Neural Information Processing Systems, 2000; 307–313.</cite></p>
+<p>In bootstrapping, 95% confidence intervals are created using the ‘’standard’’ method according to a normal distribution: see Table 6, method 1 in  <cite>Efron B., Tibshirani R. Bootstrap Methods for Standard Errors,
+Confidence Intervals, and Other Measures of Statistical Accuracy, Statistical Science Vol.1, No,1, 54-77, 1986</cite>.</p>
+</div></blockquote>
+</li>
+<li><p>ROC curve with 95% confidence intervals using the fixed-width bands method, see <cite>Macskassy S. A., Provost F., Rosset S. ROC Confidence Bands: An Empirical Evaluation. In: Proceedings of the 22nd international conference on Machine learning. 2005.</cite></p></li>
+<li><p>Univariate statistical testing of the features using:</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>A student t-test</p></li>
+<li><p>A Welch test</p></li>
+<li><p>A Wilcoxon test</p></li>
+<li><p>A Mann-Whitney U test</p></li>
+</ol>
+<p>The uncorrected p-values for all these tests are reported in a single excel sheet. Pick the right test and significance
+level based on your assumptions. Normally, we make use of the Mann-Whitney U test, as our features do not have to be normally
+distributed, it’s nonparametric, and assumes independent samples.</p>
+</div></blockquote>
+</li>
+<li><p>Ranking patients from typical to atypical as determined by the model, based on either:</p>
+<blockquote>
+<div><p>a) The percentage of times a patient was classified correctly when occuring in the test set. Patients always correctly classified
+can be seen as typical examples; patients always classified incorrectly as atypical.
+b) The mean posterior of the patient when occuring in the test set.</p>
+<p>These measures can only be used in classification. Besides an Excel with the rankings, snapshots of the middle slice
+of the image + segmentation are saved with the ground truth label and the percentage/posterior in the filename. In
+this way, one can scroll through the patients from typical to atypical to distinguish a pattern.</p>
+</div></blockquote>
+</li>
+<li><p>A barchart of how often certain features groups were selected in the optimal methods. Only useful when using
+groupwise feature selection.</p></li>
+</ol>
+<p>By default, only the first evaluation method, e.g. metric computation, is used. The other methods can simply be added
+to WORC by using the <code class="docutils literal notranslate"><span class="pre">add_evaluation()</span></code> function, either directly in WORC or through the facade:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
+<span class="n">network</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
+<span class="n">label_type</span> <span class="o">=</span> <span class="s1">&#39;name_of_label_predicted_for_evaluation&#39;</span>
+<span class="o">...</span>
+<span class="n">network</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">(</span><span class="n">label_type</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
+<span class="kn">from</span> <span class="nn">WORC</span> <span class="kn">import</span> <span class="n">IntermediateFacade</span>
+<span class="n">I</span> <span class="o">=</span> <span class="n">IntermediateFacade</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">I</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+<p>As WORC is based on fastr, debugging is similar to debugging a fastr pipeline: see therefore also
+<a class="reference external" href="https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging/">the fastr debugging guidelines</a>.</p>
+<p>If you run into any issue, please create an issue on the <a class="reference external" href="https://github.com/MStarmans91/WORC/issues/">WORC Github</a>.</p>
 </div>
 </div>
 

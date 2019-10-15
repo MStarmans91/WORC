@@ -325,7 +325,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         if bootstrap and i > 0:
             # For bootstrapping, only do this at the first iteration
             pass
-        elif ensemble:
+        elif ensemble > 1:
             # NOTE: Added for backwards compatability
             if not hasattr(fitted_model, 'cv_iter'):
                 cv_iter = list(fitted_model.cv.split(X_train_temp, Y_train_temp))

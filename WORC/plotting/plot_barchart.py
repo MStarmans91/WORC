@@ -93,11 +93,11 @@ def plot_barchart(prediction, estimators=10, label_type=None, output_tex=None,
 
     # Save the output
     if output_tex is not None:
-        print('Saving barchart to {}.').format(output_tex)
+        print(f'Saving barchart to {output_tex}.')
         tikz_save(output_tex)
 
     if output_png is not None:
-        print('Saving barchart to {}.').format(output_png)
+        print(f'Saving barchart to {output_png}.')
         fig.savefig(output_png, bbox_inches='tight', pad_inches=0, dpi=50)
 
 
@@ -200,7 +200,7 @@ def plot_bars(params, normalization_factor=None, figwidth=20, fontsize=20):
 def count_parameters(parameters):
     # Count for every parameter how many times a setting occurs
     output = dict()
-    for setting, values in parameters.iteritems():
+    for setting, values in parameters.items():
         output[setting] = dict()
         c = Counter(values)
         for k, v in zip(c.keys(), c.values()):

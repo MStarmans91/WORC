@@ -174,7 +174,7 @@
 <span class="c1"># limitations under the License.</span>
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">balanced_accuracy_score</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">roc_auc_score</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">f1_score</span>
@@ -184,6 +184,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">make_scorer</span><span class="p">,</span> <span class="n">average_precision_score</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">check_scoring</span> <span class="k">as</span> <span class="n">check_scoring_sklearn</span>
 <span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">pinv</span>
+<span class="kn">from</span> <span class="nn">imblearn.metrics</span> <span class="k">import</span> <span class="n">geometric_mean_score</span>
 
 
 <div class="viewcode-block" id="performance_singlelabel"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.performance_singlelabel">[docs]</a><span class="k">def</span> <span class="nf">performance_singlelabel</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -206,38 +207,74 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Compute confuction matrics and extract measures</span>
         <span class="n">c_mat</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">)</span>
-        <span class="n">TN</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="n">FN</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="n">TP</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="n">FP</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">c_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] No samples in y_truth and y_prediction.&#39;</span><span class="p">)</span>
+            <span class="n">TN</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">FN</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">TP</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">FP</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">c_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] Only a single class represented in y_truth and y_prediction.&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">c_mat</span><span class="p">:</span>
+                <span class="n">TN</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                <span class="n">FN</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">TP</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">FP</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">TN</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">FN</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">TP</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+                <span class="n">FP</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">TN</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">FN</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">TP</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">FP</span> <span class="o">=</span> <span class="n">c_mat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
-        <span class="c1"># compute confusion metric based statistics</span>
         <span class="k">if</span> <span class="n">FN</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">TP</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">sensitivity</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">c_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">sensitivity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sensitivity</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sensitivity</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FN</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">FP</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">TN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">specificity</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">c_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">specificity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">specificity</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">specificity</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">TN</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">FP</span><span class="o">+</span><span class="n">TN</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">TP</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">FP</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">precision</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">c_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">precision</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">precision</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">precision</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">TP</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">TP</span><span class="o">+</span><span class="n">FP</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">TN</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">FN</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">NPV</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">c_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">npv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">npv</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">NPV</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">TN</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
+            <span class="n">npv</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">TN</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">TN</span> <span class="o">+</span> <span class="n">FN</span><span class="p">)</span>
 
         <span class="c1"># Additionally, compute accuracy, AUC and f1-score</span>
         <span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">)</span>
-        <span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">)</span>
+        <span class="n">BCA</span> <span class="o">=</span> <span class="n">balanced_accuracy_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] &#39;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span> <span class="o">+</span> <span class="s1">&#39;. Setting AUC to NaN.&#39;</span><span class="p">)</span>
+            <span class="n">auc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
+
         <span class="n">f1_score_out</span> <span class="o">=</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">accuracy</span><span class="p">,</span> <span class="n">sensitivity</span><span class="p">,</span> <span class="n">specificity</span><span class="p">,</span> <span class="n">precision</span><span class="p">,</span> <span class="n">f1_score_out</span><span class="p">,</span> <span class="n">auc</span></div>
+        <span class="k">return</span> <span class="n">accuracy</span><span class="p">,</span> <span class="n">BCA</span><span class="p">,</span> <span class="n">sensitivity</span><span class="p">,</span> <span class="n">specificity</span><span class="p">,</span> <span class="n">precision</span><span class="p">,</span> <span class="n">npv</span><span class="p">,</span> <span class="n">f1_score_out</span><span class="p">,</span> <span class="n">auc</span></div>
 
 
 <div class="viewcode-block" id="performance_multilabel"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.performance_multilabel">[docs]</a><span class="k">def</span> <span class="nf">performance_multilabel</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">,</span> <span class="n">y_score</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -249,9 +286,11 @@
 
 <span class="sd">    y_truth = [0, 0,	0,	0,	0,	0,	2,	2,	1,	1,	2]    ### Groundtruth</span>
 <span class="sd">    y_prediction = [0, 0,	0,	0,	0,	0,	1,	2,	1,	2,	2]    ### Predicted labels</span>
+<span class="sd">    y_score = [[0.3, 0.3, 0.4], [0.2, 0.6, 0.2], ... ] # Normalized score per patient for all labels (three in this example)</span>
 
 
 <span class="sd">    Calculation of accuracy accorading to formula suggested in CAD Dementia Grand Challege http://caddementia.grand-challenge.org</span>
+<span class="sd">    and the TADPOLE challenge https://tadpole.grand-challenge.org/Performance_Metrics/</span>
 <span class="sd">    Calculation of Multi Class AUC according to classpy: https://bitbucket.org/bigr_erasmusmc/classpy/src/master/classpy/multi_class_auc.py</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -272,10 +311,19 @@
         <span class="n">FN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span><span class="o">-</span><span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
         <span class="n">FP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span><span class="o">-</span><span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
         <span class="n">TN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">[:])</span><span class="o">-</span><span class="n">TP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">FP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">FN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
-        <span class="n">n</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
 
-    <span class="c1"># Calculation of accuracy accorading to formula suggested in CAD Dementia Grand Challege http://caddementia.grand-challenge.org</span>
-    <span class="n">Accuracy</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">TP</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
+
+    <span class="c1"># Determine Accuracy</span>
+    <span class="n">Accuracy</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">TP</span><span class="p">))</span><span class="o">/</span><span class="n">n</span>
+
+    <span class="c1"># BCA: Balanced Class Accuracy</span>
+    <span class="n">BCA</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_class</span><span class="p">):</span>
+        <span class="n">BCAi</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">TP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">TP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">FN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="n">TN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">TN</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">FP</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]))</span>
+        <span class="n">BCA</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">BCAi</span><span class="p">)</span>
+
+    <span class="n">AverageAccuracy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">BCA</span><span class="p">)</span>
 
     <span class="c1"># Determine total positives and negatives</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">TP</span> <span class="o">+</span> <span class="n">FN</span>
@@ -294,6 +342,11 @@
     <span class="n">Precision</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Precision</span><span class="p">)</span>
     <span class="n">Precision</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Precision</span><span class="p">)</span>
 
+    <span class="c1"># Calculation of NPV</span>
+    <span class="n">NPV</span> <span class="o">=</span> <span class="n">TN</span><span class="o">/</span><span class="p">(</span><span class="n">TN</span><span class="o">+</span><span class="n">FN</span><span class="p">)</span>
+    <span class="n">NPV</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">NPV</span><span class="p">)</span>
+    <span class="n">NPV</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">NPV</span><span class="p">)</span>
+
     <span class="c1"># Calculation  of F1_Score</span>
     <span class="n">F1_score</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">beta</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="n">Sensitivity</span><span class="o">*</span><span class="n">Precision</span><span class="p">))</span><span class="o">/</span><span class="p">((</span><span class="n">beta</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">Precision</span> <span class="o">+</span> <span class="n">Sensitivity</span><span class="p">))</span>
     <span class="n">F1_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">F1_score</span><span class="p">)</span>
@@ -305,7 +358,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">AUC</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">return</span> <span class="n">Accuracy</span><span class="p">,</span> <span class="n">Sensitivity</span><span class="p">,</span> <span class="n">Specificity</span><span class="p">,</span> <span class="n">Precision</span><span class="p">,</span> <span class="n">F1_score</span><span class="p">,</span> <span class="n">AUC</span></div>
+    <span class="k">return</span> <span class="n">Accuracy</span><span class="p">,</span> <span class="n">Sensitivity</span><span class="p">,</span> <span class="n">Specificity</span><span class="p">,</span> <span class="n">Precision</span><span class="p">,</span> <span class="n">NPV</span><span class="p">,</span> <span class="n">F1_score</span><span class="p">,</span> <span class="n">AUC</span><span class="p">,</span> <span class="n">AverageAccuracy</span></div>
 
 
 <div class="viewcode-block" id="pairwise_auc"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.pairwise_auc">[docs]</a><span class="k">def</span> <span class="nf">pairwise_auc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">class_i</span><span class="p">,</span> <span class="n">class_j</span><span class="p">):</span>
@@ -338,8 +391,8 @@
 <div class="viewcode-block" id="multi_class_auc"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.multi_class_auc">[docs]</a><span class="k">def</span> <span class="nf">multi_class_auc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">):</span>
     <span class="n">classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_truth</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_score</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No AUC is calculated, output probabilities are missing&#39;</span><span class="p">)</span>
+    <span class="c1"># if any(t == 0.0 for t in np.sum(y_score, axis=1)):</span>
+    <span class="c1">#     raise ValueError(&#39;No AUC is calculated, output probabilities are missing&#39;)</span>
 
     <span class="n">pairwise_auc_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">pairwise_auc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">+</span>
                                 <span class="n">pairwise_auc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">classes</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">classes</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">]</span>
@@ -349,7 +402,7 @@
 
 
 <div class="viewcode-block" id="multi_class_auc_score"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.multi_class_auc_score">[docs]</a><span class="k">def</span> <span class="nf">multi_class_auc_score</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">metrics</span><span class="o">.</span><span class="n">make_scorer</span><span class="p">(</span><span class="n">multi_class_auc</span><span class="p">,</span> <span class="n">needs_proba</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">multi_class_auc</span><span class="p">,</span> <span class="n">needs_proba</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="check_scoring"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.check_scoring">[docs]</a><span class="k">def</span> <span class="nf">check_scoring</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_none</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -358,7 +411,9 @@
 <span class="sd">    scoring metrics.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">scoring</span> <span class="o">==</span> <span class="s1">&#39;average_precision_weighted&#39;</span><span class="p">:</span>
-        <span class="n">scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">average_precision_score</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+        <span class="n">scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">average_precision_score</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">,</span> <span class="n">needs_proba</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">scoring</span> <span class="o">==</span> <span class="s1">&#39;gmean&#39;</span><span class="p">:</span>
+        <span class="n">scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">geometric_mean_score</span><span class="p">(),</span> <span class="n">needs_proba</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">scorer</span> <span class="o">=</span> <span class="n">check_scoring_sklearn</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">scorer</span></div>

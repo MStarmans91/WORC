@@ -18,11 +18,12 @@
 import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-os.system('python3 doc_clean.py')
-print('python3 generate_modules.py ..' + os.path.sep + ' -d .' + os.path.sep + ' -s rst -f')
-os.system('python3 generate_modules.py ..' + os.path.sep + ' -d .' + os.path.sep + ' -s rst -f')
-os.system('python3 generate_config.py')
-print('python3 generate_config.py')
+# os.system('python3 doc_clean.py')
+# print('python3 generate_modules.py ..' + os.path.sep + ' -d .' + os.path.sep + ' -s rst -f')
+# os.system('python3 generate_modules.py ..' + os.path.sep + ' -d .' + os.path.sep + ' -s rst -f')
+# print('python3 generate_config.py')
+# os.system('python3 generate_config.py')
+
 print('make html')
 os.system('make html')
 #os.system('make latexpdf')

@@ -91,10 +91,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#installing-via-pip">Installing via pip</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installing-from-source-code">Installing from source code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#windows-installation">Windows installation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hello-world">Hello World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-tutorials">Advanced Tutorials</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
@@ -206,25 +207,84 @@ library. For Ubuntu this is in the <code class="docutils literal notranslate"><s
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You might want to consider installing <code class="docutils literal notranslate"><span class="pre">WORC</span></code> in a <a class="reference external" href="http://docs.python-guide.org/en/latest/dev/virtualenvs/">virtualenv</a></p>
+<p>You might want to consider installing <code class="docutils literal notranslate"><span class="pre">WORC</span></code> in a
+<a class="reference external" href="http://docs.python-guide.org/en/latest/dev/virtualenvs/">virtualenv</a></p>
 </div>
 </div>
+<div class="section" id="windows-installation">
+<h3>Windows installation<a class="headerlink" href="#windows-installation" title="Permalink to this headline">¶</a></h3>
+<p>On Windows, we strongly recommend to install python through the
+<a class="reference external" href="https://www.anaconda.com/distribution/#windows">Anaconda distribution</a>.</p>
+<p>Regardless of your installation, you will need <a class="reference external" href="https://visualstudio.microsoft.com/vs/features/python">Microsoft Visual Studio</a>: the Community
+edition can be downloaded and installed for free.</p>
+<p>If you still get an error similar to error: <code class="docutils literal notranslate"><span class="pre">Microsoft</span> <span class="pre">Visual</span> <span class="pre">C++</span> <span class="pre">14.0</span> <span class="pre">is</span> <span class="pre">required.</span> <span class="pre">Get</span> <span class="pre">it</span> <span class="pre">with</span></code>
+<a class="reference external" href="https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019">Microsoft Visual C++ Build Tools</a>
+, please follow the respective link and install the requirements.</p>
 </div>
-<div class="section" id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
-<p>WORC has defaults for all settings so it can be run out of the box to test the examples.
-However, you may want to alter the fastr configuration to your system settings, e.g.
-to locate your input and output folders and how much you want to parallelize the execution.</p>
-<p>Fastr will search for a config file named <code class="docutils literal notranslate"><span class="pre">config.py</span></code> in the <code class="docutils literal notranslate"><span class="pre">$FASTRHOME</span></code> directory
-(which defaults to <code class="docutils literal notranslate"><span class="pre">~/.fastr/</span></code> if it is not set). So if <code class="docutils literal notranslate"><span class="pre">$FASTRHOME</span></code> is set the <code class="docutils literal notranslate"><span class="pre">~/.fastr/</span></code>
-will be ignored. Additionally, .py files from the <code class="docutils literal notranslate"><span class="pre">$FASTRHOME/config.d</span></code> folder will be parsed
-as well. You will see that upon installation, WORC has already put a <code class="docutils literal notranslate"><span class="pre">WORC_config.py</span></code> file in the
-<code class="docutils literal notranslate"><span class="pre">config.d</span></code> folder.</p>
-<p>For a sample configuration file and a complete overview of the options in <code class="docutils literal notranslate"><span class="pre">config.py</span></code> see
-the <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">Config file</span></a> section.</p>
 </div>
-<div class="section" id="tutorial">
-<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hello-world">
+<h2>Hello World<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h2>
+<p>If you don’t have a dataset of your own you want to use, you can
+download an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
+
+<span class="n">WORC</span><span class="o">.</span><span class="n">exampledata</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;STWHeadAndNeck&#39;</span><span class="p">)</span>
+<span class="n">datadir</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">getfolder</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The data will be located in the same folder as where you run the code,
+which is stored in the WORC object, which we retreived as above.</p>
+<p>The minimal inputs for a WORC experiment are:
+1. Images
+2. Segmentations
+3. Labels</p>
+<p>Alternatively, you can use precomputed features instead of images and
+segmentations, see below for an example on how to use these.</p>
+<p>In the data directory, there is a folder for each patient/object. Inside,
+there is an image (‘image.nii.gz’) and a ‘mask.nii.gz’. The quick
+way to use WORC is to keep this structure (i.e. one main directory,
+subdirectories for each patient/object), although you can vary
+the image and mask filename and format. Additionally, a label file has
+been created, in which the outcome ‘imaginary_label_1’ is stored,
+which is what we are going to try and predict.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define names of image and segmentation in each patient folder</span>
+<span class="n">image_file_name</span> <span class="o">=</span> <span class="s1">&#39;image.nii.gz&#39;</span>
+<span class="n">segmentation_file_name</span> <span class="o">=</span> <span class="s1">&#39;mask.nii.gz&#39;</span>
+
+<span class="c1"># File in which the labels (i.e. outcome you want to predict) is stated</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">label_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">datadir</span><span class="p">,</span> <span class="s1">&#39;pinfo.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Name of the label you want to predict</span>
+<span class="n">label_name</span> <span class="o">=</span> <span class="s1">&#39;imaginary_label_1&#39;</span>
+</pre></div>
+</div>
+<p>You can give the experiment a name, which will be used for storing the output.
+For this examples, we will do a quick, coarse experiment: we advice to always
+start with a coarse experiment for testing the setup, than run a full experiment
+to get the optimal performance.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Determine whether we want to do a coarse quick experiment, or a full lengthy one</span>
+<span class="n">coarse</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c1"># Give your experiment a name</span>
+<span class="n">experiment_name</span> <span class="o">=</span> <span class="s1">&#39;Example_STWStrategyMMD&#39;</span>
+</pre></div>
+</div>
+<p>After defining the inputs and settings, we are ready to create and run the actual experiment</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Precomputed features can be used instead of images and masks by instead using <code class="docutils literal notranslate"><span class="pre">I.features_from_this_directory()</span></code> in a similar fashion.</p>
+</div>
+<p>There are two outputs: the features for each patient/object, and the overall
+performance. These are stored as .hdf5 and .json files, respectively. By
+default, they are saved in the so-called “fastr output mount”, in a subfolder
+named after your experiment name.</p>
+<p>Print the outputs to the command line:</p>
+<p>Extensive evaluation, including feature importance, patient ranking from
+typical to atypical, and ROC analysis, can be simply added, see section …</p>
+</div>
+<div class="section" id="advanced-tutorials">
+<h2>Advanced Tutorials<a class="headerlink" href="#advanced-tutorials" title="Permalink to this headline">¶</a></h2>
 <p>To start out using WORC, we recommend you to follow the tutorial located in the
 [WORCTutorial Github](<a class="reference external" href="https://github.com/MStarmans91/WORCTutorial">https://github.com/MStarmans91/WORCTutorial</a>). Besides some more advanced tutorials,
 the main tutorial can be found in the WORCTutorial.ipynb Jupyter notebook. Instructions on how

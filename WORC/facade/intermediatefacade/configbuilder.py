@@ -63,10 +63,10 @@ class ConfigBuilder():
                 'vessel_features': 'False',
                 'phase_features': 'False'
             },
-            'CrossValidation': {'N_iterations': '5'},
+            'CrossValidation': {'N_iterations': '3'},
             'HyperOptimization': {'N_iterations': '1000',
                                   'n_jobspercore': '500'},
-            'Ensemble': {'Use': 'False'},
+            'Ensemble': {'Use': '1'},
             'SampleProcessing': {'SMOTE': 'False'},
         }
         self._custom_overrides.update(overrides)
@@ -75,10 +75,10 @@ class ConfigBuilder():
     def full_overrides(self):
         overrides = {
             'ImageFeatures': {
-                'texture_Gabor': True,
-                'vessel': True,
-                'log': True,
-                'phase': True
+                'texture_Gabor': 'True',
+                'vessel': 'True',
+                'log': 'True',
+                'phase': 'True'
             },
             'SelectFeatGroup': {
                 'texture_Gabor_features': 'True, False',

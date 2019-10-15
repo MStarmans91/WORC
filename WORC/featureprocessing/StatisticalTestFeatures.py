@@ -15,13 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-import numpy as np
-import WORC.IOparser.config_io_classifier as config_io
 import os
-from scipy.stats import ttest_ind, ranksums, mannwhitneyu
 import csv
-from WORC.trainclassifier import load_features
+import numpy as np
+from scipy.stats import ttest_ind, ranksums, mannwhitneyu
+import WORC.IOparser.config_io_classifier as config_io
+from WORC.classification.trainclassifier import load_features
 
 
 def StatisticalTestFeatures(features, patientinfo, config, output=None,
@@ -72,7 +71,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
     if not os.path.exists(os.path.dirname(output)):
         os.makedirs(os.path.dirname(output))
 
-    if label_type is not None:
+    if label_type is None:
         label_type = config['Labels']['label_names']
 
     # Read the features and classification data
@@ -89,8 +88,8 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
     # -----------------------------------------------------------------------
     # Perform statistical tests
     print("Performing statistical tests.")
-    label_value = label_data['mutation_label']
-    label_name = label_data['mutation_name']
+    label_value = label_data['label']
+    label_name = label_data['label_name']
 
     header = list()
     subheader = list()
@@ -111,7 +110,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
 
     # Open the output file
     if output is not None:
-        myfile = open(output, 'wb')
+        myfile = open(output, 'w')
         wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
         wr.writerow(header)
         wr.writerow(subheader)
@@ -141,10 +140,10 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
                 pvaluesmw.append(1)
 
         # Sort based on p-values:
-        pvalues = np.asarray(pvalues)
-        indices = np.argsort(pvalues)
-        pvalues = pvalues[indices].tolist()
+        indices = np.argsort(np.asarray(pvaluesmw))
         feature_labels_o = np.asarray(feature_labels)[indices].tolist()
+
+        pvalues = np.asarray(pvalues)[indices].tolist()
         pvalueswelch = np.asarray(pvalueswelch)[indices].tolist()
         pvalueswil = np.asarray(pvalueswil)[indices].tolist()
         pvaluesmw = np.asarray(pvaluesmw)[indices].tolist()

@@ -251,11 +251,11 @@
 
     <span class="c1"># Save the output</span>
     <span class="k">if</span> <span class="n">output_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving barchart to </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Saving barchart to </span><span class="si">{output_tex}</span><span class="s1">.&#39;</span><span class="p">)</span>
         <span class="n">tikz_save</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">output_png</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Saving barchart to </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_png</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Saving barchart to </span><span class="si">{output_png}</span><span class="s1">.&#39;</span><span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_png</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span></div>
 
 
@@ -358,7 +358,7 @@
 <div class="viewcode-block" id="count_parameters"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_barchart.count_parameters">[docs]</a><span class="k">def</span> <span class="nf">count_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
     <span class="c1"># Count for every parameter how many times a setting occurs</span>
     <span class="n">output</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">setting</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">setting</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">output</span><span class="p">[</span><span class="n">setting</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">c</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>

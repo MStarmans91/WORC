@@ -35,8 +35,12 @@ Subpackages
 
     WORC.IOparser
     WORC.classification
+    WORC.detectors
+    WORC.exampledata
+    WORC.facade
     WORC.featureprocessing
     WORC.plotting
     WORC.processing
+    WORC.resources
     WORC.tools
 

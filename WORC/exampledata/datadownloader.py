@@ -110,7 +110,11 @@ def download_project(project_name, xnat_url, datafolder, nsubjects=10,
         os.makedirs(datafolder)
 
     subjects_len = len(project.subjects)
-    nsubjects = min(nsubjects, subjects_len)
+    if nsubjects == 'all':
+        nsubjects = subjects_len
+    else:
+        nsubjects = min(nsubjects, subjects_len)
+        
     subjects_counter = 1
     downloaded_subjects_counter = 0
     for s in range(0, subjects_len):

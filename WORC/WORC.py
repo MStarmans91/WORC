@@ -338,7 +338,7 @@ class WORC(object):
 
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Use'] = 'False'
+        config['Ensemble']['Use'] = '1'
 
         # Bootstrap options
         config['Bootstrap'] = dict()

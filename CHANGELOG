@@ -58,6 +58,10 @@ Fixed
   left and sometimes buggy.
 - StatisticalTestFeatures and PlotRankedScores tools only accepted cardinality
   of 1.
+- Bugfixes in many plotting functions: opening files with 'w' instead of 'wb'
+  due to python3 conversion, Compatibility issues with plot_SVM due to
+  conversion.
+  
 
 
 3.0.0 - 2019-05-08
