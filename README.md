@@ -26,7 +26,8 @@ The official documentation can be found at [https://worc.readthedocs.io](https:/
 ## Installation
 
 WORC currently only supports Unix with Python 3.6+ (tested on 3.7.2 and 3.7.3) systems and
-has been tested on Ubuntu 16.04 and 18.04 and Windows 10.
+has been tested on Ubuntu 16.04 and 18.04 and Windows 10. For detailed installation
+instructions, please check  [the ReadTheDocs installation guidelines](https://worc.readthedocs.io/en/latest/static/quick_start.html#installation).
 
 The package can be installed through pip:
 
@@ -40,40 +41,28 @@ Make sure you install the requirements first:
 
       pip install -r requirements.txt
 
-### Fastr Configuration
-The installation will create a FASTR configuration file in the $HOME/.fastr/config.d folder called WORC_config.py.
-This file is used for configuring fastr, the pipeline execution toolbox we use. More information can be found at
-[the FASTR website](http://fastr.readthedocs.io/en/stable/static/file_description.html#config-file).
-In this file, so called mounts are defined, which are used to locate the WORC tools and your inputs and outputs.
-Please inspect the mounts and change them if neccesary.
+NOTE: The version of PyRadiomics which WORC currently uses requires numpy to be installed beforehand. Make sure you do so, e.g.
 
-```
-echo "machine images.xnat.org
->     login admin
->     password admin" > ~/.netrc
-chmod 600 ~/.netrc
-```
+      pip install numpy
 
 ## 3rd-party packages used in WORC:
 
- - [FASTR (Workflow design and building)](http://fastr.readthedocs.io)
+ - [fastr (Workflow design and building)](http://fastr.readthedocs.io)
  - xnat (Collecting data from XNAT)
  - SimpleITK (Image loading and preprocessing)
  - [Pyradiomics](https://github.com/radiomics/pyradiomics)
  - [PREDICT](https://github.com/Svdvoort/PREDICTFastr)
 
-See for other requirements the [requirements file](requirements.txt).
+See for other python packages the [requirements file](requirements.txt).
 
 ## Start
 We suggest you start with the [WORC Tutorial](https://github.com/MStarmans91/WORCTutorial).
 Besides a Jupyter notebook with instructions, we provide there also an example script for you to get started with.
-Make sure you input your own data as the sources. Also, check out the unit tests of several tools in the
-WORC/resources/fastr_tests directory. The example is explained in more detail in the  [documentation](https://worc.readthedocs.io).
 
 ## WIP
 - We are working on improving the documentation.
-- We are working on organizing clinically relevant datasets for examples and unit tests.
 - We are writing the paper on WORC.
+- We are expanding the example experiments of WORC with open source datasets.
 
 ## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
@@ -83,7 +72,8 @@ When using WORC, please cite this repository.
 ## Contact
 We are happy to help you with any questions. Please sent us a mail or place an issue on the Github.
 
-We welcome contributions to WORC. For the moment, converting your toolbox into a FASTR tool is satisfactory.
+We welcome contributions to WORC. For the moment, converting your toolbox into a FASTR tool is satisfactory:
+see also [the fastr tool development documentation](https://fastr.readthedocs.io/en/stable/static/user_manual.html#create-your-own-tool).
 
 ## Optional
 Besides the default installation, there are several optional packages you could install to support WORC.
@@ -93,6 +83,9 @@ WORC can draw the network and save it as a SVG image using [graphviz](https://ww
 please make sure you install graphviz. On Ubuntu, simply run
 
       apt install graphiv
+
+On Windows, follow the installation instructions provided on the graphviz website.
+Make sure you add the executable to the PATH when prompted.
 
 ### Elastix
 Image registration is included in WORC through [elastix and transformix](http://elastix.isi.uu.nl/).
@@ -108,5 +101,5 @@ for installation instructions.
 
 ### XNAT
 We use the XNATpy package to connect the toolbox to the XNAT online database platforms. You will only
-need this when you want to download or upload data from or to XNAT. We advise you to specify
-your account settings in a .netrc file when using this feature,  such that you do not need to input them on every request:
+need this when you use the example dataset we provided, or if you want to download or upload data from or to XNAT. We advise you to specify
+your account settings in a .netrc file when using this feature for your own datasets, such that you do not need to input them on every request.
