@@ -245,3 +245,6 @@ class SimpleWORC():
     def add_evaluation(self, selected_label=0):
         self._add_evaluation = True
         self._selected_label = 0
+
+    def set_tmpdir(self, tmpdir):
+        self._worc.fastr_tmpdir = tmpdir

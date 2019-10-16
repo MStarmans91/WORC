@@ -19,6 +19,7 @@ import WORC.addexceptions as WORCexceptions
 import fastr
 from fastr.api import ResourceLimit
 import os
+import graphviz
 
 # NOTE: Very important to give images and segmentations as dict with patient names!
 
@@ -317,5 +318,8 @@ class Evaluate(object):
     def execute(self):
         """ Execute the network through the fastr.network.execute command. """
         # Draw and execute nwtwork
-        self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
+        try:
+            self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
+        except graphviz.backend.ExecutableNotFound:
+            print('[WORC WARNING] Graphviz executable not found: not drawing network diagram. MAke sure the Graphviz executables are on your systems PATH.')
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)

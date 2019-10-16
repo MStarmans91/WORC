@@ -18,6 +18,7 @@
 import argparse
 import SimpleITK as sitk
 import os
+import shutil
 
 
 def main():
@@ -41,7 +42,11 @@ def main():
     extension_output = os.path.splitext(args.out)[-1]
     if extension_input == extension_output:
         # Make link
-        os.symlink(args.im, args.out)
+        try:
+            os.symlink(args.im, args.out)
+        except (OSError, AttributeError):
+            print('[WORC WARNING] Cannot symlink, fallback to copying.')
+            shutil.copy2(args.im, args.out)
     else:
         # Read and Write file using SimpleITK
         image = sitk.ReadImage(args.im)

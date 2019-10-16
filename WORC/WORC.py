@@ -20,6 +20,7 @@ import fastr
 from fastr.api import ResourceLimit
 import os
 from random import randint
+import graphviz
 import WORC.addexceptions as WORCexceptions
 import WORC.IOparser.config_WORC as config_io
 from WORC.tools.Elastix import Elastix
@@ -140,7 +141,7 @@ class WORC(object):
         self.fastr_plugin = 'LinearExecution'
         if name == '':
             name = [randint(0, 9) for p in range(0, 5)]
-        self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], str(name))
+        self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
 
         self.additions = dict()
         self.CopyMetadata = True
@@ -905,12 +906,12 @@ class WORC(object):
                 config = configparser.ConfigParser()
                 config.read(c)
                 c = config
-            cfile = os.path.join(fastr.config.mounts['tmp'], self.name, ("config_{}_{}.ini").format(self.name, num))
+            cfile = os.path.join(self.fastr_tmpdir, f"config_{self.name}_{num}.ini")
             if not os.path.exists(os.path.dirname(cfile)):
                 os.makedirs(os.path.dirname(cfile))
             with open(cfile, 'w') as configfile:
                 c.write(configfile)
-            self.fastrconfigs.append(("vfs://tmp/{}/config_{}_{}.ini").format(self.name, self.name, num))
+            self.fastrconfigs.append(cfile)
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
@@ -1007,9 +1008,11 @@ class WORC(object):
     def execute(self):
         """ Execute the network through the fastr.network.execute command. """
         # Draw and execute nwtwork
-        self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
+        try:
+            self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
+        except graphviz.backend.ExecutableNotFound:
+            print('[WORC WARNING] Graphviz executable not found: not drawing network diagram. MAke sure the Graphviz executables are on your systems PATH.')
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
-        # self.network.execute(self.source_data, self.sink_data)
 
     def add_evaluation(self, label_type):
         self.Evaluate = Evaluate(label_type=label_type, parent=self)
