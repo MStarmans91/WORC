@@ -2,7 +2,7 @@ import csv
 import string
 from abc import ABC, abstractmethod
 from pathlib import Path
-
+from os import environ
 import platform
 
 
@@ -52,6 +52,17 @@ class CartesiusClusterDetector(AbstractDetector):
             except:
                 return False
         return False
+
+
+class DebugDetector(AbstractDetector):
+    def _is_detected(self):
+        try:
+            if environ.get('WORCDEBUG') is not None:
+                return True
+            else:
+                return False
+        except:
+            return False
 
 
 class BigrClusterDetector(AbstractDetector):

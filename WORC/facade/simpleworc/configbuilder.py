@@ -1,4 +1,4 @@
-from WORC.detectors.detectors import BigrClusterDetector, CartesiusClusterDetector
+from WORC.detectors.detectors import BigrClusterDetector, CartesiusClusterDetector, DebugDetector
 import configparser
 
 
@@ -14,6 +14,8 @@ class ConfigBuilder():
     def build_config(self, defaultconfig):
         defaultconfig.read_dict({**self._config})
         defaultconfig.read_dict({**self._custom_overrides})
+        defaultconfig.read_dict({**self._debug_config_overrides()})
+
         self._config = defaultconfig
         return defaultconfig
 
@@ -36,7 +38,7 @@ class ConfigBuilder():
                 'HyperOptimization': {'n_jobspercore': '4000'}
             }
         else:
-            overrides = {} # not a cluster or unsupported
+            overrides = {}  # not a cluster or unsupported
 
         self._custom_overrides.update(overrides)
         return overrides
@@ -104,3 +106,34 @@ class ConfigBuilder():
             for k2, v2 in v.items():
                 print(f"\t {k2}: {v2}")
             print("\n")
+
+    def _debug_config_overrides(self):
+        if DebugDetector().do_detection():
+            overrides = {
+                'ImageFeatures': {
+                    'texture_Gabor': 'False',
+                    'vessel': 'False',
+                    'log': 'False',
+                    'phase': 'False'
+                    'texture_LBP': 'False',
+                    'texture_GLCMMS': 'False',
+                    'texture_GLRLM': 'False',
+                    'texture_NGTDM': 'False',
+                },
+                'SelectFeatGroup': {
+                    'texture_Gabor_features': 'False',
+                    'log_features': 'False',
+                    'vessel_features': 'False',
+                    'phase_features': 'False'
+                },
+                'CrossValidation': {'N_iterations': '2'},
+                'HyperOptimization': {'N_iterations': '10',
+                                      'n_jobspercore': '10',
+                                      'n_splits': '2'},
+                'Ensemble': {'Use': '1'},
+                'SampleProcessing': {'SMOTE': 'False'},
+            }
+        else:
+            overrides = {} # not a cluster or unsupported
+
+        return overrides

@@ -17,10 +17,9 @@
 
 import os
 import fastr
-
+import pkg_resources
 
 # Get directory in which packages are installed
-import pkg_resources
 working_set = pkg_resources.working_set
 requirement_spec = pkg_resources.Requirement.parse('WORC')
 egg_info = working_set.find(requirement_spec)

@@ -29,6 +29,8 @@ Added
 - Catch for if patient is in the test set, but not the overall label set.
 - Downloader for downloading example datasets.
 - ReadTheDocs.yml for configuration of documentation.
+- Unit test included in Travis.
+- Various detectors.
 
 Changed
 ~~~~~~~

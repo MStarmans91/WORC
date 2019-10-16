@@ -1,4 +1,4 @@
-dist: bionic 
+dist: bionic
 language: python
 python:
   - "3.7"
@@ -10,6 +10,10 @@ before_install:
 install:
 - pip install -r requirements.txt
 - python setup.py -q install
+- pip install -e hg+https://bitbucket.org/bigr_erasmusmc/fastr@develop#egg=fastr
+
+env:
+  - WORCDEBUG=true
 
 script:
 - python ./tests/unit_test.py
