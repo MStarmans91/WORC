@@ -249,3 +249,7 @@ class SimpleWORC():
 
     def set_tmpdir(self, tmpdir):
         self._worc.fastr_tmpdir = tmpdir
+
+    def set_multicore_execution(self):
+        self._worc.fastr_plugin = 'ProcessPoolExecution'
+        self._config_builder.custom_config_overrides['Classification']['fastr_plugin'] = 'ProcessPoolExecution'

@@ -895,7 +895,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Simply take the top50 best hyperparameters
             if verbose:
                 print(f'Creating ensemble using top {str(method)} individual classifiers.')
-            ensemble = range(0, method)
+            if method == 1:
+                # Next functions expect list
+                ensemble = [0]
+            else:
+                ensemble = range(0, method)
 
         elif method == 'FitNumber':
             # Use optimum number of models

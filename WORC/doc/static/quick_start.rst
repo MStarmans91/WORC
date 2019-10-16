@@ -252,6 +252,14 @@ Some things we would advice to always do:
       coarse = False
       network.binary_classification(coarse=coarse)
 
+.. note:: This will result in more computation time. We therefore recommmend
+  to run this script on either a cluster or high performance PC. If so,
+  you may change the execution to use multiple cores to speed up computation
+  just before before ``experiment.execute()``:
+
+    .. code-block:: python
+
+          experiment.set_multicore_execution()
 
 * Add extensive evaluation: ``network.add_evaluation()`` before ``network.execute()``:
 

@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-3.1.0 - 2019-10-15
+3.1.0 - 2019-10-16
 ------------------
 
 Added
@@ -69,6 +69,7 @@ Fixed
   conversion.
 - Except error when Grahpviz is not installed.
 - Symlinking in worccastcovert not supported by Windows, reverted to copying.
+- Bugfix in create_ensemble in SearchCV when using ensemble = 1.
 
 
 3.0.0 - 2019-05-08

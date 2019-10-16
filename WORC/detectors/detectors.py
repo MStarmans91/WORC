@@ -17,7 +17,7 @@ class AbstractDetector(ABC):
         return result
 
     def _generate_detector_message(self, detected_Value):
-        return f"{self.__class__.__name__} detected {detected_Value}."
+        return f"{self.__class__.__name__[0:-8]} detected: {detected_Value}."
 
     @abstractmethod
     def _is_detected(self, *args, **kwargs):

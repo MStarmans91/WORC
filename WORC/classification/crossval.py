@@ -20,7 +20,6 @@ import pandas as pd
 import logging
 import os
 from sklearn.model_selection import train_test_split
-import xlrd
 from .parameter_optimization import random_search_parameters
 import WORC.addexceptions as ae
 from WORC.classification.regressors import regressors
@@ -296,8 +295,7 @@ def crossval(config, label_data, image_features,
                                                              **config['HyperOptimization'])
 
             # Create an ensemble if required
-            if ensemble['Use']:
-                trained_classifier.create_ensemble(X_train, Y_train)
+            trained_classifier.create_ensemble(X_train, Y_train, method=ensemble['Use'])
 
             # We only want to save the feature values and one label array
             X_train = [x[0] for x in X_train]
