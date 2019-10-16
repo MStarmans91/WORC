@@ -1,5 +1,6 @@
 from WORC.detectors.detectors import BigrClusterDetector, CartesiusClusterDetector, DebugDetector
 import configparser
+import fastr
 
 
 class ConfigBuilder():
@@ -133,6 +134,9 @@ class ConfigBuilder():
                 'Ensemble': {'Use': '1'},
                 'SampleProcessing': {'SMOTE': 'False'},
             }
+
+            # Additionally, turn queue reporting system on
+            fastr.config.queue_report_interval = 120
         else:
             overrides = {} # not a cluster or unsupported
 
