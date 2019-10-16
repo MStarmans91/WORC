@@ -1,0 +1,440 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>WORC.facade.intermediatefacade.intermediatefacade &mdash; WORC 3.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>WORC.facade.intermediatefacade.intermediatefacade</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for WORC.facade.intermediatefacade.intermediatefacade</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">WORC</span> <span class="k">import</span> <span class="n">WORC</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">WORC.detectors.detectors</span> <span class="k">import</span> <span class="n">CsvDetector</span>
+<span class="kn">from</span> <span class="nn">WORC.facade.intermediatefacade.configbuilder</span> <span class="k">import</span> <span class="n">ConfigBuilder</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">PathNotFoundException</span><span class="p">,</span> <span class="n">NoImagesFoundException</span><span class="p">,</span> <span class="n">NoSegmentationsFoundException</span><span class="p">,</span> \
+    <span class="n">InvalidCsvFileException</span>
+
+
+<span class="k">def</span> <span class="nf">_for_all_methods</span><span class="p">(</span><span class="n">decorator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorate</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>  <span class="c1"># there&#39;s propably a better way to do this</span>
+            <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">)):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">decorator</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">attr</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="bp">cls</span>
+
+    <span class="k">return</span> <span class="n">decorate</span>
+
+
+<span class="k">def</span> <span class="nf">_error_buldozer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="n">_valid_exceptions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">PathNotFoundException</span><span class="p">,</span> <span class="n">NoImagesFoundException</span><span class="p">,</span>
+        <span class="n">NoSegmentationsFoundException</span><span class="p">,</span> <span class="n">InvalidCsvFileException</span><span class="p">,</span>
+        <span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">NotImplementedError</span>
+    <span class="p">]</span>
+
+    <span class="n">unexpected_exception_exception</span> <span class="o">=</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;A blackhole to another dimenstion has opened. This exception should never be thrown. Double check your code or make an issue on the WORC github so that we can fix this issue.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">dec</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="vm">__class__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_valid_exceptions</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">unexpected_exception_exception</span>
+            <span class="k">raise</span> <span class="n">e</span>
+    <span class="k">return</span> <span class="n">dec</span>
+
+
+<div class="viewcode-block" id="IntermediateFacade"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade">[docs]</a><span class="nd">@_for_all_methods</span><span class="p">(</span><span class="n">_error_buldozer</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">IntermediateFacade</span><span class="p">():</span>
+<div class="viewcode-block" id="IntermediateFacade.__init__"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;WORC&#39;</span><span class="p">):</span>
+        <span class="c1"># Set some config values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span> <span class="o">=</span> <span class="n">WORC</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_images_train</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_images_test</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_train</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_test</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_semantics_file_train</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_semantics_file_test</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_labels_file_train</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_labels_file_test</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label_names</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span> <span class="o">=</span> <span class="n">ConfigBuilder</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_evaluation</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.images_from_this_directory"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.images_from_this_directory">[docs]</a>    <span class="k">def</span> <span class="nf">images_from_this_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">image_file_name</span><span class="o">=</span><span class="s1">&#39;image.nii.gz&#39;</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="s1">&#39;*/&#39;</span><span class="p">,</span> <span class="n">is_training</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">directory</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">PathNotFoundException</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+
+        <span class="n">images</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">directory</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{glob}{image_file_name}</span><span class="s1">&#39;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoImagesFoundException</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{directory}{glob}{image_file_name}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">images_per_subject</span> <span class="o">=</span> <span class="p">{</span><span class="n">image</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">is_training</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_images_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">images_per_subject</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_images_test</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">images_per_subject</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.segmentations_from_this_directory"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.segmentations_from_this_directory">[docs]</a>    <span class="k">def</span> <span class="nf">segmentations_from_this_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">segmentation_file_name</span><span class="o">=</span><span class="s1">&#39;segmentation.nii.gz&#39;</span><span class="p">,</span> <span class="n">glob</span><span class="o">=</span><span class="s1">&#39;*/&#39;</span><span class="p">,</span>
+                                          <span class="n">is_training</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">directory</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">PathNotFoundException</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+
+        <span class="n">segmentations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">directory</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{glob}{segmentation_file_name}</span><span class="s1">&#39;</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segmentations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoSegmentationsFoundException</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">directory</span><span class="p">))</span>
+
+        <span class="n">segmentations_per_subject</span> <span class="o">=</span> <span class="p">{</span><span class="n">image</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">segmentations</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">is_training</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segmentations_per_subject</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_test</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segmentations_per_subject</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.labels_from_this_file"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.labels_from_this_file">[docs]</a>    <span class="k">def</span> <span class="nf">labels_from_this_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">is_training</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">labels_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">labels_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">PathNotFoundException</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">CsvDetector</span><span class="p">(</span><span class="n">labels_file</span><span class="o">.</span><span class="n">absolute</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="n">InvalidCsvFileException</span><span class="p">(</span><span class="n">labels_file</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span>
+
+        <span class="c1"># TODO: implement sanity check labels file e.g. is it a labels file and are there labels available</span>
+        <span class="k">if</span> <span class="n">is_training</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_labels_file_train</span> <span class="o">=</span> <span class="n">labels_file</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_labels_file_test</span> <span class="o">=</span> <span class="n">labels_file</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.semantics_from_this_file"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.semantics_from_this_file">[docs]</a>    <span class="k">def</span> <span class="nf">semantics_from_this_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">is_training</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">semantics_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">semantics_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">PathNotFoundException</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">CsvDetector</span><span class="p">(</span><span class="n">semantics_file</span><span class="o">.</span><span class="n">absolute</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="n">InvalidCsvFileException</span><span class="p">(</span><span class="n">semantics_file</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span>
+
+        <span class="c1"># TODO: implement sanity check semantics file e.g. is it a semantics file and are there semantics available</span>
+        <span class="k">if</span> <span class="n">is_training</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_semantics_file_train</span> <span class="o">=</span> <span class="n">semantics_file</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_semantics_file_test</span> <span class="o">=</span> <span class="n">semantics_file</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.predict_labels"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.predict_labels">[docs]</a>    <span class="k">def</span> <span class="nf">predict_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels_file_train</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No labels file set trough labels_from_this_file&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label_names</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;label_names is of type {type(label_names)} while list is expected&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">label_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid label, length = 0&#39;</span><span class="p">)</span>
+
+        <span class="c1"># TODO: check if labels is in labels file</span>
+
+        <span class="c1"># self._worc.label_names = &#39;, &#39;.join(label_names)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label_names</span> <span class="o">=</span> <span class="n">label_names</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_and_validate_estimators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">scoring_method</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">coarse</span><span class="p">):</span>
+        <span class="c1"># validate</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+            <span class="n">valid_estimators</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SVM&#39;</span><span class="p">,</span> <span class="s1">&#39;RF&#39;</span><span class="p">,</span> <span class="s1">&#39;SGD&#39;</span><span class="p">,</span> <span class="s1">&#39;LR&#39;</span><span class="p">,</span> <span class="s1">&#39;GaussianNB&#39;</span><span class="p">,</span> <span class="s1">&#39;ComplementNB&#39;</span><span class="p">,</span> <span class="s1">&#39;LDA&#39;</span><span class="p">,</span> <span class="s1">&#39;QDA&#39;</span><span class="p">,</span> <span class="s1">&#39;RankedSVM&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span><span class="p">:</span>
+            <span class="n">valid_estimators</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SVR&#39;</span><span class="p">,</span> <span class="s1">&#39;RFR&#39;</span><span class="p">,</span> <span class="s1">&#39;ElasticNet&#39;</span><span class="p">,</span> <span class="s1">&#39;Lasso&#39;</span><span class="p">,</span> <span class="s1">&#39;SGDR&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">valid_estimators</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="n">estimators</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">estimator</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_estimators</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s1">&#39;Invalid estimator </span><span class="si">{estimator}</span><span class="s1"> for </span><span class="si">{method}</span><span class="s1">; must be one of {&quot;, &quot;.join(valid_estimators)}&#39;</span><span class="p">)</span>
+
+        <span class="c1"># TODO: sanity check scoring method per estimator</span>
+
+        <span class="c1"># set</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span><span class="o">.</span><span class="n">estimator_scoring_overrides</span><span class="p">(</span><span class="n">estimators</span><span class="p">,</span> <span class="n">scoring_method</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">coarse</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span><span class="o">.</span><span class="n">coarse_overrides</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span><span class="o">.</span><span class="n">full_overrides</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="n">method</span>
+
+    <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_images_train</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># TODO: throw exception</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_train</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># TODO: throw exception</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels_file_train</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># TODO: throw an exception</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_names</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># TODO: throw exception</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># TODO: throw exception</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_images_train</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_train</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">subjects_dict</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_images_train</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">subjects_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_train</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Subjects in images_train and segmentations_train are not the same&#39;</span><span class="p">)</span>
+
+                    <span class="c1"># TODO: verify subjects in labels files as well</span>
+                    <span class="c1"># TODO: peform same checks on images_test and segmentations_test if those are not None</span>
+                <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                    <span class="c1"># this should never be thrown, but i put it here just in case</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s1">&#39;A blackhole to another dimenstion has opened. This exception should never be thrown. Double check your code or make an issue on the WORC github so that we can fix this issue.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IntermediateFacade.execute"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate</span><span class="p">()</span>  <span class="c1"># do some final sanity checking before we execute the thing</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">images_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_images_train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">segmentations_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">labels_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels_file_train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">semantics_train</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_semantics_file_train</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_images_test</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">images_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_images_test</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_test</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">segmentations_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_segmentations_test</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels_file_test</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">labels_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_labels_file_test</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">label_names</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_label_names</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span><span class="o">.</span><span class="n">_custom_overrides</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span><span class="o">.</span><span class="n">_custom_overrides</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;label_names&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">label_names</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span><span class="o">.</span><span class="n">build_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">defaultconfig</span><span class="p">())]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_evaluation</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">(</span><span class="n">label_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_label_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_selected_label</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worc</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.binary_classification"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.binary_classification">[docs]</a>    <span class="k">def</span> <span class="nf">binary_classification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimators</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SVM&#39;</span><span class="p">],</span> <span class="n">scoring_method</span><span class="o">=</span><span class="s1">&#39;f1&#39;</span><span class="p">,</span> <span class="n">coarse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_and_validate_estimators</span><span class="p">(</span><span class="n">estimators</span><span class="p">,</span> <span class="n">scoring_method</span><span class="p">,</span> <span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="n">coarse</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.regression"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.regression">[docs]</a>    <span class="k">def</span> <span class="nf">regression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimators</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SVR&#39;</span><span class="p">],</span> <span class="n">scoring_method</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span> <span class="n">coarse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_and_validate_estimators</span><span class="p">(</span><span class="n">estimators</span><span class="p">,</span> <span class="n">scoring_method</span><span class="p">,</span> <span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="n">coarse</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.survival"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.survival">[docs]</a>    <span class="k">def</span> <span class="nf">survival</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimators</span><span class="p">,</span> <span class="n">scoring_method</span><span class="p">,</span> <span class="n">coarse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.add_config_overrides"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.add_config_overrides">[docs]</a>    <span class="k">def</span> <span class="nf">add_config_overrides</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_builder</span><span class="o">.</span><span class="n">custom_config_overrides</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IntermediateFacade.add_evaluation"><a class="viewcode-back" href="../../../../autogen/WORC.facade.intermediatefacade.html#WORC.facade.intermediatefacade.intermediatefacade.IntermediateFacade.add_evaluation">[docs]</a>    <span class="k">def</span> <span class="nf">add_evaluation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selected_label</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_evaluation</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_selected_label</span> <span class="o">=</span> <span class="mi">0</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

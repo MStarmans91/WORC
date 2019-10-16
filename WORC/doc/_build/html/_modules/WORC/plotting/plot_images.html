@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_images &mdash; WORC 3.0.0 documentation</title>
+  <title>WORC.plotting.plot_images &mdash; WORC 3.1.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
             
           
@@ -183,8 +183,8 @@
 <span class="kn">import</span> <span class="nn">SimpleITK</span> <span class="k">as</span> <span class="nn">sitk</span>
 
 
-<div class="viewcode-block" id="slicer"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_images.slicer">[docs]</a><span class="k">def</span> <span class="nf">slicer</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">output_name</span><span class="p">,</span> <span class="n">output_name_zoom</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">240</span><span class="p">,</span> <span class="mi">160</span><span class="p">],</span>
-           <span class="n">zoomfactor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<div class="viewcode-block" id="slicer"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_images.slicer">[docs]</a><span class="k">def</span> <span class="nf">slicer</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">output_name</span><span class="p">,</span> <span class="n">output_name_zoom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">240</span><span class="p">,</span> <span class="mi">160</span><span class="p">],</span>
+           <span class="n">zoomfactor</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    image and mask should both be arrays</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -193,8 +193,6 @@
     <span class="n">spacing</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">GetSpacing</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">imsize</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">GetSize</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">GetSize</span><span class="p">()[</span><span class="mi">1</span><span class="p">])]</span>
     <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">imsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">imsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span>
-    <span class="c1"># dpi = int(200/spacing)</span>
-    <span class="n">dpi</span> <span class="o">=</span> <span class="mf">100.0</span>
 
     <span class="c1"># Convert images to numpy arrays</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetArrayFromImage</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
@@ -205,6 +203,29 @@
     <span class="n">max_ind</span> <span class="o">=</span> <span class="n">areas</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">areas</span><span class="p">))</span>
     <span class="n">imslice</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">max_ind</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
     <span class="n">maskslice</span> <span class="o">=</span> <span class="n">mask</span><span class="p">[</span><span class="n">max_ind</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+    <span class="k">if</span> <span class="n">expand</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Expanding.&#39;</span><span class="p">)</span>
+        <span class="n">imslice</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetImageFromArray</span><span class="p">(</span><span class="n">imslice</span><span class="p">)</span>
+        <span class="n">maskslice</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetImageFromArray</span><span class="p">(</span><span class="n">maskslice</span><span class="p">)</span>
+
+        <span class="n">newsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">imslice</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">Expand</span><span class="p">(</span><span class="n">imslice</span><span class="p">,</span> <span class="n">newsize</span><span class="p">)</span>
+        <span class="n">maskslice</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">Expand</span><span class="p">(</span><span class="n">maskslice</span><span class="p">,</span> <span class="n">newsize</span><span class="p">)</span>
+
+        <span class="c1"># Adjust the size</span>
+        <span class="n">spacing</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">imslice</span><span class="o">.</span><span class="n">GetSpacing</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">imsize</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">imslice</span><span class="o">.</span><span class="n">GetSize</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">imslice</span><span class="o">.</span><span class="n">GetSize</span><span class="p">()[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">imsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">imsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span>
+
+        <span class="n">imslice</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetArrayFromImage</span><span class="p">(</span><span class="n">imslice</span><span class="p">)</span>
+        <span class="n">maskslice</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetArrayFromImage</span><span class="p">(</span><span class="n">maskslice</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Normalizing.&#39;</span><span class="p">)</span>
+        <span class="n">imslice</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetImageFromArray</span><span class="p">(</span><span class="n">imslice</span><span class="p">)</span>
+        <span class="n">imslice</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">imslice</span><span class="p">)</span>
+        <span class="n">imslice</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetArrayFromImage</span><span class="p">(</span><span class="n">imslice</span><span class="p">)</span>
 
     <span class="c1"># Threshold the image if desired</span>
     <span class="k">if</span> <span class="n">thresholds</span><span class="p">:</span>
@@ -220,23 +241,25 @@
     <span class="c1"># Save some memory</span>
     <span class="k">del</span> <span class="n">fig</span>
 
-    <span class="c1"># Create a bounding box and save zoomed image</span>
-    <span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span> <span class="o">=</span> <span class="n">bbox_2D</span><span class="p">(</span><span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
-    <span class="n">imsize</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">imslice</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">imslice</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="k">if</span> <span class="n">output_name_zoom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Create a bounding box and save zoomed image</span>
+        <span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span> <span class="o">=</span> <span class="n">bbox_2D</span><span class="p">(</span><span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
+        <span class="n">imsize</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">imslice</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">imslice</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
 
-    <span class="c1"># NOTE: As these zoomed images get small, we double the spacing</span>
-    <span class="n">spacing</span> <span class="o">=</span> <span class="n">spacing</span> <span class="o">*</span> <span class="n">zoomfactor</span>
-    <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">imsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">imsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_im_and_overlay</span><span class="p">(</span><span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_name_zoom</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+        <span class="c1"># NOTE: As these zoomed images get small, we double the spacing</span>
+        <span class="n">spacing</span> <span class="o">=</span> <span class="n">spacing</span> <span class="o">*</span> <span class="n">zoomfactor</span>
+        <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">imsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">imsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_im_and_overlay</span><span class="p">(</span><span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_name_zoom</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
 
-    <span class="c1"># Save some memory</span>
-    <span class="k">del</span> <span class="n">fig</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span>
+        <span class="c1"># Save some memory</span>
+        <span class="k">del</span> <span class="n">fig</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span>
+
     <span class="k">return</span> <span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span></div>
 
 
-<div class="viewcode-block" id="plot_im_and_overlay"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_images.plot_im_and_overlay">[docs]</a><span class="k">def</span> <span class="nf">plot_im_and_overlay</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_im_and_overlay"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_images.plot_im_and_overlay">[docs]</a><span class="k">def</span> <span class="nf">plot_im_and_overlay</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.40</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Plot an image in a matplotlib figure and overlay with a mask.</span>
 <span class="sd">    &#39;&#39;&#39;</span>

@@ -591,6 +591,7 @@ def RankSVM_train(train_data, train_target, cost=1, lambda_tol=1e-6,
 
     return Weights,Bias,SVs
 
+
 def RankSVM_test_original(test_data, test_target, Weights, Bias, SVs,
                  svm='Poly', gamma=0.05,
                  coefficient=0.05, degree=3):

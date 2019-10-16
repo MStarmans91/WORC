@@ -10,6 +10,15 @@ featureprocessing Package
     :show-inheritance:
     :special-members:
 
+:mod:`Decomposition` Module
+---------------------------
+
+.. automodule:: WORC.featureprocessing.Decomposition
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`Imputer` Module
 ---------------------
 

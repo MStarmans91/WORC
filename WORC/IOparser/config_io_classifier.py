@@ -32,14 +32,13 @@ def load_config(config_file_path):
 
     settings = configparser.ConfigParser()
     settings.read(config_file_path)
-    print(settings.keys())
 
     settings_dict = {'General': dict(), 'CrossValidation': dict(),
                      'Labels': dict(), 'HyperOptimization': dict(),
                      'Classification': dict(), 'SelectFeatGroup': dict(),
                      'Featsel': dict(), 'FeatureScaling': dict(),
                      'SampleProcessing': dict(), 'Imputation': dict(),
-                     'Ensemble': dict()}
+                     'Ensemble': dict(), 'Bootstrap': dict()}
 
     settings_dict['General']['cross_validation'] =\
         settings['General'].getboolean('cross_validation')
@@ -241,14 +240,21 @@ def load_config(config_file_path):
         settings['HyperOptimization'].getfloat('test_size')
     settings_dict['HyperOptimization']['N_iter'] =\
         settings['HyperOptimization'].getint('N_iterations')
+    settings_dict['HyperOptimization']['n_splits'] =\
+        settings['HyperOptimization'].getint('n_splits')
     settings_dict['HyperOptimization']['n_jobspercore'] =\
         int(settings['HyperOptimization']['n_jobspercore'])
+    settings_dict['HyperOptimization']['maxlen'] = \
+        settings['HyperOptimization'].getint('maxlen')
+    settings_dict['HyperOptimization']['ranking_score'] = \
+        str(settings['HyperOptimization']['ranking_score'])
 
     settings_dict['FeatureScaling']['scale_features'] =\
         settings['FeatureScaling'].getboolean('scale_features')
     settings_dict['FeatureScaling']['scaling_method'] =\
         str(settings['FeatureScaling']['scaling_method'])
 
+    # Settings for sample processing, i.e. oversampling, undersampling etc
     settings_dict['SampleProcessing']['SMOTE'] =\
         [str(item).strip() for item in
          settings['SampleProcessing']['SMOTE'].split(',')]
@@ -265,7 +271,15 @@ def load_config(config_file_path):
         [str(item).strip() for item in
          settings['SampleProcessing']['Oversampling'].split(',')]
 
+    # Settings for ensembling
     settings_dict['Ensemble']['Use'] =\
         settings['Ensemble'].getboolean('Use')
+
+    # Settings for bootstrapping
+    settings_dict['Bootstrap']['Use'] =\
+        settings['Bootstrap'].getboolean('Use')
+
+    settings_dict['Bootstrap']['N_iterations'] =\
+        settings['Bootstrap'].getint('N_iterations')
 
     return settings_dict

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.compute_CI &mdash; WORC 3.0.0 documentation</title>
+  <title>WORC.plotting.compute_CI &mdash; WORC 3.1.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
             
           
@@ -179,16 +179,34 @@
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">logit</span><span class="p">,</span> <span class="n">expit</span>
 
 
+<div class="viewcode-block" id="compute_confidence_bootstrap"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.compute_CI.compute_confidence_bootstrap">[docs]</a><span class="k">def</span> <span class="nf">compute_confidence_bootstrap</span><span class="p">(</span><span class="n">bootstrap_metric</span><span class="p">,</span> <span class="n">test_metric</span><span class="p">,</span> <span class="n">N_1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to calculate confidence interval for bootstrapped samples.</span>
+<span class="sd">    metric: numpy array containing the result for a metric for the different bootstrap iterations</span>
+<span class="sd">    test_metric: the value of the metric evaluated on the true, full test set</span>
+<span class="sd">    alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 0.95</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">metric_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">bootstrap_metric</span><span class="p">)</span>
+    <span class="n">CI</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">test_metric</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">metric_std</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">CI</span></div>
+
+
 <div class="viewcode-block" id="compute_confidence"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.compute_CI.compute_confidence">[docs]</a><span class="k">def</span> <span class="nf">compute_confidence</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="n">N_train</span><span class="p">,</span> <span class="n">N_test</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function to calculate the adjusted confidence interval</span>
+<span class="sd">    Function to calculate the adjusted confidence interval for cross-validation.</span>
 <span class="sd">    metric: numpy array containing the result for a metric for the different cross validations</span>
 <span class="sd">    (e.g. If 20 cross-validations are performed it is a list of length 20 with the calculated accuracy for</span>
 <span class="sd">    each cross validation)</span>
 <span class="sd">    N_train: Integer, number of training samples</span>
 <span class="sd">    N_test: Integer, number of test_samples</span>
-<span class="sd">    alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 95%</span>
+<span class="sd">    alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 0.95</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Remove NaN values if they are there</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] Array contains nan: removing.&#39;</span><span class="p">)</span>
+        <span class="n">metric</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+        <span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">metric</span><span class="p">))]</span>
 
     <span class="c1"># Convert to floats, as python 2 rounds the divisions if we have integers</span>
     <span class="n">N_train</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">N_train</span><span class="p">)</span>

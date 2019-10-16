@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.processing.label_processing &mdash; WORC 3.0.0 documentation</title>
+  <title>WORC.processing.label_processing &mdash; WORC 3.1.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
             
           
@@ -195,6 +195,9 @@
 <span class="sd">        dict: A dict containing &#39;patient_IDs&#39;, &#39;label&#39; and</span>
 <span class="sd">         &#39;label_type&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">label_file</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;File </span><span class="si">{label_file}</span><span class="s1"> does not exist!&#39;</span><span class="p">)</span>
+        
     <span class="n">_</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span class="s1">&#39;.txt&#39;</span><span class="p">:</span>
         <span class="n">label_names</span><span class="p">,</span> <span class="n">patient_IDs</span><span class="p">,</span> <span class="n">label_status</span> <span class="o">=</span> <span class="n">load_label_txt</span><span class="p">(</span>

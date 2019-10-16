@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.parameter_optimization &mdash; WORC 3.0.0 documentation</title>
+  <title>WORC.classification.parameter_optimization &mdash; WORC 3.1.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
             
           
@@ -180,9 +180,10 @@
 
 
 <div class="viewcode-block" id="random_search_parameters"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.parameter_optimization.random_search_parameters">[docs]</a><span class="k">def</span> <span class="nf">random_search_parameters</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">N_iter</span><span class="p">,</span> <span class="n">test_size</span><span class="p">,</span>
-                             <span class="n">param_grid</span><span class="p">,</span> <span class="n">scoring_method</span><span class="p">,</span>
+                             <span class="n">param_grid</span><span class="p">,</span> <span class="n">scoring_method</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                              <span class="n">n_jobspercore</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                             <span class="n">n_cores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                             <span class="n">n_cores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                             <span class="n">ranking_score</span><span class="o">=</span><span class="s1">&#39;test_score&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Train a classifier and simultaneously optimizes hyperparameters using a</span>
 <span class="sd">    randomized search.</span>
@@ -216,10 +217,10 @@
     <span class="n">regressors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SVR&#39;</span><span class="p">,</span> <span class="s1">&#39;RFR&#39;</span><span class="p">,</span> <span class="s1">&#39;SGDR&#39;</span><span class="p">,</span> <span class="s1">&#39;Lasso&#39;</span><span class="p">,</span> <span class="s1">&#39;ElasticNet&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">clf</span> <span class="ow">in</span> <span class="n">regressors</span> <span class="k">for</span> <span class="n">clf</span> <span class="ow">in</span> <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]):</span>
         <span class="c1"># We cannot do a stratified shuffle split with regression</span>
-        <span class="n">cv</span> <span class="o">=</span> <span class="n">ShuffleSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="n">ShuffleSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_splits</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
                           <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
+        <span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_splits</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span><span class="p">,</span>
                                     <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">use_fastr</span><span class="p">:</span>
@@ -228,14 +229,20 @@
                                                 <span class="n">scoring</span><span class="o">=</span><span class="n">scoring_method</span><span class="p">,</span>
                                                 <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
                                                 <span class="n">n_jobspercore</span><span class="o">=</span><span class="n">n_jobspercore</span><span class="p">,</span>
+                                                <span class="n">maxlen</span><span class="o">=</span><span class="n">maxlen</span><span class="p">,</span>
                                                 <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
-                                                <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">)</span>
+                                                <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">,</span>
+                                                <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">random_search</span> <span class="o">=</span> <span class="n">RandomizedSearchCVJoblib</span><span class="p">(</span><span class="n">param_distributions</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
                                                  <span class="n">n_iter</span><span class="o">=</span><span class="n">N_iter</span><span class="p">,</span>
                                                  <span class="n">scoring</span><span class="o">=</span><span class="n">scoring_method</span><span class="p">,</span>
                                                  <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
-                                                 <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">)</span>
+                                                 <span class="n">n_jobspercore</span><span class="o">=</span><span class="n">n_jobspercore</span><span class="p">,</span>
+                                                 <span class="n">maxlen</span><span class="o">=</span><span class="n">maxlen</span><span class="p">,</span>
+                                                 <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+                                                 <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">,</span>
+                                                 <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">)</span>
     <span class="n">random_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best found parameters:&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">random_search</span><span class="o">.</span><span class="n">best_params_</span><span class="p">:</span>

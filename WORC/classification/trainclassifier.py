@@ -17,16 +17,14 @@
 
 import json
 import os
-import sklearn
 
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
 from WORC.plotting.plot_SVM import plot_SVM
-from WORC.plotting.plot_SVR import plot_single_SVR
 import WORC.IOparser.file_io as file_io
 import WORC.IOparser.config_io_classifier as config_io
 from scipy.stats import uniform
-from WORC.classification.AdvancedSampler import discrete_uniform
+from WORC.classification.AdvancedSampler import discrete_uniform, log_uniform
 
 
 def trainclassifier(feat_train, patientinfo_train, config,
@@ -119,6 +117,9 @@ def trainclassifier(feat_train, patientinfo_train, config,
             print('[WORC Warning] You provided multiple output json files: only the first one will be used!')
             output_json = output_json[0]
 
+    if type(fixedsplits) is list:
+        fixedsplits = ''.join(fixedsplits)
+
     # Load variables from the config file
     config = config_io.load_config(config)
     label_type = config['Labels']['label_names']
@@ -189,8 +190,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
     param_grid['StatisticalTestMetric'] =\
         config['Featsel']['StatisticalTestMetric']
     param_grid['StatisticalTestThreshold'] =\
-        uniform(loc=config['Featsel']['StatisticalTestThreshold'][0],
-                scale=config['Featsel']['StatisticalTestThreshold'][1])
+        log_uniform(loc=config['Featsel']['StatisticalTestThreshold'][0],
+                    scale=config['Featsel']['StatisticalTestThreshold'][1])
 
     param_grid['ReliefUse'] =\
         config['Featsel']['ReliefUse']
@@ -248,22 +249,33 @@ def trainclassifier(feat_train, patientinfo_train, config,
     # Calculate statistics of performance
     if feat_test is None:
         if not isclassifier:
-            statistics = plot_single_SVR(trained_classifier, label_data_train,
-                                         label_type)
+            statistics = plot_SVM(trained_classifier, label_data_train,
+                                  label_type, ensemble=config['Ensemble']['Use'],
+                                  bootstrap=config['Bootstrap']['Use'],
+                                  bootstrap_N=config['Bootstrap']['N_iterations'])
         else:
             statistics = plot_SVM(trained_classifier, label_data_train,
-                                  label_type, modus=modus)
+                                  label_type, modus=modus,
+                                  ensemble=config['Ensemble']['Use'],
+                                  bootstrap=config['Bootstrap']['Use'],
+                                  bootstrap_N=config['Bootstrap']['N_iterations'])
     else:
         if patientinfo_test is not None:
             if not isclassifier:
-                statistics = plot_single_SVR(trained_classifier,
-                                             label_data_test,
-                                             label_type)
+                statistics = plot_SVM(trained_classifier,
+                                      label_data_test,
+                                      label_type,
+                                      ensemble=config['Ensemble']['Use'],
+                                      bootstrap=config['Bootstrap']['Use'],
+                                      bootstrap_N=config['Bootstrap']['N_iterations'])
             else:
                 statistics = plot_SVM(trained_classifier,
                                       label_data_test,
                                       label_type,
-                                      modus=modus)
+                                      modus=modus,
+                                      ensemble=config['Ensemble']['Use'],
+                                      bootstrap=config['Bootstrap']['Use'],
+                                      bootstrap_N=config['Bootstrap']['N_iterations'])
         else:
             statistics = None
 
@@ -275,7 +287,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
         os.makedirs(os.path.dirname(output_json))
 
     with open(output_json, 'w') as fp:
-        json.dump(savedict, fp, indent=4)
+        json.dump(savedict, fp, sort_keys=True, indent=4)
 
     print("Saved data!")
 

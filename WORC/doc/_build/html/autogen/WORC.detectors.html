@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>detectors Package &mdash; WORC 3.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="exampledata Package" href="WORC.exampledata.html" />
+    <link rel="prev" title="classification Package" href="WORC.classification.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="WORC.html">WORC Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="WORC.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.addexceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="WORC.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.classification.html">classification Package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">detectors Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.detectors.detectors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">detectors</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.exampledata.html">exampledata Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.html">facade Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.featureprocessing.html">featureprocessing Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.plotting.html">plotting Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.resources.html">resources Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="WORC.html">WORC Package</a> &raquo;</li>
+        
+      <li>detectors Package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/autogen/WORC.detectors.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="detectors-package">
+<h1>detectors Package<a class="headerlink" href="#detectors-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WORC.detectors.detectors">
+<span id="detectors-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">detectors</span></code> Module<a class="headerlink" href="#module-WORC.detectors.detectors" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.detectors.detectors.AbstractDetector">
+<em class="property">class </em><code class="descclassname">WORC.detectors.detectors.</code><code class="descname">AbstractDetector</code><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#AbstractDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.AbstractDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/abc.html#abc.ABC" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.AbstractDetector.__abstractmethods__">
+<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({'_is_detected'})</em><a class="headerlink" href="#WORC.detectors.detectors.AbstractDetector.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.AbstractDetector.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.detectors.detectors', 'do_detection': &lt;function AbstractDetector.do_detection&gt;, '_generate_detector_message': &lt;function AbstractDetector._generate_detector_message&gt;, '_is_detected': &lt;function AbstractDetector._is_detected&gt;, '__dict__': &lt;attribute '__dict__' of 'AbstractDetector' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'AbstractDetector' objects&gt;, '__doc__': None, '__abstractmethods__': frozenset({'_is_detected'}), '_abc_impl': &lt;_abc_data object&gt;})</em><a class="headerlink" href="#WORC.detectors.detectors.AbstractDetector.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.AbstractDetector.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.detectors.detectors'</em><a class="headerlink" href="#WORC.detectors.detectors.AbstractDetector.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.AbstractDetector.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.detectors.detectors.AbstractDetector.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.detectors.detectors.AbstractDetector.do_detection">
+<code class="descname">do_detection</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#AbstractDetector.do_detection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.AbstractDetector.do_detection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="WORC.detectors.detectors.BigrClusterDetector">
+<em class="property">class </em><code class="descclassname">WORC.detectors.detectors.</code><code class="descname">BigrClusterDetector</code><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#BigrClusterDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.BigrClusterDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.detectors.detectors.AbstractDetector" title="WORC.detectors.detectors.AbstractDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.detectors.detectors.AbstractDetector</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.BigrClusterDetector.__abstractmethods__">
+<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.detectors.detectors.BigrClusterDetector.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.BigrClusterDetector.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.detectors.detectors'</em><a class="headerlink" href="#WORC.detectors.detectors.BigrClusterDetector.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="WORC.detectors.detectors.CartesiusClusterDetector">
+<em class="property">class </em><code class="descclassname">WORC.detectors.detectors.</code><code class="descname">CartesiusClusterDetector</code><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#CartesiusClusterDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.CartesiusClusterDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.detectors.detectors.AbstractDetector" title="WORC.detectors.detectors.AbstractDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.detectors.detectors.AbstractDetector</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.CartesiusClusterDetector.__abstractmethods__">
+<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.detectors.detectors.CartesiusClusterDetector.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.CartesiusClusterDetector.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.detectors.detectors'</em><a class="headerlink" href="#WORC.detectors.detectors.CartesiusClusterDetector.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="WORC.detectors.detectors.CsvDetector">
+<em class="property">class </em><code class="descclassname">WORC.detectors.detectors.</code><code class="descname">CsvDetector</code><span class="sig-paren">(</span><em>csv_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#CsvDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.CsvDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.detectors.detectors.AbstractDetector" title="WORC.detectors.detectors.AbstractDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.detectors.detectors.AbstractDetector</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.CsvDetector.__abstractmethods__">
+<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.detectors.detectors.CsvDetector.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.detectors.detectors.CsvDetector.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>csv_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#CsvDetector.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.CsvDetector.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.CsvDetector.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.detectors.detectors'</em><a class="headerlink" href="#WORC.detectors.detectors.CsvDetector.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="WORC.detectors.detectors.DebugDetector">
+<em class="property">class </em><code class="descclassname">WORC.detectors.detectors.</code><code class="descname">DebugDetector</code><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#DebugDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.DebugDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.detectors.detectors.AbstractDetector" title="WORC.detectors.detectors.AbstractDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.detectors.detectors.AbstractDetector</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.DebugDetector.__abstractmethods__">
+<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.detectors.detectors.DebugDetector.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.DebugDetector.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.detectors.detectors'</em><a class="headerlink" href="#WORC.detectors.detectors.DebugDetector.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="WORC.detectors.detectors.HostnameDetector">
+<em class="property">class </em><code class="descclassname">WORC.detectors.detectors.</code><code class="descname">HostnameDetector</code><span class="sig-paren">(</span><em>expected_hostname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#HostnameDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.HostnameDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.detectors.detectors.AbstractDetector" title="WORC.detectors.detectors.AbstractDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.detectors.detectors.AbstractDetector</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.HostnameDetector.__abstractmethods__">
+<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.detectors.detectors.HostnameDetector.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.detectors.detectors.HostnameDetector.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>expected_hostname</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#HostnameDetector.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.HostnameDetector.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.HostnameDetector.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.detectors.detectors'</em><a class="headerlink" href="#WORC.detectors.detectors.HostnameDetector.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="WORC.detectors.detectors.LinuxDetector">
+<em class="property">class </em><code class="descclassname">WORC.detectors.detectors.</code><code class="descname">LinuxDetector</code><a class="reference internal" href="../_modules/WORC/detectors/detectors.html#LinuxDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.detectors.detectors.LinuxDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.detectors.detectors.AbstractDetector" title="WORC.detectors.detectors.AbstractDetector"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.detectors.detectors.AbstractDetector</span></code></a></p>
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.LinuxDetector.__abstractmethods__">
+<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.detectors.detectors.LinuxDetector.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.detectors.detectors.LinuxDetector.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.detectors.detectors'</em><a class="headerlink" href="#WORC.detectors.detectors.LinuxDetector.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="WORC.exampledata.html" class="btn btn-neutral float-right" title="exampledata Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="WORC.classification.html" class="btn btn-neutral float-left" title="classification Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

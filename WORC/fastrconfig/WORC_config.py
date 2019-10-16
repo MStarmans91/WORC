@@ -15,21 +15,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-import site
 import os
-import sys
-
+import fastr
+import pkg_resources
 
 # Get directory in which packages are installed
-try:
-    packagedir = site.getsitepackages()[0]
-except AttributeError:
-    # Inside virtualenvironment, so getsitepackages doesnt work.
-    paths = sys.path
-    for p in paths:
-        if os.path.isdir(p) and os.path.basename(p) == 'site-packages':
-            packagedir = p
+working_set = pkg_resources.working_set
+requirement_spec = pkg_resources.Requirement.parse('WORC')
+egg_info = working_set.find(requirement_spec)
+packagedir = egg_info.location
 
 # Add the WORC FASTR tools and type paths
 tools_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_tools')] + tools_path

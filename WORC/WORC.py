@@ -20,10 +20,12 @@ import fastr
 from fastr.api import ResourceLimit
 import os
 from random import randint
+import graphviz
 import WORC.addexceptions as WORCexceptions
 import WORC.IOparser.config_WORC as config_io
 from WORC.tools.Elastix import Elastix
 from WORC.tools.Evaluate import Evaluate
+from WORC.tools.Slicer import Slicer
 
 
 class WORC(object):
@@ -100,7 +102,7 @@ class WORC(object):
 
     """
 
-    def __init__(self, name='WORC'):
+    def __init__(self, name='test'):
         """Initialize WORC object. Set the initial variables all to None,
            except for some defaults.
 
@@ -108,7 +110,7 @@ class WORC(object):
             name: name of the nework (string, optional)
 
         """
-        self.name = name
+        self.name = 'WORC_' + name
 
         # Initialize several objects
         self.configs = list()
@@ -119,6 +121,7 @@ class WORC(object):
         self.semantics_train = list()
         self.labels_train = list()
         self.masks_train = list()
+        self.masks_normalize_train = list()
         self.features_train = list()
         self.metadata_train = list()
 
@@ -127,20 +130,23 @@ class WORC(object):
         self.semantics_test = list()
         self.labels_test = list()
         self.masks_test = list()
+        self.masks_normalize_test = list()
         self.features_test = list()
         self.metadata_test = list()
 
         self.Elastix_Para = list()
+        self.label_names = 'Label1, Label2'
 
         # Set some defaults, name
-        self.fastr_plugin = 'ProcessPoolExecution'
+        self.fastr_plugin = 'LinearExecution'
         if name == '':
             name = [randint(0, 9) for p in range(0, 5)]
-        self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], 'WORC_' + str(name))
+        self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
 
         self.additions = dict()
         self.CopyMetadata = True
         self.segmode = []
+        self._add_evaluation = False
 
     def defaultconfig(self):
         """Generate a configparser object holding all default configuration values.
@@ -231,14 +237,14 @@ class WORC(object):
 
         # Feature selection
         config['Featsel'] = dict()
-        config['Featsel']['Variance'] = 'True, False'
+        config['Featsel']['Variance'] = 'True'
         config['Featsel']['GroupwiseSearch'] = 'True'
         config['Featsel']['SelectFromModel'] = 'False'
         config['Featsel']['UsePCA'] = 'False'
         config['Featsel']['PCAType'] = '95variance'
         config['Featsel']['StatisticalTestUse'] = 'False'
         config['Featsel']['StatisticalTestMetric'] = 'ttest, Welch, Wilcoxon, MannWhitneyU'
-        config['Featsel']['StatisticalTestThreshold'] = '0.02, 0.2'
+        config['Featsel']['StatisticalTestThreshold'] = '-2, 1.5'
         config['Featsel']['ReliefUse'] = 'False'
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '1, 1'
@@ -250,7 +256,7 @@ class WORC(object):
         config['SelectFeatGroup']['shape_features'] = 'True, False'
         config['SelectFeatGroup']['histogram_features'] = 'True, False'
         config['SelectFeatGroup']['orientation_features'] = 'True, False'
-        config['SelectFeatGroup']['texture_Gabor_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_Gabor_features'] = 'False'
         config['SelectFeatGroup']['texture_GLCM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLCMMS_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLRLM_features'] = 'True, False'
@@ -313,8 +319,11 @@ class WORC(object):
         config['HyperOptimization'] = dict()
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.15'
+        config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '10000'
         config['HyperOptimization']['n_jobspercore'] = '2000'  # only relevant when using fastr in classification
+        config['HyperOptimization']['maxlen'] = '100'
+        config['HyperOptimization']['ranking_score'] = 'test_score'
 
         # Feature scaling options
         config['FeatureScaling'] = dict()
@@ -330,7 +339,12 @@ class WORC(object):
 
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Use'] = 'False'  # Still WIP
+        config['Ensemble']['Use'] = '1'
+
+        # Bootstrap options
+        config['Bootstrap'] = dict()
+        config['Bootstrap']['Use'] = 'False'
+        config['Bootstrap']['N_iterations'] = '1000'
 
         return config
 
@@ -368,7 +382,7 @@ class WORC(object):
                         self.configs = [self.defaultconfig()] * len(self.images_train)
                     else:
                         self.configs = [self.defaultconfig()] * len(self.features_train)
-                self.network = fastr.create_network('WORC_' + self.name)
+                self.network = fastr.create_network(self.name)
 
                 # BUG: We currently use the first configuration as general config
                 image_types = list()
@@ -407,6 +421,12 @@ class WORC(object):
 
                 self.sink_classification.input = self.classify.outputs['classification']
                 self.sink_performance.input = self.classify.outputs['performance']
+
+                if self.masks_normalize_train:
+                    self.sources_masks_normalize_train = dict()
+
+                if self.masks_normalize_test:
+                    self.sources_masks_normalize_test = dict()
 
                 if not self.features_train:
                     # Create nodes to compute features
@@ -574,12 +594,24 @@ class WORC(object):
                         if self.metadata_test and len(self.metadata_test) >= nmod + 1:
                             self.preprocessing_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
 
+                        # If there are masks to use in normalization, add them here
+                        if self.masks_normalize_train:
+                            self.sources_masks_normalize_train[label] = self.network.create_source('ITKImageFile', id='masks_normalize_train_' + label, node_group='train')
+                            self.preprocessing_train[label].inputs['mask'] = self.sources_masks_normalize_train[label].output
+
+                        if self.masks_normalize_test:
+                            self.sources_masks_normalize_test[label] = self.network.create_source('ITKImageFile', id='masks_normalize_test_' + label, node_group='test')
+                            self.preprocessing_test[label].inputs['mask'] = self.sources_masks_normalize_test[label].output
+
                         # -----------------------------------------------------
                         # Create a feature calculator node
                         calcfeat_node = str(self.configs[nmod]['General']['FeatureCalculator'])
-                        self.calcfeatures_train[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_train_' + label, resources=ResourceLimit(memory='14G'))
+                        node_ID = '_'.join([self.configs[nmod]['General']['FeatureCalculator'].replace(':', '_').replace('.', '_').replace('/', '_'),
+                                            label])
+
+                        self.calcfeatures_train[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_train_' + node_ID, resources=ResourceLimit(memory='14G'))
                         if self.images_test or self.features_test:
-                            self.calcfeatures_test[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_test_' + label, resources=ResourceLimit(memory='14G'))
+                            self.calcfeatures_test[label] = self.network.create_node(calcfeat_node, tool_version='1.0', id='calcfeatures_test_' + node_ID, resources=ResourceLimit(memory='14G'))
 
                         # Create required links
                         self.calcfeatures_train[label].inputs['parameters'] = self.sources_parameters[label].output
@@ -592,8 +624,8 @@ class WORC(object):
                         if self.metadata_train and len(self.metadata_train) >= nmod + 1:
                             self.calcfeatures_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
 
-                        if self.metadata_train and len(self.metadata_test) >= nmod + 1:
-                            self.calcfeatures_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
+                        if self.metadata_test and len(self.metadata_test) >= nmod + 1:
+                            self.calcfeatures_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
 
                         if self.semantics_train and len(self.semantics_train) >= nmod + 1:
                             self.sources_semantics_train[label] = self.network.create_source('CSVFile', id='semantics_train_' + label)
@@ -874,12 +906,12 @@ class WORC(object):
                 config = configparser.ConfigParser()
                 config.read(c)
                 c = config
-            cfile = os.path.join(fastr.config.mounts['tmp'], 'WORC_' + self.name, ("config_{}_{}.ini").format(self.name, num))
+            cfile = os.path.join(self.fastr_tmpdir, f"config_{self.name}_{num}.ini")
             if not os.path.exists(os.path.dirname(cfile)):
                 os.makedirs(os.path.dirname(cfile))
             with open(cfile, 'w') as configfile:
                 c.write(configfile)
-            self.fastrconfigs.append(("vfs://tmp/{}/config_{}_{}.ini").format('WORC_' + self.name, self.name, num))
+            self.fastrconfigs.append(cfile)
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
@@ -889,7 +921,7 @@ class WORC(object):
         self.source_data['patientclass_train'] = self.labels_train
         self.source_data['patientclass_test'] = self.labels_test
 
-        self.sink_data['classification'] = ("vfs://output/{}/svm_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.sink_data['classification'] = ("vfs://output/{}/estimator_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
@@ -903,6 +935,9 @@ class WORC(object):
 
             if self.masks_train and len(self.masks_train) - 1 >= num:
                 self.source_data['mask_train_' + label] = self.masks_train[num]
+
+            if self.masks_normalize_train and len(self.masks_normalize_train) - 1 >= num:
+                self.source_data['masks_normalize_train_' + label] = self.masks_normalize_train[num]
 
             if self.metadata_train and len(self.metadata_train) - 1 >= num:
                 self.source_data['metadata_train_' + label] = self.metadata_train[num]
@@ -932,6 +967,9 @@ class WORC(object):
 
             if self.masks_test and len(self.masks_test) - 1 >= num:
                 self.source_data['mask_test_' + label] = self.masks_test[num]
+
+            if self.masks_normalize_test and len(self.masks_normalize_test) - 1 >= num:
+                self.source_data['masks_normalize_test_' + label] = self.masks_normalize_test[num]
 
             if self.metadata_test and len(self.metadata_test) - 1 >= num:
                 self.source_data['metadata_test_' + label] = self.metadata_test[num]
@@ -964,12 +1002,21 @@ class WORC(object):
                     if self.images_test or self.features_test:
                         self.sink_data['transformations_test_' + label] = ("vfs://output/{}/Elastix/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
 
+        if self._add_evaluation:
+            self.Evaluate.set()
+
     def execute(self):
         """ Execute the network through the fastr.network.execute command. """
         # Draw and execute nwtwork
-        self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
+        try:
+            self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
+        except graphviz.backend.ExecutableNotFound:
+            print('[WORC WARNING] Graphviz executable not found: not drawing network diagram. MAke sure the Graphviz executables are on your systems PATH.')
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
-        # self.network.execute(self.source_data, self.sink_data)
+
+    def add_evaluation(self, label_type):
+        self.Evaluate = Evaluate(label_type=label_type, parent=self)
+        self._add_evaluation = True
 
 
 class Tools(object):
@@ -980,3 +1027,4 @@ class Tools(object):
     def __init__(self):
         self.Elastix = Elastix()
         self.Evaluate = Evaluate()
+        self.Slicer = Slicer()

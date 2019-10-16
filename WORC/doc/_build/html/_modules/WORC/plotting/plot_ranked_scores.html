@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.0.0 documentation</title>
+  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.1.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
             
           
@@ -181,7 +181,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">WORC.plotting.plot_images</span> <span class="k">as</span> <span class="nn">pi</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting</span> <span class="k">import</span> <span class="n">plot_images</span> <span class="k">as</span> <span class="n">pi</span>
 <span class="kn">import</span> <span class="nn">SimpleITK</span> <span class="k">as</span> <span class="nn">sitk</span>
 <span class="kn">from</span> <span class="nn">WORC.addexceptions</span> <span class="k">import</span> <span class="n">WORCKeyError</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
@@ -272,16 +272,16 @@
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determining score per patient.&#39;</span><span class="p">)</span>
     <span class="n">stats</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
                      <span class="n">pinfo</span><span class="p">,</span>
-                     <span class="n">label_type</span><span class="p">,</span>
+                     <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
                      <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                      <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
                      <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
                      <span class="n">output</span><span class="o">=</span><span class="s1">&#39;stats&#39;</span><span class="p">)</span>
 
     <span class="n">percentages</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span>
-    <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">percentages</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-    <span class="n">ranked_percentages_temp</span> <span class="o">=</span> <span class="p">[</span><span class="n">percentages</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
-    <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">percentages</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+    <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">percentages</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="n">ranked_percentages_temp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">percentages</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+    <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">percentages</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
 
     <span class="n">ranked_percentages</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="n">ranked_truths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -294,7 +294,7 @@
     <span class="k">if</span> <span class="n">output_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing output scores to CSV.&quot;</span><span class="p">)</span>
         <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PatientID&#39;</span><span class="p">,</span> <span class="s1">&#39;TrueLabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Percentage&#39;</span><span class="p">]</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 
@@ -313,12 +313,12 @@
     <span class="nb">print</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
     <span class="n">label_data</span><span class="p">,</span> <span class="n">images</span> <span class="o">=</span>\
         <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">pinfo</span><span class="p">,</span>
-                         <span class="p">[[</span><span class="n">label_type</span><span class="p">]],</span>
+                         <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
                          <span class="n">images</span><span class="p">,</span>
                          <span class="n">images</span><span class="p">)</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">segmentations</span> <span class="o">=</span>\
         <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">pinfo</span><span class="p">,</span>
-                         <span class="p">[[</span><span class="n">label_type</span><span class="p">]],</span>
+                         <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
                          <span class="n">segmentations</span><span class="p">,</span>
                          <span class="n">segmentations</span><span class="p">)</span>
 
@@ -362,7 +362,9 @@
         <span class="n">im</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">ReadImage</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
         <span class="n">seg</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">ReadImage</span><span class="p">(</span><span class="n">segmentations</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
         <span class="n">pid</span> <span class="o">=</span> <span class="n">PIDs_images</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
-        <span class="n">fname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">]))</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">+</span> <span class="s1">&#39;_TrueLabel_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ranked_truths</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_slice.png&#39;</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">])))</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">+</span> <span class="s1">&#39;_TrueLabel_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ranked_truths</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_slice.png&#39;</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span> <span class="o">+</span> <span class="n">fname</span>
 
         <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">output_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_zip</span><span class="p">),</span> <span class="n">fname</span><span class="p">)</span>
@@ -401,7 +403,7 @@
     <span class="n">y_truths</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">,</span> <span class="n">y_predictions</span><span class="p">,</span> <span class="n">PIDs_scores</span> <span class="o">=</span>\
         <span class="n">plot_SVM</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
                  <span class="n">pinfo</span><span class="p">,</span>
-                 <span class="n">label_type</span><span class="p">,</span>
+                 <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
                  <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
                  <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
@@ -429,8 +431,8 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">maxlen</span><span class="p">:</span>
             <span class="n">maxlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span>
 
-    <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">scores_means</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-    <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores_means</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+    <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">scores_means</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">scores_means</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
 
     <span class="n">ranked_mean_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores_means</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
     <span class="n">ranked_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
@@ -443,7 +445,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">):</span>
             <span class="n">header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Score&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 

@@ -21,16 +21,34 @@ import scipy.stats as st
 from scipy.special import logit, expit
 
 
+def compute_confidence_bootstrap(bootstrap_metric, test_metric, N_1, alpha=0.95):
+    """
+    Function to calculate confidence interval for bootstrapped samples.
+    metric: numpy array containing the result for a metric for the different bootstrap iterations
+    test_metric: the value of the metric evaluated on the true, full test set
+    alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 0.95
+    """
+    metric_std = np.std(bootstrap_metric)
+    CI = st.norm.interval(alpha, loc=test_metric, scale=metric_std)
+    return CI
+
+
 def compute_confidence(metric, N_train, N_test, alpha=0.95):
     """
-    Function to calculate the adjusted confidence interval
+    Function to calculate the adjusted confidence interval for cross-validation.
     metric: numpy array containing the result for a metric for the different cross validations
     (e.g. If 20 cross-validations are performed it is a list of length 20 with the calculated accuracy for
     each cross validation)
     N_train: Integer, number of training samples
     N_test: Integer, number of test_samples
-    alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 95%
+    alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 0.95
     """
+
+    # Remove NaN values if they are there
+    if np.isnan(metric).any():
+        print('[WORC Warning] Array contains nan: removing.')
+        metric = np.asarray(metric)
+        metric = metric[np.logical_not(np.isnan(metric))]
 
     # Convert to floats, as python 2 rounds the divisions if we have integers
     N_train = float(N_train)

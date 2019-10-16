@@ -1,0 +1,735 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>&lt;no title&gt; &mdash; WORC 3.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> WORC
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="autogen/WORC.html">WORC Package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">WORC</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>&lt;no title&gt;</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/WORC.config.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <table class="docutils align-center">
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 5%" />
+<col style="width: 51%" />
+<col style="width: 8%" />
+<col style="width: 32%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Subkey</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Options</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>General</p></td>
+<td><p>cross_validation
+Segmentix
+FeatureCalculator
+Preprocessing
+RegistrationNode
+TransformationNode
+Joblib_ncores
+Joblib_backend
+tempsave</p></td>
+<td><p>Determine whether a cross validation will be performed or not. Obsolete, will be removed.
+Determine whether to use Segmentix tool for segmentation preprocessing.
+Specifies which feature calculation tool should be used.
+Specifies which tool will be used for image preprocessing.
+Specifies which tool will be used for image registration.
+Specifies which tool will be used for applying image transformations.
+Number of cores to be used by joblib for multicore processing.
+Type of backend to be used by joblib for multicore processing.
+Determines whether after every cross validation iteration the result will be saved, in addition to the result after all iterations. Especially useful for debugging.</p></td>
+<td><p>True
+False
+predict/CalcFeatures:1.0
+worc/PreProcess:1.0
+‘elastix4.8/Elastix:4.8’
+‘elastix4.8/Transformix:4.8’
+4
+multiprocessing
+False</p></td>
+<td><p>True, False
+True, False
+predict/CalcFeatures:1.0, pyradiomics/CF_pyradiomics:1.0, your own tool reference
+worc/PreProcess:1.0, your own tool reference
+‘elastix4.8/Elastix:4.8’, your own tool reference
+‘elastix4.8/Transformix:4.8’, your own tool reference
+Integer &gt; 0
+multiprocessing, threading
+True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>Segmentix</p></td>
+<td><p>mask
+segtype
+segradius
+N_blobs
+fillholes</p></td>
+<td><p>If a mask is supplied, should the mask be subtracted from the contour or multiplied.
+If Ring, then a ring around the segmentation will be used as contour.
+Define the radius of the ring used if segtype is Ring.
+How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.
+Determines whether hole filling will be used.</p></td>
+<td><p>subtract
+None
+5
+1
+False</p></td>
+<td><p>subtract, multiply
+None, Ring
+Integer &gt; 0
+Integer &gt; 0
+True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>Normalize</p></td>
+<td><p>ROI
+Method</p></td>
+<td><p>If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.
+Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.</p></td>
+<td><p>Full
+z_score</p></td>
+<td><p>True, False, Full
+z_score, minmed</p></td>
+</tr>
+<tr class="row-odd"><td><p>ImageFeatures</p></td>
+<td><p>shape
+histogram
+orientation
+texture_Gabor
+texture_LBP
+texture_GLCM
+texture_GLCMMS
+texture_GLRLM
+texture_GLSZM
+texture_NGTDM
+coliage
+vessel
+log
+phase
+image_type
+gabor_frequencies
+gabor_angles
+GLCM_angles
+GLCM_levels
+GLCM_distances
+LBP_radius
+LBP_npoints
+phase_minwavelength
+phase_nscale
+log_sigma
+vessel_scale_range
+vessel_scale_step
+vessel_radius</p></td>
+<td><p>Determine whether orientation features are computed or not.
+Determine whether histogram features are computed or not.
+Determine whether orientation features are computed or not.
+Determine whether Gabor texture features are computed or not.
+Determine whether LBP texture features are computed or not.
+Determine whether GLCM texture features are computed or not.
+Determine whether GLCM Multislice texture features are computed or not.
+Determine whether GLRLM texture features are computed or not.
+Determine whether GLSZM texture features are computed or not.
+Determine whether NGTDM texture features are computed or not.
+Determine whether coliage features are computed or not.
+Determine whether vessel features are computed or not.
+Determine whether LoG features are computed or not.
+Determine whether local phase features are computed or not.
+Modality of images supplied. Determines how the image is loaded.
+Frequencies of Gabor filters used: can be a single float or a list.
+Angles of Gabor filters in degrees: can be a single integer or a list.
+Angles used in GLCM computation in radians: can be a single float or a list.
+Number of grayscale levels used in discretization before GLCM computation.
+Distance(s) used in GLCM computation in pixels: can be a single integer or a list.
+Radii used for LBP computation: can be a single integer or a list.
+Number(s) of points used in LBP computation: can be a single integer or a list.
+Minimal wavelength in pixels used for phase features.
+Number of scales used in phase feature computation.
+Standard deviation(s) in pixels used in log feature computation: can be a single integer or a list.
+Scale in pixels used for Frangi vessel filter. Given as a minimum and a maximum.
+Step size used to go from minimum to maximum scale on Frangi vessel filter.
+Radius to determine boundary of between inner part and edge in Frangi vessel filter.</p></td>
+<td><p>True
+True
+True
+False
+True
+True
+True
+True
+True
+True
+False
+False
+False
+False
+CT
+0.05, 0.2, 0.5
+0, 45, 90, 135
+0, 0.79, 1.57, 2.36
+16
+1, 3
+3, 8, 15
+12, 24, 36
+3
+5
+1, 5, 10
+1, 10
+2
+5</p></td>
+<td><p>True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+CT
+Float(s)
+Integer(s)
+Float(s)
+Integer &gt; 0
+Integer(s) &gt; 0
+Integer(s) &gt; 0
+Integer(s) &gt; 0
+Integer &gt; 0
+Integer &gt; 0
+Integer(s)
+Two integers: min and max.
+Integer &gt; 0
+Integer &gt; 0</p></td>
+</tr>
+<tr class="row-even"><td><p>Featsel</p></td>
+<td><p>Variance
+GroupwiseSearch
+SelectFromModel
+UsePCA
+PCAType
+StatisticalTestUse
+StatisticalTestMetric
+StatisticalTestThreshold
+ReliefUse
+ReliefNN
+ReliefSampleSize
+ReliefDistanceP
+ReliefNumFeatures</p></td>
+<td><p>If True, exclude features which have a variance &lt; 0.01. Based on ` sklearn &lt;<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/">https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/</a>&gt;`_.
+Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.
+Select features by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/">sklearn</a>.
+If True, Use Principle Component Analysis (PCA) to select features.
+Method to select number of components using PCA: Either the number of components that explains 95% of the variance, or use a fixed number of components.95variance
+If True, use statistical test to select features.
+Define the type of statistical test to be used.
+Specify a threshold for the p-value threshold used in the statistical test to select features. The first element defines the lower boundary, the other the upper boundary. Random sampling will occur between the boundaries.
+If True, use Relief to select features.
+Min and max of number of nearest neighbors search range in Relief.
+Min and max of sample size search range in Relief.
+Min and max of positive distance search range in Relief.
+Min and max of number of features that is selected search range in Relief.</p></td>
+<td><p>True
+True
+False
+False
+95variance
+False
+ttest, Welch, Wilcoxon, MannWhitneyU
+-2, 1.5
+False
+2, 4
+1, 1
+1, 3
+25, 200</p></td>
+<td><p>Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Inteteger(s), 95variance
+Boolean(s)
+ttest, Welch, Wilcoxon, MannWhitneyU
+Two Integers: loc and scale
+Boolean(s)
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale</p></td>
+</tr>
+<tr class="row-odd"><td><p>SelectFeatGroup</p></td>
+<td><p>shape_features
+histogram_features
+orientation_features
+texture_Gabor_features
+texture_GLCM_features
+texture_GLCMMS_features
+texture_GLRLM_features
+texture_GLSZM_features
+texture_NGTDM_features
+texture_LBP_features
+patient_features
+semantic_features
+coliage_features
+log_features
+vessel_features
+phase_features</p></td>
+<td><p>If True, use shape features in model.
+If True, use histogram features in model.
+If True, use orientation features in model.
+If True, use Gabor texture features in model.
+If True, use GLCM texture features in model.
+If True, use GLCM Multislice texture features in model.
+If True, use GLRLM texture features in model.
+If True, use GLSZM texture features in model.
+If True, use NGTDM texture features in model.
+If True, use LBP texture features in model.
+If True, use patient features in model.
+If True, use semantic features in model.
+If True, use coliage features in model.
+If True, use log features in model.
+If True, use vessel features in model.
+If True, use phase features in model.</p></td>
+<td><p>True, False
+True, False
+True, False
+False
+True, False
+True, False
+True, False
+True, False
+True, False
+True, False
+False
+False
+False
+False
+False
+False</p></td>
+<td><p>Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)
+Boolean(s)</p></td>
+</tr>
+<tr class="row-even"><td><p>Imputation</p></td>
+<td><p>use
+strategy
+n_neighbors</p></td>
+<td><p>If True, use feature imputation methods to replace NaN values. If False, all NaN features will be set to zero.
+Method to be used for imputation.
+When using k-Nearest Neighbors (kNN) for feature imputation, determines the number of neighbors used for imputation. Can be a single integer or a list.</p></td>
+<td><p>False
+mean, median, most_frequent, constant, knn
+5, 5</p></td>
+<td><p>Boolean(s)
+mean, median, most_frequent, constant, knn
+Two Integers: loc and scale</p></td>
+</tr>
+<tr class="row-odd"><td><p>Classification</p></td>
+<td><p>fastr
+fastr_plugin
+classifiers
+max_iter
+SVMKernel
+SVMC
+SVMdegree
+SVMcoef0
+SVMgamma
+RFn_estimators
+RFmin_samples_split
+RFmax_depth
+LRpenalty
+LRC
+LDA_solver
+LDA_shrinkage
+QDA_reg_param
+ElasticNet_alpha
+ElasticNet_l1_ratio
+SGD_alpha
+SGD_l1_ratio
+SGD_loss
+SGD_penalty
+CNB_alpha</p></td>
+<td><p>Use fastr for the optimization gridsearch (recommended on clusters, default) or if set to False , joblib (recommended for PCs but not on Windows).
+Name of execution plugin to be used. Default use the same as the self.fastr_plugin for the WORC object.
+Select the estimator(s) to use. Most are implemented using <a class="reference external" href="https://scikit-learn.org/stable/">sklearn</a>. For abbreviations, see above.
+Maximum number of iterations to use in training an estimator. Only for specific estimators, see <a class="reference external" href="https://scikit-learn.org/stable/">sklearn</a>.
+When using a SVM, specify the kernel type.
+Range of the SVM slack parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).
+Range of the SVM polynomial degree when using a polynomial kernel. We sample on a uniform scale: the parameters specify the range (a, a + b).
+Range of SVM homogeneity parameter. We sample on a uniform scale: the parameters specify the range (a, a + b).
+Range of the SVM gamma parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b)
+Range of number of trees in a RF. We sample on a uniform scale: the parameters specify the range (a, a + b).
+Range of minimum number of samples required to split a branch in a RF. We sample on a uniform scale: the parameters specify the range (a, a + b).
+Range of maximum depth of a RF. We sample on a uniform scale: the parameters specify the range (a, a + b).
+Penalty term used in LR.
+Range of regularization strength in LR. We sample on a uniform scale: the parameters specify the range (a, a + b).
+Solver used in LDA.
+Range of the LDA shrinkage parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).
+Range of the QDA regularization parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).
+Range of the ElasticNet penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).
+Range of l1 ratio in LR. We sample on a uniform scale: the parameters specify the range (a, a + b).
+Range of the SGD penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).
+Range of l1 ratio in SGD. We sample on a uniform scale: the parameters specify the range (a, a + b).
+hinge, Loss function of SG
+Penalty term in SGD.
+Regularization strenght in ComplementNB. We sample on a uniform scale: the parameters specify the range (a, a + b)</p></td>
+<td><p>True
+LinearExecution
+SVM
+100000
+poly
+0, 6
+1, 6
+0, 1
+-5, 5
+10, 90
+2, 3
+5, 5
+l2, l1
+0.01, 1.0
+svd, lsqr, eigen
+-5, 5
+-5, 5
+-5, 5
+0, 1
+-5, 5
+0, 1
+hinge, squared_hinge, modified_huber
+none, l2, l1
+0, 1</p></td>
+<td><p>True, False
+Any <a class="reference external" href="https://fastr.readthedocs.io/en/develop/_autogen/fastr.reference.html#executionplugin-reference/">fastr execution plugin</a> .
+SVM , SVR, SGD, SGDR, RF, LDA, QDA, ComplementND, GaussianNB, LR, RFR, Lasso, ElasticNet. All are estimators from <a class="reference external" href="https://scikit-learn.org/stable//">sklearn</a>
+Integer
+poly, linear, rbf
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+none, l2, l1
+Two Integers: loc and scale
+svd, lsqr, eigen
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+Two Integers: loc and scale
+hinge, squared_hinge, modified_huber
+none, l2, l1
+Two Integers: loc and scale</p></td>
+</tr>
+<tr class="row-even"><td><p>CrossValidation</p></td>
+<td><p>N_iterations
+test_size</p></td>
+<td><p>Number of times the data is split in training and test in the outer cross-validation.
+The percentage of data to be used for testing.</p></td>
+<td><p>100
+0.2</p></td>
+<td><p>Integer
+Float</p></td>
+</tr>
+<tr class="row-odd"><td><p>Labels</p></td>
+<td><p>label_names
+modus
+url
+projectID</p></td>
+<td><p>The labels used from your label file for classification.
+Determine whether multilabel or singlelabel classification or regression will be performed.
+WIP
+WIP</p></td>
+<td><p>Label1, Label2
+singlelabel
+WIP
+WIP</p></td>
+<td><p>String(s)
+singlelabel, multilabel
+Not Supported Yet
+Not Supported Yet</p></td>
+</tr>
+<tr class="row-even"><td><p>HyperOptimization</p></td>
+<td><p>scoring_method
+test_size
+n_splits
+N_iterations
+n_jobspercore
+maxlen
+ranking_score</p></td>
+<td><p>Specify the optimization metric for your hyperparameter search.
+Size of test set in the hyperoptimization cross validation, given as a percentage of the whole dataset.</p>
+<p>Number of iterations used in the hyperparameter optimization. This corresponds to the number of samples drawn from the parameter grid.
+Number of jobs assigned to a single core. Only used if fastr is set to true in the classfication.</p>
+</td>
+<td><p>f1_weighted
+0.15
+5
+10000
+2000
+100
+test_score</p></td>
+<td><p>Any <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/">sklearn metric</a>
+Float
+5
+Integer
+Integer
+100
+test_score</p></td>
+</tr>
+<tr class="row-odd"><td><p>FeatureScaling</p></td>
+<td><p>scale_features
+scaling_method</p></td>
+<td><p>Determine whether to use feature scaling is.
+Determine the scaling method.</p></td>
+<td><p>True
+z_score</p></td>
+<td><p>Boolean(s)
+z_score, minmax</p></td>
+</tr>
+<tr class="row-even"><td><p>SampleProcessing</p></td>
+<td><p>SMOTE
+SMOTE_ratio
+SMOTE_neighbors
+Oversampling</p></td>
+<td><p>Determine whether to use SMOTE oversampling, see also ` imbalanced learn &lt;<a class="reference external" href="https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.SMOTE.html/">https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.SMOTE.html/</a>&gt;`_.
+Determine the ratio of oversampling. If 1, the minority class will be oversampled to the same size as the majority class. We sample on a uniform scale: the parameters specify the range (a, a + b).
+Number of neighbors used in SMOTE. This should be much smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (a, a + b).
+Determine whether to random oversampling.</p></td>
+<td><p>True
+1, 0
+5, 15
+False</p></td>
+<td><p>Boolean(s)
+Two Integers: loc and scale
+Two Integers: loc and scale
+Boolean(s)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ensemble</p></td>
+<td><p>Use</p></td>
+<td><p>Determine whether to use ensembling or not. Either provide an integer to state how many estimators to include, or True, which will use the default ensembling method.</p></td>
+<td><p>1</p></td>
+<td><p>Boolean or Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>Bootstrap</p></td>
+<td><p>Use
+N_iterations</p></td>
+<td></td>
+<td><p>False
+1000</p></td>
+<td><p>False
+1000</p></td>
+</tr>
+</tbody>
+</table>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

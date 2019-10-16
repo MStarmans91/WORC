@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.trainclassifier &mdash; WORC 3.0.0 documentation</title>
+  <title>WORC.classification.trainclassifier &mdash; WORC 3.1.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
             
           
@@ -175,16 +175,14 @@
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sklearn</span>
 
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
 <span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVM</span> <span class="k">import</span> <span class="n">plot_SVM</span>
-<span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVR</span> <span class="k">import</span> <span class="n">plot_single_SVR</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.file_io</span> <span class="k">as</span> <span class="nn">file_io</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.config_io_classifier</span> <span class="k">as</span> <span class="nn">config_io</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">uniform</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">discrete_uniform</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> <span class="n">log_uniform</span>
 
 
 <div class="viewcode-block" id="trainclassifier"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.trainclassifier.trainclassifier">[docs]</a><span class="k">def</span> <span class="nf">trainclassifier</span><span class="p">(</span><span class="n">feat_train</span><span class="p">,</span> <span class="n">patientinfo_train</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span>
@@ -277,6 +275,9 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] You provided multiple output json files: only the first one will be used!&#39;</span><span class="p">)</span>
             <span class="n">output_json</span> <span class="o">=</span> <span class="n">output_json</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">fixedsplits</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">fixedsplits</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fixedsplits</span><span class="p">)</span>
+
     <span class="c1"># Load variables from the config file</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">config_io</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
     <span class="n">label_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;label_names&#39;</span><span class="p">]</span>
@@ -347,8 +348,8 @@
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">log_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span>
@@ -406,22 +407,33 @@
     <span class="c1"># Calculate statistics of performance</span>
     <span class="k">if</span> <span class="n">feat_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">isclassifier</span><span class="p">:</span>
-            <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_single_SVR</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
-                                         <span class="n">label_type</span><span class="p">)</span>
+            <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
+                                  <span class="n">label_type</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                  <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                  <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
-                                  <span class="n">label_type</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">)</span>
+                                  <span class="n">label_type</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
+                                  <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                  <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                  <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">patientinfo_test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">isclassifier</span><span class="p">:</span>
-                <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_single_SVR</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
-                                             <span class="n">label_data_test</span><span class="p">,</span>
-                                             <span class="n">label_type</span><span class="p">)</span>
+                <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
+                                      <span class="n">label_data_test</span><span class="p">,</span>
+                                      <span class="n">label_type</span><span class="p">,</span>
+                                      <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                      <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                      <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
                                       <span class="n">label_data_test</span><span class="p">,</span>
                                       <span class="n">label_type</span><span class="p">,</span>
-                                      <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">)</span>
+                                      <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
+                                      <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                      <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                      <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">statistics</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -433,7 +445,7 @@
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_json</span><span class="p">))</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_json</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">savedict</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">savedict</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saved data!&quot;</span><span class="p">)</span></div>
 

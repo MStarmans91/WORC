@@ -23,7 +23,7 @@ import glob
 import numpy as np
 import csv
 import os
-import WORC.plotting.plot_images as pi
+from WORC.plotting import plot_images as pi
 import SimpleITK as sitk
 from WORC.addexceptions import WORCKeyError
 import zipfile
@@ -114,16 +114,16 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
     print('Determining score per patient.')
     stats = plot_SVM(prediction,
                      pinfo,
-                     label_type,
+                     [label_type],
                      show_plots=False,
                      alpha=0.95,
                      ensemble=ensemble,
                      output='stats')
 
     percentages = stats['Percentages']
-    ranking = np.argsort(percentages.values())
-    ranked_percentages_temp = [percentages.values()[r] for r in ranking]
-    ranked_PIDs = [percentages.keys()[r] for r in ranking]
+    ranking = np.argsort(list(percentages.values()))
+    ranked_percentages_temp = [list(percentages.values())[r] for r in ranking]
+    ranked_PIDs = [list(percentages.keys())[r] for r in ranking]
 
     ranked_percentages = list()
     ranked_truths = list()
@@ -136,7 +136,7 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
     if output_csv is not None:
         print("Writing output scores to CSV.")
         header = ['PatientID', 'TrueLabel', 'Percentage']
-        with open(output_csv, 'wb') as csv_file:
+        with open(output_csv, 'w') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(header)
 
@@ -155,12 +155,12 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
     print(images)
     label_data, images =\
         lp.findlabeldata(pinfo,
-                         [[label_type]],
+                         [label_type],
                          images,
                          images)
     _, segmentations =\
         lp.findlabeldata(pinfo,
-                         [[label_type]],
+                         [label_type],
                          segmentations,
                          segmentations)
 
@@ -204,7 +204,9 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
         im = sitk.ReadImage(images[idx])
         seg = sitk.ReadImage(segmentations[idx])
         pid = PIDs_images[idx]
-        fname = str(int(ranked_scores[idx])) + '_' + pid + '_TrueLabel_' + str(ranked_truths[idx]) + '_slice.png'
+        fname = str(abs(int(ranked_scores[idx]))) + '_' + pid + '_TrueLabel_' + str(ranked_truths[idx]) + '_slice.png'
+        if int(ranked_scores[idx]) < 0:
+            fname = 'min' + fname
 
         if output_zip is not None:
             output_name = os.path.join(os.path.dirname(output_zip), fname)
@@ -243,7 +245,7 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
     y_truths, y_scores, y_predictions, PIDs_scores =\
         plot_SVM(prediction,
                  pinfo,
-                 label_type,
+                 [label_type],
                  show_plots=False,
                  alpha=0.95,
                  ensemble=ensemble,
@@ -271,8 +273,8 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
         if len(scores[pid]) > maxlen:
             maxlen = len(scores[pid])
 
-    ranking = np.argsort(scores_means.values())
-    ranked_PIDs = [scores_means.keys()[r] for r in ranking]
+    ranking = np.argsort(list(scores_means.values()))
+    ranked_PIDs = [list(scores_means.keys())[r] for r in ranking]
 
     ranked_mean_scores = [scores_means[r] for r in ranked_PIDs]
     ranked_scores = [scores[r] for r in ranked_PIDs]
@@ -285,7 +287,7 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
         for i in range(0, maxlen):
             header.append('Score' + str(i+1))
 
-        with open(output_csv, 'wb') as csv_file:
+        with open(output_csv, 'w') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(header)
 

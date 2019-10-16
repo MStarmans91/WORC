@@ -37,3 +37,12 @@ tools Package
     :show-inheritance:
     :special-members:
 
+:mod:`createfixedsplits` Module
+-------------------------------
+
+.. automodule:: WORC.tools.createfixedsplits
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+

@@ -1,0 +1,8 @@
+=============== =====================================================================================================================================================================================================
+Subkey          Description                                                                                                                                                                                          
+=============== =====================================================================================================================================================================================================
+SMOTE           Determine whether to use SMOTE oversampling, see also ` imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.SMOTE.html/>`_.                         
+SMOTE_ratio     Determine the ratio of oversampling. If 1, the minority class will be oversampled to the same size as the majority class. We sample on a uniform scale: the parameters specify the range (a, a + b). 
+SMOTE_neighbors Number of neighbors used in SMOTE. This should be much smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (a, a + b).            
+Oversampling    Determine whether to random oversampling.                                                                                                                                                            
+=============== =====================================================================================================================================================================================================

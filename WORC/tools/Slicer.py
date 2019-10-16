@@ -17,6 +17,7 @@
 
 import WORC.addexceptions as WORCexceptions
 import fastr
+from fastr.api import ResourceLimit
 import os
 
 
@@ -43,15 +44,15 @@ class Slicer(object):
             self.mode = 'StandAlone'
             self.fastr_plugin = fastr_plugin
             self.name = 'WORC_Slicer_' + name
-            self.network = fastr.Network(id_=self.name)
+            self.network = fastr.create_network(id=self.name)
             self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
 
         if images is None and self.mode == 'StandAlone':
             message = 'Either images and segmentations as input or a WORC' +\
              'network is required for the Evaluate network.'
-            raise WORCexceptions.IOError(message)
+            raise WORCexceptions.WORCIOError(message)
 
-        self.image = images
+        self.images = images
         self.segmentations = segmentations
 
         self.create_network()
@@ -62,23 +63,23 @@ class Slicer(object):
         '''
 
         # Create all nodes
-        self.network.node_slicer =\
-            self.network.create_node('Slicer', memory='20G', id_='Slicer')
+        self.node_slicer =\
+            self.network.create_node('worc/Slicer:1.0', tool_version='1.0', id='Slicer', resources=ResourceLimit(memory='20G'))
 
         # Create sinks
-        self.network.sink_PNG =\
-            self.network.create_sink('PNGFile', id_='PNG')
-        self.network.sink_PNGZoomed =\
-            self.network.create_sink('PNGFile', id_='PNGZoomed')
+        self.sink_PNG =\
+            self.network.create_sink('PNGFile', id='PNG')
+        self.sink_PNGZoomed =\
+            self.network.create_sink('PNGFile', id='PNGZoomed')
 
         # Create links to sinks
-        self.network.sink_PNG.input = self.network.node_slicer.outputs['out']
-        self.network.sink_PNGZoomed.input = self.network.node_slicer.outputs['outzoom']
+        self.sink_PNG.input = self.node_slicer.outputs['out']
+        self.sink_PNGZoomed.input = self.node_slicer.outputs['outzoom']
 
         # Create sources if not supplied by a WORC network
         if self.mode == 'StandAlone':
-            self.network.source_images = self.network.create_source('ITKImage', id_='Images')
-            self.network.source_segmentations = self.network.create_source('ITKImage', id_='Segmentations')
+            self.source_images = self.network.create_source('ITKImageFile', id='Images')
+            self.source_segmentations = self.network.create_source('ITKImageFile', id='Segmentations')
 
         # Create links to sources that are not supplied by a WORC network
         # Not needed in this network
@@ -86,8 +87,8 @@ class Slicer(object):
         # Create links to the sources that could be in a WORC network
         if self.mode == 'StandAlone':
             # Sources from the Evaluate network are used
-            self.network.node_slicer.inputs['image'] = self.network.source_images.output
-            self.network.node_slicer.inputs['segmentation'] = self.network.source_segmentations.output
+            self.node_slicer.inputs['image'] = self.source_images.output
+            self.node_slicer.inputs['segmentation'] = self.source_segmentations.output
         else:
             # Sources from the WORC network are used
             print('WIP')
@@ -100,8 +101,8 @@ class Slicer(object):
             self.source_data = dict()
             self.sink_data = dict()
 
-            self.source_data['Images'] = images
-            self.source_data['Segmentations'] = segmentations
+            self.source_data['Images'] = self.images
+            self.source_data['Segmentations'] = self.segmentations
 
             if 'PNG' not in sink_data.keys():
                 self.sink_data['PNG'] = ("vfs://output/{}/Slice_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
@@ -114,5 +115,5 @@ class Slicer(object):
     def execute(self):
         """ Execute the network through the fastr.network.execute command. """
         # Draw and execute nwtwork
-        self.network.draw_network(self.network.id, draw_dimension=True)
+        self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)

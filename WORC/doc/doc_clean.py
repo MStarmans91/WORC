@@ -27,6 +27,7 @@ def clean():
 
     autogen_path = doc_path / 'autogen'
     clean_dir(autogen_path)
+    clean_dir(autogen_path / 'config')
 
 
 def clean_dir(directory):

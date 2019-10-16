@@ -17,6 +17,7 @@
 
 import SimpleITK as sitk
 import fastr
+from fastr.api import ResourceLimit
 import numpy as np
 import os
 import WORC.addexceptions as WORCexceptions
@@ -30,19 +31,19 @@ class Transformix(object):
         self.TransformParameterMap = None
 
     def create_network(self):
-        self.network = fastr.Network(id_="transformix")
+        self.network = fastr.create_network(id="transformix")
 
-        self.MovingImageSource = self.network.create_source('ITKImageFile', id_='MovingImage')
-        self.ParameterMapSource = self.network.create_source('ElastixTransformFile', id_='ParameterFile')
+        self.MovingImageSource = self.network.create_source('ITKImageFile', id='MovingImage')
+        self.ParameterMapSource = self.network.create_source('ElastixTransformFile', id='ParameterFile')
 
-        self.transformix_node = self.network.create_node('transformix_dev', id_='transformix')
+        self.transformix_node = self.network.create_node('elastix_dev/transformix_dev:4.9-dev-wyke', tool_version='0.2', id='transformix')
         self.transformix_node.inputs['image'] = self.MovingImageSource.output
         self.transformix_node.inputs['transform'] = self.ParameterMapSource.output
 
-        self.outimage = self.network.create_sink('ITKImageFile', id_='sink_image')
+        self.outimage = self.network.create_sink('ITKImageFile', id='sink_image')
         self.outimage.inputs['input'] = self.transformix_node.outputs['image']
 
-        self.network.draw_network(img_format='svg')
+        self.network.draw(file_path='transformix.svg')
         self.network.dumpf('{}.json'.format(self.network.id), indent=2)
 
     def execute(self):

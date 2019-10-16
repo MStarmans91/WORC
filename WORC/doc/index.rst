@@ -53,7 +53,7 @@ WORC has been used in the following studies:
 
     `Jose M. Castillo T., Martijn P. A. Starmans, Ivo Schoots, Wiro J. Niessen, Stefan Klein, Jifke F. Veenland. "CLASSIFICATION OF PROSTATE CANCER: HIGH GRADE VERSUS LOW GRADE USING A RADIOMICS APPROACH." IEEE International Symposium on Biomedical Imaging (ISBI) 2019. <https://embs.papercept.net/conferences/conferences/ISBI19/program/ISBI19_ContentListWeb_3.html>`_
 
-WORC is made possible by contributions from the following people: Martijn Starmans, and Stefan Klein
+WORC is made possible by contributions from the following people: Martijn Starmans, Thomas Phil, and Stefan Klein
 
 
 WORC Documentation

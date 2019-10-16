@@ -22,9 +22,10 @@ from WORC.classification.SearchCV import RandomizedSearchCVfastr, RandomizedSear
 
 
 def random_search_parameters(features, labels, N_iter, test_size,
-                             param_grid, scoring_method,
+                             param_grid, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
-                             n_cores=1, fastr_plugin=None):
+                             n_cores=1, fastr_plugin=None, maxlen=100,
+                             ranking_score='test_score'):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
     randomized search.
@@ -58,10 +59,10 @@ def random_search_parameters(features, labels, N_iter, test_size,
     regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
     if any(clf in regressors for clf in param_grid['classifiers']):
         # We cannot do a stratified shuffle split with regression
-        cv = ShuffleSplit(n_splits=5, test_size=test_size,
+        cv = ShuffleSplit(n_splits=n_splits, test_size=test_size,
                           random_state=random_state)
     else:
-        cv = StratifiedShuffleSplit(n_splits=5, test_size=test_size,
+        cv = StratifiedShuffleSplit(n_splits=n_splits, test_size=test_size,
                                     random_state=random_state)
 
     if use_fastr:
@@ -70,14 +71,20 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                                 scoring=scoring_method,
                                                 n_jobs=n_cores,
                                                 n_jobspercore=n_jobspercore,
+                                                maxlen=maxlen,
                                                 verbose=1, cv=cv,
-                                                fastr_plugin=fastr_plugin)
+                                                fastr_plugin=fastr_plugin,
+                                                ranking_score=ranking_score)
     else:
         random_search = RandomizedSearchCVJoblib(param_distributions=param_grid,
                                                  n_iter=N_iter,
                                                  scoring=scoring_method,
                                                  n_jobs=n_cores,
-                                                 verbose=1, cv=cv)
+                                                 n_jobspercore=n_jobspercore,
+                                                 maxlen=maxlen,
+                                                 verbose=1, cv=cv,
+                                                 fastr_plugin=fastr_plugin,
+                                                 ranking_score=ranking_score)
     random_search.fit(features, labels)
     print("Best found parameters:")
     for i in random_search.best_params_:

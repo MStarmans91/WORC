@@ -1,6 +1,15 @@
 plotting Package
 ================
 
+:mod:`plotting` Package
+-----------------------
+
+.. automodule:: WORC.plotting
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`compute_CI` Module
 ------------------------
 
@@ -32,15 +41,6 @@ plotting Package
 ----------------------
 
 .. automodule:: WORC.plotting.plot_SVM
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :special-members:
-
-:mod:`plot_SVR` Module
-----------------------
-
-.. automodule:: WORC.plotting.plot_SVR
     :members:
     :undoc-members:
     :show-inheritance:

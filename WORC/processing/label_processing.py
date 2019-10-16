@@ -37,6 +37,9 @@ def load_labels(label_file, label_type):
         dict: A dict containing 'patient_IDs', 'label' and
          'label_type'
     """
+    if not os.path.exists(label_file):
+        raise ae.WORCKeyError(f'File {label_file} does not exist!')
+        
     _, extension = os.path.splitext(label_file)
     if extension == '.txt':
         label_names, patient_IDs, label_status = load_label_txt(

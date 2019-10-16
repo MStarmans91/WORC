@@ -95,7 +95,7 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
                                  pfiles,
                                  image_features)
         except ValueError as e:
-            message = e.message + '. Please take a look at your labels' +\
+            message = str(e) + '. Please take a look at your labels' +\
                 ' file and make sure it is formatted correctly. ' +\
                 'See also https://github.com/MStarmans91/WORC/wiki/The-WORC-configuration#genetics.'
             raise WORCexceptions.WORCValueError(message)

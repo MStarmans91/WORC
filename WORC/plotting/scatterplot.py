@@ -18,11 +18,11 @@
 try:
     import matplotlib.pyplot as plt
 except ImportError:
-    print("[PREDICT Warning] Cannot use scatterplot function, as _tkinter is not installed")
+    print("[WORC Warning] Cannot use scatterplot function, as _tkinter is not installed")
 
 import pandas as pd
 import argparse
-import genetics.genetic_processing as gp
+import WORC.processing.label_processing as lp
 import os
 import glob
 from natsort import natsorted
@@ -57,27 +57,25 @@ def main():
         args.feat = glob.glob(args.feat + '/features_*.hdf5')
         args.feat = natsorted(args.feat)
 
+        make_scatterplot(args.feat, args.classs, args.lab[0], args.lab[1],
+                         args.out)
+
+
+def make_scatterplot(features, label_file, feature_label_1, feature_label_2,
+                     output):
     # Read and stack the features
+    featname = [feature_label_1, feature_label_2]
     image_features_temp = list()
-    for i_feat in range(len(args.feat)):
-        feat = dict()
-        feat_temp = pd.read_hdf(args.feat[i_feat])
-        feat_temp = feat_temp.image_features
-
-        for feattype in feat_temp.keys():
-            feat_type = feat_temp[feattype]
-            for subtype in feat_type.keys():
-                subfeat = feat_type[subtype]
-                for k in subfeat.keys():
-                    feat[k] = subfeat[k]
-
-        image_features_temp.append(feat)
+    for i_feat in range(len(features)):
+        feat_temp = pd.read_hdf(features[i_feat])
+        feat_temp = {k: v for k, v in zip(feat_temp.feature_labels, feat_temp.feature_values) if k in featname}
+        image_features_temp.append(feat_temp)
 
     # Get the mutation labels and patient IDs
-    mutation_type = [['GP']]
-    mutation_data, image_features = gp.findmutationdata(args.classs,
+    mutation_type = [['MDM2']]
+    mutation_data, image_features = gp.findmutationdata(label_file,
                                                         mutation_type,
-                                                        args.feat,
+                                                        features,
                                                         image_features_temp)
 
     image_features = image_features.tolist()
@@ -86,17 +84,16 @@ def main():
     feat2_c0 = list()
     feat1_c1 = list()
     feat2_c1 = list()
-    mutation_label = mutation_data['mutation_label'].tolist()[0]
+    mutation_label = mutation_data['label'].tolist()[0]
     patient_IDs = mutation_data['patient_IDs'].tolist()
 
     for imfeat, label, pid in zip(image_features, mutation_label, patient_IDs):
-        print imfeat[args.lab[0]], pid
         if label[0] == 0:
-            feat1_c0.append(imfeat[args.lab[0]])
-            feat2_c0.append(imfeat[args.lab[1]])
+            feat1_c0.append(imfeat[feature_label_1])
+            feat2_c0.append(imfeat[feature_label_2])
         else:
-            feat1_c1.append(imfeat[args.lab[0]])
-            feat2_c1.append(imfeat[args.lab[1]])
+            feat1_c1.append(imfeat[feature_label_1])
+            feat2_c1.append(imfeat[feature_label_2])
 
     # Make a scatter plot
     f = plt.figure()
@@ -104,16 +101,16 @@ def main():
     subplot.plot(feat1_c0, feat2_c0, linestyle='', ms=12, marker='o', color='navy')
     subplot.plot(feat1_c1, feat2_c1, linestyle='', ms=12, marker='x', color='red')
     # NOTE: arbitrary limits!
-    plt.xlim([0, 10])
-    plt.ylim([0, 10])
-    plt.xlabel(args.lab[0])
-    plt.ylabel(args.lab[1])
+    # plt.xlim([0, 10])
+    # plt.ylim([0, 10])
+    plt.xlabel(feature_label_1)
+    plt.ylabel(feature_label_2)
     plt.title('Feature scatter plot')
     plt.legend()
-    plt.show()
+    # plt.show()
 
-    f.savefig(args.out)
-    print(("Snapshot saved as {} !").format(args.out))
+    f.savefig(output)
+    print(("Scatterplot saved as {} !").format(output))
 
 
 if __name__ == '__main__':

@@ -1,10 +1,28 @@
 classification Package
 ======================
 
+:mod:`classification` Package
+-----------------------------
+
+.. automodule:: WORC.classification
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`AdvancedSampler` Module
 -----------------------------
 
 .. automodule:: WORC.classification.AdvancedSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`ObjectSampler` Module
+---------------------------
+
+.. automodule:: WORC.classification.ObjectSampler
     :members:
     :undoc-members:
     :show-inheritance:
@@ -32,6 +50,15 @@ classification Package
 ----------------------------------
 
 .. automodule:: WORC.classification.construct_classifier
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`createfixedsplits` Module
+-------------------------------
+
+.. automodule:: WORC.classification.createfixedsplits
     :members:
     :undoc-members:
     :show-inheritance:
@@ -77,6 +104,15 @@ classification Package
 ------------------------------------
 
 .. automodule:: WORC.classification.parameter_optimization
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`regressors` Module
+------------------------
+
+.. automodule:: WORC.classification.regressors
     :members:
     :undoc-members:
     :show-inheritance:

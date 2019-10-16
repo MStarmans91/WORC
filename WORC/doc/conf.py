@@ -26,6 +26,7 @@ if on_rtd:
     print('[conf.py] On Read the Docs')
 
 from generate_modules import recurse_tree
+from generate_config import generate_config_doc
 from doc_clean import clean
 
 # -- General configuration -----------------------------------------------------
@@ -270,6 +271,9 @@ excludes = [
     os.path.abspath(os.path.join(rootpath, 'examples')),
 ]
 recurse_tree(rootpath, excludes, opts)
+
+print('[conf.py] python generate_config.py')
+generate_config_doc()
 
 print('[conf.py] Done...')
 print('[conf.py] Found files in curdir: {}'.format(os.listdir('.')))

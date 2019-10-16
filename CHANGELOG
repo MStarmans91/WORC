@@ -6,6 +6,72 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.1.0 - 2019-10-16
+------------------
+
+Added
+~~~~~~~
+- Thresholding option in plot_SVM.
+- NPV (Negative Preditive Value) to classification metrics.
+- Facade for easier interaction with WORC.
+- Thresholding option in plot_SVM.
+- Function to create fixed splits for cross validation.
+- n_splits parameter for train-test cross validation.
+- Added generalization score.
+- Parameter to choose how many of the optimal settings to save (maxlen).
+- Option to combine multiple onevsrest models in plot_SVM.
+- StatsticalTestThreshold feature selection for multilabel problems.
+- Support for test sets in which only one class is present in various
+  plotting functions and the metrics.
+- Installation: create fastr home if it does not exist yet.
+- Boostrapping as performance evaluation in plot_SVM.
+- Confidence intervals for boostrapping based on percentile.
+- Catch for if patient is in the test set, but not the overall label set.
+- Downloader for downloading example datasets.
+- ReadTheDocs.yml for configuration of documentation.
+- Unit test included in Travis.
+- Various detectors.
+
+Changed
+~~~~~~~
+- Plot_SVR is removed: it's now embedded in plot_SVM.
+- Moved statistical feature selection to last step in fit and score.
+- Also the minimum train and validation score are now saved.
+- Put scaler at top of fitandscore function.
+- Make link in file conversion if output is same format as input.
+- Sort keys in performance output JSON.
+- VarianceThreshold features selection on by default.
+- Removed grid_scores from SearchCV as support is dropped in sklearn > 0.20
+- Renamed IntermediateFacade to SimpleWORC
+- Use inspect to find packagedir
+
+Fixed
+~~~~~
+- Metric computation can now handle it when both the truth and the predicted
+  labels are from a single class.
+- Plotting module now correctly initialized.
+- Plot_SVM now also works properly for regression.
+- Masks for ROI normalization now properly added.
+- Preprocessing: mask needed to be cast to binary.
+- Failed workflows now return nan instead of zero for performance.
+- Several bugs in multilabel performance evaluation
+- Ring in segmentix was in sagital instead of axial direction.
+- Added replacenan in features before applying SMOTE.
+- Metadata test was not passed to calcfeatures: bugfix.
+- Bugfix: overide labels in facade when predict_labels is called.
+- Several bugfixes in the overrides in the facade configbuilder.
+- Various print commands converted to Python3: .format prints were still
+  left and sometimes buggy.
+- StatisticalTestFeatures and PlotRankedScores tools only accepted cardinality
+  of 1.
+- Bugfixes in many plotting functions: opening files with 'w' instead of 'wb'
+  due to python3 conversion, Compatibility issues with plot_SVM due to
+  conversion.
+- Except error when Grahpviz is not installed.
+- Symlinking in worccastcovert not supported by Windows, reverted to copying.
+- Bugfix in create_ensemble in SearchCV when using ensemble = 1.
+
+
 3.0.0 - 2019-05-08
 ------------------
 
