@@ -12,7 +12,7 @@ install:
 - python setup.py -q install
 
 script:
-- python ./tests/tests.py
+- python ./tests/unit_test.py
 
 notifications:
   slack:

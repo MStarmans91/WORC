@@ -9,14 +9,18 @@ import platform
 class AbstractDetector(ABC):
     # noinspection PyBroadException
     def do_detection(self, *args, **kwargs):
-        print(self.is_detected(*args, **kwargs))
         try:
-            return self.is_detected(*args, **kwargs)
+            result = self._is_detected(*args, **kwargs)
         except:
-            return False
+            result = False
+        print(self._generate_detector_message(result))
+        return result
+
+    def _generate_detector_message(self, detected_Value):
+        return f"{self.__class__.__name__} detected {detected_Value}."
 
     @abstractmethod
-    def is_detected(self, *args, **kwargs):
+    def _is_detected(self, *args, **kwargs):
         pass
 
 
@@ -24,7 +28,7 @@ class CsvDetector(AbstractDetector):
     def __init__(self, csv_file_path):
         self._csv_file_path = csv_file_path
 
-    def is_detected(self, *args, **kwargs):
+    def _is_detected(self, *args, **kwargs):
         try:
             with open(self._csv_file_path, newline='') as csvfile:
                 start = csvfile.read(4096)
@@ -40,8 +44,8 @@ class CsvDetector(AbstractDetector):
 
 
 class CartesiusClusterDetector(AbstractDetector):
-    def is_detected(self):
-        if LinuxDetector().is_detected():
+    def _is_detected(self):
+        if LinuxDetector()._is_detected():
             try:
                 if 'cartesius' in Path('/etc/hosts').read_text():
                     return True
@@ -51,8 +55,8 @@ class CartesiusClusterDetector(AbstractDetector):
 
 
 class BigrClusterDetector(AbstractDetector):
-    def is_detected(self):
-        if LinuxDetector().is_detected():
+    def _is_detected(self):
+        if LinuxDetector()._is_detected():
             try:
                 if 'bigr-cluster' in Path('/etc/hosts').read_text():
                     return True
@@ -62,7 +66,7 @@ class BigrClusterDetector(AbstractDetector):
 
 
 class HostnameDetector(AbstractDetector):
-    def is_detected(self):
+    def _is_detected(self):
         if platform.node() == self._expected_hostname:
             return True
         return False
@@ -72,7 +76,7 @@ class HostnameDetector(AbstractDetector):
 
 
 class LinuxDetector(AbstractDetector):
-    def is_detected(self):
+    def _is_detected(self):
         if platform.system().lower().strip() == 'linux':
             return True
         return False

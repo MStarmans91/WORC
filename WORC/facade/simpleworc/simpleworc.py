@@ -1,7 +1,7 @@
 from WORC import WORC
-
+import fastr.exceptions
 from pathlib import Path
-
+import inspect
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, CartesiusClusterDetector
 from WORC.facade.simpleworc.configbuilder import ConfigBuilder
 from .exceptions import PathNotFoundException, NoImagesFoundException, NoSegmentationsFoundException, \
@@ -24,6 +24,7 @@ def _error_buldozer(func):
         NoSegmentationsFoundException, InvalidCsvFileException,
         TypeError, ValueError, NotImplementedError
     ]
+    _valid_exceptions += [c[1] for c in inspect.getmembers(fastr.exceptions, inspect.isclass)]
 
     unexpected_exception_exception = Exception('A blackhole to another dimenstion has opened. This exception should never be thrown. Double check your code or make an issue on the WORC github so that we can fix this issue.')
 
