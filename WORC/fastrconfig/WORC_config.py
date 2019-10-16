@@ -36,9 +36,6 @@ mounts['apps'] = os.path.expanduser(os.path.join('~', 'apps'))
 mounts['output'] = os.path.expanduser(os.path.join('~', 'WORC', 'output'))
 mounts['test'] = os.path.join(packagedir, 'WORC', 'resources', 'fastr_tests')
 
-# FIXME: On Windows, we need to overwrite the default tempdir, as it is often locked due to lack of admin rights
-mounts['tmp'] = os.path.expanduser(os.path.join('~', 'WORC', 'tmp'))
-
 # The ITKFile type requires a preferred type when no specification is given.
 # We will set it to Nifti, but you may change this.
 preferred_types += ["NiftiImageFileCompressed"]
