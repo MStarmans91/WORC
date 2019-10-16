@@ -166,6 +166,10 @@ Identify our data structure: change the fields below accordingly if you use your
     # Give your experiment a name
     experiment_name = 'Example_STWStrategyHN4'
 
+    # Instead of the default tempdir, let's but the temporary output in a subfolder
+    # in the same folder as this script
+    tmpdir = os.path.join(script_path, 'WORC_' + experiment_name)
+
 The actual experiment
 `````````````````````
 
@@ -186,6 +190,9 @@ After defining the inputs, the following code can be used to run your first expe
 
     # Use the standard workflow for binary classification
     network.binary_classification(coarse=coarse)
+
+    # Set the temporary directory
+    experiment.set_tmpdir(tmpdir)
 
     # Run the experiment!
     network.execute()
@@ -252,6 +259,14 @@ Some things we would advice to always do:
       coarse = False
       network.binary_classification(coarse=coarse)
 
+.. note:: This will result in more computation time. We therefore recommmend
+  to run this script on either a cluster or high performance PC. If so,
+  you may change the execution to use multiple cores to speed up computation
+  just before before ``experiment.execute()``:
+
+    .. code-block:: python
+
+          experiment.set_multicore_execution()
 
 * Add extensive evaluation: ``network.add_evaluation()`` before ``network.execute()``:
 

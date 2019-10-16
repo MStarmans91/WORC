@@ -92,7 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">3.1.0 - 2019-10-15</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3.1.0 - 2019-10-16</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
@@ -208,7 +208,7 @@
 <p>The format is based on <a class="reference external" href="http://keepachangelog.com/">Keep a Changelog</a>
 and this project adheres to <a class="reference external" href="http://semver.org/">Semantic Versioning</a></p>
 <div class="section" id="id1">
-<h2>3.1.0 - 2019-10-15<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>3.1.0 - 2019-10-16<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -230,6 +230,8 @@ plotting functions and the metrics.</p></li>
 <li><p>Catch for if patient is in the test set, but not the overall label set.</p></li>
 <li><p>Downloader for downloading example datasets.</p></li>
 <li><p>ReadTheDocs.yml for configuration of documentation.</p></li>
+<li><p>Unit test included in Travis.</p></li>
+<li><p>Various detectors.</p></li>
 </ul>
 </div>
 <div class="section" id="changed">
@@ -244,6 +246,7 @@ plotting functions and the metrics.</p></li>
 <li><p>VarianceThreshold features selection on by default.</p></li>
 <li><p>Removed grid_scores from SearchCV as support is dropped in sklearn &gt; 0.20</p></li>
 <li><p>Renamed IntermediateFacade to SimpleWORC</p></li>
+<li><p>Use inspect to find packagedir</p></li>
 </ul>
 </div>
 <div class="section" id="fixed">
@@ -269,6 +272,9 @@ of 1.</p></li>
 <li><p>Bugfixes in many plotting functions: opening files with ‘w’ instead of ‘wb’
 due to python3 conversion, Compatibility issues with plot_SVM due to
 conversion.</p></li>
+<li><p>Except error when Grahpviz is not installed.</p></li>
+<li><p>Symlinking in worccastcovert not supported by Windows, reverted to copying.</p></li>
+<li><p>Bugfix in create_ensemble in SearchCV when using ensemble = 1.</p></li>
 </ul>
 </div>
 </div>

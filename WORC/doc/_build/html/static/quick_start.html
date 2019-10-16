@@ -334,6 +334,10 @@ a subset of 20 patients in this folder. You can change this settings if you like
 
 <span class="c1"># Give your experiment a name</span>
 <span class="n">experiment_name</span> <span class="o">=</span> <span class="s1">&#39;Example_STWStrategyHN4&#39;</span>
+
+<span class="c1"># Instead of the default tempdir, let&#39;s but the temporary output in a subfolder</span>
+<span class="c1"># in the same folder as this script</span>
+<span class="n">tmpdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">script_path</span><span class="p">,</span> <span class="s1">&#39;WORC_&#39;</span> <span class="o">+</span> <span class="n">experiment_name</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -353,6 +357,9 @@ a subset of 20 patients in this folder. You can change this settings if you like
 
 <span class="c1"># Use the standard workflow for binary classification</span>
 <span class="n">network</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
+
+<span class="c1"># Set the temporary directory</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">set_tmpdir</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span>
 
 <span class="c1"># Run the experiment!</span>
 <span class="n">network</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
@@ -419,6 +426,18 @@ or advanced tutorials on <a class="reference external" href="https://github.com/
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="n">network</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This will result in more computation time. We therefore recommmend
+to run this script on either a cluster or high performance PC. If so,
+you may change the execution to use multiple cores to speed up computation
+just before before <code class="docutils literal notranslate"><span class="pre">experiment.execute()</span></code>:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span><span class="o">.</span><span class="n">set_multicore_execution</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 <ul class="simple">
 <li><p>Add extensive evaluation: <code class="docutils literal notranslate"><span class="pre">network.add_evaluation()</span></code> before <code class="docutils literal notranslate"><span class="pre">network.execute()</span></code>:</p></li>

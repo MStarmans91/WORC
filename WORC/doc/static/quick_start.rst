@@ -166,6 +166,10 @@ Identify our data structure: change the fields below accordingly if you use your
     # Give your experiment a name
     experiment_name = 'Example_STWStrategyHN4'
 
+    # Instead of the default tempdir, let's but the temporary output in a subfolder
+    # in the same folder as this script
+    tmpdir = os.path.join(script_path, 'WORC_' + experiment_name)
+
 The actual experiment
 `````````````````````
 
@@ -186,6 +190,9 @@ After defining the inputs, the following code can be used to run your first expe
 
     # Use the standard workflow for binary classification
     network.binary_classification(coarse=coarse)
+
+    # Set the temporary directory
+    experiment.set_tmpdir(tmpdir)
 
     # Run the experiment!
     network.execute()

@@ -178,7 +178,6 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
-<span class="kn">import</span> <span class="nn">xlrd</span>
 <span class="kn">from</span> <span class="nn">.parameter_optimization</span> <span class="k">import</span> <span class="n">random_search_parameters</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.regressors</span> <span class="k">import</span> <span class="n">regressors</span>
@@ -454,8 +453,7 @@
                                                              <span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">])</span>
 
             <span class="c1"># Create an ensemble if required</span>
-            <span class="k">if</span> <span class="n">ensemble</span><span class="p">[</span><span class="s1">&#39;Use&#39;</span><span class="p">]:</span>
-                <span class="n">trained_classifier</span><span class="o">.</span><span class="n">create_ensemble</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">)</span>
+            <span class="n">trained_classifier</span><span class="o">.</span><span class="n">create_ensemble</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">ensemble</span><span class="p">[</span><span class="s1">&#39;Use&#39;</span><span class="p">])</span>
 
             <span class="c1"># We only want to save the feature values and one label array</span>
             <span class="n">X_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">]</span>

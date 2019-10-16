@@ -17,7 +17,7 @@ env:
   - WORCDEBUG=true
 
 script:
-- python WORCTutorial/WORC_tutorial_simple.py
+- python WORCTutorial/WORCTutorialSimple.py
 
 notifications:
   slack:

@@ -1053,7 +1053,11 @@
             <span class="c1"># Simply take the top50 best hyperparameters</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Creating ensemble using top {str(method)} individual classifiers.&#39;</span><span class="p">)</span>
-            <span class="n">ensemble</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># Next functions expect list</span>
+                <span class="n">ensemble</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ensemble</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;FitNumber&#39;</span><span class="p">:</span>
             <span class="c1"># Use optimum number of models</span>

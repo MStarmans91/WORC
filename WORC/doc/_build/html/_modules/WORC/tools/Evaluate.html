@@ -177,6 +177,7 @@
 <span class="kn">import</span> <span class="nn">fastr</span>
 <span class="kn">from</span> <span class="nn">fastr.api</span> <span class="k">import</span> <span class="n">ResourceLimit</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">graphviz</span>
 
 <span class="c1"># NOTE: Very important to give images and segmentations as dict with patient names!</span>
 
@@ -475,7 +476,10 @@
 <div class="viewcode-block" id="Evaluate.execute"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Execute the network through the fastr.network.execute command. &quot;&quot;&quot;</span>
         <span class="c1"># Draw and execute nwtwork</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">draw_dimensions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">draw_dimensions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">ExecutableNotFound</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Graphviz executable not found: not drawing network diagram. MAke sure the Graphviz executables are on your systems PATH.&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">,</span> <span class="n">execution_plugin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_plugin</span><span class="p">,</span> <span class="n">tmpdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span></div></div>
 </pre></div>
 
