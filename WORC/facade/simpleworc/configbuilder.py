@@ -57,13 +57,13 @@ class ConfigBuilder():
                 'texture_Gabor': 'False',
                 'vessel': 'False',
                 'log': 'False',
-                'phase': 'False'
+                'phase': 'False',
             },
             'SelectFeatGroup': {
                 'texture_Gabor_features': 'False',
                 'log_features': 'False',
                 'vessel_features': 'False',
-                'phase_features': 'False'
+                'phase_features': 'False',
             },
             'CrossValidation': {'N_iterations': '3'},
             'HyperOptimization': {'N_iterations': '1000',
@@ -80,13 +80,13 @@ class ConfigBuilder():
                 'texture_Gabor': 'True',
                 'vessel': 'True',
                 'log': 'True',
-                'phase': 'True'
+                'phase': 'True',
             },
             'SelectFeatGroup': {
                 'texture_Gabor_features': 'True, False',
                 'log_features': 'True, False',
                 'vessel_features': 'True, False',
-                'phase_features': 'True, False'
+                'phase_features': 'True, False',
             },
             'CrossValidation': {'N_iterations': '100'},
             'HyperOptimization': {'N_iterations': '100000',
@@ -114,7 +114,7 @@ class ConfigBuilder():
                     'texture_Gabor': 'False',
                     'vessel': 'False',
                     'log': 'False',
-                    'phase': 'False'
+                    'phase': 'False',
                     'texture_LBP': 'False',
                     'texture_GLCMMS': 'False',
                     'texture_GLRLM': 'False',
@@ -124,7 +124,7 @@ class ConfigBuilder():
                     'texture_Gabor_features': 'False',
                     'log_features': 'False',
                     'vessel_features': 'False',
-                    'phase_features': 'False'
+                    'phase_features': 'False',
                 },
                 'CrossValidation': {'N_iterations': '2'},
                 'HyperOptimization': {'N_iterations': '10',
