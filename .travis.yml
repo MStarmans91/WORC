@@ -16,6 +16,7 @@ matrix:
         - python -m pip install --upgrade pip
         - pip3 install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
         - pip3 install -r requirements.txt
+        - pip3 install "python-dateutil<=2.8.0" # Recent 2.8.1 release gives issues
       env:
         - PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - WORCDEBUG=true
@@ -33,6 +34,7 @@ before_install:
 
 install:
 - pip install -r requirements.txt
+- pip install "python-dateutil<=2.8.0" # Recent 2.8.1 release gives issues
 - python setup.py -q install
 - pip3 install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
 - pip install -e hg+https://bitbucket.org/bigr_erasmusmc/fastr@develop#egg=fastr
