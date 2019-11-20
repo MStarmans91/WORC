@@ -12,7 +12,7 @@ Unreleased
 Added
 ~~~~~~~
 - Travis continuous integration for Windows
-
+- Removed RT Struct Reader
 
 3.1.0 - 2019-10-16
 ------------------
