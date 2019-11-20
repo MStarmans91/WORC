@@ -24,7 +24,7 @@ matrix:
       - python setup.py -q install
       - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
       script:
-      - python3 WORCTutorial/WORCTutorialSimple.py
+      - python WORCTutorial/WORCTutorialSimple.py
 
 # ===== Linux ======
 before_install:
