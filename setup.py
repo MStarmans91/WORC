@@ -79,7 +79,10 @@ class MyInstall(install):
     def run(self):
         # Determine the fastr config path: create if non-existent
         if not os.path.exists(fastr_home):
+            print('[setup.py] Fastr home folder not detected: creating.')
             os.makedirs(fastr_home)
+        else:
+            print('[setup.py] Fastr home folder detected.')
         install.run(self)
 
 
