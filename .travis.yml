@@ -30,7 +30,7 @@ matrix:
       language: python # 'language: python' is an error on Travis CI Windows
       before_install:
       - sudo apt-get -qq update
-      - sudo apt-get -qq -y install git\
+      - sudo apt-get -qq -y install git
       - pip install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
       env:
         - WORCDEBUG=true
