@@ -1,6 +1,7 @@
+# ===== Main testing: Linux ======
 language: python
-# ===== Linux ======
 dist: bionic
+
 python:
   - 3.7
 
@@ -23,27 +24,26 @@ matrix:
       install:
       - python setup.py -q install
       - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
-      script:
-      - python WORCTutorial/WORCTutorialSimple.py
+  include:
+    - name: "Linux"
+      dist: bionic
+      language: python # 'language: python' is an error on Travis CI Windows
+      before_install:
+      - sudo apt-get -qq update
+      - sudo apt-get -qq -y install git\
+      - pip install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
+      env:
+        - WORCDEBUG=true
+      install:
+      - pip install -r requirements.txt
+      - pip install "python-dateutil<=2.8.0" # Recent 2.8.1 release gives issues
+      - python setup.py -q install
+      - pip install -e hg+https://bitbucket.org/bigr_erasmusmc/fastr@develop#egg=fastr
+      - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
 
-# ===== Linux ======
-before_install:
-- sudo apt-get -qq update
-- sudo apt-get -qq -y install git
-
-install:
-- pip install -r requirements.txt
-- pip install "python-dateutil<=2.8.0" # Recent 2.8.1 release gives issues
-- python setup.py -q install
-- pip3 install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
-- pip install -e hg+https://bitbucket.org/bigr_erasmusmc/fastr@develop#egg=fastr
-- git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
-
-env:
-  - WORCDEBUG=true
-
-script:
-- python WORCTutorial/WORCTutorialSimple.py
+# 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
+# 'python3' is a 'command not found' error on Windows but 'py' works on Windows only. Also include alternate path separator options.
+script: python WORCTutorial/WORCTutorialSimple.py || python3 WORCTutorial/WORCTutorialSimple.py || python WORCTutorial\WORCTutorialSimple.py || python3 WORCTutorial\WORCTutorialSimple.py
 
 notifications:
   slack:

@@ -69,10 +69,14 @@ entry_points = {
     ]
 }
 
-# Determine the fastr config path: create if non-existent
+
+# NOTE: fastr home folder required to move configuration there, so run this before WORC installation
 fastr_home = os.path.expanduser(os.path.join('~', '.fastr'))
-if not os.path.exists(fastr_home):
-    os.makedirs(fastr_home)
+class MyInstall(install):
+    def run(self):
+        # Determine the fastr config path: create if non-existent
+        if not os.path.exists(fastr_home):
+            os.makedirs(fastr_home)
 
 config_d = os.path.join(fastr_home, 'config.d')
 worc_config = os.path.join('WORC', 'fastrconfig', 'WORC_config.py')
@@ -133,7 +137,7 @@ setup(
     install_requires=_requires,
     tests_require=_tests_require,
     test_suite='nose.collector',
-    cmdclass={'test': NoseTestCommand},
+    cmdclass={'test': NoseTestCommand, 'install': MyInstall},
     entry_points=entry_points,
     setup_requires=_requires
 )

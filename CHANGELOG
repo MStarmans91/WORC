@@ -14,6 +14,13 @@ Added
 - Travis continuous integration for Windows
 - Removed RT Struct Reader
 
+Fixed
+~~~~~
+- Under Windows, creation of the fastr home folder if it did not exist
+  did not work when using pip for installing. Moved to command line execution
+  in setup.py.
+
+
 3.1.0 - 2019-10-16
 ------------------
 
