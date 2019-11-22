@@ -26,8 +26,6 @@ matrix:
       - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
   include:
     - name: "Linux"
-      dist: bionic
-      language: python # 'language: python' is an error on Travis CI Windows
       before_install:
       - sudo apt-get -qq update
       - sudo apt-get -qq -y install git

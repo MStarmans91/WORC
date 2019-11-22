@@ -16,6 +16,7 @@
 import os
 import sys
 from setuptools.command.test import test as TestCommand
+from setuptools.command.install import install
 from setuptools import setup
 
 if sys.version_info < (3, 6):
