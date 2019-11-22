@@ -915,7 +915,10 @@ class WORC(object):
                 os.makedirs(os.path.dirname(cfile))
             with open(cfile, 'w') as configfile:
                 c.write(configfile)
-            self.fastrconfigs.append(cfile)
+
+            # BUG: Make path with pathlib to create windows double slashes
+            cfile = Path(self.fastr_tmpdir) / f"config_{self.name}_{num}.ini"
+            self.fastrconfigs.append(str(cfile.absolute()))
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
