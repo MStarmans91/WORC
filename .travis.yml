@@ -5,7 +5,7 @@ python:
   - 3.7
 
 # ===== Build for each OS ======
-matrix:
+jobs:
   include:
     - name: "Windows"
       os: windows
