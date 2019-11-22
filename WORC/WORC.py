@@ -27,6 +27,7 @@ from WORC.tools.Elastix import Elastix
 from WORC.tools.Evaluate import Evaluate
 from WORC.tools.Slicer import Slicer
 from WORC.detectors.detectors import DebugDetector
+from pathlib import Path
 
 
 class WORC(object):
