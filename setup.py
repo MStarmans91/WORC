@@ -71,13 +71,17 @@ entry_points = {
 }
 
 
-# NOTE: fastr home folder required to move configuration there, so run this before WORC installation
+# NOTE: fastr home folder required to move configuration there. Hence
+# make custom install command in order to override the normal insall to first
+# create the neccesary folder
 fastr_home = os.path.expanduser(os.path.join('~', '.fastr'))
 class MyInstall(install):
     def run(self):
         # Determine the fastr config path: create if non-existent
         if not os.path.exists(fastr_home):
             os.makedirs(fastr_home)
+        install.run(self)
+
 
 config_d = os.path.join(fastr_home, 'config.d')
 worc_config = os.path.join('WORC', 'fastrconfig', 'WORC_config.py')
