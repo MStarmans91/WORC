@@ -919,7 +919,7 @@ class WORC(object):
 
             # BUG: Make path with pathlib to create windows double slashes
             cfile = Path(self.fastr_tmpdir) / f"config_{self.name}_{num}.ini"
-            self.fastrconfigs.append(str(cfile.absolute()))
+            self.fastrconfigs.append(cfile.as_uri())
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
@@ -1028,6 +1028,9 @@ class WORC(object):
             print("\n Sink Data:")
             for k in self.sink_data.keys():
                 print(f"\t {k}: {self.sink_data[k]}.")
+
+            # When debugging, set the tempdir to the default of fastr
+            self.fastr_tmpdir = None
 
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 

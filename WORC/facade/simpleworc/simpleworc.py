@@ -77,7 +77,7 @@ class SimpleWORC():
         if len(images) == 0:
             raise NoImagesFoundException(f'{directory}{glob}{image_file_name}')
 
-        images_per_subject = {image.parent.name: str(image.absolute()) for image in images}
+        images_per_subject = {image.parent.name: image.as_uri() for image in images}
         if is_training:
             self._images_train.append(images_per_subject)
         else:
@@ -94,7 +94,7 @@ class SimpleWORC():
         if len(segmentations) == 0:
             raise NoSegmentationsFoundException(str(directory))
 
-        segmentations_per_subject = {image.parent.name: str(image.absolute()) for image in segmentations}
+        segmentations_per_subject = {image.parent.name: image.as_uri() for image in segmentations}
         if is_training:
             self._segmentations_train.append(segmentations_per_subject)
         else:
@@ -111,9 +111,9 @@ class SimpleWORC():
 
         # TODO: implement sanity check labels file e.g. is it a labels file and are there labels available
         if is_training:
-            self._labels_file_train = labels_file.absolute()
+            self._labels_file_train = labels_file.as_uri()
         else:
-            self._labels_file_test = labels_file.absolute()
+            self._labels_file_test = labels_file.as_uri()
 
     def semantics_from_this_file(self, file_path, is_training=True):
         semantics_file = Path(file_path).expanduser()
@@ -126,9 +126,9 @@ class SimpleWORC():
 
         # TODO: implement sanity check semantics file e.g. is it a semantics file and are there semantics available
         if is_training:
-            self._semantics_file_train = semantics_file.absolute()
+            self._semantics_file_train = semantics_file.as_uri()
         else:
-            self._semantics_file_test = semantics_file.absolute()
+            self._semantics_file_test = semantics_file.as_uri()
 
     def predict_labels(self, label_names: list):
         if not self._labels_file_train:
