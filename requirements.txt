@@ -1,5 +1,5 @@
 numpy>=1.16.3
-fastr>=3.1.1
+fastr>=3.1.3
 xnat>=0.2.2
 configparser>=3.5.0
 natsort>=5.0.1

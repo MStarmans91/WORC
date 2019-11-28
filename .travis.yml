@@ -22,7 +22,6 @@ matrix:
         - WORCDEBUG=true
       install:
       - python setup.py -q install
-      - pip install -e git+https://bitbucket.org/bigr_erasmusmc/fastr@develop#egg=fastr
       - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
       # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
       # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
@@ -38,7 +37,6 @@ matrix:
         - WORCDEBUG=true
       install:
       - python setup.py -q install
-      - pip install -e hg+https://bitbucket.org/bigr_erasmusmc/fastr@develop#egg=fastr
       - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
       # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
       # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
