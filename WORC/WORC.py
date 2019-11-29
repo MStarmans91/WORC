@@ -266,7 +266,9 @@ class WORC(object):
         config['SelectFeatGroup']['texture_GLCMMS_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLRLM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLSZM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLDZM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_NGTDM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_NGLDM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_LBP_features'] = 'True, False'
         config['SelectFeatGroup']['patient_features'] = 'False'
         config['SelectFeatGroup']['semantic_features'] = 'False'
@@ -274,6 +276,10 @@ class WORC(object):
         config['SelectFeatGroup']['log_features'] = 'False'
         config['SelectFeatGroup']['vessel_features'] = 'False'
         config['SelectFeatGroup']['phase_features'] = 'False'
+        config['SelectFeatGroup']['fractal_features'] = 'True, False'
+        config['SelectFeatGroup']['location_features'] = 'True, False'
+        config['SelectFeatGroup']['rgrd_features'] = 'True, False'
+        config['SelectFeatGroup']['wavelet_features'] = 'True, False'
 
         # Feature imputation
         config['Imputation'] = dict()

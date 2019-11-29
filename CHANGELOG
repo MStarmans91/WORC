@@ -6,6 +6,27 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+Unreleased
+------------------
+
+Added
+~~~~~~~
+- Support for Oncoradiomics RadiomiX tool
+- Groupwise Search includes GLDZM, Fractal, location, NGTDM, NGLDM, wavelet,
+  and rgrd features
+- SimpleWORC now also accepts features instead of images and segs as input
+- Preprocessor object to preprocess the features before any fitting algorithms
+  are ran. Mostly to detect possible faults/errors in the data.
+
+Changed
+~~~~~~~
+-
+
+Fixed
+~~~~~
+- KNN imputation gave an error if >80% of the feature values were missing.
+  Added preprocessing function to remove these features.
+
 3.1.1 - 2019-11-28
 ------------------
 

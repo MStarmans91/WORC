@@ -178,26 +178,26 @@ After defining the inputs, the following code can be used to run your first expe
 .. code-block:: python
 
     # Create a Simple WORC object
-    network = SimpleWORC(experiment_name)
+    experiment = SimpleWORC(experiment_name)
 
     # Set the input data according to the variables we defined earlier
-    network.images_from_this_directory(imagedatadir,
+    experiment.images_from_this_directory(imagedatadir,
                                  image_file_name=image_file_name)
-    network.segmentations_from_this_directory(imagedatadir,
+    experiment.segmentations_from_this_directory(imagedatadir,
                                         segmentation_file_name=segmentation_file_name)
-    network.labels_from_this_file(label_file)
-    network.predict_labels([label_name])
+    experiment.labels_from_this_file(label_file)
+    experiment.predict_labels([label_name])
 
     # Use the standard workflow for binary classification
-    network.binary_classification(coarse=coarse)
+    experiment.binary_classification(coarse=coarse)
 
     # Set the temporary directory
     experiment.set_tmpdir(tmpdir)
 
     # Run the experiment!
-    network.execute()
+    experiment.execute()
 
-.. note::  Precomputed features can be used instead of images and masks by instead using ``network.features_from_this_directory()`` in a similar fashion.
+.. note::  Precomputed features can be used instead of images and masks by instead using ``experiment.features_from_this_directory()`` in a similar fashion.
 
 Analysis of the results
 ```````````````````````
@@ -257,7 +257,7 @@ Some things we would advice to always do:
 .. code-block:: python
 
       coarse = False
-      network.binary_classification(coarse=coarse)
+      experiment.binary_classification(coarse=coarse)
 
 .. note:: This will result in more computation time. We therefore recommmend
   to run this script on either a cluster or high performance PC. If so,
@@ -268,8 +268,8 @@ Some things we would advice to always do:
 
           experiment.set_multicore_execution()
 
-* Add extensive evaluation: ``network.add_evaluation()`` before ``network.execute()``:
+* Add extensive evaluation: ``experiment.add_evaluation()`` before ``experiment.execute()``:
 
 .. code-block:: python
 
-      network.add_evaluation()
+      experiment.add_evaluation()

@@ -115,6 +115,7 @@ class WORCAssertionError(WORCError, AssertionError):
     """
     pass
 
+
 class WORCIndexError(WORCError, IndexError):
     """
     IndexError in the WORC system
