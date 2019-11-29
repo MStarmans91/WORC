@@ -52,7 +52,7 @@ class Preprocessor(object):
                 else:
                     self.selectcolumns.append(column)
 
-        def transform(self, X):
+        def transform(self, inputarray):
             '''
             Transform the inputarray to select only the features based on the
             result from the fit function.
@@ -63,4 +63,4 @@ class Preprocessor(object):
                     Array containing the items to use selection on. The type of
                     item in this list does not matter, e.g. floats, strings etc.
             '''
-            return X[:, self.selectcolumns]
+            return np.asarray([np.asarray(x)[self.selectcolumns].tolist() for x in inputarray])

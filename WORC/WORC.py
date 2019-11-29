@@ -1035,8 +1035,9 @@ class WORC(object):
             for k in self.sink_data.keys():
                 print(f"\t {k}: {self.sink_data[k]}.")
 
-            # When debugging, set the tempdir to the default of fastr
-            self.fastr_tmpdir = None
+            # When debugging, set the tempdir to the default of fastr + name
+            self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'],
+                                             self.name)
 
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 

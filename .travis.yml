@@ -26,8 +26,8 @@ matrix:
       # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
       # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
       script:
-      - python WORCTutorial/WORCTutorialSimple.py
-      - fastr trace C:\Users\travis\AppData\Local\Temp\fastr_WORC_Example_STWStrategyHN4_2019-11-29T12-48-32_esze2r2e\__sink_data__.json --sinks classification --samples all
+        - python WORCTutorial/WORCTutorialSimple.py
+        -fastr trace C:\Users\travis\AppData\Local\Temp\fastr_WORC_Example_STWStrategyHN4\__sink_data__.json --sinks classification --samples all
     - name: "Linux"
       before_install:
       - sudo apt-get -qq update
@@ -44,7 +44,7 @@ matrix:
       # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
       script:
       - python WORCTutorial/WORCTutorialSimple.py
-      - fastr trace /tmp/fastr_WORC_Example_STWStrategyHN4_2019-11-29T12-47-22_81a2jj7z/__sink_data__.json --sinks classification --samples all
+      - fastr trace /tmp/fastr_WORC_Example_STWStrategyHN4/__sink_data__.json --sinks classification --samples all
 
 notifications:
   slack:
