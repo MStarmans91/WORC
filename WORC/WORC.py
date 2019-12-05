@@ -26,6 +26,8 @@ import WORC.IOparser.config_WORC as config_io
 from WORC.tools.Elastix import Elastix
 from WORC.tools.Evaluate import Evaluate
 from WORC.tools.Slicer import Slicer
+from WORC.detectors.detectors import DebugDetector
+from pathlib import Path
 
 
 class WORC(object):
@@ -147,6 +149,9 @@ class WORC(object):
         self.CopyMetadata = True
         self.segmode = []
         self._add_evaluation = False
+
+        if DebugDetector().do_detection():
+            print(fastr.config)
 
     def defaultconfig(self):
         """Generate a configparser object holding all default configuration values.
@@ -911,7 +916,10 @@ class WORC(object):
                 os.makedirs(os.path.dirname(cfile))
             with open(cfile, 'w') as configfile:
                 c.write(configfile)
-            self.fastrconfigs.append(cfile)
+
+            # BUG: Make path with pathlib to create windows double slashes
+            cfile = Path(self.fastr_tmpdir) / f"config_{self.name}_{num}.ini"
+            self.fastrconfigs.append(cfile.as_uri())
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
@@ -1011,7 +1019,19 @@ class WORC(object):
         try:
             self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
         except graphviz.backend.ExecutableNotFound:
-            print('[WORC WARNING] Graphviz executable not found: not drawing network diagram. MAke sure the Graphviz executables are on your systems PATH.')
+            print('[WORC WARNING] Graphviz executable not found: not drawing network diagram. Make sure the Graphviz executables are on your systems PATH.')
+
+        if DebugDetector().do_detection():
+            print("Source Data:")
+            for k in self.source_data.keys():
+                print(f"\t {k}: {self.source_data[k]}.")
+            print("\n Sink Data:")
+            for k in self.sink_data.keys():
+                print(f"\t {k}: {self.sink_data[k]}.")
+
+            # When debugging, set the tempdir to the default of fastr
+            self.fastr_tmpdir = None
+
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 
     def add_evaluation(self, label_type):

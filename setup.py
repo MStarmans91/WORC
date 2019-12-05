@@ -1,4 +1,4 @@
-# Copyright 2011-2017 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016 - 2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 import os
 import sys
 from setuptools.command.test import test as TestCommand
+from setuptools.command.install import install
 from setuptools import setup
 
 if sys.version_info < (3, 6):
@@ -69,15 +70,6 @@ entry_points = {
     ]
 }
 
-# Determine the fastr config path: create if non-existent
-fastr_home = os.path.expanduser(os.path.join('~', '.fastr'))
-if not os.path.exists(fastr_home):
-    os.makedirs(fastr_home)
-
-config_d = os.path.join(fastr_home, 'config.d')
-worc_config = os.path.join('WORC', 'fastrconfig', 'WORC_config.py')
-
-
 class NoseTestCommand(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
@@ -92,7 +84,7 @@ class NoseTestCommand(TestCommand):
 
 setup(
     name='WORC',
-    version='3.1.0',
+    version='3.1.1',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',
@@ -129,7 +121,6 @@ setup(
                   'WORC': ['versioninfo'],
                   # If any package contains *.ini files, include them
                   'src': ['IOparser/*.ini']},
-    data_files=[(config_d, [worc_config])],
     install_requires=_requires,
     tests_require=_tests_require,
     test_suite='nose.collector',

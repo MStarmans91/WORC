@@ -1,23 +1,46 @@
-dist: bionic
+# ===== Main testing: Linux ======
 language: python
+dist: bionic
 python:
-  - "3.7"
+  - 3.7
 
-before_install:
-- sudo apt-get -qq update
-- sudo apt-get -qq -y install git
-
-install:
-- pip install -r requirements.txt
-- python setup.py -q install
-- pip install -e hg+https://bitbucket.org/bigr_erasmusmc/fastr@develop#egg=fastr
-- git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
-
-env:
-  - WORCDEBUG=true
-
-script:
-- python WORCTutorial/WORCTutorialSimple.py
+# ===== Build for each OS ======
+matrix:
+  include:
+    - name: "Windows"
+      os: windows
+      language: shell # 'language: python' is an error on Travis CI Windows
+      before_install:
+        - choco install python --version 3.7.4
+        - python --version
+        - python -m pip install --upgrade pip
+        - pip3 install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
+        - pip3 install -r requirements.txt
+        - pip3 install "python-dateutil<=2.8.0" # Recent 2.8.1 release gives issues
+      env:
+        - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        - WORCDEBUG=true
+      install:
+      - python setup.py -q install
+      - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
+      # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
+      # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
+      script: python WORCTutorial/WORCTutorialSimple.py
+    - name: "Linux"
+      before_install:
+      - sudo apt-get -qq update
+      - sudo apt-get -qq -y install git
+      - pip install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
+      - pip install -r requirements.txt
+      - pip install "python-dateutil<=2.8.0" # Recent 2.8.1 release gives issues
+      env:
+        - WORCDEBUG=true
+      install:
+      - python setup.py -q install
+      - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
+      # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
+      # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
+      script: python WORCTutorial/WORCTutorialSimple.py
 
 notifications:
   slack:

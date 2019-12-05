@@ -85,9 +85,9 @@ def download_subject(project, subject, datafolder, session, verbose=False):
         return False
 
     # Patient is included, so cleanup folder structure
-    os.rename(os.path.join(NIFTI_image_folder, 'image.nii.gz'),
+    shutil.move(os.path.join(NIFTI_image_folder, 'image.nii.gz'),
               os.path.join(outdir, 'image.nii.gz'))
-    os.rename(os.path.join(NIFTI_mask_folder, 'mask_GTV-1.nii.gz'),
+    shutil.move(os.path.join(NIFTI_mask_folder, 'mask_GTV-1.nii.gz'),
               os.path.join(outdir, 'mask.nii.gz'))
 
     for folder in glob(os.path.join(outdir, '*', 'scans')):
@@ -114,7 +114,7 @@ def download_project(project_name, xnat_url, datafolder, nsubjects=10,
         nsubjects = subjects_len
     else:
         nsubjects = min(nsubjects, subjects_len)
-        
+
     subjects_counter = 1
     downloaded_subjects_counter = 0
     for s in range(0, subjects_len):

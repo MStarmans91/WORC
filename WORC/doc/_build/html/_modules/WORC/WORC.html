@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.WORC &mdash; WORC 3.1.0 documentation</title>
+  <title>WORC.WORC &mdash; WORC 3.1.1 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.0
+                3.1.1
               </div>
             
           
@@ -184,6 +184,8 @@
 <span class="kn">from</span> <span class="nn">WORC.tools.Elastix</span> <span class="k">import</span> <span class="n">Elastix</span>
 <span class="kn">from</span> <span class="nn">WORC.tools.Evaluate</span> <span class="k">import</span> <span class="n">Evaluate</span>
 <span class="kn">from</span> <span class="nn">WORC.tools.Slicer</span> <span class="k">import</span> <span class="n">Slicer</span>
+<span class="kn">from</span> <span class="nn">WORC.detectors.detectors</span> <span class="k">import</span> <span class="n">DebugDetector</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 
 
 <div class="viewcode-block" id="WORC"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC">[docs]</a><span class="k">class</span> <span class="nc">WORC</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -304,7 +306,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">additions</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">CopyMetadata</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">segmode</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_evaluation</span> <span class="o">=</span> <span class="kc">False</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_evaluation</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WORC.defaultconfig"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC.defaultconfig">[docs]</a>    <span class="k">def</span> <span class="nf">defaultconfig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Generate a configparser object holding all default configuration values.</span>
@@ -1069,7 +1074,10 @@
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">cfile</span><span class="p">))</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">configfile</span><span class="p">:</span>
                 <span class="n">c</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">configfile</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">fastrconfigs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfile</span><span class="p">)</span>
+
+            <span class="c1"># BUG: Make path with pathlib to create windows double slashes</span>
+            <span class="n">cfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="s2">&quot;config_</span><span class="si">{self.name}</span><span class="s2">_</span><span class="si">{num}</span><span class="s2">.ini&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fastrconfigs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfile</span><span class="o">.</span><span class="n">as_uri</span><span class="p">())</span>
 
         <span class="c1"># Generate gridsearch parameter files if required</span>
         <span class="c1"># TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality</span>
@@ -1169,7 +1177,19 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">draw_dimensions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">ExecutableNotFound</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Graphviz executable not found: not drawing network diagram. MAke sure the Graphviz executables are on your systems PATH.&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Graphviz executable not found: not drawing network diagram. Make sure the Graphviz executables are on your systems PATH.&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Source Data:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{k}</span><span class="s2">: </span><span class="si">{self.source_data[k]}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Sink Data:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{k}</span><span class="s2">: </span><span class="si">{self.sink_data[k]}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># When debugging, set the tempdir to the default of fastr</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">,</span> <span class="n">execution_plugin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_plugin</span><span class="p">,</span> <span class="n">tmpdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="WORC.add_evaluation"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC.add_evaluation">[docs]</a>    <span class="k">def</span> <span class="nf">add_evaluation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label_type</span><span class="p">):</span>

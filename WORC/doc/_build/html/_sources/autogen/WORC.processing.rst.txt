@@ -10,15 +10,6 @@ processing Package
     :show-inheritance:
     :special-members:
 
-:mod:`RTStructReader` Module
-----------------------------
-
-.. automodule:: WORC.processing.RTStructReader
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :special-members:
-
 :mod:`classes` Module
 ---------------------
 

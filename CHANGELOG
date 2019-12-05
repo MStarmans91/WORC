@@ -6,6 +6,29 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.1.1 - 2019-11-28
+------------------
+
+Added
+~~~~~~~
+- Travis continuous integration for Windows.
+- Removed RT Struct Reader, as it was buggy and not used.
+
+Changed
+~~~~~~~
+- SimpleWORC now properly uses the fastr FileSystem plugin, instead
+  of supplying the absolute filepaths.
+
+Fixed
+~~~~~
+- Under Windows, creation of the fastr home folder if it did not exist
+  did not work when using pip for installing. We now use a new feature
+  of fastr to simply add the WORC folder to the fastr config
+  at WORC import time.
+- When debugging, override manual tempdir setting and always use default. On
+  Windows, Travis gives errors if the tempdir is not in a vfs mount.
+- Use shutil.move in the datadownloader, as os.rename could not overwrite files.
+
 3.1.0 - 2019-10-16
 ------------------
 
