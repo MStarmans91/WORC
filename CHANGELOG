@@ -20,7 +20,7 @@ Added
 
 Changed
 ~~~~~~~
-- Use entrypoint to append fastrconfig from WORC to fastr.
+- On runtime, copy config.d file if it does not exist yet.
 
 Fixed
 ~~~~~

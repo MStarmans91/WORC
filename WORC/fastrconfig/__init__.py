@@ -19,5 +19,4 @@ import os
 
 
 def get_fastr_config():
-    print(os.path.dirname(os.path.abspath(__file__)))
     return os.path.dirname(os.path.abspath(__file__))
