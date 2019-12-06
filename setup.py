@@ -16,7 +16,6 @@
 import os
 import sys
 from setuptools.command.test import test as TestCommand
-from setuptools.command.install import install
 from setuptools import setup
 
 if sys.version_info < (3, 6):
@@ -53,6 +52,7 @@ def scan_dir(path, prefix=None):
 
     return file_list
 
+
 # Determine the extra resources and scripts to pack
 resources_list = scan_dir('./WORC/resources')
 
@@ -66,9 +66,13 @@ else:
 # Set the entry point
 entry_points = {
     "console_scripts": [
-        "WORC = WORC.WORC:main",
-    ]
+        "WORC = WORC.WORC:main"
+    ],
+    "fastr.config": [
+        "WORC_config = WORC.fastrconfig:get_fastr_config"
+        ]
 }
+
 
 class NoseTestCommand(TestCommand):
     def finalize_options(self):
@@ -84,7 +88,7 @@ class NoseTestCommand(TestCommand):
 
 setup(
     name='WORC',
-    version='3.1.1',
+    version='3.1.2',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',

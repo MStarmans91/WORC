@@ -276,10 +276,10 @@ class WORC(object):
         config['SelectFeatGroup']['log_features'] = 'False'
         config['SelectFeatGroup']['vessel_features'] = 'False'
         config['SelectFeatGroup']['phase_features'] = 'False'
-        config['SelectFeatGroup']['fractal_features'] = 'True, False'
-        config['SelectFeatGroup']['location_features'] = 'True, False'
-        config['SelectFeatGroup']['rgrd_features'] = 'True, False'
-        config['SelectFeatGroup']['wavelet_features'] = 'True, False'
+        config['SelectFeatGroup']['fractal_features'] = 'False'
+        config['SelectFeatGroup']['location_features'] = 'False'
+        config['SelectFeatGroup']['rgrd_features'] = 'False'
+        config['SelectFeatGroup']['wavelet_features'] = 'False'
 
         # Feature imputation
         config['Imputation'] = dict()

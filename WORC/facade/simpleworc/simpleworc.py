@@ -1,14 +1,32 @@
-from WORC import WORC
+#!/usr/bin/env python
+
+# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import fastr.exceptions
 from pathlib import Path
 import inspect
-from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, CartesiusClusterDetector
-from WORC.facade.simpleworc.configbuilder import ConfigBuilder
-from .exceptions import PathNotFoundException, NoImagesFoundException, NoSegmentationsFoundException, \
-    InvalidCsvFileException
-from .helpers import convert_radiomix_features
 import os
+from WORC import WORC
+from .helpers import convert_radiomix_features
+from .exceptions import PathNotFoundException, NoImagesFoundException, \
+    NoSegmentationsFoundException, InvalidCsvFileException
 from WORC.addexceptions import WORCKeyError
+from WORC.facade.simpleworc.configbuilder import ConfigBuilder
+from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
+    CartesiusClusterDetector
 
 
 def _for_all_methods(decorator):
@@ -72,7 +90,6 @@ class SimpleWORC():
         elif CartesiusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
 
-
     def features_from_this_directory(self, directory, feature_file_name='features.hdf5', glob='*/', is_training=True):
         directory = Path(directory).expanduser()
         if not directory.exists():
@@ -88,7 +105,6 @@ class SimpleWORC():
             self._features_train.append(features_per_subject)
         else:
             self._features_test.append(features_per_subject)
-
 
     def images_from_this_directory(self, directory, image_file_name='image.nii.gz', glob='*/', is_training=True):
         directory = Path(directory).expanduser()
@@ -230,7 +246,8 @@ class SimpleWORC():
 
         if self._radiomix_feature_file:
             # Convert radiomix features and use those as inputs
-            output_folder = os.path.join(fastr.config.mounts['tmp'], 'Radiomix_features')
+            output_folder = os.path.join(fastr.config.mounts['tmp'],
+                                         'Radiomix_features')
 
             # Check if output folder exists: otherwise create
             if not os.path.exists(output_folder):

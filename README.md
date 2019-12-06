@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master)](https://travis-ci.com/MStarmans91/WORC)
 
-# WORC v3.1.1
+# WORC v3.1.2
 
 ## Workflow for Optimal Radiomics Classification
 

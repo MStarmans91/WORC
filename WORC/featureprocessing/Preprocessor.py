@@ -39,7 +39,7 @@ class Preprocessor(object):
             for column in range(0, X.shape[1]):
                 nans = np.count_nonzero(np.isnan(X[:, column]))
                 missing_percentage = float(nans) / nrows
-                if  missing_percentage> 0.80:
+                if missing_percentage > 0.80:
                     if feature_labels is not None:
                         name = feature_labels[column]
                     else:

@@ -6,8 +6,17 @@ from WORC.addexceptions import WORCKeyError
 # All standard texture features accepted
 texture_features = ['GLCM', 'GLDZM', 'GLRLM', 'GLSZM', 'NGLDM', 'NGTDM']
 
+
 def convert_radiomix_features(input_file, output_folder):
-    ''' Convert .xlsx from RadiomiX to WORC compatible .hdf5 format'''
+    '''
+    Convert .xlsx from RadiomiX to WORC compatible .hdf5 format
+
+    Input:
+    --------------
+
+    input_file: .xlsx in which the feature are stored.
+    output_folder: folder in which features are stored
+    '''
 
     print('Converting .xlsx from RadiomiX to WORC compatible .hdf5 format...')
     # Check if output folder exists: otherwise create
@@ -51,10 +60,9 @@ def convert_radiomix_features(input_file, output_folder):
         else:
             raise WORCKeyError(f'Unknown feature {l}.')
 
-
     # Initiate labels for pandas file
     panda_labels = ['feature_values',
-                     'feature_labels']
+                    'feature_labels']
 
     # For each patient, convert features
     for i_patient in range(0, len(pids)):
