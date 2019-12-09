@@ -15,6 +15,7 @@ matrix:
         - python --version
         - python -m pip install --upgrade pip
         - pip3 install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
+        - pip3 install -r requirements.txt
       env:
         - PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - WORCDEBUG=true
@@ -33,6 +34,7 @@ matrix:
         - WORCDEBUG=true
       install:
       - python setup.py -q install
+      - pip install -r requirements.txt
       - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
       # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
       # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
