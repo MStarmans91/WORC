@@ -42,16 +42,17 @@ matrix:
       osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
       language: shell
       before_install:
-        - python -m pip install --upgrade pip
-        - pip install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
+        - python3 --version
+        - pip3 install -U pip
+        - pip3 install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
       env:
         - WORCDEBUG=true
       install:
-      - python setup.py -q install
+      - python3 setup.py -q install
       - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
       # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
       # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
-      script: python WORCTutorial/WORCTutorialSimple.py
+      script: python3 WORCTutorial/WORCTutorialSimple.py
 
 notifications:
   slack:
