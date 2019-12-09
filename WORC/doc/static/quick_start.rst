@@ -120,15 +120,11 @@ folder for each patient, where in each folder there is a image.nii.gz and a mask
     * Datadir
 
       * Patient_001
-
           * image.nii.gz
           * mask.nii.gz
-
       * Patient_002
-
           * image.nii.gz
           * mask.nii.gz
-
       * ...
 
 In the example, we will use open source data from the online
@@ -164,7 +160,7 @@ Identify our data structure: change the fields below accordingly if you use your
     coarse = True
 
     # Give your experiment a name
-    experiment_name = 'Example_STWStrategyHN4'
+    experiment_name = 'Example_STWStrategyHN'
 
     # Instead of the default tempdir, let's but the temporary output in a subfolder
     # in the same folder as this script
@@ -197,7 +193,7 @@ After defining the inputs, the following code can be used to run your first expe
     # Run the experiment!
     experiment.execute()
 
-.. note::  Precomputed features can be used instead of images and masks by instead using ``experiment.features_from_this_directory()`` in a similar fashion.
+.. note::  Precomputed features can be used instead of images and masks by instead using ``experiment.features_from_this_directory(featuresdatadir)`` in a similar fashion.
 
 Analysis of the results
 ```````````````````````
