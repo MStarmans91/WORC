@@ -17,7 +17,6 @@ Added
 - SimpleWORC now also accepts features instead of images and segs as input
 - Preprocessor object to preprocess the features before any fitting algorithms
   are ran. Mostly to detect possible faults/errors in the data.
-- MacOS support.
 
 Changed
 ~~~~~~~

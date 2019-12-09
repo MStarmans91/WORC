@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quick start guide &mdash; WORC 3.1.1 documentation</title>
+  <title>Quick start guide &mdash; WORC 3.1.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.1
+                3.1.2
               </div>
             
           
@@ -252,7 +252,7 @@ If you’re stuck, feel free to post an issue on the <a class="reference externa
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="c1"># These packages are only used in analysing the results</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">fastr</span>
 <span class="kn">import</span> <span class="nn">glob</span>
@@ -279,24 +279,24 @@ If you’re stuck, feel free to post an issue on the <a class="reference externa
 <p>In SimpleWORC, we assume you have a folder “datadir”, in which there is a
 folder for each patient, where in each folder there is a image.nii.gz and a mask.nii.gz:</p>
 <blockquote>
-<div><ul>
+<div><ul class="simple">
 <li><p>Datadir</p>
 <ul>
-<li><p>Patient_001</p>
-<blockquote>
-<div><ul class="simple">
+<li><dl class="simple">
+<dt>Patient_001</dt><dd><ul>
 <li><p>image.nii.gz</p></li>
 <li><p>mask.nii.gz</p></li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </li>
-<li><p>Patient_002</p>
-<blockquote>
-<div><ul class="simple">
+<li><dl class="simple">
+<dt>Patient_002</dt><dd><ul>
 <li><p>image.nii.gz</p></li>
 <li><p>mask.nii.gz</p></li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </li>
 <li><p>…</p></li>
 </ul>
@@ -330,10 +330,10 @@ a subset of 20 patients in this folder. You can change this settings if you like
 
 <span class="c1"># Determine whether we want to do a coarse quick experiment, or a full lengthy</span>
 <span class="c1"># one. Again, change this accordingly if you use your own data.</span>
-<span class="n">coarse</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">coarse</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># Give your experiment a name</span>
-<span class="n">experiment_name</span> <span class="o">=</span> <span class="s1">&#39;Example_STWStrategyHN4&#39;</span>
+<span class="n">experiment_name</span> <span class="o">=</span> <span class="s1">&#39;Example_STWStrategyHN&#39;</span>
 
 <span class="c1"># Instead of the default tempdir, let&#39;s but the temporary output in a subfolder</span>
 <span class="c1"># in the same folder as this script</span>
@@ -345,29 +345,29 @@ a subset of 20 patients in this folder. You can change this settings if you like
 <h3>The actual experiment<a class="headerlink" href="#the-actual-experiment" title="Permalink to this headline">¶</a></h3>
 <p>After defining the inputs, the following code can be used to run your first experiment.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Simple WORC object</span>
-<span class="n">network</span> <span class="o">=</span> <span class="n">SimpleWORC</span><span class="p">(</span><span class="n">experiment_name</span><span class="p">)</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">SimpleWORC</span><span class="p">(</span><span class="n">experiment_name</span><span class="p">)</span>
 
 <span class="c1"># Set the input data according to the variables we defined earlier</span>
-<span class="n">network</span><span class="o">.</span><span class="n">images_from_this_directory</span><span class="p">(</span><span class="n">imagedatadir</span><span class="p">,</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">images_from_this_directory</span><span class="p">(</span><span class="n">imagedatadir</span><span class="p">,</span>
                              <span class="n">image_file_name</span><span class="o">=</span><span class="n">image_file_name</span><span class="p">)</span>
-<span class="n">network</span><span class="o">.</span><span class="n">segmentations_from_this_directory</span><span class="p">(</span><span class="n">imagedatadir</span><span class="p">,</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">segmentations_from_this_directory</span><span class="p">(</span><span class="n">imagedatadir</span><span class="p">,</span>
                                     <span class="n">segmentation_file_name</span><span class="o">=</span><span class="n">segmentation_file_name</span><span class="p">)</span>
-<span class="n">network</span><span class="o">.</span><span class="n">labels_from_this_file</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
-<span class="n">network</span><span class="o">.</span><span class="n">predict_labels</span><span class="p">([</span><span class="n">label_name</span><span class="p">])</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">labels_from_this_file</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">predict_labels</span><span class="p">([</span><span class="n">label_name</span><span class="p">])</span>
 
 <span class="c1"># Use the standard workflow for binary classification</span>
-<span class="n">network</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
 
 <span class="c1"># Set the temporary directory</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">set_tmpdir</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span>
 
 <span class="c1"># Run the experiment!</span>
-<span class="n">network</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Precomputed features can be used instead of images and masks by instead using <code class="docutils literal notranslate"><span class="pre">network.features_from_this_directory()</span></code> in a similar fashion.</p>
+<p>Precomputed features can be used instead of images and masks by instead using <code class="docutils literal notranslate"><span class="pre">experiment.features_from_this_directory(featuresdatadir)</span></code> in a similar fashion.</p>
 </div>
 </div>
 <div class="section" id="analysis-of-the-results">
@@ -380,7 +380,7 @@ named after your experiment name.</p>
 <span class="n">outputfolder</span> <span class="o">=</span> <span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
 <span class="n">experiment_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputfolder</span><span class="p">,</span> <span class="s1">&#39;WORC_&#39;</span> <span class="o">+</span> <span class="n">experiment_name</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Your output is stored in {experiment_folder}.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Your output is stored in </span><span class="si">{experiment_folder}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
 <span class="c1"># Read the features for the first patient</span>
 <span class="c1"># NOTE: we use the glob package for scanning a folder to find specific files</span>
@@ -396,16 +396,16 @@ named after your experiment name.</p>
     <span class="n">performance</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
 
 <span class="c1"># Print the feature values and names</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Feature values:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Feature values:&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">features_p1</span><span class="o">.</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">features_p1</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> {l} : {v}.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{l}</span><span class="s2"> : </span><span class="si">{v}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
 <span class="c1"># Print the output performance</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Performance:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Performance:&quot;</span><span class="p">)</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">performance</span><span class="p">[</span><span class="s1">&#39;Statistics&#39;</span><span class="p">]</span>
 <span class="k">del</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span>  <span class="c1"># Omitted for brevity</span>
 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> {k} {v}.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{k}</span><span class="s2"> </span><span class="si">{v}</span><span class="s2">.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -423,8 +423,8 @@ or advanced tutorials on <a class="reference external" href="https://github.com/
 <ul class="simple">
 <li><p>Run actual experiments on the full settings (coarse=False):</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="n">network</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -440,9 +440,9 @@ just before before <code class="docutils literal notranslate"><span class="pre">
 </div></blockquote>
 </div>
 <ul class="simple">
-<li><p>Add extensive evaluation: <code class="docutils literal notranslate"><span class="pre">network.add_evaluation()</span></code> before <code class="docutils literal notranslate"><span class="pre">network.execute()</span></code>:</p></li>
+<li><p>Add extensive evaluation: <code class="docutils literal notranslate"><span class="pre">experiment.add_evaluation()</span></code> before <code class="docutils literal notranslate"><span class="pre">experiment.execute()</span></code>:</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">network</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

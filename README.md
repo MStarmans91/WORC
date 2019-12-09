@@ -26,7 +26,7 @@ The official documentation can be found at [https://worc.readthedocs.io](https:/
 ## Installation
 
 WORC currently only supports Unix with Python 3.6+ (tested on 3.7.2 - 3.7.4) systems and
-has been tested on Ubuntu 16.04 and 18.04, MacOS, and Windows 10. For detailed installation
+has been tested on Ubuntu 16.04 and 18.04, and Windows 10. For detailed installation
 instructions, please check  [the ReadTheDocs installation guidelines](https://worc.readthedocs.io/en/latest/static/quick_start.html#installation).
 
 The package can be installed through pip:

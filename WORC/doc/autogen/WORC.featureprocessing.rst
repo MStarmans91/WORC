@@ -28,6 +28,15 @@ featureprocessing Package
     :show-inheritance:
     :special-members:
 
+:mod:`Preprocessor` Module
+--------------------------
+
+.. automodule:: WORC.featureprocessing.Preprocessor
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`Relief` Module
 --------------------
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.SearchCV &mdash; WORC 3.1.1 documentation</title>
+  <title>WORC.classification.SearchCV &mdash; WORC 3.1.2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.1
+                3.1.2
               </div>
             
           
@@ -174,45 +174,45 @@
 <span class="c1"># limitations under the License.</span>
 
 
-<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">is_classifier</span><span class="p">,</span> <span class="n">clone</span>
-<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">MetaEstimatorMixin</span>
-<span class="kn">from</span> <span class="nn">sklearn.exceptions</span> <span class="k">import</span> <span class="n">NotFittedError</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="k">import</span> <span class="n">if_delegate_has_method</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">indexable</span><span class="p">,</span> <span class="n">check_is_fitted</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.metrics</span> <span class="k">import</span> <span class="n">check_scoring</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection._split</span> <span class="k">import</span> <span class="n">check_cv</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">rankdata</span>
-<span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="k">import</span> <span class="n">six</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.fixes</span> <span class="k">import</span> <span class="n">MaskedArray</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">is_classifier</span><span class="p">,</span> <span class="n">clone</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">MetaEstimatorMixin</span>
+<span class="kn">from</span> <span class="nn">sklearn.exceptions</span> <span class="kn">import</span> <span class="n">NotFittedError</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="kn">import</span> <span class="n">if_delegate_has_method</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">indexable</span><span class="p">,</span> <span class="n">check_is_fitted</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.metrics</span> <span class="kn">import</span> <span class="n">check_scoring</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection._split</span> <span class="kn">import</span> <span class="n">check_cv</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">rankdata</span>
+<span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="kn">import</span> <span class="n">six</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.fixes</span> <span class="kn">import</span> <span class="n">MaskedArray</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.model_selection._search</span> <span class="k">import</span> <span class="n">ParameterSampler</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection._search</span> <span class="k">import</span> <span class="n">ParameterGrid</span><span class="p">,</span> <span class="n">_check_param_grid</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection._search</span> <span class="kn">import</span> <span class="n">ParameterSampler</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection._search</span> <span class="kn">import</span> <span class="n">ParameterGrid</span><span class="p">,</span> <span class="n">_check_param_grid</span>
 
-<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Sized</span><span class="p">,</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Sized</span><span class="p">,</span> <span class="n">defaultdict</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">import</span> <span class="nn">fastr</span>
-<span class="kn">from</span> <span class="nn">fastr.api</span> <span class="k">import</span> <span class="n">ResourceLimit</span>
-<span class="kn">from</span> <span class="nn">joblib</span> <span class="k">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.fitandscore</span> <span class="k">import</span> <span class="n">fit_and_score</span><span class="p">,</span> <span class="n">replacenan</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.fitandscore</span> <span class="k">import</span> <span class="n">delete_nonestimator_parameters</span>
+<span class="kn">from</span> <span class="nn">fastr.api</span> <span class="kn">import</span> <span class="n">ResourceLimit</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.fitandscore</span> <span class="kn">import</span> <span class="n">fit_and_score</span><span class="p">,</span> <span class="n">replacenan</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.fitandscore</span> <span class="kn">import</span> <span class="n">delete_nonestimator_parameters</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">islice</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">mean_squared_error</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">accuracy_score</span>
-<span class="kn">from</span> <span class="nn">sklearn.multiclass</span> <span class="k">import</span> <span class="n">OneVsRestClassifier</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.estimators</span> <span class="k">import</span> <span class="n">RankedSVM</span>
-<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">mean_squared_error</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.multiclass</span> <span class="kn">import</span> <span class="n">OneVsRestClassifier</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.estimators</span> <span class="kn">import</span> <span class="n">RankedSVM</span>
+<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="kn">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
 
 
 <div class="viewcode-block" id="rms_score"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.rms_score">[docs]</a><span class="k">def</span> <span class="nf">rms_score</span><span class="p">(</span><span class="n">truth</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
@@ -254,7 +254,7 @@
                                   <span class="n">MetaEstimatorMixin</span><span class="p">)):</span>
     <span class="sd">&quot;&quot;&quot;Ensemble of BaseSearchCV Estimators.&quot;&quot;&quot;</span>
     <span class="c1"># @abstractmethod</span>
-<div class="viewcode-block" id="Ensemble.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.Ensemble.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimators</span><span class="p">):</span>
+<div class="viewcode-block" id="Ensemble.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.Ensemble.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimators</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">estimators</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;You supplied an empty list of estimators: No ensemble creation possible.&#39;</span>
             <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
@@ -510,7 +510,7 @@
                                       <span class="n">MetaEstimatorMixin</span><span class="p">)):</span>
     <span class="sd">&quot;&quot;&quot;Base class for hyper parameter search with cross-validation.&quot;&quot;&quot;</span>
 <div class="viewcode-block" id="BaseSearchCV.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.__init__">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_distributions</span><span class="o">=</span><span class="p">{},</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_distributions</span><span class="o">=</span><span class="p">{},</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">fit_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pre_dispatch</span><span class="o">=</span><span class="s1">&#39;2*n_jobs&#39;</span><span class="p">,</span>
                  <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -723,6 +723,9 @@
 
 <div class="viewcode-block" id="BaseSearchCV.preprocess"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.preprocess">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Apply the available preprocssing methods to the features&#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_preprocessor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_preprocessor</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
@@ -805,7 +808,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">array_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">ZeroDivisionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">e</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;[WORC Warning] </span><span class="si">{e}</span><span class="s1">. Setting </span><span class="si">{key_name}</span><span class="s1"> to unweighted.&#39;</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[WORC Warning] </span><span class="si">{e}</span><span class="s1">. Setting </span><span class="si">{key_name}</span><span class="s1"> to unweighted.&#39;</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                 <span class="n">array_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -820,7 +823,7 @@
                                                  <span class="n">array_means</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
                                                 <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">))</span>
             <span class="k">except</span> <span class="ne">ZeroDivisionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">e</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;[WORC Warning] </span><span class="si">{e}</span><span class="s1">. Setting </span><span class="si">{key_name}</span><span class="s1"> to unweighted.&#39;</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[WORC Warning] </span><span class="si">{e}</span><span class="s1">. Setting </span><span class="si">{key_name}</span><span class="s1"> to unweighted.&#39;</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                 <span class="n">array_stds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">((</span><span class="n">array</span> <span class="o">-</span>
                                                  <span class="n">array_means</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
@@ -943,11 +946,12 @@
 
         <span class="c1"># Associate best options with new fits</span>
         <span class="p">(</span><span class="n">save_data</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">scalers</span><span class="p">,</span>\
-            <span class="n">Imputers</span><span class="p">,</span> <span class="n">PCAs</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">ros</span><span class="p">)</span> <span class="o">=</span> <span class="n">out</span>
+            <span class="n">Imputers</span><span class="p">,</span> <span class="n">Preprocessors</span><span class="p">,</span> <span class="n">PCAs</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">ros</span><span class="p">)</span> <span class="o">=</span> <span class="n">out</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_groupsel</span> <span class="o">=</span> <span class="n">GroupSel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_scaler</span> <span class="o">=</span> <span class="n">scalers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_varsel</span> <span class="o">=</span> <span class="n">VarSel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_modelsel</span> <span class="o">=</span> <span class="n">SelectModel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_preprocessor</span> <span class="o">=</span> <span class="n">Preprocessors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_imputer</span> <span class="o">=</span> <span class="n">Imputers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_pca</span> <span class="o">=</span> <span class="n">PCAs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_featlab</span> <span class="o">=</span> <span class="n">feature_labels</span>
@@ -1052,7 +1056,7 @@
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">method</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
             <span class="c1"># Simply take the top50 best hyperparameters</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Creating ensemble using top {str(method)} individual classifiers.&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Creating ensemble using top {str(method)} individual classifiers.&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># Next functions expect list</span>
                 <span class="n">ensemble</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1073,7 +1077,7 @@
             <span class="n">performances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_iter</span><span class="p">,</span> <span class="n">n_classifiers</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">it</span><span class="p">,</span> <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_iter</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39; - iteration {it + 1} / </span><span class="si">{n_iter}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; - iteration {it + 1} / </span><span class="si">{n_iter}</span><span class="s1">.&#39;</span><span class="p">)</span>
                 <span class="n">Y_valid_score_it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_classifiers</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid</span><span class="p">)))</span>
 
                 <span class="c1"># Loop over the 100 best estimators</span>
@@ -1181,9 +1185,9 @@
                 <span class="n">best_performance</span> <span class="o">=</span> <span class="n">new_performance</span>
 
                 <span class="c1"># Print the performance gain</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;Caruana&#39;</span><span class="p">:</span>
             <span class="c1"># Use the method from Caruana</span>
@@ -1209,7 +1213,7 @@
             <span class="n">performances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_iter</span><span class="p">,</span> <span class="n">n_classifiers</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">it</span><span class="p">,</span> <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_iter</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39; - iteration {it + 1} / </span><span class="si">{n_iter}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; - iteration {it + 1} / </span><span class="si">{n_iter}</span><span class="s1">.&#39;</span><span class="p">)</span>
                 <span class="n">Y_valid_score_it</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_classifiers</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid</span><span class="p">)))</span>
 
                 <span class="c1"># Loop over the 100 best estimators</span>
@@ -1317,9 +1321,9 @@
                 <span class="n">best_performance</span> <span class="o">=</span> <span class="n">new_performance</span>
 
                 <span class="c1"># Print the performance gain</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
             <span class="c1"># Greedy selection  -----------------------------------------------</span>
             <span class="c1"># Initialize variables</span>
@@ -1333,7 +1337,7 @@
             <span class="k">while</span> <span class="n">new_performance</span> <span class="o">&gt;</span> <span class="n">best_performance</span><span class="p">:</span>
                 <span class="c1"># Score is better, so expand ensemble and replace new best score</span>
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Iteration: </span><span class="si">{iteration}</span><span class="s2">, best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{new_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Iteration: </span><span class="si">{iteration}</span><span class="s2">, best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{new_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
                 <span class="n">best_performance</span> <span class="o">=</span> <span class="n">new_performance</span>
 
                 <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -1379,11 +1383,11 @@
                 <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
 
             <span class="c1"># Print the performance gain</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WORC WARNING] No valid ensemble method given: </span><span class="si">{method}</span><span class="s1">. Not ensembling&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[WORC WARNING] No valid ensemble method given: </span><span class="si">{method}</span><span class="s1">. Not ensembling&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span>
 
         <span class="c1"># Create the ensemble --------------------------------------------------</span>
@@ -1395,7 +1399,7 @@
         <span class="n">nest</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ensemble</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">enum</span><span class="p">,</span> <span class="p">(</span><span class="n">p_est</span><span class="p">,</span> <span class="n">p_all</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">parameters_est</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">)):</span>
             <span class="c1"># Refit a SearchCV object with the provided parameters</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Refitting estimator {enum+1} / </span><span class="si">{nest}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Refitting estimator {enum+1} / </span><span class="si">{nest}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="n">base_estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
 
             <span class="c1"># # Check if we need to create a multiclass estimator</span>
@@ -1430,7 +1434,7 @@
         <span class="n">n_splits</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">get_n_splits</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameter_iterable</span><span class="p">,</span> <span class="n">Sized</span><span class="p">):</span>
             <span class="n">n_candidates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameter_iterable</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Fitting </span><span class="si">{n_splits}</span><span class="s2"> folds for each of </span><span class="si">{n_candidates}</span><span class="s2"> candidates, totalling {n_candidates * n_splits} fits.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fitting </span><span class="si">{n_splits}</span><span class="s2"> folds for each of </span><span class="si">{n_candidates}</span><span class="s2"> candidates, totalling {n_candidates * n_splits} fits.&quot;</span><span class="p">)</span>
 
         <span class="n">cv_iter</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="p">))</span>
         <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_uppercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
@@ -1460,7 +1464,7 @@
             <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;One or more of the values in your parameter sampler &#39;</span> <span class="o">+</span>\
                       <span class="s1">&#39;is either not iterable, or the distribution cannot &#39;</span> <span class="o">+</span>\
                       <span class="s1">&#39;generate valid samples. Please check your  &#39;</span> <span class="o">+</span>\
-                      <span class="n">f</span><span class="s1">&#39; parameters. At least </span><span class="si">{k}</span><span class="s1"> gives an error.&#39;</span>
+                      <span class="sa">f</span><span class="s1">&#39; parameters. At least </span><span class="si">{k}</span><span class="s1"> gives an error.&#39;</span>
             <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="c1"># Split the parameters files in equal parts</span>
@@ -1472,7 +1476,7 @@
             <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
                 <span class="n">temp_dict</span><span class="p">[</span><span class="n">number</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameters_temp</span><span class="p">[</span><span class="n">number</span><span class="p">]</span>
 
-            <span class="n">fname</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;settings_</span><span class="si">{num}</span><span class="s1">.json&#39;</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;settings_</span><span class="si">{num}</span><span class="s1">.json&#39;</span>
             <span class="n">sourcename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;parameters&#39;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">sourcename</span><span class="p">)):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">sourcename</span><span class="p">))</span>
@@ -1480,7 +1484,7 @@
                 <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">temp_dict</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
             <span class="n">parameter_files</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)]</span> <span class="o">=</span>\
-                <span class="n">f</span><span class="s1">&#39;vfs://tmp/GS/</span><span class="si">{name}</span><span class="s1">/parameters/</span><span class="si">{fname}</span><span class="s1">&#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;vfs://tmp/GS/</span><span class="si">{name}</span><span class="s1">/parameters/</span><span class="si">{fname}</span><span class="s1">&#39;</span>
 
         <span class="c1"># Create test-train splits</span>
         <span class="n">traintest_files</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -1493,13 +1497,13 @@
                                     <span class="n">index</span><span class="o">=</span><span class="n">source_labels</span><span class="p">,</span>
                                     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Train-test data&#39;</span><span class="p">)</span>
 
-            <span class="n">fname</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;traintest_</span><span class="si">{num}</span><span class="s1">.hdf5&#39;</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;traintest_</span><span class="si">{num}</span><span class="s1">.hdf5&#39;</span>
             <span class="n">sourcename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;traintest&#39;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">sourcename</span><span class="p">)):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">sourcename</span><span class="p">))</span>
-            <span class="n">traintest_files</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)]</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;vfs://tmp/GS/</span><span class="si">{name}</span><span class="s1">/traintest/</span><span class="si">{fname}</span><span class="s1">&#39;</span>
+            <span class="n">traintest_files</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;vfs://tmp/GS/</span><span class="si">{name}</span><span class="s1">/traintest/</span><span class="si">{fname}</span><span class="s1">&#39;</span>
 
-            <span class="n">sourcelabel</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Source Data Iteration </span><span class="si">{num}</span><span class="s2">&quot;</span>
+            <span class="n">sourcelabel</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Source Data Iteration </span><span class="si">{num}</span><span class="s2">&quot;</span>
             <span class="n">source_data</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">sourcename</span><span class="p">,</span> <span class="n">sourcelabel</span><span class="p">)</span>
 
             <span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1522,7 +1526,7 @@
         <span class="n">estimatorname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
         <span class="n">estimator_data</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">estimatorname</span><span class="p">,</span> <span class="s1">&#39;Estimator Data&#39;</span><span class="p">)</span>
 
-        <span class="n">estimatordata</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;vfs://tmp/GS/</span><span class="si">{name}</span><span class="s2">/</span><span class="si">{fname}</span><span class="s2">&quot;</span>
+        <span class="n">estimatordata</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;vfs://tmp/GS/</span><span class="si">{name}</span><span class="s2">/</span><span class="si">{fname}</span><span class="s2">&quot;</span>
 
         <span class="c1"># Create the fastr network</span>
         <span class="n">network</span> <span class="o">=</span> <span class="n">fastr</span><span class="o">.</span><span class="n">create_network</span><span class="p">(</span><span class="s1">&#39;WORC_GridSearch_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
@@ -1544,7 +1548,7 @@
         <span class="n">source_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;estimator_source&#39;</span><span class="p">:</span> <span class="n">estimatordata</span><span class="p">,</span>
                        <span class="s1">&#39;traintest&#39;</span><span class="p">:</span> <span class="n">traintest_files</span><span class="p">,</span>
                        <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="n">parameter_files</span><span class="p">}</span>
-        <span class="n">sink_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="n">f</span><span class="s2">&quot;vfs://tmp/GS/</span><span class="si">{name}</span><span class="s2">/output_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">}</span>
+        <span class="n">sink_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;vfs://tmp/GS/</span><span class="si">{name}</span><span class="s2">/output_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">}</span>
 
         <span class="n">network</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">source_data</span><span class="p">,</span> <span class="n">sink_data</span><span class="p">,</span>
                         <span class="n">tmpdir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tmp&#39;</span><span class="p">),</span>
@@ -1570,11 +1574,13 @@
                   <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">tempfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tmp&#39;</span><span class="p">)</span>
             <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Fitting classifiers has failed. The temporary &#39;</span> <span class="o">+</span>
-                       <span class="n">f</span><span class="s1">&#39;results where not deleted and can be found in </span><span class="si">{tempfolder}</span><span class="s1">. &#39;</span> <span class="o">+</span>
+                       <span class="sa">f</span><span class="s1">&#39;results where not deleted and can be found in </span><span class="si">{tempfolder}</span><span class="s1">. &#39;</span> <span class="o">+</span>
                        <span class="s1">&#39;Probably your fitting and scoring failed: check out &#39;</span> <span class="o">+</span>
                        <span class="s1">&#39;the tmp/fitandscore folder within the tempfolder for &#39;</span> <span class="o">+</span>
-                       <span class="s1">&#39;the fastr job temporary results.&#39;</span><span class="p">)</span>
+                       <span class="s1">&#39;the fastr job temporary results or run: fastr trace &#39;</span> <span class="o">+</span>
+                       <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{tmpfolder}{os.path.sep}</span><span class="s1">__sink_data__.json --samples.&#39;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="c1"># Remove the temporary folder used</span>
@@ -1802,7 +1808,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="RandomizedSearchCVfastr.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVfastr.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_distributions</span><span class="o">=</span><span class="p">{},</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="RandomizedSearchCVfastr.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVfastr.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_distributions</span><span class="o">=</span><span class="p">{},</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">fit_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pre_dispatch</span><span class="o">=</span><span class="s1">&#39;2*n_jobs&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1856,7 +1862,7 @@
         <span class="n">n_splits</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">get_n_splits</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">groups</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameter_iterable</span><span class="p">,</span> <span class="n">Sized</span><span class="p">):</span>
             <span class="n">n_candidates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameter_iterable</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Fitting </span><span class="si">{n_splits}</span><span class="s2"> folds for each of </span><span class="si">{n_candidates}</span><span class="s2">&quot;</span> <span class="o">+</span>\
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fitting </span><span class="si">{n_splits}</span><span class="s2"> folds for each of </span><span class="si">{n_candidates}</span><span class="s2">&quot;</span> <span class="o">+</span>\
                   <span class="s2">&quot; candidates, totalling&quot;</span> <span class="o">+</span>\
                   <span class="s2">&quot; {n_candidates * n_splits} fits&quot;</span><span class="p">)</span>
 
@@ -2133,7 +2139,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GridSearchCVfastr.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVfastr.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="GridSearchCVfastr.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVfastr.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">pre_dispatch</span><span class="o">=</span><span class="s1">&#39;2*n_jobs&#39;</span><span class="p">,</span> <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span>
                  <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -2375,7 +2381,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="RandomizedSearchCVJoblib.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVJoblib.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_distributions</span><span class="o">=</span><span class="p">{},</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="RandomizedSearchCVJoblib.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVJoblib.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_distributions</span><span class="o">=</span><span class="p">{},</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">fit_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pre_dispatch</span><span class="o">=</span><span class="s1">&#39;2*n_jobs&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -2642,7 +2648,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GridSearchCVJoblib.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="GridSearchCVJoblib.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimator</span><span class="p">,</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">pre_dispatch</span><span class="o">=</span><span class="s1">&#39;2*n_jobs&#39;</span><span class="p">,</span> <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span>
                  <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>

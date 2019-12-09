@@ -38,6 +38,7 @@ Subpackages
     WORC.detectors
     WORC.exampledata
     WORC.facade
+    WORC.fastrconfig
     WORC.featureprocessing
     WORC.plotting
     WORC.processing
