@@ -37,6 +37,7 @@ from WORC.featureprocessing.Imputer import Imputer
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
+from WORC.featureprocessing.Preprocessor import Preprocessor
 
 # Specific imports for error management
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
@@ -209,6 +210,17 @@ def fit_and_score(X, y, scoring,
     feature_labels = np.asarray([x[1] for x in X])
 
     # ------------------------------------------------------------------------
+    # Preprocessing: remove features if too many NaNs
+    preprocessor = Preprocessor(verbose=False)
+    preprocessor.fit(feature_values, feature_labels=feature_labels[0, :])
+    feature_values = preprocessor.transform(feature_values)
+    feature_labels = preprocessor.transform(feature_labels)
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del preprocessor
+
+    # ------------------------------------------------------------------------
     # Feature scaling
     if 'FeatureScaling' in para_estimator:
         if verbose:
@@ -367,8 +379,12 @@ def fit_and_score(X, y, scoring,
                           "phase_features", "log_features",
                           "texture_gabor_features", "texture_glcm_features",
                           "texture_glcmms_features", "texture_glrlm_features",
-                          "texture_glszm_features", "texture_ngtdm_features",
-                          "texture_lbp_features"]
+                          "texture_glszm_features", 'texture_gldzm_features',
+                          "texture_ngtdm_features",
+                          "texture_lbp_features", "texture_ngldm_features",
+                          'wavelet_features', 'rgrd_features',
+                          'location_features', 'fractal_features',
+                          'texture_GLDZM_features']
 
         # Backwards compatability
         if 'texture_features' in para_estimator.keys():
@@ -426,7 +442,7 @@ def fit_and_score(X, y, scoring,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
 
@@ -481,7 +497,7 @@ def fit_and_score(X, y, scoring,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
 
@@ -489,7 +505,7 @@ def fit_and_score(X, y, scoring,
     if len(feature_values[0]) == 0:
         # TODO: Make a specific WORC exception for this warning.
         if verbose:
-            print('[WARNING]: No features are selected! Probably you selected a feature group that is not in your feature file. Parameters:')
+            print('[WORC WARNING]: No features are selected! Probably you selected a feature group that is not in your feature file. Parameters:')
             print(para)
 
         para_estimator = delete_nonestimator_parameters(para_estimator)
@@ -502,7 +518,7 @@ def fit_and_score(X, y, scoring,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
 
@@ -573,6 +589,7 @@ def fit_and_score(X, y, scoring,
         feature_labels = SelectModel.transform(feature_labels)
     else:
         SelectModel = None
+
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']
 
@@ -647,6 +664,7 @@ def fit_and_score(X, y, scoring,
             feature_labels = StatisticalSel.transform(feature_labels)
             if verbose:
                 print("New Length: " + str(len(feature_values[0])))
+            print("New Length: " + str(len(feature_values[0])))
         else:
             StatisticalSel = None
         del para_estimator['StatisticalTestUse']
@@ -658,6 +676,29 @@ def fit_and_score(X, y, scoring,
     # Delete the object if we do not need to return it
     if not return_all:
         del StatisticalSel
+
+    # --------------------------------------------------------------------
+    # Final check if there are still features left
+    # Check whether there are any features left
+    if len(feature_values[0]) == 0:
+        # TODO: Make a specific WORC exception for this warning.
+        if verbose:
+            print('[WORC WARNING]: No features are selected! Probably you selected a feature group that is not in your feature file. Parameters:')
+            print(para)
+
+        para_estimator = delete_nonestimator_parameters(para_estimator)
+
+        # Return a zero performance dummy
+        scaler = None
+        SelectModel = None
+        pca = None
+        ret = [train_score, test_score, test_sample_counts,
+               fit_time, score_time, para_estimator, para]
+
+        if return_all:
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
+        else:
+            return ret
 
     # ----------------------------------------------------------------
     # Fitting and scoring
@@ -703,7 +744,7 @@ def fit_and_score(X, y, scoring,
                    fit_time, score_time, para_estimator, para]
 
             if return_all:
-                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
             else:
                 return ret
         else:
@@ -721,7 +762,7 @@ def fit_and_score(X, y, scoring,
     ret.append(para)
 
     if return_all:
-        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
     else:
         return ret
 

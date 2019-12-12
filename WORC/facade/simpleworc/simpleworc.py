@@ -1,11 +1,32 @@
-from WORC import WORC
+#!/usr/bin/env python
+
+# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import fastr.exceptions
 from pathlib import Path
 import inspect
-from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, CartesiusClusterDetector
+import os
+from WORC import WORC
+from .helpers import convert_radiomix_features
+from .exceptions import PathNotFoundException, NoImagesFoundException, \
+    NoSegmentationsFoundException, InvalidCsvFileException
+from WORC.addexceptions import WORCKeyError
 from WORC.facade.simpleworc.configbuilder import ConfigBuilder
-from .exceptions import PathNotFoundException, NoImagesFoundException, NoSegmentationsFoundException, \
-    InvalidCsvFileException
+from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
+    CartesiusClusterDetector
 
 
 def _for_all_methods(decorator):
@@ -22,7 +43,7 @@ def _error_buldozer(func):
     _valid_exceptions = [
         PathNotFoundException, NoImagesFoundException,
         NoSegmentationsFoundException, InvalidCsvFileException,
-        TypeError, ValueError, NotImplementedError
+        TypeError, ValueError, NotImplementedError, WORCKeyError
     ]
     _valid_exceptions += [c[1] for c in inspect.getmembers(fastr.exceptions, inspect.isclass)]
 
@@ -46,10 +67,13 @@ class SimpleWORC():
 
         self._images_train = []
         self._images_test = []
+        self._features_train = []
+        self._features_test = []
         self._segmentations_train = []
         self._segmentations_test = []
         self._semantics_file_train = None
         self._semantics_file_test = None
+        self._radiomix_feature_file = None
 
         self._labels_file_train = None
         self._labels_file_test = None
@@ -66,6 +90,21 @@ class SimpleWORC():
         elif CartesiusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
 
+    def features_from_this_directory(self, directory, feature_file_name='features.hdf5', glob='*/', is_training=True):
+        directory = Path(directory).expanduser()
+        if not directory.exists():
+            raise PathNotFoundException(directory)
+
+        features = list(directory.glob(f'{glob}{feature_file_name}'))
+
+        if len(features) == 0:
+            raise NoFeaturesFoundException(f'{directory}{glob}{image_file_name}')
+
+        features_per_subject = {feature.parent.name: feature.as_uri() for feature in features}
+        if is_training:
+            self._features_train.append(features_per_subject)
+        else:
+            self._features_test.append(features_per_subject)
 
     def images_from_this_directory(self, directory, image_file_name='image.nii.gz', glob='*/', is_training=True):
         directory = Path(directory).expanduser()
@@ -205,13 +244,32 @@ class SimpleWORC():
         # this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well
         self._validate()  # do some final sanity checking before we execute the thing
 
+        if self._radiomix_feature_file:
+            # Convert radiomix features and use those as inputs
+            output_folder = os.path.join(fastr.config.mounts['tmp'],
+                                         'Radiomix_features')
+
+            # Check if output folder exists: otherwise create
+            if not os.path.exists(output_folder):
+                os.mkdir(output_folder)
+
+            # convert the features
+            convert_radiomix_features(self._radiomix_feature_file, output_folder)
+
+            # Set the newly created feature files as the WORC input
+            self.features_from_this_directory(output_folder)
+
         self._worc.images_train = self._images_train
+        self._worc.features_train = self._features_train
         self._worc.segmentations_train = self._segmentations_train
         self._worc.labels_train = self._labels_file_train
         self._worc.semantics_train = self._semantics_file_train
 
         if self._images_test:
             self._worc.images_test = self._images_test
+
+        if self._features_test:
+            self._worc.features_test = self._features_test
 
         if self._segmentations_test:
             self._worc.segmentations_test = self._segmentations_test
@@ -253,3 +311,6 @@ class SimpleWORC():
     def set_multicore_execution(self):
         self._worc.fastr_plugin = 'ProcessPoolExecution'
         self._config_builder.custom_config_overrides['Classification']['fastr_plugin'] = 'ProcessPoolExecution'
+
+    def features_from_radiomix_xlsx(self, feature_file):
+        self._radiomix_feature_file = feature_file

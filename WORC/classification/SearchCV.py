@@ -565,6 +565,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
     def preprocess(self, X, y=None):
         '''Apply the available preprocssing methods to the features'''
+        if self.best_preprocessor is not None:
+            X = self.best_preprocessor.transform(X)
+
         if self.best_scaler is not None:
             X = self.best_scaler.transform(X)
 
@@ -785,11 +788,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
-            Imputers, PCAs, StatisticalSel, ReliefSel, sm, ros) = out
+            Imputers, Preprocessors, PCAs, StatisticalSel, ReliefSel, sm, ros) = out
         self.best_groupsel = GroupSel
         self.best_scaler = scalers
         self.best_varsel = VarSel
         self.best_modelsel = SelectModel
+        self.best_preprocessor = Preprocessors
         self.best_imputer = Imputers
         self.best_pca = PCAs
         self.best_featlab = feature_labels
@@ -1412,11 +1416,13 @@ class BaseSearchCVfastr(BaseSearchCV):
                   zip(*save_data)
         except ValueError as e:
             print(e)
+            tempfolder = os.path.join(tempfolder, 'tmp')
             message = ('Fitting classifiers has failed. The temporary ' +
                        f'results where not deleted and can be found in {tempfolder}. ' +
                        'Probably your fitting and scoring failed: check out ' +
                        'the tmp/fitandscore folder within the tempfolder for ' +
-                       'the fastr job temporary results.')
+                       'the fastr job temporary results or run: fastr trace ' +
+                       f'{tmpfolder}{os.path.sep}__sink_data__.json --samples.')
             raise WORCexceptions.WORCValueError(message)
 
         # Remove the temporary folder used

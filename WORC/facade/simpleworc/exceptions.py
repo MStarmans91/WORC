@@ -10,11 +10,13 @@ class PathNotFoundException(Exception):
     def __init__(self, path):
         super(PathNotFoundException, self).__init__(f'Path not found: {path}')
 
+class NoFeaturesFoundException(Exception):
+    def __init__(self, path):
+        super(NoFeaturesFoundException, self).__init__(f'No features found in directory {path}')
 
 class NoImagesFoundException(Exception):
     def __init__(self, path):
         super(NoImagesFoundException, self).__init__(f'No images found in directory {path}')
-
 
 class NoSegmentationsFoundException(Exception):
     def __init__(self, path):

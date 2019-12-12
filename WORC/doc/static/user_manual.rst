@@ -353,10 +353,10 @@ to WORC by using the ``add_evaluation()`` function, either directly in WORC or t
 .. code-block:: python
 
     import WORC
-    from WORC import IntermediateFacade
-    I = IntermediateFacade('somename')
+    from WORC import SimpleWORC
+    experiment = SimpleWORC('somename')
     ...
-    I.add_evaluation()
+    experiment.add_evaluation()
 
 Debugging
 ---------

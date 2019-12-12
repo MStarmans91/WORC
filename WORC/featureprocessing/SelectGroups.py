@@ -46,9 +46,13 @@ class SelectGroups(BaseEstimator, SelectorMixin):
                 - texture_GLCMMS_features
                 - texture_GLRLM_features
                 - texture_GLSZM_features
+                - texture_GLDZM_features
                 - texture_NGTDM_features
+                - texture_NGLDM_features
                 - texture_LBP_features
-
+                - fractal_features
+                - location_features
+                - RGRD_features
         '''
         params = list()
         if parameters['histogram_features'] == 'True':
@@ -69,6 +73,14 @@ class SelectGroups(BaseEstimator, SelectorMixin):
             params.append('vf_')
         if parameters['log_features'] == 'True':
             params.append('logf_')
+        if parameters['fractal_features'] == 'True':
+            params.append('fracf_')
+        if parameters['location_features'] == 'True':
+            params.append('locf_')
+        if parameters['rgrd_features'] == 'True':
+            params.append('rgrdf_')
+        if parameters['wavelet_features'] == 'True':
+            params.append('waveletf_')
 
         if 'texture_features' in parameters.keys():
             # Backwards compatability
@@ -90,8 +102,12 @@ class SelectGroups(BaseEstimator, SelectorMixin):
                 params.append('tf_GLRLM')
             if parameters['texture_glszm_features'] == 'True':
                 params.append('tf_GLSZM')
+            if parameters['texture_gldzm_features'] == 'True':
+                params.append('tf_GLDZM')
             if parameters['texture_ngtdm_features'] == 'True':
                 params.append('tf_NGTDM')
+            if parameters['texture_ngldm_features'] == 'True':
+                params.append('tf_NGLDM')
             if parameters['texture_lbp_features'] == 'True':
                 params.append('tf_LBP')
 

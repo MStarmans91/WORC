@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.AdvancedSampler &mdash; WORC 3.1.1 documentation</title>
+  <title>WORC.classification.AdvancedSampler &mdash; WORC 3.1.2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.1
+                3.1.2
               </div>
             
           
@@ -173,18 +173,18 @@
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_random_state</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="k">import</span> <span class="n">six</span>
-<span class="kn">from</span> <span class="nn">ghalton</span> <span class="k">import</span> <span class="n">Halton</span>
+<span class="kn">from</span> <span class="nn">sklearn.externals</span> <span class="kn">import</span> <span class="n">six</span>
+<span class="kn">from</span> <span class="nn">ghalton</span> <span class="kn">import</span> <span class="n">Halton</span>
 <span class="c1"># from sobol_seq import i4_sobol_generate as Sobol</span>
 <span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">uniform</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">uniform</span>
 <span class="kn">import</span> <span class="nn">math</span>
 
 
 <div class="viewcode-block" id="log_uniform"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.log_uniform">[docs]</a><span class="k">class</span> <span class="nc">log_uniform</span><span class="p">():</span>
-<div class="viewcode-block" id="log_uniform.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.log_uniform.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="log_uniform.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.log_uniform.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">base</span>
@@ -198,7 +198,7 @@
 
 
 <div class="viewcode-block" id="discrete_uniform"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform">[docs]</a><span class="k">class</span> <span class="nc">discrete_uniform</span><span class="p">():</span>
-<div class="viewcode-block" id="discrete_uniform.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="discrete_uniform.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">uniform_dist</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span></div>
@@ -211,7 +211,7 @@
 
 
 <div class="viewcode-block" id="exp_uniform"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.exp_uniform">[docs]</a><span class="k">class</span> <span class="nc">exp_uniform</span><span class="p">():</span>
-<div class="viewcode-block" id="exp_uniform.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.exp_uniform.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">):</span>
+<div class="viewcode-block" id="exp_uniform.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.exp_uniform.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loc</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">e</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">base</span></div>
@@ -282,7 +282,7 @@
 <span class="sd">    ...                  {&#39;b&#39;: 1.038159, &#39;a&#39;: 2}]</span>
 <span class="sd">    True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="AdvancedSampler.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_distributions</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="AdvancedSampler.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_distributions</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Halton&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param_distributions</span> <span class="o">=</span> <span class="n">param_distributions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span> <span class="o">=</span> <span class="n">n_iter</span>
@@ -292,7 +292,7 @@
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;Halton&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Halton</span> <span class="o">=</span> <span class="n">Halton</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_distributions</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="AdvancedSampler.__iter__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__iter__">[docs]</a>    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AdvancedSampler.__iter__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__iter__">[docs]</a>    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Create a random state to be used</span>
         <span class="n">rnd</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
 
@@ -325,7 +325,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;Halton&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Halton</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="AdvancedSampler.__len__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__len__">[docs]</a>    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AdvancedSampler.__len__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__len__">[docs]</a>    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Number of points that will be sampled.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span></div></div>
 

@@ -273,7 +273,7 @@ def load_config(config_file_path):
 
     # Settings for ensembling
     settings_dict['Ensemble']['Use'] =\
-        settings['Ensemble'].getboolean('Use')
+        settings['Ensemble'].getint('Use')
 
     # Settings for bootstrapping
     settings_dict['Bootstrap']['Use'] =\

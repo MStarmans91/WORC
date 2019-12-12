@@ -16,7 +16,6 @@
 import os
 import sys
 from setuptools.command.test import test as TestCommand
-from setuptools.command.install import install
 from setuptools import setup
 
 if sys.version_info < (3, 6):
@@ -53,6 +52,7 @@ def scan_dir(path, prefix=None):
 
     return file_list
 
+
 # Determine the extra resources and scripts to pack
 resources_list = scan_dir('./WORC/resources')
 
@@ -66,9 +66,18 @@ else:
 # Set the entry point
 entry_points = {
     "console_scripts": [
-        "WORC = WORC.WORC:main",
+        "WORC = WORC.WORC:main"
     ]
 }
+
+# Determine the fastr config path: create if non-existent
+fastr_home = os.path.expanduser(os.path.join('~', '.fastr'))
+if not os.path.exists(fastr_home):
+    os.makedirs(fastr_home)
+
+config_d = os.path.join(fastr_home, 'config.d')
+worc_config = os.path.join('WORC', 'fastrconfig', 'WORC_config.py')
+
 
 class NoseTestCommand(TestCommand):
     def finalize_options(self):
@@ -84,7 +93,7 @@ class NoseTestCommand(TestCommand):
 
 setup(
     name='WORC',
-    version='3.1.1',
+    version='3.1.2',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',
@@ -121,6 +130,7 @@ setup(
                   'WORC': ['versioninfo'],
                   # If any package contains *.ini files, include them
                   'src': ['IOparser/*.ini']},
+    # data_files=[(config_d, [worc_config])],
     install_requires=_requires,
     tests_require=_tests_require,
     test_suite='nose.collector',

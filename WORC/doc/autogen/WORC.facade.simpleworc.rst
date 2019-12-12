@@ -19,6 +19,15 @@ simpleworc Package
     :show-inheritance:
     :special-members:
 
+:mod:`helpers` Module
+---------------------
+
+.. automodule:: WORC.facade.simpleworc.helpers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`simpleworc` Module
 ------------------------
 

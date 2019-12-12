@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master)](https://travis-ci.com/MStarmans91/WORC)
 
-# WORC v3.1.1
+# WORC v3.1.2
 
 ## Workflow for Optimal Radiomics Classification
 
@@ -25,8 +25,8 @@ The official documentation can be found at [https://worc.readthedocs.io](https:/
 
 ## Installation
 
-WORC currently only supports Unix with Python 3.6+ (tested on 3.7.2 and 3.7.3) systems and
-has been tested on Ubuntu 16.04 and 18.04 and Windows 10. For detailed installation
+WORC currently only supports Unix with Python 3.6+ (tested on 3.7.2 - 3.7.4) systems and
+has been tested on Ubuntu 16.04 and 18.04, and Windows 10. For detailed installation
 instructions, please check  [the ReadTheDocs installation guidelines](https://worc.readthedocs.io/en/latest/static/quick_start.html#installation).
 
 The package can be installed through pip:
@@ -60,7 +60,6 @@ We suggest you start with the [WORC Tutorial](https://github.com/MStarmans91/WOR
 Besides a Jupyter notebook with instructions, we provide there also an example script for you to get started with.
 
 ## WIP
-- We are working on improving the documentation.
 - We are writing the paper on WORC.
 - We are expanding the example experiments of WORC with open source datasets.
 
