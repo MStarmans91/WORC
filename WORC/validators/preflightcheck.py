@@ -44,15 +44,15 @@ class SimpleValidator(AbstractValidator):
 class MinSubjectsValidator(AbstractValidator):
     def _validate(self, simpleworc, *args, **kwargs):
         minsubjects = 10
-        if simpleworc._get_num_subjects() <= minsubjects:
+        if simpleworc.count_num_subjects() <= minsubjects:
             raise ValueError(f'Less than {minsubjects + 1} subjects will make WORC crash due to a split in the validation set having only one subject. Add at least {minsubjects + 1} subjects or more.')
 
 class SamplesWarning(AbstractValidator):
     # Not really a validator, but more a good practice. Hence this won't throw an exception but prints a warning instead.
     def _validate(self, simpleworc, *args, **kwargs):
         if simpleworc._method == 'classification':
-            if simpleworc._get_num_subjects() < len(simpleworc._label_names) * 100 # at least 100 subjects per label recommended
-                print(f'Warning: at least {len(simpleworc._label_names) * 100} subjects is recommended when predicting {len(simpleworc._label_names)} labels. Current subject count is: {simpleworc._get_num_subjects()}')
+            if simpleworc.count_num_subjects() < len(simpleworc._label_names) * 100 # at least 100 subjects per label recommended
+                print(f'Warning: at least {len(simpleworc._label_names) * 100} subjects is recommended when predicting {len(simpleworc._label_names)} labels. Current subject count is: {simpleworc.count_num_subjects()}')
         elif simpleworc._method == 'regression':
             # TODO @martijn not sure how to tackle this, what would be a reasonable amount of subjects for regression?
             pass

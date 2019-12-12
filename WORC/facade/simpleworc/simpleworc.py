@@ -213,7 +213,7 @@ class SimpleWORC():
 
         self._method = method
 
-    def _get_num_subjects(self):
+    def count_num_subjects(self):
         # TODO: @martijn graag hier subject counter implementeren
         # hier durf ik mijn vingers niet aan te branden ivm. verschillende
         # modussen waardoor dit niet altijd aan de hand van het aantal segmentaties
