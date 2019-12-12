@@ -1,5 +1,4 @@
 import pandas as pd
-import tables
 import os
 from WORC.addexceptions import WORCKeyError
 
