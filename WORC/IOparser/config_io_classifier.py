@@ -38,7 +38,8 @@ def load_config(config_file_path):
                      'Classification': dict(), 'SelectFeatGroup': dict(),
                      'Featsel': dict(), 'FeatureScaling': dict(),
                      'SampleProcessing': dict(), 'Imputation': dict(),
-                     'Ensemble': dict(), 'Bootstrap': dict()}
+                     'Ensemble': dict(), 'Bootstrap': dict(),
+                     'FeatPreProcess': dict()}
 
     settings_dict['General']['cross_validation'] =\
         settings['General'].getboolean('cross_validation')
@@ -103,6 +104,9 @@ def load_config(config_file_path):
     settings_dict['Featsel']['ReliefNumFeatures'] =\
         [int(str(item).strip()) for item in
          settings['Featsel']['ReliefNumFeatures'].split(',')]
+
+    settings_dict['FeatPreProcess']['Use'] =\
+        [str(settings['FeatPreProcess']['Use'])]
 
     settings_dict['Imputation']['use'] =\
         [str(item).strip() for item in

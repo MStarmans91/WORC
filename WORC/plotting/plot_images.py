@@ -23,10 +23,36 @@ import numpy as np
 from matplotlib.ticker import NullLocator
 import matplotlib.colors as colors
 import SimpleITK as sitk
+from skimage import morphology
 
 
-def slicer(image, mask, output_name, output_name_zoom=None, thresholds=[-240, 160],
-           zoomfactor=4, dpi=500, normalize=False, expand=False):
+def extract_boundary(contour, radius=2):
+    returnitk = False
+    if type(contour) is sitk.Image:
+        contour = sitk.GetArrayFromImage(contour)
+        returnitk = True
+
+    disk = morphology.disk(radius)
+    if len(contour.shape) == 3:
+        for ind in range(contour.shape[0]):
+            contour_d = morphology.binary_dilation(contour[ind, :, :], disk)
+            contour_e = morphology.binary_erosion(contour[ind, :, :], disk)
+            contour[ind, :, :] = np.bitwise_xor(contour_d, contour_e)
+    else:
+            contour_d = morphology.binary_dilation(contour, disk)
+            contour_e = morphology.binary_erosion(contour, disk)
+            contour = np.bitwise_xor(contour_d, contour_e)
+
+    contour = contour.astype(np.uint16)  # To be compatible with SimpleITK
+    if returnitk:
+        return sitk.GetImageFromArray(contour)
+    else:
+        return contour
+
+
+def slicer(image, mask, output_name, output_name_zoom=None,
+           thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False,
+           expand=False, boundary=False, square=False, flip=True):
     '''
     image and mask should both be arrays
     '''
@@ -46,6 +72,45 @@ def slicer(image, mask, output_name, output_name_zoom=None, thresholds=[-240, 16
     imslice = image[max_ind, :, :]
     maskslice = mask[max_ind, :, :]
 
+    # Rotate, as this is not done automatically
+    if flip:
+        print('\t Flipping up-down.')
+        imslice = np.flipud(imslice)
+        maskslice = np.flipud(maskslice)
+
+    if boundary:
+        print('\t Extracting boundary.')
+        maskslice = extract_boundary(maskslice)
+
+    if normalize:
+        print('\t Normalizing.')
+        imslice = sitk.GetImageFromArray(imslice)
+        imslice = sitk.Normalize(imslice)
+        imslice = sitk.GetArrayFromImage(imslice)
+
+    if square:
+        sz = imslice.shape
+        if sz[0] != sz[1]:
+            print('\t Making image square')
+            if sz[0] > sz[1]:
+                diff = sz[0] - sz[1]
+                newimslice = np.ones((sz[0], sz[0])) * np.min(imslice)
+                newimslice[:, int(diff/2.0):sz[1] + int(diff/2.0)] = imslice
+                imslice = newimslice
+
+                newmaskslice = np.zeros((sz[0], sz[0]))
+                newmaskslice[:, int(diff/2.0):sz[1] + int(diff/2.0)] = maskslice
+                maskslice = newmaskslice
+            else:
+                diff = sz[1] - sz[0]
+                newimslice = np.ones((sz[1], sz[1])) * np.min(imslice)
+                newimslice[int(diff/2.0):sz[0] + int(diff/2.0), :] = imslice
+                imslice = newimslice
+
+                newmaskslice = np.zeros((sz[1], sz[1]))
+                newmaskslice[int(diff/2.0):sz[0] + int(diff/2.0), :] = maskslice
+                maskslice = newmaskslice
+
     if expand:
         print('\t Expanding.')
         imslice = sitk.GetImageFromArray(imslice)
@@ -63,12 +128,6 @@ def slicer(image, mask, output_name, output_name_zoom=None, thresholds=[-240, 16
         imslice = sitk.GetArrayFromImage(imslice)
         maskslice = sitk.GetArrayFromImage(maskslice)
 
-    if normalize:
-        print('\t Normalizing.')
-        imslice = sitk.GetImageFromArray(imslice)
-        imslice = sitk.Normalize(imslice)
-        imslice = sitk.GetArrayFromImage(imslice)
-
     # Threshold the image if desired
     if thresholds:
         imslice[imslice < thresholds[0]] = thresholds[0]
@@ -78,10 +137,11 @@ def slicer(image, mask, output_name, output_name_zoom=None, thresholds=[-240, 16
     fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize)
 
     # Save Output
+    print('\t Saving output.')
     fig.savefig(output_name, bbox_inches='tight', pad_inches=0, dpi=dpi)
 
     # Save some memory
-    del fig
+    # del fig
 
     if output_name_zoom is not None:
         # Create a bounding box and save zoomed image

@@ -289,10 +289,10 @@ def crossval(config, label_data, image_features,
             config['HyperOptimization']['fastr_plugin'] = fastr_plugin
             n_cores = config['General']['Joblib_ncores']
             trained_classifier = random_search_parameters(features=X_train,
-                                                             labels=Y_train,
-                                                             param_grid=param_grid,
-                                                             n_cores=n_cores,
-                                                             **config['HyperOptimization'])
+                                                          labels=Y_train,
+                                                          param_grid=param_grid,
+                                                          n_cores=n_cores,
+                                                          **config['HyperOptimization'])
 
             # Create an ensemble if required
             trained_classifier.create_ensemble(X_train, Y_train, method=ensemble['Use'])

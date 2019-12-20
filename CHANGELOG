@@ -6,6 +6,19 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+Unreleased
+------------------
+
+Added
+~~~~~~~
+- Some options for the plot_images slicer function.
+
+Changed
+~~~~~~~
+- Preprocessor slows down progress and is not always neccesary. Made it optional.
+- Moved the preprocessor to the SearchCV script to do once on the training set,
+  not in within the algorithm optimization.
+
 3.1.2 - 2019-12-09
 ------------------
 

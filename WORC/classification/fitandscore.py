@@ -37,7 +37,6 @@ from WORC.featureprocessing.Imputer import Imputer
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
-from WORC.featureprocessing.Preprocessor import Preprocessor
 
 # Specific imports for error management
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
@@ -210,19 +209,8 @@ def fit_and_score(X, y, scoring,
     feature_labels = np.asarray([x[1] for x in X])
 
     # ------------------------------------------------------------------------
-    # Preprocessing: remove features if too many NaNs
-    preprocessor = Preprocessor(verbose=False)
-    preprocessor.fit(feature_values, feature_labels=feature_labels[0, :])
-    feature_values = preprocessor.transform(feature_values)
-    feature_labels = preprocessor.transform(feature_labels)
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del preprocessor
-
-    # ------------------------------------------------------------------------
     # Feature scaling
-    if 'FeatureScaling' in para_estimator:
+    if 'FeatureScaling' in para_estimator.keys():
         if verbose:
             print("Fitting scaler and transforming features.")
 
@@ -442,7 +430,7 @@ def fit_and_score(X, y, scoring,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
 
@@ -497,7 +485,7 @@ def fit_and_score(X, y, scoring,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
 
@@ -518,7 +506,7 @@ def fit_and_score(X, y, scoring,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
 
@@ -696,7 +684,7 @@ def fit_and_score(X, y, scoring,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
 
@@ -744,7 +732,7 @@ def fit_and_score(X, y, scoring,
                    fit_time, score_time, para_estimator, para]
 
             if return_all:
-                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
+                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
             else:
                 return ret
         else:
@@ -762,7 +750,7 @@ def fit_and_score(X, y, scoring,
     ret.append(para)
 
     if return_all:
-        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, preprocessor, pca, StatisticalSel, ReliefSel, sm, ros
+        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
     else:
         return ret
 
@@ -789,6 +777,9 @@ def delete_nonestimator_parameters(parameters):
 
     if 'Featsel_Variance' in parameters.keys():
         del parameters['Featsel_Variance']
+
+    if 'FeatPreProcess' in parameters.keys():
+        del parameters['FeatPreProcess']
 
     if 'FeatureScaling' in parameters.keys():
         del parameters['FeatureScaling']

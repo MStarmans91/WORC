@@ -178,6 +178,14 @@ def generate_config_options():
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Integer > 0'
 
+    # Feature preprocessing before all below takes place
+    config['FeatPreProcess'] = dict()
+    config['FeatPreProcess']['Use'] = 'True, False'
+
+    # Feature preprocessing before all below takes place
+    config['FeatPreProcess'] = dict()
+    config['FeatPreProcess']['Use'] = 'Boolean'
+
     # Feature selection
     config['Featsel'] = dict()
     config['Featsel']['Variance'] = 'Boolean(s)'
@@ -204,6 +212,8 @@ def generate_config_options():
     config['SelectFeatGroup']['texture_GLCMMS_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLRLM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLSZM_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['texture_GLDZM_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['texture_NGLDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_NGTDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_LBP_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['patient_features'] = 'Boolean(s)'
@@ -212,6 +222,10 @@ def generate_config_options():
     config['SelectFeatGroup']['log_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['vessel_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['phase_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['fractal_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['location_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['rgrd_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['wavelet_features'] = 'Boolean(s)'
 
     # Feature imputation
     config['Imputation'] = dict()
@@ -371,6 +385,10 @@ def generate_config_descriptions():
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Radius to determine boundary of between inner part and edge in Frangi vessel filter.'
 
+    # Feature preprocessing before all below takes place
+    config['FeatPreProcess'] = dict()
+    config['FeatPreProcess']['Use'] = 'If True, use feature preprocessor in the classify node. Currently excluded features with >80% NaNs.'
+
     # Feature selection
     config['Featsel'] = dict()
     config['Featsel']['Variance'] = 'If True, exclude features which have a variance < 0.01. Based on ` sklearn"s VarianceThreshold <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/>`_.'
@@ -397,7 +415,9 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['texture_GLCMMS_features'] = 'If True, use GLCM Multislice texture features in model.'
     config['SelectFeatGroup']['texture_GLRLM_features'] = 'If True, use GLRLM texture features in model.'
     config['SelectFeatGroup']['texture_GLSZM_features'] = 'If True, use GLSZM texture features in model.'
+    config['SelectFeatGroup']['texture_GLDZM_features'] = 'If True, use GLDZM texture features in model.'
     config['SelectFeatGroup']['texture_NGTDM_features'] = 'If True, use NGTDM texture features in model.'
+    config['SelectFeatGroup']['texture_NGLDM_features'] = 'If True, use NGLDM texture features in model.'
     config['SelectFeatGroup']['texture_LBP_features'] = 'If True, use LBP texture features in model.'
     config['SelectFeatGroup']['patient_features'] = 'If True, use patient features in model.'
     config['SelectFeatGroup']['semantic_features'] = 'If True, use semantic features in model.'
@@ -405,6 +425,10 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['log_features'] = 'If True, use log features in model.'
     config['SelectFeatGroup']['vessel_features'] = 'If True, use vessel features in model.'
     config['SelectFeatGroup']['phase_features'] = 'If True, use phase features in model.'
+    config['SelectFeatGroup']['fractal_features'] = 'If True, use fractal features in model.'
+    config['SelectFeatGroup']['location_features'] = 'If True, use location features in model.'
+    config['SelectFeatGroup']['rgrd_features'] = 'If True, use rgrd features in model.'
+    config['SelectFeatGroup']['wavelet_features'] = 'If True, use wavelet features in model.'
 
     # Feature imputation
     config['Imputation'] = dict()

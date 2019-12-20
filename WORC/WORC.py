@@ -240,6 +240,10 @@ class WORC(object):
         # Vessel features radius for erosion to determine boudnary
         config['ImageFeatures']['vessel_radius'] = '5'
 
+        # Feature preprocessing before all below takes place
+        config['FeatPreProcess'] = dict()
+        config['FeatPreProcess']['Use'] = 'False'
+        
         # Feature selection
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = 'True'
