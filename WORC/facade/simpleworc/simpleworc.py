@@ -19,6 +19,7 @@ import fastr.exceptions
 from pathlib import Path
 import inspect
 import os
+import pandas as pd
 from WORC import WORC
 from .helpers import convert_radiomix_features
 from .exceptions import PathNotFoundException, NoImagesFoundException, \
@@ -30,6 +31,7 @@ from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
     CartesiusClusterDetector
 
 from WORC.validators.preflightcheck import ValidatorsFactory
+
 
 def _for_all_methods(decorator):
     def decorate(cls):
@@ -92,7 +94,9 @@ class SimpleWORC():
         elif CartesiusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
 
-    def features_from_this_directory(self, directory, feature_file_name='features.hdf5', glob='*/', is_training=True):
+    def features_from_this_directory(self, directory,
+                                     feature_file_name='features.hdf5',
+                                     glob='*/', is_training=True):
         directory = Path(directory).expanduser()
         if not directory.exists():
             raise PathNotFoundException(directory)
@@ -214,19 +218,23 @@ class SimpleWORC():
         self._method = method
 
     def count_num_subjects(self):
-        # TODO: @martijn graag hier subject counter implementeren
-        # hier durf ik mijn vingers niet aan te branden ivm. verschillende
-        # modussen waardoor dit niet altijd aan de hand van het aantal segmentaties
-        # of aantal images kan.
-        return 0
+        if self._radiomix_feature_file:
+            f = pd.read_excel(self._radiomix_feature_file)
+            pids = f.values[:, 4]
+            num_subjects = len(pids)
+        elif self._images_train:
+            num_subjects = len(self._images_train)
+        elif self._feature_train:
+            num_subjects = len(self._features_train)
+
+        self._num_subjects = num_subjects
 
     def _validate(self):
         validators = ValidatorsFactory.factor_validators()
+        self.count_num_subjects()
 
         for validator in validators:
-            do_validation(self)
-
-
+            validator.do_validation(self)
 
     def execute(self):
         # this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well

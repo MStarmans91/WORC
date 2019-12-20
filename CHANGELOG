@@ -12,6 +12,7 @@ Unreleased
 Added
 ~~~~~~~
 - Some options for the plot_images slicer function.
+- Validators to check your inputs before executing experiment.
 
 Changed
 ~~~~~~~
