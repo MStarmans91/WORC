@@ -44,16 +44,14 @@ class SimpleValidator(AbstractValidator):
 
         if simpleworc._images_train:
             for num, (ims, segs) in enumerate(zip(simpleworc._images_train, simpleworc._segmentations_train)):
-                if len(ims) == len(segs):
-                    for key, subjects_dict in ims.items():
-                        if subjects_dict.keys() != segs[key].keys():
-                            raise ae.WORCValueError(f'Subjects in images_train and segmentations_train are not the same for modality {num}.')
+                if ims.keys() != segs.keys():
+                    raise ae.WORCValueError(f'Subjects in images_train and segmentations_train are not the same for modality {num}.')
 
 
 class MinSubjectsValidator(AbstractValidator):
     def _validate(self, simpleworc, *args, **kwargs):
         if simpleworc._num_subjects < min_subjects:
-            raise ae.WORCValueError(f'Less than {min_subjects} subjects will porbably make WORC crash due to a split in the test/validation set having only one subject. Use at least {min_subjects} subjects or more.')
+            raise ae.WORCValueError(f'Less than {min_subjects} subjects (you have {simpleworc._num_subjects}) will probably make WORC crash due to a split in the test/validation set having only one subject. Use at least {min_subjects} subjects or more.')
 
 
 class SamplesWarning(AbstractValidator):

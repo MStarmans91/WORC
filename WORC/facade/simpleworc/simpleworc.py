@@ -25,7 +25,7 @@ from .helpers import convert_radiomix_features
 from .exceptions import PathNotFoundException, NoImagesFoundException, \
     NoSegmentationsFoundException, InvalidCsvFileException, \
     NoFeaturesFoundException
-from WORC.addexceptions import WORCKeyError
+from WORC.addexceptions import WORCKeyError, WORCValueError, WORCAssertionError
 from WORC.facade.simpleworc.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
     CartesiusClusterDetector
@@ -47,7 +47,8 @@ def _error_buldozer(func):
     _valid_exceptions = [
         PathNotFoundException, NoImagesFoundException,
         NoSegmentationsFoundException, InvalidCsvFileException,
-        TypeError, ValueError, NotImplementedError, WORCKeyError
+        TypeError, ValueError, NotImplementedError, WORCKeyError,
+        WORCValueError, WORCAssertionError
     ]
     _valid_exceptions += [c[1] for c in inspect.getmembers(fastr.exceptions, inspect.isclass)]
 
@@ -223,9 +224,15 @@ class SimpleWORC():
             pids = f.values[:, 4]
             num_subjects = len(pids)
         elif self._images_train:
-            num_subjects = len(self._images_train)
-        elif self._feature_train:
-            num_subjects = len(self._features_train)
+            if type(self._images_train[0]) == dict():
+                num_subjects = len(list(self._images_train[0].keys()))
+            else:
+                num_subjects = len(self._images_train[0])
+        elif self._features_train:
+            if type(self._features_train[0]) == dict():
+                num_subjects = len(list(self._features_train[0].keys()))
+            else:
+                num_subjects = len(self._features_train[0])
 
         self._num_subjects = num_subjects
 
