@@ -22,12 +22,14 @@ import os
 from WORC import WORC
 from .helpers import convert_radiomix_features
 from .exceptions import PathNotFoundException, NoImagesFoundException, \
-    NoSegmentationsFoundException, InvalidCsvFileException
+    NoSegmentationsFoundException, InvalidCsvFileException, \
+    NoFeaturesFoundException
 from WORC.addexceptions import WORCKeyError
 from WORC.facade.simpleworc.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
     CartesiusClusterDetector
 
+from WORC.validators.preflightcheck import ValidatorsFactory
 
 def _for_all_methods(decorator):
     def decorate(cls):
@@ -211,34 +213,20 @@ class SimpleWORC():
 
         self._method = method
 
+    def count_num_subjects(self):
+        # TODO: @martijn graag hier subject counter implementeren
+        # hier durf ik mijn vingers niet aan te branden ivm. verschillende
+        # modussen waardoor dit niet altijd aan de hand van het aantal segmentaties
+        # of aantal images kan.
+        return 0
+
     def _validate(self):
-        if not self._images_train:
-            pass  # TODO: throw exception
+        validators = ValidatorsFactory.factor_validators()
 
-        if not self._segmentations_train:
-            pass  # TODO: throw exception
+        for validator in validators:
+            do_validation(self)
 
-        if not self._labels_file_train:
-            pass  # TODO: throw an exception
 
-        if not self._label_names:
-            pass  # TODO: throw exception
-
-        if not self._method:
-            pass  # TODO: throw exception
-
-        if len(self._images_train) == len(self._segmentations_train):
-            for index, subjects_dict in enumerate(self._images_train):
-                try:
-                    if subjects_dict.keys() != self._segmentations_train[index].keys():
-                        raise ValueError('Subjects in images_train and segmentations_train are not the same')
-
-                    # TODO: verify subjects in labels files as well
-                    # TODO: peform same checks on images_test and segmentations_test if those are not None
-                except IndexError:
-                    # this should never be thrown, but i put it here just in case
-                    raise ValueError(
-                        'A blackhole to another dimenstion has opened. This exception should never be thrown. Double check your code or make an issue on the WORC github so that we can fix this issue.')
 
     def execute(self):
         # this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well
