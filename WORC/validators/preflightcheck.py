@@ -34,25 +34,26 @@ class AbstractValidator(ABC):
 class SimpleValidator(AbstractValidator):
     def _validate(self, simpleworc, *args, **kwargs):
         if not simpleworc._labels_file_train:
-            raise ValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
+            raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
 
         if not simpleworc._label_names:
-            raise ValueError(f'No label(s) to predict selected. Use SimpleWorc().predict_labels(**) to select labels.')
+            raise ae.WORCValueError(f'No label(s) to predict selected. Use SimpleWorc().predict_labels(**) to select labels.')
 
         if not simpleworc._method:
-            raise ValueError(f'No method selected. Call function binary_classification(**) or regression(**) or survival(**) on SimpleWorc().')
+            raise ae.WORCValueError(f'No method selected. Call function binary_classification(**) or regression(**) or survival(**) on SimpleWorc().')
 
         if simpleworc._images_train:
-            if len(simpleworc._images_train) == len(simpleworc._segmentations_train):
-                for key, subjects_dict in simpleworc._images_train.items():
-                    if subjects_dict.keys() != self._segmentations_train[key].keys():
-                        raise ValueError('Subjects in images_train and segmentations_train are not the same')
+            for num, (ims, segs) in enumerate(zip(simpleworc._images_train, simpleworc._segmentations_train)):
+                if len(ims) == len(segs):
+                    for key, subjects_dict in ims.items():
+                        if subjects_dict.keys() != segs[key].keys():
+                            raise ae.WORCValueError(f'Subjects in images_train and segmentations_train are not the same for modality {num}.')
 
 
 class MinSubjectsValidator(AbstractValidator):
     def _validate(self, simpleworc, *args, **kwargs):
         if simpleworc._num_subjects < min_subjects:
-            raise ValueError(f'Less than {min_subjects} subjects will porbably make WORC crash due to a split in the test/validation set having only one subject. Use at least {min_subjects} subjects or more.')
+            raise ae.WORCValueError(f'Less than {min_subjects} subjects will porbably make WORC crash due to a split in the test/validation set having only one subject. Use at least {min_subjects} subjects or more.')
 
 
 class SamplesWarning(AbstractValidator):
@@ -73,7 +74,7 @@ class InvalidLabelsValidator(AbstractValidator):
         except ae.WORCAssertionError as wae:
             if 'First column should be patient ID' in str(wae):
                 # TODO: print wrong column name and file so that it is clear what needs to be replaced in which file
-                raise ValueError(f'First column in the file given to SimpleWORC().labels_from_this_file(**) needs to be named Patient.')
+                raise ae.WORCValueError(f'First column in the file given to SimpleWORC().labels_from_this_file(**) needs to be named Patient.')
 
         # check labels for substrings of eachother
         labels_matches = self._get_all_substrings_for_array(labels)
@@ -95,7 +96,7 @@ class InvalidLabelsValidator(AbstractValidator):
                     errstr += f"{label} is a substring of {match}\n"
 
         if errstr:
-            raise ValueError(errstr)
+            raise ae.WORCValueError(errstr)
 
     def _get_all_substrings_for_array(self, arr):
         # generate a dict with substrings of each element in array
