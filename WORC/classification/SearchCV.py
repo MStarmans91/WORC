@@ -789,8 +789,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 X_fit = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
             else:
                 X_fit = X
+                preprocessor = None
         else:
             X_fit = X
+            preprocessor = None
 
         # Refit all preprocessing functions
         out = fit_and_score(X_fit, y, self.scoring,
