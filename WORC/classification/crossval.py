@@ -19,6 +19,8 @@ import numpy as np
 import pandas as pd
 import logging
 import os
+import time
+from time import gmtime, strftime
 from sklearn.model_selection import train_test_split
 from .parameter_optimization import random_search_parameters
 import WORC.addexceptions as ae
@@ -100,19 +102,21 @@ def crossval(config, label_data, image_features,
             Contains all information on the trained classifier.
 
     """
-    if tempsave:
-        import fastr
-
     # Process input data
     patient_IDs = label_data['patient_IDs']
     label_value = label_data['label']
     label_name = label_data['label_name']
 
     if outputfolder is None:
-        logfilename = os.path.join(os.getcwd(), 'classifier.log')
-    else:
-        logfilename = os.path.join(outputfolder, 'classifier.log')
+        outputfolder = os.getcwd()
+
+    logfilename = os.path.join(outputfolder, 'classifier.log')
     print("Logging to file " + str(logfilename))
+
+    if tempsave:
+        tempfolder = os.path.join(outputfolder, 'tempsave')
+        if not os.path.exists(tempfolder):
+            os.makedirs(tempfolder)
 
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
@@ -120,6 +124,7 @@ def crossval(config, label_data, image_features,
     logging.basicConfig(filename=logfilename, level=logging.DEBUG)
     N_iterations = config['CrossValidation']['N_iterations']
     test_size = config['CrossValidation']['test_size']
+    fixed_seed = config['CrossValidation']['fixed_seed']
 
     classifier_labelss = dict()
     logging.debug('Starting classifier')
@@ -153,7 +158,15 @@ def crossval(config, label_data, image_features,
         for i in range(0, N_iterations):
             print(('Cross validation iteration {} / {} .').format(str(i + 1), str(N_iterations)))
             logging.debug(('Cross validation iteration {} / {} .').format(str(i + 1), str(N_iterations)))
-            random_seed = np.random.randint(5000)
+            timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+            print(f'\t Time: {timestamp}.')
+            logging.debug(f'\t Time: {timestamp}.')
+            if fixed_seed:
+                random_seed = i**2
+            else:
+                random_seed = np.random.randint(5000)
+
+            t = time.time()
 
             # Split into test and training set, where the percentage of each
             # label is maintained
@@ -295,7 +308,7 @@ def crossval(config, label_data, image_features,
                                                           **config['HyperOptimization'])
 
             # Create an ensemble if required
-            trained_classifier.create_ensemble(X_train, Y_train, method=ensemble['Use'])
+            # trained_classifier.create_ensemble(X_train, Y_train, method=ensemble['Use'])
 
             # We only want to save the feature values and one label array
             X_train = [x[0] for x in X_train]
@@ -321,16 +334,18 @@ def crossval(config, label_data, image_features,
 
                 panda_data = pd.DataFrame(panda_data_temp)
                 n = 0
-                filename = os.path.join(fastr.config.mounts['tmp'], 'GSout', 'RS_' + str(i) + '.hdf5')
+                filename = os.path.join(tempfolder, 'tempsave_' + str(i) + '.hdf5')
                 while os.path.exists(filename):
                     n += 1
-                    filename = os.path.join(fastr.config.mounts['tmp'], 'GSout', 'RS_' + str(i + n) + '.hdf5')
-
-                if not os.path.exists(os.path.dirname(filename)):
-                    os.makedirs(os.path.dirname(filename))
+                    filename = os.path.join(tempfolder, 'tempsave_' + str(i + n) + '.hdf5')
 
                 panda_data.to_hdf(filename, 'SVMdata')
                 del panda_data, panda_data_temp
+
+            # Print elapsed time
+            elapsed = int((time.time() - t) / 60.0)
+            print(f'\t Fitting took {elapsed} minutes.')
+            logging.debug(f'\t Fitting took {elapsed} minutes.')
 
         [classifiers, X_train_set, X_test_set, Y_train_set, Y_test_set,
          patient_ID_train_set, patient_ID_test_set, seed_set] =\
@@ -465,8 +480,7 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
                                                          **config['HyperOptimization'])
 
         # Create an ensemble if required
-        if ensemble['Use']:
-            trained_classifier.create_ensemble(X_train, Y_train)
+        # trained_classifier.create_ensemble(X_train, Y_train, method=ensemble['Use'])
 
         # Extract the feature values
         X_train = np.asarray([x[0] for x in X_train])

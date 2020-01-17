@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,12 +21,12 @@ import inspect
 import os
 import pandas as pd
 from WORC import WORC
-from .helpers import convert_radiomix_features
-from .exceptions import PathNotFoundException, NoImagesFoundException, \
+from .helpers.processing import convert_radiomix_features
+from .helpers.exceptions import PathNotFoundException, NoImagesFoundException, \
     NoSegmentationsFoundException, InvalidCsvFileException, \
     NoFeaturesFoundException
 from WORC.addexceptions import WORCKeyError, WORCValueError, WORCAssertionError
-from WORC.facade.simpleworc.configbuilder import ConfigBuilder
+from .helpers.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
     CartesiusClusterDetector
 
@@ -178,7 +178,8 @@ class SimpleWORC():
 
     def predict_labels(self, label_names: list):
         if not self._labels_file_train:
-            raise ValueError('No labels file set trough labels_from_this_file')
+            if not self.labels_file_train:
+                raise ValueError('No labels file set! You can do this through labels_from_this_file')
 
         if not isinstance(label_names, list):
             raise TypeError(f'label_names is of type {type(label_names)} while list is expected')
@@ -222,17 +223,25 @@ class SimpleWORC():
         if self._radiomix_feature_file:
             f = pd.read_excel(self._radiomix_feature_file)
             pids = f.values[:, 4]
-            num_subjects = len(pids)
+            tocount = pids
         elif self._images_train:
-            if type(self._images_train[0]) == dict():
-                num_subjects = len(list(self._images_train[0].keys()))
-            else:
-                num_subjects = len(self._images_train[0])
+            tocount = self._images_train[0]
         elif self._features_train:
-            if type(self._features_train[0]) == dict():
-                num_subjects = len(list(self._features_train[0].keys()))
-            else:
-                num_subjects = len(self._features_train[0])
+            tocount = self._features_train[0]
+        elif self.images_train:
+            tocount = self.images_train[0]
+        elif self.features_train:
+            tocount = self.features_train[0]
+        else:
+            message = 'No features or images given, cannot count number ' +\
+                ' of subjects. Make sure you input at least one of these ' +\
+                'as source.'
+            raise WORCValueError(message)
+
+        if type(tocount) == dict():
+            num_subjects = len(list(tocount.keys()))
+        else:
+            num_subjects = len(tocount)
 
         self._num_subjects = num_subjects
 

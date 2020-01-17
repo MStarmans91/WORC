@@ -229,6 +229,9 @@ def load_config(config_file_path):
     settings_dict['CrossValidation']['test_size'] =\
         settings['CrossValidation'].getfloat('test_size')
 
+    settings_dict['CrossValidation']['fixed_seed'] =\
+        settings['CrossValidation'].getboolean('fixed_seed')
+
     # Genetic settings
     settings_dict['Labels']['label_names'] =\
         [str(item).strip() for item in

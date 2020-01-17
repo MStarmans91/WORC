@@ -52,7 +52,8 @@ def extract_boundary(contour, radius=2):
 
 def slicer(image, mask, output_name, output_name_zoom=None,
            thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False,
-           expand=False, boundary=False, square=False, flip=True):
+           expand=False, boundary=False, square=False, flip=True,
+           alpha=0.40):
     '''
     image and mask should both be arrays
     '''
@@ -130,11 +131,12 @@ def slicer(image, mask, output_name, output_name_zoom=None,
 
     # Threshold the image if desired
     if thresholds:
+        print("\t Thresholding.")
         imslice[imslice < thresholds[0]] = thresholds[0]
         imslice[imslice > thresholds[1]] = thresholds[1]
 
     # Plot the image and overlay the mask
-    fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize)
+    fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize, alpha=alpha)
 
     # Save Output
     print('\t Saving output.')
@@ -151,7 +153,7 @@ def slicer(image, mask, output_name, output_name_zoom=None,
         # NOTE: As these zoomed images get small, we double the spacing
         spacing = spacing * zoomfactor
         figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
-        fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize)
+        fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize, alpha=alpha)
         fig.savefig(output_name_zoom, bbox_inches='tight', pad_inches=0, dpi=dpi)
         plt.close('all')
 

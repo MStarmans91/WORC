@@ -281,15 +281,6 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
 
         # Check which patients are in the test set.
         for i_ID in test_patient_IDs:
-            if i_ID not in patient_IDs:
-                print(f'[WORC WARNING] Patient {i_ID} is not found the patient labels, removing underscore.')
-                i_ID = np.where(patient_IDs == i_ID.split("_")[0])
-                if i_ID not in patient_IDs:
-                    print(f'[WORC WARNING] Did not help, excluding patient {i_ID}.')
-                    continue
-
-            test_indices.append(np.where(patient_IDs == i_ID)[0][0])
-
             # Initiate counting how many times a patient is classified correctly
             if i_ID not in patient_classification_list:
                 patient_classification_list[i_ID] = dict()
@@ -298,6 +289,16 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                 patient_classification_list[i_ID]['N_wrong'] = 0
 
             patient_classification_list[i_ID]['N_test'] += 1
+
+            # Check if this is exactly the label of the patient within the label file
+            if i_ID not in patient_IDs:
+                print(f'[WORC WARNING] Patient {i_ID} is not found the patient labels, removing underscore.')
+                i_ID = i_ID.split("_")[0]
+                if i_ID not in patient_IDs:
+                    print(f'[WORC WARNING] Did not help, excluding patient {i_ID}.')
+                    continue
+
+            test_indices.append(np.where(patient_IDs == i_ID)[0][0])
 
         # Extract ground truth
         y_truth = Y_test_temp
@@ -325,7 +326,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         if bootstrap and i > 0:
             # For bootstrapping, only do this at the first iteration
             pass
-        elif ensemble > 1:
+        elif ensemble > 1 and not fitted_model.ensemble:
             # NOTE: Added for backwards compatability
             if not hasattr(fitted_model, 'cv_iter'):
                 cv_iter = list(fitted_model.cv.split(X_train_temp, Y_train_temp))
@@ -334,8 +335,8 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             # Create the ensemble
             X_train_temp = [(x, feature_labels) for x in X_train_temp]
             fitted_model.create_ensemble(X_train_temp, Y_train_temp,
-                                    method=ensemble, verbose=verbose,
-                                    scoring=ensemble_scoring)
+                                         method=ensemble, verbose=verbose,
+                                         scoring=ensemble_scoring)
 
         # Create prediction
         y_prediction = fitted_model.predict(X_test_temp)
