@@ -5,6 +5,7 @@ Bootstrap         :ref:`Bootstrap <config-Bootstrap>`
 Classification    :ref:`Classification <config-Classification>`      
 CrossValidation   :ref:`CrossValidation <config-CrossValidation>`    
 Ensemble          :ref:`Ensemble <config-Ensemble>`                  
+FeatPreProcess    :ref:`FeatPreProcess <config-FeatPreProcess>`      
 Featsel           :ref:`Featsel <config-Featsel>`                    
 FeatureScaling    :ref:`FeatureScaling <config-FeatureScaling>`      
 General           :ref:`General <config-General>`                    

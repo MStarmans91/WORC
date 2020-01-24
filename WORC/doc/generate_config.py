@@ -264,6 +264,7 @@ def generate_config_options():
     config['CrossValidation'] = dict()
     config['CrossValidation']['N_iterations'] = 'Integer'
     config['CrossValidation']['test_size'] = 'Float'
+    config['CrossValidation']['fixed_seed'] = 'Boolean'
 
     # Options for the object/patient labels that are used
     config['Labels'] = dict()
@@ -467,6 +468,7 @@ def generate_config_descriptions():
     config['CrossValidation'] = dict()
     config['CrossValidation']['N_iterations'] = 'Number of times the data is split in training and test in the outer cross-validation.'
     config['CrossValidation']['test_size'] = 'The percentage of data to be used for testing.'
+    config['CrossValidation']['fixed_seed'] = 'If True, use a fixed seed for the cross-validation splits.'
 
     # Options for the object/patient labels that are used
     config['Labels'] = dict()
