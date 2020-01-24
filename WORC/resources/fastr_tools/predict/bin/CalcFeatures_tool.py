@@ -59,6 +59,10 @@ def main():
         print('Saving image features')
         panda_data.to_hdf(args.out, 'image_features')
     else:
+        if type(args.para) is list:
+            # Parameters is a single argument
+            args.para = args.para[0]
+
         CalcFeatures(image=args.im, segmentation=args.seg, parameters=args.para,
                      output=args.out, metadata_file=args.md,
                      semantics_file=args.sem)
