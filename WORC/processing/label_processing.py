@@ -39,7 +39,7 @@ def load_labels(label_file, label_type):
     """
     if not os.path.exists(label_file):
         raise ae.WORCKeyError(f'File {label_file} does not exist!')
-        
+
     _, extension = os.path.splitext(label_file)
     if extension == '.txt':
         label_names, patient_IDs, label_status = load_label_txt(
@@ -250,11 +250,11 @@ def findlabeldata(patientinfo, label_type, filenames,
 
         if ifound > 1:
             message = ('Multiple matches ({}) found in labeling for feature file {}.').format(str(matches), str(feat))
-            raise ae.WORCIOError(message)
+            raise ae.WORCValueError(message)
 
         elif ifound == 0:
             message = ('No entry found in labeling for feature file {}.').format(str(feat))
-            raise ae.WORCIOError(message)
+            raise ae.WORCKeyError(message)
 
     # if image_features_temp is not None:
     #     image_features = np.asarray(image_features)

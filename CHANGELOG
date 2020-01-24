@@ -18,6 +18,7 @@ Added
 - Option for fixed seed in cross-validation.
 - BasicWORC Facade.
 - Support for computing confidence intervals on differences between models.
+- Error when config file cannot be found.
 
 Changed
 ~~~~~~~
