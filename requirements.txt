@@ -22,5 +22,5 @@ SimpleITK>=1.2.0
 missingpy>=0.2.0
 matplotlib2tikz==0.7.4
 lifelines>=0.21.1
-PREDICT>=3.1.1
+PREDICT>=3.1.2
 python-dateutil<=2.8.0

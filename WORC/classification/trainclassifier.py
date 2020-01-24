@@ -172,6 +172,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
     param_grid['SampleProcessing_Oversampling'] = config['SampleProcessing']['Oversampling']
 
     # Extract hyperparameter grid settings for SearchCV from config
+    param_grid['FeatPreProcess'] = config['FeatPreProcess']['Use']
     param_grid['Featsel_Variance'] = config['Featsel']['Variance']
 
     param_grid['Imputation'] = config['Imputation']['use']

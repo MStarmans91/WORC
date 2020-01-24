@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>processing Package &mdash; WORC 3.1.2 documentation</title>
+  <title>processing Package &mdash; WORC 3.1.3 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.2
+                3.1.3
               </div>
             
           
@@ -115,6 +115,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.resources.html">resources Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
 </ul>
 </li>
 </ul>
@@ -191,7 +192,7 @@
 <span id="extractnlargestblobsn-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ExtractNLargestBlobsn</span></code> Module<a class="headerlink" href="#module-WORC.processing.ExtractNLargestBlobsn" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.processing.ExtractNLargestBlobsn.ExtractNLargestBlobsn">
-<code class="sig-prename descclassname">WORC.processing.ExtractNLargestBlobsn.</code><code class="sig-name descname">ExtractNLargestBlobsn</code><span class="sig-paren">(</span><em class="sig-param">binaryImage</em>, <em class="sig-param">numberToExtract=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/ExtractNLargestBlobsn.html#ExtractNLargestBlobsn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.ExtractNLargestBlobsn.ExtractNLargestBlobsn" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.ExtractNLargestBlobsn.</code><code class="descname">ExtractNLargestBlobsn</code><span class="sig-paren">(</span><em>binaryImage</em>, <em>numberToExtract=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/ExtractNLargestBlobsn.html#ExtractNLargestBlobsn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.ExtractNLargestBlobsn.ExtractNLargestBlobsn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract N largest blobs from binary image.</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><p>binaryImage: boolean numpy array one or several contours.
@@ -210,40 +211,40 @@ numberToExtract: number of blobs to extract (integer).</p>
 <span id="classes-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">classes</span></code> Module<a class="headerlink" href="#module-WORC.processing.classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WORC.processing.classes.switch">
-<em class="property">class </em><code class="sig-prename descclassname">WORC.processing.classes.</code><code class="sig-name descname">switch</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.processing.classes.</code><code class="descname">switch</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Object to mimic the MATLAB switch - case statement.</p>
 <dl class="attribute">
 <dt id="WORC.processing.classes.switch.__dict__">
-<code class="sig-name descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.processing.classes', '__doc__': ' Object to mimic the MATLAB switch - case statement.', '__init__': &lt;function switch.__init__&gt;, '__iter__': &lt;function switch.__iter__&gt;, 'match': &lt;function switch.match&gt;, '__dict__': &lt;attribute '__dict__' of 'switch' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'switch' objects&gt;})</em><a class="headerlink" href="#WORC.processing.classes.switch.__dict__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.processing.classes', '__doc__': ' Object to mimic the MATLAB switch - case statement.', '__init__': &lt;function switch.__init__&gt;, '__iter__': &lt;function switch.__iter__&gt;, 'match': &lt;function switch.match&gt;, '__dict__': &lt;attribute '__dict__' of 'switch' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'switch' objects&gt;})</em><a class="headerlink" href="#WORC.processing.classes.switch.__dict__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="WORC.processing.classes.switch.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WORC.processing.classes.switch.__iter__">
-<code class="sig-name descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.__iter__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.__iter__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the match method once, then stop</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="WORC.processing.classes.switch.__module__">
-<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.processing.classes'</em><a class="headerlink" href="#WORC.processing.classes.switch.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__module__</code><em class="property"> = 'WORC.processing.classes'</em><a class="headerlink" href="#WORC.processing.classes.switch.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="WORC.processing.classes.switch.__weakref__">
-<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#WORC.processing.classes.switch.__weakref__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.processing.classes.switch.__weakref__" title="Permalink to this definition">¶</a></dt>
 <dd><p>list of weak references to the object (if defined)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WORC.processing.classes.switch.match">
-<code class="sig-name descname">match</code><span class="sig-paren">(</span><em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.match" title="Permalink to this definition">¶</a></dt>
+<code class="descname">match</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicate whether or not to enter a case suite</p>
 </dd></dl>
 
@@ -254,7 +255,7 @@ numberToExtract: number of blobs to extract (integer).</p>
 <span id="label-processing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module<a class="headerlink" href="#module-WORC.processing.label_processing" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.processing.label_processing.findlabeldata">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">findlabeldata</code><span class="sig-paren">(</span><em class="sig-param">patientinfo</em>, <em class="sig-param">label_type</em>, <em class="sig-param">filenames</em>, <em class="sig-param">image_features_temp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#findlabeldata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.findlabeldata" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">findlabeldata</code><span class="sig-paren">(</span><em>patientinfo</em>, <em>label_type</em>, <em>filenames</em>, <em>image_features_temp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#findlabeldata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.findlabeldata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the label data and match to the unage features.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>patientinfo (string): file with patient label data
@@ -269,13 +270,13 @@ image_features (np.array or list): array of the features</p>
 
 <dl class="function">
 <dt id="WORC.processing.label_processing.load_config_XNAT">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_config_XNAT</code><span class="sig-paren">(</span><em class="sig-param">config_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_config_XNAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_config_XNAT" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_config_XNAT</code><span class="sig-paren">(</span><em>config_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_config_XNAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_config_XNAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configparser for retreiving patient data from XNAT.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="WORC.processing.label_processing.load_label_XNAT">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_label_XNAT</code><span class="sig-paren">(</span><em class="sig-param">label_info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_XNAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_XNAT" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_label_XNAT</code><span class="sig-paren">(</span><em>label_info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_XNAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_XNAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the patient IDs and label data from XNAT, Only works if you have a
 file /resources/GENETICS/files/genetics.json for each patient containing
 a single dictionary of all labels.</p>
@@ -298,7 +299,7 @@ patient_ID (numpy array): IDs of patients for which label data is</p>
 
 <dl class="function">
 <dt id="WORC.processing.label_processing.load_label_csv">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_label_csv</code><span class="sig-paren">(</span><em class="sig-param">input_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_csv" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_label_csv</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_csv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the patient IDs and label data from the label file</p>
 <dl>
 <dt>Args:</dt><dd><p>input_file (string): Path of the label file</p>
@@ -318,7 +319,7 @@ patient_ID (numpy array): IDs of patients for which label data is</p>
 
 <dl class="function">
 <dt id="WORC.processing.label_processing.load_label_txt">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_label_txt</code><span class="sig-paren">(</span><em class="sig-param">input_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_txt" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_label_txt</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_txt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the patient IDs and label data from the label file</p>
 <dl>
 <dt>Args:</dt><dd><p>input_file (string): Path of the label file</p>
@@ -338,7 +339,7 @@ patient_ID (numpy array): IDs of patients for which label data is</p>
 
 <dl class="function">
 <dt id="WORC.processing.label_processing.load_labels">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_labels</code><span class="sig-paren">(</span><em class="sig-param">label_file</em>, <em class="sig-param">label_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_labels" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_labels</code><span class="sig-paren">(</span><em>label_file</em>, <em>label_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the label data from a label file</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>label_file (string): The path to the label file

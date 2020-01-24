@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,8 @@
 
 
 import configparser
+import os
+import WORC.addexceptions as ae
 
 
 def load_config(config_file_path):
@@ -29,6 +31,9 @@ def load_config(config_file_path):
     Returns:
         settings_dict (dict): dict with the loaded settings
     """
+    if not os.path.exists(config_file_path):
+        e = f'File {config_file_path} does not exist!'
+        raise ae.WORCKeyError(e)
 
     settings = configparser.ConfigParser()
     settings.read(config_file_path)
@@ -38,7 +43,8 @@ def load_config(config_file_path):
                      'Classification': dict(), 'SelectFeatGroup': dict(),
                      'Featsel': dict(), 'FeatureScaling': dict(),
                      'SampleProcessing': dict(), 'Imputation': dict(),
-                     'Ensemble': dict(), 'Bootstrap': dict()}
+                     'Ensemble': dict(), 'Bootstrap': dict(),
+                     'FeatPreProcess': dict()}
 
     settings_dict['General']['cross_validation'] =\
         settings['General'].getboolean('cross_validation')
@@ -103,6 +109,9 @@ def load_config(config_file_path):
     settings_dict['Featsel']['ReliefNumFeatures'] =\
         [int(str(item).strip()) for item in
          settings['Featsel']['ReliefNumFeatures'].split(',')]
+
+    settings_dict['FeatPreProcess']['Use'] =\
+        [str(settings['FeatPreProcess']['Use'])]
 
     settings_dict['Imputation']['use'] =\
         [str(item).strip() for item in
@@ -224,6 +233,9 @@ def load_config(config_file_path):
 
     settings_dict['CrossValidation']['test_size'] =\
         settings['CrossValidation'].getfloat('test_size')
+
+    settings_dict['CrossValidation']['fixed_seed'] =\
+        settings['CrossValidation'].getboolean('fixed_seed')
 
     # Genetic settings
     settings_dict['Labels']['label_names'] =\

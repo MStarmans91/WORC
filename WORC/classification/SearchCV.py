@@ -55,6 +55,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.multiclass import OneVsRestClassifier
 from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
+from WORC.featureprocessing.Preprocessor import Preprocessor
 
 
 def rms_score(truth, prediction):
@@ -775,8 +776,26 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if verbose is None:
             verbose = self.verbose
 
+        # Preprocess features if required
+        if 'FeatPreProcess' in parameters_all:
+            if parameters_all['FeatPreProcess'] == 'True':
+                print("Preprocessing features.")
+                feature_values = np.asarray([x[0] for x in X])
+                feature_labels = np.asarray([x[1] for x in X])
+                preprocessor = Preprocessor(verbose=False)
+                preprocessor.fit(feature_values, feature_labels=feature_labels[0, :])
+                feature_values = preprocessor.transform(feature_values)
+                feature_labels = preprocessor.transform(feature_labels)
+                X_fit = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
+            else:
+                X_fit = X
+                preprocessor = None
+        else:
+            X_fit = X
+            preprocessor = None
+
         # Refit all preprocessing functions
-        out = fit_and_score(X, y, self.scoring,
+        out = fit_and_score(X_fit, y, self.scoring,
                             train, test, parameters_all,
                             fit_params=self.fit_params,
                             return_train_score=self.return_train_score,
@@ -788,12 +807,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
-            Imputers, Preprocessors, PCAs, StatisticalSel, ReliefSel, sm, ros) = out
+            Imputers, PCAs, StatisticalSel, ReliefSel, sm, ros) = out
         self.best_groupsel = GroupSel
         self.best_scaler = scalers
         self.best_varsel = VarSel
         self.best_modelsel = SelectModel
-        self.best_preprocessor = Preprocessors
+        self.best_preprocessor = preprocessor
         self.best_imputer = Imputers
         self.best_pca = PCAs
         self.best_featlab = feature_labels
@@ -1284,6 +1303,23 @@ class BaseSearchCVfastr(BaseSearchCV):
         if not os.path.exists(tempfolder):
             os.makedirs(tempfolder)
 
+        # Draw parameter sample
+        for num, parameters in enumerate(parameter_iterable):
+            parameter_sample = parameters
+            break
+
+        # Preprocess features if required
+        if 'FeatPreProcess' in parameter_sample:
+            if parameter_sample['FeatPreProcess'] == 'True':
+                print("Preprocessing features.")
+                feature_values = np.asarray([x[0] for x in X])
+                feature_labels = np.asarray([x[1] for x in X])
+                preprocessor = Preprocessor(verbose=False)
+                preprocessor.fit(feature_values, feature_labels=feature_labels[0, :])
+                feature_values = preprocessor.transform(feature_values)
+                feature_labels = preprocessor.transform(feature_labels)
+                X = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
+
         # Create the parameter files
         parameters_temp = dict()
         try:
@@ -1710,6 +1746,23 @@ class BaseSearchCVJoblib(BaseSearchCV):
 
         pre_dispatch = self.pre_dispatch
         cv_iter = list(cv.split(X, y, groups))
+
+        # Draw parameter sample
+        for num, parameters in enumerate(parameter_iterable):
+            parameter_sample = parameters
+            break
+
+        # Preprocess features if required
+        if 'FeatPreProcess' in parameter_sample:
+            if parameter_sample['FeatPreProcess'] == 'True':
+                print("Preprocessing features.")
+                feature_values = np.asarray([x[0] for x in X])
+                feature_labels = np.asarray([x[1] for x in X])
+                preprocessor = Preprocessor(verbose=False)
+                preprocessor.fit(feature_values, feature_labels=feature_labels[0, :])
+                feature_values = preprocessor.transform(feature_values)
+                feature_labels = preprocessor.transform(feature_labels)
+                X = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
 
         out = Parallel(
             n_jobs=self.n_jobs, verbose=self.verbose,

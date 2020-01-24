@@ -172,8 +172,8 @@ class WORC(object):
         config['General']['Preprocessing'] = 'worc/PreProcess:1.0'
         config['General']['RegistrationNode'] = "'elastix4.8/Elastix:4.8'"
         config['General']['TransformationNode'] = "'elastix4.8/Transformix:4.8'"
-        config['General']['Joblib_ncores'] = '4'
-        config['General']['Joblib_backend'] = 'multiprocessing'
+        config['General']['Joblib_ncores'] = '1'
+        config['General']['Joblib_backend'] = 'threading'
         config['General']['tempsave'] = 'False'
 
         # Segmentix
@@ -240,6 +240,10 @@ class WORC(object):
         # Vessel features radius for erosion to determine boudnary
         config['ImageFeatures']['vessel_radius'] = '5'
 
+        # Feature preprocessing before all below takes place
+        config['FeatPreProcess'] = dict()
+        config['FeatPreProcess']['Use'] = 'False'
+
         # Feature selection
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = 'True'
@@ -293,7 +297,7 @@ class WORC(object):
         config['Classification']['fastr_plugin'] = self.fastr_plugin
         config['Classification']['classifiers'] = 'SVM'
         config['Classification']['max_iter'] = '100000'
-        config['Classification']['SVMKernel'] = 'poly'
+        config['Classification']['SVMKernel'] = 'poly, rbf, linear'
         config['Classification']['SVMC'] = '0, 6'
         config['Classification']['SVMdegree'] = '1, 6'
         config['Classification']['SVMcoef0'] = '0, 1'
@@ -318,6 +322,7 @@ class WORC(object):
         config['CrossValidation'] = dict()
         config['CrossValidation']['N_iterations'] = '100'
         config['CrossValidation']['test_size'] = '0.2'
+        config['CrossValidation']['fixed_seed'] = 'False'
 
         # Options for the object/patient labels that are used
         config['Labels'] = dict()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,8 @@
 
 
 import configparser
+import os
+import WORC.addexceptions as ae
 
 
 def load_config(config_file_path):
@@ -28,6 +30,9 @@ def load_config(config_file_path):
     Returns:
         settings_dict: dictionary containing all parsed settings.
     """
+    if not os.path.exists(config_file_path):
+        e = f'File {config_file_path} does not exist!'
+        raise ae.WORCKeyError(e)
 
     settings = configparser.ConfigParser()
     settings.read(config_file_path)

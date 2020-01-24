@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,14 +19,18 @@ import fastr.exceptions
 from pathlib import Path
 import inspect
 import os
+import pandas as pd
 from WORC import WORC
-from .helpers import convert_radiomix_features
-from .exceptions import PathNotFoundException, NoImagesFoundException, \
-    NoSegmentationsFoundException, InvalidCsvFileException
-from WORC.addexceptions import WORCKeyError
-from WORC.facade.simpleworc.configbuilder import ConfigBuilder
+from .helpers.processing import convert_radiomix_features
+from .helpers.exceptions import PathNotFoundException, NoImagesFoundException, \
+    NoSegmentationsFoundException, InvalidCsvFileException, \
+    NoFeaturesFoundException
+from WORC.addexceptions import WORCKeyError, WORCValueError, WORCAssertionError
+from .helpers.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
     CartesiusClusterDetector
+
+from WORC.validators.preflightcheck import ValidatorsFactory
 
 
 def _for_all_methods(decorator):
@@ -43,7 +47,8 @@ def _error_buldozer(func):
     _valid_exceptions = [
         PathNotFoundException, NoImagesFoundException,
         NoSegmentationsFoundException, InvalidCsvFileException,
-        TypeError, ValueError, NotImplementedError, WORCKeyError
+        TypeError, ValueError, NotImplementedError, WORCKeyError,
+        WORCValueError, WORCAssertionError
     ]
     _valid_exceptions += [c[1] for c in inspect.getmembers(fastr.exceptions, inspect.isclass)]
 
@@ -90,7 +95,9 @@ class SimpleWORC():
         elif CartesiusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
 
-    def features_from_this_directory(self, directory, feature_file_name='features.hdf5', glob='*/', is_training=True):
+    def features_from_this_directory(self, directory,
+                                     feature_file_name='features.hdf5',
+                                     glob='*/', is_training=True):
         directory = Path(directory).expanduser()
         if not directory.exists():
             raise PathNotFoundException(directory)
@@ -171,7 +178,8 @@ class SimpleWORC():
 
     def predict_labels(self, label_names: list):
         if not self._labels_file_train:
-            raise ValueError('No labels file set trough labels_from_this_file')
+            if not self.labels_file_train:
+                raise ValueError('No labels file set! You can do this through labels_from_this_file')
 
         if not isinstance(label_names, list):
             raise TypeError(f'label_names is of type {type(label_names)} while list is expected')
@@ -211,34 +219,38 @@ class SimpleWORC():
 
         self._method = method
 
+    def count_num_subjects(self):
+        if self._radiomix_feature_file:
+            f = pd.read_excel(self._radiomix_feature_file)
+            pids = f.values[:, 4]
+            tocount = pids
+        elif self._images_train:
+            tocount = self._images_train[0]
+        elif self._features_train:
+            tocount = self._features_train[0]
+        elif self.images_train:
+            tocount = self.images_train[0]
+        elif self.features_train:
+            tocount = self.features_train[0]
+        else:
+            message = 'No features or images given, cannot count number ' +\
+                ' of subjects. Make sure you input at least one of these ' +\
+                'as source.'
+            raise WORCValueError(message)
+
+        if type(tocount) == dict():
+            num_subjects = len(list(tocount.keys()))
+        else:
+            num_subjects = len(tocount)
+
+        self._num_subjects = num_subjects
+
     def _validate(self):
-        if not self._images_train:
-            pass  # TODO: throw exception
+        validators = ValidatorsFactory.factor_validators()
+        self.count_num_subjects()
 
-        if not self._segmentations_train:
-            pass  # TODO: throw exception
-
-        if not self._labels_file_train:
-            pass  # TODO: throw an exception
-
-        if not self._label_names:
-            pass  # TODO: throw exception
-
-        if not self._method:
-            pass  # TODO: throw exception
-
-        if len(self._images_train) == len(self._segmentations_train):
-            for index, subjects_dict in enumerate(self._images_train):
-                try:
-                    if subjects_dict.keys() != self._segmentations_train[index].keys():
-                        raise ValueError('Subjects in images_train and segmentations_train are not the same')
-
-                    # TODO: verify subjects in labels files as well
-                    # TODO: peform same checks on images_test and segmentations_test if those are not None
-                except IndexError:
-                    # this should never be thrown, but i put it here just in case
-                    raise ValueError(
-                        'A blackhole to another dimenstion has opened. This exception should never be thrown. Double check your code or make an issue on the WORC github so that we can fix this issue.')
+        for validator in validators:
+            validator.do_validation(self)
 
     def execute(self):
         # this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well

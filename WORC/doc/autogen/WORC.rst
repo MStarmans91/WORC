@@ -44,4 +44,5 @@ Subpackages
     WORC.processing
     WORC.resources
     WORC.tools
+    WORC.validators
 

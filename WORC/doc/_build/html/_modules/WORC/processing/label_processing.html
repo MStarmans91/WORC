@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.processing.label_processing &mdash; WORC 3.1.2 documentation</title>
+  <title>WORC.processing.label_processing &mdash; WORC 3.1.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.2
+                3.1.3
               </div>
             
           
@@ -176,7 +176,7 @@
 
 <span class="kn">import</span> <span class="nn">xnat</span>
 <span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">requests.packages.urllib3.exceptions</span> <span class="kn">import</span> <span class="n">InsecureRequestWarning</span>
+<span class="kn">from</span> <span class="nn">requests.packages.urllib3.exceptions</span> <span class="k">import</span> <span class="n">InsecureRequestWarning</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">configparser</span>
@@ -196,8 +196,8 @@
 <span class="sd">         &#39;label_type&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">label_file</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{label_file}</span><span class="s1"> does not exist!&#39;</span><span class="p">)</span>
-        
+        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;File </span><span class="si">{label_file}</span><span class="s1"> does not exist!&#39;</span><span class="p">)</span>
+
     <span class="n">_</span><span class="p">,</span> <span class="n">extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span class="s1">&#39;.txt&#39;</span><span class="p">:</span>
         <span class="n">label_names</span><span class="p">,</span> <span class="n">patient_IDs</span><span class="p">,</span> <span class="n">label_status</span> <span class="o">=</span> <span class="n">load_label_txt</span><span class="p">(</span>
@@ -408,11 +408,11 @@
 
         <span class="k">if</span> <span class="n">ifound</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Multiple matches (</span><span class="si">{}</span><span class="s1">) found in labeling for feature file </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">matches</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">feat</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">ifound</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;No entry found in labeling for feature file </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">feat</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
     <span class="c1"># if image_features_temp is not None:</span>
     <span class="c1">#     image_features = np.asarray(image_features)</span>

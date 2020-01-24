@@ -18,12 +18,24 @@
 import os
 import fastr
 import pkg_resources
+import site
+import sys
 
 # Get directory in which packages are installed
 working_set = pkg_resources.working_set
 requirement_spec = pkg_resources.Requirement.parse('WORC')
 egg_info = working_set.find(requirement_spec)
-packagedir = egg_info.location
+if egg_info is None:  # Backwards compatibility with WORC2
+    try:
+        packagedir = site.getsitepackages()[0]
+    except AttributeError:
+        # Inside virtualenvironment, so getsitepackages doesnt work.
+        paths = sys.path
+        for p in paths:
+            if os.path.isdir(p) and os.path.basename(p) == 'site-packages':
+                packagedir = p
+else:
+    packagedir = egg_info.location
 
 # Add the WORC FASTR tools and type paths
 tools_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_tools')] + tools_path

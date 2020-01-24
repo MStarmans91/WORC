@@ -6,6 +6,36 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.1.3 - 2020-01-24
+------------------
+
+Added
+~~~~~~~
+- Some options for the plot_images slicer function.
+- Validators to check your inputs before executing experiment.
+- Timer in classification log.
+- Backwards compatibility in fastr config.
+- Option for fixed seed in cross-validation.
+- BasicWORC Facade.
+- Support for computing confidence intervals on differences between models.
+- Error when config file cannot be found.
+
+Changed
+~~~~~~~
+- Preprocessor slows down progress and is not always neccesary. Made it optional.
+- Moved the preprocessor to the SearchCV script to do once on the training set,
+  not in within the algorithm optimization.
+- Ensembling during training is turned-of, as it takes to much time. Only
+  used when plotting the performance.
+- Debug flag includes fixed seed in cross-validation.
+- Joblib now uses by default only 1 core and threading backend.
+
+Fixed
+~~~~~
+- Bug in patient naming of plotting function: if ensembling was done in training,
+  do not re-ensemble.
+
+
 3.1.2 - 2019-12-09
 ------------------
 

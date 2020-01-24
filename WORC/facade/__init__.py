@@ -1,1 +1,2 @@
-from .simpleworc.simpleworc import SimpleWORC
+from .simpleworc import SimpleWORC
+from .basicworc import BasicWORC
