@@ -504,6 +504,14 @@ class WORC(object):
                         self.transformix_im_nodes_test = dict()
                         pass
 
+                    else:
+                        nseg = len(self.segmentations_train)
+                        nim = len(image_types)
+                        m = f'Length of segmentations for training is ' +\
+                            f'{nseg}: should be equal to number of images' +\
+                            f' ({nim}) or 1 when using registration.'
+                        raise WORCexceptions.WORCValueError(m)
+
                     # BUG: We assume that first type defines if we use segmentix
                     if self.configs[0]['General']['Segmentix'] == 'True':
                         # Use the segmentix toolbox for segmentation processing

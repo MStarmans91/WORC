@@ -578,6 +578,24 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Replace nan if still left
         X = replacenan(np.asarray(X)).tolist()
 
+        if self.best_groupsel is not None:
+            X = self.best_groupsel.transform(X)
+
+        if self.best_varsel is not None:
+            X = self.best_varsel.transform(X)
+
+        if self.best_reliefsel is not None:
+            X = self.best_reliefsel.transform(X)
+
+        if self.best_modelsel is not None:
+            X = self.best_modelsel.transform(X)
+
+        if self.best_pca is not None:
+            X = self.best_pca.transform(X)
+
+        if self.best_statisticalsel is not None:
+            X = self.best_statisticalsel.transform(X)
+
         # Only oversample in training phase, i.e. if we have the labels
         if y is not None:
             if self.best_SMOTE is not None:
@@ -585,24 +603,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
             if self.best_RandomOverSampler is not None:
                 X, y = self.best_RandomOverSampler.fit_sample(X, y)
-
-        if self.best_groupsel is not None:
-            X = self.best_groupsel.transform(X)
-
-        if self.best_varsel is not None:
-            X = self.best_varsel.transform(X)
-
-        if self.best_statisticalsel is not None:
-            X = self.best_statisticalsel.transform(X)
-
-        if self.best_reliefsel is not None:
-            X = self.best_reliefsel.transform(X)
-
-        if self.best_pca is not None:
-            X = self.best_pca.transform(X)
-
-        if self.best_modelsel is not None:
-            X = self.best_modelsel.transform(X)
 
         return X, y
 

@@ -262,98 +262,6 @@ def fit_and_score(X, y, scoring,
     feature_values = replacenan(feature_values, verbose=verbose, feature_labels=feature_labels[0])
 
     # ------------------------------------------------------------------------
-    # Use SMOTE oversampling
-    if 'SampleProcessing_SMOTE' in para_estimator.keys():
-        if para_estimator['SampleProcessing_SMOTE'] == 'True':
-
-            # Determine our starting balance
-            pos_initial = int(np.sum(y))
-            neg_initial = int(len(y) - pos_initial)
-            len_in = len(y)
-
-            # Fit SMOTE object and transform dataset
-            # NOTE: need to save random state for this one as well!
-            sm = SMOTE(random_state=None,
-                       ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
-                       m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
-                       kind='borderline1',
-                       n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
-
-            feature_values, y = sm.fit_sample(feature_values, y)
-
-            # Also make sure our feature label object has the same size
-            # NOTE: Not sure if this is the best implementation
-            feature_labels = np.asarray([feature_labels[0] for x in X])
-
-            # Note the user what SMOTE did
-            pos = int(np.sum(y))
-            neg = int(len(y) - pos)
-            if verbose:
-                message = f"Sampling with SMOTE from {len_in} ({pos_initial} pos," +\
-                          f" {neg_initial} neg) to {len(y)} ({pos} pos, {neg} neg) patients."
-                print(message)
-        else:
-            sm = None
-
-    if 'SampleProcessing_SMOTE' in para_estimator.keys():
-        del para_estimator['SampleProcessing_SMOTE']
-        del para_estimator['SampleProcessing_SMOTE_ratio']
-        del para_estimator['SampleProcessing_SMOTE_neighbors']
-        del para_estimator['SampleProcessing_SMOTE_n_cores']
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del sm
-
-    # ------------------------------------------------------------------------
-    # Full Oversampling: To Do
-    if 'SampleProcessing_Oversampling' in para_estimator.keys():
-        if para_estimator['SampleProcessing_Oversampling'] == 'True':
-            if verbose:
-                print('Oversample underrepresented classes in training.')
-
-            # Oversample underrepresented classes in training
-            # We always use a factor 1, e.g. all classes end up with an
-            # equal number of samples
-            if len(y.shape) == 1:
-                # Single Class, use imblearn oversampling
-
-                # Create another random state
-                # NOTE: Also need to save this random seed. Can be same as SMOTE
-                random_seed2 = np.random.randint(5000)
-                random_state2 = check_random_state(random_seed2)
-
-                ros = RandomOverSampler(random_state=random_state2)
-                feature_values, y = ros.fit_sample(feature_values, y)
-
-            else:
-                # Multi class, use own method as imblearn cannot do this
-                sumclass = [np.sum(y[:, i]) for i in range(y.shape[1])]
-                maxclass = np.argmax(sumclass)
-                for i in range(y.shape[1]):
-                    if i != maxclass:
-                        # Oversample
-                        nz = np.nonzero(y[:, i])[0]
-                        noversample = sumclass[maxclass] - sumclass[i]
-                        while noversample > 0:
-                            n_sample = random.randint(0, len(nz) - 1)
-                            n_sample = nz[n_sample]
-                            i_sample = y[n_sample, :]
-                            x_sample = feature_values[n_sample]
-                            y = np.vstack((y, i_sample))
-                            feature_values.append(x_sample)
-                            noversample -= 1
-        else:
-            ros = None
-
-    if 'SampleProcessing_Oversampling' in para_estimator.keys():
-        del para_estimator['SampleProcessing_Oversampling']
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del ros
-
-    # ------------------------------------------------------------------------
     # Groupwise feature selection
     if 'SelectGroups' in para_estimator:
         if verbose:
@@ -687,6 +595,98 @@ def fit_and_score(X, y, scoring,
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
         else:
             return ret
+
+    # ------------------------------------------------------------------------
+    # Use SMOTE oversampling
+    if 'SampleProcessing_SMOTE' in para_estimator.keys():
+        if para_estimator['SampleProcessing_SMOTE'] == 'True':
+
+            # Determine our starting balance
+            pos_initial = int(np.sum(y))
+            neg_initial = int(len(y) - pos_initial)
+            len_in = len(y)
+
+            # Fit SMOTE object and transform dataset
+            # NOTE: need to save random state for this one as well!
+            sm = SMOTE(random_state=None,
+                       ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
+                       m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
+                       kind='borderline1',
+                       n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
+
+            feature_values, y = sm.fit_sample(feature_values, y)
+
+            # Also make sure our feature label object has the same size
+            # NOTE: Not sure if this is the best implementation
+            feature_labels = np.asarray([feature_labels[0] for x in X])
+
+            # Note the user what SMOTE did
+            pos = int(np.sum(y))
+            neg = int(len(y) - pos)
+            if verbose:
+                message = f"Sampling with SMOTE from {len_in} ({pos_initial} pos," +\
+                          f" {neg_initial} neg) to {len(y)} ({pos} pos, {neg} neg) patients."
+                print(message)
+        else:
+            sm = None
+
+    if 'SampleProcessing_SMOTE' in para_estimator.keys():
+        del para_estimator['SampleProcessing_SMOTE']
+        del para_estimator['SampleProcessing_SMOTE_ratio']
+        del para_estimator['SampleProcessing_SMOTE_neighbors']
+        del para_estimator['SampleProcessing_SMOTE_n_cores']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del sm
+
+    # ------------------------------------------------------------------------
+    # Full Oversampling: To Do
+    if 'SampleProcessing_Oversampling' in para_estimator.keys():
+        if para_estimator['SampleProcessing_Oversampling'] == 'True':
+            if verbose:
+                print('Oversample underrepresented classes in training.')
+
+            # Oversample underrepresented classes in training
+            # We always use a factor 1, e.g. all classes end up with an
+            # equal number of samples
+            if len(y.shape) == 1:
+                # Single Class, use imblearn oversampling
+
+                # Create another random state
+                # NOTE: Also need to save this random seed. Can be same as SMOTE
+                random_seed2 = np.random.randint(5000)
+                random_state2 = check_random_state(random_seed2)
+
+                ros = RandomOverSampler(random_state=random_state2)
+                feature_values, y = ros.fit_sample(feature_values, y)
+
+            else:
+                # Multi class, use own method as imblearn cannot do this
+                sumclass = [np.sum(y[:, i]) for i in range(y.shape[1])]
+                maxclass = np.argmax(sumclass)
+                for i in range(y.shape[1]):
+                    if i != maxclass:
+                        # Oversample
+                        nz = np.nonzero(y[:, i])[0]
+                        noversample = sumclass[maxclass] - sumclass[i]
+                        while noversample > 0:
+                            n_sample = random.randint(0, len(nz) - 1)
+                            n_sample = nz[n_sample]
+                            i_sample = y[n_sample, :]
+                            x_sample = feature_values[n_sample]
+                            y = np.vstack((y, i_sample))
+                            feature_values.append(x_sample)
+                            noversample -= 1
+        else:
+            ros = None
+
+    if 'SampleProcessing_Oversampling' in para_estimator.keys():
+        del para_estimator['SampleProcessing_Oversampling']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del ros
 
     # ----------------------------------------------------------------
     # Fitting and scoring

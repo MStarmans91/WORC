@@ -83,7 +83,7 @@ def main():
     generate_boxplots(image_features, label_data, args.out)
 
 
-def generate_boxplots(image_features, label_data, outputfolder):
+def generate_feature_boxplots(image_features, label_data, outputfolder):
     '''
     Generate boxplots of the feature values among different objects.
 
@@ -168,7 +168,6 @@ def generate_boxplots(image_features, label_data, outputfolder):
         outputname = os.path.join(outputfolder, fname)
         f.savefig(outputname, dpi=600)
         print(("Boxplot saved as {} !").format(outputname))
-
 
 if __name__ == '__main__':
     main()
