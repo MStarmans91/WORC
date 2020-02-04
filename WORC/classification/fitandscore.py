@@ -17,7 +17,7 @@
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection._validation import _fit_and_score
+from sklearn.model_selection._validation import _fit_and_score as _org_fit_and_score
 import numpy as np
 from sklearn.linear_model import Lasso
 from sklearn.feature_selection import SelectFromModel
@@ -753,6 +753,127 @@ def fit_and_score(X, y, scoring,
         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
     else:
         return ret
+
+
+def _fit_and_score(estimator, *args, **kwargs):
+    params = locals()  # this is a bit hacky but should work for now
+
+    if hasattr(estimator, '_is_survival') and estimator._is_survival:
+        # TODO: implement special survival way
+        # return _survival_fit_and_score(*args, {**params, **kwargs})
+        return _org_fit_and_score(*args, {**params, **kwargs})
+    else:
+        return _org_fit_and_score(*args, {**params, **kwargs})
+
+# def _survival_fit_and_score(estimator, X, y, scorer, train, test, verbose,
+#                    parameters, fit_params, return_train_score=False,
+#                    return_parameters=False, return_n_test_samples=False,
+#                    return_times=False, return_estimator=False,
+#                    error_score='raise-deprecating', *args, **kwargs):
+
+    # this function is a copy-pasted and adjusted-for-survival function from scikit-learn
+    # if verbose > 1:
+    #     if parameters is None:
+    #         msg = ''
+    #     else:
+    #         msg = '%s' % (', '.join('%s=%s' % (k, v)
+    #                       for k, v in parameters.items()))
+    #     print("[CV] %s %s" % (msg, (64 - len(msg)) * '.'))
+    #
+    # # Adjust length of sample weights
+    # fit_params = fit_params if fit_params is not None else {}
+    # fit_params = {k: _index_param_value(X, v, train)
+    #               for k, v in fit_params.items()}
+    #
+    # train_scores = {}
+    # if parameters is not None:
+    #     estimator.set_params(**parameters)
+    #
+    # start_time = time.time()
+    #
+    # X_train, y_train = _safe_split(estimator, X, y, train)
+    # X_test, y_test = _safe_split(estimator, X, y, test, train)
+    #
+    # is_multimetric = not callable(scorer)
+    # n_scorers = len(scorer.keys()) if is_multimetric else 1
+    # try:
+    #     if y_train is None:
+    #         estimator.fit(X_train, **fit_params)
+    #     else:
+    #         estimator.fit(X_train, y_train, **fit_params)
+    #
+    # except Exception as e:
+    #     # Note fit time as time until error
+    #     fit_time = time.time() - start_time
+    #     score_time = 0.0
+    #     if error_score == 'raise':
+    #         raise
+    #     elif error_score == 'raise-deprecating':
+    #         warnings.warn("From version 0.22, errors during fit will result "
+    #                       "in a cross validation score of NaN by default. Use "
+    #                       "error_score='raise' if you want an exception "
+    #                       "raised or error_score=np.nan to adopt the "
+    #                       "behavior from version 0.22.",
+    #                       FutureWarning)
+    #         raise
+    #     elif isinstance(error_score, numbers.Number):
+    #         if is_multimetric:
+    #             test_scores = dict(zip(scorer.keys(),
+    #                                [error_score, ] * n_scorers))
+    #             if return_train_score:
+    #                 train_scores = dict(zip(scorer.keys(),
+    #                                     [error_score, ] * n_scorers))
+    #         else:
+    #             test_scores = error_score
+    #             if return_train_score:
+    #                 train_scores = error_score
+    #         warnings.warn("Estimator fit failed. The score on this train-test"
+    #                       " partition for these parameters will be set to %f. "
+    #                       "Details: \n%s" %
+    #                       (error_score, format_exception_only(type(e), e)[0]),
+    #                       FitFailedWarning)
+    #     else:
+    #         raise ValueError("error_score must be the string 'raise' or a"
+    #                          " numeric value. (Hint: if using 'raise', please"
+    #                          " make sure that it has been spelled correctly.)")
+    #
+    # else:
+    #     fit_time = time.time() - start_time
+    #     # _score will return dict if is_multimetric is True
+    #     test_scores = _score(estimator, X_test, y_test, scorer, is_multimetric)
+    #     score_time = time.time() - start_time - fit_time
+    #     if return_train_score:
+    #         train_scores = _score(estimator, X_train, y_train, scorer,
+    #                               is_multimetric)
+    # if verbose > 2:
+    #     if is_multimetric:
+    #         for scorer_name in sorted(test_scores):
+    #             msg += ", %s=" % scorer_name
+    #             if return_train_score:
+    #                 msg += "(train=%.3f," % train_scores[scorer_name]
+    #                 msg += " test=%.3f)" % test_scores[scorer_name]
+    #             else:
+    #                 msg += "%.3f" % test_scores[scorer_name]
+    #     else:
+    #         msg += ", score="
+    #         msg += ("%.3f" % test_scores if not return_train_score else
+    #                 "(train=%.3f, test=%.3f)" % (train_scores, test_scores))
+    #
+    # if verbose > 1:
+    #     total_time = score_time + fit_time
+    #     print(_message_with_time('CV', msg, total_time))
+    #
+    # ret = [train_scores, test_scores] if return_train_score else [test_scores]
+    #
+    # if return_n_test_samples:
+    #     ret.append(_num_samples(X_test))
+    # if return_times:
+    #     ret.extend([fit_time, score_time])
+    # if return_parameters:
+    #     ret.append(parameters)
+    # if return_estimator:
+    #     ret.append(estimator)
+    # return ret
 
 
 def delete_nonestimator_parameters(parameters):

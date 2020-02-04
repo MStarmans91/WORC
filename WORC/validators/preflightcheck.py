@@ -1,52 +1,39 @@
-from abc import ABC, abstractmethod
-
+from WORC.validators import AbstractValidator
 from WORC.processing.label_processing import load_label_csv
 import WORC.addexceptions as ae
 
 # Global variables
+
 min_subjects = 10
 recommended_subjects = 50
 
 
-class AbstractValidator(ABC):
-    # noinspection PyBroadException
-    def do_validation(self, *args, **kwargs):
-        # try:
-        result = self._validate(*args, **kwargs)
-        if result is None:
-            result = True
-        # except:
-        #     result = False
 
-        msg = self._generate_detector_message(result)
-        if msg:
-            print(msg)
-        return result
-
-    def _generate_detector_message(self, validated_value):
-        return f"{self.__class__.__name__[0:-8]} validated: {validated_value}."
-
-    @abstractmethod
-    def _validate(self, *args, **kwargs):
-        pass
 
 
 class SimpleValidator(AbstractValidator):
     def _validate(self, simpleworc, *args, **kwargs):
-        if not simpleworc._labels_file_train:
-            raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
-
-        if not simpleworc._label_names:
-            raise ae.WORCValueError(f'No label(s) to predict selected. Use SimpleWorc().predict_labels(**) to select labels.')
-
         if not simpleworc._method:
-            raise ae.WORCValueError(f'No method selected. Call function binary_classification(**) or regression(**) or survival(**) on SimpleWorc().')
+            raise ae.WORCValueError(
+                f'No method selected. Call function binary_classification(**) or regression(**) or survival(**) on SimpleWorc().')
 
         if simpleworc._images_train:
             for num, (ims, segs) in enumerate(zip(simpleworc._images_train, simpleworc._segmentations_train)):
                 if ims.keys() != segs.keys():
-                    raise ae.WORCValueError(f'Subjects in images_train and segmentations_train are not the same for modality {num}.')
+                    raise ae.WORCValueError(
+                        f'Subjects in images_train and segmentations_train are not the same for modality {num}.')
 
+        if simpleworc._method == 'survival':
+            self._validate_survival(simpleworc, *args, **kwargs)
+        else:
+            if not simpleworc._labels_file_train:
+                raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
+
+            if not simpleworc._label_names:
+                raise ae.WORCValueError(f'No label(s) to predict selected. Use SimpleWorc().predict_labels(**) to select labels.')
+
+    def _validate_survival(self, simpleworc, *args, **kwargs):
+        pass
 
 class MinSubjectsValidator(AbstractValidator):
     def _validate(self, simpleworc, *args, **kwargs):

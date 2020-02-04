@@ -20,6 +20,7 @@ from sklearn.metrics import accuracy_score, balanced_accuracy_score
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
+from sksurv.metrics import concordance_index_censored
 import numpy as np
 from sklearn import metrics
 from scipy.stats import pearsonr, spearmanr
@@ -256,6 +257,8 @@ def check_scoring(estimator, scoring=None, allow_none=False):
         scorer = make_scorer(average_precision_score, average='weighted', needs_proba=True)
     elif scoring == 'gmean':
         scorer = make_scorer(geometric_mean_score(), needs_proba=True)
+    elif scoring == 'concordance':
+        scorer = make_scorer(concordance_index_censored(), needs_proba=False)
     else:
         scorer = check_scoring_sklearn(estimator, scoring=scoring)
     return scorer

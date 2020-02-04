@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from sksurv.svm import FastKernelSurvivalSVM, FastSurvivalSVM
 from sklearn.svm import SVC
 from sklearn.svm import SVR as SVMR
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
@@ -27,6 +28,12 @@ import scipy
 from WORC.classification.estimators import RankedSVM
 from WORC.classification.AdvancedSampler import log_uniform, discrete_uniform
 import WORC.addexceptions as ae
+
+
+survival_classifiers = {
+        'FastKernelSurvivalSVM': FastKernelSurvivalSVM,
+        'FastSurvivalSVM': FastSurvivalSVM,
+}
 
 
 def construct_classifier(config):
@@ -47,7 +54,12 @@ def construct_classifier(config):
     # NOTE: Function is not working anymore for regression: need
     # to move param grid creation to the create_param_grid function
     max_iter = config['max_iter']
-    if 'SVM' in config['classifiers']:
+
+    if any(x == config['classifiers'] for x in survival_classifiers):
+        # Survival! Exciting! :D
+        # Added this as first if-statement so that the if-statement for (normal) SVM would continue to work
+        classifier = construct_survival_classifier(config)
+    elif 'SVM' in config['classifiers']:
         # Support Vector Machine
         classifier = construct_SVM(config)
 
@@ -129,6 +141,63 @@ def construct_classifier(config):
         raise ae.WORCKeyError(message)
 
     return classifier
+
+
+def construct_survival_classifier(config):
+    # clf.C = config['SVMC']  # whats this?
+
+    ret = None
+
+    if 'FastKernelSurvivalSVM' == config['classifiers']:
+        svm_config = {
+            'max_iter': config['max_iter'],
+            'kernel': str(config['SVMKernel']),
+            'degree': config['SVMdegree'],
+            'coef0': config['SVMcoef0'],
+            'gamma': config['SVMgamma'],
+        }
+        ret = FastKernelSurvivalSVM(**svm_config)
+    elif 'FastSurvivalSVM' == config['classifiers']:
+        svm_config = {
+            'max_iter': config['max_iter']
+        }
+        ret = FastSurvivalSVM(**svm_config)
+
+    if ret is not None:
+        ret._is_survival = True
+
+    return ret
+
+"""
+FastKernelSurvivalSVM:
+    alpha (float, positive, default: 1) – Weight of penalizing the squared hinge loss in the objective function
+    rank_ratio (float, optional, default: 1.0) – Mixing parameter between regression and ranking objective with 0 <= rank_ratio <= 1. If rank_ratio = 1, only ranking is performed, if rank_ratio = 0, only regression is performed. A non-zero value is only allowed if optimizer is one of ‘avltree’, ‘PRSVM’, or ‘rbtree’.
+    fit_intercept (boolean, optional, default: False) – Whether to calculate an intercept for the regression model. If set to False, no intercept will be calculated. Has no effect if rank_ratio = 1, i.e., only ranking is performed.
+    kernel ("linear" | "poly" | "rbf" | "sigmoid" | "cosine" | "precomputed") – Kernel. Default: “linear”
+    degree (int, default: 3) – Degree for poly kernels. Ignored by other kernels.
+    gamma (float, optional) – Kernel coefficient for rbf and poly kernels. Default: 1/n_features. Ignored by other kernels.
+    coef0 (float, optional) – Independent term in poly and sigmoid kernels. Ignored by other kernels.
+    kernel_params (mapping of string to any, optional) – Parameters (keyword arguments) and values for kernel passed as call
+    max_iter (int, optional, default: 20) – Maximum number of iterations to perform in Newton optimization
+    verbose (bool, optional, default: False) – Whether to print messages during optimization
+    tol (float, optional) – Tolerance for termination. For detailed control, use solver-specific options.
+    optimizer ("avltree" | "rbtree", optional, default: "rbtree") – Which optimizer to use.
+    random_state (int or numpy.random.RandomState instance, optional) – Random number generator (used to resolve ties in survival times).
+    timeit (False or int) – If non-zero value is provided the time it takes for optimization is measured. The given number of repetitions are performed. Results can be accessed from the optimizer_result_ attribute.
+"""
+
+"""
+FastSurvivalSVM:
+    alpha (float, positive, default: 1) – Weight of penalizing the squared hinge loss in the objective function
+    rank_ratio (float, optional, default: 1.0) – Mixing parameter between regression and ranking objective with 0 <= rank_ratio <= 1. If rank_ratio = 1, only ranking is performed, if rank_ratio = 0, only regression is performed. A non-zero value is only allowed if optimizer is one of ‘avltree’, ‘rbtree’, or ‘direct-count’.
+    fit_intercept (boolean, optional, default: False) – Whether to calculate an intercept for the regression model. If set to False, no intercept will be calculated. Has no effect if rank_ratio = 1, i.e., only ranking is performed.
+    max_iter (int, optional, default: 20) – Maximum number of iterations to perform in Newton optimization
+    verbose (bool, optional, default: False) – Whether to print messages during optimization
+    tol (float, optional) – Tolerance for termination. For detailed control, use solver-specific options.
+    optimizer ("avltree" | "direct-count" | "PRSVM" | "rbtree" | "simple", optional, default: avltree)) – Which optimizer to use.
+    random_state (int or numpy.random.RandomState instance, optional) – Random number generator (used to resolve ties in survival times).
+    timeit (False or int) – If non-zero value is provided the time it takes for optimization is measured. The given number of repetitions are performed. Results can be accessed from the optimizer_result_ attribute.
+"""
 
 
 def construct_SVM(config, regression=False):

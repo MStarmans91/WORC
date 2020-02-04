@@ -28,7 +28,9 @@ from .helpers.exceptions import PathNotFoundException, NoImagesFoundException, \
 from WORC.addexceptions import WORCKeyError, WORCValueError, WORCAssertionError
 from .helpers.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
-    CartesiusClusterDetector
+    CartesiusClusterDetector, SurvivalFileDetector
+
+from WORC.classification.metrics import check_scoring
 
 from WORC.validators.preflightcheck import ValidatorsFactory
 
@@ -95,6 +97,7 @@ class SimpleWORC():
         elif CartesiusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
 
+
     def features_from_this_directory(self, directory,
                                      feature_file_name='features.hdf5',
                                      glob='*/', is_training=True):
@@ -146,13 +149,29 @@ class SimpleWORC():
         else:
             self._segmentations_test.append(segmentations_per_subject)
 
+    def survival_from_this_file(self, file_path, time='T', event='E', is_training=True):
+        survival_file = Path(file_path).expanduser()
+
+        if not survival_file.is_file():
+            raise PathNotFoundException(file_path)
+
+        if not SurvivalFileDetector(survival_file.absolute(), time, event).do_detection():
+            raise InvalidCsvFileException(survival_file.absolute())
+
+        if is_training:
+            self._survival_file_train = survival_file.as_uri()
+            self._survival_file_train_mappings = {'time': time, 'event': event}
+        else:
+            self._survival_file_test = survival_file.as_uri()
+            self._survival_file_test_mappings = {'time': time, 'event': event}
+
     def labels_from_this_file(self, file_path, is_training=True):
         labels_file = Path(file_path).expanduser()
 
         if not labels_file.is_file():
             raise PathNotFoundException(file_path)
 
-        if not CsvDetector(labels_file.absolute()):
+        if not CsvDetector(labels_file.absolute()).do_detection():
             raise InvalidCsvFileException(labels_file.absolute())
 
         # TODO: implement sanity check labels file e.g. is it a labels file and are there labels available
@@ -167,7 +186,7 @@ class SimpleWORC():
         if not semantics_file.is_file():
             raise PathNotFoundException(file_path)
 
-        if not CsvDetector(semantics_file.absolute()):
+        if not CsvDetector(semantics_file.absolute()).do_detection():
             raise InvalidCsvFileException(semantics_file.absolute())
 
         # TODO: implement sanity check semantics file e.g. is it a semantics file and are there semantics available
@@ -199,6 +218,17 @@ class SimpleWORC():
             valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'GaussianNB', 'ComplementNB', 'LDA', 'QDA', 'RankedSVM']
         elif method == 'regression':
             valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR']
+        elif method == 'survival':
+            valid_estimators = ['FastSurvivalSVM', 'FastKernelSurvivalSVM']
+            valid_scoring_methods = ['concordance']
+
+            # TODO: implement survival
+            # TODO: enforce smotes off
+
+            if scoring_method not in valid_scoring_methods:
+                raise ValueError(
+                    f'Invalid scoring method {scoring_method} for estimators {estimators}; must be one of {", ".join(valid_scoring_methods)}')
+
         else:
             valid_estimators = []
 
@@ -206,8 +236,6 @@ class SimpleWORC():
             if estimator not in valid_estimators:
                 raise ValueError(
                     f'Invalid estimator {estimator} for {method}; must be one of {", ".join(valid_estimators)}')
-
-        # TODO: sanity check scoring method per estimator
 
         # set
         self._config_builder.estimator_scoring_overrides(estimators, scoring_method)
@@ -301,6 +329,10 @@ class SimpleWORC():
 
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
 
+        from pprint import pprint
+        pprint({section: dict(self._config_builder._config[section]) for section in self._config_builder._config.sections()})
+        return
+
         self._worc.build()
         if self._add_evaluation:
             self._worc.add_evaluation(label_type=self._label_names[self._selected_label])
@@ -314,8 +346,8 @@ class SimpleWORC():
     def regression(self, estimators=['SVR'], scoring_method='r2', coarse=True):
         self._set_and_validate_estimators(estimators, scoring_method, 'regression', coarse)
 
-    def survival(self, estimators, scoring_method, coarse=True):
-        raise NotImplementedError()
+    def survival(self, estimators=['FastSurvivalSVM'], scoring_method='concordance', coarse=True):
+        self._set_and_validate_estimators(estimators, scoring_method, 'survival', coarse)
 
     def add_config_overrides(self, config):
         self._config_builder.custom_config_overrides(config)
@@ -329,7 +361,9 @@ class SimpleWORC():
 
     def set_multicore_execution(self):
         self._worc.fastr_plugin = 'ProcessPoolExecution'
-        self._config_builder.custom_config_overrides['Classification']['fastr_plugin'] = 'ProcessPoolExecution'
+        self._config_builder.custom_config_overrides({'Classification': {
+            'fastr_plugin': 'ProcessPoolExecution'
+        }})
 
     def features_from_radiomix_xlsx(self, feature_file):
         self._radiomix_feature_file = feature_file

@@ -506,23 +506,24 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                 SpearmanC.append(SpearmanC_temp)
                 SpearmanP.append(SpearmanP_temp)
 
-        if survival:
-            # Extract time to event and event from label data
-            E_truth = np.asarray([labels[1][k][0] for k in test_indices])
-            T_truth = np.asarray([labels[2][k][0] for k in test_indices])
-
-            # Concordance index
-            cindex.append(1 - ll.utils.concordance_index(T_truth, y_prediction, E_truth))
-
-            # Fit Cox model using SVR output, time to event and event
-            data = {'predict': y_prediction, 'E': E_truth, 'T': T_truth}
-            data = pd.DataFrame(data=data, index=test_patient_IDs)
-
-            cph = ll.CoxPHFitter()
-            cph.fit(data, duration_col='T', event_col='E')
-
-            coxcoef.append(cph.summary['coef']['predict'])
-            coxp.append(cph.summary['p']['predict'])
+        # TODO: override with new survival code
+        # if survival:
+        #     # Extract time to event and event from label data
+        #     E_truth = np.asarray([labels[1][k][0] for k in test_indices])
+        #     T_truth = np.asarray([labels[2][k][0] for k in test_indices])
+        #
+        #     # Concordance index
+        #     cindex.append(1 - ll.utils.concordance_index(T_truth, y_prediction, E_truth))
+        #
+        #     # Fit Cox model using SVR output, time to event and event
+        #     data = {'predict': y_prediction, 'E': E_truth, 'T': T_truth}
+        #     data = pd.DataFrame(data=data, index=test_patient_IDs)
+        #
+        #     cph = ll.CoxPHFitter()
+        #     cph.fit(data, duration_col='T', event_col='E')
+        #
+        #     coxcoef.append(cph.summary['coef']['predict'])
+        #     coxp.append(cph.summary['p']['predict'])
 
     if output in ['scores', 'decision']:
         # Return the scores and true values of all patients
