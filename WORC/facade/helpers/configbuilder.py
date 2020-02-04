@@ -59,7 +59,6 @@ class ConfigBuilder():
             'HyperOptimization': {'scoring_method': scoring_method}
         }
         self.custom_config_overrides(overrides)
-        print(self._custom_overrides)
         return overrides
 
     def coarse_overrides(self):
