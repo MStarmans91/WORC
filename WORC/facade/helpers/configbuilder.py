@@ -12,6 +12,7 @@ def _deep_update(d, u):
             d[k] = v
     return d
 
+
 class ConfigBuilder():
     def __init__(self):
         # initalize the main config object and the custom overrids
@@ -76,7 +77,7 @@ class ConfigBuilder():
                 'phase_features': 'False',
             },
             'CrossValidation': {'N_iterations': '3'},
-            #'Classification': {'classifiers': 'SVM'},
+            'Classification': {'classifiers': 'SVM'},
             'HyperOptimization': {'n_splits': '2',
                                   'N_iterations': '1000',
                                   'n_jobspercore': '500'},
@@ -100,7 +101,7 @@ class ConfigBuilder():
                 'vessel_features': 'True, False',
                 'phase_features': 'True, False',
             },
-            #'Classification': {'classifiers': 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'},
+            'Classification': {'classifiers': 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'},
             'CrossValidation': {'N_iterations': '100'},
             'HyperOptimization': {'N_iterations': '100000',
                                   'n_jobspercore': '4000'},
