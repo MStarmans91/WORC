@@ -1,7 +1,16 @@
 from WORC.detectors.detectors import BigrClusterDetector, CartesiusClusterDetector, DebugDetector
 import configparser
 import fastr
+import collections.abc
 
+
+def _deep_update(d, u):
+    for k, v in u.items():
+        if isinstance(v, collections.abc.Mapping):
+            d[k] = _deep_update(d.get(k, {}), v)
+        else:
+            d[k] = v
+    return d
 
 class ConfigBuilder():
     def __init__(self):
@@ -21,7 +30,7 @@ class ConfigBuilder():
         return defaultconfig
 
     def custom_config_overrides(self, config):
-        self._custom_overrides.update(config)
+        _deep_update(self._custom_overrides, config)
 
     def _cluster_config_overrides(self):
         if BigrClusterDetector().do_detection():
@@ -41,7 +50,7 @@ class ConfigBuilder():
         else:
             overrides = {}  # not a cluster or unsupported
 
-        self._custom_overrides.update(overrides)
+        self.custom_config_overrides(overrides)
         return overrides
 
     def estimator_scoring_overrides(self, estimators, scoring_method):
@@ -49,7 +58,7 @@ class ConfigBuilder():
             'Classification': {'classifiers': ', '.join(estimators)},
             'HyperOptimization': {'scoring_method': scoring_method}
         }
-        self._custom_overrides.update(overrides)
+        self.custom_config_overrides(overrides)
         return overrides
 
     def coarse_overrides(self):
@@ -67,14 +76,14 @@ class ConfigBuilder():
                 'phase_features': 'False',
             },
             'CrossValidation': {'N_iterations': '3'},
-            'Classification': {'classifiers': 'SVM'},
+            #'Classification': {'classifiers': 'SVM'},
             'HyperOptimization': {'n_splits': '2',
                                   'N_iterations': '1000',
                                   'n_jobspercore': '500'},
             'Ensemble': {'Use': '1'},
             'SampleProcessing': {'SMOTE': 'False'},
         }
-        self._custom_overrides.update(overrides)
+        self.custom_config_overrides(overrides)
         return overrides
 
     def full_overrides(self):
@@ -91,14 +100,14 @@ class ConfigBuilder():
                 'vessel_features': 'True, False',
                 'phase_features': 'True, False',
             },
-            'Classification': {'classifiers': 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'},
+            #'Classification': {'classifiers': 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'},
             'CrossValidation': {'N_iterations': '100'},
             'HyperOptimization': {'N_iterations': '100000',
                                   'n_jobspercore': '4000'},
             'Ensemble': {'Use': '50'},
             'SampleProcessing': {'SMOTE': 'True'},
         }
-        self._custom_overrides.update(overrides)
+        self.custom_config_overrides(overrides)
         return overrides
 
     def fullprint(self):
