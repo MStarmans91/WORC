@@ -560,7 +560,6 @@ def fit_and_score(X, y, scoring,
             feature_labels = StatisticalSel.transform(feature_labels)
             if verbose:
                 print("New Length: " + str(len(feature_values[0])))
-            print("New Length: " + str(len(feature_values[0])))
         else:
             StatisticalSel = None
         del para_estimator['StatisticalTestUse']
