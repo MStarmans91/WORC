@@ -351,6 +351,16 @@ def crossval(config, label_data, image_features,
          patient_ID_train_set, patient_ID_test_set, seed_set] =\
             zip(*save_data)
 
+        # Convert to lists
+        classifiers = list(classifiers)
+        X_train_set = list(X_train_set)
+        X_test_set = list(X_test_set)
+        Y_train_set = list(Y_train_set)
+        Y_test_set = list(Y_test_set)
+        patient_ID_train_set = list(patient_ID_train_set)
+        patient_ID_test_set = list(patient_ID_test_set)
+        seed_set = list(seed_set)
+
         panda_labels = ['classifiers', 'X_train', 'X_test', 'Y_train', 'Y_test',
                         'config', 'patient_ID_train', 'patient_ID_test',
                         'random_seed', 'feature_labels']

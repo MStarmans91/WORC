@@ -81,32 +81,41 @@ class ConfigBuilder():
             'HyperOptimization': {'n_splits': '2',
                                   'N_iterations': '1000',
                                   'n_jobspercore': '500'},
-            'Ensemble': {'Use': '1'},
-            'SampleProcessing': {'SMOTE': 'False'},
+            'Ensemble': {'Use': '1'}
         }
         self.custom_config_overrides(overrides)
         return overrides
 
     def full_overrides(self):
         overrides = {
+            # Compute all available features
             'ImageFeatures': {
                 'texture_Gabor': 'True',
                 'vessel': 'True',
                 'log': 'True',
                 'phase': 'True',
             },
+            # Also take these features into account in the feature groupwise selection
             'SelectFeatGroup': {
                 'texture_Gabor_features': 'True, False',
                 'log_features': 'True, False',
                 'vessel_features': 'True, False',
                 'phase_features': 'True, False',
             },
+            # Use some more feature selection methods
+            'Featsel': {
+                'UsePCA': '0.25',
+                'StatisticalTestUse': '0.25',
+                'ReliefUse': '0.25'
+            },
+            # Use all available classifiers. SVM three times because we have three kernels.
             'Classification': {'classifiers': 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'},
+            # Extensive cross-validation and hyperoptimization
             'CrossValidation': {'N_iterations': '100'},
             'HyperOptimization': {'N_iterations': '100000',
                                   'n_jobspercore': '4000'},
-            'Ensemble': {'Use': '50'},
-            'SampleProcessing': {'SMOTE': 'True'},
+            # Make use of ensembling
+            'Ensemble': {'Use': '50'}
         }
         self.custom_config_overrides(overrides)
         return overrides

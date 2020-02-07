@@ -70,17 +70,19 @@ class Evaluate(object):
 
         # Create all nodes
         self.node_ROC =\
-            self.network.create_node('worc/PlotROC:1.0', tool_version='1.0', id='plot_ROC', resources=ResourceLimit(memory='20G'))
+            self.network.create_node('worc/PlotROC:1.0', tool_version='1.0', id='plot_ROC', resources=ResourceLimit(memory='4G'))
         self.node_SVM =\
-            self.network.create_node('worc/PlotSVM:1.0', tool_version='1.0', id='plot_SVM', resources=ResourceLimit(memory='20G'))
+            self.network.create_node('worc/PlotSVM:1.0', tool_version='1.0', id='plot_SVM', resources=ResourceLimit(memory='4G'))
         self.node_Barchart =\
             self.network.create_node('worc/PlotBarchart:1.0', tool_version='1.0', id='plot_Barchart', resources=ResourceLimit(memory='4G'))
         self.node_STest =\
             self.network.create_node('worc/StatisticalTestFeatures:1.0', tool_version='1.0', id='statistical_test_features', resources=ResourceLimit(memory='4G'))
         self.node_Ranked_Percentages =\
-            self.network.create_node('worc/PlotRankedScores:1.0', tool_version='1.0', id='plot_ranked_percentages', resources=ResourceLimit(memory='20G'))
+            self.network.create_node('worc/PlotRankedScores:1.0', tool_version='1.0', id='plot_ranked_percentages', resources=ResourceLimit(memory='8G'))
         self.node_Ranked_Posteriors =\
-            self.network.create_node('worc/PlotRankedScores:1.0', tool_version='1.0', id='plot_ranked_posteriors', resources=ResourceLimit(memory='20G'))
+            self.network.create_node('worc/PlotRankedScores:1.0', tool_version='1.0', id='plot_ranked_posteriors', resources=ResourceLimit(memory='8G'))
+        self.node_Boxplots_Features =\
+            self.network.create_node('worc/PlotBoxplotFeatures:1.0', tool_version='1.0', id='plot_boxplot_features', resources=ResourceLimit(memory='4G'))
 
         # Create sinks
         self.sink_ROC_PNG =\
@@ -111,6 +113,9 @@ class Evaluate(object):
         self.sink_Ranked_Posteriors_CSV =\
             self.network.create_sink('CSVFile', id='RankedPosteriors_CSV')
 
+        self.sink_Boxplots_Features_Zip =\
+            self.network.create_sink('ZipFile', id='BoxplotsFeatures_Zip')
+
         # Create links to sinks
         self.sink_ROC_PNG.input = self.node_ROC.outputs['output_png']
         self.sink_ROC_Tex.input = self.node_ROC.outputs['output_tex']
@@ -128,6 +133,8 @@ class Evaluate(object):
 
         self.sink_Ranked_Posteriors_Zip.input = self.node_Ranked_Posteriors.outputs['output_zip']
         self.sink_Ranked_Posteriors_CSV.input = self.node_Ranked_Posteriors.outputs['output_csv']
+
+        self.sink_Boxplots_Features_Zip.input = self.node_Boxplots_Features.outputs['output_zip']
 
         # Create two constant nodes
         self.node_Ranked_Percentages.inputs['scores'] = ['percentages']
@@ -196,6 +203,9 @@ class Evaluate(object):
             self.node_STest.inputs['patientclass'] = self.source_PatientInfo.output
             self.node_STest.inputs['config'] = self.source_Config.output
 
+            self.node_Boxplots_Features.inputs['patientclass'] = self.source_PatientInfo.output
+            self.node_Boxplots_Features.inputs['config'] = self.source_Config.output
+
             self.node_Ranked_Percentages.inputs['estimator'] = self.source_Estimator.output
             self.node_Ranked_Percentages.inputs['pinfo'] = self.source_PatientInfo.output
             self.link_images_perc = self.network.create_link(self.source_Images.output, self.node_Ranked_Percentages.inputs['images'])
@@ -235,18 +245,26 @@ class Evaluate(object):
             self.node_Barchart.inputs['prediction'] = prediction
 
             self.links_STest_Features = dict()
+            self.links_Boxplots_Features = dict()
             for idx, label in enumerate(self.parent.modlabels):
                 # NOTE: Currently statistical testing is only done within the training set
                 if self.parent.sources_images_train:
                     # Features are computed within the network
                     self.links_STest_Features[label] = self.node_STest.inputs['features'][str(label)] << self.parent.calcfeatures_train[label].outputs['features']
+                    self.links_Boxplots_Features[label] = self.node_Boxplots_Features.inputs['features'][str(label)] << self.parent.calcfeatures_train[label].outputs['features']
                 else:
                     # Feature are precomputed and given as sources
                     self.links_STest_Features[label] = self.node_STest.inputs['features'][str(label)] << self.parent.sources_features_train[label].output
+                    self.links_Boxplots_Features[label] = self.node_Boxplots_Features.inputs['features'][str(label)] << self.parent.sources_features_train[label].output
+
                 self.links_STest_Features[label].collapse = 'train'
+                self.links_Boxplots_Features[label].collapse = 'train'
 
             self.node_STest.inputs['patientclass'] = pinfo
             self.node_STest.inputs['config'] = config
+
+            self.node_Boxplots_Features.inputs['patientclass'] = pinfo
+            self.node_Boxplots_Features.inputs['config'] = config
 
             self.node_Ranked_Percentages.inputs['estimator'] = prediction
             self.node_Ranked_Percentages.inputs['pinfo'] = pinfo
@@ -314,6 +332,9 @@ class Evaluate(object):
             self.sink_data['RankedPosteriors_Zip'] = ("vfs://output/{}/RankedPosteriors_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         if 'RankedPosteriors_CSV' not in sink_data.keys():
             self.sink_data['RankedPosteriors_CSV'] = ("vfs://output/{}/RankedPosteriors_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
+        if 'BoxplotsFeatures_Zip' not in sink_data.keys():
+            self.sink_data['BoxplotsFeatures_Zip'] = ("vfs://output/{}/BoxplotsFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
     def execute(self):
         """ Execute the network through the fastr.network.execute command. """

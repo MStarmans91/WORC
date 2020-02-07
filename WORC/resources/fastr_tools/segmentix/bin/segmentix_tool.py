@@ -42,6 +42,25 @@ def main():
                         help='Segmentation output (ITK Image)')
     args = parser.parse_args()
 
+    # Convert inputs from lists to single arguments
+    if type(args.im) is list:
+        args.im = ''.join(args.im)
+
+    if type(args.md) is list:
+        args.md = ''.join(args.md)
+
+    if type(args.mask) is list:
+        args.mask = ''.join(args.mask)
+
+    if type(args.para) is list:
+        args.para = ''.join(args.para)
+
+    if type(args.out) is list:
+        args.out = ''.join(args.out)
+
+    if type(args.seg) is list:
+        args.seg = ''.join(args.seg)
+
     if 'Dummy' in str(args.im):
         # Image is a dummy, so we do not do anything with the segmentation but
         # simply copy the input to the output

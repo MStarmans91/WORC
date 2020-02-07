@@ -116,3 +116,49 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
         label_data['patient_IDs'] = patient_IDs
 
     return label_data, image_features
+
+
+def load_features(feat, patientinfo, label_type):
+    ''' Read feature files and stack the features per patient in an array.
+        Additionally, if a patient label file is supplied, the features from
+        a patient will be matched to the labels.
+
+        Parameters
+        ----------
+        featurefiles: list, mandatory
+                List containing all paths to the .hdf5 feature files to be loaded.
+                The argument should contain a list per modelity, e.g.
+                [[features_mod1_patient1, features_mod1_patient2, ...],
+                 [features_mod2_patient1, features_mod2_patient2, ...]].
+
+        patientinfo: string, optional
+                Path referring to the .txt file to be used to read patient
+                labels from. See the Github Wiki for the format.
+
+        label_names: list, optional
+                List containing all the labels that should be extracted from
+                the patientinfo file.
+
+    '''
+    # Split the feature files per modality
+    feat_temp = list()
+    modnames = list()
+    for feat_mod in feat:
+        feat_mod_temp = [str(item).strip() for item in feat_mod.split(',')]
+
+        # The first item contains the name of the modality, followed by a = sign
+        temp = [str(item).strip() for item in feat_mod_temp[0].split('=')]
+        modnames.append(temp[0])
+        feat_mod_temp[0] = temp[1]
+
+        # Append the files to the main list
+        feat_temp.append(feat_mod_temp)
+
+    feat = feat_temp
+
+    # Read the features and classification data
+    label_data, image_features =\
+        load_data(feat, patientinfo,
+                  label_type, modnames)
+
+    return label_data, image_features

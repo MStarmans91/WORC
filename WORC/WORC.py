@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -246,15 +246,15 @@ class WORC(object):
 
         # Feature selection
         config['Featsel'] = dict()
-        config['Featsel']['Variance'] = 'True'
+        config['Featsel']['Variance'] = '1.0'
         config['Featsel']['GroupwiseSearch'] = 'True'
-        config['Featsel']['SelectFromModel'] = 'False'
-        config['Featsel']['UsePCA'] = 'False'
+        config['Featsel']['SelectFromModel'] = '0.0'
+        config['Featsel']['UsePCA'] = '0.0'
         config['Featsel']['PCAType'] = '95variance'
-        config['Featsel']['StatisticalTestUse'] = 'False'
-        config['Featsel']['StatisticalTestMetric'] = 'ttest, Welch, Wilcoxon, MannWhitneyU'
+        config['Featsel']['StatisticalTestUse'] = '0.0'
+        config['Featsel']['StatisticalTestMetric'] = 'MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '-2, 1.5'
-        config['Featsel']['ReliefUse'] = 'False'
+        config['Featsel']['ReliefUse'] = '0.0'
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '1, 1'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
@@ -348,7 +348,7 @@ class WORC(object):
 
         # Sample processing options
         config['SampleProcessing'] = dict()
-        config['SampleProcessing']['SMOTE'] = 'True'
+        config['SampleProcessing']['SMOTE'] = 'False'
         config['SampleProcessing']['SMOTE_ratio'] = '1, 0'
         config['SampleProcessing']['SMOTE_neighbors'] = '5, 15'
         config['SampleProcessing']['Oversampling'] = 'False'
@@ -356,6 +356,10 @@ class WORC(object):
         # Ensemble options
         config['Ensemble'] = dict()
         config['Ensemble']['Use'] = '1'
+
+        # Evaluation options
+        config['Evaluation'] = dict()
+        config['Evaluation']['OverfitScaler'] = 'False'
 
         # Bootstrap options
         config['Bootstrap'] = dict()
