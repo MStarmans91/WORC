@@ -247,6 +247,9 @@ def multi_class_auc(y_truth, y_score):
 def multi_class_auc_score(y_truth, y_score):
     return make_scorer(multi_class_auc, needs_proba=True)
 
+def _concordance_index_censored(y_true, y_pred):
+    result = concordance_index_censored([row[0] for row in y_true], [row[1] for row in y_true], y_pred)
+    return result[0]
 
 def check_scoring(estimator, scoring=None, allow_none=False):
     '''
@@ -258,7 +261,7 @@ def check_scoring(estimator, scoring=None, allow_none=False):
     elif scoring == 'gmean':
         scorer = make_scorer(geometric_mean_score(), needs_proba=True)
     elif scoring == 'concordance':
-        scorer = make_scorer(concordance_index_censored(), needs_proba=False)
+        scorer = make_scorer(_concordance_index_censored, needs_proba=False)
     else:
         scorer = check_scoring_sklearn(estimator, scoring=scoring)
     return scorer

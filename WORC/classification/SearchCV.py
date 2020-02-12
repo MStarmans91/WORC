@@ -1285,10 +1285,11 @@ class BaseSearchCVfastr(BaseSearchCV):
     def _fit(self, X, y, groups, parameter_iterable):
         """Actual fitting,  performing the search over parameters."""
 
-        regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
+        regressors = cc.list_regression_classifiers()
         isclassifier =\
             not any(clf in regressors for clf in self.param_distributions['classifiers'])
 
+        print('----', isclassifier, self.param_distributions['classifiers'], '----')
         cv = check_cv(self.cv, y, classifier=isclassifier)
 
         X, y, groups = indexable(X, y, groups)

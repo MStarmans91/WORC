@@ -19,7 +19,7 @@ import numpy as np
 from sklearn.utils import check_random_state
 from sklearn.model_selection import StratifiedShuffleSplit, ShuffleSplit
 from WORC.classification.SearchCV import RandomizedSearchCVfastr, RandomizedSearchCVJoblib
-
+from WORC.classification import construct_classifier as cc
 
 def random_search_parameters(features, labels, N_iter, test_size,
                              param_grid, scoring_method, n_splits=5,
@@ -56,8 +56,7 @@ def random_search_parameters(features, labels, N_iter, test_size,
     random_seed = np.random.randint(1, 5000)
     random_state = check_random_state(random_seed)
 
-    regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
-    if any(clf in regressors for clf in param_grid['classifiers']):
+    if any(clf in cc.list_regression_classifiers() for clf in param_grid['classifiers']):
         # We cannot do a stratified shuffle split with regression
         cv = ShuffleSplit(n_splits=n_splits, test_size=test_size,
                           random_state=random_state)

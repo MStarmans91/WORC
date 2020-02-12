@@ -30,7 +30,7 @@ from .helpers.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
     CartesiusClusterDetector, SurvivalFileDetector
 
-from WORC.classification.metrics import check_scoring
+from WORC.classification import construct_classifier as cc
 
 from WORC.validators.preflightcheck import ValidatorsFactory
 
@@ -214,12 +214,11 @@ class SimpleWORC():
 
     def _set_and_validate_estimators(self, estimators, scoring_method, method, coarse):
         # validate
+        self._method = method
         if method == 'classification':
             valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'GaussianNB', 'ComplementNB', 'LDA', 'QDA', 'RankedSVM']
-        elif method == 'regression':
-            valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR']
         elif method == 'survival':
-            valid_estimators = ['FastSurvivalSVM', 'FastKernelSurvivalSVM']
+            valid_estimators = cc.list_survival_classifiers()
             valid_scoring_methods = ['concordance']
 
             # TODO: implement survival
@@ -228,7 +227,8 @@ class SimpleWORC():
             if scoring_method not in valid_scoring_methods:
                 raise ValueError(
                     f'Invalid scoring method {scoring_method} for estimators {estimators}; must be one of {", ".join(valid_scoring_methods)}')
-
+        elif method == 'regression':
+            valid_estimators = [x for x in cc.list_regression_classifiers() if x in cc.list_survival_classifiers()]  # remove survival classifiers from regressors list
         else:
             valid_estimators = []
 
@@ -239,6 +239,10 @@ class SimpleWORC():
 
         # set
         self._config_builder.estimator_scoring_overrides(estimators, scoring_method)
+
+        if estimator in cc.list_survival_classifiers():
+            # TODO: pass n_splits to this function, for now it will use default=5
+            self._config_builder.regression_overrides()
 
         if coarse:
             self._config_builder.coarse_overrides()
@@ -302,7 +306,12 @@ class SimpleWORC():
         self._worc.images_train = self._images_train
         self._worc.features_train = self._features_train
         self._worc.segmentations_train = self._segmentations_train
-        self._worc.labels_train = self._labels_file_train
+
+        if self._method == 'survival':
+            self._worc.labels_train = self._survival_file_train
+        else:
+            self._worc.labels_train = self._labels_file_train
+
         self._worc.semantics_train = self._semantics_file_train
 
         if self._images_test:
@@ -317,9 +326,16 @@ class SimpleWORC():
         if self._labels_file_test:
             self._worc.labels_test = self._labels_file_test
 
-        self._worc.label_names = ', '.join(self._label_names)
-        self._config_builder._custom_overrides['Labels'] = dict()
-        self._config_builder._custom_overrides['Labels']['label_names'] = self._worc.label_names
+        if self._method and self._method == 'survival':
+            self._worc.label_names = f"{self._survival_file_train_mappings['event']}, {self._survival_file_train_mappings['time']}"
+            self._config_builder.custom_config_overrides({'Labels': {
+                'label_names': self._worc.label_names,
+                'modus': 'survival'
+            }})
+        else:
+            self._worc.label_names = ', '.join(self._label_names)
+            self._config_builder._custom_overrides['Labels'] = dict()
+            self._config_builder._custom_overrides['Labels']['label_names'] = self._worc.label_names
 
         # Find out how many configs we need to make
         if self._worc.images_train:
@@ -328,10 +344,6 @@ class SimpleWORC():
           nmod = len(self.features_train)
 
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
-
-        from pprint import pprint
-        pprint({section: dict(self._config_builder._config[section]) for section in self._config_builder._config.sections()})
-        return
 
         self._worc.build()
         if self._add_evaluation:

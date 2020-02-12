@@ -20,12 +20,21 @@ import pandas as pd
 import logging
 import os
 import time
+from WORC.classification import construct_classifier as cc
 from time import gmtime, strftime
 from sklearn.model_selection import train_test_split
 from .parameter_optimization import random_search_parameters
 import WORC.addexceptions as ae
-from WORC.classification.regressors import regressors
 
+def _convert_multilabel_to_np(i_class):
+    # Sklearn multiclass requires rows to be objects/patients
+    # i_class = i_class.reshape(i_class.shape[1], i_class.shape[0])
+    i_class_temp = np.zeros((i_class.shape[1], i_class.shape[0]))
+    for n_patient in range(0, i_class.shape[1]):
+        for n_label in range(0, i_class.shape[0]):
+            i_class_temp[n_patient, n_label] = i_class[n_label, n_patient]
+
+    return i_class_temp
 
 def crossval(config, label_data, image_features,
              param_grid=None, use_fastr=False,
@@ -93,8 +102,8 @@ def crossval(config, label_data, image_features,
 
     modus: string, default 'singlelabel'
             Determine whether one-vs-all classification (or regression) for
-            each single label is used ('singlelabel') or if multilabel
-            classification is performed ('multilabel').
+            each single label is used ('singlelabel') or if multilabel / surival
+            classification is performed ('multilabel', 'survival').
 
     Returns
     ----------
@@ -139,8 +148,8 @@ def crossval(config, label_data, image_features,
     if modus == 'singlelabel':
         print('Performing Single class classification.')
         logging.debug('Performing Single class classification.')
-    elif modus == 'multilabel':
-        print('Performing Multi label classification.')
+    elif modus in ('multilabel', 'survival',):
+        print(f'Performing {modus} classification.')
         logging.debug('Performing Multi class classification.')
         label_value = [label_value]
         label_name = [label_name]
@@ -168,11 +177,20 @@ def crossval(config, label_data, image_features,
 
             t = time.time()
 
+            isregression = any(clf in cc.list_regression_classifiers() for clf in param_grid['classifiers'])
+
             # Split into test and training set, where the percentage of each
             # label is maintained
-            if any(clf in regressors for clf in param_grid['classifiers']):
+            if isregression:
                 # We cannot do a stratified shuffle split with regression
                 stratify = None
+                msg = f'Classifier is a regression classifier, setting stratify to None'
+                print(msg)
+                logging.debug(msg)
+                if modus in ('multilabel', 'survival'):
+                    i_class_temp = _convert_multilabel_to_np(i_class)
+                else:
+                    i_class_temp = i_class
             else:
                 if modus == 'singlelabel':
                     stratify = i_class_temp
@@ -188,13 +206,8 @@ def crossval(config, label_data, image_features,
                                 plabel = lnum + 1
                         stratify.append(plabel)
 
-                    # Sklearn multiclass requires rows to be objects/patients
-                    # i_class = i_class.reshape(i_class.shape[1], i_class.shape[0])
-                    i_class_temp = np.zeros((i_class.shape[1], i_class.shape[0]))
-                    for n_patient in range(0, i_class.shape[1]):
-                        for n_label in range(0, i_class.shape[0]):
-                            i_class_temp[n_patient, n_label] = i_class[n_label, n_patient]
-                    i_class_temp = i_class_temp
+                    i_class_temp = _convert_multilabel_to_np(i_class)
+                    #i_class_temp = i_class_temp
                 else:
                     raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
 
@@ -202,7 +215,7 @@ def crossval(config, label_data, image_features,
                 # Use Random Split. Split per patient, not per sample
                 unique_patient_IDs, unique_indices =\
                     np.unique(np.asarray(patient_IDs), return_index=True)
-                if any(clf in regressors for clf in param_grid['classifiers']):
+                if isregression:
                     unique_stratify = None
                 else:
                     unique_stratify = [stratify[i] for i in unique_indices]
@@ -247,14 +260,24 @@ def crossval(config, label_data, image_features,
                 # Split features and labels accordingly
                 X_train = [image_features[i] for i in indices_train]
                 X_test = [image_features[i] for i in indices_test]
-                if modus == 'singlelabel':
-                    Y_train = i_class_temp[indices_train]
-                    Y_test = i_class_temp[indices_test]
-                elif modus == 'multilabel':
-                    Y_train = i_class_temp[indices_train, :]
-                    Y_test = i_class_temp[indices_test, :]
+
+                if not isregression:
+                    if modus == 'singlelabel':
+                        Y_train = i_class_temp[indices_train]
+                        Y_test = i_class_temp[indices_test]
+                    elif modus in ('multilabel', 'survival',):
+                        Y_train = i_class_temp[indices_train, :]
+                        Y_test = i_class_temp[indices_test, :]
+                    else:
+                        raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
                 else:
-                    raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
+                    if modus in ('survival',):
+                        # TODO: where should we get the split from?
+                        Y_train = i_class_temp[indices_train, :]
+                        Y_test = i_class_temp[indices_test, :]
+
+                        print('1----', X_train, X_test)
+                        print('2----', Y_train, Y_test)
 
             else:
                 # Use pre defined splits
@@ -291,7 +314,7 @@ def crossval(config, label_data, image_features,
                 if modus == 'singlelabel':
                     Y_train = i_class_temp[ind_train]
                     Y_test = i_class_temp[ind_test]
-                elif modus == 'multilabel':
+                elif modus in ('multilabel', 'survival',):
                     Y_train = i_class_temp[ind_train, :]
                     Y_test = i_class_temp[ind_test, :]
                 else:
@@ -364,7 +387,7 @@ def crossval(config, label_data, image_features,
 
         if modus == 'singlelabel':
             i_name = ''.join(i_name)
-        elif modus == 'multilabel':
+        elif modus in ('multilabel', 'survival',):
             i_name = ','.join(i_name)
 
         classifier_labelss[i_name] = panda_data_temp
@@ -399,8 +422,8 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
 
         modus: string, default 'singlelabel'
                 Determine whether one-vs-all classification (or regression) for
-                each single label is used ('singlelabel') or if multilabel
-                classification is performed ('multilabel').
+                each single label is used ('singlelabel') or if multilabel / survival
+                classification is performed ('multilabel', 'survival').
 
     Returns:
         classifier_data (pandas dataframe)
@@ -429,7 +452,7 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
     if modus == 'singlelabel':
         print('Performing Single class classification.')
         logging.debug('Performing Single class classification.')
-    elif modus == 'multilabel':
+    elif modus in ('multilabel', 'survival',):
         print('Performing Multi label classification.')
         logging.debug('Performing Multi class classification.')
         label_name_train = [label_name_train]

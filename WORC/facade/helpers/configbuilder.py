@@ -154,3 +154,6 @@ class ConfigBuilder():
             overrides = {} # not a cluster or unsupported
 
         return overrides
+
+    def regression_overrides(self, n_splits=5):
+        self.custom_config_overrides({'HyperOptimization': {'n_splits': n_splits}})

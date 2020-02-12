@@ -35,6 +35,15 @@ survival_classifiers = {
         'FastSurvivalSVM': FastSurvivalSVM,
 }
 
+regression_classifiers = [
+    'SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet'
+]
+
+multilabel_classifiers = {
+    'RankedSVM': RankedSVM,
+    'RandomForestClassifier': RandomForestClassifier,
+    **survival_classifiers
+}
 
 def construct_classifier(config):
     """Interface to create classification
@@ -142,6 +151,20 @@ def construct_classifier(config):
 
     return classifier
 
+def list_regression_classifiers():
+    return regression_classifiers.copy() + list_survival_classifiers()  # survival is regression as well so we should return the product of these two lists
+
+def list_survival_classifiers():
+    return list(survival_classifiers.keys())
+
+def is_survival_classifier(obj):
+    return any([isinstance(obj, x) for x in survival_classifiers.values()])
+
+def list_multilabel_classifiers():
+    return list(multilabel_classifiers.keys())
+
+def is_multilabel_classifier(obj):
+    return any([isinstance(obj, x) for x in multilabel_classifiers.values()])
 
 def construct_survival_classifier(config):
     # clf.C = config['SVMC']  # whats this?
@@ -162,9 +185,6 @@ def construct_survival_classifier(config):
             'max_iter': config['max_iter']
         }
         ret = FastSurvivalSVM(**svm_config)
-
-    if ret is not None:
-        ret._is_survival = True
 
     return ret
 
