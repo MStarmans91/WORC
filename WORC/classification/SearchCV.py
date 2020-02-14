@@ -16,6 +16,7 @@
 # limitations under the License.
 
 
+from sksurv.util import Surv
 from sklearn.base import BaseEstimator, is_classifier, clone
 from sklearn.base import MetaEstimatorMixin
 from sklearn.exceptions import NotFittedError
@@ -838,12 +839,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             except IndexError:
                 labellength = 1
 
-        if labellength > 1 and type(best_estimator) != RankedSVM:
-            # Multiclass, hence employ a multiclass classifier for e.g. SVM, RF
+        if labellength > 1 and not cc.is_multilabel_classifier(best_estimator):
             best_estimator = OneVsRestClassifier(best_estimator)
 
         if y is not None:
-            best_estimator.fit(X, y, **self.fit_params)
+            if cc.is_survival_classifier(best_estimator) or (hasattr(best_estimator, 'estimator') and cc.is_survival_classifier(best_estimator.estimator)):
+                best_estimator.fit(X, Surv.from_arrays([row[0] for row in y], [row[1] for row in y]))
+            else:
+                best_estimator.fit(X, y, **self.fit_params)
         else:
             best_estimator.fit(X, **self.fit_params)
         self.best_estimator_ = best_estimator

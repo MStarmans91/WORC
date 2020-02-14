@@ -14,7 +14,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+from sklearn.base import is_regressor
 from sksurv.svm import FastKernelSurvivalSVM, FastSurvivalSVM
 from sklearn.svm import SVC
 from sklearn.svm import SVR as SVMR
@@ -151,20 +151,30 @@ def construct_classifier(config):
 
     return classifier
 
+
+def is_regression_classifier(obj):
+    return is_regressor(obj) or is_survival_classifier(obj)  # return true for survival as well, since it usually uses regression
+
+
 def list_regression_classifiers():
-    return regression_classifiers.copy() + list_survival_classifiers()  # survival is regression as well so we should return the product of these two lists
+    return regression_classifiers.copy() + list_survival_classifiers()  # survival usually uses regression as well so we should return the product of these two lists
+
 
 def list_survival_classifiers():
     return list(survival_classifiers.keys())
 
+
 def is_survival_classifier(obj):
     return any([isinstance(obj, x) for x in survival_classifiers.values()])
+
 
 def list_multilabel_classifiers():
     return list(multilabel_classifiers.keys())
 
+
 def is_multilabel_classifier(obj):
     return any([isinstance(obj, x) for x in multilabel_classifiers.values()])
+
 
 def construct_survival_classifier(config):
     # clf.C = config['SVMC']  # whats this?

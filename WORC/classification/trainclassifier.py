@@ -243,40 +243,25 @@ def trainclassifier(feat_train, patientinfo_train, config,
     trained_classifier.to_hdf(output_hdf, 'SVMdata')
 
     # Check whether we do regression or classification
-    regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
-    isclassifier =\
-        not any(clf in regressors for clf in config['Classification']['classifiers'])
+    regressors = cc.list_regression_classifiers()
+    isregression = any(clf in regressors for clf in config['Classification']['classifiers'])
 
     # Calculate statistics of performance
     if feat_test is None:
-        if not isclassifier:
-            statistics = plot_SVM(trained_classifier, label_data_train,
-                                  label_type, ensemble=config['Ensemble']['Use'],
-                                  bootstrap=config['Bootstrap']['Use'],
-                                  bootstrap_N=config['Bootstrap']['N_iterations'])
-        else:
-            statistics = plot_SVM(trained_classifier, label_data_train,
-                                  label_type, modus=modus,
+        statistics = plot_SVM(trained_classifier, label_data_train,
+                              label_type, modus=modus,
+                              ensemble=config['Ensemble']['Use'],
+                              bootstrap=config['Bootstrap']['Use'],
+                              bootstrap_N=config['Bootstrap']['N_iterations'])
+    else:
+        if patientinfo_test is not None:
+            statistics = plot_SVM(trained_classifier,
+                                  label_data_test,
+                                  label_type,
+                                  modus=modus,
                                   ensemble=config['Ensemble']['Use'],
                                   bootstrap=config['Bootstrap']['Use'],
                                   bootstrap_N=config['Bootstrap']['N_iterations'])
-    else:
-        if patientinfo_test is not None:
-            if not isclassifier:
-                statistics = plot_SVM(trained_classifier,
-                                      label_data_test,
-                                      label_type,
-                                      ensemble=config['Ensemble']['Use'],
-                                      bootstrap=config['Bootstrap']['Use'],
-                                      bootstrap_N=config['Bootstrap']['N_iterations'])
-            else:
-                statistics = plot_SVM(trained_classifier,
-                                      label_data_test,
-                                      label_type,
-                                      modus=modus,
-                                      ensemble=config['Ensemble']['Use'],
-                                      bootstrap=config['Bootstrap']['Use'],
-                                      bootstrap_N=config['Bootstrap']['N_iterations'])
         else:
             statistics = None
 
