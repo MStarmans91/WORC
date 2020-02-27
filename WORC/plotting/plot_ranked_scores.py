@@ -152,7 +152,6 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
                        output_itk=None, zoomfactor=4):
     # Match the images to the label data
     print('Matching image and segmentation data to labels.')
-    print(images)
     label_data, images =\
         lp.findlabeldata(pinfo,
                          [label_type],
@@ -171,10 +170,10 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
     # Order the images and segmentations in the scores ordering
     ordering = list()
     for pid in ranked_PIDs:
-        if pid in PIDs_images:
+        if pid.lower() in PIDs_images:
             ordering.append(PIDs_images.index(pid))
         else:
-            print('[WORC Warning] Patient {} not in images list!').format(str(pid))
+            print(f'[WORC Warning] Patient {pid} not in images list!')
 
     PIDs_images = [PIDs_images[i] for i in ordering]
     images = [images[i] for i in ordering]

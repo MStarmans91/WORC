@@ -250,15 +250,15 @@ class WORC(object):
         config['Featsel']['GroupwiseSearch'] = 'True'
         config['Featsel']['SelectFromModel'] = '0.0'
         config['Featsel']['UsePCA'] = '0.0'
-        config['Featsel']['PCAType'] = '95variance'
+        config['Featsel']['PCAType'] = '95variance, 50, 100'
         config['Featsel']['StatisticalTestUse'] = '0.0'
         config['Featsel']['StatisticalTestMetric'] = 'MannWhitneyU'
-        config['Featsel']['StatisticalTestThreshold'] = '-2, 1.5'
+        config['Featsel']['StatisticalTestThreshold'] = '-3, 2.5'
         config['Featsel']['ReliefUse'] = '0.0'
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '1, 1'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
-        config['Featsel']['ReliefNumFeatures'] = '25, 200'
+        config['Featsel']['ReliefNumFeatures'] = '25, 100'
 
         # Groupwise Featureselection options
         config['SelectFeatGroup'] = dict()

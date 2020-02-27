@@ -28,6 +28,7 @@ from WORC.classification import metrics
 import WORC.addexceptions as ae
 from sklearn.base import is_regressor
 from collections import OrderedDict
+from sklearn.utils import resample
 
 
 def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_scoring):
@@ -242,6 +243,16 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
     N_1 = float(len(prediction[label_type]['patient_ID_train'][0]))
     N_2 = float(len(prediction[label_type]['patient_ID_test'][0]))
 
+    # Convert tuples to lists if required
+    if type(prediction[label_type]['X_test']) is tuple:
+        prediction[label_type]['X_test'] = list(prediction[label_type]['X_test'])
+        prediction[label_type]['X_train'] = list(prediction[label_type]['X_train'])
+        prediction[label_type]['Y_train'] = list(prediction[label_type]['Y_train'])
+        prediction[label_type]['Y_test'] = list(prediction[label_type]['Y_test'])
+        prediction[label_type]['patient_ID_test'] = list(prediction[label_type]['patient_ID_test'])
+        prediction[label_type]['patient_ID_train'] = list(prediction[label_type]['patient_ID_train'])
+        prediction[label_type]['classifiers'] = list(prediction[label_type]['classifiers'])
+
     # Loop over the test sets, which correspond to cross-validation
     # or bootstrapping iterations
     n_iter = len(prediction[label_type]['Y_test'])
@@ -255,7 +266,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         if bootstrap:
             print(f"Bootstrap {i + 1} / {bootstrap_N}.")
         else:
-            print(f"Cross validation {i + 1} / {n_iter}.")
+            print(f"Cross-validation {i + 1} / {n_iter}.")
 
         test_indices = list()
 
@@ -527,10 +538,10 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             coxcoef.append(cph.summary['coef']['predict'])
             coxp.append(cph.summary['p']['predict'])
 
-        # Delete some objects to save memory
-        del fitted_model, X_test_temp, X_train_temp, Y_train_temp, Y_test_temp
-        del test_patient_IDs, train_patient_IDs
+        # Delete some objects to save memory in cross-validtion
         if not bootstrap:
+            del fitted_model, X_test_temp, X_train_temp, Y_train_temp
+            del Y_test_temp, test_patient_IDs, train_patient_IDs
             prediction[label_type]['X_test'][i] = None
             prediction[label_type]['X_train'][i] = None
             prediction[label_type]['Y_train'][i] = None
@@ -569,7 +580,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                 stats["Accuracy 95%:"] = f"{accuracy_test} {str(compute_confidence_bootstrap(accuracy, accuracy_test, N_1, alpha))}"
                 stats["BCA 95%:"] = f"{bca_test} {str(compute_confidence_bootstrap(bca, bca_test, N_1, alpha))}"
                 stats["AUC 95%:"] = f"{auc_test} {str(compute_confidence_bootstrap(auc, auc_test, N_1, alpha))}"
-                stats["F1-score 95%:"] = f"{f1_score_list_test} {str(compute_confidence_bootstrap(f1_score_list, f1_score_test, N_1, alpha))}"
+                stats["F1-score 95%:"] = f"{f1_score_test} {str(compute_confidence_bootstrap(f1_score_list, f1_score_test, N_1, alpha))}"
                 stats["Precision 95%:"] = f"{precision_test} {str(compute_confidence_bootstrap(precision, precision_test, N_1, alpha))}"
                 stats["NPV 95%:"] = f"{npv_test} {str(compute_confidence_bootstrap(npv, npv_test, N_1, alpha))}"
                 stats["Sensitivity 95%: "] = f"{sensitivity_test} {str(compute_confidence_bootstrap(sensitivity, sensitivity_test, N_1, alpha))}"

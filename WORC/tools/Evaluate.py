@@ -197,9 +197,13 @@ class Evaluate(object):
             self.node_Barchart.inputs['prediction'] = self.source_Estimator.output
 
             self.links_STest_Features = list()
+            self.links_Boxplots_Features = list()
             for idx, label in enumerate(self.labels):
                 self.links_STest_Features.append(self.node_STest.inputs['features'][str(label)] << self.source_Features[idx].output)
                 self.links_STest_Features[idx].collapse = 'features'
+                self.links_Boxplots_Features.append(self.node_Boxplots_Features.inputs['features'][str(label)] << self.source_Features[idx].output)
+                self.links_Boxplots_Features[idx].collapse = 'features'
+
             self.node_STest.inputs['patientclass'] = self.source_PatientInfo.output
             self.node_STest.inputs['config'] = self.source_Config.output
 

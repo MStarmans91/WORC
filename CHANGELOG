@@ -30,6 +30,8 @@ Changed
   you can now simply supply a float to determine the percentage of times
   this method is used in the created workflows.
 - Moved load_features from trainclassifier to file_io.
+- Matching of PID from labels from label file to other objects is now all
+  converted to lower case.
 
 Fixed
 ~~~~~
