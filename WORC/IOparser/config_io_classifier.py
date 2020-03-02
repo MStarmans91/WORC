@@ -120,8 +120,9 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Imputation']['n_neighbors'].split(',')]
 
-    settings_dict['General']['FeatureCalculator'] =\
-        str(settings['General']['FeatureCalculator'])
+    settings_dict['General']['FeatureCalculators'] =\
+        [str(item).strip() for item in
+         settings['General']['FeatureCalculators'].split(',')]
 
     # Feature selection options
     for key in settings['SelectFeatGroup'].keys():
