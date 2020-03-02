@@ -32,6 +32,7 @@ Changed
 - Moved load_features from trainclassifier to file_io.
 - Matching of PID from labels from label file to other objects is now all
   converted to lower case.
+- Refactoring of WORC network building.
 
 Fixed
 ~~~~~
