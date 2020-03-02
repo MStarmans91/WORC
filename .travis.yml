@@ -41,6 +41,7 @@ matrix:
       script:
       - python WORCTutorial/WORCTutorialSimple.py
       - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0 --samples HN1331
+      - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
     # - name: "MacOS"
     #   os: osx
     #   osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
