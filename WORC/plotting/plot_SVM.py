@@ -161,7 +161,6 @@ class BasePlotter(ABC):
 
             # TODO: resample here is undefined, when bootstrap == True this code will fail
             # @Martijn please fix plx plx? :)
-            shuffle = lambda x: (_ for _ in ()).throw(Exception('resample undefined'))
             x_test_temp, y_test_temp, test_patient_ids = resample(x_test_temp, y_test_temp, test_patient_ids)
 
             self._dowhatisinloop1(y_test_temp, test_patient_ids, fitted_model)
@@ -290,7 +289,6 @@ class BasePlotter(ABC):
         print('Shuffling estimators for random ensembling.')
         # TODO: shuffle seems to be undefined
         # @Martijn fix plxplx? :)
-        shuffle = lambda x: (_ for _ in ()).throw(Exception('shuffle undefined'))
         shuffle(fitted_model.cv_results_['params'])
         shuffle(fitted_model.cv_results_['params_all'])
 
@@ -333,10 +331,10 @@ class BasePlotter(ABC):
 
     def stats(self):
         s = self._get_stats()
-        for k, v in s.items():
-            print(k)
-            for i in v:
-                print('\t', i)
+        # for k, v in s.items():
+        #     print(k)
+        #     for i in v:
+        #         print('\t', i)
         return s
 
 
@@ -375,10 +373,10 @@ class SurvivalPlotter(BasePlotter):
         # Compute statistics
         # Extract time to event and event from label data
 
-        print(len(y_train))
-        print(len(y_test))
-
-        return
+        # print(len(y_train))
+        # print(len(y_test))
+        #
+        # return
 
         e_test = np.asarray([bool(x[0]) for x in y_test])
         t_test = np.asarray([x[1] for x in y_test])
@@ -397,7 +395,7 @@ class SurvivalPlotter(BasePlotter):
 
         cic = concordance_index_censored(e_test, t_test, y_prediction)
         cii = concordance_index_ipcw(train, test, y_prediction, max(t_train))  # tau param specifies values to be truncated as max(t_test) <= max(t_train)
-        # cda = cumulative_dynamic_auc(train, test, y_prediction)
+        cda = cumulative_dynamic_auc(train, test, y_prediction, range(int(min(t_test)), int(max(t_test))))
 
         cic_mappings = {
             'cindex': cic[0],
@@ -415,14 +413,16 @@ class SurvivalPlotter(BasePlotter):
             'tied_time': cii[4]
         }
 
-        # cda_mappings = {
-        #     'auc': cda[0],
-        #     'mean_auc': cda[1]
-        # }
+        cda_mappings = {
+            'auc': cda[0],
+            'mean_auc': cda[1]
+        }
+
+        # TODO: compute_confidence(..) uitrekenen
 
         self._append_mappings('concordance_index_censored', cic_mappings)
         self._append_mappings('concordance_index_ipcw', cii_mappings)
-        # self._append_mappings('cumulative_dynamic_auc', cda_mappings)
+        self._append_mappings('cumulative_dynamic_auc', cda_mappings)
 
         # # Fit Cox model using SVR output, time to event and event
         # data = {'predict': y_prediction, 'E': E_truth, 'T': T_truth}
