@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import SimpleITK as sitk
 import argparse
-from WORC.processing.segmentix import segmentix
-from shutil import copyfile
+from WORC.processing.preprocessing import preprocess
 
 
 def main():
@@ -28,21 +28,18 @@ def main():
     parser.add_argument('-md', '--md', metavar='metadata', dest='md',
                         type=str, required=False, nargs='+',
                         help='Clinical data on patient (DICOM)')
-    parser.add_argument('-segin', '--segin', metavar='segmentation', dest='seg',
-                        type=str, required=True, nargs='+',
-                        help='Segmentation input (ITK Image)')
     parser.add_argument('-mask', '--mask', metavar='mask', dest='mask',
                         type=str, required=False, nargs='+',
-                        help='Mask (ITK Image)')
+                        help='Mask that can be used in normalization')
     parser.add_argument('-para', '--para', metavar='Parameters', nargs='+',
                         dest='para', type=str, required=True,
                         help='Parameters')
-    parser.add_argument('-segout', '--segout', metavar='Features',
-                        dest='out', type=str, required=True,
-                        help='Segmentation output (ITK Image)')
+    parser.add_argument('-out', '--out', metavar='Features',
+                        dest='out', type=str, required=False,
+                        help='Image output (ITK Image)')
     args = parser.parse_args()
 
-    # Convert inputs from lists to single arguments
+    # Convert list inputs to strings
     if type(args.im) is list:
         args.im = ''.join(args.im)
 
@@ -58,17 +55,11 @@ def main():
     if type(args.out) is list:
         args.out = ''.join(args.out)
 
-    if type(args.seg) is list:
-        args.seg = ''.join(args.seg)
+    # Apply preprocessing
+    image = preprocess(args.im, args.para, args.md, args.mask)
 
-    if 'Dummy' in str(args.im):
-        # Image is a dummy, so we do not do anything with the segmentation but
-        # simply copy the input to the output
-        if args.out is not None:
-            copyfile(str(args.seg), str(args.out))
-    else:
-        segmentix(image=args.im, segmentation=args.seg, parameters=args.para,
-                  output=args.out, metadata_file=args.md, mask=args.mask)
+    # Save the output
+    sitk.WriteImage(image, args.out)
 
 
 if __name__ == '__main__':

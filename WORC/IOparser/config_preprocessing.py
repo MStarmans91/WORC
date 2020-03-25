@@ -42,6 +42,9 @@ def load_config(config_file_path):
     settings_dict['Normalize']['ROI'] =\
         str(settings['Normalize']['ROI'])
 
+    settings_dict['Normalize']['ROIdilate'] =\
+        str(settings['Normalize']['ROIdilate'])
+
     settings_dict['Normalize']['Method'] =\
         str(settings['Normalize']['Method'])
 

@@ -183,10 +183,13 @@ class WORC(object):
         config['Segmentix']['segradius'] = '5'
         config['Segmentix']['N_blobs'] = '1'
         config['Segmentix']['fillholes'] = 'False'
+        config['Segmentix']['remove_small_objects'] = 'False'
+        config['Segmentix']['min_object_size'] = '2'
 
         # Preprocessing
         config['Normalize'] = dict()
         config['Normalize']['ROI'] = 'Full'
+        config['Normalize']['ROIdilate'] = 'False'
         config['Normalize']['Method'] = 'z_score'
 
         # PREDICT - Feature calculation
@@ -636,7 +639,7 @@ class WORC(object):
                         feature_calculators =\
                             self.configs[nmod]['General']['FeatureCalculators']
                         feature_calculators = feature_calculators.strip('][').split(', ')
-                        
+
                         for f in feature_calculators:
                             self.add_feature_calculator(f, label, nmod)
 

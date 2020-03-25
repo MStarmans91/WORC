@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,61 +16,30 @@
 # limitations under the License.
 
 import SimpleITK as sitk
-import argparse
 import pydicom
 import WORC.IOparser.config_preprocessing as config_io
 import os
+from WORC.processing.segmentix import dilate_contour
 
 
-def main():
-    parser = argparse.ArgumentParser(description='Feature extraction')
-    parser.add_argument('-im', '--im', metavar='image', nargs='+',
-                        dest='im', type=str, required=False,
-                        help='Images to calculate features on')
-    parser.add_argument('-md', '--md', metavar='metadata', dest='md',
-                        type=str, required=False, nargs='+',
-                        help='Clinical data on patient (DICOM)')
-    parser.add_argument('-mask', '--mask', metavar='mask', dest='mask',
-                        type=str, required=False, nargs='+',
-                        help='Mask that can be used in normalization')
-    parser.add_argument('-para', '--para', metavar='Parameters', nargs='+',
-                        dest='para', type=str, required=True,
-                        help='Parameters')
-    parser.add_argument('-out', '--out', metavar='Features',
-                        dest='out', type=str, required=False,
-                        help='Image output (ITK Image)')
-    args = parser.parse_args()
-
-    # Convert list inputs to strings
-    if type(args.im) is list:
-        args.im = ''.join(args.im)
-
-    if type(args.md) is list:
-        args.md = ''.join(args.md)
-
-    if type(args.mask) is list:
-        args.mask = ''.join(args.mask)
-
-    if type(args.para) is list:
-        args.para = ''.join(args.para)
-
-    if type(args.out) is list:
-        args.out = ''.join(args.out)
-
+def preprocess(image, config, metadata=None, mask=None):
+    '''
+    Apply preprocessing to an image to prepare it for feture extration
+    '''
     # Read the config, image and if given masks and metadata
-    config = config_io.load_config(args.para)
-    image = sitk.ReadImage(args.im)
+    config = config_io.load_config(config)
+    image = sitk.ReadImage(image)
 
-    if args.md is not None:
-        metadata = pydicom.read_file(args.md)
+    if metadata is not None:
+        metadata = pydicom.read_file(metadata)
 
-    if args.mask is not None:
-        mask = sitk.ReadImage(args.mask)
+    if mask is not None:
+        mask = sitk.ReadImage(mask)
 
     # Convert image to Hounsfield units if type is CT
     image_type = config['ImageFeatures']['image_type']
     # NOTE: We only do this if the input is a DICOM folder
-    if 'CT' in image_type and not os.path.isfile(args.im):
+    if 'CT' in image_type and not os.path.isfile(image):
         print('Converting intensity to Hounsfield units.')
         image = image*metadata.RescaleSlope +\
             metadata.RescaleIntercept
@@ -81,7 +50,14 @@ def main():
         image = sitk.Normalize(image)
     elif config['Normalize']['ROI'] == 'True':
         print('Apply scaling of image based on a Region Of Interest.')
-        if args.mask is None:
+
+        # Dilate the mask if required
+        if config['Normalize']['ROIdilate'] == 'True':
+            mask = sitk.GetArrayFromImage(mask)
+            mask = dilate_contour(mask)
+            mask = sitk.GetImageFromArray(mask)
+
+        if mask is None:
             raise IOError('Mask input required for ROI normalization.')
         else:
             if config['Normalize']['Method'] == 'z_score':
@@ -115,9 +91,4 @@ def main():
     else:
         print('No preprocessing was applied.')
 
-    # Save the output
-    sitk.WriteImage(image, args.out)
-
-
-if __name__ == '__main__':
-    main()
+    return image

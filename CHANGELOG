@@ -21,6 +21,8 @@ Added
 - Option in evaluation to overfit feature scaling to test set: should only
   be used to assess differences between the training and test sets, not
   in an actual model.
+- Option to delete small objects in segmentation.
+- Option to within the preprocessing, use a dilated ROI.
 
 Changed
 ~~~~~~~
@@ -33,6 +35,7 @@ Changed
 - Matching of PID from labels from label file to other objects is now all
   converted to lower case.
 - Refactoring of WORC network building.
+- Segmentatix tool is cleaned up. Segmentix script is moved to processing.
 
 Fixed
 ~~~~~
