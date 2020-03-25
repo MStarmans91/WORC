@@ -23,6 +23,7 @@ Added
   in an actual model.
 - Option to delete small objects in segmentation.
 - Option to within the preprocessing, use a dilated ROI.
+- Otsu thresholding as mask for preprocessing.
 
 Changed
 ~~~~~~~

@@ -53,12 +53,18 @@ def preprocess(image, config, metadata=None, mask=None):
 
         # Dilate the mask if required
         if config['Normalize']['ROIdilate'] == 'True':
+            radius = config['Normalize']['ROIdilateradius']
             mask = sitk.GetArrayFromImage(mask)
-            mask = dilate_contour(mask)
+            mask = dilate_contour(mask, radius)
             mask = sitk.GetImageFromArray(mask)
 
         if mask is None:
-            raise IOError('Mask input required for ROI normalization.')
+            if config['Normalize']['ROIDetermine'] == 'Provided':
+                raise IOError('Mask input required for ROI normalization.')
+            elif config['Normalize']['ROIDetermine'] == 'Otsu':
+                mask = 1 - sitk.OtsuThreshold(image)
+            else:
+                raise IOError(f"{config['Normalize']['ROIDetermine']} is not a valid method!")
         else:
             if config['Normalize']['Method'] == 'z_score':
                 print('Apply scaling using z-scoring based on the ROI')

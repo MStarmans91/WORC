@@ -189,7 +189,9 @@ class WORC(object):
         # Preprocessing
         config['Normalize'] = dict()
         config['Normalize']['ROI'] = 'Full'
+        config['Normalize']['ROIDetermine'] = 'Provided'
         config['Normalize']['ROIdilate'] = 'False'
+        config['Normalize']['ROIdilateradius'] = '10'
         config['Normalize']['Method'] = 'z_score'
 
         # PREDICT - Feature calculation
