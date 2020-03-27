@@ -180,7 +180,13 @@ def segmentix(parameters, image=None, segmentation=None,
             mask = ''.join(mask)
         contour = mask_contour(contour, mask, method)
 
-    # Output contour
+    # Convert back to ITK Image with correct meta information
     contour = contour.astype(np.uint8)
     contour = sitk.GetImageFromArray(contour)
     contour.CopyInformation(contour_original)
+
+    # If required, output contour
+    if output is not None:
+        sitk.WriteImage(contour, output)
+
+    return contour
