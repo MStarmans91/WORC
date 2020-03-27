@@ -22,13 +22,13 @@ import os
 from WORC.processing.segmentix import dilate_contour
 
 
-def preprocess(image, config, metadata=None, mask=None):
+def preprocess(imagefile, config, metadata=None, mask=None):
     '''
     Apply preprocessing to an image to prepare it for feture extration
     '''
     # Read the config, image and if given masks and metadata
     config = config_io.load_config(config)
-    image = sitk.ReadImage(image)
+    image = sitk.ReadImage(imagefile)
 
     if metadata is not None:
         metadata = pydicom.read_file(metadata)
@@ -39,7 +39,7 @@ def preprocess(image, config, metadata=None, mask=None):
     # Convert image to Hounsfield units if type is CT
     image_type = config['ImageFeatures']['image_type']
     # NOTE: We only do this if the input is a DICOM folder
-    if 'CT' in image_type and not os.path.isfile(image):
+    if 'CT' in image_type and not os.path.isfile(imagefile):
         print('Converting intensity to Hounsfield units.')
         image = image*metadata.RescaleSlope +\
             metadata.RescaleIntercept
