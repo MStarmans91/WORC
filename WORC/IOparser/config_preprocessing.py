@@ -58,4 +58,7 @@ def load_config(config_file_path):
         [str(item).strip() for item in
          settings['ImageFeatures']['image_type'].split(',')]
 
+    settings_dict['General']['AssumeSameImageAndMaskMetadata'] =\
+        settings['General'].getboolean('AssumeSameImageAndMaskMetadata')
+
     return settings_dict

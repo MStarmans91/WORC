@@ -175,6 +175,7 @@ class WORC(object):
         config['General']['Joblib_ncores'] = '1'
         config['General']['Joblib_backend'] = 'threading'
         config['General']['tempsave'] = 'False'
+        config['General']['AssumeSameImageAndMaskMetadata'] = 'False'
 
         # Segmentix
         config['Segmentix'] = dict()

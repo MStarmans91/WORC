@@ -74,7 +74,16 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                 mask = sitk.Cast(mask, 0)
 
                 LabelFilter = sitk.LabelStatisticsImageFilter()
-                LabelFilter.Execute(image, mask)
+                try:
+                    LabelFilter.Execute(image, mask)
+                except RuntimeError as e:
+                    if ['General']['AssumeSameImageAndMaskMetadata']:
+                        print(f'[WORC Warning] {e}: assuming image and mask have same metadata.')
+                        mask.CopyInformation(image)
+                        LabelFilter.Execute(image, mask)
+                    else:
+                        raise RuntimeError(e)
+
                 ROI_mean = LabelFilter.GetMean(1)
                 ROI_std = LabelFilter.GetSigma(1)
 
@@ -87,7 +96,16 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                 mask = sitk.Cast(mask, 0)
 
                 LabelFilter = sitk.LabelStatisticsImageFilter()
-                LabelFilter.Execute(image, mask)
+                try:
+                    LabelFilter.Execute(image, mask)
+                except RuntimeError as e:
+                    if ['General']['AssumeSameImageAndMaskMetadata']:
+                        print(f'[WORC Warning] {e}: assuming image and mask have same metadata.')
+                        mask.CopyInformation(image)
+                        LabelFilter.Execute(image, mask)
+                    else:
+                        raise RuntimeError(e)
+
                 ROI_median = LabelFilter.GetMedian(1)
                 ROI_minimum = LabelFilter.GetMinimum(1)
 
