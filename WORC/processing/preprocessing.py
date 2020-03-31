@@ -77,8 +77,9 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                 try:
                     LabelFilter.Execute(image, mask)
                 except RuntimeError as e:
-                    if ['General']['AssumeSameImageAndMaskMetadata']:
-                        print(f'[WORC Warning] {e}: assuming image and mask have same metadata.')
+                    if config['General']['AssumeSameImageAndMaskMetadata']:
+                        print(f'[WORC Warning] error: {e}.')
+                        print(f'[WORC Warning] Assuming image and mask have same metadata.')
                         mask.CopyInformation(image)
                         LabelFilter.Execute(image, mask)
                     else:
@@ -99,8 +100,9 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                 try:
                     LabelFilter.Execute(image, mask)
                 except RuntimeError as e:
-                    if ['General']['AssumeSameImageAndMaskMetadata']:
-                        print(f'[WORC Warning] {e}: assuming image and mask have same metadata.')
+                    if config['General']['AssumeSameImageAndMaskMetadata']:
+                        print(f'[WORC Warning] error: {e}.')
+                        print(f'[WORC Warning] Assuming image and mask have same metadata.')
                         mask.CopyInformation(image)
                         LabelFilter.Execute(image, mask)
                     else:
