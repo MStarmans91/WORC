@@ -20,6 +20,7 @@ import pydicom
 import WORC.IOparser.config_preprocessing as config_io
 import os
 from WORC.processing.segmentix import dilate_contour
+import numpy as np
 
 
 def preprocess(imagefile, config, metadata=None, mask=None):
@@ -56,6 +57,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
             radius = config['Normalize']['ROIdilateradius']
             mask = sitk.GetArrayFromImage(mask)
             mask = dilate_contour(mask, radius)
+            mask = mask.astype(np.uint8)
             mask = sitk.GetImageFromArray(mask)
 
         if mask is None:

@@ -56,7 +56,8 @@ def main():
         args.out = ''.join(args.out)
 
     # Apply preprocessing
-    image = preprocess(args.im, args.para, args.md, args.mask)
+    image = preprocess(image=args.im, config=args.para, metadata=args.md,
+                       mask=args.mask)
 
     # Save the output
     sitk.WriteImage(image, args.out)
