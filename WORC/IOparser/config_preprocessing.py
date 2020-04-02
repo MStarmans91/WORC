@@ -37,7 +37,8 @@ def load_config(config_file_path):
     settings = configparser.ConfigParser()
     settings.read(config_file_path)
 
-    settings_dict = {'Normalize': dict(), 'ImageFeatures': dict()}
+    settings_dict = {'Normalize': dict(), 'ImageFeatures': dict(),
+                     'General': dict()}
 
     settings_dict['Normalize']['ROI'] =\
         str(settings['Normalize']['ROI'])

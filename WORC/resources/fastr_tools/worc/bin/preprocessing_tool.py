@@ -56,7 +56,7 @@ def main():
         args.out = ''.join(args.out)
 
     # Apply preprocessing
-    image = preprocess(image=args.im, config=args.para, metadata=args.md,
+    image = preprocess(imagefile=args.im, config=args.para, metadata=args.md,
                        mask=args.mask)
 
     # Save the output
