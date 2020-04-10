@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import argparse
 import os
 import subprocess
 import scipy.io as sio
@@ -26,54 +25,6 @@ import pandas as pd
 from WORC.addexceptions import WORCValueError
 import tempfile
 from sys import platform
-
-
-def main():
-    parser = argparse.ArgumentParser(description='ComBat Feature Harmonization')
-    parser.add_argument('-feat_train', '--feat_train', metavar='features_train',
-                        nargs='+', dest='feat_train', type=str, required=True,
-                        help='Patient features input (HDF)')
-    parser.add_argument('-feat_test', '--feat_test', metavar='features_test',
-                        nargs='+', dest='feat_test', type=str, required=False,
-                        default=None,
-                        help='Patient features input (HDF)')
-    parser.add_argument('-pc_train', '--pc_train', metavar='Patientinfo',
-                        dest='pc_train',
-                        type=str, required=True, nargs='+',
-                        help='Classification of patient')
-    parser.add_argument('-pc_test', '--pc_test', metavar='Patientinfo',
-                        dest='pc_test',
-                        type=str, required=False, nargs='+',
-                        help='Classification of patient')
-    parser.add_argument('-cf', '--conf', metavar='config', nargs='+',
-                        dest='cf', type=str, required=True,
-                        help='Configuration')
-    parser.add_argument('-feat_train_out', '--feat_train_out', metavar='features_train_out',
-                        nargs='+', dest='feat_train_out', type=str, required=True,
-                        help='Patient features output (HDF)')
-    parser.add_argument('-feat_test_out', '--feat_test_out', metavar='features_test_out',
-                        nargs='+', dest='feat_test_out', type=str, required=False,
-                        default=None,
-                        help='Patient features output (HDF)')
-    args = parser.parse_args()
-
-    # Convert input arguments that should be strings
-    if type(args.pc_train) is list:
-        args.pc_train = ''.join(args.pc_train)
-
-    if type(args.pc_test) is list:
-        args.pc_test = ''.join(args.pc_test)
-
-    if type(args.cf) is list:
-        args.cf = ''.join(args.cf)
-
-    ComBat(features_train_in=args.feat_train,
-           labels_train=args.pc_train,
-           config=args.cf,
-           features_train_out=args.feat_train_out,
-           features_test_in=args.feat_test,
-           labels_test=args.pc_test,
-           features_test_out=args.feat_test_out)
 
 
 def ComBat(features_train_in, labels_train, config, features_train_out,
@@ -263,7 +214,3 @@ def ComBatMatlab(dat, batch, mod=None, par=0):
     os.remove(tempfile_in)
 
     return data_harmonized
-
-
-if __name__ == '__main__':
-    main()

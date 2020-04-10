@@ -8,3 +8,5 @@ Adding a feature processing toolbox
 3. In WORC:
   a. Add converter for your config file
   b. Add a config safe function to save_config
+  c. Make sure you add both sources and sinks for your tools
+  d. Link these sources and sinks to the fastr network in the WORC.set function

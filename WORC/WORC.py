@@ -504,12 +504,13 @@ class WORC(object):
                     self.converters_seg_train = dict()
                     self.links_C1_train = dict()
 
+                    self.featurecalculators = dict()
+
                     if self.images_test or self.features_test:
                         # A test set is supplied, for which nodes also need to be created
                         self.preprocessing_test = dict()
                         self.calcfeatures_test = dict()
                         self.sources_images_test = dict()
-                        self.sinks_features_test = dict()
                         self.converters_im_test = dict()
                         self.converters_seg_test = dict()
                         self.links_C1_test = dict()
@@ -584,7 +585,6 @@ class WORC(object):
                         # Create required sources and sinks
                         self.sources_parameters[label] = self.network.create_source('ParameterFile', id='parameters_' + label)
                         self.sources_images_train[label] = self.network.create_source('ITKImageFile', id='images_train_' + label, node_group='train')
-                        self.sinks_features_train[label] = self.network.create_sink('HDF5', id='features_train_' + label)
                         if self.images_test or self.features_test:
                             self.sources_images_test[label] = self.network.create_source('ITKImageFile', id='images_test_' + label, node_group='test')
                             self.sinks_features_test[label] = self.network.create_sink('HDF5', id='features_test_' + label)
@@ -635,6 +635,7 @@ class WORC(object):
                         feature_calculators =\
                             self.configs[nmod]['General']['FeatureCalculators']
                         feature_calculators = feature_calculators.strip('][').split(', ')
+                        self.featurecalculators[label] = [f.split('/')[0] for f in feature_calculators]
 
                         for f in feature_calculators:
                             self.calcfeatures_train[label] = list()
@@ -718,24 +719,28 @@ class WORC(object):
                         # Classification nodes
                         # Add the features from this modality to the classifier node input
                         self.links_C1_train[label] = list()
-                        self.links_C1_test[label] = list()
-                        for i_node, fname in enumerate(self.configs[nmod]['General']['FeatureCalculators']):
-                            # TODO: Hier gebleven
-                            self.links_C1_train[label] = self.classify.inputs['features_train'][str(label)] << self.calcfeatures_train[label].outputs['features']
-                            self.links_C1_train[label].collapse = 'train'
+                        self.sinks_features_train[label] = list()
+                        if self.images_test or self.features_test:
+                            self.links_C1_test[label] = list()
+                            self.sinks_features_test[label] = list()
 
-                            if self.images_test or self.features_test:
-                                # Add the features from this modality to the classifier node input
-                                self.links_C1_test[label] = self.classify.inputs['features_test'][str(label)] << self.calcfeatures_test[label].outputs['features']
-                                self.links_C1_test[label].collapse = 'test'
+                        for i_node, fname in enumerate(self.featurecalculators[label]):
+                            # Create sink for feature outputs
+                            self.sinks_features_train[label].append(self.network.create_sink('HDF5', id='features_train_' + label + '_' + fname))
+
+                            # Append features to the classification
+                            self.links_C1_train[label].append(self.classify.inputs['features_train'][str(label)] << self.calcfeatures_train[label][i_node].outputs['features'])
+                            self.links_C1_train[label][i_node].collapse = 'train'
 
                             # Save output
-                            self.sinks_features_train[label] = list()
-                            self.sinks_features_test[label] = list()
-                            for i_node in range(len(self.calcfeatures_train[label])):
-                                self.sinks_features_train[label][i_node].input = self.calcfeatures_train[label][i_node].outputs['features']
-                                if self.images_test or self.features_test:
-                                    self.sinks_features_test[label][i_node].input = self.calcfeatures_test[label][i_node].outputs['features']
+                            self.sinks_features_train[label][i_node].input = self.calcfeatures_train[label][i_node].outputs['features']
+
+                            # Similar for testing workflow
+                            if self.images_test or self.features_test:
+                                self.sinks_features_test[label].append(self.network.create_sink('HDF5', id='features_test_' + label + '_' + fname))
+                                self.links_C1_test[label].append(self.classify.inputs['features_test'][str(label)] << self.calcfeatures_test[label][i_node].outputs['features'])
+                                self.links_C1_test[label][i_node].collapse = 'test'
+                                self.sinks_features_test[label][i_node].input = self.calcfeatures_test[label][i_node].outputs['features']
 
                 else:
                     # Features already provided: hence we can skip numerous nodes
@@ -1358,13 +1363,15 @@ class WORC(object):
             self.sink_data['segmentations_out_segmentix_train_' + label] = ("vfs://output/{}/Segmentations/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
             self.sink_data['segmentations_out_elastix_train_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
             self.sink_data['images_out_elastix_train_' + label] = ("vfs://output/{}/Elastix/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-            self.sink_data['features_train_' + label] = ("vfs://output/{}/Features/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+            for f in self.featurecalculators[label]:
+                self.sink_data['features_train_' + label + '_' + f] = ("vfs://output/{}/Features/features_{}_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, f, label)
 
             if self.labels_test:
                 self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/Segmentations/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 self.sink_data['segmentations_out_elastix_test_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 self.sink_data['images_out_elastix_test_' + label] = ("vfs://output/{}/Images/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-                self.sink_data['features_test_' + label] = ("vfs://output/{}/Features/features_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                for f in self.featurecalculators[label]:
+                    self.sink_data['features_test_' + label + '_' + f] = ("vfs://output/{}/Features/features_{}_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, f, label)
 
             # Add elastix sinks if used
             if self.segmode:
