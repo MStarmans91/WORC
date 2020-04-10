@@ -52,6 +52,7 @@ NOTE: The version of PyRadiomics which WORC currently uses requires numpy to be 
  - SimpleITK (Image loading and preprocessing)
  - [Pyradiomics](https://github.com/radiomics/pyradiomics)
  - [PREDICT](https://github.com/Svdvoort/PREDICTFastr)
+ - [ComBat](https://github.com/Jfortin1/ComBatHarmonization) (optional)
 
 See for other python packages the [requirements file](requirements.txt).
 

@@ -28,6 +28,8 @@ from WORC.tools.Evaluate import Evaluate
 from WORC.tools.Slicer import Slicer
 from WORC.detectors.detectors import DebugDetector
 from pathlib import Path
+import yaml
+import WORC.IOparser.file_io as io
 
 
 class WORC(object):
@@ -150,6 +152,16 @@ class WORC(object):
         self.segmode = []
         self._add_evaluation = False
 
+        # Memory settings for all fastr nodes
+        self.fastr_memory_parameters = dict()
+        self.fastr_memory_parameters['FeatureCalculator'] = '14G'
+        self.fastr_memory_parameters['Classification'] = '12G'
+        self.fastr_memory_parameters['WORCCastConvert'] = '4G'
+        self.fastr_memory_parameters['Preprocessing'] = '4G'
+        self.fastr_memory_parameters['Elastix'] = '4G'
+        self.fastr_memory_parameters['Transformix'] = '4G'
+        self.fastr_memory_parameters['Segmentix'] = '6G'
+
         if DebugDetector().do_detection():
             print(fastr.config)
 
@@ -245,6 +257,31 @@ class WORC(object):
 
         # Vessel features radius for erosion to determine boudnary
         config['ImageFeatures']['vessel_radius'] = '5'
+
+        # PyRadiomics - Feature calculation
+        # Addition to the above, specifically for PyRadiomics
+        # Mostly based on Mpecific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml
+        config['PyRadiomics'] = dict()
+        config['PyRadiomics']['verbose'] = 'True'
+        config['PyRadiomics']['geometryTolerance'] = '1E-3'
+
+        config['PyRadiomics']['normalize'] = 'False'
+        config['PyRadiomics']['normalizeScale'] = '100'
+        config['PyRadiomics']['removeOutliers'] = 'None'
+
+        config['PyRadiomics']['resampledPixelSpacing'] = 'None'
+        config['PyRadiomics']['interpolator'] = 'Bspline'
+
+        config['PyRadiomics']['preCrop'] = 'True'
+        config['PyRadiomics']['label'] = '1'
+
+        config['PyRadiomics']['binWidth'] = 'None'  # BinWidth to sensitive for normalization, thus use binCount
+        config['PyRadiomics']['binCount'] = config['ImageFeatures']['GLCM_levels']
+
+        config['PyRadiomics']['force2D'] = 'True'
+        config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
+
+        config['PyRadiomics']['voxelArrayShift'] = '300'
 
         # Feature preprocessing before all below takes place
         config['FeatPreProcess'] = dict()
@@ -426,7 +463,8 @@ class WORC(object):
                 if self.labels_test:
                     self.source_patientclass_test = self.network.create_source('PatientInfoFile', id='patientclass_test', node_group='pctest')
 
-                self.classify = self.network.create_node('worc/TrainClassifier:1.0', tool_version='1.0', id='classify', resources=ResourceLimit(memory='12G'))
+                memory = self.fastr_memory_parameters['Classification']
+                self.classify = self.network.create_node('worc/TrainClassifier:1.0', tool_version='1.0', id='classify', resources=ResourceLimit(memory=memory))
 
                 # Outputs
                 self.sink_classification = self.network.create_sink('HDF5', id='classification')
@@ -489,29 +527,7 @@ class WORC(object):
 
                     elif len(self.segmentations_train) == 1:
                         # Assume segmentations need to be registered to other modalities
-                        self.sources_segmentation = dict()
-                        self.segmode = 'Register'
-
-                        self.source_Elastix_Parameters = dict()
-                        self.elastix_nodes_train = dict()
-                        self.transformix_seg_nodes_train = dict()
-                        self.sources_segmentations_train = dict()
-                        self.sinks_transformations_train = dict()
-                        self.sinks_segmentations_elastix_train = dict()
-                        self.sinks_images_elastix_train = dict()
-                        self.converters_seg_train = dict()
-                        self.edittransformfile_nodes_train = dict()
-                        self.transformix_im_nodes_train = dict()
-
-                        self.elastix_nodes_test = dict()
-                        self.transformix_seg_nodes_test = dict()
-                        self.sources_segmentations_test = dict()
-                        self.sinks_transformations_test = dict()
-                        self.sinks_segmentations_elastix_test = dict()
-                        self.sinks_images_elastix_test = dict()
-                        self.converters_seg_test = dict()
-                        self.edittransformfile_nodes_test = dict()
-                        self.transformix_im_nodes_test = dict()
+                        self.add_elastix_sourcesandsinks()
                         pass
 
                     else:
@@ -582,21 +598,24 @@ class WORC(object):
                         if self.masks_train and len(self.masks_train) >= nmod + 1:
                             # Create mask source and convert
                             self.sources_masks_train[label] = self.network.create_source('ITKImageFile', id='mask_train_' + label, node_group='train')
-                            self.converters_masks_train[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_mask_train_' + label, node_group='train', resources=ResourceLimit(memory='4G'))
+                            memory = self.fastr_memory_parameters['WORCCastConvert']
+                            self.converters_masks_train[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_mask_train_' + label, node_group='train', resources=ResourceLimit(memory=memory))
                             self.converters_masks_train[label].inputs['image'] = self.sources_masks_train[label].output
 
                         if self.masks_test and len(self.masks_test) >= nmod + 1:
                             # Create mask source and convert
                             self.sources_masks_test[label] = self.network.create_source('ITKImageFile', id='mask_test_' + label, node_group='test')
-                            self.converters_masks_test[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_mask_test_' + label, node_group='test', resources=ResourceLimit(memory='4G'))
+                            memory = self.fastr_memory_parameters['WORCCastConvert']
+                            self.converters_masks_test[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_mask_test_' + label, node_group='test', resources=ResourceLimit(memory=memory))
                             self.converters_masks_test[label].inputs['image'] = self.sources_masks_test[label].output
 
                         # First convert the images
                         if any(modality in mod for modality in ['MR', 'CT', 'MG', 'PET']):
-                            # Use ITKTools PXCastConvet for converting image formats
-                            self.converters_im_train[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_im_train_' + label, resources=ResourceLimit(memory='4G'))
+                            # Use WORC PXCastConvet for converting image formats
+                            memory = self.fastr_memory_parameters['WORCCastConvert']
+                            self.converters_im_train[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_im_train_' + label, resources=ResourceLimit(memory=memory))
                             if self.images_test or self.features_test:
-                                self.converters_im_test[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_im_test_' + label, resources=ResourceLimit(memory='4G'))
+                                self.converters_im_test[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_im_test_' + label, resources=ResourceLimit(memory=memory))
 
                         else:
                             raise WORCexceptions.WORCTypeError(('No valid image type for modality {}: {} provided.').format(str(nmod), mod))
@@ -608,49 +627,25 @@ class WORC(object):
 
                         # -----------------------------------------------------
                         # Preprocessing
-                        # Create nodes
                         preprocess_node = str(self.configs[nmod]['General']['Preprocessing'])
-                        self.preprocessing_train[label] = self.network.create_node(preprocess_node, tool_version='1.0', id='preprocessing_train_' + label, resources=ResourceLimit(memory='4G'))
-                        if self.images_test or self.features_test:
-                            self.preprocessing_test[label] = self.network.create_node(preprocess_node, tool_version='1.0', id='preprocessing_test_' + label, resources=ResourceLimit(memory='4G'))
-
-                        # Create required links
-                        self.preprocessing_train[label].inputs['parameters'] = self.sources_parameters[label].output
-                        self.preprocessing_train[label].inputs['image'] = self.converters_im_train[label].outputs['image']
-
-                        if self.images_test or self.features_test:
-                            self.preprocessing_test[label].inputs['parameters'] = self.sources_parameters[label].output
-                            self.preprocessing_test[label].inputs['image'] = self.converters_im_test[label].outputs['image']
-
-                        if self.metadata_train and len(self.metadata_train) >= nmod + 1:
-                            self.preprocessing_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
-
-                        if self.metadata_test and len(self.metadata_test) >= nmod + 1:
-                            self.preprocessing_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
-
-                        # If there are masks to use in normalization, add them here
-                        if self.masks_normalize_train:
-                            self.sources_masks_normalize_train[label] = self.network.create_source('ITKImageFile', id='masks_normalize_train_' + label, node_group='train')
-                            self.preprocessing_train[label].inputs['mask'] = self.sources_masks_normalize_train[label].output
-
-                        if self.masks_normalize_test:
-                            self.sources_masks_normalize_test[label] = self.network.create_source('ITKImageFile', id='masks_normalize_test_' + label, node_group='test')
-                            self.preprocessing_test[label].inputs['mask'] = self.sources_masks_normalize_test[label].output
+                        self.add_preprocessing(preprocess_node, label, nmod)
 
                         # -----------------------------------------------------
-                        # Create feature calculator nodes
+                        # Feature calculation
                         feature_calculators =\
                             self.configs[nmod]['General']['FeatureCalculators']
                         feature_calculators = feature_calculators.strip('][').split(', ')
 
                         for f in feature_calculators:
+                            self.calcfeatures_train[label] = list()
                             self.add_feature_calculator(f, label, nmod)
 
                         # -----------------------------------------------------
-                        # Create the nexxesary nodes for the segmentation
+                        # Create the neccesary nodes for the segmentation
                         if self.segmode == 'Provided':
                             # Segmentation ----------------------------------------------------
                             # Use the provided segmantions for each modality
+                            memory = self.fastr_memory_parameters['WORCCastConvert']
                             self.sources_segmentations_train[label] =\
                                 self.network.create_source('ITKImageFile',
                                                            id='segmentations_train_' + label,
@@ -660,7 +655,7 @@ class WORC(object):
                                 self.network.create_node('worc/WORCCastConvert:0.3.2',
                                                          tool_version='0.1',
                                                          id='convert_seg_train_' + label,
-                                                         resources=ResourceLimit(memory='4G'))
+                                                         resources=ResourceLimit(memory=memory))
 
                             self.converters_seg_train[label].inputs['image'] =\
                                 self.sources_segmentations_train[label].output
@@ -675,7 +670,7 @@ class WORC(object):
                                     self.network.create_node('worc/WORCCastConvert:0.3.2',
                                                              tool_version='0.1',
                                                              id='convert_seg_test_' + label,
-                                                             resources=ResourceLimit(memory='4G'))
+                                                             resources=ResourceLimit(memory=memory))
 
                                 self.converters_seg_test[label].inputs['image'] =\
                                     self.sources_segmentations_test[label].output
@@ -695,44 +690,52 @@ class WORC(object):
                         else:
                             # Provide source or elastix segmentations to
                             # feature calculator
-                            if self.segmode == 'Provided':
-                                self.calcfeatures_train[label].inputs['segmentation'] =\
-                                    self.converters_seg_train[label].outputs['image']
-                            elif self.segmode == 'Register':
-                                if nmod > 0:
-                                    self.calcfeatures_train[label].inputs['segmentation'] =\
-                                        self.transformix_seg_nodes_train[label].outputs['image']
-                                else:
-                                    self.calcfeatures_train[label].inputs['segmentation'] =\
-                                        self.converters_seg_train[label].outputs['image']
-
-                            if self.images_test or self.features_test:
+                            for i_node in range(len(self.calcfeatures_train[label])):
                                 if self.segmode == 'Provided':
-                                    self.calcfeatures_train[label].inputs['segmentation'] =\
+                                    self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
                                         self.converters_seg_train[label].outputs['image']
                                 elif self.segmode == 'Register':
                                     if nmod > 0:
-                                        self.calcfeatures_test[label].inputs['segmentation'] =\
-                                            self.transformix_seg_nodes_test[label] .outputs['image']
+                                        self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
+                                            self.transformix_seg_nodes_train[label].outputs['image']
                                     else:
-                                        self.calcfeatures_train[label].inputs['segmentation'] =\
+                                        self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
                                             self.converters_seg_train[label].outputs['image']
 
+                                if self.images_test or self.features_test:
+                                    if self.segmode == 'Provided':
+                                        self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
+                                            self.converters_seg_train[label].outputs['image']
+                                    elif self.segmode == 'Register':
+                                        if nmod > 0:
+                                            self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
+                                                self.transformix_seg_nodes_test[label] .outputs['image']
+                                        else:
+                                            self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
+                                                self.converters_seg_train[label].outputs['image']
 
-                        # Classification nodes -----------------------------------------------------
+                        # -----------------------------------------------------
+                        # Classification nodes
                         # Add the features from this modality to the classifier node input
-                        self.links_C1_train[label] = self.classify.inputs['features_train'][str(label)] << self.calcfeatures_train[label].outputs['features']
-                        self.links_C1_train[label].collapse = 'train'
+                        self.links_C1_train[label] = list()
+                        self.links_C1_test[label] = list()
+                        for i_node, fname in enumerate(self.configs[nmod]['General']['FeatureCalculators']):
+                            # TODO: Hier gebleven
+                            self.links_C1_train[label] = self.classify.inputs['features_train'][str(label)] << self.calcfeatures_train[label].outputs['features']
+                            self.links_C1_train[label].collapse = 'train'
 
-                        if self.images_test or self.features_test:
-                            # Add the features from this modality to the classifier node input
-                            self.links_C1_test[label] = self.classify.inputs['features_test'][str(label)] << self.calcfeatures_test[label].outputs['features']
-                            self.links_C1_test[label].collapse = 'test'
+                            if self.images_test or self.features_test:
+                                # Add the features from this modality to the classifier node input
+                                self.links_C1_test[label] = self.classify.inputs['features_test'][str(label)] << self.calcfeatures_test[label].outputs['features']
+                                self.links_C1_test[label].collapse = 'test'
 
-                        # Save output
-                        self.sinks_features_train[label].input = self.calcfeatures_train[label].outputs['features']
-                        if self.images_test or self.features_test:
-                            self.sinks_features_test[label].input = self.calcfeatures_test[label].outputs['features']
+                            # Save output
+                            self.sinks_features_train[label] = list()
+                            self.sinks_features_test[label] = list()
+                            for i_node in range(len(self.calcfeatures_train[label])):
+                                self.sinks_features_train[label][i_node].input = self.calcfeatures_train[label][i_node].outputs['features']
+                                if self.images_test or self.features_test:
+                                    self.sinks_features_test[label][i_node].input = self.calcfeatures_test[label][i_node].outputs['features']
 
                 else:
                     # Features already provided: hence we can skip numerous nodes
@@ -771,70 +774,154 @@ class WORC(object):
         else:
             raise WORCexceptions.WORCIOError("Please provide either images or features.")
 
+    def add_preprocessing(self, preprocess_node, label, nmod):
+        '''
+        Add nodes required for preprocessing of images.
+        '''
+        memory = self.fastr_memory_parameters['Preprocessing']
+        self.preprocessing_train[label] = self.network.create_node(preprocess_node, tool_version='1.0', id='preprocessing_train_' + label, resources=ResourceLimit(memory=memory))
+        if self.images_test or self.features_test:
+            self.preprocessing_test[label] = self.network.create_node(preprocess_node, tool_version='1.0', id='preprocessing_test_' + label, resources=ResourceLimit(memory=memory))
+
+        # Create required links
+        self.preprocessing_train[label].inputs['parameters'] = self.sources_parameters[label].output
+        self.preprocessing_train[label].inputs['image'] = self.converters_im_train[label].outputs['image']
+
+        if self.images_test or self.features_test:
+            self.preprocessing_test[label].inputs['parameters'] = self.sources_parameters[label].output
+            self.preprocessing_test[label].inputs['image'] = self.converters_im_test[label].outputs['image']
+
+        if self.metadata_train and len(self.metadata_train) >= nmod + 1:
+            self.preprocessing_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
+
+        if self.metadata_test and len(self.metadata_test) >= nmod + 1:
+            self.preprocessing_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
+
+        # If there are masks to use in normalization, add them here
+        if self.masks_normalize_train:
+            self.sources_masks_normalize_train[label] = self.network.create_source('ITKImageFile', id='masks_normalize_train_' + label, node_group='train')
+            self.preprocessing_train[label].inputs['mask'] = self.sources_masks_normalize_train[label].output
+
+        if self.masks_normalize_test:
+            self.sources_masks_normalize_test[label] = self.network.create_source('ITKImageFile', id='masks_normalize_test_' + label, node_group='test')
+            self.preprocessing_test[label].inputs['mask'] = self.sources_masks_normalize_test[label].output
+
     def add_feature_calculator(self, calcfeat_node, label, nmod):
         '''
         Add a feature calculation node to the network.
         '''
         # Name of fastr node has to exclude some specific symbols, which
         # are used in the node name
+
+        # TODO: This function can be called multiple times for one modality.
+        # Thus, the nodes, sources etc should be lists.
         node_ID = '_'.join([calcfeat_node.replace(':', '_').replace('.', '_').replace('/', '_'),
                             label])
 
-        self.calcfeatures_train[label] =\
+        memory = self.fastr_memory_parameters['FeatureCalculator']
+        node_train =\
             self.network.create_node(calcfeat_node,
                                      tool_version='1.0',
                                      id='calcfeatures_train_' + node_ID,
-                                     resources=ResourceLimit(memory='14G'))
+                                     resources=ResourceLimit(memory=memory))
 
         if self.images_test or self.features_test:
-            self.calcfeatures_test[label] =\
+            node_test =\
                 self.network.create_node(calcfeat_node,
                                          tool_version='1.0',
                                          id='calcfeatures_test_' + node_ID,
-                                         resources=ResourceLimit(memory='14G'))
+                                         resources=ResourceLimit(memory=memory))
+
+        # Check if we need to add pyradiomics confis
+        if 'pyradiomics' in calcfeat_node.lower():
+            self.source_config_pyradiomics[label] =\
+                self.network.create_source('YamlFile',
+                                           id='config_pyradiomics_' + label,
+                                           node_group='train')
 
         # Create required links
-        self.calcfeatures_train[label].inputs['parameters'] =\
-            self.sources_parameters[label].output
+        # We can have a different config for different tools
+        if 'pyradiomics' in calcfeat_node.lower():
+            node_train.inputs['parameters'] =\
+                self.source_config_pyradiomics[label]
+        else:
+            node_train.inputs['parameters'] =\
+                self.sources_parameters[label].output
 
-        self.calcfeatures_train[label].inputs['image'] =\
+        node_train.inputs['image'] =\
             self.preprocessing_train[label].outputs['image']
 
         if self.images_test or self.features_test:
-            self.calcfeatures_test[label].inputs['parameters'] =\
+            node_test.inputs['parameters'] =\
                 self.sources_parameters[label].output
 
-            self.calcfeatures_test[label].inputs['image'] =\
+            node_test.inputs['image'] =\
                 self.preprocessing_test[label].outputs['image']
 
-        if self.metadata_train and len(self.metadata_train) >= nmod + 1:
-            self.calcfeatures_train[label].inputs['metadata'] =\
-                self.sources_metadata_train[label].output
+        # PREDICT can extract semantic and metadata features
+        if 'predict' in calcfeat_node.lower():
+            if self.metadata_train and len(self.metadata_train) >= nmod + 1:
+                node_train.inputs['metadata'] =\
+                    self.sources_metadata_train[label].output
 
-        if self.metadata_test and len(self.metadata_test) >= nmod + 1:
-            self.calcfeatures_test[label].inputs['metadata'] =\
-                self.sources_metadata_test[label].output
+            if self.metadata_test and len(self.metadata_test) >= nmod + 1:
+                node_test.inputs['metadata'] =\
+                    self.sources_metadata_test[label].output
 
-        # If a semantics file is provided, connect to feature extraction tool
-        if self.semantics_train and len(self.semantics_train) >= nmod + 1:
-            self.sources_semantics_train[label] =\
-                self.network.create_source('CSVFile',
-                                           id='semantics_train_' + label)
+            # If a semantics file is provided, connect to feature extraction tool
+            if self.semantics_train and len(self.semantics_train) >= nmod + 1:
+                self.sources_semantics_train[label] =\
+                    self.network.create_source('CSVFile',
+                                               id='semantics_train_' + label)
 
-            self.calcfeatures_train[label].inputs['semantics'] =\
-                self.sources_semantics_train[label].output
+                node_train.inputs['semantics'] =\
+                    self.sources_semantics_train[label].output
 
-        if self.semantics_test and len(self.semantics_test) >= nmod + 1:
-            self.sources_semantics_test[label] =\
-                self.network.create_source('CSVFile',
-                                           id='semantics_test_' + label)
-            self.calcfeatures_test[label].inputs['semantics'] =\
-                self.sources_semantics_test[label].output
+            if self.semantics_test and len(self.semantics_test) >= nmod + 1:
+                self.sources_semantics_test[label] =\
+                    self.network.create_source('CSVFile',
+                                               id='semantics_test_' + label)
+                node_test.inputs['semantics'] =\
+                    self.sources_semantics_test[label].output
+
+        # Append to feature calculator list
+        self.calcfeatures_train[label].append(node_train)
+        if self.images_test or self.features_test:
+            self.calcfeatures_test[label].append(node_test)
+
+    def add_elastix_sourcesandsinks(self):
+        '''
+        Add sources and sinks required for image registration through elastix.
+        '''
+        self.sources_segmentation = dict()
+        self.segmode = 'Register'
+
+        self.source_Elastix_Parameters = dict()
+        self.elastix_nodes_train = dict()
+        self.transformix_seg_nodes_train = dict()
+        self.sources_segmentations_train = dict()
+        self.sinks_transformations_train = dict()
+        self.sinks_segmentations_elastix_train = dict()
+        self.sinks_images_elastix_train = dict()
+        self.converters_seg_train = dict()
+        self.edittransformfile_nodes_train = dict()
+        self.transformix_im_nodes_train = dict()
+
+        self.elastix_nodes_test = dict()
+        self.transformix_seg_nodes_test = dict()
+        self.sources_segmentations_test = dict()
+        self.sinks_transformations_test = dict()
+        self.sinks_segmentations_elastix_test = dict()
+        self.sinks_images_elastix_test = dict()
+        self.converters_seg_test = dict()
+        self.edittransformfile_nodes_test = dict()
+        self.transformix_im_nodes_test = dict()
 
     def add_elastix(self, label, nmod):
         # Create sources and converter for only for the given segmentation,
         # which should be on the first modality
         if nmod == 0:
+            memory = self.fastr_memory_parameters['WORCCastConvert']
             self.sources_segmentations_train[label] =\
                 self.network.create_source('ITKImageFile',
                                            id='segmentations_train_' + label,
@@ -844,7 +931,7 @@ class WORC(object):
                 self.network.create_node('worc/WORCCastConvert:0.3.2',
                                          tool_version='0.1',
                                          id='convert_seg_train_' + label,
-                                         resources=ResourceLimit(memory='4G'))
+                                         resources=ResourceLimit(memory=memory))
 
             self.converters_seg_train[label].inputs['image'] =\
                 self.sources_segmentations_train[label].output
@@ -859,7 +946,7 @@ class WORC(object):
                     self.network.create_node('worc/WORCCastConvert:0.3.2',
                                              tool_version='0.1',
                                              id='convert_seg_test_' + label,
-                                             resources=ResourceLimit(memory='4G'))
+                                             resources=ResourceLimit(memory=memory))
 
                 self.converters_seg_test[label].inputs['image'] =\
                     self.sources_segmentations_test[label].output
@@ -874,38 +961,44 @@ class WORC(object):
             transformix_node =\
                 str(self.configs[0]['General']['TransformationNode'])
 
+            memory_elastix = self.fastr_memory_parameters['Elastix']
             self.elastix_nodes_train[label] =\
                 self.network.create_node(elastix_node,
                                          tool_version='0.2',
                                          id='elastix_train_' + label,
-                                         resources=ResourceLimit(memory='4G'))
+                                         resources=ResourceLimit(memory=memory_elastix))
 
+            memory_transformix = self.fastr_memory_parameters['Elastix']
             self.transformix_seg_nodes_train[label] =\
                 self.network.create_node(transformix_node,
                                          tool_version='0.2',
-                                         id='transformix_seg_train_' + label)
+                                         id='transformix_seg_train_' + label,
+                                         resources=ResourceLimit(memory=memory_transformix))
 
             self.transformix_im_nodes_train[label] =\
                 self.network.create_node(transformix_node,
                                          tool_version='0.2',
-                                         id='transformix_im_train_' + label)
+                                         id='transformix_im_train_' + label,
+                                         resources=ResourceLimit(memory=memory_transformix))
 
             if self.images_test or self.features_test:
                 self.elastix_nodes_test[label] =\
                     self.network.create_node(elastix_node,
                                              tool_version='0.2',
                                              id='elastix_test_' + label,
-                                             resources=ResourceLimit(memory='4G'))
+                                             resources=ResourceLimit(memory=memory_elastix))
 
                 self.transformix_seg_nodes_test[label] =\
                     self.network.create_node(transformix_node,
                                              tool_version='0.2',
-                                             id='transformix_seg_test_' + label)
+                                             id='transformix_seg_test_' + label,
+                                             resources=ResourceLimit(memory=memory_transformix))
 
                 self.transformix_im_nodes_test[label] =\
                     self.network.create_node(transformix_node,
                                              tool_version='0.2',
-                                             id='transformix_im_test_' + label)
+                                             id='transformix_im_test_' + label,
+                                             resources=ResourceLimit(memory=memory_transformix))
 
             # Create sources_segmentation
             # M1 = moving, others = fixed
@@ -1032,9 +1125,6 @@ class WORC(object):
             self.transformix_seg_nodes_train[label].inputs['transform'] =\
                 self.edittransformfile_nodes_train[label].outputs['transform']
 
-            self.calcfeatures_train[label].inputs['segmentation'] =\
-                self.transformix_seg_nodes_train[label].outputs['image']
-
             self.transformix_im_nodes_train[label].inputs['transform'] =\
                 self.elastix_nodes_train[label].outputs['transform'][-1]
 
@@ -1045,14 +1135,18 @@ class WORC(object):
                 self.transformix_seg_nodes_test[label].inputs['transform'] =\
                     self.edittransformfile_nodes_test[label].outputs['transform']
 
-                self.calcfeatures_test[label].inputs['segmentation'] =\
-                    self.transformix_seg_nodes_test[label] .outputs['image']
-
                 self.transformix_im_nodes_test[label].inputs['transform'] =\
                     self.elastix_nodes_test[label].outputs['transform'][-1]
 
                 self.transformix_im_nodes_test[label].inputs['image'] =\
                     self.converters_im_test[self.modlabels[0]].outputs['image']
+
+            for i_node in range(len(self.calcfeatures_test[label])):
+                self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
+                    self.transformix_seg_nodes_train[label].outputs['image']
+                if self.images_test or self.features_test:
+                    self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
+                        self.transformix_seg_nodes_test[label].outputs['image']
 
             # Save outputfor the training set
             self.sinks_transformations_train[label] =\
@@ -1103,11 +1197,12 @@ class WORC(object):
                 self.network.create_sink('ITKImageFile',
                                          id='segmentations_out_segmentix_train_' + label)
 
+        memory = self.fastr_memory_parameters['Segmentix']
         self.nodes_segmentix_train[label] =\
             self.network.create_node('segmentix/Segmentix:1.0',
                                      tool_version='1.0',
                                      id='segmentix_train_' + label,
-                                     resources=ResourceLimit(memory='6G'))
+                                     resources=ResourceLimit(memory=memory))
 
         if hasattr(self, 'transformix_seg_nodes_train'):
             if label in self.transformix_seg_nodes_train.keys():
@@ -1125,8 +1220,6 @@ class WORC(object):
 
         self.nodes_segmentix_train[label].inputs['parameters'] =\
             self.sources_parameters[label].output
-        self.calcfeatures_train[label].inputs['segmentation'] =\
-            self.nodes_segmentix_train[label].outputs['segmentation_out']
         self.sinks_segmentations_segmentix_train[label].input =\
             self.nodes_segmentix_train[label].outputs['segmentation_out']
 
@@ -1137,7 +1230,7 @@ class WORC(object):
             self.nodes_segmentix_test[label] =\
                 self.network.create_node('segmentix/Segmentix:1.0',
                                          tool_version='1.0',
-                                         id='segmentix_test_' + label, resources=ResourceLimit(memory='6G'))
+                                         id='segmentix_test_' + label, resources=ResourceLimit(memory=memory))
 
             if hasattr(self, 'transformix_seg_nodes_test'):
                 if label in self.transformix_seg_nodes_test.keys():
@@ -1155,10 +1248,17 @@ class WORC(object):
 
             self.nodes_segmentix_test[label].inputs['parameters'] =\
                 self.sources_parameters[label].output
-            self.calcfeatures_test[label].inputs['segmentation'] =\
-                self.nodes_segmentix_test[label].outputs['segmentation_out']
             self.sinks_segmentations_segmentix_test[label].input =\
                 self.nodes_segmentix_test[label].outputs['segmentation_out']
+
+        for i_node in range(len(self.calcfeatures_train[label])):
+            self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
+                self.nodes_segmentix_train[label].outputs['segmentation_out']
+
+            if self.images_test or self.features_test:
+                self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
+                    self.nodes_segmentix_test[label].outputs['segmentation_out']
+
 
         if self.masks_train and len(self.masks_train) >= nmod + 1:
             # Use masks
@@ -1179,23 +1279,8 @@ class WORC(object):
         self.source_data = dict()
         self.sink_data = dict()
 
-        # If the configuration files are confiparse objects, write to file
-        for num, c in enumerate(self.configs):
-            if type(c) != configparser.ConfigParser:
-                # A filepath (not a fastr source) is provided. Hence we read
-                # the config file and convert it to a configparser object
-                config = configparser.ConfigParser()
-                config.read(c)
-                c = config
-            cfile = os.path.join(self.fastr_tmpdir, f"config_{self.name}_{num}.ini")
-            if not os.path.exists(os.path.dirname(cfile)):
-                os.makedirs(os.path.dirname(cfile))
-            with open(cfile, 'w') as configfile:
-                c.write(configfile)
-
-            # BUG: Make path with pathlib to create windows double slashes
-            cfile = Path(self.fastr_tmpdir) / f"config_{self.name}_{num}.ini"
-            self.fastrconfigs.append(cfile.as_uri())
+        # Save the configurations as files
+        self.save_config()
 
         # Generate gridsearch parameter files if required
         # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
@@ -1211,7 +1296,10 @@ class WORC(object):
 
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):
+            # TODO: Check which feature toolbox is used, than append right sources
             self.source_data['parameters_' + label] = self.fastrconfigs[num]
+            if self.pyradiomics_configs:
+                self.source_data['parameters_pyradiomics_' + label] = self.pyradiomics_configs[num]
 
             # Add train data sources
             if self.images_train and len(self.images_train) - 1 >= num:
@@ -1314,6 +1402,39 @@ class WORC(object):
     def add_evaluation(self, label_type):
         self.Evaluate = Evaluate(label_type=label_type, parent=self)
         self._add_evaluation = True
+
+    def save_config(self):
+        '''
+        Save the config files to physical files, and add them to the config
+        objects in WORC.
+        '''
+        # If the configuration files are confiparse objects, write to file
+        self.pyradiomics_configs = list()
+        for num, c in enumerate(self.configs):
+            if type(c) != configparser.ConfigParser:
+                # A filepath (not a fastr source) is provided. Hence we read
+                # the config file and convert it to a configparser object
+                config = configparser.ConfigParser()
+                config.read(c)
+                c = config
+            cfile = os.path.join(self.fastr_tmpdir, f"config_{self.name}_{num}.ini")
+            if not os.path.exists(os.path.dirname(cfile)):
+                os.makedirs(os.path.dirname(cfile))
+            with open(cfile, 'w') as configfile:
+                c.write(configfile)
+
+            # If PyRadiomics is used, also write a config for PyRadiomics
+            if 'pyradiomics' in c['General']['FeatureCalculators']:
+                cfile_pyradiomics = os.path.join(self.fastr_tmpdir, f"config_pyradiomics_{self.name}_{num}.yaml")
+                config_pyradiomics = io.convert_config_pyradiomics(c)
+                with open(cfile_pyradiomics, 'w') as file:
+                    yaml.dump(config_pyradiomics, file)
+                cfile_pyradiomics = Path(self.fastr_tmpdir) / f"config_pyradiomics_{self.name}_{num}.yaml"
+                self.pyradiomics_configs.append(cfile_pyradiomics.as_uri())
+
+            # BUG: Make path with pathlib to create windows double slashes
+            cfile = Path(self.fastr_tmpdir) / f"config_{self.name}_{num}.ini"
+            self.fastrconfigs.append(cfile.as_uri())
 
 
 class Tools(object):

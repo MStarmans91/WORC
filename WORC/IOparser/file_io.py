@@ -20,6 +20,7 @@ import pandas as pd
 import WORC.processing.label_processing as lp
 import WORC.addexceptions as WORCexceptions
 import numpy as np
+import os
 
 
 def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
@@ -97,16 +98,17 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
         except ValueError as e:
             message = str(e) + '. Please take a look at your labels' +\
                 ' file and make sure it is formatted correctly. ' +\
-                'See also https://github.com/MStarmans91/WORC/wiki/The-WORC-configuration#genetics.'
+                r'See also https://github.com/MStarmans91/WORC/wiki/The-WORC-configuration#genetics.'
             raise WORCexceptions.WORCValueError(message)
 
-        print("Labels:")
-        print(label_data['label'])
-        print('Total of ' + str(label_data['patient_IDs'].shape[0]) +
-              ' patients')
-        pos = np.sum(label_data['label'])
-        neg = label_data['patient_IDs'].shape[0] - pos
-        print(('{} positives, {} negatives').format(pos, neg))
+        if len(label_names) == 1:
+            print("Labels:")
+            print(label_data['label'])
+            print('Total of ' + str(label_data['patient_IDs'].shape[0]) +
+                  ' patients')
+            pos = np.sum(label_data['label'])
+            neg = label_data['patient_IDs'].shape[0] - pos
+            print(('{} positives, {} negatives').format(pos, neg))
     else:
         # Use filenames as patient ID s
         patient_IDs = list()
@@ -140,6 +142,10 @@ def load_features(feat, patientinfo, label_type):
                 the patientinfo file.
 
     '''
+    # Check if features is a simple list, or just one string
+    if '=' not in feat[0]:
+        feat = ['Mod0=' + ','.join(feat)]
+
     # Split the feature files per modality
     feat_temp = list()
     modnames = list()
@@ -162,3 +168,25 @@ def load_features(feat, patientinfo, label_type):
                   label_type, modnames)
 
     return label_data, image_features
+
+
+def convert_config_pyradiomics(config):
+    '''
+    Convert fields from WORC confiparser object to a PyRadiomics compatible dictionary
+    '''
+    # Creatae main config structure
+    outputconfig = dict()
+    outputconfig['imageType'] = dict()
+    outputconfig['setting'] = dict()
+
+    # Take out the specific PyRadiomics values
+    for k, v in zip(config['PyRadiomics'].keys(), config['PyRadiomics'].values()):
+        outputconfig[k] = v
+
+    # Extract several general values as well
+    outputconfig['setting']['distances'] = config['ImageFeatures']['GLCM_distances']
+
+    outputconfig['imageType']['LoG'] = dict()
+    outputconfig['imageType']['LoG']['sigma'] = config['ImageFeatures']['log_sigma']
+
+    return outputconfig

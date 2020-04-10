@@ -4,6 +4,10 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from os import environ
 import platform
+import os
+import pkg_resources
+import site
+import sys
 
 
 class AbstractDetector(ABC):
@@ -91,3 +95,25 @@ class LinuxDetector(AbstractDetector):
         if platform.system().lower().strip() == 'linux':
             return True
         return False
+
+
+class WORCDirectoryDetector(AbstractDetector):
+    def _is_detected(self):
+        # Get directory in which WORC package is installed
+        working_set = pkg_resources.working_set
+        requirement_spec = pkg_resources.Requirement.parse('WORC')
+        egg_info = working_set.find(requirement_spec)
+        if egg_info is None:  # Backwards compatibility with WORC2
+            try:
+                packagedir = site.getsitepackages()[0]
+            except AttributeError:
+                # Inside virtualenvironment, so getsitepackages doesnt work.
+                paths = sys.path
+                for p in paths:
+                    if os.path.isdir(p) and os.path.basename(p) == 'site-packages':
+                        packagedir = p
+        else:
+            packagedir = egg_info.location
+
+        packagedir = os.path.join(packagedir, 'WORC')
+        return packagedir

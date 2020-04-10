@@ -125,3 +125,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Example data
+WORC/exampledata/*.hdf5
+WORC/external/*

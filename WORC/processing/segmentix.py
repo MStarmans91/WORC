@@ -36,7 +36,7 @@ def get_ring(contour, radius=5):
             Radius of ring to be extracted.
     '''
     contour = contour.astype(bool)
-    radius = int()
+    radius = int(radius)
     disk = morphology.disk(radius)
 
     # Dilation with radius in axial direction
@@ -61,14 +61,13 @@ def dilate_contour(contour, radius=5):
             Radius of ring to be extracted.
     '''
     contour = contour.astype(bool)
-    radius = int()
+    radius = int(radius)
     disk = morphology.disk(radius)
 
     # Dilation with radius in axial direction
     for ind in range(contour.shape[0]):
         contour[ind, :, :] = morphology.binary_dilation(contour[ind, :, :],
                                                         disk)
-
     return contour
 
 

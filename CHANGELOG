@@ -24,6 +24,11 @@ Added
 - Option to delete small objects in segmentation.
 - Option to within the preprocessing, use a dilated ROI.
 - Otsu thresholding as mask for preprocessing.
+- Memory for each fastr node is now in a dictionary of the WORC object and can
+  be easily changed.
+- PyRadiomics now fully embedded and configurable.
+- ComBat harmonization: currently as separate tool on full dataset,
+  not in cross-validation.
 
 Changed
 ~~~~~~~
