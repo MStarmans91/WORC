@@ -129,3 +129,4 @@ dmypy.json
 # Example data
 WORC/exampledata/*.hdf5
 WORC/external/*
+WORC/exampledata/ICCvalues.csv

@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -108,6 +108,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#evaluation-of-your-network">Evaluation of your network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-data">Example data</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
@@ -274,7 +275,7 @@ supply these as a .csv listing your features per patient. The first
 column should always be named <code class="docutils literal notranslate"><span class="pre">Patient</span></code> and contain the Patient ID. The
 other columns should contain a label for the feature and their values.
 For example:</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 38%" />
 <col style="width: 31%" />
@@ -492,6 +493,14 @@ to WORC by using the <code class="docutils literal notranslate"><span class="pre
 <p>As WORC is based on fastr, debugging is similar to debugging a fastr pipeline: see therefore also
 <a class="reference external" href="https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging/">the fastr debugging guidelines</a>.</p>
 <p>If you run into any issue, please create an issue on the <a class="reference external" href="https://github.com/MStarmans91/WORC/issues/">WORC Github</a>.</p>
+</div>
+<div class="section" id="example-data">
+<h2>Example data<a class="headerlink" href="#example-data" title="Permalink to this headline">¶</a></h2>
+<p>For many files used in typical WORC experiments, we provide example data. Some
+of these can be found in the exampledata folder within the WORC package. To
+save memory, for several types the example data is not included, but a script
+is provided to create the example data. This script (create_examplt_data) can
+be foud in the exampledata folder as well.</p>
 </div>
 </div>
 

@@ -29,6 +29,7 @@ Added
 - PyRadiomics now fully embedded and configurable.
 - ComBat harmonization: currently as separate tool on full dataset,
   not in cross-validation.
+- Computation of ICC, and thresholding object to use ICC for feature selection.
 
 Changed
 ~~~~~~~

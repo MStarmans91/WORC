@@ -10,6 +10,15 @@ featureprocessing Package
     :show-inheritance:
     :special-members:
 
+:mod:`ComBat` Module
+--------------------
+
+.. automodule:: WORC.featureprocessing.ComBat
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`Decomposition` Module
 ---------------------------
 

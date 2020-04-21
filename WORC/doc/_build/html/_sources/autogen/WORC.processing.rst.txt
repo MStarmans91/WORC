@@ -28,3 +28,21 @@ processing Package
     :show-inheritance:
     :special-members:
 
+:mod:`preprocessing` Module
+---------------------------
+
+.. automodule:: WORC.processing.preprocessing
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`segmentix` Module
+-----------------------
+
+.. automodule:: WORC.processing.segmentix
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+

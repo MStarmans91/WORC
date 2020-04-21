@@ -55,6 +55,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         # Dilate the mask if required
         if config['Normalize']['ROIdilate'] == 'True':
             radius = config['Normalize']['ROIdilateradius']
+            print(f"Dilating ROI with radius {radius}.")
             mask = sitk.GetArrayFromImage(mask)
             mask = dilate_contour(mask, radius)
             mask = mask.astype(np.uint8)
@@ -94,7 +95,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                                         shift=-ROI_mean,
                                         scale=1.0/ROI_std)
             elif config['Normalize']['Method'] == 'minmed':
-                print('Apply scaling using the minimum and mean of the ROI')
+                print('Apply scaling using the minimum and median of the ROI')
                 image = sitk.Cast(image, 9)
                 mask = sitk.Cast(mask, 0)
 

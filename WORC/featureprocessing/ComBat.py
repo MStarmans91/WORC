@@ -32,6 +32,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     '''
     Apply ComBat feature harmonization. Based on: https://github.com/Jfortin1/ComBatHarmonization
     '''
+    print('Apply ComBat to data.')
     # Load the config
     config = cio.load_config(config)
 
@@ -42,6 +43,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
         label_names = config['ComBat']['batch'] + config['ComBat']['mod']
 
     # Load the features for both training and testing, match with batch and mod parameters
+    print('\t Loading features.')
     label_data_train, image_features_train =\
         wio.load_features(features_train_in, patientinfo=labels_train,
                           label_type=label_names)
@@ -83,6 +85,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     mod = np.transpose(np.asarray(mod))
 
     # Run ComBatin Matlab
+    print('\t Running ComBat in Matlab.')
     data_harmonized = ComBatMatlab(dat=all_features_matrix,
                                    batch=batch,
                                    mod=mod,
@@ -106,7 +109,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                                name=name
                                )
 
-        print(f'Saving image features to: {features_train_out[fnum]}.')
+        print(f'\t Saving image features to: {features_train_out[fnum]}.')
         panda_data.to_hdf(features_train_out[fnum], 'image_features')
 
     # Repeat for testing if required
@@ -120,7 +123,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                                    name=name
                                    )
 
-            print(f'Saving image features to: {features_test_out[fnum]}.')
+            print(f'\t Saving image features to: {features_test_out[fnum]}.')
             panda_data.to_hdf(features_test_out[fnum], 'image_features')
 
 

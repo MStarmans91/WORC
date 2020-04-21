@@ -365,3 +365,13 @@ As WORC is based on fastr, debugging is similar to debugging a fastr pipeline: s
 `the fastr debugging guidelines <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging/>`_.
 
 If you run into any issue, please create an issue on the `WORC Github <https://github.com/MStarmans91/WORC/issues/>`_.
+
+
+Example data
+------------
+
+For many files used in typical WORC experiments, we provide example data. Some
+of these can be found in the exampledata folder within the WORC package. To
+save memory, for several types the example data is not included, but a script
+is provided to create the example data. This script (create_examplt_data) can
+be foud in the exampledata folder as well.

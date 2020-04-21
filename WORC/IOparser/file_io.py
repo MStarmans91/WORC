@@ -112,7 +112,7 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
     else:
         # Use filenames as patient ID s
         patient_IDs = list()
-        for i in featurefiles:
+        for i in featurefiles[0]:
             patient_IDs.append(os.path.basename(i))
         label_data = dict()
         label_data['patient_IDs'] = patient_IDs

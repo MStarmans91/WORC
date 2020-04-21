@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -252,7 +252,7 @@ If you’re stuck, feel free to post an issue on the <a class="reference externa
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="c1"># These packages are only used in analysing the results</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">fastr</span>
 <span class="kn">import</span> <span class="nn">glob</span>
@@ -330,7 +330,7 @@ a subset of 20 patients in this folder. You can change this settings if you like
 
 <span class="c1"># Determine whether we want to do a coarse quick experiment, or a full lengthy</span>
 <span class="c1"># one. Again, change this accordingly if you use your own data.</span>
-<span class="n">coarse</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">coarse</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="c1"># Give your experiment a name</span>
 <span class="n">experiment_name</span> <span class="o">=</span> <span class="s1">&#39;Example_STWStrategyHN&#39;</span>
@@ -380,7 +380,7 @@ named after your experiment name.</p>
 <span class="n">outputfolder</span> <span class="o">=</span> <span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
 <span class="n">experiment_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputfolder</span><span class="p">,</span> <span class="s1">&#39;WORC_&#39;</span> <span class="o">+</span> <span class="n">experiment_name</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Your output is stored in {experiment_folder}.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Your output is stored in </span><span class="si">{</span><span class="n">experiment_folder</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
 <span class="c1"># Read the features for the first patient</span>
 <span class="c1"># NOTE: we use the glob package for scanning a folder to find specific files</span>
@@ -396,16 +396,16 @@ named after your experiment name.</p>
     <span class="n">performance</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
 
 <span class="c1"># Print the feature values and names</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Feature values:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Feature values:&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">features_p1</span><span class="o">.</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">features_p1</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> {l} : {v}.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">l</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
 <span class="c1"># Print the output performance</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Performance:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Performance:&quot;</span><span class="p">)</span>
 <span class="n">stats</span> <span class="o">=</span> <span class="n">performance</span><span class="p">[</span><span class="s1">&#39;Statistics&#39;</span><span class="p">]</span>
 <span class="k">del</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span>  <span class="c1"># Omitted for brevity</span>
 <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> {k} {v}.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -423,7 +423,7 @@ or advanced tutorials on <a class="reference external" href="https://github.com/
 <ul class="simple">
 <li><p>Run actual experiments on the full settings (coarse=False):</p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="bp">False</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
 </pre></div>
 </div>
