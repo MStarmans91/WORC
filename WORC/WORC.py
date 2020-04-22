@@ -437,6 +437,7 @@ class WORC(object):
         """Build the training network based on the given attributes."""
         # We either need images or features for Radiomics
         if self.images_train or self.features_train:
+            print('Building training network...')
             # We currently require labels for supervised learning
             if self.labels_train:
                 if not self.configs:
@@ -495,7 +496,7 @@ class WORC(object):
                 if not self.features_train:
                     # Create nodes to compute features
                     self.sources_parameters = dict()
-
+                    self.source_config_pyradiomics = dict()
                     self.calcfeatures_train = dict()
                     self.preprocessing_train = dict()
                     self.sources_images_train = dict()
@@ -528,6 +529,7 @@ class WORC(object):
 
                     elif len(self.segmentations_train) == 1:
                         # Assume segmentations need to be registered to other modalities
+                        print('\t - Adding Elastix node for image registration.')
                         self.add_elastix_sourcesandsinks()
                         pass
 
@@ -542,6 +544,7 @@ class WORC(object):
                     # BUG: We assume that first type defines if we use segmentix
                     if self.configs[0]['General']['Segmentix'] == 'True':
                         # Use the segmentix toolbox for segmentation processing
+                        print('\t - Adding segmentix node for segmentation preprocessing.')
                         self.sinks_segmentations_segmentix_train = dict()
                         self.sources_masks_train = dict()
                         self.converters_masks_train = dict()
@@ -583,7 +586,7 @@ class WORC(object):
                         self.modlabels.append(label)
 
                         # Create required sources and sinks
-                        self.sources_parameters[label] = self.network.create_source('ParameterFile', id='parameters_' + label)
+                        self.sources_parameters[label] = self.network.create_source('ParameterFile', id='config_' + label)
                         self.sources_images_train[label] = self.network.create_source('ITKImageFile', id='images_train_' + label, node_group='train')
                         if self.images_test or self.features_test:
                             self.sources_images_test[label] = self.network.create_source('ITKImageFile', id='images_test_' + label, node_group='test')
@@ -628,6 +631,7 @@ class WORC(object):
                         # -----------------------------------------------------
                         # Preprocessing
                         preprocess_node = str(self.configs[nmod]['General']['Preprocessing'])
+                        print('\t - Adding preprocessing node for image preprocessing.')
                         self.add_preprocessing(preprocess_node, label, nmod)
 
                         # -----------------------------------------------------
@@ -639,6 +643,7 @@ class WORC(object):
 
                         for f in feature_calculators:
                             self.calcfeatures_train[label] = list()
+                            print(f'\t - Adding feature calculation node: {f}.')
                             self.add_feature_calculator(f, label, nmod)
 
                         # -----------------------------------------------------
@@ -848,7 +853,7 @@ class WORC(object):
         # We can have a different config for different tools
         if 'pyradiomics' in calcfeat_node.lower():
             node_train.inputs['parameters'] =\
-                self.source_config_pyradiomics[label]
+                self.source_config_pyradiomics[label].output
         else:
             node_train.inputs['parameters'] =\
                 self.sources_parameters[label].output
@@ -857,8 +862,12 @@ class WORC(object):
             self.preprocessing_train[label].outputs['image']
 
         if self.images_test or self.features_test:
-            node_test.inputs['parameters'] =\
-                self.sources_parameters[label].output
+            if 'pyradiomics' in calcfeat_node.lower():
+                node_test.inputs['parameters'] =\
+                    self.source_config_pyradiomics[label].output
+            else:
+                node_test.inputs['parameters'] =\
+                    self.sources_parameters[label].output
 
             node_test.inputs['image'] =\
                 self.preprocessing_test[label].outputs['image']
@@ -893,6 +902,9 @@ class WORC(object):
         self.calcfeatures_train[label].append(node_train)
         if self.images_test or self.features_test:
             self.calcfeatures_test[label].append(node_test)
+
+        # TODO: Add a feature converter to convert the labels, e.g. to add PyRadiomics and convert format to hdf5
+        # Do this also for PREDICT, than you can always link classification to the converter
 
     def add_elastix_sourcesandsinks(self):
         '''
@@ -1302,9 +1314,9 @@ class WORC(object):
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):
             # TODO: Check which feature toolbox is used, than append right sources
-            self.source_data['parameters_' + label] = self.fastrconfigs[num]
+            self.source_data['config_' + label] = self.fastrconfigs[num]
             if self.pyradiomics_configs:
-                self.source_data['parameters_pyradiomics_' + label] = self.pyradiomics_configs[num]
+                self.source_data['config_pyradiomics_' + label] = self.pyradiomics_configs[num]
 
             # Add train data sources
             if self.images_train and len(self.images_train) - 1 >= num:
@@ -1363,15 +1375,17 @@ class WORC(object):
             self.sink_data['segmentations_out_segmentix_train_' + label] = ("vfs://output/{}/Segmentations/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
             self.sink_data['segmentations_out_elastix_train_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
             self.sink_data['images_out_elastix_train_' + label] = ("vfs://output/{}/Elastix/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-            for f in self.featurecalculators[label]:
-                self.sink_data['features_train_' + label + '_' + f] = ("vfs://output/{}/Features/features_{}_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, f, label)
+            if hasattr(self, 'featurecalculators'):
+                for f in self.featurecalculators[label]:
+                    self.sink_data['features_train_' + label + '_' + f] = ("vfs://output/{}/Features/features_{}_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, f, label)
 
             if self.labels_test:
                 self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/Segmentations/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 self.sink_data['segmentations_out_elastix_test_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 self.sink_data['images_out_elastix_test_' + label] = ("vfs://output/{}/Images/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-                for f in self.featurecalculators[label]:
-                    self.sink_data['features_test_' + label + '_' + f] = ("vfs://output/{}/Features/features_{}_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, f, label)
+                if hasattr(self, 'featurecalculators'):
+                    for f in self.featurecalculators[label]:
+                        self.sink_data['features_test_' + label + '_' + f] = ("vfs://output/{}/Features/features_{}_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, f, label)
 
             # Add elastix sinks if used
             if self.segmode:
@@ -1437,11 +1451,11 @@ class WORC(object):
                 with open(cfile_pyradiomics, 'w') as file:
                     yaml.dump(config_pyradiomics, file)
                 cfile_pyradiomics = Path(self.fastr_tmpdir) / f"config_pyradiomics_{self.name}_{num}.yaml"
-                self.pyradiomics_configs.append(cfile_pyradiomics.as_uri())
+                self.pyradiomics_configs.append(cfile_pyradiomics.as_uri().replace('%20', ' '))
 
             # BUG: Make path with pathlib to create windows double slashes
             cfile = Path(self.fastr_tmpdir) / f"config_{self.name}_{num}.ini"
-            self.fastrconfigs.append(cfile.as_uri())
+            self.fastrconfigs.append(cfile.as_uri().replace('%20', ' '))
 
 
 class Tools(object):

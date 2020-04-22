@@ -726,7 +726,7 @@ def fit_and_score(X, y, scoring,
                              return_times, error_score)
     except (ValueError, LinAlgError) as e:
         if type(estimator) == LDA:
-            print('[WARNING]: skipping this setting due to LDA Error: ' + e.message)
+            print(f'[WARNING]: skipping this setting due to LDA Error: {e}.')
             ret = [train_score, test_score, test_sample_counts,
                    fit_time, score_time, para_estimator, para]
 

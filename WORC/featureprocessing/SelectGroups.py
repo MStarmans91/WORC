@@ -25,7 +25,7 @@ class SelectGroups(BaseEstimator, SelectorMixin):
     Object to fit feature selection based on the type group the feature belongs
     to. The label for the feature is used for this procedure.
     '''
-    def __init__(self, parameters):
+    def __init__(self, parameters, toolboxes=['PREDICT']):
         '''
         Parameters
         ----------
@@ -53,6 +53,10 @@ class SelectGroups(BaseEstimator, SelectorMixin):
                 - fractal_features
                 - location_features
                 - RGRD_features
+
+                Also, should contain a parameter for selecting per feature toolbox:
+                - PREDICT
+                - PyRadiomics
         '''
         params = list()
         if parameters['histogram_features'] == 'True':
@@ -113,6 +117,9 @@ class SelectGroups(BaseEstimator, SelectorMixin):
 
         self.parameters = params
 
+        # Select per feature toolbox
+        self.toolboxes = toolboxes
+
     def fit(self, feature_labels):
         '''
         Select only features specificed by parameters per patient.
@@ -127,7 +134,8 @@ class SelectGroups(BaseEstimator, SelectorMixin):
         selectrows = list()
         for num, l in enumerate(feature_labels):
             if any(x in l for x in self.parameters):
-                selectrows.append(num)
+                if any(x in l for x in self.toolboxes):
+                    selectrows.append(num)
 
         self.selectrows = selectrows
 

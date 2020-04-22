@@ -52,4 +52,7 @@ def load_config(config_file_path):
     settings_dict['ComBat']['par'] =\
         settings['ComBat'].getint('par')
 
+    settings_dict['ComBat']['matlab'] =\
+        str(settings['ComBat']['matlab'])
+
     return settings_dict
