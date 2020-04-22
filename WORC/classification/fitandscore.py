@@ -174,11 +174,11 @@ def fit_and_score(X, y, scoring,
         Either None if the RELIEF feature selection is not used, or
         the fitted object.
 
-    sm: WORC SMOTE Object
+    Snote: WORC SMOTE Object
         Either None if the SMOTE oversampling is not used, or
         the fitted object.
 
-    ros: WORC ROS Object
+    RandOverSample: WORC RandomOverSampler Object
         Either None if Random Oversampling is not used, or
         the fitted object.
 
@@ -189,6 +189,16 @@ def fit_and_score(X, y, scoring,
     score_time = np.inf
     train_score = np.nan
     test_score = np.nan
+    Smote = None
+    imputer = None
+    scaler = None
+    GroupSel = None
+    SelectModel = None
+    pca = None
+    StatisticalSel = None
+    VarSel = None
+    ReliefSel = None
+    RandOverSample = None
 
     # We copy the parameter object so we can alter it and keep the original
     if verbose:
@@ -218,14 +228,10 @@ def fit_and_score(X, y, scoring,
             scaler = StandardScaler().fit(feature_values)
         elif para_estimator['FeatureScaling'] == 'minmax':
             scaler = MinMaxScaler().fit(feature_values)
-        else:
-            scaler = None
 
         if scaler is not None:
             feature_values = scaler.transform(feature_values)
         del para_estimator['FeatureScaling']
-    else:
-        scaler = None
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -244,10 +250,6 @@ def fit_and_score(X, y, scoring,
                               n_neighbors=imp_nn)
             imputer.fit(feature_values)
             feature_values = imputer.transform(feature_values)
-        else:
-            imputer = None
-    else:
-        imputer = None
 
     if 'Imputation' in para_estimator.keys():
         del para_estimator['Imputation']
@@ -309,8 +311,7 @@ def fit_and_score(X, y, scoring,
         if verbose:
             print("New Length: " + str(len(feature_values[0])))
         feature_labels = GroupSel.transform(feature_labels)
-    else:
-        GroupSel = None
+
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -323,14 +324,6 @@ def fit_and_score(X, y, scoring,
             print('[WARNING]: No features are selected! Probably all feature groups were set to False. Parameters:')
             print(para)
 
-        # Return a zero performance dummy
-        VarSel = None
-        scaler = None
-        SelectModel = None
-        pca = None
-        StatisticalSel = None
-        ReliefSel = None
-
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
@@ -338,7 +331,7 @@ def fit_and_score(X, y, scoring,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
         else:
             return ret
 
@@ -365,11 +358,9 @@ def fit_and_score(X, y, scoring,
         except ValueError:
             if verbose:
                 print('[WARNING]: No features meet the selected Variance threshold! Skipping selection.')
-            VarSel = None
         if verbose:
             print("New Length: " + str(len(feature_values[0])))
-    else:
-        VarSel = None
+
     del para_estimator['Featsel_Variance']
 
     # Delete the object if we do not need to return it
@@ -385,15 +376,11 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         # Return a zero performance dummy
-        scaler = None
-        SelectModel = None
-        pca = None
-        StatisticalSel = None
         ret = [train_score, test_score, test_sample_counts,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
         else:
             return ret
 
@@ -407,14 +394,11 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         # Return a zero performance dummy
-        scaler = None
-        SelectModel = None
-        pca = None
         ret = [train_score, test_score, test_sample_counts,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
         else:
             return ret
 
@@ -444,10 +428,6 @@ def fit_and_score(X, y, scoring,
             if verbose:
                 print("New Length: " + str(len(feature_values[0])))
             feature_labels = ReliefSel.transform(feature_labels)
-        else:
-            ReliefSel = None
-    else:
-        ReliefSel = None
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -483,8 +463,6 @@ def fit_and_score(X, y, scoring,
         if verbose:
             print("New Length: " + str(len(feature_values[0])))
         feature_labels = SelectModel.transform(feature_labels)
-    else:
-        SelectModel = None
 
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']
@@ -522,7 +500,6 @@ def fit_and_score(X, y, scoring,
 
             if n_components >= len(feature_values[0]):
                 print(f"[WORC WARNING] PCA n_components ({n_components})> n_features ({len(feature_values[0])}): skipping PCA.")
-                pca = None
             else:
                 pca = PCA(n_components=n_components)
                 pca.fit(feature_values)
@@ -530,8 +507,6 @@ def fit_and_score(X, y, scoring,
 
         if verbose:
             print("New Length: " + str(len(feature_values[0])))
-    else:
-        pca = None
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -560,13 +535,9 @@ def fit_and_score(X, y, scoring,
             feature_labels = StatisticalSel.transform(feature_labels)
             if verbose:
                 print("New Length: " + str(len(feature_values[0])))
-        else:
-            StatisticalSel = None
         del para_estimator['StatisticalTestUse']
         del para_estimator['StatisticalTestMetric']
         del para_estimator['StatisticalTestThreshold']
-    else:
-        StatisticalSel = None
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -584,14 +555,11 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         # Return a zero performance dummy
-        scaler = None
-        SelectModel = None
-        pca = None
         ret = [train_score, test_score, test_sample_counts,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
         else:
             return ret
 
@@ -607,13 +575,13 @@ def fit_and_score(X, y, scoring,
 
             # Fit SMOTE object and transform dataset
             # NOTE: need to save random state for this one as well!
-            sm = SMOTE(random_state=None,
-                       ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
-                       m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
-                       kind='borderline1',
-                       n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
+            Smote = SMOTE(random_state=None,
+                          ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
+                          m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
+                          kind='borderline1',
+                          n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
 
-            feature_values, y = sm.fit_sample(feature_values, y)
+            feature_values, y = Smote.fit_sample(feature_values, y)
 
             # Also make sure our feature label object has the same size
             # NOTE: Not sure if this is the best implementation
@@ -626,8 +594,6 @@ def fit_and_score(X, y, scoring,
                 message = f"Sampling with SMOTE from {len_in} ({pos_initial} pos," +\
                           f" {neg_initial} neg) to {len(y)} ({pos} pos, {neg} neg) patients."
                 print(message)
-        else:
-            sm = None
 
     if 'SampleProcessing_SMOTE' in para_estimator.keys():
         del para_estimator['SampleProcessing_SMOTE']
@@ -637,7 +603,7 @@ def fit_and_score(X, y, scoring,
 
     # Delete the object if we do not need to return it
     if not return_all:
-        del sm
+        del Smote
 
     # ------------------------------------------------------------------------
     # Full Oversampling: To Do
@@ -657,8 +623,8 @@ def fit_and_score(X, y, scoring,
                 random_seed2 = np.random.randint(5000)
                 random_state2 = check_random_state(random_seed2)
 
-                ros = RandomOverSampler(random_state=random_state2)
-                feature_values, y = ros.fit_sample(feature_values, y)
+                RandOverSample = RandomOverSampler(random_state=random_state2)
+                feature_values, y = RandOverSample.fit_sample(feature_values, y)
 
             else:
                 # Multi class, use own method as imblearn cannot do this
@@ -677,15 +643,13 @@ def fit_and_score(X, y, scoring,
                             y = np.vstack((y, i_sample))
                             feature_values.append(x_sample)
                             noversample -= 1
-        else:
-            ros = None
 
     if 'SampleProcessing_Oversampling' in para_estimator.keys():
         del para_estimator['SampleProcessing_Oversampling']
 
     # Delete the object if we do not need to return it
     if not return_all:
-        del ros
+        del RandOverSample
 
     # ----------------------------------------------------------------
     # Fitting and scoring
@@ -731,7 +695,7 @@ def fit_and_score(X, y, scoring,
                    fit_time, score_time, para_estimator, para]
 
             if return_all:
-                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
             else:
                 return ret
         else:
@@ -749,7 +713,7 @@ def fit_and_score(X, y, scoring,
     ret.append(para)
 
     if return_all:
-        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
     else:
         return ret
 
