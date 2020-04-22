@@ -1,10 +1,11 @@
 # WORC v3.1.3
+## Workflow for Optimal Radiomics Classification
 
-## Build Status
+## Information
 
-| Linux                          | Windows                       |
-|--------------------------------|-------------------------------|
-| [![][tci-linx]][tci-linx-lnk]  | [![][tci-wind]][tci-wind-lnk] |
+| Linux                          | Windows                       | Documentation                 | PyPi                          |
+|--------------------------------|-------------------------------|-------------------------------|-------------------------------|
+| [![][tci-linx]][tci-linx-lnk]  | [![][tci-wind]][tci-wind-lnk] | [![][doc]][doc-lnk]           | [![][pypi]][pypi-lnk]         |
 
 [tci-linx]: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=1
 [tci-linx-lnk]: https://travis-ci.com/MStarmans91/WORC
@@ -12,10 +13,13 @@
 [tci-wind]: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=2
 [tci-wind-lnk]: https://travis-ci.com/MStarmans91/WORC
 
-[![Documentation Status](https://readthedocs.org/projects/worc/badge/?version=latest)](https://worc.readthedocs.io/en/latest/?badge=latest)
-[![PyPI version](https://badge.fury.io/py/WORC.svg)](https://badge.fury.io/py/WORC)
+[doc]:https://readthedocs.org/projects/worc/badge/?version=latest
+[doc-lnk]: https://worc.readthedocs.io/en/latest/?badge=latest
 
-## Workflow for Optimal Radiomics Classification
+[pypi]: https://badge.fury.io/py/WORC.svg
+[pypi-lnk]: https://badge.fury.io/py/WORC
+
+# Introduction
 
 WORC is an open-source python package for the easy execution of full radiomics pipelines.
 
