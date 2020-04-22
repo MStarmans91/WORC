@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master)](https://travis-ci.com/MStarmans91/WORC)
+[![Documentation Status](https://readthedocs.org/projects/worc/badge/?version=latest)](https://worc.readthedocs.io/en/latest/?badge=latest)
 
 # WORC v3.1.3
 
