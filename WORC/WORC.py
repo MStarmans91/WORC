@@ -33,7 +33,8 @@ import WORC.IOparser.file_io as io
 
 
 class WORC(object):
-    """
+    """Workflow for Optimal Radiomics Classification.
+
     A Workflow for Optimal Radiomics Classification (WORC) object that
     serves as a pipeline spawner and manager for optimizating radiomics
     studies. Depending on the attributes set, the object will spawn an
@@ -107,8 +108,9 @@ class WORC(object):
     """
 
     def __init__(self, name='test'):
-        """Initialize WORC object. Set the initial variables all to None,
-           except for some defaults.
+        """Initialize WORC object.
+
+        Set the initial variables all to None, except for some defaults.
 
         Arguments:
             name: name of the nework (string, optional)
@@ -216,9 +218,9 @@ class WORC(object):
         config['ImageFeatures']['texture_LBP'] = 'True'
         config['ImageFeatures']['texture_GLCM'] = 'True'
         config['ImageFeatures']['texture_GLCMMS'] = 'True'
-        config['ImageFeatures']['texture_GLRLM'] = 'True'
-        config['ImageFeatures']['texture_GLSZM'] = 'True'
-        config['ImageFeatures']['texture_NGTDM'] = 'True'
+        config['ImageFeatures']['texture_GLRLM'] = 'False'
+        config['ImageFeatures']['texture_GLSZM'] = 'False'
+        config['ImageFeatures']['texture_NGTDM'] = 'False'
         config['ImageFeatures']['coliage'] = 'False'
         config['ImageFeatures']['vessel'] = 'False'
         config['ImageFeatures']['log'] = 'False'
@@ -923,7 +925,7 @@ class WORC(object):
         # Add source to tell converter which toolbox we use
         if 'pyradiomics' in calcfeat_node.lower():
             toolbox = 'PyRadiomics'
-        elif 'PREDICT' in calcfeat_node.lower():
+        elif 'predict' in calcfeat_node.lower():
             toolbox = 'PREDICT'
         else:
             message = f'Toolbox {calcfeat_node} not recognized!'
