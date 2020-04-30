@@ -26,14 +26,15 @@ from WORC.addexceptions import WORCValueError
 import tempfile
 from sys import platform
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
+from sklearn.preprocessing import StandardScaler
 
 
 def ComBat(features_train_in, labels_train, config, features_train_out,
-           features_test_in=None, labels_test=None, features_test_out=None):
+           features_test_in=None, labels_test=None, features_test_out=None,
+           VarianceThreshold=True, scaler=False):
     '''
     Apply ComBat feature harmonization. Based on: https://github.com/Jfortin1/ComBatHarmonization
     '''
-    print('Apply ComBat to data.')
     # Load the config
     config = cio.load_config(config)
 
@@ -51,10 +52,16 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     feature_labels = image_features_train[0][1]
     image_features_train = [i[0] for i in image_features_train]
 
+    # Apply a scaler to the features
+    if scaler:
+        scaler = StandardScaler().fit(image_features_train)
+        image_features_train = scaler.transform(image_features_train)
+
     # Remove features with a constant value
-    image_features_train, feature_labels, VarSel =\
-        selfeat_variance(image_features_train, np.asarray([feature_labels]))
-    feature_labels = feature_labels[0]
+    if VarianceThreshold:
+        image_features_train, feature_labels, VarSel =\
+            selfeat_variance(image_features_train, np.asarray([feature_labels]))
+        feature_labels = feature_labels[0]
 
     if features_test_in:
         label_data_test, image_features_test =\
@@ -62,20 +69,26 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                               label_type=label_names)
 
         image_features_test = [i[0] for i in image_features_test]
-        all_features = image_features_train + image_features_test
+        if scaler:
+            image_features_test = scaler.transform(image_features_test)
+
+        if VarianceThreshold:
+            image_features_test = VarSel.transform(image_features_test)
+
+        all_features = image_features_train.tolist() + image_features_test.tolist()
         all_labels = list()
         for i in range(label_data_train['label'].shape[0]):
             all_labels.append(label_data_train['label'][i, :, 0].tolist() + label_data_test['label'][i, :, 0].tolist())
         all_labels = np.asarray(all_labels)
     else:
-        all_features = image_features_train
+        all_features = image_features_train.tolist()
         all_labels = label_data_train['label']
 
     # Convert data to a single array
     all_features_matrix = np.asarray(all_features)
+    all_labels = np.squeeze(all_labels)
 
     # Convert all_labels to dictionary
-    all_labels = np.squeeze(all_labels)
     all_labels = {k: v for k, v in zip(label_data_train['label_name'], all_labels)}
 
     # Split labels in batch and moderation labels
@@ -90,11 +103,8 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     mod = np.transpose(np.asarray(mod))
 
     # Run ComBatin Matlab
-    print('\t Running ComBat in Matlab.')
-    executable = config['ComBat']['matlab']
     data_harmonized = ComBatMatlab(dat=all_features_matrix,
                                    batch=batch,
-                                   executable=executable,
                                    mod=mod,
                                    par=config['ComBat']['par'])
 
@@ -110,13 +120,13 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     feature_values_train_combat = [data_harmonized[i] for i in range(len(image_features_train))]
     for fnum, i_feat in enumerate(feature_values_train_combat):
         # Convert to pandas Series and save as hdf5
-        panda_data = pd.Series([parameters, list(i_feat),
+        panda_data = pd.Series([parameters, i_feat,
                                 feature_labels],
                                index=panda_labels,
                                name=name
                                )
 
-        print(f'\t Saving image features to: {features_train_out[fnum]}.')
+        print(f'Saving image features to: {features_train_out[fnum]}.')
         panda_data.to_hdf(features_train_out[fnum], 'image_features')
 
     # Repeat for testing if required
@@ -124,17 +134,17 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
         feature_values_test_combat = [d for d in data_harmonized[len(image_features_train):]]
         for fnum, i_feat in enumerate(feature_values_test_combat):
             # Convert to pandas Series and save as hdf5
-            panda_data = pd.Series([parameters, list(i_feat),
+            panda_data = pd.Series([parameters, i_feat,
                                     feature_labels],
                                    index=panda_labels,
                                    name=name
                                    )
 
-            print(f'\t Saving image features to: {features_test_out[fnum]}.')
+            print(f'Saving image features to: {features_test_out[fnum]}.')
             panda_data.to_hdf(features_test_out[fnum], 'image_features')
 
 
-def ComBatMatlab(dat, batch, executable, mod=None, par=0):
+def ComBatMatlab(dat, batch, mod=None, par=0):
     '''
     Run the ComBat Function Matlab script.
 
@@ -144,6 +154,8 @@ def ComBatMatlab(dat, batch, executable, mod=None, par=0):
     # Mod: default argument is empty list
     if mod is None:
         mod = []
+
+    # TODO: Add check whether matlab executable is found
 
     # Save the features in a .mat MatLab Compatible format
     # NOTE: Should change this_folder to a proper temporary directory
@@ -179,10 +191,10 @@ def ComBatMatlab(dat, batch, executable, mod=None, par=0):
         commandseparator = ' & '
 
     regcommand = ('cd ' + this_folder + commandseparator +
-                  '"' + executable +
-                  '" -nodesktop -nosplash -nojvm -r "combatmatlab(' + "'" + str(tempfile_in) + "'" + ')"' +
+                  '"/cm/shared/apps/matlab/R2015b/bin/matlab" -nodesktop -nosplash -nojvm -r "combatmatlab(' + "'" + str(tempfile_in) + "'" + ')"' +
                   commandseparator +
                   'cd ' + currentdir)
+    print(f'Executing ComBat in Matlab through command: {regcommand}.')
     proc = subprocess.Popen(regcommand,
                             shell=True,
                             stdin=subprocess.PIPE,

@@ -1,0 +1,35 @@
+<tool id="FeatureConverter" name="FeatureConverter" version="1.0">
+    <description>Function to convert a set of features to a different format.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="FeatureConverter_tool.py" />
+    </targets>
+    <description>
+       FeatureConverter.py feat_in config feat_out
+       output = converted features
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="feat_in" name="Input feature files of first modality" datatype="DataFile" prefix="--feat_in" cardinality="1-*" repeat_prefix="false" required="true" />
+        <input id="toolbox" name="Name of toolbox from which features originate" datatype="String" prefix="--toolbox" cardinality="1-*" repeat_prefix="false" required="true" />
+        <input id="config" name="Configuration" datatype="ParameterFile" prefix="--conf" cardinality="1-*" repeat_prefix="false" required="true" /></inputs>
+    <outputs>
+      <output id="feat_out" name="Features converted to WORC default hdf5 format" datatype="HDF5" cardinality="as:feat_in" nospace="False" order="0" prefix="--feat_out" required="true"/>
+      </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> To Do
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

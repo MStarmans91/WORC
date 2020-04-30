@@ -30,7 +30,9 @@ Added
 - ComBat harmonization: currently as separate tool on full dataset,
   not in cross-validation.
 - Computation of ICC, and thresholding object to use ICC for feature selection.
-- Added groupwise feature selection per feature extraction toolbox. 
+- Added groupwise feature selection per feature extraction toolbox.
+- Feature converter tool, to convert features from a toolbox to WORC compatible
+  format.
 
 Changed
 ~~~~~~~

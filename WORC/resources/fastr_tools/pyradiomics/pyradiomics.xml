@@ -5,7 +5,7 @@
     </authors>
   <command version="1.0" url="" >
     <targets>
-      <target os="*" arch="*" type="bin" value="pyradiomics" />
+      <target os="*" arch="*" paths="" bin="pyradiomics"/>
     </targets>
     <description>
        pyradiomics image|batch [mask] [Options]
@@ -18,12 +18,13 @@
   <repository />
   <interface>
     <inputs>
-        <input id="image" name="image" datatype="ITKImageFile" prefix="" cardinality="1" repeat_prefix="false" required="true" />
-        <input id="segmentation" name="segmentation" datatype="ITKImageFile" prefix="" cardinality="as:image" repeat_prefix="false" required="true" />
-        <input id="parameters" name="parameters" datatype="YamlFile" prefix="--parameter" cardinality="1-*" repeat_prefix="false" required="false" />
+        <input id="image" name="image" datatype="ITKImageFile" prefix="" order="0" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="segmentation" name="segmentation" datatype="ITKImageFile" prefix="" order="1" cardinality="as:image" repeat_prefix="false" required="true" />
+        <input id="parameters" name="parameters" datatype="YamlFile" prefix="--param" order="2" cardinality="1-*" repeat_prefix="false" required="false" />
+        <input id="format" name="format" datatype="String" prefix="--format" cardinality="1" repeat_prefix="false" required="false" />
      </inputs>
     <outputs>
-      <output id="features" name="Output feature files" datatype="DataFile" cardinality="as:parameters" nospace="False" order="0" prefix="--out" required="false"/>
+      <output id="features" name="Output feature files" datatype="CSVFile" cardinality="as:parameters" nospace="False" order="0" prefix="--out" required="false"/>
     </outputs>
   </interface>
   <requirements />

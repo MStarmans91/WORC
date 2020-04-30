@@ -18,3 +18,15 @@ following steps have to be performed:
 
 Note: we currently use the MatLab based implementation. Make sure you have
 MatLab installed on your machine.
+
+Elastix
+---------
+
+Regression
+------------
+
+Survival
+----------
+
+Evaluation
+-----------

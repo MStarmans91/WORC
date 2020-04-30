@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from imblearn import over_sampling, under_sampling, combine
+from imblearn import over_sampling, under_sampling, combine, SMOTE
 import numpy as np
 from sklearn.utils import check_random_state
 import WORC.addexceptions as ae
@@ -30,8 +30,8 @@ class ObjectSampler(object):
     He, Haibo, and Edwardo A. Garcia. "Learning from imbalanced data."
     IEEE Transactions on Knowledge & Data Engineering 9 (2008): 1263-1284.
 
-
     """
+
     def __init__(self, method,
                  sampling_strategy='auto',
                  SMOTE_ratio=1,
@@ -39,16 +39,17 @@ class ObjectSampler(object):
                  n_jobs=1,
                  n_neighbors=3,
                  ):
-
+        """Initialize object."""
         # Initialize a random state
         self.random_seed = np.random.randint(5000)
-        self.random_state = check_random_state(random_seed)
+        self.random_state = check_random_state(self.random_seed)
 
         # Initialize all objects as Nones: overriden when required by functions
         self.sampling_strategy = None
         self.object = None
-        self.n_neighbors = None
+        self.k_neighbors = None
         self.n_jobs = None
+        self.ratio = None
 
         if method == 'RandomUnderSampling':
             self.init_RandomUnderSampling(sampling_strategy)
@@ -70,11 +71,13 @@ class ObjectSampler(object):
             raise ae.WORCKeyError(f'{method} is not a valid sampling method!')
 
     def init_RandomUnderSampling(self, sampling_strategy):
+        """Creata a random under sampler object."""
         self.object = under_sampling.RandomUnderSampler(sampling_strategy=sampling_strategy,
                                                         random_state=self.random_state)
         self.sampling_strategy = sampling_strategy
 
     def init_NearMiss(self, sampling_strategy, n_neighbors, n_jobs):
+        """Creata a near miss sampler object."""
         self.object = under_sampling.NearMiss(sampling_strategy=sampling_strategy,
                                               random_state=self.random_state,
                                               n_neighbors=n_neighbors,
@@ -85,21 +88,30 @@ class ObjectSampler(object):
         self.n_jobs = n_jobs
 
     def init_RandomOverSampling(self, sampling_strategy):
+        """Creata a random over sampler object."""
         self.object = over_sampling.RandomOverSampler(sampling_strategy=sampling_strategy,
                                                       random_state=self.random_state)
         self.sampling_strategy = sampling_strategy
 
-    def init_SMOTE(self):
-        sm = SMOTE(random_state=None,
-                   ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
-                   m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
-                   kind='borderline1',
-                   n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
+    def init_SMOTE(self, ratio, k_neighbors, kind, n_jobs):
+        """Creata a SMOTE sampler object."""
+        sm = SMOTE(random_state=self.random_state,
+                   ratio=ratio,
+                   k_neighbors=k_neighbors,
+                   kind=kind,
+                   n_jobs=n_jobs)
 
         self.object = sm
 
-    def fit(self, **kwargs):
-        self.object.fit(**kwargs)
+        self.ratio = ratio
+        self.k_neighbors = k_neighbors
+        self.kind = kind
+        self.n_jobs = n_jobs
 
     def fit(self, **kwargs):
+        """Fit a sampler object."""
         self.object.fit(**kwargs)
+
+    def transform(self, **kwargs):
+        """Transform objects with a fitted sampler."""
+        return self.object.transform(**kwargs)

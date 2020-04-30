@@ -180,13 +180,34 @@ def convert_config_pyradiomics(config):
     outputconfig['setting'] = dict()
 
     # Take out the specific PyRadiomics values
-    for k, v in zip(config['PyRadiomics'].keys(), config['PyRadiomics'].values()):
-        outputconfig[k] = v
+    outputconfig['setting']['geometryTolerance'] = float(config['PyRadiomics']['geometryTolerance'])
+
+    outputconfig['setting']['normalize'] = bool(config['PyRadiomics']['normalize'])
+    outputconfig['setting']['normalizeScale'] = int(config['PyRadiomics']['normalizeScale'])
+
+    outputconfig['setting']['interpolator'] = config['PyRadiomics']['interpolator']
+
+    outputconfig['setting']['preCrop'] = bool(config['PyRadiomics']['preCrop'])
+    outputconfig['setting']['label'] = int(config['PyRadiomics']['label'])
+
+    outputconfig['setting']['force2D'] = bool(config['PyRadiomics']['force2D'])
+    outputconfig['setting']['force2Ddimension'] = int(config['PyRadiomics']['force2Ddimension'])
+
+    outputconfig['setting']['voxelArrayShift'] = int(config['PyRadiomics']['voxelArrayShift'])
+
+    outputconfig['setting']['binCount'] = int(config['PyRadiomics']['binCount'])
 
     # Extract several general values as well
-    outputconfig['setting']['distances'] = config['ImageFeatures']['GLCM_distances']
+    # Convert strings with values to list of ints
+    distances = config['ImageFeatures']['GLCM_distances']
+    distances = distances.split(',')
+    distances = [int(s) for s in distances]
+    outputconfig['setting']['distances'] = distances
 
     outputconfig['imageType']['LoG'] = dict()
-    outputconfig['imageType']['LoG']['sigma'] = config['ImageFeatures']['log_sigma']
+    sigmas = config['ImageFeatures']['log_sigma']
+    sigmas = sigmas.split(',')
+    sigmas = [int(s) for s in sigmas]
+    outputconfig['imageType']['LoG']['sigma'] = sigmas
 
     return outputconfig

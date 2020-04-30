@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ from sklearn.ensemble import RandomForestClassifier
 from imblearn.over_sampling import SMOTE, RandomOverSampler
 from sklearn.utils import check_random_state
 import random
+import ast
 from sklearn.metrics import make_scorer, average_precision_score
 from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
@@ -284,9 +285,9 @@ def fit_and_score(X, y, scoring,
                           'location_features', 'fractal_features',
                           'texture_GLDZM_features']
 
-        # Backwards compatability
-        if 'texture_features' in para_estimator.keys():
-            feature_groups.append('texture_features')
+        # First take out the toolbox selection, which is a list
+        toolboxes = ast.literal_eval(para_estimator['toolbox'])
+        del para_estimator['toolbox']
 
         # Check per feature group if the parameter is present
         parameters_featsel = dict()
@@ -303,7 +304,8 @@ def fit_and_score(X, y, scoring,
 
             parameters_featsel[group] = value
 
-        GroupSel = SelectGroups(parameters=parameters_featsel)
+        GroupSel = SelectGroups(parameters=parameters_featsel,
+                                toolboxes=toolboxes)
         GroupSel.fit(feature_labels[0])
         if verbose:
             print("Original Length: " + str(len(feature_values[0])))

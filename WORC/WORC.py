@@ -172,7 +172,6 @@ class WORC(object):
             config: configparser configuration file
 
         """
-        # TODO: cluster parallel execution parameters
         config = configparser.ConfigParser()
         config.optionxform = str
 
@@ -262,21 +261,16 @@ class WORC(object):
         # Addition to the above, specifically for PyRadiomics
         # Mostly based on Mpecific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml
         config['PyRadiomics'] = dict()
-        config['PyRadiomics']['verbose'] = 'True'
-        config['PyRadiomics']['geometryTolerance'] = '1E-3'
+        config['PyRadiomics']['geometryTolerance'] = '0.0001'
 
         config['PyRadiomics']['normalize'] = 'False'
         config['PyRadiomics']['normalizeScale'] = '100'
-        config['PyRadiomics']['removeOutliers'] = 'None'
-
-        config['PyRadiomics']['resampledPixelSpacing'] = 'None'
-        config['PyRadiomics']['interpolator'] = 'Bspline'
+        config['PyRadiomics']['interpolator'] = 'sitkBSpline'
 
         config['PyRadiomics']['preCrop'] = 'True'
-        config['PyRadiomics']['label'] = '1'
+        config['PyRadiomics']['label'] = '1'  # Use 255 when not using segmentix
 
-        config['PyRadiomics']['binWidth'] = 'None'  # BinWidth to sensitive for normalization, thus use binCount
-        config['PyRadiomics']['binCount'] = config['ImageFeatures']['GLCM_levels']
+        config['PyRadiomics']['binCount'] = config['ImageFeatures']['GLCM_levels'] # BinWidth to sensitive for normalization, thus use binCount
 
         config['PyRadiomics']['force2D'] = 'True'
         config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
@@ -327,6 +321,7 @@ class WORC(object):
         config['SelectFeatGroup']['location_features'] = 'False'
         config['SelectFeatGroup']['rgrd_features'] = 'False'
         config['SelectFeatGroup']['wavelet_features'] = 'False'
+        config['SelectFeatGroup']['toolbox'] = '[PREDICT]'
 
         # Feature imputation
         config['Imputation'] = dict()
@@ -498,6 +493,8 @@ class WORC(object):
                     self.sources_parameters = dict()
                     self.source_config_pyradiomics = dict()
                     self.calcfeatures_train = dict()
+                    self.featureconverter_train = dict()
+                    self.source_toolbox_name = dict()
                     self.preprocessing_train = dict()
                     self.sources_images_train = dict()
                     self.sinks_features_train = dict()
@@ -511,6 +508,7 @@ class WORC(object):
                         # A test set is supplied, for which nodes also need to be created
                         self.preprocessing_test = dict()
                         self.calcfeatures_test = dict()
+                        self.featureconverter_test = dict()
                         self.sources_images_test = dict()
                         self.converters_im_test = dict()
                         self.converters_seg_test = dict()
@@ -643,6 +641,10 @@ class WORC(object):
 
                         for f in feature_calculators:
                             self.calcfeatures_train[label] = list()
+                            self.featureconverter_train[label] = list()
+                            if self.images_test or self.features_test:
+                                self.calcfeatures_test[label] = list()
+                                self.featureconverter_test[label] = list()
                             print(f'\t - Adding feature calculation node: {f}.')
                             self.add_feature_calculator(f, label, nmod)
 
@@ -715,7 +717,7 @@ class WORC(object):
                                     elif self.segmode == 'Register':
                                         if nmod > 0:
                                             self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
-                                                self.transformix_seg_nodes_test[label] .outputs['image']
+                                                self.transformix_seg_nodes_test[label].outputs['image']
                                         else:
                                             self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
                                                 self.converters_seg_train[label].outputs['image']
@@ -734,18 +736,18 @@ class WORC(object):
                             self.sinks_features_train[label].append(self.network.create_sink('HDF5', id='features_train_' + label + '_' + fname))
 
                             # Append features to the classification
-                            self.links_C1_train[label].append(self.classify.inputs['features_train'][str(label)] << self.calcfeatures_train[label][i_node].outputs['features'])
+                            self.links_C1_train[label].append(self.classify.inputs['features_train'][str(label)] << self.featureconverter_train[label][i_node].outputs['feat_out'])
                             self.links_C1_train[label][i_node].collapse = 'train'
 
                             # Save output
-                            self.sinks_features_train[label][i_node].input = self.calcfeatures_train[label][i_node].outputs['features']
+                            self.sinks_features_train[label][i_node].input = self.featureconverter_train[label][i_node].outputs['feat_out']
 
                             # Similar for testing workflow
                             if self.images_test or self.features_test:
                                 self.sinks_features_test[label].append(self.network.create_sink('HDF5', id='features_test_' + label + '_' + fname))
-                                self.links_C1_test[label].append(self.classify.inputs['features_test'][str(label)] << self.calcfeatures_test[label][i_node].outputs['features'])
+                                self.links_C1_test[label].append(self.classify.inputs['features_test'][str(label)] << self.featureconverter_test[label][i_node].outputs['feat_out'])
                                 self.links_C1_test[label][i_node].collapse = 'test'
-                                self.sinks_features_test[label][i_node].input = self.calcfeatures_test[label][i_node].outputs['features']
+                                self.sinks_features_test[label][i_node].input = self.featureconverter_test[label][i_node].outputs['feat_out']
 
                 else:
                     # Features already provided: hence we can skip numerous nodes
@@ -822,9 +824,6 @@ class WORC(object):
         '''
         # Name of fastr node has to exclude some specific symbols, which
         # are used in the node name
-
-        # TODO: This function can be called multiple times for one modality.
-        # Thus, the nodes, sources etc should be lists.
         node_ID = '_'.join([calcfeat_node.replace(':', '_').replace('.', '_').replace('/', '_'),
                             label])
 
@@ -842,12 +841,26 @@ class WORC(object):
                                          id='calcfeatures_test_' + node_ID,
                                          resources=ResourceLimit(memory=memory))
 
-        # Check if we need to add pyradiomics confis
+        # Check if we need to add pyradiomics specific sources
         if 'pyradiomics' in calcfeat_node.lower():
+            # Add a config source
             self.source_config_pyradiomics[label] =\
                 self.network.create_source('YamlFile',
                                            id='config_pyradiomics_' + label,
                                            node_group='train')
+
+            # Add a format source, which we are going to set to a constant
+            # And attach to the tool node
+            self.source_format_pyradiomics =\
+                self.network.create_constant('String', 'csv',
+                                             id='format_pyradiomics_' + label,
+                                             node_group='train')
+            node_train.inputs['format'] =\
+                self.source_format_pyradiomics.output
+
+            if self.images_test or self.features_test:
+                node_test.inputs['format'] =\
+                    self.source_format_pyradiomics.output
 
         # Create required links
         # We can have a different config for different tools
@@ -898,18 +911,51 @@ class WORC(object):
                 node_test.inputs['semantics'] =\
                     self.sources_semantics_test[label].output
 
-        # Append to feature calculator list
+        # Add feature converter to make features WORC compatible
+        conv_train =\
+            self.network.create_node('worc/FeatureConverter:1.0',
+                                     tool_version='1.0',
+                                     id='featureconverter_train_' + node_ID,
+                                     resources=ResourceLimit(memory='4G'))
+
+        conv_train.inputs['feat_in'] = node_train.outputs['features']
+
+        # Add source to tell converter which toolbox we use
+        if 'pyradiomics' in calcfeat_node.lower():
+            toolbox = 'PyRadiomics'
+        elif 'PREDICT' in calcfeat_node.lower():
+            toolbox = 'PREDICT'
+        else:
+            message = f'Toolbox {calcfeat_node} not recognized!'
+            raise WORCexceptions.WORCKeyError(message)
+
+        self.source_toolbox_name[label] =\
+            self.network.create_constant('String', toolbox,
+                                         id='toolbox_name_' + label)
+
+        conv_train.inputs['toolbox'] = self.source_toolbox_name[label].output
+        conv_train.inputs['config'] = self.sources_parameters[label].output
+
+        if self.images_test or self.features_test:
+            conv_test =\
+                self.network.create_node('worc/FeatureConverter:1.0',
+                                         tool_version='1.0',
+                                         id='featureconverter_test_' + node_ID,
+                                         resources=ResourceLimit(memory='4G'))
+
+            conv_test.inputs['feat_in'] = node_test.outputs['features']
+            conv_test.inputs['toolbox'] = self.source_toolbox_name[label].output
+            conv_test.inputs['config'] = self.sources_parameters[label].output
+
+        # Append to nodes to list
         self.calcfeatures_train[label].append(node_train)
+        self.featureconverter_train[label].append(conv_train)
         if self.images_test or self.features_test:
             self.calcfeatures_test[label].append(node_test)
-
-        # TODO: Add a feature converter to convert the labels, e.g. to add PyRadiomics and convert format to hdf5
-        # Do this also for PREDICT, than you can always link classification to the converter
+            self.featureconverter_test[label].append(conv_test)
 
     def add_elastix_sourcesandsinks(self):
-        '''
-        Add sources and sinks required for image registration through elastix.
-        '''
+        """Add sources and sinks required for image registration."""
         self.sources_segmentation = dict()
         self.segmode = 'Register'
 
@@ -935,6 +981,7 @@ class WORC(object):
         self.transformix_im_nodes_test = dict()
 
     def add_elastix(self, label, nmod):
+        """ Add image registration through elastix to network."""
         # Create sources and converter for only for the given segmentation,
         # which should be on the first modality
         if nmod == 0:
@@ -1206,6 +1253,7 @@ class WORC(object):
                     self.transformix_im_nodes_test[label].outputs['image']
 
     def add_segmentix(self, label, nmod):
+        """Add segmentix to the network."""
         # Segmentix nodes -------------------------------------------------
         # Use segmentix node to convert input segmentation into
         # correct contour
@@ -1287,11 +1335,8 @@ class WORC(object):
             self.nodes_segmentix_test[label].inputs['mask'] =\
                 self.converters_masks_test[label].outputs['image']
 
-    def build_testing(self):
-        ''' todo '''
-
     def set(self):
-        """ Set the FASTR source and sink data based on the given attributes."""
+        """Set the FASTR source and sink data based on the given attributes."""
         self.fastrconfigs = list()
         self.source_data = dict()
         self.sink_data = dict()
@@ -1300,7 +1345,6 @@ class WORC(object):
         self.save_config()
 
         # Generate gridsearch parameter files if required
-        # TODO: We now use the first configuration for the classifier, but his needs to be separated from the rest per modality
         self.source_data['config_classification_source'] = self.fastrconfigs[0]
 
         # Set source and sink data
@@ -1313,7 +1357,6 @@ class WORC(object):
 
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):
-            # TODO: Check which feature toolbox is used, than append right sources
             self.source_data['config_' + label] = self.fastrconfigs[num]
             if self.pyradiomics_configs:
                 self.source_data['config_pyradiomics_' + label] = self.pyradiomics_configs[num]
@@ -1399,7 +1442,7 @@ class WORC(object):
             self.Evaluate.set()
 
     def execute(self):
-        """ Execute the network through the fastr.network.execute command. """
+        """Execute the network through the fastr.network.execute command."""
         # Draw and execute nwtwork
         try:
             self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
@@ -1421,14 +1464,12 @@ class WORC(object):
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 
     def add_evaluation(self, label_type):
+        """Add branch for evaluation of performance to network."""
         self.Evaluate = Evaluate(label_type=label_type, parent=self)
         self._add_evaluation = True
 
     def save_config(self):
-        '''
-        Save the config files to physical files, and add them to the config
-        objects in WORC.
-        '''
+        """Save the config files to physical files and add to network."""
         # If the configuration files are confiparse objects, write to file
         self.pyradiomics_configs = list()
         for num, c in enumerate(self.configs):
@@ -1459,11 +1500,17 @@ class WORC(object):
 
 
 class Tools(object):
-    '''
-    This object can be used to create other pipelines besides the default
-    Radiomics executions. Currently only includes a registratio pipeline.
-    '''
+    """
+    Create other pipelines besides the default radiomics executions.
+
+    Currently includes:
+    1. Registration pipeline
+    2. Evaluation pipeline
+    3. Slicer pipeline, to create pngs of middle slice of images.
+    """
+
     def __init__(self):
+        """Initialize object with all pipelines."""
         self.Elastix = Elastix()
         self.Evaluate = Evaluate()
         self.Slicer = Slicer()
