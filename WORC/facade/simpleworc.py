@@ -308,10 +308,20 @@ class SimpleWORC():
         self._worc.set()
         self._worc.execute()
 
-    def binary_classification(self, estimators=['SVM'], scoring_method='f1', coarse=True):
+    def binary_classification(self, estimators=None, scoring_method='f1', coarse=True):
+        if coarse and estimators is None:
+            estimators = ['SVM']
+        elif estimators is None:
+            estimators = ['SVM', 'SVM', 'SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB']
+
         self._set_and_validate_estimators(estimators, scoring_method, 'classification', coarse)
 
-    def regression(self, estimators=['SVR'], scoring_method='r2', coarse=True):
+    def regression(self, estimators=None, scoring_method='r2', coarse=True):
+        if coarse and estimators is None:
+            estimators = ['SVR']
+        elif estimators is None:
+            estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR']
+
         self._set_and_validate_estimators(estimators, scoring_method, 'regression', coarse)
 
     def survival(self, estimators, scoring_method, coarse=True):
