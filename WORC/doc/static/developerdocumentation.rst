@@ -12,3 +12,9 @@ Adding a feature processing toolbox
   d. Link these sources and sinks to the fastr network in the WORC.set function
   e. Add part to feature converter
 4. Add part to feature converter tool to convert your features to WORC format.
+
+Testing and example data
+-------------------------
+
+Facades
+--------

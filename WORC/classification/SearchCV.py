@@ -1449,34 +1449,36 @@ class BaseSearchCVfastr(BaseSearchCV):
                         tmpdir=os.path.join(tempfolder, 'tmp'),
                         execution_plugin=self.fastr_plugin)
 
-        # Read in the output data once finished
-        # TODO: expanding fastr url is probably a nicer way
+        # Check whether all jobs have finished
+        expected_no_files = len(traintest_files) * len(parameter_files)
         sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
+        if len(sink_files) != expected_no_files:
+            difference = expected_no_files - len(sink_files)
+            fname = os.path.join(tempfolder, 'tmp')
+            message = ('Fitting classifiers has failed for ' +
+                       f'{difference} / {expected_no_files} files. The temporary ' +
+                       f'results where not deleted and can be found in {tempfolder}. ' +
+                       'Probably your fitting and scoring failed: check out ' +
+                       'the tmp/fitandscore folder within the tempfolder for ' +
+                       'the fastr job temporary results or run: fastr trace ' +
+                       f'{fname}{os.path.sep}__sink_data__.json --samples.')
+            raise WORCexceptions.WORCValueError(message)
+
+        # Read in the output data once finished
         save_data = list()
         for output in sink_files:
             data = pd.read_hdf(output)
             save_data.extend(list(data['RET']))
 
         # if one choose to see train score, "out" will contain train score info
-        try:
-            if self.return_train_score:
-                (train_scores, test_scores, test_sample_counts,
-                 fit_time, score_time, parameters_est, parameters_all) =\
-                  zip(*save_data)
-            else:
-                (test_scores, test_sample_counts,
-                 fit_time, score_time, parameters_est, parameters_all) =\
-                  zip(*save_data)
-        except ValueError as e:
-            print(e)
-            tempfolder = os.path.join(tempfolder, 'tmp')
-            message = ('Fitting classifiers has failed. The temporary ' +
-                       f'results where not deleted and can be found in {tempfolder}. ' +
-                       'Probably your fitting and scoring failed: check out ' +
-                       'the tmp/fitandscore folder within the tempfolder for ' +
-                       'the fastr job temporary results or run: fastr trace ' +
-                       f'{tempfolder}{os.path.sep}__sink_data__.json --samples.')
-            raise WORCexceptions.WORCValueError(message)
+        if self.return_train_score:
+            (train_scores, test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) =\
+              zip(*save_data)
+        else:
+            (test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) =\
+              zip(*save_data)
 
         # Remove the temporary folder used
         shutil.rmtree(tempfolder)

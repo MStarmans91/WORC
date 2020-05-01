@@ -264,20 +264,18 @@ class WORC(object):
         # Mostly based on Mpecific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml
         config['PyRadiomics'] = dict()
         config['PyRadiomics']['geometryTolerance'] = '0.0001'
-
         config['PyRadiomics']['normalize'] = 'False'
         config['PyRadiomics']['normalizeScale'] = '100'
         config['PyRadiomics']['interpolator'] = 'sitkBSpline'
-
         config['PyRadiomics']['preCrop'] = 'True'
-        config['PyRadiomics']['label'] = '1'  # Use 255 when not using segmentix
-
+        config['PyRadiomics']['label'] = '255'  # Use 255 when not using segmentix
         config['PyRadiomics']['binCount'] = config['ImageFeatures']['GLCM_levels'] # BinWidth to sensitive for normalization, thus use binCount
-
         config['PyRadiomics']['force2D'] = 'True'
         config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
-
         config['PyRadiomics']['voxelArrayShift'] = '300'
+        config['PyRadiomics']['Original'] = 'True'
+        config['PyRadiomics']['Wavelet'] = 'True'
+        config['PyRadiomics']['LoG'] = 'True'
 
         # Feature preprocessing before all below takes place
         config['FeatPreProcess'] = dict()
@@ -306,6 +304,7 @@ class WORC(object):
         config['SelectFeatGroup']['orientation_features'] = 'True, False'
         config['SelectFeatGroup']['texture_Gabor_features'] = 'False'
         config['SelectFeatGroup']['texture_GLCM_features'] = 'True, False'
+        config['SelectFeatGroup']['texture_GLDM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLCMMS_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLRLM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLSZM_features'] = 'True, False'
@@ -316,14 +315,20 @@ class WORC(object):
         config['SelectFeatGroup']['patient_features'] = 'False'
         config['SelectFeatGroup']['semantic_features'] = 'False'
         config['SelectFeatGroup']['coliage_features'] = 'False'
-        config['SelectFeatGroup']['log_features'] = 'False'
         config['SelectFeatGroup']['vessel_features'] = 'False'
         config['SelectFeatGroup']['phase_features'] = 'False'
         config['SelectFeatGroup']['fractal_features'] = 'False'
         config['SelectFeatGroup']['location_features'] = 'False'
         config['SelectFeatGroup']['rgrd_features'] = 'False'
+
+        # Select features per toolbox, or simply all
+        config['SelectFeatGroup']['toolbox'] = 'All'
+
+        # Select original features, or after transformation of feature space
+        config['SelectFeatGroup']['original_features'] = 'True'
         config['SelectFeatGroup']['wavelet_features'] = 'False'
-        config['SelectFeatGroup']['toolbox'] = '[PREDICT]'
+        config['SelectFeatGroup']['log_features'] = 'False'
+
 
         # Feature imputation
         config['Imputation'] = dict()

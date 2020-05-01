@@ -18,6 +18,7 @@
 import pandas as pd
 import collections
 import WORC.addexceptions as WORCexceptions
+import numpy as np
 
 # General labels for feature file
 panda_labels = ['image_type', 'parameters', 'feature_values',
@@ -25,37 +26,44 @@ panda_labels = ['image_type', 'parameters', 'feature_values',
 
 
 def convert_pyradiomics_featurevector(featureVector):
-    """
-    Convert a PyRadiomics feature vector to WORC compatible features.
-    """
+    """Convert a PyRadiomics feature vector to WORC compatible features."""
     # Split center of mass features in the three dimensions
     # Save as orientation features
-    COM_index = featureVector['diagnostics_Mask-original_CenterOfMassIndex']
+    COM_index = eval(featureVector['diagnostics_Mask-original_CenterOfMassIndex'])
     featureVector['of_original_COM_Index_x'] = COM_index[0]
     featureVector['of_original_COM_Index_y'] = COM_index[1]
     featureVector['of_original_COM_Index_z'] = COM_index[2]
 
-    COM = featureVector['diagnostics_Mask-original_CenterOfMass']
+    COM = eval(featureVector['diagnostics_Mask-original_CenterOfMass'])
     featureVector['of_original_COM_x'] = COM[0]
     featureVector['of_original_COM_y'] = COM[1]
     featureVector['of_original_COM_z'] = COM[2]
 
     # Delete all diagnostics features:
-    for k in featureVector.keys():
-        if 'diagnostics' in k:
+    omitted = ['Image', 'Mask', 'diagnostics']
+    keys = list(featureVector.keys())
+    for k in keys:
+        if any(k.startswith(om) for om in omitted):
             del featureVector[k]
 
     # Change label to be similar to PREDICT
     new_featureVector = collections.OrderedDict()
-    texture_features = ['_glcm_', '_gldm_', '_glrlm_', '_glszm_', '_ngtdm']
     for k in featureVector.keys():
-        if any(t in k for t in texture_features):
-            kn = 'tf_' + k
+        if '_glcm_' in k:
+            kn = 'tf_' + k.replace('_glcm_', '_GLCM_')
+        elif '_gldm_' in k:
+            kn = 'tf_' + k.replace('_gldm_', '_GLDM_')
+        elif '_glrlm_' in k:
+            kn = 'tf_' + k.replace('_glrlm_', '_GLRLM_')
+        elif '_glszm_' in k:
+            kn = 'tf_' + k.replace('_glszm_', '_GLSZM_')
+        elif '_ngtdm_' in k:
+            kn = 'tf_' + k.replace('_ngtdm_', '_NGTDM_')
         elif '_shape_' in k:
             kn = 'sf_' + k
         elif '_firstorder_' in k:
             kn = 'hf_' + k
-        elif '_of_' in k:
+        elif 'of_' in k:
             # COM
             kn = k
         else:
@@ -83,7 +91,7 @@ def convert_PREDICT(features, config, feat_out):
 
     # Add name of toolbox to the labels
     feature_labels = data.feature_labels
-    feature_labels = ['PREDICT_' + l for l in feature_labels]
+    feature_labels = ['PREDICT_original_' + l for l in feature_labels]
 
     # Convert to pandas Series and save as hdf5
     panda_data = pd.Series([data.image_type, data.parameters,
@@ -105,16 +113,11 @@ def convert_pyradiomics(features, config, feat_out):
     # Read the csv file and split in objects
     # TODO: Make sure we can read multiple output types
     data = pd.read_csv(features)
-    keys = data.keys()
-    values = data.values
+    keys = list(data.keys())
+    values = np.squeeze(data.values)
+    featureVector = {k: v for k, v in zip(keys, values)}
 
-    # Remove the non-feature elements
-    omitted = ['Image', 'Mask', 'diagnostics']
-    featureVector = dict()
-    for k, v in zip(keys, values):
-        if not any(k.startswith(om) for om in omitted):
-            featureVector[k] = v
-
+    # Convert feature vector
     featureVector = convert_pyradiomics_featurevector(featureVector)
 
     # Extract the PyRadiomics parameters
@@ -122,8 +125,8 @@ def convert_pyradiomics(features, config, feat_out):
 
     # Convert to pandas Series and save as hdf5
     image_type = 'None'
-    panda_data = pd.Series([image_type, parameters, featureVector.values,
-                            featureVector.keys()],
+    panda_data = pd.Series([image_type, parameters, list(featureVector.values()),
+                            list(featureVector.keys())],
                            index=panda_labels,
                            name='Image features'
                            )
@@ -153,7 +156,6 @@ def FeatureConverter(feat_in, toolbox, config, feat_out):
 
     """
     # Convert input features
-    print(toolbox)
     if toolbox == 'PREDICT':
         convert_PREDICT(feat_in, config, feat_out)
     elif toolbox == 'PyRadiomics':

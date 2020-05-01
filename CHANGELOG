@@ -51,7 +51,8 @@ Fixed
 ~~~~~
 - Order of methods in preprocessing function of SearchCV did not correspond
   with that in fitandscore.
-- Replace spaces in uri conversion of sources in SimpleWORC
+- Replace spaces in uri conversion of sources in SimpleWORC.
+- Check whether all fitandscore jobs succeeded, otherwise throw error.
 
 
 3.1.3 - 2020-01-24

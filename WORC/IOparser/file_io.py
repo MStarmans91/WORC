@@ -204,10 +204,18 @@ def convert_config_pyradiomics(config):
     distances = [int(s) for s in distances]
     outputconfig['setting']['distances'] = distances
 
-    outputconfig['imageType']['LoG'] = dict()
-    sigmas = config['ImageFeatures']['log_sigma']
-    sigmas = sigmas.split(',')
-    sigmas = [int(s) for s in sigmas]
-    outputconfig['imageType']['LoG']['sigma'] = sigmas
+    # Check if we need to apply transforms to the image
+    if config['PyRadiomics']['Original'] == 'True':
+        outputconfig['imageType']['Original'] = dict()
+
+    if config['PyRadiomics']['Wavelet'] == 'True':
+        outputconfig['imageType']['Wavelet'] = dict()
+
+    if config['PyRadiomics']['LoG'] == 'True':
+        outputconfig['imageType']['LoG'] = dict()
+        sigmas = config['ImageFeatures']['log_sigma']
+        sigmas = sigmas.split(',')
+        sigmas = [int(s) for s in sigmas]
+        outputconfig['imageType']['LoG']['sigma'] = sigmas
 
     return outputconfig

@@ -271,22 +271,33 @@ def fit_and_score(X, y, scoring,
             print("Selecting groups of features.")
         del para_estimator['SelectGroups']
         # TODO: more elegant way to solve this
-        feature_groups = ["histogram_features", "orientation_features",
-                          "patient_features", "semantic_features",
-                          "shape_features",
-                          "coliage_features", 'vessel_features',
-                          "phase_features", "log_features",
-                          "texture_gabor_features", "texture_glcm_features",
-                          "texture_glcmms_features", "texture_glrlm_features",
-                          "texture_glszm_features", 'texture_gldzm_features',
-                          "texture_ngtdm_features",
-                          "texture_lbp_features", "texture_ngldm_features",
-                          'wavelet_features', 'rgrd_features',
-                          'location_features', 'fractal_features',
-                          'texture_GLDZM_features']
+        feature_groups = ['shape_features',
+                          'histogram_features',
+                          'orientation_features',
+                          'texture_gabor_features',
+                          'texture_glcm_features',
+                          'texture_gldm_features',
+                          'texture_glcmms_features',
+                          'texture_glrlm_features',
+                          'texture_glszm_features',
+                          'texture_gldzm_features',
+                          'texture_ngtdm_features',
+                          'texture_ngldm_features',
+                          'texture_lbp_features',
+                          'patient_features',
+                          'semantic_features',
+                          'coliage_features',
+                          'vessel_features',
+                          'phase_features',
+                          'fractal_features',
+                          'location_features',
+                          'rgrd_features',
+                          'original_features',
+                          'wavelet_features',
+                          'log_features']
 
         # First take out the toolbox selection, which is a list
-        toolboxes = ast.literal_eval(para_estimator['toolbox'])
+        toolboxes = para_estimator['toolbox']
         del para_estimator['toolbox']
 
         # Check per feature group if the parameter is present

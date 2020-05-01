@@ -8,8 +8,10 @@ and describe the more advanced features.
 
 .. _tools:
 
-The WORC object
+The SimpleWORC object
 ---------------
+
+#TODO: Write this part about SimpleWORC, all other parts move to WORC.rst.
 
 The WORC toolbox consists of one main object, the WORC object:
 
