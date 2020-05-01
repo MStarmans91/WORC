@@ -77,7 +77,6 @@ class ConfigBuilder():
                 'phase_features': 'False',
             },
             'CrossValidation': {'N_iterations': '3'},
-            'Classification': {'classifiers': 'SVM'},
             'HyperOptimization': {'n_splits': '2',
                                   'N_iterations': '1000',
                                   'n_jobspercore': '500'},
@@ -108,8 +107,6 @@ class ConfigBuilder():
                 'StatisticalTestUse': '0.25',
                 'ReliefUse': '0.25'
             },
-            # Use all available classifiers. SVM three times because we have three kernels.
-            'Classification': {'classifiers': 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'},
             # Extensive cross-validation and hyperoptimization
             'CrossValidation': {'N_iterations': '100'},
             'HyperOptimization': {'N_iterations': '100000',
