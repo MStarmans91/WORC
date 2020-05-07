@@ -90,6 +90,9 @@
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#unreleased">3.1.4 - Unreleased</a><ul>
@@ -254,6 +257,10 @@ be easily changed.</p></li>
 <li><p>PyRadiomics now fully embedded and configurable.</p></li>
 <li><p>ComBat harmonization: currently as separate tool on full dataset,
 not in cross-validation.</p></li>
+<li><p>Computation of ICC, and thresholding object to use ICC for feature selection.</p></li>
+<li><p>Added groupwise feature selection per feature extraction toolbox.</p></li>
+<li><p>Feature converter tool, to convert features from a toolbox to WORC compatible
+format.</p></li>
 </ul>
 </div>
 <div class="section" id="changed">
@@ -276,6 +283,8 @@ converted to lower case.</p></li>
 <ul class="simple">
 <li><p>Order of methods in preprocessing function of SearchCV did not correspond
 with that in fitandscore.</p></li>
+<li><p>Replace spaces in uri conversion of sources in SimpleWORC.</p></li>
+<li><p>Check whether all fitandscore jobs succeeded, otherwise throw error.</p></li>
 </ul>
 </div>
 </div>

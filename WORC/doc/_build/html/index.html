@@ -89,6 +89,9 @@
 <li class="toctree-l1"><a class="reference internal" href="static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a></li>
 </ul>
@@ -223,7 +226,7 @@ can address various problems.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#the-worc-object">The WORC object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#the-simpleworc-object">The SimpleWORC object</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#attributes-sources">Attributes: Sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#attributes-settings">Attributes: Settings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#attributes-functions">Attributes: Functions</a></li>
@@ -257,6 +260,27 @@ can address various problems.</p>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#bootstrap">Bootstrap</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static/additionalfunctionality.html">Additional functionality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#combat">ComBat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#elastix">Elastix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#regression">Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#survival">Survival</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#evaluation">Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#segmentix">Segmentix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#icc">ICC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static/facades.html">Facades</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/facades.html#simpleworc">SimpleWORC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/facades.html#basicworc">BasicWORC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="static/developerdocumentation.html">Developer documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/developerdocumentation.html#adding-a-feature-processing-toolbox">Adding a feature processing toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/developerdocumentation.html#testing-and-example-data">Testing and example data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/developerdocumentation.html#facades">Facades</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
@@ -358,7 +382,7 @@ can address various problems.</p>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.classification.html">classification Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classification</span></code> Package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.AdvancedSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">AdvancedSampler</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.ObjectSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#objectsampler-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.RankedSVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.SearchCV"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.construct_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">construct_classifier</span></code> Module</a></li>
@@ -396,6 +420,8 @@ can address various problems.</p>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">featureprocessing</span></code> Package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.ComBat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#decomposition-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Decomposition</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.FeatureConverter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FeatureConverter</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.ICCThreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ICCThreshold</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.Imputer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Imputer</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.Preprocessor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Preprocessor</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.Relief"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Relief</span></code> Module</a></li>
@@ -440,6 +466,7 @@ can address various problems.</p>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.tests.html">tests Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_combat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_combat</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_helpers</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_iccthreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_iccthreshold</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.tools.html">tools Package</a><ul>

@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Resource File Formats" href="file_description.html" />
+    <link rel="next" title="Additional functionality" href="additionalfunctionality.html" />
     <link rel="prev" title="User Manual" href="user_manual.html" /> 
 </head>
 
@@ -112,6 +112,9 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -723,15 +726,15 @@ are computed or not.</p>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>texture_GLRLM</p></td>
-<td><p>True</p></td>
+<td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>texture_GLSZM</p></td>
-<td><p>True</p></td>
+<td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>texture_NGTDM</p></td>
-<td><p>True</p></td>
+<td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>coliage</p></td>
@@ -976,38 +979,38 @@ recommended, and looks as follows:</p>
 <tr class="row-even"><td><p>texture_GLCM_features</p></td>
 <td><p>If True, use GLCM texture features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_GLCMMS_features</p></td>
+<tr class="row-odd"><td><p>texture_GLDM_features</p></td>
+<td><p>WIP</p></td>
+</tr>
+<tr class="row-even"><td><p>texture_GLCMMS_features</p></td>
 <td><p>If True, use GLCM Multislice texture features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_GLRLM_features</p></td>
+<tr class="row-odd"><td><p>texture_GLRLM_features</p></td>
 <td><p>If True, use GLRLM texture features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_GLSZM_features</p></td>
+<tr class="row-even"><td><p>texture_GLSZM_features</p></td>
 <td><p>If True, use GLSZM texture features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_GLDZM_features</p></td>
+<tr class="row-odd"><td><p>texture_GLDZM_features</p></td>
 <td><p>If True, use GLDZM texture features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_NGTDM_features</p></td>
+<tr class="row-even"><td><p>texture_NGTDM_features</p></td>
 <td><p>If True, use NGTDM texture features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_NGLDM_features</p></td>
+<tr class="row-odd"><td><p>texture_NGLDM_features</p></td>
 <td><p>If True, use NGLDM texture features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_LBP_features</p></td>
+<tr class="row-even"><td><p>texture_LBP_features</p></td>
 <td><p>If True, use LBP texture features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>patient_features</p></td>
+<tr class="row-odd"><td><p>patient_features</p></td>
 <td><p>If True, use patient features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>semantic_features</p></td>
+<tr class="row-even"><td><p>semantic_features</p></td>
 <td><p>If True, use semantic features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>coliage_features</p></td>
+<tr class="row-odd"><td><p>coliage_features</p></td>
 <td><p>If True, use coliage features in model.</p></td>
-</tr>
-<tr class="row-odd"><td><p>log_features</p></td>
-<td><p>If True, use log features in model.</p></td>
 </tr>
 <tr class="row-even"><td><p>vessel_features</p></td>
 <td><p>If True, use vessel features in model.</p></td>
@@ -1024,17 +1027,26 @@ recommended, and looks as follows:</p>
 <tr class="row-even"><td><p>rgrd_features</p></td>
 <td><p>If True, use rgrd features in model.</p></td>
 </tr>
+<tr class="row-odd"><td><p>toolbox</p></td>
+<td><p>WIP</p></td>
+</tr>
+<tr class="row-even"><td><p>original_features</p></td>
+<td><p>WIP</p></td>
+</tr>
 <tr class="row-odd"><td><p>wavelet_features</p></td>
 <td><p>If True, use wavelet features in model.</p></td>
+</tr>
+<tr class="row-even"><td><p>log_features</p></td>
+<td><p>If True, use log features in model.</p></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 52%" />
-<col style="width: 25%" />
-<col style="width: 23%" />
+<col style="width: 51%" />
+<col style="width: 24%" />
+<col style="width: 24%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -1063,47 +1075,47 @@ recommended, and looks as follows:</p>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_GLCMMS_features</p></td>
+<tr class="row-odd"><td><p>texture_GLDM_features</p></td>
+<td><p>True, False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>texture_GLCMMS_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_GLRLM_features</p></td>
+<tr class="row-odd"><td><p>texture_GLRLM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_GLSZM_features</p></td>
+<tr class="row-even"><td><p>texture_GLSZM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_GLDZM_features</p></td>
+<tr class="row-odd"><td><p>texture_GLDZM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_NGTDM_features</p></td>
+<tr class="row-even"><td><p>texture_NGTDM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_NGLDM_features</p></td>
+<tr class="row-odd"><td><p>texture_NGLDM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_LBP_features</p></td>
+<tr class="row-even"><td><p>texture_LBP_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>patient_features</p></td>
+<tr class="row-odd"><td><p>patient_features</p></td>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>semantic_features</p></td>
+<tr class="row-even"><td><p>semantic_features</p></td>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>coliage_features</p></td>
-<td><p>False</p></td>
-<td><p>Boolean(s)</p></td>
-</tr>
-<tr class="row-odd"><td><p>log_features</p></td>
+<tr class="row-odd"><td><p>coliage_features</p></td>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
@@ -1127,7 +1139,19 @@ recommended, and looks as follows:</p>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
+<tr class="row-odd"><td><p>toolbox</p></td>
+<td><p>All</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-even"><td><p>original_features</p></td>
+<td><p>True</p></td>
+<td><p>True</p></td>
+</tr>
 <tr class="row-odd"><td><p>wavelet_features</p></td>
+<td><p>False</p></td>
+<td><p>Boolean(s)</p></td>
+</tr>
+<tr class="row-even"><td><p>log_features</p></td>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
@@ -1853,7 +1877,7 @@ performing workflow.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="file_description.html" class="btn btn-neutral float-right" title="Resource File Formats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="additionalfunctionality.html" class="btn btn-neutral float-right" title="Additional functionality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="user_manual.html" class="btn btn-neutral float-left" title="User Manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

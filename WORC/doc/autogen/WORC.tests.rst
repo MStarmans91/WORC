@@ -19,3 +19,12 @@ tests Package
     :show-inheritance:
     :special-members:
 
+:mod:`test_iccthreshold` Module
+-------------------------------
+
+.. automodule:: WORC.tests.test_iccthreshold
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+

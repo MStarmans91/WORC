@@ -15,8 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
 from sklearn.model_selection._validation import _fit_and_score
 import numpy as np
 from sklearn.linear_model import Lasso
@@ -28,7 +27,6 @@ from sklearn.ensemble import RandomForestClassifier
 from imblearn.over_sampling import SMOTE, RandomOverSampler
 from sklearn.utils import check_random_state
 import random
-import ast
 from sklearn.metrics import make_scorer, average_precision_score
 from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
@@ -227,6 +225,8 @@ def fit_and_score(X, y, scoring,
 
         if para_estimator['FeatureScaling'] == 'z_score':
             scaler = StandardScaler().fit(feature_values)
+        elif para_estimator['FeatureScaling'] == 'robust':
+            scaler = RobustScaler().fit(feature_values)
         elif para_estimator['FeatureScaling'] == 'minmax':
             scaler = MinMaxScaler().fit(feature_values)
 

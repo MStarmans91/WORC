@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,7 @@ class boolean_uniform():
 
     Note: as Booleans cannot be saved in JSOn, which WORC later does, this
     object returns strings.
-    
+
     '''
     def __init__(self, loc=0, scale=1, threshold=0.5):
         self.loc = loc

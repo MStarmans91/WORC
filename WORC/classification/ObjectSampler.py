@@ -38,6 +38,7 @@ class ObjectSampler(object):
                  SMOTE_neighbors=5,
                  n_jobs=1,
                  n_neighbors=3,
+                 threshold_cleaning=0.5
                  ):
         """Initialize object."""
         # Initialize a random state
@@ -56,13 +57,16 @@ class ObjectSampler(object):
         elif method == 'NearMiss':
             self.init_NearMiss(sampling_strategy, n_neighbors, n_jobs)
         elif method == 'NeigbourhoodCleaningRule':
-            self.init_NeigbourhoodCleaningRule()
+            self.init_NeigbourhoodCleaningRule(sampling_strategy, n_neighbors,
+                                               n_jobs, threshold_cleaning)
         elif method == 'RandomOverSampling':
             self.init_RandomOverSampling(sampling_strategy)
         elif method == 'ADASYN':
             self.init_ADASYN()
         elif method == 'BorderlineSMOTE':
             self.init_BorderlineSMOTE()
+        elif method == 'SMOTE':
+            self.init_SMOTE()
         elif method == 'SMOTEENN':
             self.init_SMOTEENN()
         elif method == 'SMOTETomek':
@@ -76,15 +80,26 @@ class ObjectSampler(object):
                                                         random_state=self.random_state)
         self.sampling_strategy = sampling_strategy
 
-    def init_NearMiss(self, sampling_strategy, n_neighbors, n_jobs):
+    def init_NearMiss(self, sampling_strategy, n_jobs):
         """Creata a near miss sampler object."""
         self.object = under_sampling.NearMiss(sampling_strategy=sampling_strategy,
                                               random_state=self.random_state,
-                                              n_neighbors=n_neighbors,
                                               n_jobs=n_jobs)
 
         self.sampling_strategy = sampling_strategy
-        self.n_neighbors = n_neighbors
+        self.n_jobs = n_jobs
+
+    def init_NeigbourhoodCleaningRule(self, sampling_strategy, n_neighbors,
+                                      n_jobs, threshold_cleaning):
+        """Creata a NeigbourhoodCleaningRule sampler object."""
+        self.object =\
+            under_sampling.NeigbourhoodCleaningRule(sampling_strategy=sampling_strategy,
+                                                    random_state=self.random_state,
+                                                    threshold_cleaning=threshold_cleaning,
+                                                    n_jobs=n_jobs)
+
+        self.sampling_strategy = sampling_strategy
+        self.threshold_cleaning = threshold_cleaning
         self.n_jobs = n_jobs
 
     def init_RandomOverSampling(self, sampling_strategy):
@@ -92,6 +107,33 @@ class ObjectSampler(object):
         self.object = over_sampling.RandomOverSampler(sampling_strategy=sampling_strategy,
                                                       random_state=self.random_state)
         self.sampling_strategy = sampling_strategy
+
+    def init_ADASYN(self, sampling_strategy, ratio, n_neighbors, n_jobs):
+        """Creata a ADASYN sampler object."""
+        self.object = over_sampling.ADASYN(sampling_strategy=sampling_strategy,
+                                           random_state=self.random_state,
+                                           ratio=ratio,
+                                           n_neighbors=n_neighbors,
+                                           n_jobs=n_jobs)
+
+        self.sampling_strategy = sampling_strategy
+        self.ratio = ratio
+        self.n_neighbors = n_neighbors
+        self.n_jobs = n_jobs
+
+    def init_BorderlineSMOTE(self, ratio, k_neighbors, kind, n_jobs):
+        """Creata a BorderlineSMOTE sampler object."""
+        self.object =\
+            over_sampling.BorderlineSMOTE(random_state=self.random_state,
+                                          ratio=ratio,
+                                          k_neighbors=k_neighbors,
+                                          kind=kind,
+                                          n_jobs=n_jobs)
+
+        self.ratio = ratio
+        self.k_neighbors = k_neighbors
+        self.kind = kind
+        self.n_jobs = n_jobs
 
     def init_SMOTE(self, ratio, k_neighbors, kind, n_jobs):
         """Creata a SMOTE sampler object."""
@@ -102,6 +144,21 @@ class ObjectSampler(object):
                    n_jobs=n_jobs)
 
         self.object = sm
+
+        self.ratio = ratio
+        self.k_neighbors = k_neighbors
+        self.kind = kind
+        self.n_jobs = n_jobs
+
+    def init_SMOTEEN(self, ratio, k_neighbors, kind, n_jobs):
+        """Creata a SMOTEEN sampler object."""
+        self.object =\
+            combine.SMOTEENN(random_state=self.random_state,
+                                          ratio=ratio,
+                                          k_neighbors=k_neighbors,
+                                          kind=kind,
+                                          n_jobs=n_jobs)
+
 
         self.ratio = ratio
         self.k_neighbors = k_neighbors

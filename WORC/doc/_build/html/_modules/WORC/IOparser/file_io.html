@@ -88,6 +88,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
@@ -270,7 +273,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Use filenames as patient ID s</span>
         <span class="n">patient_IDs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">featurefiles</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">featurefiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="n">patient_IDs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
         <span class="n">label_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">patient_IDs</span>
@@ -338,14 +341,43 @@
     <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="c1"># Take out the specific PyRadiomics values</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-        <span class="n">outputconfig</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;geometryTolerance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;geometryTolerance&#39;</span><span class="p">])</span>
+
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">])</span>
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;normalizeScale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalizeScale&#39;</span><span class="p">])</span>
+
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;interpolator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;interpolator&#39;</span><span class="p">]</span>
+
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">])</span>
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">])</span>
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;force2Ddimension&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2Ddimension&#39;</span><span class="p">])</span>
+
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;voxelArrayShift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;voxelArrayShift&#39;</span><span class="p">])</span>
+
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;binCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;binCount&#39;</span><span class="p">])</span>
 
     <span class="c1"># Extract several general values as well</span>
-    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;distances&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;GLCM_distances&#39;</span><span class="p">]</span>
+    <span class="c1"># Convert strings with values to list of ints</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;GLCM_distances&#39;</span><span class="p">]</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">distances</span><span class="p">]</span>
+    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;distances&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distances</span>
 
-    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;imageType&#39;</span><span class="p">][</span><span class="s1">&#39;LoG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;imageType&#39;</span><span class="p">][</span><span class="s1">&#39;LoG&#39;</span><span class="p">][</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;log_sigma&#39;</span><span class="p">]</span>
+    <span class="c1"># Check if we need to apply transforms to the image</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;Original&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;imageType&#39;</span><span class="p">][</span><span class="s1">&#39;Original&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;Wavelet&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;imageType&#39;</span><span class="p">][</span><span class="s1">&#39;Wavelet&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;LoG&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;imageType&#39;</span><span class="p">][</span><span class="s1">&#39;LoG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;log_sigma&#39;</span><span class="p">]</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">sigmas</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sigmas</span><span class="p">]</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;imageType&#39;</span><span class="p">][</span><span class="s1">&#39;LoG&#39;</span><span class="p">][</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmas</span>
 
     <span class="k">return</span> <span class="n">outputconfig</span></div>
 </pre></div>

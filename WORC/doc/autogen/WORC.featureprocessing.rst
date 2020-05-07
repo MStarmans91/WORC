@@ -28,6 +28,24 @@ featureprocessing Package
     :show-inheritance:
     :special-members:
 
+:mod:`FeatureConverter` Module
+------------------------------
+
+.. automodule:: WORC.featureprocessing.FeatureConverter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`ICCThreshold` Module
+--------------------------
+
+.. automodule:: WORC.featureprocessing.ICCThreshold
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`Imputer` Module
 ---------------------
 

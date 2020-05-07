@@ -646,12 +646,14 @@ class WORC(object):
                         feature_calculators = feature_calculators.strip('][').split(', ')
                         self.featurecalculators[label] = [f.split('/')[0] for f in feature_calculators]
 
+                        # Add lists for feature calculation and converter objects
+                        self.calcfeatures_train[label] = list()
+                        self.featureconverter_train[label] = list()
+                        if self.images_test or self.features_test:
+                            self.calcfeatures_test[label] = list()
+                            self.featureconverter_test[label] = list()
+
                         for f in feature_calculators:
-                            self.calcfeatures_train[label] = list()
-                            self.featureconverter_train[label] = list()
-                            if self.images_test or self.features_test:
-                                self.calcfeatures_test[label] = list()
-                                self.featureconverter_test[label] = list()
                             print(f'\t - Adding feature calculation node: {f}.')
                             self.add_feature_calculator(f, label, nmod)
 
@@ -743,7 +745,8 @@ class WORC(object):
                             self.sinks_features_train[label].append(self.network.create_sink('HDF5', id='features_train_' + label + '_' + fname))
 
                             # Append features to the classification
-                            self.links_C1_train[label].append(self.classify.inputs['features_train'][str(label)] << self.featureconverter_train[label][i_node].outputs['feat_out'])
+                            self.featureconverter_train[label][i_node]
+                            self.links_C1_train[label].append(self.classify.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
                             self.links_C1_train[label][i_node].collapse = 'train'
 
                             # Save output
@@ -938,7 +941,7 @@ class WORC(object):
 
         self.source_toolbox_name[label] =\
             self.network.create_constant('String', toolbox,
-                                         id='toolbox_name_' + label)
+                                         id=f'toolbox_name_{toolbox}_{label}')
 
         conv_train.inputs['toolbox'] = self.source_toolbox_name[label].output
         conv_train.inputs['config'] = self.sources_parameters[label].output

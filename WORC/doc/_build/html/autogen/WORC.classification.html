@@ -90,6 +90,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
 </ul>
@@ -103,7 +106,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">classification Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classification</span></code> Package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.AdvancedSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">AdvancedSampler</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.ObjectSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#objectsampler-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.RankedSVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.SearchCV"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.construct_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">construct_classifier</span></code> Module</a></li>
@@ -429,65 +432,8 @@ object returns strings.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-WORC.classification.ObjectSampler">
-<span id="objectsampler-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module<a class="headerlink" href="#module-WORC.classification.ObjectSampler" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler">
-<em class="property">class </em><code class="sig-prename descclassname">WORC.classification.ObjectSampler.</code><code class="sig-name descname">ObjectSampler</code><span class="sig-paren">(</span><em class="sig-param">method</em>, <em class="sig-param">sampling_strategy='auto'</em>, <em class="sig-param">SMOTE_ratio=1</em>, <em class="sig-param">SMOTE_neighbors=5</em>, <em class="sig-param">n_jobs=1</em>, <em class="sig-param">n_neighbors=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Samples objects for learning based on various under-, over- and combined sampling methods.</p>
-<p>The choice of included methods is largely based on:</p>
-<p>He, Haibo, and Edwardo A. Garcia. “Learning from imbalanced data.”
-IEEE Transactions on Knowledge &amp; Data Engineering 9 (2008): 1263-1284.</p>
-<dl class="attribute">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.__dict__">
-<code class="sig-name descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.classification.ObjectSampler', '__doc__': '\n    Samples objects for learning based on various under-, over- and combined sampling methods.\n\n    The choice of included methods is largely based on:\n\n    He, Haibo, and Edwardo A. Garcia. &quot;Learning from imbalanced data.&quot;\n    IEEE Transactions on Knowledge &amp; Data Engineering 9 (2008): 1263-1284.\n\n\n    ', '__init__': &lt;function ObjectSampler.__init__&gt;, 'init_RandomUnderSampling': &lt;function ObjectSampler.init_RandomUnderSampling&gt;, 'init_NearMiss': &lt;function ObjectSampler.init_NearMiss&gt;, 'init_RandomOverSampling': &lt;function ObjectSampler.init_RandomOverSampling&gt;, 'init_SMOTE': &lt;function ObjectSampler.init_SMOTE&gt;, 'fit': &lt;function ObjectSampler.fit&gt;, '__dict__': &lt;attribute '__dict__' of 'ObjectSampler' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'ObjectSampler' objects&gt;})</em><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.__dict__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">method</em>, <em class="sig-param">sampling_strategy='auto'</em>, <em class="sig-param">SMOTE_ratio=1</em>, <em class="sig-param">SMOTE_neighbors=5</em>, <em class="sig-param">n_jobs=1</em>, <em class="sig-param">n_neighbors=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.__module__">
-<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.classification.ObjectSampler'</em><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.__weakref__">
-<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.init_NearMiss">
-<code class="sig-name descname">init_NearMiss</code><span class="sig-paren">(</span><em class="sig-param">sampling_strategy</em>, <em class="sig-param">n_neighbors</em>, <em class="sig-param">n_jobs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.init_NearMiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.init_NearMiss" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.init_RandomOverSampling">
-<code class="sig-name descname">init_RandomOverSampling</code><span class="sig-paren">(</span><em class="sig-param">sampling_strategy</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.init_RandomOverSampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.init_RandomOverSampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.init_RandomUnderSampling">
-<code class="sig-name descname">init_RandomUnderSampling</code><span class="sig-paren">(</span><em class="sig-param">sampling_strategy</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.init_RandomUnderSampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.init_RandomUnderSampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.init_SMOTE">
-<code class="sig-name descname">init_SMOTE</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.init_SMOTE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.init_SMOTE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="objectsampler-module">
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module<a class="headerlink" href="#objectsampler-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-WORC.classification.RankedSVM">
 <span id="rankedsvm-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module<a class="headerlink" href="#module-WORC.classification.RankedSVM" title="Permalink to this headline">¶</a></h2>
@@ -2267,10 +2213,10 @@ the fitted object.</p>
 <dt>ReliefSel: WORC ReliefSel Object</dt><dd><p>Either None if the RELIEF feature selection is not used, or
 the fitted object.</p>
 </dd>
-<dt>sm: WORC SMOTE Object</dt><dd><p>Either None if the SMOTE oversampling is not used, or
+<dt>Snote: WORC SMOTE Object</dt><dd><p>Either None if the SMOTE oversampling is not used, or
 the fitted object.</p>
 </dd>
-<dt>ros: WORC ROS Object</dt><dd><p>Either None if Random Oversampling is not used, or
+<dt>RandOverSample: WORC RandomOverSampler Object</dt><dd><p>Either None if Random Oversampling is not used, or
 the fitted object.</p>
 </dd>
 </dl>

@@ -33,6 +33,7 @@ Added
 - Added groupwise feature selection per feature extraction toolbox.
 - Feature converter tool, to convert features from a toolbox to WORC compatible
   format.
+- RobustScaler for feature scaling.
 
 Changed
 ~~~~~~~
