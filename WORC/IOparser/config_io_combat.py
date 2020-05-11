@@ -55,4 +55,11 @@ def load_config(config_file_path):
     settings_dict['ComBat']['matlab'] =\
         str(settings['ComBat']['matlab'])
 
+    settings_dict['ComBat']['per_feature'] =\
+        int(settings['ComBat']['per_feature'])
+
+    settings_dict['ComBat']['excluded_features'] =\
+        [str(item).strip() for item in
+         settings['ComBat']['excluded_features'].split(',')]
+
     return settings_dict

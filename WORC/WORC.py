@@ -286,12 +286,12 @@ class WORC(object):
         config['Featsel']['Variance'] = '1.0'
         config['Featsel']['GroupwiseSearch'] = 'True'
         config['Featsel']['SelectFromModel'] = '0.0'
-        config['Featsel']['UsePCA'] = '0.0'
+        config['Featsel']['UsePCA'] = '0.25'
         config['Featsel']['PCAType'] = '95variance, 50, 100'
-        config['Featsel']['StatisticalTestUse'] = '0.0'
+        config['Featsel']['StatisticalTestUse'] = '0.25'
         config['Featsel']['StatisticalTestMetric'] = 'MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '-3, 2.5'
-        config['Featsel']['ReliefUse'] = '0.0'
+        config['Featsel']['ReliefUse'] = '0.25'
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '1, 1'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
@@ -332,7 +332,7 @@ class WORC(object):
 
         # Feature imputation
         config['Imputation'] = dict()
-        config['Imputation']['use'] = 'False'
+        config['Imputation']['use'] = 'True'
         config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
         config['Imputation']['n_neighbors'] = '5, 5'
 
@@ -340,7 +340,7 @@ class WORC(object):
         config['Classification'] = dict()
         config['Classification']['fastr'] = 'True'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
-        config['Classification']['classifiers'] = 'SVM'
+        config['Classification']['classifiers'] = 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'
         config['Classification']['max_iter'] = '100000'
         config['Classification']['SVMKernel'] = 'poly, rbf, linear'
         config['Classification']['SVMC'] = '0, 6'
@@ -400,7 +400,7 @@ class WORC(object):
 
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Use'] = '1'
+        config['Ensemble']['Use'] = '50'
 
         # Evaluation options
         config['Evaluation'] = dict()

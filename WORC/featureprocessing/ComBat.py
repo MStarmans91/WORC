@@ -32,11 +32,14 @@ from sklearn.preprocessing import StandardScaler
 def ComBat(features_train_in, labels_train, config, features_train_out,
            features_test_in=None, labels_test=None, features_test_out=None,
            VarianceThreshold=True, scaler=False):
-    '''
-    Apply ComBat feature harmonization. Based on: https://github.com/Jfortin1/ComBatHarmonization
-    '''
+    """
+    Apply ComBat feature harmonization.
+
+    Based on: https://github.com/Jfortin1/ComBatHarmonization
+    """
     # Load the config
     config = cio.load_config(config)
+    excluded_features = config['ComBat']['excluded_features']
 
     # If mod, than also load moderating labels
     if config['ComBat']['mod'][0] == '[]':
@@ -51,6 +54,18 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
     feature_labels = image_features_train[0][1]
     image_features_train = [i[0] for i in image_features_train]
+
+    # Exclude features
+    if excluded_features:
+        # Determine indices of excluded features
+        included_feature_indices = []
+        for fnum, i in enumerate(feature_labels):
+            if not any(e in i for e in excluded_features):
+                included_feature_indices.append(fnum)
+
+        # Actually exclude the features
+        image_features_train = [np.asarray(i)[included_feature_indices].tolist() for i in image_features_train]
+        feature_labels = np.asarray(feature_labels)[included_feature_indices].tolist()
 
     # Apply a scaler to the features
     if scaler:
@@ -69,6 +84,10 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                               label_type=label_names)
 
         image_features_test = [i[0] for i in image_features_test]
+
+        if excluded_features:
+            image_features_test = [np.asarray(i)[included_feature_indices].tolist() for i in image_features_test]
+
         if scaler:
             image_features_test = scaler.transform(image_features_test)
 
@@ -105,8 +124,10 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     # Run ComBatin Matlab
     data_harmonized = ComBatMatlab(dat=all_features_matrix,
                                    batch=batch,
+                                   command=config['ComBat']['matlab'],
                                    mod=mod,
-                                   par=config['ComBat']['par'])
+                                   par=config['ComBat']['par'],
+                                   per_feature=config['ComBat']['per_feature'])
 
     # Convert again to train hdf5 files
     parameters = {'batch': config['ComBat']['batch'],
@@ -144,7 +165,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
             panda_data.to_hdf(features_test_out[fnum], 'image_features')
 
 
-def ComBatMatlab(dat, batch, mod=None, par=0):
+def ComBatMatlab(dat, batch, command, mod=None, par=1, per_feature='true'):
     '''
     Run the ComBat Function Matlab script.
 
@@ -174,7 +195,8 @@ def ComBatMatlab(dat, batch, mod=None, par=0):
             'datvar': dat,
             'batchvar': batch,
             'modvar': mod,
-            'parvar': par
+            'parvar': par,
+            'per_feature': per_feature
             }
 
     sio.savemat(tempfile_in, dict)
@@ -190,10 +212,11 @@ def ComBatMatlab(dat, batch, mod=None, par=0):
     elif platform == "win32":
         commandseparator = ' & '
 
-    regcommand = ('cd ' + this_folder + commandseparator +
-                  '"/cm/shared/apps/matlab/R2015b/bin/matlab" -nodesktop -nosplash -nojvm -r "combatmatlab(' + "'" + str(tempfile_in) + "'" + ')"' +
+    # BIGR Cluster: /cm/shared/apps/matlab/R2015b/bin/matlab
+    regcommand = ('cd "' + this_folder + '"' + commandseparator +
+                  '"' + command + '" -nodesktop -nosplash -nojvm -r "combatmatlab(' + "'" + str(tempfile_in) + "'" + ')"' +
                   commandseparator +
-                  'cd ' + currentdir)
+                  'cd "' + currentdir + '"')
     print(f'Executing ComBat in Matlab through command: {regcommand}.')
     proc = subprocess.Popen(regcommand,
                             shell=True,

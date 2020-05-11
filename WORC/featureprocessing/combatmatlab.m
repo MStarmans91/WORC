@@ -29,7 +29,19 @@ try
     addpath(genpath(ComBatFolder))
 
     % Run Combat
-    data_harmonized = combat(datvar, batchvar, modvar, parvar);
+    if per_feature
+        % Per feature
+        data_size = size(datvar);
+        data_harmonized = zeros(data_size);
+        for i_feat = 1:data_size(1);
+            new_feat = combat(datvar(i_feat, :), batchvar, modvar, parvar);
+            data_harmonized(i_feat, :) = new_feat;
+        end
+    else
+        % Over all features together
+        data_harmonized = combat(datvar, batchvar, modvar, parvar);
+
+    end
 
     % Write Output .mat file
     save(output, 'data_harmonized')
@@ -37,7 +49,7 @@ catch exception
     % Error, write error message as output
     disp(exception)
     disp(output)
-    message = exception.message; 
+    message = exception.message;
     save(output, 'message')
 end
 

@@ -508,8 +508,9 @@ def fit_and_score(X, y, scoring,
             feature_values = pca.transform(feature_values)
 
         else:
-            # Assume a fixed number of components
-            n_components = int(para_estimator['PCAType'])
+            # Assume a fixed number of components: cannot be larger than
+            # n_samples
+            n_components = min(len(feature_values), int(para_estimator['PCAType']))
 
             if n_components >= len(feature_values[0]):
                 print(f"[WORC WARNING] PCA n_components ({n_components})> n_features ({len(feature_values[0])}): skipping PCA.")
