@@ -38,6 +38,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     Based on: https://github.com/Jfortin1/ComBatHarmonization
     """
     # Load the config
+    print('Initializing ComBat.')
     config = cio.load_config(config)
     excluded_features = config['ComBat']['excluded_features']
 
@@ -57,6 +58,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
     # Exclude features
     if excluded_features:
+        print(f'\t Excluding features containing: {excluded_features}')
         # Determine indices of excluded features
         included_feature_indices = []
         excluded_feature_indices = []
@@ -75,21 +77,23 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
     else:
         image_features_train_combat = image_features_train
-        feature_labels_combat = feature_labels
+        feature_labels_combat = feature_labels.tolist()
 
         image_features_train_noncombat = []
         feature_labels_noncombat = []
 
     # Apply a scaler to the features
     if scaler:
-        scaler = StandardScaler().fit(image_features_train)
-        image_features_train = scaler.transform(image_features_train)
+        print('\t Fitting scaler on dataset.')
+        scaler = StandardScaler().fit(image_features_train_combat)
+        image_features_train_combat = scaler.transform(image_features_train_combat)
 
     # Remove features with a constant value
     if VarianceThreshold:
-        image_features_train, feature_labels, VarSel =\
-            selfeat_variance(image_features_train, np.asarray([feature_labels]))
-        feature_labels = feature_labels[0]
+        print(f'\t Applying variance threshold on dataset.')
+        image_features_train_combat, feature_labels_combat, VarSel =\
+            selfeat_variance(image_features_train_combat, np.asarray([feature_labels_combat]))
+        feature_labels_combat = feature_labels_combat[0].tolist()
 
     if features_test_in:
         label_data_test, image_features_test =\
@@ -107,11 +111,11 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
         # Apply a scaler to the features
         if scaler:
-            image_features_test = scaler.transform(image_features_test)
+            image_features_test_combat = scaler.transform(image_features_test_combat)
 
         # Remove features with a constant value
         if VarianceThreshold:
-            image_features_test = VarSel.transform(image_features_test)
+            image_features_test_combat = VarSel.transform(image_features_test_combat)
 
         all_features = image_features_train_combat.tolist() + image_features_test_combat.tolist()
         all_labels = list()
@@ -157,11 +161,12 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                     'feature_values',
                     'feature_labels']
 
-    feature_values_train_combat = [data_harmonized[i] for i in range(len(image_features_train))]
+    feature_values_train_combat = [data_harmonized[i] for i in range(len(image_features_train_combat))]
+    print(len(feature_values_train_combat))
     feature_labels = feature_labels_combat + feature_labels_noncombat
     for fnum, i_feat in enumerate(feature_values_train_combat):
         # Combine ComBat and non-ComBat features
-        feature_values_temp = i_feat + image_features_train_noncombat[i]
+        feature_values_temp = i_feat.tolist() + image_features_train_noncombat[fnum]
 
         # Sort based on feature label
         feature_labels_temp, feature_values_temp =\
@@ -179,10 +184,10 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
     # Repeat for testing if required
     if features_test_in:
-        feature_values_test_combat = [d for d in data_harmonized[len(image_features_test):]]
+        feature_values_test_combat = [d for d in data_harmonized[-len(image_features_test_combat):]]
         for fnum, i_feat in enumerate(feature_values_test_combat):
             # Combine ComBat and non-ComBat features
-            feature_values_temp = i_feat + image_features_test_noncombat[i]
+            feature_values_temp = i_feat.tolist() + image_features_test_noncombat[fnum]
 
             # Sort based on feature label
             feature_labels_temp, feature_values_temp =\
