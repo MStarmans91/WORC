@@ -197,7 +197,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
     # Repeat for testing if required
     if features_test_in:
-        feature_values_test_combat = [data_harmonized[:, i] for i in range(-len(image_features_test_combat), data_harmonized.shape[1])]
+        feature_values_test_combat = [data_harmonized[:, i] for i in range(data_harmonized.shape[1] - len(image_features_test_combat), data_harmonized.shape[1])]
         for fnum, i_feat in enumerate(feature_values_test_combat):
             # Combine ComBat and non-ComBat features
             feature_values_temp = i_feat.tolist() + image_features_test_noncombat[fnum]
@@ -231,7 +231,7 @@ def ComBatPython(dat, batch, mod=None, par=1,
     if mod is not None:
         for i_mod in range(mod.shape[1]):
             label = f'mod_{i_mod}'
-            covars[label] = mod[:, i_mod][0]
+            covars[label] = [m for m in mod[:, i_mod]]
             categorical_cols.append(label)
 
     covars = pd.DataFrame(covars)

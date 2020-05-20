@@ -512,11 +512,14 @@ class WORC(object):
 
                 if not self.features_train:
                     # Create nodes to compute features
+                    # General
                     self.sources_parameters = dict()
                     self.source_config_pyradiomics = dict()
+                    self.source_toolbox_name = dict()
+
+                    # Training only
                     self.calcfeatures_train = dict()
                     self.featureconverter_train = dict()
-                    self.source_toolbox_name = dict()
                     self.preprocessing_train = dict()
                     self.sources_images_train = dict()
                     self.sinks_features_train = dict()
@@ -528,13 +531,15 @@ class WORC(object):
 
                     if self.images_test or self.features_test:
                         # A test set is supplied, for which nodes also need to be created
-                        self.preprocessing_test = dict()
                         self.calcfeatures_test = dict()
                         self.featureconverter_test = dict()
+                        self.preprocessing_test = dict()
                         self.sources_images_test = dict()
+                        self.sinks_features_test = dict()
                         self.converters_im_test = dict()
                         self.converters_seg_test = dict()
                         self.links_C1_test = dict()
+
 
                     # Check which nodes are necessary
                     if not self.segmentations_train:
@@ -610,7 +615,6 @@ class WORC(object):
                         self.sources_images_train[label] = self.network.create_source('ITKImageFile', id='images_train_' + label, node_group='train')
                         if self.images_test or self.features_test:
                             self.sources_images_test[label] = self.network.create_source('ITKImageFile', id='images_test_' + label, node_group='test')
-                            self.sinks_features_test[label] = self.network.create_sink('HDF5', id='features_test_' + label)
 
                         if self.metadata_train and len(self.metadata_train) >= nmod + 1:
                             self.sources_metadata_train[label] = self.network.create_source('DicomImageFile', id='metadata_train_' + label, node_group='train')
@@ -760,7 +764,6 @@ class WORC(object):
                             self.sinks_features_train[label].append(self.network.create_sink('HDF5', id='features_train_' + label + '_' + fname))
 
                             # Append features to the classification
-                            self.featureconverter_train[label][i_node]
                             self.links_C1_train[label].append(self.classify.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
                             self.links_C1_train[label][i_node].collapse = 'train'
 
@@ -770,7 +773,7 @@ class WORC(object):
                             # Similar for testing workflow
                             if self.images_test or self.features_test:
                                 self.sinks_features_test[label].append(self.network.create_sink('HDF5', id='features_test_' + label + '_' + fname))
-                                self.links_C1_test[label].append(self.classify.inputs['features_test'][str(label)] << self.featureconverter_test[label][i_node].outputs['feat_out'])
+                                self.links_C1_test[label].append(self.classify.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
                                 self.links_C1_test[label][i_node].collapse = 'test'
                                 self.sinks_features_test[label][i_node].input = self.featureconverter_test[label][i_node].outputs['feat_out']
 
