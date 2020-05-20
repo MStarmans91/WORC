@@ -140,6 +140,10 @@ class ConfigBuilder():
                     'texture_GLRLM': 'False',
                     'texture_NGTDM': 'False',
                 },
+                'PyRadiomics': {
+                    'Wavelet': 'False',
+                    'LoG': 'False'
+                },
                 'SelectFeatGroup': {
                     'texture_Gabor_features': 'False',
                     'log_features': 'False',

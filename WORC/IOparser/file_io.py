@@ -171,9 +171,9 @@ def load_features(feat, patientinfo, label_type):
 
 
 def convert_config_pyradiomics(config):
-    '''
+    """
     Convert fields from WORC confiparser object to a PyRadiomics compatible dictionary
-    '''
+    """
     # Creatae main config structure
     outputconfig = dict()
     outputconfig['imageType'] = dict()

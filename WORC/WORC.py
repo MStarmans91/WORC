@@ -338,7 +338,7 @@ class WORC(object):
         config['SelectFeatGroup']['rgrd_features'] = 'False'
 
         # Select features per toolbox, or simply all
-        config['SelectFeatGroup']['toolbox'] = 'All'
+        config['SelectFeatGroup']['toolbox'] = 'All, PREDICT, PyRadiomics'
 
         # Select original features, or after transformation of feature space
         config['SelectFeatGroup']['original_features'] = 'True'
