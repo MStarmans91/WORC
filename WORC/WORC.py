@@ -270,7 +270,7 @@ class WORC(object):
         config['PyRadiomics']['interpolator'] = 'sitkBSpline'
         config['PyRadiomics']['preCrop'] = 'True'
         config['PyRadiomics']['binCount'] = config['ImageFeatures']['GLCM_levels'] # BinWidth to sensitive for normalization, thus use binCount
-        config['PyRadiomics']['force2D'] = 'True'
+        config['PyRadiomics']['force2D'] = 'false'
         config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
         config['PyRadiomics']['voxelArrayShift'] = '300'
         config['PyRadiomics']['Original'] = 'True'
