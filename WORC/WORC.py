@@ -188,7 +188,7 @@ class WORC(object):
         config['General']['Joblib_ncores'] = '1'
         config['General']['Joblib_backend'] = 'threading'
         config['General']['tempsave'] = 'False'
-        config['General']['AssumeSameImageAndMaskMetadata'] = 'False'
+        config['General']['AssumeSameImageAndMaskMetadata'] = 'True'
         config['General']['ComBat'] = 'False'
 
         # Segmentix
