@@ -1,6 +1,6 @@
 |Build Status|
 
-WORC v3.1.3
+WORC v3.1.4
 ===========
 
 Workflow for Optimal Radiomics Classification

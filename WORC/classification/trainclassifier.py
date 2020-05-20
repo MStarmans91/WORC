@@ -218,6 +218,10 @@ def trainclassifier(feat_train, patientinfo_train, config,
         discrete_uniform(loc=config['Featsel']['ReliefNumFeatures'][0],
                          scale=config['Featsel']['ReliefNumFeatures'][1])
 
+    # Add a random seed, which is required for many methods
+    param_grid['random_seed'] =\
+        discrete_uniform(loc=0, scale=2**32 - 1)
+
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
     if feat_test is None:

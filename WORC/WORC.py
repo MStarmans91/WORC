@@ -180,8 +180,8 @@ class WORC(object):
         # General configuration of WORC
         config['General'] = dict()
         config['General']['cross_validation'] = 'True'
-        config['General']['Segmentix'] = 'False'
-        config['General']['FeatureCalculators'] = '[predict/CalcFeatures:1.0]'
+        config['General']['Segmentix'] = 'True'
+        config['General']['FeatureCalculators'] = '[predict/CalcFeatures:1.0, pyradiomics/Pyradiomics:1.0]'
         config['General']['Preprocessing'] = 'worc/PreProcess:1.0'
         config['General']['RegistrationNode'] = "'elastix4.8/Elastix:4.8'"
         config['General']['TransformationNode'] = "'elastix4.8/Transformix:4.8'"
@@ -189,6 +189,7 @@ class WORC(object):
         config['General']['Joblib_backend'] = 'threading'
         config['General']['tempsave'] = 'False'
         config['General']['AssumeSameImageAndMaskMetadata'] = 'False'
+        config['General']['ComBat'] = 'False'
 
         # Segmentix
         config['Segmentix'] = dict()
@@ -196,7 +197,7 @@ class WORC(object):
         config['Segmentix']['segtype'] = 'None'
         config['Segmentix']['segradius'] = '5'
         config['Segmentix']['N_blobs'] = '1'
-        config['Segmentix']['fillholes'] = 'False'
+        config['Segmentix']['fillholes'] = 'True'
         config['Segmentix']['remove_small_objects'] = 'False'
         config['Segmentix']['min_object_size'] = '2'
 
@@ -227,7 +228,7 @@ class WORC(object):
         config['ImageFeatures']['phase'] = 'False'
 
         # Parameter settings for PREDICT feature calculation
-        # Defines what should be done with the images
+        # Defines only naming of modalities
         config['ImageFeatures']['image_type'] = 'CT'
 
         # Define frequencies for gabor filter in pixels
@@ -261,14 +262,13 @@ class WORC(object):
 
         # PyRadiomics - Feature calculation
         # Addition to the above, specifically for PyRadiomics
-        # Mostly based on Mpecific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml
+        # Mostly based on specific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml
         config['PyRadiomics'] = dict()
         config['PyRadiomics']['geometryTolerance'] = '0.0001'
         config['PyRadiomics']['normalize'] = 'False'
         config['PyRadiomics']['normalizeScale'] = '100'
         config['PyRadiomics']['interpolator'] = 'sitkBSpline'
         config['PyRadiomics']['preCrop'] = 'True'
-        config['PyRadiomics']['label'] = '255'  # Use 255 when not using segmentix
         config['PyRadiomics']['binCount'] = config['ImageFeatures']['GLCM_levels'] # BinWidth to sensitive for normalization, thus use binCount
         config['PyRadiomics']['force2D'] = 'True'
         config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
@@ -276,6 +276,22 @@ class WORC(object):
         config['PyRadiomics']['Original'] = 'True'
         config['PyRadiomics']['Wavelet'] = 'True'
         config['PyRadiomics']['LoG'] = 'True'
+
+        if config['General']['Segmentix'] == 'True':
+            config['PyRadiomics']['label'] = '1'
+        else:
+            config['PyRadiomics']['label'] = '255'
+
+        # ComBat Feature Harmonization
+        config['ComBat'] = dict()
+        config['ComBat']['language'] = 'python'
+        config['ComBat']['batch'] = 'Hospital'
+        config['ComBat']['mod'] = 'Age'
+        config['ComBat']['par'] = '1'
+        config['ComBat']['eb'] = 'true'
+        config['ComBat']['per_feature'] = '0'
+        config['ComBat']['excluded_features'] = 'sf_, of_, semf_, pf_'
+        config['ComBat']['matlab'] = 'C:\\Program Files\\MATLAB\\R2015b\\bin\\matlab.exe'
 
         # Feature preprocessing before all below takes place
         config['FeatPreProcess'] = dict()
@@ -287,7 +303,7 @@ class WORC(object):
         config['Featsel']['GroupwiseSearch'] = 'True'
         config['Featsel']['SelectFromModel'] = '0.0'
         config['Featsel']['UsePCA'] = '0.25'
-        config['Featsel']['PCAType'] = '95variance, 50, 100'
+        config['Featsel']['PCAType'] = '95variance, 10, 50, 100'
         config['Featsel']['StatisticalTestUse'] = '0.25'
         config['Featsel']['StatisticalTestMetric'] = 'MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '-3, 2.5'
@@ -328,7 +344,6 @@ class WORC(object):
         config['SelectFeatGroup']['original_features'] = 'True'
         config['SelectFeatGroup']['wavelet_features'] = 'False'
         config['SelectFeatGroup']['log_features'] = 'False'
-
 
         # Feature imputation
         config['Imputation'] = dict()
@@ -414,6 +429,7 @@ class WORC(object):
         return config
 
     def add_tools(self):
+        """Add several tools to the WORC object."""
         self.Tools = Tools()
 
     def build(self, wtype='training'):
@@ -428,7 +444,6 @@ class WORC(object):
                 - training: use if you want to train a classifier from a dataset.
 
         """
-
         self.wtype = wtype
         if wtype == 'training':
             self.build_training()
@@ -829,9 +844,7 @@ class WORC(object):
             self.preprocessing_test[label].inputs['mask'] = self.sources_masks_normalize_test[label].output
 
     def add_feature_calculator(self, calcfeat_node, label, nmod):
-        '''
-        Add a feature calculation node to the network.
-        '''
+        """Add a feature calculation node to the network."""
         # Name of fastr node has to exclude some specific symbols, which
         # are used in the node name
         node_ID = '_'.join([calcfeat_node.replace(':', '_').replace('.', '_').replace('/', '_'),

@@ -183,7 +183,11 @@ def segmentix(parameters, image=None, segmentation=None,
         print('[Segmentix] Masking contour.')
         if type(mask) is list:
             mask = ''.join(mask)
-        contour = mask_contour(contour, mask, method)
+        new_contour = mask_contour(contour, mask, method)
+        if np.sum(new_contour) == 0:
+            print('\t [WARNING] Contour after masking sums to zero: not applying masking.')
+        else:
+            contour = new_contour
 
     # Convert back to ITK Image with correct meta information
     contour = contour.astype(np.uint8)

@@ -1461,7 +1461,7 @@ class BaseSearchCVfastr(BaseSearchCV):
                        'Probably your fitting and scoring failed: check out ' +
                        'the tmp/fitandscore folder within the tempfolder for ' +
                        'the fastr job temporary results or run: fastr trace ' +
-                       f'{fname}{os.path.sep}__sink_data__.json --samples.')
+                       f'"{fname}{os.path.sep}__sink_data__.json" --samples.')
             raise WORCexceptions.WORCValueError(message)
 
         # Read in the output data once finished

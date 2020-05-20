@@ -21,11 +21,11 @@ from WORC.tests import test_helpers as th
 from WORC.addexceptions import WORCValueError
 from WORC.featureprocessing.ComBat import ComBat
 
+# TODO: Matlab and Python currently do not give the same results!
+
 
 def test_combat():
-    '''
-    Test ComBat feature harmonization.
-    '''
+    """Test ComBat feature harmonization."""
     # Check if example data directory exists
     example_data_dir = th.find_exampledatadir()
 
@@ -43,8 +43,29 @@ def test_combat():
         raise WORCValueError(message)
 
     objectlabels = os.path.join(example_data_dir, 'objectlabels.csv')
-    config = os.path.join(example_data_dir, 'ComBatConfig.ini')
-    features_train_out = [f.replace('examplefeatures_', 'examplefeatures_ComBat_') for f in features]
+
+    # Python
+    config = os.path.join(example_data_dir, 'ComBatConfig_python.ini')
+    features_train_out = [f.replace('examplefeatures_', 'examplefeatures_ComBat_python_') for f in features]
+
+    # # Run the Combat function: only for training
+    ComBat(features_train_in=features,
+           labels_train=objectlabels,
+           config=config,
+           features_train_out=features_train_out)
+
+    # Run the Combat function: now for train + testing
+    ComBat(features_train_in=features[0:4],
+           labels_train=objectlabels,
+           config=config,
+           features_train_out=features_train_out[0:4],
+           features_test_in=features[4:],
+           labels_test=objectlabels,
+           features_test_out=features_train_out[4:])
+
+    # Matlab
+    config = os.path.join(example_data_dir, 'ComBatConfig_matlab.ini')
+    features_train_out = [f.replace('examplefeatures_', 'examplefeatures_ComBat_matlab_') for f in features]
 
     # # Run the Combat function: only for training
     ComBat(features_train_in=features,

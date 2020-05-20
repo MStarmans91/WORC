@@ -305,6 +305,7 @@ def crossval(config, label_data, image_features,
                                                           labels=Y_train,
                                                           param_grid=param_grid,
                                                           n_cores=n_cores,
+                                                          random_seed=random_seed,
                                                           **config['HyperOptimization'])
 
             # Create an ensemble if required

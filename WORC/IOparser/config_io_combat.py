@@ -52,6 +52,12 @@ def load_config(config_file_path):
     settings_dict['ComBat']['par'] =\
         settings['ComBat'].getint('par')
 
+    settings_dict['ComBat']['eb'] =\
+        settings['ComBat'].getint('eb')
+
+    settings_dict['ComBat']['language'] =\
+        str(settings['ComBat']['language'])
+
     settings_dict['ComBat']['matlab'] =\
         str(settings['ComBat']['matlab'])
 

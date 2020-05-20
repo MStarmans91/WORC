@@ -199,6 +199,13 @@ def fit_and_score(X, y, scoring,
     ReliefSel = None
     RandOverSample = None
 
+    if return_train_score:
+        ret = [train_score, test_score, test_sample_counts,
+               fit_time, score_time, para, para]
+    else:
+        ret = [test_score, test_sample_counts,
+               fit_time, score_time, para, para]
+
     # We copy the parameter object so we can alter it and keep the original
     if verbose:
         print("\n")
@@ -212,6 +219,11 @@ def fit_and_score(X, y, scoring,
         scorer = make_scorer(average_precision_score, average='weighted')
 
     para_estimator = delete_cc_para(para_estimator)
+
+    # Get random seed from parameters
+    random_seed = para_estimator['random_seed']
+    random_state = check_random_state(random_seed)
+    del para_estimator['random_seed']
 
     # X is a tuple: split in two arrays
     feature_values = np.asarray([x[0] for x in X])
@@ -325,7 +337,6 @@ def fit_and_score(X, y, scoring,
             print("New Length: " + str(len(feature_values[0])))
         feature_labels = GroupSel.transform(feature_labels)
 
-
     # Delete the object if we do not need to return it
     if not return_all:
         del GroupSel
@@ -339,9 +350,6 @@ def fit_and_score(X, y, scoring,
 
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
-
-        ret = [train_score, test_score, test_sample_counts,
-               fit_time, score_time, para_estimator, para]
 
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
@@ -493,7 +501,7 @@ def fit_and_score(X, y, scoring,
             print("Original Length: " + str(len(feature_values[0])))
         if para_estimator['PCAType'] == '95variance':
             # Select first X components that describe 95 percent of the explained variance
-            pca = PCA(n_components=None)
+            pca = PCA(n_components=None, random_state=random_seed)
             pca.fit(feature_values)
             evariance = pca.explained_variance_ratio_
             num = 0
@@ -503,7 +511,7 @@ def fit_and_score(X, y, scoring,
                 num += 1
 
             # Make a PCA based on the determined amound of components
-            pca = PCA(n_components=num)
+            pca = PCA(n_components=num, random_state=random_seed)
             pca.fit(feature_values)
             feature_values = pca.transform(feature_values)
 
@@ -515,7 +523,7 @@ def fit_and_score(X, y, scoring,
             if n_components >= len(feature_values[0]):
                 print(f"[WORC WARNING] PCA n_components ({n_components})> n_features ({len(feature_values[0])}): skipping PCA.")
             else:
-                pca = PCA(n_components=n_components)
+                pca = PCA(n_components=n_components, random_state=random_seed)
                 pca.fit(feature_values)
                 feature_values = pca.transform(feature_values)
 
@@ -589,7 +597,7 @@ def fit_and_score(X, y, scoring,
 
             # Fit SMOTE object and transform dataset
             # NOTE: need to save random state for this one as well!
-            Smote = SMOTE(random_state=None,
+            Smote = SMOTE(random_state=random_state,
                           ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
                           m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
                           kind='borderline1',
@@ -609,7 +617,6 @@ def fit_and_score(X, y, scoring,
                           f" {neg_initial} neg) to {len(y)} ({pos} pos, {neg} neg) patients."
                 print(message)
 
-    if 'SampleProcessing_SMOTE' in para_estimator.keys():
         del para_estimator['SampleProcessing_SMOTE']
         del para_estimator['SampleProcessing_SMOTE_ratio']
         del para_estimator['SampleProcessing_SMOTE_neighbors']
@@ -631,13 +638,7 @@ def fit_and_score(X, y, scoring,
             # equal number of samples
             if len(y.shape) == 1:
                 # Single Class, use imblearn oversampling
-
-                # Create another random state
-                # NOTE: Also need to save this random seed. Can be same as SMOTE
-                random_seed2 = np.random.randint(5000)
-                random_state2 = check_random_state(random_seed2)
-
-                RandOverSample = RandomOverSampler(random_state=random_state2)
+                RandOverSample = RandomOverSampler(random_state=random_state)
                 feature_values, y = RandOverSample.fit_sample(feature_values, y)
 
             else:
@@ -658,7 +659,6 @@ def fit_and_score(X, y, scoring,
                             feature_values.append(x_sample)
                             noversample -= 1
 
-    if 'SampleProcessing_Oversampling' in para_estimator.keys():
         del para_estimator['SampleProcessing_Oversampling']
 
     # Delete the object if we do not need to return it
@@ -775,6 +775,9 @@ def delete_nonestimator_parameters(parameters):
     if 'SampleProcessing_Oversampling' in parameters.keys():
         del parameters['SampleProcessing_Oversampling']
 
+    if 'random_seed' in parameters.keys():
+        del parameters['random_seed']
+
     return parameters
 
 
@@ -798,9 +801,7 @@ def replacenan(image_features, verbose=True, feature_labels=None):
 
 
 def delete_cc_para(para):
-    '''
-    Delete all parameters that are involved in classifier construction.
-    '''
+    """Delete all parameters that are involved in classifier construction."""
     deletekeys = ['classifiers',
                   'max_iter',
                   'SVMKernel',

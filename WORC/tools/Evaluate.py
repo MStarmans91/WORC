@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,25 +21,24 @@ from fastr.api import ResourceLimit
 import os
 import graphviz
 
-# NOTE: Very important to give images and segmentations as dict with patient names!
-
 
 class Evaluate(object):
+    """Build a network that evaluates the performance of an estimator."""
+
     def __init__(self, label_type, ensemble=50, scores='percentages',
                  parent=None, features=None,
                  fastr_plugin='LinearExecution',
                  name='Example'):
-        '''
-        Build a network that evaluates the performance of an estimator.
+        """
+        Initialize object.
 
         Parameters
         ----------
-
         network: fastr network, default None
                 If you input a network, the evaluate network is added
                 to the existing network.
 
-        '''
+        """
         if parent is not None:
             self.parent = parent
             self.network = parent.network
@@ -64,25 +63,40 @@ class Evaluate(object):
         self.create_network()
 
     def create_network(self):
-        '''
-        Add evaluate components to network.
-        '''
-
+        """Add evaluate components to network."""
         # Create all nodes
         self.node_ROC =\
-            self.network.create_node('worc/PlotROC:1.0', tool_version='1.0', id='plot_ROC', resources=ResourceLimit(memory='4G'))
+            self.network.create_node('worc/PlotROC:1.0', tool_version='1.0',
+                                     id='plot_ROC',
+                                     resources=ResourceLimit(memory='4G'))
         self.node_SVM =\
-            self.network.create_node('worc/PlotSVM:1.0', tool_version='1.0', id='plot_SVM', resources=ResourceLimit(memory='4G'))
+            self.network.create_node('worc/PlotSVM:1.0', tool_version='1.0',
+                                     id='plot_SVM',
+                                     resources=ResourceLimit(memory='4G'))
         self.node_Barchart =\
-            self.network.create_node('worc/PlotBarchart:1.0', tool_version='1.0', id='plot_Barchart', resources=ResourceLimit(memory='4G'))
+            self.network.create_node('worc/PlotBarchart:1.0',
+                                     tool_version='1.0', id='plot_Barchart',
+                                     resources=ResourceLimit(memory='4G'))
         self.node_STest =\
-            self.network.create_node('worc/StatisticalTestFeatures:1.0', tool_version='1.0', id='statistical_test_features', resources=ResourceLimit(memory='4G'))
+            self.network.create_node('worc/StatisticalTestFeatures:1.0',
+                                     tool_version='1.0',
+                                     id='statistical_test_features',
+                                     resources=ResourceLimit(memory='4G'))
         self.node_Ranked_Percentages =\
-            self.network.create_node('worc/PlotRankedScores:1.0', tool_version='1.0', id='plot_ranked_percentages', resources=ResourceLimit(memory='8G'))
+            self.network.create_node('worc/PlotRankedScores:1.0',
+                                     tool_version='1.0',
+                                     id='plot_ranked_percentages',
+                                     resources=ResourceLimit(memory='8G'))
         self.node_Ranked_Posteriors =\
-            self.network.create_node('worc/PlotRankedScores:1.0', tool_version='1.0', id='plot_ranked_posteriors', resources=ResourceLimit(memory='8G'))
+            self.network.create_node('worc/PlotRankedScores:1.0',
+                                     tool_version='1.0',
+                                     id='plot_ranked_posteriors',
+                                     resources=ResourceLimit(memory='8G'))
         self.node_Boxplots_Features =\
-            self.network.create_node('worc/PlotBoxplotFeatures:1.0', tool_version='1.0', id='plot_boxplot_features', resources=ResourceLimit(memory='4G'))
+            self.network.create_node('worc/PlotBoxplotFeatures:1.0',
+                                     tool_version='1.0',
+                                     id='plot_boxplot_features',
+                                     resources=ResourceLimit(memory='4G'))
 
         # Create sinks
         self.sink_ROC_PNG =\
@@ -101,7 +115,8 @@ class Evaluate(object):
             self.network.create_sink('TexFile', id='Barchart_Tex')
 
         self.sink_STest_CSV =\
-            self.network.create_sink('CSVFile', id='StatisticalTestFeatures_CSV')
+            self.network.create_sink('CSVFile',
+                                     id='StatisticalTestFeatures_CSV')
 
         self.sink_Ranked_Percentages_Zip =\
             self.network.create_sink('ZipFile', id='RankedPercentages_Zip')
@@ -128,34 +143,44 @@ class Evaluate(object):
 
         self.sink_STest_CSV.input = self.node_STest.outputs['performance']
 
-        self.sink_Ranked_Percentages_Zip.input = self.node_Ranked_Percentages.outputs['output_zip']
-        self.sink_Ranked_Percentages_CSV.input = self.node_Ranked_Percentages.outputs['output_csv']
+        self.sink_Ranked_Percentages_Zip.input =\
+            self.node_Ranked_Percentages.outputs['output_zip']
+        self.sink_Ranked_Percentages_CSV.input =\
+            self.node_Ranked_Percentages.outputs['output_csv']
 
-        self.sink_Ranked_Posteriors_Zip.input = self.node_Ranked_Posteriors.outputs['output_zip']
-        self.sink_Ranked_Posteriors_CSV.input = self.node_Ranked_Posteriors.outputs['output_csv']
+        self.sink_Ranked_Posteriors_Zip.input =\
+            self.node_Ranked_Posteriors.outputs['output_zip']
+        self.sink_Ranked_Posteriors_CSV.input =\
+            self.node_Ranked_Posteriors.outputs['output_csv']
 
-        self.sink_Boxplots_Features_Zip.input = self.node_Boxplots_Features.outputs['output_zip']
+        self.sink_Boxplots_Features_Zip.input =\
+            self.node_Boxplots_Features.outputs['output_zip']
 
         # Create two constant nodes
         self.node_Ranked_Percentages.inputs['scores'] = ['percentages']
         self.node_Ranked_Posteriors.inputs['scores'] = ['posteriors']
 
-        # Create sources that are not in WORC and set them
-        # self.source_LabelType = self.network.create_source('String', id='LabelType')
-        # self.source_Ensemble = self.network.create_source('String', id='Ensemble')
-        # self.source_LabelType.input = [self.label_type]
-        # self.source_Ensemble.input = [self.ensemble]
-
-        self.source_LabelType = self.network.create_constant('String', [self.label_type], id='LabelType')
-        self.source_Ensemble = self.network.create_constant('String', [self.ensemble], id='Ensemble')
+        self.source_LabelType =\
+            self.network.create_constant('String', [self.label_type],
+                                         id='LabelType')
+        self.source_Ensemble =\
+            self.network.create_constant('String', [self.ensemble],
+                                         id='Ensemble')
 
         # Create sources if not supplied by a WORC network
         if self.mode == 'StandAlone':
-            self.source_Estimator = self.network.create_source('HDF5', id='Estimator')
-            self.source_PatientInfo = self.network.create_source('PatientInfoFile', id='PatientInfo')
-            self.source_Images = self.network.create_source('ITKImageFile', id='Images', node_group='patients')
-            self.source_Segmentations = self.network.create_source('ITKImageFile', id='Segmentations', node_group='patients')
-            self.source_Config = self.network.create_source('ParameterFile', id='Config')
+            self.source_Estimator =\
+                self.network.create_source('HDF5', id='Estimator')
+            self.source_PatientInfo =\
+                self.network.create_source('PatientInfoFile', id='PatientInfo')
+            self.source_Images =\
+                self.network.create_source('ITKImageFile', id='Images',
+                                           node_group='patients')
+            self.source_Segmentations =\
+                self.network.create_source('ITKImageFile', id='Segmentations',
+                                           node_group='patients')
+            self.source_Config =\
+                self.network.create_source('ParameterFile', id='Config')
 
             self.labels = list()
             self.source_Features = list()
@@ -174,11 +199,15 @@ class Evaluate(object):
         self.node_Barchart.inputs['estimators'] = self.source_Ensemble.output
         self.node_Barchart.inputs['label_type'] = self.source_LabelType.output
 
-        self.node_Ranked_Percentages.inputs['ensemble'] = self.source_Ensemble.output
-        self.node_Ranked_Percentages.inputs['label_type'] = self.source_LabelType.output
+        self.node_Ranked_Percentages.inputs['ensemble'] =\
+            self.source_Ensemble.output
+        self.node_Ranked_Percentages.inputs['label_type'] =\
+            self.source_LabelType.output
 
-        self.node_Ranked_Posteriors.inputs['ensemble'] = self.source_Ensemble.output
-        self.node_Ranked_Posteriors.inputs['label_type'] = self.source_LabelType.output
+        self.node_Ranked_Posteriors.inputs['ensemble'] =\
+            self.source_Ensemble.output
+        self.node_Ranked_Posteriors.inputs['label_type'] =\
+            self.source_LabelType.output
 
         # Create links to the sources that could be in a WORC network
         if self.mode == 'StandAlone':
@@ -225,73 +254,90 @@ class Evaluate(object):
             self.link_segmentations_post.collapse = 'patients'
 
     def create_links_Addon(self):
-            # Sources from the WORC network are used
-            prediction = self.parent.classify.outputs['classification']
-            if self.parent.labels_test:
-                pinfo = self.parent.source_patientclass_test.output
+        """Create links in network between sources, nodes and sinks."""
+        # Sources from the WORC network are used
+        prediction = self.parent.classify.outputs['classification']
+        if self.parent.labels_test:
+            pinfo = self.parent.source_patientclass_test.output
+        else:
+            pinfo = self.parent.source_patientclass_train.output
+
+        config = self.parent.source_class_config.output
+
+        if self.parent.sources_images_train:
+            # NOTE: Use images of first modality to depict tumor
+            label = self.parent.modlabels[0]
+            images = self.parent.sources_images_train[label].output
+            segmentations =\
+                self.parent.sources_segmentations_train[label].output
+
+        self.node_ROC.inputs['prediction'] = prediction
+        self.node_ROC.inputs['pinfo'] = pinfo
+
+        self.node_SVM.inputs['prediction'] = prediction
+        self.node_SVM.inputs['pinfo'] = pinfo
+
+        self.node_Barchart.inputs['prediction'] = prediction
+
+        self.links_STest_Features = dict()
+        self.links_Boxplots_Features = dict()
+        for idx, label in enumerate(self.parent.modlabels):
+            # NOTE: Currently statistical testing is only done within the training set
+            if self.parent.sources_images_train:
+                # Features are computed within the network
+                for node in self.parent.featureconverter_train[label]:
+                    name = node.id
+                    self.links_STest_Features[name] =\
+                        self.node_STest.inputs['features'][name] << node.outputs['feat_out']
+                    self.links_Boxplots_Features[name] =\
+                        self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
+
+                    # All features should be input at once
+                    self.links_STest_Features[name].collapse = 'train'
+                    self.links_Boxplots_Features[name].collapse = 'train'
             else:
-                pinfo = self.parent.source_patientclass_train.output
+                # Feature are precomputed and given as sources
+                for node in self.parent.sources_features_train[label]:
+                    name = node.id
+                    self.links_STest_Features[name] =\
+                        self.node_STest.inputs['features'][name] << node.output
+                    self.links_Boxplots_Features[name] =\
+                        self.node_Boxplots_Features.inputs['features'][name] << node.output
 
-            config = self.parent.source_class_config.output
+                    # All features should be input at once
+                    self.links_STest_Features[name].collapse = 'train'
+                    self.links_Boxplots_Features[name].collapse = 'train'
 
-            if self.parent.sources_images_train:
-                # NOTE: Use images of first modality to depict tumor
-                label = self.parent.modlabels[0]
-                images = self.parent.sources_images_train[label].output
-                segmentations = self.parent.sources_segmentations_train[label].output
+        self.node_STest.inputs['patientclass'] = pinfo
+        self.node_STest.inputs['config'] = config
 
-            self.node_ROC.inputs['prediction'] = prediction
-            self.node_ROC.inputs['pinfo'] = pinfo
+        self.node_Boxplots_Features.inputs['patientclass'] = pinfo
+        self.node_Boxplots_Features.inputs['config'] = config
 
-            self.node_SVM.inputs['prediction'] = prediction
-            self.node_SVM.inputs['pinfo'] = pinfo
+        self.node_Ranked_Percentages.inputs['estimator'] = prediction
+        self.node_Ranked_Percentages.inputs['pinfo'] = pinfo
+        self.node_Ranked_Posteriors.inputs['estimator'] = prediction
+        self.node_Ranked_Posteriors.inputs['pinfo'] = pinfo
 
-            self.node_Barchart.inputs['prediction'] = prediction
+        if self.parent.sources_images_train:
+            self.link_images_perc =\
+                self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
+            self.link_images_perc.collapse = 'train'
+            self.link_segmentations_perc =\
+                self.network.create_link(segmentations, self.node_Ranked_Percentages.inputs['segmentations'])
+            self.link_segmentations_perc.collapse = 'train'
 
-            self.links_STest_Features = dict()
-            self.links_Boxplots_Features = dict()
-            for idx, label in enumerate(self.parent.modlabels):
-                # NOTE: Currently statistical testing is only done within the training set
-                if self.parent.sources_images_train:
-                    # Features are computed within the network
-                    self.links_STest_Features[label] = self.node_STest.inputs['features'][str(label)] << self.parent.calcfeatures_train[label].outputs['features']
-                    self.links_Boxplots_Features[label] = self.node_Boxplots_Features.inputs['features'][str(label)] << self.parent.calcfeatures_train[label].outputs['features']
-                else:
-                    # Feature are precomputed and given as sources
-                    self.links_STest_Features[label] = self.node_STest.inputs['features'][str(label)] << self.parent.sources_features_train[label].output
-                    self.links_Boxplots_Features[label] = self.node_Boxplots_Features.inputs['features'][str(label)] << self.parent.sources_features_train[label].output
-
-                self.links_STest_Features[label].collapse = 'train'
-                self.links_Boxplots_Features[label].collapse = 'train'
-
-            self.node_STest.inputs['patientclass'] = pinfo
-            self.node_STest.inputs['config'] = config
-
-            self.node_Boxplots_Features.inputs['patientclass'] = pinfo
-            self.node_Boxplots_Features.inputs['config'] = config
-
-            self.node_Ranked_Percentages.inputs['estimator'] = prediction
-            self.node_Ranked_Percentages.inputs['pinfo'] = pinfo
-            self.node_Ranked_Posteriors.inputs['estimator'] = prediction
-            self.node_Ranked_Posteriors.inputs['pinfo'] = pinfo
-
-            if self.parent.sources_images_train:
-                self.link_images_perc = self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
-                self.link_images_perc.collapse = 'train'
-                self.link_segmentations_perc = self.network.create_link(segmentations, self.node_Ranked_Percentages.inputs['segmentations'])
-                self.link_segmentations_perc.collapse = 'train'
-
-                self.link_images_post = self.network.create_link(images, self.node_Ranked_Posteriors.inputs['images'])
-                self.link_images_post.collapse = 'train'
-                self.link_segmentations_post = self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
-                self.link_segmentations_post.collapse = 'train'
+            self.link_images_post =\
+                self.network.create_link(images, self.node_Ranked_Posteriors.inputs['images'])
+            self.link_images_post.collapse = 'train'
+            self.link_segmentations_post =\
+                self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
+            self.link_segmentations_post.collapse = 'train'
 
     def set(self, estimator=None, pinfo=None, images=None,
             segmentations=None, config=None, features=None,
             sink_data={}):
-        '''
-        Set the sources and sinks based on the provided attributes.
-        '''
+        """Set the sources and sinks based on the provided attributes."""
         if self.mode == 'StandAlone':
             self.source_data = dict()
             self.sink_data = dict()
@@ -341,10 +387,13 @@ class Evaluate(object):
             self.sink_data['BoxplotsFeatures_Zip'] = ("vfs://output/{}/BoxplotsFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
     def execute(self):
-        """ Execute the network through the fastr.network.execute command. """
+        """Execute the network through the fastr.network.execute command."""
         # Draw and execute nwtwork
         try:
-            self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
+            self.network.draw(file_path=self.network.id + '.svg',
+                              draw_dimensions=True)
         except graphviz.backend.ExecutableNotFound:
             print('[WORC WARNING] Graphviz executable not found: not drawing network diagram. MAke sure the Graphviz executables are on your systems PATH.')
-        self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
+        self.network.execute(self.source_data, self.sink_data,
+                             execution_plugin=self.fastr_plugin,
+                             tmpdir=self.fastr_tmpdir)

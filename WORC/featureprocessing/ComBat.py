@@ -22,11 +22,12 @@ import WORC.IOparser.file_io as wio
 import WORC.IOparser.config_io_combat as cio
 import numpy as np
 import pandas as pd
-from WORC.addexceptions import WORCValueError
+from WORC.addexceptions import WORCValueError, WORCKeyError
 import tempfile
 from sys import platform
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from sklearn.preprocessing import StandardScaler
+from neuroCombat import neuroCombat
 
 
 def ComBat(features_train_in, labels_train, config, features_train_out,
@@ -145,12 +146,25 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     mod = np.transpose(np.asarray(mod))
 
     # Run ComBatin Matlab
-    data_harmonized = ComBatMatlab(dat=all_features_matrix,
-                                   batch=batch,
-                                   command=config['ComBat']['matlab'],
-                                   mod=mod,
-                                   par=config['ComBat']['par'],
-                                   per_feature=config['ComBat']['per_feature'])
+    if config['ComBat']['language'] == 'matlab':
+        print('\t Executing ComBat through Matlab')
+        data_harmonized = ComBatMatlab(dat=all_features_matrix,
+                                       batch=batch,
+                                       command=config['ComBat']['matlab'],
+                                       mod=mod,
+                                       par=config['ComBat']['par'],
+                                       per_feature=config['ComBat']['per_feature'])
+
+    elif config['ComBat']['language'] == 'python':
+        print('\t Executing ComBat through neuroComBat in Python')
+        data_harmonized = ComBatPython(dat=all_features_matrix,
+                                       batch=batch,
+                                       mod=mod,
+                                       eb=config['ComBat']['eb'],
+                                       par=config['ComBat']['par'],
+                                       per_feature=config['ComBat']['per_feature'])
+    else:
+        raise WORCKeyError(f"Language {config['ComBat']['language']} unknown.")
 
     # Convert again to train hdf5 files
     parameters = {'batch': config['ComBat']['batch'],
@@ -162,7 +176,6 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                     'feature_labels']
 
     feature_values_train_combat = [data_harmonized[i] for i in range(len(image_features_train_combat))]
-    print(len(feature_values_train_combat))
     feature_labels = feature_labels_combat + feature_labels_noncombat
     for fnum, i_feat in enumerate(feature_values_train_combat):
         # Combine ComBat and non-ComBat features
@@ -202,6 +215,43 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
             print(f'Saving image features to: {features_test_out[fnum]}.')
             panda_data.to_hdf(features_test_out[fnum], 'image_features')
+
+
+def ComBatPython(dat, batch, mod=None, par=1,
+                 eb=1, per_feature='true'):
+    """
+    Run the ComBat Function python script.
+
+    par = 0 is non-parametric.
+    """
+    # convert inputs to neuroCombat format.
+    covars = dict()
+    covars['batch'] = batch[0]
+    categorical_cols = list()
+    if mod is not None:
+        for i_mod in range(mod.shape[1]):
+            label = f'mod_{i_mod}'
+            covars[label] = mod[:, i_mod][0]
+            categorical_cols.append(label)
+
+    covars = pd.DataFrame(covars)
+    batch_col = 'batch'
+    if par == 0:
+        parametric = False
+    else:
+        parametric = True
+
+    if eb == 0:
+        eb = False
+    else:
+        eb = True
+
+    # execute ComBat
+    data_harmonized = neuroCombat(dat=dat, covars=covars, batch_col=batch_col,
+                                  categorical_cols=categorical_cols,
+                                  eb=eb, parametric=parametric)
+
+    return data_harmonized
 
 
 def ComBatMatlab(dat, batch, command, mod=None, par=1, per_feature='true'):
@@ -281,7 +331,7 @@ def ComBatMatlab(dat, batch, command, mod=None, par=1, per_feature='true'):
                         raise WORCValueError(f'Error in Matlab ComBat execution: {message}.')
                     except KeyError:
                         pass
-            except sio.matlab.miobase.MatReadError:
+            except (sio.matlab.miobase.MatReadError, ValueError):
                 pass
 
     # Check if expected output file exists

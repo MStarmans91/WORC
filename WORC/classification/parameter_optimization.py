@@ -25,7 +25,7 @@ def random_search_parameters(features, labels, N_iter, test_size,
                              param_grid, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
                              n_cores=1, fastr_plugin=None, maxlen=100,
-                             ranking_score='test_score'):
+                             ranking_score='test_score', random_seed=None):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
     randomized search.
@@ -52,8 +52,8 @@ def random_search_parameters(features, labels, N_iter, test_size,
     Returns:
         random_search: sklearn randomsearch object containing the results.
     """
-
-    random_seed = np.random.randint(1, 5000)
+    if random_seed is None:
+        random_seed = np.random.randint(1, 5000)
     random_state = check_random_state(random_seed)
 
     regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
