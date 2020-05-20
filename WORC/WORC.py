@@ -163,6 +163,7 @@ class WORC(object):
         self.fastr_memory_parameters['Elastix'] = '4G'
         self.fastr_memory_parameters['Transformix'] = '4G'
         self.fastr_memory_parameters['Segmentix'] = '6G'
+        self.fastr_memory_parameters['ComBat'] = '12G'
 
         if DebugDetector().do_detection():
             print(fastr.config)
@@ -510,6 +511,12 @@ class WORC(object):
                 if self.masks_normalize_test:
                     self.sources_masks_normalize_test = dict()
 
+                # -----------------------------------------------------
+                # Optionally, add ComBat Harmonization. Currently done
+                # on full dataset, not in a cross-validation
+                if self.configs[0]['General']['ComBat'] == 'True':
+                    self.add_ComBat()
+
                 if not self.features_train:
                     # Create nodes to compute features
                     # General
@@ -539,7 +546,6 @@ class WORC(object):
                         self.converters_im_test = dict()
                         self.converters_seg_test = dict()
                         self.links_C1_test = dict()
-
 
                     # Check which nodes are necessary
                     if not self.segmentations_train:
@@ -751,6 +757,17 @@ class WORC(object):
                                                 self.converters_seg_train[label].outputs['image']
 
                         # -----------------------------------------------------
+                        # Optionally, add ComBat Harmonization
+                        if self.configs[0]['General']['ComBat'] == 'True':
+                            # Link features to ComBat
+                            self.links_Combat1_train[label].append(self.ComBat.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
+                            self.links_Combat1_train[label][i_node].collapse = 'train'
+
+                            if self.images_test or self.features_test:
+                                self.links_Combat1_test[label].append(self.ComBat.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
+                                self.links_Combat1_test[label][i_node].collapse = 'test'
+
+                        # -----------------------------------------------------
                         # Classification nodes
                         # Add the features from this modality to the classifier node input
                         self.links_C1_train[label] = list()
@@ -764,8 +781,9 @@ class WORC(object):
                             self.sinks_features_train[label].append(self.network.create_sink('HDF5', id='features_train_' + label + '_' + fname))
 
                             # Append features to the classification
-                            self.links_C1_train[label].append(self.classify.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
-                            self.links_C1_train[label][i_node].collapse = 'train'
+                            if not self.configs[0]['General']['ComBat'] == 'True':
+                                self.links_C1_train[label].append(self.classify.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
+                                self.links_C1_train[label][i_node].collapse = 'train'
 
                             # Save output
                             self.sinks_features_train[label][i_node].input = self.featureconverter_train[label][i_node].outputs['feat_out']
@@ -773,8 +791,9 @@ class WORC(object):
                             # Similar for testing workflow
                             if self.images_test or self.features_test:
                                 self.sinks_features_test[label].append(self.network.create_sink('HDF5', id='features_test_' + label + '_' + fname))
-                                self.links_C1_test[label].append(self.classify.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
-                                self.links_C1_test[label][i_node].collapse = 'test'
+                                if not self.configs[0]['General']['ComBat'] == 'True':
+                                    self.links_C1_test[label].append(self.classify.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
+                                    self.links_C1_test[label][i_node].collapse = 'test'
                                 self.sinks_features_test[label][i_node].input = self.featureconverter_test[label][i_node].outputs['feat_out']
 
                 else:
@@ -814,10 +833,47 @@ class WORC(object):
         else:
             raise WORCexceptions.WORCIOError("Please provide either images or features.")
 
+    def add_ComBat(self):
+        """Add ComBat harmonization to the network.
+
+        Note: applied on all objects, not in a train-test or cross-val setting.
+        """
+        memory = self.fastr_memory_parameters['ComBat']
+        self.ComBat =\
+            self.network.create_node('combat/ComBat:1.0',
+                                     tool_version='1.0',
+                                     id='ComBat',
+                                     resources=ResourceLimit(memory=memory))
+
+        # Create sink for ComBat output
+        self.sinks_features_train_ComBat = self.network.create_sink('HDF5', id='features_train_ComBat')
+
+        # Create links for inputs
+        self.link_combat_1 = self.network.create_link(self.source_class_config.output, self.ComBat.inputs['config'])
+        self.link_combat_2 = self.network.create_link(self.source_patientclass_train.output, self.ComBat.inputs['patientclass_train'])
+        self.link_combat_1.collapse = 'conf'
+        self.link_combat_2.collapse = 'pctrain'
+
+        # Link Combat output to both sink and classify node
+        self.links_Combat_out_train = self.classify.inputs['features_train']['ComBat'] << self.ComBat.outputs['features_train_out']
+        self.links_Combat_out_train.collapse = 'train'
+        self.sinks_features_train_ComBat.input = self.ComBat.outputs['features_train_out']
+
+        if self.images_test or self.features_test:
+            # Create sink for ComBat output
+            self.sinks_features_test_ComBat = self.network.create_sink('HDF5', id='features_test_ComBat')
+
+            # Create links for inputs
+            self.link_combat_3 = self.network.create_link(self.source_patientclass_test.output, self.ComBat.inputs['patientclass_test'])
+            self.link_combat_3.collapse = 'pctest'
+
+            # Link Combat output to both sink and classify node
+            self.links_Combat_out_test = self.classify.inputs['features_test']['ComBat'] << self.ComBat.outputs['features_test_out']
+            self.links_Combat_out_test.collapse = 'test'
+            self.sinks_features_test_ComBat.input = self.ComBat.outputs['features_test_out']
+
     def add_preprocessing(self, preprocess_node, label, nmod):
-        '''
-        Add nodes required for preprocessing of images.
-        '''
+        """Add nodes required for preprocessing of images."""
         memory = self.fastr_memory_parameters['Preprocessing']
         self.preprocessing_train[label] = self.network.create_node(preprocess_node, tool_version='1.0', id='preprocessing_train_' + label, resources=ResourceLimit(memory=memory))
         if self.images_test or self.features_test:
