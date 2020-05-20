@@ -188,7 +188,7 @@ class WORC(object):
         config['General']['Joblib_ncores'] = '1'
         config['General']['Joblib_backend'] = 'threading'
         config['General']['tempsave'] = 'False'
-        config['General']['AssumeSameImageAndMaskMetadata'] = 'True'
+        config['General']['AssumeSameImageAndMaskMetadata'] = 'False'
         config['General']['ComBat'] = 'False'
 
         # Segmentix
@@ -1295,6 +1295,11 @@ class WORC(object):
                                      id='segmentix_train_' + label,
                                      resources=ResourceLimit(memory=memory))
 
+        # Input the image
+        self.nodes_segmentix_train[label].inputs['image'] =\
+            self.converters_im_train[label].outputs['image']
+
+        # Input the segmentation
         if hasattr(self, 'transformix_seg_nodes_train'):
             if label in self.transformix_seg_nodes_train.keys():
                 # Use output of registration in segmentix
@@ -1309,6 +1314,7 @@ class WORC(object):
             self.nodes_segmentix_train[label].inputs['segmentation_in'] =\
                 self.converters_seg_train[label].outputs['image']
 
+        # Input the parameters
         self.nodes_segmentix_train[label].inputs['parameters'] =\
             self.sources_parameters[label].output
         self.sinks_segmentations_segmentix_train[label].input =\
@@ -1322,6 +1328,9 @@ class WORC(object):
                 self.network.create_node('segmentix/Segmentix:1.0',
                                          tool_version='1.0',
                                          id='segmentix_test_' + label, resources=ResourceLimit(memory=memory))
+
+            self.nodes_segmentix_test[label].inputs['image'] =\
+                self.converters_im_test[label].outputs['image']
 
             if hasattr(self, 'transformix_seg_nodes_test'):
                 if label in self.transformix_seg_nodes_test.keys():

@@ -147,6 +147,9 @@ def segmentix(parameters, image=None, segmentation=None,
     if type(segmentation) is list:
         segmentation = ''.join(segmentation)
 
+    if type(image) is list:
+        image = ''.join(image)
+
     # Load the image onvert to array
     contour_original = sitk.ReadImage(segmentation)
     contour = sitk.GetArrayFromImage(contour_original)
@@ -193,6 +196,11 @@ def segmentix(parameters, image=None, segmentation=None,
     contour = contour.astype(np.uint8)
     contour = sitk.GetImageFromArray(contour)
     contour.CopyInformation(contour_original)
+
+    if config['Segmentix']['AssumeSameImageAndMaskMetadata']:
+        print('[Segmentix] Copy metadata information from image to mask.')
+        image = sitk.ReadImage(image)
+        contour.CopyInformation(image)
 
     # If required, output contour
     if output is not None:
