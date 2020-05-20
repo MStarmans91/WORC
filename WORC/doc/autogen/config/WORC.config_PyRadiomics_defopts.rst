@@ -6,7 +6,6 @@ normalize         False       False
 normalizeScale    100         100        
 interpolator      sitkBSpline sitkBSpline
 preCrop           True        True       
-label             255         255        
 binCount          16          16         
 force2D           True        True       
 force2Ddimension  0           0          
@@ -14,4 +13,5 @@ voxelArrayShift   300         300
 Original          True        True       
 Wavelet           True        True       
 LoG               True        True       
+label             1           1          
 ================= =========== ===========

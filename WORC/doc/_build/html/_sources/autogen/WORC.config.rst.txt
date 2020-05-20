@@ -3,6 +3,7 @@ Key               Reference
 ================= ===================================================
 Bootstrap         :ref:`Bootstrap <config-Bootstrap>`                
 Classification    :ref:`Classification <config-Classification>`      
+ComBat            :ref:`ComBat <config-ComBat>`                      
 CrossValidation   :ref:`CrossValidation <config-CrossValidation>`    
 Ensemble          :ref:`Ensemble <config-Ensemble>`                  
 Evaluation        :ref:`Evaluation <config-Evaluation>`              

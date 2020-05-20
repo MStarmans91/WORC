@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>exampledata Package &mdash; WORC 3.1.3 documentation</title>
+  <title>exampledata Package &mdash; WORC 3.1.4 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.3
+                3.1.4
               </div>
             
           
@@ -196,7 +196,7 @@
 <span id="create-example-data-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">create_example_data</span></code> Module<a class="headerlink" href="#module-WORC.exampledata.create_example_data" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.exampledata.create_example_data.create_random_features">
-<code class="sig-prename descclassname">WORC.exampledata.create_example_data.</code><code class="sig-name descname">create_random_features</code><span class="sig-paren">(</span><em class="sig-param">n_objects=6</em>, <em class="sig-param">n_features=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/exampledata/create_example_data.html#create_random_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.exampledata.create_example_data.create_random_features" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.exampledata.create_example_data.</code><code class="descname">create_random_features</code><span class="sig-paren">(</span><em>n_objects=6</em>, <em>n_features=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/exampledata/create_example_data.html#create_random_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.exampledata.create_example_data.create_random_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create n_objects sets of random features and save in files. Format based
 on PREDICT python package.</p>
 </dd></dl>
@@ -206,17 +206,17 @@ on PREDICT python package.</p>
 <span id="datadownloader-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">datadownloader</span></code> Module<a class="headerlink" href="#module-WORC.exampledata.datadownloader" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.exampledata.datadownloader.download_HeadAndNeck">
-<code class="sig-prename descclassname">WORC.exampledata.datadownloader.</code><code class="sig-name descname">download_HeadAndNeck</code><span class="sig-paren">(</span><em class="sig-param">datafolder=None</em>, <em class="sig-param">nsubjects=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/exampledata/datadownloader.html#download_HeadAndNeck"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.exampledata.datadownloader.download_HeadAndNeck" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.exampledata.datadownloader.</code><code class="descname">download_HeadAndNeck</code><span class="sig-paren">(</span><em>datafolder=None</em>, <em>nsubjects=10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/exampledata/datadownloader.html#download_HeadAndNeck"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.exampledata.datadownloader.download_HeadAndNeck" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="WORC.exampledata.datadownloader.download_project">
-<code class="sig-prename descclassname">WORC.exampledata.datadownloader.</code><code class="sig-name descname">download_project</code><span class="sig-paren">(</span><em class="sig-param">project_name</em>, <em class="sig-param">xnat_url</em>, <em class="sig-param">datafolder</em>, <em class="sig-param">nsubjects=10</em>, <em class="sig-param">verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/exampledata/datadownloader.html#download_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.exampledata.datadownloader.download_project" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.exampledata.datadownloader.</code><code class="descname">download_project</code><span class="sig-paren">(</span><em>project_name</em>, <em>xnat_url</em>, <em>datafolder</em>, <em>nsubjects=10</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/exampledata/datadownloader.html#download_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.exampledata.datadownloader.download_project" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="WORC.exampledata.datadownloader.download_subject">
-<code class="sig-prename descclassname">WORC.exampledata.datadownloader.</code><code class="sig-name descname">download_subject</code><span class="sig-paren">(</span><em class="sig-param">project</em>, <em class="sig-param">subject</em>, <em class="sig-param">datafolder</em>, <em class="sig-param">session</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/exampledata/datadownloader.html#download_subject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.exampledata.datadownloader.download_subject" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.exampledata.datadownloader.</code><code class="descname">download_subject</code><span class="sig-paren">(</span><em>project</em>, <em>subject</em>, <em>datafolder</em>, <em>session</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/exampledata/datadownloader.html#download_subject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.exampledata.datadownloader.download_subject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

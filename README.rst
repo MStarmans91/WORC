@@ -1,10 +1,20 @@
-|Build Status|
-
 WORC v3.1.4
 ===========
 
 Workflow for Optimal Radiomics Classification
 ---------------------------------------------
+
+Information
+-----------
+
++--------------------+-------------------+-------------------+-------------------+
+| Linux              | Windows           | Documentation     | PyPi              |
++====================+===================+===================+===================+
+| |image0|           | |image1|          | |image2|          | |image3|          |
++--------------------+-------------------+-------------------+-------------------+
+
+Introduction
+============
 
 WORC is an open-source python package for the easy execution of full
 radiomics pipelines.
@@ -77,6 +87,8 @@ numpy to be installed beforehand. Make sure you do so, e.g.
 -  SimpleITK (Image loading and preprocessing)
 -  `Pyradiomics <https://github.com/radiomics/pyradiomics>`__
 -  `PREDICT <https://github.com/Svdvoort/PREDICTFastr>`__
+-  `ComBat <https://github.com/Jfortin1/ComBatHarmonization>`__
+   (optional)
 
 See for other python packages the `requirements
 file <requirements.txt>`__.
@@ -163,5 +175,11 @@ to XNAT. We advise you to specify your account settings in a .netrc file
 when using this feature for your own datasets, such that you do not need
 to input them on every request.
 
-.. |Build Status| image:: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master
+.. |image0| image:: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=1
    :target: https://travis-ci.com/MStarmans91/WORC
+.. |image1| image:: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=2
+   :target: https://travis-ci.com/MStarmans91/WORC
+.. |image2| image:: https://readthedocs.org/projects/worc/badge/?version=latest
+   :target: https://worc.readthedocs.io/en/latest/?badge=latest
+.. |image3| image:: https://badge.fury.io/py/WORC.svg
+   :target: https://badge.fury.io/py/WORC

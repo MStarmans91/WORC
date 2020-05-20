@@ -22,8 +22,8 @@ phase_features          If True, use phase features in model.
 fractal_features        If True, use fractal features in model.                
 location_features       If True, use location features in model.               
 rgrd_features           If True, use rgrd features in model.                   
-toolbox                 WIP                                                    
-original_features       WIP                                                    
+toolbox                 List of names of toolboxes to be used, or All          
+original_features       If True, use original features in model.               
 wavelet_features        If True, use wavelet features in model.                
 log_features            If True, use log features in model.                    
 ======================= =======================================================

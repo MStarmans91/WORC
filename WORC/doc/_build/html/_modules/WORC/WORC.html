@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.WORC &mdash; WORC 3.1.3 documentation</title>
+  <title>WORC.WORC &mdash; WORC 3.1.4 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.3
+                3.1.4
               </div>
             
           
@@ -178,17 +178,17 @@
 
 <span class="kn">import</span> <span class="nn">configparser</span>
 <span class="kn">import</span> <span class="nn">fastr</span>
-<span class="kn">from</span> <span class="nn">fastr.api</span> <span class="kn">import</span> <span class="n">ResourceLimit</span>
+<span class="kn">from</span> <span class="nn">fastr.api</span> <span class="k">import</span> <span class="n">ResourceLimit</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">randint</span>
 <span class="kn">import</span> <span class="nn">graphviz</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.config_WORC</span> <span class="k">as</span> <span class="nn">config_io</span>
-<span class="kn">from</span> <span class="nn">WORC.tools.Elastix</span> <span class="kn">import</span> <span class="n">Elastix</span>
-<span class="kn">from</span> <span class="nn">WORC.tools.Evaluate</span> <span class="kn">import</span> <span class="n">Evaluate</span>
-<span class="kn">from</span> <span class="nn">WORC.tools.Slicer</span> <span class="kn">import</span> <span class="n">Slicer</span>
-<span class="kn">from</span> <span class="nn">WORC.detectors.detectors</span> <span class="kn">import</span> <span class="n">DebugDetector</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">WORC.tools.Elastix</span> <span class="k">import</span> <span class="n">Elastix</span>
+<span class="kn">from</span> <span class="nn">WORC.tools.Evaluate</span> <span class="k">import</span> <span class="n">Evaluate</span>
+<span class="kn">from</span> <span class="nn">WORC.tools.Slicer</span> <span class="k">import</span> <span class="n">Slicer</span>
+<span class="kn">from</span> <span class="nn">WORC.detectors.detectors</span> <span class="k">import</span> <span class="n">DebugDetector</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.file_io</span> <span class="k">as</span> <span class="nn">io</span>
 
@@ -268,7 +268,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="WORC.__init__"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="WORC.__init__"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize WORC object.</span>
 
 <span class="sd">        Set the initial variables all to None, except for some defaults.</span>
@@ -341,8 +341,8 @@
         <span class="c1"># General configuration of WORC</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;cross_validation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;FeatureCalculators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[predict/CalcFeatures:1.0]&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;FeatureCalculators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[predict/CalcFeatures:1.0, pyradiomics/Pyradiomics:1.0]&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;worc/PreProcess:1.0&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;RegistrationNode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&#39;elastix4.8/Elastix:4.8&#39;&quot;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;TransformationNode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&#39;elastix4.8/Transformix:4.8&#39;&quot;</span>
@@ -350,6 +350,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Joblib_backend&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;threading&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;tempsave&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;AssumeSameImageAndMaskMetadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
 
         <span class="c1"># Segmentix</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -357,7 +358,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;segtype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;segradius&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;N_blobs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;fillholes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;fillholes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;remove_small_objects&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;min_object_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2&#39;</span>
 
@@ -388,7 +389,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;phase&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
 
         <span class="c1"># Parameter settings for PREDICT feature calculation</span>
-        <span class="c1"># Defines what should be done with the images</span>
+        <span class="c1"># Defines only naming of modalities</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;image_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;CT&#39;</span>
 
         <span class="c1"># Define frequencies for gabor filter in pixels</span>
@@ -422,14 +423,13 @@
 
         <span class="c1"># PyRadiomics - Feature calculation</span>
         <span class="c1"># Addition to the above, specifically for PyRadiomics</span>
-        <span class="c1"># Mostly based on Mpecific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml</span>
+        <span class="c1"># Mostly based on specific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;geometryTolerance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.0001&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalizeScale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;interpolator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sitkBSpline&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;255&#39;</span>  <span class="c1"># Use 255 when not using segmentix</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;binCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;GLCM_levels&#39;</span><span class="p">]</span> <span class="c1"># BinWidth to sensitive for normalization, thus use binCount</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2Ddimension&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>  <span class="c1"># axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.</span>
@@ -437,6 +437,22 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;Original&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;Wavelet&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;LoG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
+
+        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+            <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;255&#39;</span>
+
+        <span class="c1"># ComBat Feature Harmonization</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;language&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;python&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;batch&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Hospital&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;mod&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;par&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;eb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;true&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;per_feature&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;excluded_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sf_, of_, semf_, pf_&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;matlab&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Program Files</span><span class="se">\\</span><span class="s1">MATLAB</span><span class="se">\\</span><span class="s1">R2015b</span><span class="se">\\</span><span class="s1">bin</span><span class="se">\\</span><span class="s1">matlab.exe&#39;</span>
 
         <span class="c1"># Feature preprocessing before all below takes place</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatPreProcess&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -447,12 +463,12 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;Variance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;GroupwiseSearch&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.0&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.0&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;95variance, 50, 100&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.0&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.25&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;95variance, 10, 50, 100&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.25&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;MannWhitneyU&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;-3, 2.5&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.0&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.25&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefNN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2, 4&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefSampleSize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1, 1&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefDistanceP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1, 3&#39;</span>
@@ -490,10 +506,9 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;wavelet_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;log_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
 
-
         <span class="c1"># Feature imputation</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mean, median, most_frequent, constant, knn&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5, 5&#39;</span>
 
@@ -501,7 +516,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fastr_plugin</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;SVM&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;max_iter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100000&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;SVMKernel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;poly, rbf, linear&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;SVMC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0, 6&#39;</span>
@@ -561,7 +576,7 @@
 
         <span class="c1"># Ensemble options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;50&#39;</span>
 
         <span class="c1"># Evaluation options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -575,6 +590,7 @@
         <span class="k">return</span> <span class="n">config</span></div>
 
 <div class="viewcode-block" id="WORC.add_tools"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC.add_tools">[docs]</a>    <span class="k">def</span> <span class="nf">add_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add several tools to the WORC object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Tools</span> <span class="o">=</span> <span class="n">Tools</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="WORC.build"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wtype</span><span class="o">=</span><span class="s1">&#39;training&#39;</span><span class="p">):</span>
@@ -589,7 +605,6 @@
 <span class="sd">                - training: use if you want to train a classifier from a dataset.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">wtype</span> <span class="o">=</span> <span class="n">wtype</span>
         <span class="k">if</span> <span class="n">wtype</span> <span class="o">==</span> <span class="s1">&#39;training&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">build_training</span><span class="p">()</span>
@@ -702,9 +717,9 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">nseg</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentations_train</span><span class="p">)</span>
                         <span class="n">nim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_types</span><span class="p">)</span>
-                        <span class="n">m</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Length of segmentations for training is &#39;</span> <span class="o">+</span>\
-                            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">nseg</span><span class="si">}</span><span class="s1">: should be equal to number of images&#39;</span> <span class="o">+</span>\
-                            <span class="sa">f</span><span class="s1">&#39; (</span><span class="si">{</span><span class="n">nim</span><span class="si">}</span><span class="s1">) or 1 when using registration.&#39;</span>
+                        <span class="n">m</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Length of segmentations for training is &#39;</span> <span class="o">+</span>\
+                            <span class="n">f</span><span class="s1">&#39;</span><span class="si">{nseg}</span><span class="s1">: should be equal to number of images&#39;</span> <span class="o">+</span>\
+                            <span class="n">f</span><span class="s1">&#39; (</span><span class="si">{nim}</span><span class="s1">) or 1 when using registration.&#39;</span>
                         <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
                     <span class="c1"># BUG: We assume that first type defines if we use segmentix</span>
@@ -815,7 +830,7 @@
                             <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 
                         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feature_calculators</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> - Adding feature calculation node: </span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> - Adding feature calculation node: </span><span class="si">{f}</span><span class="s1">.&#39;</span><span class="p">)</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">add_feature_calculator</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">nmod</span><span class="p">)</span>
 
                         <span class="c1"># -----------------------------------------------------</span>
@@ -907,7 +922,7 @@
 
                             <span class="c1"># Append features to the classification</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">links_C1_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_train&#39;</span><span class="p">][</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">featurecalculators</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">links_C1_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_train&#39;</span><span class="p">][</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">_</span><span class="si">{self.featurecalculators[label][i_node]}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_C1_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
                             <span class="c1"># Save output</span>
@@ -990,9 +1005,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">preprocessing_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources_masks_normalize_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span></div>
 
 <div class="viewcode-block" id="WORC.add_feature_calculator"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC.add_feature_calculator">[docs]</a>    <span class="k">def</span> <span class="nf">add_feature_calculator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calcfeat_node</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">nmod</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Add a feature calculation node to the network.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;Add a feature calculation node to the network.&quot;&quot;&quot;</span>
         <span class="c1"># Name of fastr node has to exclude some specific symbols, which</span>
         <span class="c1"># are used in the node name</span>
         <span class="n">node_ID</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">calcfeat_node</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">),</span>
@@ -1097,12 +1110,12 @@
         <span class="k">elif</span> <span class="s1">&#39;predict&#39;</span> <span class="ow">in</span> <span class="n">calcfeat_node</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
             <span class="n">toolbox</span> <span class="o">=</span> <span class="s1">&#39;PREDICT&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Toolbox </span><span class="si">{</span><span class="n">calcfeat_node</span><span class="si">}</span><span class="s1"> not recognized!&#39;</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Toolbox </span><span class="si">{calcfeat_node}</span><span class="s1"> not recognized!&#39;</span>
             <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">source_toolbox_name</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_constant</span><span class="p">(</span><span class="s1">&#39;String&#39;</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">,</span>
-                                         <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;toolbox_name_</span><span class="si">{</span><span class="n">toolbox</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="n">f</span><span class="s1">&#39;toolbox_name_</span><span class="si">{toolbox}</span><span class="s1">_</span><span class="si">{label}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="n">conv_train</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;toolbox&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_toolbox_name</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
         <span class="n">conv_train</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources_parameters</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
@@ -1623,10 +1636,10 @@
         <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Source Data:&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{k}</span><span class="s2">: </span><span class="si">{self.source_data[k]}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Sink Data:&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{k}</span><span class="s2">: </span><span class="si">{self.sink_data[k]}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
             <span class="c1"># When debugging, set the tempdir to the default of fastr + name</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">],</span>
@@ -1650,7 +1663,7 @@
                 <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
                 <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
                 <span class="n">c</span> <span class="o">=</span> <span class="n">config</span>
-            <span class="n">cfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;config_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">.ini&quot;</span><span class="p">)</span>
+            <span class="n">cfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;config_</span><span class="si">{self.name}</span><span class="s2">_</span><span class="si">{num}</span><span class="s2">.ini&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">cfile</span><span class="p">)):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">cfile</span><span class="p">))</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">configfile</span><span class="p">:</span>
@@ -1658,15 +1671,15 @@
 
             <span class="c1"># If PyRadiomics is used, also write a config for PyRadiomics</span>
             <span class="k">if</span> <span class="s1">&#39;pyradiomics&#39;</span> <span class="ow">in</span> <span class="n">c</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;FeatureCalculators&#39;</span><span class="p">]:</span>
-                <span class="n">cfile_pyradiomics</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;config_pyradiomics_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">)</span>
+                <span class="n">cfile_pyradiomics</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;config_pyradiomics_</span><span class="si">{self.name}</span><span class="s2">_</span><span class="si">{num}</span><span class="s2">.yaml&quot;</span><span class="p">)</span>
                 <span class="n">config_pyradiomics</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">convert_config_pyradiomics</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cfile_pyradiomics</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
                     <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">config_pyradiomics</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-                <span class="n">cfile_pyradiomics</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;config_pyradiomics_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">.yaml&quot;</span>
+                <span class="n">cfile_pyradiomics</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="s2">&quot;config_pyradiomics_</span><span class="si">{self.name}</span><span class="s2">_</span><span class="si">{num}</span><span class="s2">.yaml&quot;</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pyradiomics_configs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfile_pyradiomics</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;%20&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))</span>
 
             <span class="c1"># BUG: Make path with pathlib to create windows double slashes</span>
-            <span class="n">cfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;config_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">.ini&quot;</span>
+            <span class="n">cfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="s2">&quot;config_</span><span class="si">{self.name}</span><span class="s2">_</span><span class="si">{num}</span><span class="s2">.ini&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fastrconfigs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfile</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;%20&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))</span></div></div>
 
 
@@ -1680,7 +1693,7 @@
 <span class="sd">    3. Slicer pipeline, to create pngs of middle slice of images.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Tools.__init__"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.Tools.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tools.__init__"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.Tools.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize object with all pipelines.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Elastix</span> <span class="o">=</span> <span class="n">Elastix</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Evaluate</span> <span class="o">=</span> <span class="n">Evaluate</span><span class="p">()</span>

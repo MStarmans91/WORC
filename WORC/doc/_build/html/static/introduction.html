@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Introduction &mdash; WORC 3.1.3 documentation</title>
+  <title>Introduction &mdash; WORC 3.1.4 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.3
+                3.1.4
               </div>
             
           
@@ -95,6 +95,9 @@
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -186,7 +189,7 @@ Hence, I decided to create an automatic optimization routine for the platform wh
 <h2>Radiomics Terminology<a class="headerlink" href="#radiomics-terminology" title="Permalink to this headline">¶</a></h2>
 <p>Radiomics concerns the use of quantitative medical image features to predict clinically relevant outcomes.
 In WORC, the computational radiomics workflow is divided in five steps:</p>
-<div class="figure align-default">
+<div class="figure align-center">
 <img alt="../_images/RadiomicsSteps.png" src="../_images/RadiomicsSteps.png" />
 </div>
 <ol class="arabic simple">
@@ -212,7 +215,7 @@ The available radiomics methods were all in different software languages, hence 
 Luckily, some of my colleagues had the same issues and decided to create a new workflow engine: <a href="#id1"><span class="problematic" id="id2">`fastr http://journal.frontiersin.org/article/10.3389/fict.2016.00015/full/&gt;`_</span></a>.
 I highly recommend to read at least <a class="reference external" href="https://fastr.readthedocs.io/en/stable/static/introduction.html/">the introductory page of the manual</a> in order to get familiar with the basic concept of fastr .</p>
 <p>To illustrate the principles of fastr, one of the simpler workflows created by WORC using fastr is shown in the figure below.</p>
-<div class="figure align-default">
+<div class="figure align-center">
 <img alt="../_images/WORC_small.png" src="../_images/WORC_small.png" />
 </div>
 <p>The radiomics workflow is split in nodes. We define four types of nodes:
@@ -242,7 +245,7 @@ As the performance of the machine learning algorithm may depend on the previous 
 we decided to include all parameters from all nodes as hyperparameters.</p>
 <p>Optimization is done through a variant of combined algorithm selection and hyperparameter (CASH) optimization problem.
 Currently, WORC solves the problem as following:</p>
-<div class="figure align-default">
+<div class="figure align-center">
 <img alt="../_images/CASH.png" src="../_images/CASH.png" />
 </div>
 <ol class="arabic simple">
