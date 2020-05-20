@@ -34,8 +34,9 @@ class ObjectSampler(object):
 
     def __init__(self, method,
                  sampling_strategy='auto',
-                 SMOTE_ratio=1,
-                 SMOTE_neighbors=5,
+                 ratio=1,
+                 k_neighbors=5,
+                 kind='borderline-1',
                  n_jobs=1,
                  n_neighbors=3,
                  threshold_cleaning=0.5
@@ -62,15 +63,16 @@ class ObjectSampler(object):
         elif method == 'RandomOverSampling':
             self.init_RandomOverSampling(sampling_strategy)
         elif method == 'ADASYN':
-            self.init_ADASYN()
+            self.init_ADASYN(sampling_strategy, ratio, n_neighbors, n_jobs)
         elif method == 'BorderlineSMOTE':
-            self.init_BorderlineSMOTE()
+            self.init_BorderlineSMOTE(ratio, k_neighbors, kind, n_jobs)
         elif method == 'SMOTE':
-            self.init_SMOTE()
+            self.init_SMOTE(ratio, k_neighbors, kind, n_jobs)
         elif method == 'SMOTEENN':
-            self.init_SMOTEENN()
+            self.init_SMOTEENN(sampling_strategy, ratio, k_neighbors, kind,
+                               n_jobs)
         elif method == 'SMOTETomek':
-            self.init_SMOTETomek()
+            self.init_SMOTETomek(sampling_strategy, ratio, n_jobs)
         else:
             raise ae.WORCKeyError(f'{method} is not a valid sampling method!')
 
@@ -150,19 +152,28 @@ class ObjectSampler(object):
         self.kind = kind
         self.n_jobs = n_jobs
 
-    def init_SMOTEEN(self, ratio, k_neighbors, kind, n_jobs):
+    def init_SMOTEEN(self, sampling_strategy, ratio, n_jobs):
         """Creata a SMOTEEN sampler object."""
         self.object =\
             combine.SMOTEENN(random_state=self.random_state,
-                                          ratio=ratio,
-                                          k_neighbors=k_neighbors,
-                                          kind=kind,
-                                          n_jobs=n_jobs)
-
+                             sampling_strategy=sampling_strategy,
+                             ratio=ratio,
+                             n_jobs=n_jobs)
 
         self.ratio = ratio
-        self.k_neighbors = k_neighbors
-        self.kind = kind
+        self.sampling_strategy = sampling_strategy
+        self.n_jobs = n_jobs
+
+    def init_SMOTETomek(self, sampling_strategy, ratio, n_jobs):
+        """Creata a SMOTE Tomek sampler object."""
+        self.object =\
+            combine.SMOTETomek(random_state=self.random_state,
+                               sampling_strategy=sampling_strategy,
+                               ratio=ratio,
+                               n_jobs=n_jobs)
+
+        self.ratio = ratio
+        self.sampling_strategy = sampling_strategy
         self.n_jobs = n_jobs
 
     def fit(self, **kwargs):

@@ -182,15 +182,27 @@ def convert_config_pyradiomics(config):
     # Take out the specific PyRadiomics values
     outputconfig['setting']['geometryTolerance'] = float(config['PyRadiomics']['geometryTolerance'])
 
-    outputconfig['setting']['normalize'] = bool(config['PyRadiomics']['normalize'])
+    if config['PyRadiomics']['normalize'] == 'True':
+        outputconfig['setting']['normalize'] = True
+    else:
+        outputconfig['setting']['normalize'] = False
+
     outputconfig['setting']['normalizeScale'] = int(config['PyRadiomics']['normalizeScale'])
 
     outputconfig['setting']['interpolator'] = config['PyRadiomics']['interpolator']
 
-    outputconfig['setting']['preCrop'] = bool(config['PyRadiomics']['preCrop'])
+    if config['PyRadiomics']['preCrop'] == 'True':
+        outputconfig['setting']['preCrop'] = True
+    else:
+        outputconfig['setting']['preCrop'] = False
+
     outputconfig['setting']['label'] = int(config['PyRadiomics']['label'])
 
-    outputconfig['setting']['force2D'] = bool(config['PyRadiomics']['force2D'])
+    if config['PyRadiomics']['force2D'] == 'True':
+        outputconfig['setting']['force2D'] = True
+    else:
+        outputconfig['setting']['force2D'] = False
+
     outputconfig['setting']['force2Ddimension'] = int(config['PyRadiomics']['force2Ddimension'])
 
     outputconfig['setting']['voxelArrayShift'] = int(config['PyRadiomics']['voxelArrayShift'])

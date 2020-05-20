@@ -175,7 +175,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                     'feature_values',
                     'feature_labels']
 
-    feature_values_train_combat = [data_harmonized[i] for i in range(len(image_features_train_combat))]
+    feature_values_train_combat = [data_harmonized[:, i] for i in range(len(image_features_train_combat))]
     feature_labels = feature_labels_combat + feature_labels_noncombat
     for fnum, i_feat in enumerate(feature_values_train_combat):
         # Combine ComBat and non-ComBat features
@@ -197,7 +197,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
     # Repeat for testing if required
     if features_test_in:
-        feature_values_test_combat = [d for d in data_harmonized[-len(image_features_test_combat):]]
+        feature_values_test_combat = [data_harmonized[:, i] for i in range(-len(image_features_test_combat), data_harmonized.shape[1])]
         for fnum, i_feat in enumerate(feature_values_test_combat):
             # Combine ComBat and non-ComBat features
             feature_values_temp = i_feat.tolist() + image_features_test_noncombat[fnum]
