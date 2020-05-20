@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ import pandas as pd
 import WORC.processing.label_processing as lp
 import WORC.addexceptions as WORCexceptions
 import numpy as np
+import os
 
 
 def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
@@ -97,20 +98,21 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
         except ValueError as e:
             message = str(e) + '. Please take a look at your labels' +\
                 ' file and make sure it is formatted correctly. ' +\
-                'See also https://github.com/MStarmans91/WORC/wiki/The-WORC-configuration#genetics.'
+                r'See also https://github.com/MStarmans91/WORC/wiki/The-WORC-configuration#genetics.'
             raise WORCexceptions.WORCValueError(message)
 
-        print("Labels:")
-        print(label_data['label'])
-        print('Total of ' + str(label_data['patient_IDs'].shape[0]) +
-              ' patients')
-        pos = np.sum(label_data['label'])
-        neg = label_data['patient_IDs'].shape[0] - pos
-        print(('{} positives, {} negatives').format(pos, neg))
+        if len(label_names) == 1:
+            print("Labels:")
+            print(label_data['label'])
+            print('Total of ' + str(label_data['patient_IDs'].shape[0]) +
+                  ' patients')
+            pos = np.sum(label_data['label'])
+            neg = label_data['patient_IDs'].shape[0] - pos
+            print(('{} positives, {} negatives').format(pos, neg))
     else:
         # Use filenames as patient ID s
         patient_IDs = list()
-        for i in featurefiles:
+        for i in featurefiles[0]:
             patient_IDs.append(os.path.basename(i))
         label_data = dict()
         label_data['patient_IDs'] = patient_IDs
@@ -140,6 +142,10 @@ def load_features(feat, patientinfo, label_type):
                 the patientinfo file.
 
     '''
+    # Check if features is a simple list, or just one string
+    if '=' not in feat[0]:
+        feat = ['Mod0=' + ','.join(feat)]
+
     # Split the feature files per modality
     feat_temp = list()
     modnames = list()
@@ -162,3 +168,54 @@ def load_features(feat, patientinfo, label_type):
                   label_type, modnames)
 
     return label_data, image_features
+
+
+def convert_config_pyradiomics(config):
+    '''
+    Convert fields from WORC confiparser object to a PyRadiomics compatible dictionary
+    '''
+    # Creatae main config structure
+    outputconfig = dict()
+    outputconfig['imageType'] = dict()
+    outputconfig['setting'] = dict()
+
+    # Take out the specific PyRadiomics values
+    outputconfig['setting']['geometryTolerance'] = float(config['PyRadiomics']['geometryTolerance'])
+
+    outputconfig['setting']['normalize'] = bool(config['PyRadiomics']['normalize'])
+    outputconfig['setting']['normalizeScale'] = int(config['PyRadiomics']['normalizeScale'])
+
+    outputconfig['setting']['interpolator'] = config['PyRadiomics']['interpolator']
+
+    outputconfig['setting']['preCrop'] = bool(config['PyRadiomics']['preCrop'])
+    outputconfig['setting']['label'] = int(config['PyRadiomics']['label'])
+
+    outputconfig['setting']['force2D'] = bool(config['PyRadiomics']['force2D'])
+    outputconfig['setting']['force2Ddimension'] = int(config['PyRadiomics']['force2Ddimension'])
+
+    outputconfig['setting']['voxelArrayShift'] = int(config['PyRadiomics']['voxelArrayShift'])
+
+    outputconfig['setting']['binCount'] = int(config['PyRadiomics']['binCount'])
+
+    # Extract several general values as well
+    # Convert strings with values to list of ints
+    distances = config['ImageFeatures']['GLCM_distances']
+    distances = distances.split(',')
+    distances = [int(s) for s in distances]
+    outputconfig['setting']['distances'] = distances
+
+    # Check if we need to apply transforms to the image
+    if config['PyRadiomics']['Original'] == 'True':
+        outputconfig['imageType']['Original'] = dict()
+
+    if config['PyRadiomics']['Wavelet'] == 'True':
+        outputconfig['imageType']['Wavelet'] = dict()
+
+    if config['PyRadiomics']['LoG'] == 'True':
+        outputconfig['imageType']['LoG'] = dict()
+        sigmas = config['ImageFeatures']['log_sigma']
+        sigmas = sigmas.split(',')
+        sigmas = [int(s) for s in sigmas]
+        outputconfig['imageType']['LoG']['sigma'] = sigmas
+
+    return outputconfig

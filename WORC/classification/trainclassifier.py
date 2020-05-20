@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -217,6 +217,10 @@ def trainclassifier(feat_train, patientinfo_train, config,
     param_grid['ReliefNumFeatures'] =\
         discrete_uniform(loc=config['Featsel']['ReliefNumFeatures'][0],
                          scale=config['Featsel']['ReliefNumFeatures'][1])
+
+    # Add a random seed, which is required for many methods
+    param_grid['random_seed'] =\
+        discrete_uniform(loc=0, scale=2**32 - 1)
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)

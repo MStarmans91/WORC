@@ -22,10 +22,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -89,6 +89,9 @@
 <li class="toctree-l1"><a class="reference internal" href="static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a></li>
 </ul>
@@ -173,7 +176,6 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
- | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -188,19 +190,19 @@
       <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.__abstractmethods__">__abstractmethods__ (WORC.classification.SearchCV.BaseSearchCV attribute)</a>
 
       <ul>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCVJoblib.__abstractmethods__">(WORC.classification.SearchCV.BaseSearchCVJoblib attribute)</a>
-</li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCVfastr.__abstractmethods__">(WORC.classification.SearchCV.BaseSearchCVfastr attribute)</a>
+</li>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCVJoblib.__abstractmethods__">(WORC.classification.SearchCV.BaseSearchCVJoblib attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.Ensemble.__abstractmethods__">(WORC.classification.SearchCV.Ensemble attribute)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib.__abstractmethods__">(WORC.classification.SearchCV.GridSearchCVJoblib attribute)</a>
-</li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVfastr.__abstractmethods__">(WORC.classification.SearchCV.GridSearchCVfastr attribute)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVJoblib.__abstractmethods__">(WORC.classification.SearchCV.RandomizedSearchCVJoblib attribute)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib.__abstractmethods__">(WORC.classification.SearchCV.GridSearchCVJoblib attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVfastr.__abstractmethods__">(WORC.classification.SearchCV.RandomizedSearchCVfastr attribute)</a>
+</li>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVJoblib.__abstractmethods__">(WORC.classification.SearchCV.RandomizedSearchCVJoblib attribute)</a>
 </li>
         <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.AbstractDetector.__abstractmethods__">(WORC.detectors.detectors.AbstractDetector attribute)</a>
 </li>
@@ -215,6 +217,10 @@
         <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.HostnameDetector.__abstractmethods__">(WORC.detectors.detectors.HostnameDetector attribute)</a>
 </li>
         <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.LinuxDetector.__abstractmethods__">(WORC.detectors.detectors.LinuxDetector attribute)</a>
+</li>
+        <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.WORCDirectoryDetector.__abstractmethods__">(WORC.detectors.detectors.WORCDirectoryDetector attribute)</a>
+</li>
+        <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.ICCThreshold.ICCThreshold.__abstractmethods__">(WORC.featureprocessing.ICCThreshold.ICCThreshold attribute)</a>
 </li>
         <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.Relief.SelectMulticlassRelief.__abstractmethods__">(WORC.featureprocessing.Relief.SelectMulticlassRelief attribute)</a>
 </li>
@@ -240,17 +246,13 @@
       <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__dict__">__dict__ (WORC.classification.AdvancedSampler.AdvancedSampler attribute)</a>
 
       <ul>
-        <li><a href="autogen/WORC.html#WORC.WORC.Tools.__dict__">(WORC.WORC.Tools attribute)</a>
-</li>
-        <li><a href="autogen/WORC.html#WORC.WORC.WORC.__dict__">(WORC.WORC.WORC attribute)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.boolean_uniform.__dict__">(WORC.classification.AdvancedSampler.boolean_uniform attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform.__dict__">(WORC.classification.AdvancedSampler.discrete_uniform attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.exp_uniform.__dict__">(WORC.classification.AdvancedSampler.exp_uniform attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.log_uniform.__dict__">(WORC.classification.AdvancedSampler.log_uniform attribute)</a>
-</li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.__dict__">(WORC.classification.ObjectSampler.ObjectSampler attribute)</a>
 </li>
         <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.AbstractDetector.__dict__">(WORC.detectors.detectors.AbstractDetector attribute)</a>
 </li>
@@ -276,13 +278,15 @@
 </li>
         <li><a href="autogen/WORC.validators.html#WORC.validators.preflightcheck.ValidatorsFactory.__dict__">(WORC.validators.preflightcheck.ValidatorsFactory attribute)</a>
 </li>
+        <li><a href="autogen/WORC.html#WORC.WORC.Tools.__dict__">(WORC.WORC.Tools attribute)</a>
+</li>
+        <li><a href="autogen/WORC.html#WORC.WORC.WORC.__dict__">(WORC.WORC.WORC attribute)</a>
+</li>
       </ul></li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__init__">__init__() (WORC.classification.AdvancedSampler.AdvancedSampler method)</a>
 
       <ul>
-        <li><a href="autogen/WORC.html#WORC.WORC.Tools.__init__">(WORC.WORC.Tools method)</a>
-</li>
-        <li><a href="autogen/WORC.html#WORC.WORC.WORC.__init__">(WORC.WORC.WORC method)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.boolean_uniform.__init__">(WORC.classification.AdvancedSampler.boolean_uniform method)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform.__init__">(WORC.classification.AdvancedSampler.discrete_uniform method)</a>
 </li>
@@ -290,21 +294,19 @@
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.log_uniform.__init__">(WORC.classification.AdvancedSampler.log_uniform method)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.__init__">(WORC.classification.ObjectSampler.ObjectSampler method)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.estimators.RankedSVM.__init__">(WORC.classification.estimators.RankedSVM method)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.__init__">(WORC.classification.SearchCV.BaseSearchCV method)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.Ensemble.__init__">(WORC.classification.SearchCV.Ensemble method)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib.__init__">(WORC.classification.SearchCV.GridSearchCVJoblib method)</a>
-</li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVfastr.__init__">(WORC.classification.SearchCV.GridSearchCVfastr method)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVJoblib.__init__">(WORC.classification.SearchCV.RandomizedSearchCVJoblib method)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib.__init__">(WORC.classification.SearchCV.GridSearchCVJoblib method)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVfastr.__init__">(WORC.classification.SearchCV.RandomizedSearchCVfastr method)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.estimators.RankedSVM.__init__">(WORC.classification.estimators.RankedSVM method)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVJoblib.__init__">(WORC.classification.SearchCV.RandomizedSearchCVJoblib method)</a>
 </li>
         <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.CsvDetector.__init__">(WORC.detectors.detectors.CsvDetector method)</a>
 </li>
@@ -327,6 +329,8 @@
         <li><a href="autogen/WORC.facade.helpers.html#WORC.facade.helpers.exceptions.PathNotFoundException.__init__">(WORC.facade.helpers.exceptions.PathNotFoundException method)</a>
 </li>
         <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.__init__">(WORC.facade.simpleworc.SimpleWORC method)</a>
+</li>
+        <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__">(WORC.featureprocessing.ICCThreshold.ICCThreshold method)</a>
 </li>
         <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.Imputer.Imputer.__init__">(WORC.featureprocessing.Imputer.Imputer method)</a>
 </li>
@@ -352,6 +356,10 @@
 </li>
         <li><a href="autogen/WORC.tools.html#WORC.tools.Transformix.Transformix.__init__">(WORC.tools.Transformix.Transformix method)</a>
 </li>
+        <li><a href="autogen/WORC.html#WORC.WORC.Tools.__init__">(WORC.WORC.Tools method)</a>
+</li>
+        <li><a href="autogen/WORC.html#WORC.WORC.WORC.__init__">(WORC.WORC.WORC method)</a>
+</li>
       </ul></li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__iter__">__iter__() (WORC.classification.AdvancedSampler.AdvancedSampler method)</a>
 
@@ -366,15 +374,11 @@
       <li><a href="autogen/WORC.html#WORC.addexceptions.WORCAssertionError.__module__">__module__ (WORC.addexceptions.WORCAssertionError attribute)</a>
 
       <ul>
-        <li><a href="autogen/WORC.html#WORC.WORC.Tools.__module__">(WORC.WORC.Tools attribute)</a>
-</li>
-        <li><a href="autogen/WORC.html#WORC.WORC.WORC.__module__">(WORC.WORC.WORC attribute)</a>
-</li>
         <li><a href="autogen/WORC.html#WORC.addexceptions.WORCError.__module__">(WORC.addexceptions.WORCError attribute)</a>
 </li>
-        <li><a href="autogen/WORC.html#WORC.addexceptions.WORCIOError.__module__">(WORC.addexceptions.WORCIOError attribute)</a>
-</li>
         <li><a href="autogen/WORC.html#WORC.addexceptions.WORCIndexError.__module__">(WORC.addexceptions.WORCIndexError attribute)</a>
+</li>
+        <li><a href="autogen/WORC.html#WORC.addexceptions.WORCIOError.__module__">(WORC.addexceptions.WORCIOError attribute)</a>
 </li>
         <li><a href="autogen/WORC.html#WORC.addexceptions.WORCKeyError.__module__">(WORC.addexceptions.WORCKeyError attribute)</a>
 </li>
@@ -386,31 +390,31 @@
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__module__">(WORC.classification.AdvancedSampler.AdvancedSampler attribute)</a>
 </li>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.boolean_uniform.__module__">(WORC.classification.AdvancedSampler.boolean_uniform attribute)</a>
+</li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform.__module__">(WORC.classification.AdvancedSampler.discrete_uniform attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.exp_uniform.__module__">(WORC.classification.AdvancedSampler.exp_uniform attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.log_uniform.__module__">(WORC.classification.AdvancedSampler.log_uniform attribute)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.__module__">(WORC.classification.ObjectSampler.ObjectSampler attribute)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.estimators.RankedSVM.__module__">(WORC.classification.estimators.RankedSVM attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.__module__">(WORC.classification.SearchCV.BaseSearchCV attribute)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCVJoblib.__module__">(WORC.classification.SearchCV.BaseSearchCVJoblib attribute)</a>
-</li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCVfastr.__module__">(WORC.classification.SearchCV.BaseSearchCVfastr attribute)</a>
+</li>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCVJoblib.__module__">(WORC.classification.SearchCV.BaseSearchCVJoblib attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.Ensemble.__module__">(WORC.classification.SearchCV.Ensemble attribute)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib.__module__">(WORC.classification.SearchCV.GridSearchCVJoblib attribute)</a>
-</li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVfastr.__module__">(WORC.classification.SearchCV.GridSearchCVfastr attribute)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVJoblib.__module__">(WORC.classification.SearchCV.RandomizedSearchCVJoblib attribute)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib.__module__">(WORC.classification.SearchCV.GridSearchCVJoblib attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVfastr.__module__">(WORC.classification.SearchCV.RandomizedSearchCVfastr attribute)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.estimators.RankedSVM.__module__">(WORC.classification.estimators.RankedSVM attribute)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVJoblib.__module__">(WORC.classification.SearchCV.RandomizedSearchCVJoblib attribute)</a>
 </li>
         <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.AbstractDetector.__module__">(WORC.detectors.detectors.AbstractDetector attribute)</a>
 </li>
@@ -425,6 +429,8 @@
         <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.HostnameDetector.__module__">(WORC.detectors.detectors.HostnameDetector attribute)</a>
 </li>
         <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.LinuxDetector.__module__">(WORC.detectors.detectors.LinuxDetector attribute)</a>
+</li>
+        <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.WORCDirectoryDetector.__module__">(WORC.detectors.detectors.WORCDirectoryDetector attribute)</a>
 </li>
         <li><a href="autogen/WORC.facade.html#WORC.facade.basicworc.BasicWORC.__module__">(WORC.facade.basicworc.BasicWORC attribute)</a>
 </li>
@@ -443,6 +449,8 @@
         <li><a href="autogen/WORC.facade.helpers.html#WORC.facade.helpers.exceptions.PathNotFoundException.__module__">(WORC.facade.helpers.exceptions.PathNotFoundException attribute)</a>
 </li>
         <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.__module__">(WORC.facade.simpleworc.SimpleWORC attribute)</a>
+</li>
+        <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.ICCThreshold.ICCThreshold.__module__">(WORC.featureprocessing.ICCThreshold.ICCThreshold attribute)</a>
 </li>
         <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.Imputer.Imputer.__module__">(WORC.featureprocessing.Imputer.Imputer attribute)</a>
 </li>
@@ -480,25 +488,25 @@
 </li>
         <li><a href="autogen/WORC.validators.html#WORC.validators.preflightcheck.ValidatorsFactory.__module__">(WORC.validators.preflightcheck.ValidatorsFactory attribute)</a>
 </li>
+        <li><a href="autogen/WORC.html#WORC.WORC.Tools.__module__">(WORC.WORC.Tools attribute)</a>
+</li>
+        <li><a href="autogen/WORC.html#WORC.WORC.WORC.__module__">(WORC.WORC.WORC attribute)</a>
+</li>
       </ul></li>
       <li><a href="autogen/WORC.html#WORC.addexceptions.WORCError.__weakref__">__weakref__ (WORC.addexceptions.WORCError attribute)</a>
 
       <ul>
-        <li><a href="autogen/WORC.html#WORC.WORC.Tools.__weakref__">(WORC.WORC.Tools attribute)</a>
-</li>
-        <li><a href="autogen/WORC.html#WORC.WORC.WORC.__weakref__">(WORC.WORC.WORC attribute)</a>
-</li>
         <li><a href="autogen/WORC.html#WORC.addexceptions.WORCIOError.__weakref__">(WORC.addexceptions.WORCIOError attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.AdvancedSampler.__weakref__">(WORC.classification.AdvancedSampler.AdvancedSampler attribute)</a>
+</li>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.boolean_uniform.__weakref__">(WORC.classification.AdvancedSampler.boolean_uniform attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform.__weakref__">(WORC.classification.AdvancedSampler.discrete_uniform attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.exp_uniform.__weakref__">(WORC.classification.AdvancedSampler.exp_uniform attribute)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.log_uniform.__weakref__">(WORC.classification.AdvancedSampler.log_uniform attribute)</a>
-</li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.__weakref__">(WORC.classification.ObjectSampler.ObjectSampler attribute)</a>
 </li>
         <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.AbstractDetector.__weakref__">(WORC.detectors.detectors.AbstractDetector attribute)</a>
 </li>
@@ -536,6 +544,10 @@
 </li>
         <li><a href="autogen/WORC.validators.html#WORC.validators.preflightcheck.ValidatorsFactory.__weakref__">(WORC.validators.preflightcheck.ValidatorsFactory attribute)</a>
 </li>
+        <li><a href="autogen/WORC.html#WORC.WORC.Tools.__weakref__">(WORC.WORC.Tools attribute)</a>
+</li>
+        <li><a href="autogen/WORC.html#WORC.WORC.WORC.__weakref__">(WORC.WORC.WORC attribute)</a>
+</li>
       </ul></li>
   </ul></td>
 </tr></table>
@@ -549,6 +561,10 @@
 </li>
       <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.add_config_overrides">add_config_overrides() (WORC.facade.simpleworc.SimpleWORC method)</a>
 </li>
+      <li><a href="autogen/WORC.html#WORC.WORC.WORC.add_elastix">add_elastix() (WORC.WORC.WORC method)</a>
+</li>
+      <li><a href="autogen/WORC.html#WORC.WORC.WORC.add_elastix_sourcesandsinks">add_elastix_sourcesandsinks() (WORC.WORC.WORC method)</a>
+</li>
       <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.add_evaluation">add_evaluation() (WORC.facade.simpleworc.SimpleWORC method)</a>
 
       <ul>
@@ -557,6 +573,12 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/WORC.html#WORC.WORC.WORC.add_feature_calculator">add_feature_calculator() (WORC.WORC.WORC method)</a>
+</li>
+      <li><a href="autogen/WORC.html#WORC.WORC.WORC.add_preprocessing">add_preprocessing() (WORC.WORC.WORC method)</a>
+</li>
+      <li><a href="autogen/WORC.html#WORC.WORC.WORC.add_segmentix">add_segmentix() (WORC.WORC.WORC method)</a>
+</li>
       <li><a href="autogen/WORC.html#WORC.WORC.WORC.add_tools">add_tools() (WORC.WORC.WORC method)</a>
 </li>
       <li><a href="autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.addchangeorder">addchangeorder() (WORC.tools.Elastix.Elastix method)</a>
@@ -579,21 +601,21 @@
 </li>
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_images.bbox_2D">bbox_2D() (in module WORC.plotting.plot_images)</a>
 </li>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.best_params_">best_params_ (WORC.classification.SearchCV.BaseSearchCV attribute)</a>
+      <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.best_params_">best_params_() (WORC.classification.SearchCV.BaseSearchCV property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.best_score_">best_score_ (WORC.classification.SearchCV.BaseSearchCV attribute)</a>
+      <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.best_score_">best_score_() (WORC.classification.SearchCV.BaseSearchCV property)</a>
 </li>
       <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.BigrClusterDetector">BigrClusterDetector (class in WORC.detectors.detectors)</a>
 </li>
       <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.binary_classification">binary_classification() (WORC.facade.simpleworc.SimpleWORC method)</a>
 </li>
+      <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.boolean_uniform">boolean_uniform (class in WORC.classification.AdvancedSampler)</a>
+</li>
       <li><a href="autogen/WORC.html#WORC.WORC.WORC.build">build() (WORC.WORC.WORC method)</a>
 </li>
       <li><a href="autogen/WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.build_config">build_config() (WORC.facade.helpers.configbuilder.ConfigBuilder method)</a>
-</li>
-      <li><a href="autogen/WORC.html#WORC.WORC.WORC.build_testing">build_testing() (WORC.WORC.WORC method)</a>
 </li>
       <li><a href="autogen/WORC.html#WORC.WORC.WORC.build_training">build_training() (WORC.WORC.WORC method)</a>
 </li>
@@ -603,6 +625,8 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/WORC.statistics.html#WORC.statistics.delong.calc_pvalue">calc_pvalue() (in module WORC.statistics.delong)</a>
+</li>
       <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.CartesiusClusterDetector">CartesiusClusterDetector (class in WORC.detectors.detectors)</a>
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.metrics.check_scoring">check_scoring() (in module WORC.classification.metrics)</a>
@@ -613,6 +637,10 @@
 </li>
       <li><a href="autogen/WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.coarse_overrides">coarse_overrides() (WORC.facade.helpers.configbuilder.ConfigBuilder method)</a>
 </li>
+      <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.ComBat.ComBat">ComBat() (in module WORC.featureprocessing.ComBat)</a>
+</li>
+      <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.ComBat.ComBatMatlab">ComBatMatlab() (in module WORC.featureprocessing.ComBat)</a>
+</li>
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_SVM.combine_multiple_estimators">combine_multiple_estimators() (in module WORC.plotting.plot_SVM)</a>
 </li>
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.compute_CI.compute_confidence">compute_confidence() (in module WORC.plotting.compute_CI)</a>
@@ -621,11 +649,29 @@
 </li>
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.compute_CI.compute_confidence_logit">compute_confidence_logit() (in module WORC.plotting.compute_CI)</a>
 </li>
+      <li><a href="autogen/WORC.statistics.html#WORC.statistics.delong.compute_ground_truth_statistics">compute_ground_truth_statistics() (in module WORC.statistics.delong)</a>
+</li>
+      <li><a href="autogen/WORC.statistics.html#WORC.statistics.delong.compute_midrank">compute_midrank() (in module WORC.statistics.delong)</a>
+</li>
+      <li><a href="autogen/WORC.statistics.html#WORC.statistics.delong.compute_midrank_weight">compute_midrank_weight() (in module WORC.statistics.delong)</a>
+</li>
       <li><a href="autogen/WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder">ConfigBuilder (class in WORC.facade.helpers.configbuilder)</a>
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.construct_classifier.construct_classifier">construct_classifier() (in module WORC.classification.construct_classifier)</a>
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.construct_classifier.construct_SVM">construct_SVM() (in module WORC.classification.construct_classifier)</a>
+</li>
+      <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.file_io.convert_config_pyradiomics">convert_config_pyradiomics() (in module WORC.IOparser.file_io)</a>
+</li>
+      <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold">convert_features_ICC_threshold() (in module WORC.featureprocessing.ICCThreshold)</a>
+</li>
+      <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.FeatureConverter.convert_PREDICT">convert_PREDICT() (in module WORC.featureprocessing.FeatureConverter)</a>
+</li>
+      <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.FeatureConverter.convert_pyradiomics">convert_pyradiomics() (in module WORC.featureprocessing.FeatureConverter)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.FeatureConverter.convert_pyradiomics_featurevector">convert_pyradiomics_featurevector() (in module WORC.featureprocessing.FeatureConverter)</a>
 </li>
       <li><a href="autogen/WORC.facade.helpers.html#WORC.facade.helpers.processing.convert_radiomix_features">convert_radiomix_features() (in module WORC.facade.helpers.processing)</a>
 </li>
@@ -635,8 +681,6 @@
 </li>
       <li><a href="autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.create_bbox">create_bbox() (WORC.tools.Elastix.Elastix method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.create_ensemble">create_ensemble() (WORC.classification.SearchCV.BaseSearchCV method)</a>
 </li>
       <li><a href="autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate.create_links_Addon">create_links_Addon() (WORC.tools.Evaluate.Evaluate method)</a>
@@ -646,6 +690,10 @@
       <li><a href="autogen/WORC.resources.fastr_tests.html#WORC.resources.fastr_tests.CalcFeatures_test.create_network">create_network() (in module WORC.resources.fastr_tests.CalcFeatures_test)</a>
 
       <ul>
+        <li><a href="autogen/WORC.resources.fastr_tests.html#WORC.resources.fastr_tests.elastix_test.create_network">(in module WORC.resources.fastr_tests.elastix_test)</a>
+</li>
+        <li><a href="autogen/WORC.resources.fastr_tests.html#WORC.resources.fastr_tests.segmentix_test.create_network">(in module WORC.resources.fastr_tests.segmentix_test)</a>
+</li>
         <li><a href="autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.create_network">(WORC.tools.Elastix.Elastix method)</a>
 </li>
         <li><a href="autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate.create_network">(WORC.tools.Evaluate.Evaluate method)</a>
@@ -654,12 +702,10 @@
 </li>
         <li><a href="autogen/WORC.tools.html#WORC.tools.Transformix.Transformix.create_network">(WORC.tools.Transformix.Transformix method)</a>
 </li>
-        <li><a href="autogen/WORC.resources.fastr_tests.html#WORC.resources.fastr_tests.elastix_test.create_network">(in module WORC.resources.fastr_tests.elastix_test)</a>
-</li>
-        <li><a href="autogen/WORC.resources.fastr_tests.html#WORC.resources.fastr_tests.segmentix_test.create_network">(in module WORC.resources.fastr_tests.segmentix_test)</a>
-</li>
       </ul></li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.construct_classifier.create_param_grid">create_param_grid() (in module WORC.classification.construct_classifier)</a>
+</li>
+      <li><a href="autogen/WORC.exampledata.html#WORC.exampledata.create_example_data.create_random_features">create_random_features() (in module WORC.exampledata.create_example_data)</a>
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.createfixedsplits.createfixedsplits">createfixedsplits() (in module WORC.classification.createfixedsplits)</a>
 
@@ -693,8 +739,14 @@
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.fitandscore.delete_nonestimator_parameters">delete_nonestimator_parameters() (in module WORC.classification.fitandscore)</a>
 </li>
+      <li><a href="autogen/WORC.statistics.html#WORC.statistics.delong.delong_roc_test">delong_roc_test() (in module WORC.statistics.delong)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/WORC.statistics.html#WORC.statistics.delong.delong_roc_variance">delong_roc_variance() (in module WORC.statistics.delong)</a>
+</li>
+      <li><a href="autogen/WORC.processing.html#WORC.processing.segmentix.dilate_contour">dilate_contour() (in module WORC.processing.segmentix)</a>
+</li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform">discrete_uniform (class in WORC.classification.AdvancedSampler)</a>
 </li>
       <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.AbstractDetector.do_detection">do_detection() (WORC.detectors.detectors.AbstractDetector method)</a>
@@ -726,8 +778,6 @@
       <li><a href="autogen/WORC.facade.html#WORC.facade.basicworc.BasicWORC.execute">execute() (WORC.facade.basicworc.BasicWORC method)</a>
 
       <ul>
-        <li><a href="autogen/WORC.html#WORC.WORC.WORC.execute">(WORC.WORC.WORC method)</a>
-</li>
         <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.execute">(WORC.facade.simpleworc.SimpleWORC method)</a>
 </li>
         <li><a href="autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.execute">(WORC.tools.Elastix.Elastix method)</a>
@@ -737,6 +787,8 @@
         <li><a href="autogen/WORC.tools.html#WORC.tools.Slicer.Slicer.execute">(WORC.tools.Slicer.Slicer method)</a>
 </li>
         <li><a href="autogen/WORC.tools.html#WORC.tools.Transformix.Transformix.execute">(WORC.tools.Transformix.Transformix method)</a>
+</li>
+        <li><a href="autogen/WORC.html#WORC.WORC.WORC.execute">(WORC.WORC.WORC method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -755,24 +807,30 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autogen/WORC.validators.html#WORC.validators.preflightcheck.ValidatorsFactory.factor_validators">factor_validators() (WORC.validators.preflightcheck.ValidatorsFactory static method)</a>
 </li>
+      <li><a href="autogen/WORC.statistics.html#WORC.statistics.delong.fastDeLong">fastDeLong() (in module WORC.statistics.delong)</a>
+</li>
+      <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.FeatureConverter.FeatureConverter">FeatureConverter() (in module WORC.featureprocessing.FeatureConverter)</a>
+</li>
       <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.features_from_radiomix_xlsx">features_from_radiomix_xlsx() (WORC.facade.simpleworc.SimpleWORC method)</a>
 </li>
       <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.features_from_this_directory">features_from_this_directory() (WORC.facade.simpleworc.SimpleWORC method)</a>
+</li>
+      <li><a href="autogen/WORC.tests.html#WORC.tests.test_helpers.find_exampledatadir">find_exampledatadir() (in module WORC.tests.test_helpers)</a>
 </li>
       <li><a href="autogen/WORC.processing.html#WORC.processing.label_processing.findlabeldata">findlabeldata() (in module WORC.processing.label_processing)</a>
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.estimators.RankedSVM.fit">fit() (WORC.classification.estimators.RankedSVM method)</a>
 
       <ul>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.fit">(WORC.classification.ObjectSampler.ObjectSampler method)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVfastr.fit">(WORC.classification.SearchCV.GridSearchCVfastr method)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib.fit">(WORC.classification.SearchCV.GridSearchCVJoblib method)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVfastr.fit">(WORC.classification.SearchCV.GridSearchCVfastr method)</a>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVfastr.fit">(WORC.classification.SearchCV.RandomizedSearchCVfastr method)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVJoblib.fit">(WORC.classification.SearchCV.RandomizedSearchCVJoblib method)</a>
 </li>
-        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVfastr.fit">(WORC.classification.SearchCV.RandomizedSearchCVfastr method)</a>
+        <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.ICCThreshold.ICCThreshold.fit">(WORC.featureprocessing.ICCThreshold.ICCThreshold method)</a>
 </li>
         <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.Imputer.Imputer.fit">(WORC.featureprocessing.Imputer.Imputer method)</a>
 </li>
@@ -805,12 +863,16 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_boxplot.generate_boxplots">generate_boxplots() (in module WORC.plotting.plot_boxplot)</a>
+      <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_boxplot_features.generate_feature_boxplots">generate_feature_boxplots() (in module WORC.plotting.plot_boxplot_features)</a>
 </li>
-      <li><a href="autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.getparametermap">getparametermap() (WORC.tools.Elastix.Elastix method)</a>
+      <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_boxplot_performance.generate_performance_boxplots">generate_performance_boxplots() (in module WORC.plotting.plot_boxplot_performance)</a>
+</li>
+      <li><a href="autogen/WORC.processing.html#WORC.processing.segmentix.get_ring">get_ring() (in module WORC.processing.segmentix)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/WORC.tools.html#WORC.tools.Elastix.Elastix.getparametermap">getparametermap() (WORC.tools.Elastix.Elastix method)</a>
+</li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVfastr">GridSearchCVfastr (class in WORC.classification.SearchCV)</a>
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.GridSearchCVJoblib">GridSearchCVJoblib (class in WORC.classification.SearchCV)</a>
@@ -833,20 +895,14 @@
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.metrics.ICC_anova">ICC_anova() (in module WORC.classification.metrics)</a>
 </li>
+      <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.ICCThreshold.ICCThreshold">ICCThreshold (class in WORC.featureprocessing.ICCThreshold)</a>
+</li>
       <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.images_from_this_directory">images_from_this_directory() (WORC.facade.simpleworc.SimpleWORC method)</a>
 </li>
       <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.Imputer.Imputer">Imputer (class in WORC.featureprocessing.Imputer)</a>
 </li>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_NearMiss">init_NearMiss() (WORC.classification.ObjectSampler.ObjectSampler method)</a>
-</li>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_RandomOverSampling">init_RandomOverSampling() (WORC.classification.ObjectSampler.ObjectSampler method)</a>
-</li>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_RandomUnderSampling">init_RandomUnderSampling() (WORC.classification.ObjectSampler.ObjectSampler method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_SMOTE">init_SMOTE() (WORC.classification.ObjectSampler.ObjectSampler method)</a>
-</li>
       <li><a href="autogen/WORC.facade.helpers.html#WORC.facade.helpers.exceptions.InvalidCsvFileException">InvalidCsvFileException</a>
 </li>
       <li><a href="autogen/WORC.validators.html#WORC.validators.preflightcheck.InvalidLabelsValidator">InvalidLabelsValidator (class in WORC.validators.preflightcheck)</a>
@@ -876,11 +932,15 @@
       <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.config_io_classifier.load_config">load_config() (in module WORC.IOparser.config_io_classifier)</a>
 
       <ul>
-        <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.config_WORC.load_config">(in module WORC.IOparser.config_WORC)</a>
+        <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.config_io_combat.load_config">(in module WORC.IOparser.config_io_combat)</a>
+</li>
+        <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.config_io_PyRadiomics.load_config">(in module WORC.IOparser.config_io_PyRadiomics)</a>
 </li>
         <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.config_preprocessing.load_config">(in module WORC.IOparser.config_preprocessing)</a>
 </li>
         <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.config_segmentix.load_config">(in module WORC.IOparser.config_segmentix)</a>
+</li>
+        <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.config_WORC.load_config">(in module WORC.IOparser.config_WORC)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -889,7 +949,7 @@
 </li>
       <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.file_io.load_data">load_data() (in module WORC.IOparser.file_io)</a>
 </li>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.trainclassifier.load_features">load_features() (in module WORC.classification.trainclassifier)</a>
+      <li><a href="autogen/WORC.IOparser.html#WORC.IOparser.file_io.load_features">load_features() (in module WORC.IOparser.file_io)</a>
 </li>
       <li><a href="autogen/WORC.processing.html#WORC.processing.label_processing.load_label_csv">load_label_csv() (in module WORC.processing.label_processing)</a>
 </li>
@@ -910,13 +970,11 @@
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_barchart.main">main() (in module WORC.plotting.plot_barchart)</a>
 
       <ul>
+        <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.main">(in module WORC.plotting.plot_ranked_scores)</a>
+</li>
         <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_ROC.main">(in module WORC.plotting.plot_ROC)</a>
 </li>
         <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_SVM.main">(in module WORC.plotting.plot_SVM)</a>
-</li>
-        <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_boxplot.main">(in module WORC.plotting.plot_boxplot)</a>
-</li>
-        <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.main">(in module WORC.plotting.plot_ranked_scores)</a>
 </li>
         <li><a href="autogen/WORC.plotting.html#WORC.plotting.plotminmaxresponse.main">(in module WORC.plotting.plotminmaxresponse)</a>
 </li>
@@ -932,6 +990,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.scatterplot.make_scatterplot">make_scatterplot() (in module WORC.plotting.scatterplot)</a>
+</li>
+      <li><a href="autogen/WORC.processing.html#WORC.processing.segmentix.mask_contour">mask_contour() (in module WORC.processing.segmentix)</a>
 </li>
       <li><a href="autogen/WORC.processing.html#WORC.processing.classes.switch.match">match() (WORC.processing.classes.switch method)</a>
 </li>
@@ -964,14 +1024,6 @@
   </ul></td>
 </tr></table>
 
-<h2 id="O">O</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler">ObjectSampler (class in WORC.classification.ObjectSampler)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -988,6 +1040,8 @@
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_barchart.plot_barchart">plot_barchart() (in module WORC.plotting.plot_barchart)</a>
 </li>
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_barchart.plot_bars">plot_bars() (in module WORC.plotting.plot_barchart)</a>
+</li>
+      <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_boxplot_features.plot_boxplot_features">plot_boxplot_features() (in module WORC.plotting.plot_boxplot_features)</a>
 </li>
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_images.plot_im_and_overlay">plot_im_and_overlay() (in module WORC.plotting.plot_images)</a>
 </li>
@@ -1033,8 +1087,12 @@
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.Ensemble.predict_proba">(WORC.classification.SearchCV.Ensemble method)</a>
 </li>
       </ul></li>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.preprocess">preprocess() (WORC.classification.SearchCV.BaseSearchCV method)</a>
+      <li><a href="autogen/WORC.processing.html#WORC.processing.preprocessing.preprocess">preprocess() (in module WORC.processing.preprocessing)</a>
+
+      <ul>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.preprocess">(WORC.classification.SearchCV.BaseSearchCV method)</a>
 </li>
+      </ul></li>
       <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.Preprocessor.Preprocessor">Preprocessor (class in WORC.featureprocessing.Preprocessor)</a>
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.process_fit">process_fit() (WORC.classification.SearchCV.BaseSearchCV method)</a>
@@ -1073,9 +1131,11 @@
 </li>
       <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_ROC.ROC_thresholding">ROC_thresholding() (in module WORC.plotting.plot_ROC)</a>
 </li>
-      <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform.rvs">rvs() (WORC.classification.AdvancedSampler.discrete_uniform method)</a>
+      <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.boolean_uniform.rvs">rvs() (WORC.classification.AdvancedSampler.boolean_uniform method)</a>
 
       <ul>
+        <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.discrete_uniform.rvs">(WORC.classification.AdvancedSampler.discrete_uniform method)</a>
+</li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.exp_uniform.rvs">(WORC.classification.AdvancedSampler.exp_uniform method)</a>
 </li>
         <li><a href="autogen/WORC.classification.html#WORC.classification.AdvancedSampler.log_uniform.rvs">(WORC.classification.AdvancedSampler.log_uniform method)</a>
@@ -1091,9 +1151,13 @@
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.sar_score">sar_score() (in module WORC.classification.SearchCV)</a>
 </li>
+      <li><a href="autogen/WORC.html#WORC.WORC.WORC.save_config">save_config() (WORC.WORC.WORC method)</a>
+</li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.score">score() (WORC.classification.SearchCV.BaseSearchCV method)</a>
 </li>
       <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.segmentations_from_this_directory">segmentations_from_this_directory() (WORC.facade.simpleworc.SimpleWORC method)</a>
+</li>
+      <li><a href="autogen/WORC.processing.html#WORC.processing.segmentix.segmentix">segmentix() (in module WORC.processing.segmentix)</a>
 </li>
       <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.SelectGroups.SelectGroups">SelectGroups (class in WORC.featureprocessing.SelectGroups)</a>
 </li>
@@ -1108,17 +1172,17 @@
       <li><a href="autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate.set">set() (WORC.tools.Evaluate.Evaluate method)</a>
 
       <ul>
-        <li><a href="autogen/WORC.html#WORC.WORC.WORC.set">(WORC.WORC.WORC method)</a>
-</li>
         <li><a href="autogen/WORC.tools.html#WORC.tools.Slicer.Slicer.set">(WORC.tools.Slicer.Slicer method)</a>
+</li>
+        <li><a href="autogen/WORC.html#WORC.WORC.WORC.set">(WORC.WORC.WORC method)</a>
 </li>
       </ul></li>
       <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.set_multicore_execution">set_multicore_execution() (WORC.facade.simpleworc.SimpleWORC method)</a>
 </li>
-      <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.set_tmpdir">set_tmpdir() (WORC.facade.simpleworc.SimpleWORC method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC.set_tmpdir">set_tmpdir() (WORC.facade.simpleworc.SimpleWORC method)</a>
+</li>
       <li><a href="autogen/WORC.validators.html#WORC.validators.preflightcheck.SimpleValidator">SimpleValidator (class in WORC.validators.preflightcheck)</a>
 </li>
       <li><a href="autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC">SimpleWORC (class in WORC.facade.simpleworc)</a>
@@ -1159,6 +1223,12 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="autogen/WORC.plotting.html#WORC.plotting.plot_boxplot_performance.test">test() (in module WORC.plotting.plot_boxplot_performance)</a>
+</li>
+      <li><a href="autogen/WORC.tests.html#WORC.tests.test_combat.test_combat">test_combat() (in module WORC.tests.test_combat)</a>
+</li>
+      <li><a href="autogen/WORC.tests.html#WORC.tests.test_iccthreshold.test_iccthreshold">test_iccthreshold() (in module WORC.tests.test_iccthreshold)</a>
+</li>
       <li><a href="autogen/WORC.html#WORC.WORC.Tools">Tools (class in WORC.WORC)</a>
 </li>
       <li><a href="autogen/WORC.classification.html#WORC.classification.trainclassifier.trainclassifier">trainclassifier() (in module WORC.classification.trainclassifier)</a>
@@ -1167,6 +1237,8 @@
 
       <ul>
         <li><a href="autogen/WORC.classification.html#WORC.classification.SearchCV.Ensemble.transform">(WORC.classification.SearchCV.Ensemble method)</a>
+</li>
+        <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.ICCThreshold.ICCThreshold.transform">(WORC.featureprocessing.ICCThreshold.ICCThreshold method)</a>
 </li>
         <li><a href="autogen/WORC.featureprocessing.html#WORC.featureprocessing.Imputer.Imputer.transform">(WORC.featureprocessing.Imputer.Imputer method)</a>
 </li>
@@ -1227,8 +1299,6 @@
 </li>
       <li><a href="autogen/WORC.classification.html#module-WORC.classification.metrics">WORC.classification.metrics (module)</a>
 </li>
-      <li><a href="autogen/WORC.classification.html#module-WORC.classification.ObjectSampler">WORC.classification.ObjectSampler (module)</a>
-</li>
       <li><a href="autogen/WORC.classification.html#module-WORC.classification.parameter_optimization">WORC.classification.parameter_optimization (module)</a>
 </li>
       <li><a href="autogen/WORC.classification.html#module-WORC.classification.RankedSVM">WORC.classification.RankedSVM (module)</a>
@@ -1240,6 +1310,8 @@
       <li><a href="autogen/WORC.classification.html#module-WORC.classification.trainclassifier">WORC.classification.trainclassifier (module)</a>
 </li>
       <li><a href="autogen/WORC.detectors.html#module-WORC.detectors.detectors">WORC.detectors.detectors (module)</a>
+</li>
+      <li><a href="autogen/WORC.exampledata.html#module-WORC.exampledata.create_example_data">WORC.exampledata.create_example_data (module)</a>
 </li>
       <li><a href="autogen/WORC.exampledata.html#module-WORC.exampledata.datadownloader">WORC.exampledata.datadownloader (module)</a>
 </li>
@@ -1256,6 +1328,12 @@
       <li><a href="autogen/WORC.facade.html#module-WORC.facade.simpleworc">WORC.facade.simpleworc (module)</a>
 </li>
       <li><a href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing">WORC.featureprocessing (module)</a>
+</li>
+      <li><a href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.ComBat">WORC.featureprocessing.ComBat (module)</a>
+</li>
+      <li><a href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.FeatureConverter">WORC.featureprocessing.FeatureConverter (module)</a>
+</li>
+      <li><a href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.ICCThreshold">WORC.featureprocessing.ICCThreshold (module)</a>
 </li>
       <li><a href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.Imputer">WORC.featureprocessing.Imputer (module)</a>
 </li>
@@ -1275,12 +1353,16 @@
 </li>
       <li><a href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_io_classifier">WORC.IOparser.config_io_classifier (module)</a>
 </li>
+      <li><a href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_io_combat">WORC.IOparser.config_io_combat (module)</a>
+</li>
+      <li><a href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_io_PyRadiomics">WORC.IOparser.config_io_PyRadiomics (module)</a>
+</li>
       <li><a href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_preprocessing">WORC.IOparser.config_preprocessing (module)</a>
+</li>
+      <li><a href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_segmentix">WORC.IOparser.config_segmentix (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_segmentix">WORC.IOparser.config_segmentix (module)</a>
-</li>
       <li><a href="autogen/WORC.IOparser.html#module-WORC.IOparser.config_WORC">WORC.IOparser.config_WORC (module)</a>
 </li>
       <li><a href="autogen/WORC.IOparser.html#module-WORC.IOparser.file_io">WORC.IOparser.file_io (module)</a>
@@ -1293,7 +1375,9 @@
 </li>
       <li><a href="autogen/WORC.plotting.html#module-WORC.plotting.plot_barchart">WORC.plotting.plot_barchart (module)</a>
 </li>
-      <li><a href="autogen/WORC.plotting.html#module-WORC.plotting.plot_boxplot">WORC.plotting.plot_boxplot (module)</a>
+      <li><a href="autogen/WORC.plotting.html#module-WORC.plotting.plot_boxplot_features">WORC.plotting.plot_boxplot_features (module)</a>
+</li>
+      <li><a href="autogen/WORC.plotting.html#module-WORC.plotting.plot_boxplot_performance">WORC.plotting.plot_boxplot_performance (module)</a>
 </li>
       <li><a href="autogen/WORC.plotting.html#module-WORC.plotting.plot_images">WORC.plotting.plot_images (module)</a>
 </li>
@@ -1313,6 +1397,10 @@
 </li>
       <li><a href="autogen/WORC.processing.html#module-WORC.processing.label_processing">WORC.processing.label_processing (module)</a>
 </li>
+      <li><a href="autogen/WORC.processing.html#module-WORC.processing.preprocessing">WORC.processing.preprocessing (module)</a>
+</li>
+      <li><a href="autogen/WORC.processing.html#module-WORC.processing.segmentix">WORC.processing.segmentix (module)</a>
+</li>
       <li><a href="autogen/WORC.resources.fastr_tests.html#module-WORC.resources.fastr_tests.CalcFeatures_test">WORC.resources.fastr_tests.CalcFeatures_test (module)</a>
 </li>
       <li><a href="autogen/WORC.resources.fastr_tests.html#module-WORC.resources.fastr_tests.elastix_test">WORC.resources.fastr_tests.elastix_test (module)</a>
@@ -1320,6 +1408,14 @@
       <li><a href="autogen/WORC.resources.fastr_tests.html#module-WORC.resources.fastr_tests.segmentix_test">WORC.resources.fastr_tests.segmentix_test (module)</a>
 </li>
       <li><a href="autogen/WORC.resources.fastr_tools.html#module-WORC.resources.fastr_tools">WORC.resources.fastr_tools (module)</a>
+</li>
+      <li><a href="autogen/WORC.statistics.html#module-WORC.statistics.delong">WORC.statistics.delong (module)</a>
+</li>
+      <li><a href="autogen/WORC.tests.html#module-WORC.tests.test_combat">WORC.tests.test_combat (module)</a>
+</li>
+      <li><a href="autogen/WORC.tests.html#module-WORC.tests.test_helpers">WORC.tests.test_helpers (module)</a>
+</li>
+      <li><a href="autogen/WORC.tests.html#module-WORC.tests.test_iccthreshold">WORC.tests.test_iccthreshold (module)</a>
 </li>
       <li><a href="autogen/WORC.tools.html#module-WORC.tools.createfixedsplits">WORC.tools.createfixedsplits (module)</a>
 </li>
@@ -1336,6 +1432,8 @@
       <li><a href="autogen/WORC.html#module-WORC.WORC">WORC.WORC (module)</a>
 </li>
       <li><a href="autogen/WORC.html#WORC.addexceptions.WORCAssertionError">WORCAssertionError</a>
+</li>
+      <li><a href="autogen/WORC.detectors.html#WORC.detectors.detectors.WORCDirectoryDetector">WORCDirectoryDetector (class in WORC.detectors.detectors)</a>
 </li>
       <li><a href="autogen/WORC.html#WORC.addexceptions.WORCError">WORCError</a>
 </li>

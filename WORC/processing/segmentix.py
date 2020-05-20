@@ -36,7 +36,7 @@ def get_ring(contour, radius=5):
             Radius of ring to be extracted.
     '''
     contour = contour.astype(bool)
-    radius = int()
+    radius = int(radius)
     disk = morphology.disk(radius)
 
     # Dilation with radius in axial direction
@@ -61,14 +61,13 @@ def dilate_contour(contour, radius=5):
             Radius of ring to be extracted.
     '''
     contour = contour.astype(bool)
-    radius = int()
+    radius = int(radius)
     disk = morphology.disk(radius)
 
     # Dilation with radius in axial direction
     for ind in range(contour.shape[0]):
         contour[ind, :, :] = morphology.binary_dilation(contour[ind, :, :],
                                                         disk)
-
     return contour
 
 
@@ -153,34 +152,51 @@ def segmentix(parameters, image=None, segmentation=None,
     contour = sitk.GetArrayFromImage(contour_original)
 
     if config['Segmentix']['fillholes']:
+        print('[Segmentix] Filling holes.')
         contour = nd.binary_fill_holes(contour)
 
     if config['Segmentix']['remove_small_objects']:
+        print('[Segmentix] Removing small objects.')
         min_size = config['Segmentix']['min_object_size']
         contour = morphology.remove_small_objects(contour, min_size=min_size, connectivity=2, in_place=False)
 
     if config['Segmentix']['N_blobs'] != 0:
+        print('[Segmentix] Extracting largest blob.')
         contour = contour.astype(bool)
         contour = ExtractNLargestBlobsn(contour, 1)
 
     # Expand contour depending on settings
     # TODO: this is a workaround for 3-D morphology
     if config['Segmentix']['type'] == 'Ring':
+        print('[Segmentix] Converting contour to ring around existing contour.')
         radius = config['Segmentix']['radius']
         contour = get_ring(contour, radius)
 
     elif config['Segmentix']['type'] == 'Dilate':
+        print('[Segmentix] Dilating contour.')
         radius = config['Segmentix']['radius']
         contour = dilate_contour(contour, radius)
 
     # Mask the segmentation if necessary
     if mask is not None:
         method = config['Segmentix']['mask']
+        print('[Segmentix] Masking contour.')
         if type(mask) is list:
             mask = ''.join(mask)
-        contour = mask_contour(contour, mask, method)
+        new_contour = mask_contour(contour, mask, method)
+        if np.sum(new_contour) == 0:
+            print('\t [WARNING] Contour after masking sums to zero: not applying masking.')
+        else:
+            contour = new_contour
 
-    # Output contour
+    # Convert back to ITK Image with correct meta information
     contour = contour.astype(np.uint8)
     contour = sitk.GetImageFromArray(contour)
     contour.CopyInformation(contour_original)
+
+    # If required, output contour
+    if output is not None:
+        print(f'[Segmentix] Writing image to {output}.')
+        sitk.WriteImage(contour, output)
+
+    return contour

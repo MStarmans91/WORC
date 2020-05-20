@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -88,6 +88,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
@@ -158,10 +161,14 @@
   <h1>Source code for WORC.detectors.detectors</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">environ</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">environ</span>
 <span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">site</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
 
 <div class="viewcode-block" id="AbstractDetector"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.AbstractDetector">[docs]</a><span class="k">class</span> <span class="nc">AbstractDetector</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
@@ -175,7 +182,7 @@
         <span class="k">return</span> <span class="n">result</span></div>
 
     <span class="k">def</span> <span class="nf">_generate_detector_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detected_Value</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__[0:-8]}</span><span class="s2"> detected: </span><span class="si">{detected_Value}</span><span class="s2">.&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span><span class="si">}</span><span class="s2"> detected: </span><span class="si">{</span><span class="n">detected_Value</span><span class="si">}</span><span class="s2">.&quot;</span>
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">_is_detected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -183,7 +190,7 @@
 
 
 <div class="viewcode-block" id="CsvDetector"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.CsvDetector">[docs]</a><span class="k">class</span> <span class="nc">CsvDetector</span><span class="p">(</span><span class="n">AbstractDetector</span><span class="p">):</span>
-<div class="viewcode-block" id="CsvDetector.__init__"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.CsvDetector.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csv_file_path</span><span class="p">):</span>
+<div class="viewcode-block" id="CsvDetector.__init__"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.CsvDetector.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csv_file_path</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_csv_file_path</span> <span class="o">=</span> <span class="n">csv_file_path</span></div>
 
     <span class="k">def</span> <span class="nf">_is_detected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -240,7 +247,7 @@
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="HostnameDetector.__init__"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.HostnameDetector.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expected_hostname</span><span class="p">):</span>
+<div class="viewcode-block" id="HostnameDetector.__init__"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.HostnameDetector.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expected_hostname</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_expected_hostname</span> <span class="o">=</span> <span class="n">expected_hostname</span></div></div>
 
 
@@ -249,6 +256,28 @@
         <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;linux&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="WORCDirectoryDetector"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.WORCDirectoryDetector">[docs]</a><span class="k">class</span> <span class="nc">WORCDirectoryDetector</span><span class="p">(</span><span class="n">AbstractDetector</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_is_detected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Get directory in which WORC package is installed</span>
+        <span class="n">working_set</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">working_set</span>
+        <span class="n">requirement_spec</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">Requirement</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s1">&#39;WORC&#39;</span><span class="p">)</span>
+        <span class="n">egg_info</span> <span class="o">=</span> <span class="n">working_set</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">requirement_spec</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">egg_info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Backwards compatibility with WORC2</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">packagedir</span> <span class="o">=</span> <span class="n">site</span><span class="o">.</span><span class="n">getsitepackages</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="c1"># Inside virtualenvironment, so getsitepackages doesnt work.</span>
+                <span class="n">paths</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span>
+                <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;site-packages&#39;</span><span class="p">:</span>
+                        <span class="n">packagedir</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">packagedir</span> <span class="o">=</span> <span class="n">egg_info</span><span class="o">.</span><span class="n">location</span>
+
+        <span class="n">packagedir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">packagedir</span><span class="p">,</span> <span class="s1">&#39;WORC&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">packagedir</span></div>
 </pre></div>
 
            </div>

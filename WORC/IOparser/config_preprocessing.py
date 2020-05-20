@@ -37,7 +37,8 @@ def load_config(config_file_path):
     settings = configparser.ConfigParser()
     settings.read(config_file_path)
 
-    settings_dict = {'Normalize': dict(), 'ImageFeatures': dict()}
+    settings_dict = {'Normalize': dict(), 'ImageFeatures': dict(),
+                     'General': dict()}
 
     settings_dict['Normalize']['ROI'] =\
         str(settings['Normalize']['ROI'])
@@ -45,8 +46,8 @@ def load_config(config_file_path):
     settings_dict['Normalize']['ROIdilate'] =\
         str(settings['Normalize']['ROIdilate'])
 
-    settings_dict['Normalize']['ROIdetermine'] =\
-        str(settings['Normalize']['ROIdetermine'])
+    settings_dict['Normalize']['ROIDetermine'] =\
+        str(settings['Normalize']['ROIDetermine'])
 
     settings_dict['Normalize']['ROIdilateradius'] =\
         int(settings['Normalize']['ROIdilateradius'])
@@ -57,5 +58,8 @@ def load_config(config_file_path):
     settings_dict['ImageFeatures']['image_type'] =\
         [str(item).strip() for item in
          settings['ImageFeatures']['image_type'].split(',')]
+
+    settings_dict['General']['AssumeSameImageAndMaskMetadata'] =\
+        settings['General'].getboolean('AssumeSameImageAndMaskMetadata')
 
     return settings_dict

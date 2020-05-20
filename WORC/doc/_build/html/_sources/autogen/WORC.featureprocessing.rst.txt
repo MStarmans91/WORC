@@ -10,10 +10,37 @@ featureprocessing Package
     :show-inheritance:
     :special-members:
 
+:mod:`ComBat` Module
+--------------------
+
+.. automodule:: WORC.featureprocessing.ComBat
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`Decomposition` Module
 ---------------------------
 
 .. automodule:: WORC.featureprocessing.Decomposition
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`FeatureConverter` Module
+------------------------------
+
+.. automodule:: WORC.featureprocessing.FeatureConverter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`ICCThreshold` Module
+--------------------------
+
+.. automodule:: WORC.featureprocessing.ICCThreshold
     :members:
     :undoc-members:
     :show-inheritance:

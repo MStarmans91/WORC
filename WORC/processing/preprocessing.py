@@ -20,6 +20,7 @@ import pydicom
 import WORC.IOparser.config_preprocessing as config_io
 import os
 from WORC.processing.segmentix import dilate_contour
+import numpy as np
 
 
 def preprocess(imagefile, config, metadata=None, mask=None):
@@ -54,8 +55,10 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         # Dilate the mask if required
         if config['Normalize']['ROIdilate'] == 'True':
             radius = config['Normalize']['ROIdilateradius']
+            print(f"Dilating ROI with radius {radius}.")
             mask = sitk.GetArrayFromImage(mask)
             mask = dilate_contour(mask, radius)
+            mask = mask.astype(np.uint8)
             mask = sitk.GetImageFromArray(mask)
 
         if mask is None:
@@ -74,7 +77,17 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                 mask = sitk.Cast(mask, 0)
 
                 LabelFilter = sitk.LabelStatisticsImageFilter()
-                LabelFilter.Execute(image, mask)
+                try:
+                    LabelFilter.Execute(image, mask)
+                except RuntimeError as e:
+                    if config['General']['AssumeSameImageAndMaskMetadata']:
+                        print(f'[WORC Warning] error: {e}.')
+                        print(f'[WORC Warning] Assuming image and mask have same metadata.')
+                        mask.CopyInformation(image)
+                        LabelFilter.Execute(image, mask)
+                    else:
+                        raise RuntimeError(e)
+
                 ROI_mean = LabelFilter.GetMean(1)
                 ROI_std = LabelFilter.GetSigma(1)
 
@@ -82,12 +95,22 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                                         shift=-ROI_mean,
                                         scale=1.0/ROI_std)
             elif config['Normalize']['Method'] == 'minmed':
-                print('Apply scaling using the minimum and mean of the ROI')
+                print('Apply scaling using the minimum and median of the ROI')
                 image = sitk.Cast(image, 9)
                 mask = sitk.Cast(mask, 0)
 
                 LabelFilter = sitk.LabelStatisticsImageFilter()
-                LabelFilter.Execute(image, mask)
+                try:
+                    LabelFilter.Execute(image, mask)
+                except RuntimeError as e:
+                    if config['General']['AssumeSameImageAndMaskMetadata']:
+                        print(f'[WORC Warning] error: {e}.')
+                        print(f'[WORC Warning] Assuming image and mask have same metadata.')
+                        mask.CopyInformation(image)
+                        LabelFilter.Execute(image, mask)
+                    else:
+                        raise RuntimeError(e)
+
                 ROI_median = LabelFilter.GetMedian(1)
                 ROI_minimum = LabelFilter.GetMinimum(1)
 

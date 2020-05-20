@@ -106,13 +106,14 @@ def generate_config_options():
     config['General'] = dict()
     config['General']['cross_validation'] = 'True, False'
     config['General']['Segmentix'] = 'True, False'
-    config['General']['FeatureCalculator'] = 'predict/CalcFeatures:1.0, pyradiomics/CF_pyradiomics:1.0, your own tool reference'
+    config['General']['FeatureCalculators'] = 'predict/CalcFeatures:1.0, pyradiomics/Pyradiomics:1.0, pyradiomics/CF_pyradiomics:1.0, your own tool reference'
     config['General']['Preprocessing'] = 'worc/PreProcess:1.0, your own tool reference'
     config['General']['RegistrationNode'] = "'elastix4.8/Elastix:4.8', your own tool reference"
     config['General']['TransformationNode'] = "'elastix4.8/Transformix:4.8', your own tool reference"
     config['General']['Joblib_ncores'] = 'Integer > 0'
     config['General']['Joblib_backend'] = 'multiprocessing, threading'
     config['General']['tempsave'] = 'True, False'
+    config['General']['AssumeSameImageAndMaskMetadata'] = 'True, False'
 
     # Segmentix
     config['Segmentix'] = dict()
@@ -121,10 +122,15 @@ def generate_config_options():
     config['Segmentix']['segradius'] = 'Integer > 0'
     config['Segmentix']['N_blobs'] = 'Integer > 0'
     config['Segmentix']['fillholes'] = 'True, False'
+    config['Segmentix']['remove_small_objects'] = 'True, False'
+    config['Segmentix']['min_object_size'] = 'Integer > 0'
 
     # Preprocessing
     config['Normalize'] = dict()
     config['Normalize']['ROI'] = 'True, False, Full'
+    config['Normalize']['ROIDetermine'] = 'Provided, Otsu'
+    config['Normalize']['ROIdilate'] = 'True, False'
+    config['Normalize']['ROIdilateradius'] = 'Integer > 0'
     config['Normalize']['Method'] = 'z_score, minmed'
 
     # PREDICT - Feature calculation
@@ -210,6 +216,7 @@ def generate_config_options():
     config['SelectFeatGroup']['texture_Gabor_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLCM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLCMMS_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['texture_GLDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLRLM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLSZM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLDZM_features'] = 'Boolean(s)'
@@ -226,6 +233,8 @@ def generate_config_options():
     config['SelectFeatGroup']['location_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['rgrd_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['wavelet_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['original_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['toolbox'] = 'All, or name of toolbox (PREDICT, PyRadiomics)'
 
     # Feature imputation
     config['Imputation'] = dict()
@@ -270,8 +279,6 @@ def generate_config_options():
     config['Labels'] = dict()
     config['Labels']['label_names'] = 'String(s)'
     config['Labels']['modus'] = 'singlelabel, multilabel'
-    config['Labels']['url'] = 'Not Supported Yet'
-    config['Labels']['projectID'] = 'Not Supported Yet'
 
     # Hyperparameter optimization options
     config['HyperOptimization'] = dict()
@@ -286,7 +293,7 @@ def generate_config_options():
     # Feature scaling options
     config['FeatureScaling'] = dict()
     config['FeatureScaling']['scale_features'] = 'Boolean(s)'
-    config['FeatureScaling']['scaling_method'] = 'z_score, minmax'
+    config['FeatureScaling']['scaling_method'] = 'z_score, minmax, robust'
 
     # Sample processing options
     config['SampleProcessing'] = dict()
@@ -314,13 +321,14 @@ def generate_config_descriptions():
     config['General'] = dict()
     config['General']['cross_validation'] = 'Determine whether a cross validation will be performed or not. Obsolete, will be removed.'
     config['General']['Segmentix'] = 'Determine whether to use Segmentix tool for segmentation preprocessing.'
-    config['General']['FeatureCalculator'] = 'Specifies which feature calculation tool should be used.'
+    config['General']['FeatureCalculators'] = 'Specifies which feature calculation tools should be used. A list can be provided to use multiple tools.'
     config['General']['Preprocessing'] = 'Specifies which tool will be used for image preprocessing.'
     config['General']['RegistrationNode'] = "Specifies which tool will be used for image registration."
     config['General']['TransformationNode'] = "Specifies which tool will be used for applying image transformations."
     config['General']['Joblib_ncores'] = 'Number of cores to be used by joblib for multicore processing.'
     config['General']['Joblib_backend'] = 'Type of backend to be used by joblib for multicore processing.'
     config['General']['tempsave'] = 'Determines whether after every cross validation iteration the result will be saved, in addition to the result after all iterations. Especially useful for debugging.'
+    config['General']['AssumeSameImageAndMaskMetadata'] = 'Make the assumption that the image and mask have the same metadata. If True and there is a mismatch, metadata from the image will be copied to the mask.'
 
     # Segmentix
     config['Segmentix'] = dict()
@@ -329,10 +337,15 @@ def generate_config_descriptions():
     config['Segmentix']['segradius'] = 'Define the radius of the ring used if segtype is Ring.'
     config['Segmentix']['N_blobs'] = 'How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.'
     config['Segmentix']['fillholes'] = 'Determines whether hole filling will be used.'
+    config['Segmentix']['remove_small_objects'] = 'Determines whether small objects will be removed.'
+    config['Segmentix']['min_object_size'] = 'Minimum of objects in voxels to not be removed if small objects are removed'
 
     # Preprocessing
     config['Normalize'] = dict()
     config['Normalize']['ROI'] = 'If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.'
+    config['Normalize']['ROIDetermine'] = 'Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.'
+    config['Normalize']['ROIdilate'] = 'Determine whether the ROI has to be dilated with a disc element or not.'
+    config['Normalize']['ROIdilateradius'] = 'Radius of disc element to be used in ROI dilation.'
     config['Normalize']['Method'] = 'Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.'
 
     # PREDICT - Feature calculation
@@ -345,6 +358,7 @@ def generate_config_descriptions():
     config['ImageFeatures']['texture_LBP'] ='Determine whether LBP texture features are computed or not.'
     config['ImageFeatures']['texture_GLCM'] = 'Determine whether GLCM texture features are computed or not.'
     config['ImageFeatures']['texture_GLCMMS'] = 'Determine whether GLCM Multislice texture features are computed or not.'
+    config['ImageFeatures']['texture_GLDM'] = 'Determine whether GLDM texture features are computed or not.'
     config['ImageFeatures']['texture_GLRLM'] = 'Determine whether GLRLM texture features are computed or not.'
     config['ImageFeatures']['texture_GLSZM'] = 'Determine whether GLSZM texture features are computed or not.'
     config['ImageFeatures']['texture_NGTDM'] = 'Determine whether NGTDM texture features are computed or not.'
@@ -430,6 +444,8 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['location_features'] = 'If True, use location features in model.'
     config['SelectFeatGroup']['rgrd_features'] = 'If True, use rgrd features in model.'
     config['SelectFeatGroup']['wavelet_features'] = 'If True, use wavelet features in model.'
+    config['SelectFeatGroup']['original_features'] = 'If True, use original features in model.'
+    config['SelectFeatGroup']['toolbox'] = 'List of names of toolboxes to be used, or All'
 
     # Feature imputation
     config['Imputation'] = dict()
@@ -474,8 +490,6 @@ def generate_config_descriptions():
     config['Labels'] = dict()
     config['Labels']['label_names'] = 'The labels used from your label file for classification.'
     config['Labels']['modus'] = 'Determine whether multilabel or singlelabel classification or regression will be performed.'
-    config['Labels']['url'] = 'WIP'
-    config['Labels']['projectID'] = 'WIP'
 
     # Hyperparameter optimization options
     config['HyperOptimization'] = dict()

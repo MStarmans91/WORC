@@ -138,7 +138,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
             try:
                 pvaluesmw.append(mannwhitneyu(class1, class2)[1])
             except ValueError as e:
-                print("[PREDICT Warning] " + str(e) + '. Replacing metric value by 1.')
+                print("[WORC Warning] " + str(e) + '. Replacing metric value by 1.')
                 pvaluesmw.append(1)
 
             # Optional: perform chi2 test. Only do this when categorical, which we define as less than 20 options.
@@ -152,7 +152,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
                 _, p, _, _ = chi2_contingency(obs)
                 pvalueschi2.append(p)
             else:
-                print("[PREDICT Warning] " + fl + " is no categorical variable. Replacing chi2 metric value by 1.")
+                print("[WORC Warning] " + fl + " is no categorical variable. Replacing chi2 metric value by 1.")
                 pvalueschi2.append(1)
 
         # Sort based on p-values:

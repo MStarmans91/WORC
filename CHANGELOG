@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-3.1.4 - Unreleased
+3.1.4 - 2020-05-20
 ------------------
 
 Added
@@ -24,6 +24,16 @@ Added
 - Option to delete small objects in segmentation.
 - Option to within the preprocessing, use a dilated ROI.
 - Otsu thresholding as mask for preprocessing.
+- Memory for each fastr node is now in a dictionary of the WORC object and can
+  be easily changed.
+- PyRadiomics now fully embedded and configurable.
+- ComBat harmonization: currently as separate tool on full dataset,
+  not in cross-validation.
+- Computation of ICC, and thresholding object to use ICC for feature selection.
+- Added groupwise feature selection per feature extraction toolbox.
+- Feature converter tool, to convert features from a toolbox to WORC compatible
+  format.
+- RobustScaler for feature scaling.
 
 Changed
 ~~~~~~~
@@ -36,12 +46,18 @@ Changed
 - Matching of PID from labels from label file to other objects is now all
   converted to lower case.
 - Refactoring of WORC network building.
-- Segmentatix tool is cleaned up. Segmentix script is moved to processing.
+- Segmentix tool is cleaned up. Segmentix script is moved to processing.
 
 Fixed
 ~~~~~
 - Order of methods in preprocessing function of SearchCV did not correspond
   with that in fitandscore.
+- Replace spaces in uri conversion of sources in SimpleWORC.
+- Check whether all fitandscore jobs succeeded, otherwise throw error.
+- Bug in PCA when n_components > min(n_samples, n_features)
+- Random seed is now set and passed to PCA, Relief and all classifiers
+  for reproducability of the results.
+- Evaluate can now also accept multiple feature toolboxes.
 
 
 3.1.3 - 2020-01-24

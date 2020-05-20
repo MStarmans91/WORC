@@ -1,17 +1,17 @@
-======================== ==================================== ====================================
-Subkey                   Default                              Options                             
-======================== ==================================== ====================================
-Variance                 True                                 Boolean(s)                          
-GroupwiseSearch          True                                 Boolean(s)                          
-SelectFromModel          False                                Boolean(s)                          
-UsePCA                   False                                Boolean(s)                          
-PCAType                  95variance                           Inteteger(s), 95variance            
-StatisticalTestUse       False                                Boolean(s)                          
-StatisticalTestMetric    ttest, Welch, Wilcoxon, MannWhitneyU ttest, Welch, Wilcoxon, MannWhitneyU
-StatisticalTestThreshold -2, 1.5                              Two Integers: loc and scale         
-ReliefUse                False                                Boolean(s)                          
-ReliefNN                 2, 4                                 Two Integers: loc and scale         
-ReliefSampleSize         1, 1                                 Two Integers: loc and scale         
-ReliefDistanceP          1, 3                                 Two Integers: loc and scale         
-ReliefNumFeatures        25, 200                              Two Integers: loc and scale         
-======================== ==================================== ====================================
+======================== =================== ====================================
+Subkey                   Default             Options                             
+======================== =================== ====================================
+Variance                 1.0                 Float                               
+GroupwiseSearch          True                Boolean(s)                          
+SelectFromModel          0.0                 Float                               
+UsePCA                   0.0                 Float                               
+PCAType                  95variance, 50, 100 Inteteger(s), 95variance            
+StatisticalTestUse       0.0                 Float                               
+StatisticalTestMetric    MannWhitneyU        ttest, Welch, Wilcoxon, MannWhitneyU
+StatisticalTestThreshold -3, 2.5             Two Integers: loc and scale         
+ReliefUse                0.0                 Float                               
+ReliefNN                 2, 4                Two Integers: loc and scale         
+ReliefSampleSize         1, 1                Two Integers: loc and scale         
+ReliefDistanceP          1, 3                Two Integers: loc and scale         
+ReliefNumFeatures        25, 100             Two Integers: loc and scale         
+======================== =================== ====================================
