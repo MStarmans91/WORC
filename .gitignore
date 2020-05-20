@@ -125,3 +125,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Practice tutorial file
+WORC/tutorialScript.py
