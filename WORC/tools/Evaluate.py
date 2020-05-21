@@ -309,6 +309,10 @@ class Evaluate(object):
                     self.links_Boxplots_Features[name] =\
                         self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
 
+                    # All features should be input at once
+                    self.links_STest_Features[name].collapse = 'train'
+                    self.links_decomposition_Features[name].collapse = 'train'
+                    self.links_Boxplots_Features[name].collapse = 'train'
             else:
                 # Feature are precomputed and given as sources
                 for node in self.parent.sources_features_train[label]:
@@ -320,10 +324,10 @@ class Evaluate(object):
                     self.links_Boxplots_Features[name] =\
                         self.node_Boxplots_Features.inputs['features'][name] << node.output
 
-            # All features should be input at once
-            self.links_STest_Features[name].collapse = 'train'
-            self.links_decomposition_Features[name].collapse = 'train'
-            self.links_Boxplots_Features[name].collapse = 'train'
+                    # All features should be input at once
+                    self.links_STest_Features[name].collapse = 'train'
+                    self.links_decomposition_Features[name].collapse = 'train'
+                    self.links_Boxplots_Features[name].collapse = 'train'
 
         self.node_STest.inputs['patientclass'] = pinfo
         self.node_STest.inputs['config'] = config
