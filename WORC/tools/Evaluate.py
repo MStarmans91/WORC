@@ -152,7 +152,7 @@ class Evaluate(object):
         self.sink_Barchart_Tex.input = self.node_Barchart.outputs['output_tex']
 
         self.sink_STest_CSV.input = self.node_STest.outputs['performance']
-        self.sink_decomposition_png.input = self.node_decomposition.outputs['output']
+        self.sink_decomposition_PNG.input = self.node_decomposition.outputs['output']
 
         self.sink_Ranked_Percentages_Zip.input =\
             self.node_Ranked_Percentages.outputs['output_zip']
