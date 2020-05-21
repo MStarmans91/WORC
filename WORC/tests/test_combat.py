@@ -19,7 +19,7 @@ import glob
 import os
 from WORC.tests import test_helpers as th
 from WORC.addexceptions import WORCValueError
-from WORC.featureprocessing.ComBat import ComBat
+from WORC.featureprocessing.ComBat import ComBat, Synthetictest
 
 # TODO: Matlab and Python currently do not give the same results!
 
@@ -48,24 +48,8 @@ def test_combat():
     config = os.path.join(example_data_dir, 'ComBatConfig_python.ini')
     features_train_out = [f.replace('examplefeatures_', 'examplefeatures_ComBat_python_') for f in features]
 
-    # # Run the Combat function: only for training
-    ComBat(features_train_in=features,
-           labels_train=objectlabels,
-           config=config,
-           features_train_out=features_train_out)
-
-    # Run the Combat function: now for train + testing
-    ComBat(features_train_in=features[0:4],
-           labels_train=objectlabels,
-           config=config,
-           features_train_out=features_train_out[0:4],
-           features_test_in=features[4:],
-           labels_test=objectlabels,
-           features_test_out=features_train_out[4:])
-
-    # Matlab
-    config = os.path.join(example_data_dir, 'ComBatConfig_matlab.ini')
-    features_train_out = [f.replace('examplefeatures_', 'examplefeatures_ComBat_matlab_') for f in features]
+    # First run synthetic test
+    # Synthetictest()
 
     # # Run the Combat function: only for training
     ComBat(features_train_in=features,
@@ -73,14 +57,33 @@ def test_combat():
            config=config,
            features_train_out=features_train_out)
 
-    # Run the Combat function: now for train + testing
-    ComBat(features_train_in=features[0:4],
-           labels_train=objectlabels,
-           config=config,
-           features_train_out=features_train_out[0:4],
-           features_test_in=features[4:],
-           labels_test=objectlabels,
-           features_test_out=features_train_out[4:])
+    # # Run the Combat function: now for train + testing
+    # ComBat(features_train_in=features[0:4],
+    #        labels_train=objectlabels,
+    #        config=config,
+    #        features_train_out=features_train_out[0:4],
+    #        features_test_in=features[4:],
+    #        labels_test=objectlabels,
+    #        features_test_out=features_train_out[4:])
+
+    # # Matlab
+    # config = os.path.join(example_data_dir, 'ComBatConfig_matlab.ini')
+    # features_train_out = [f.replace('examplefeatures_', 'examplefeatures_ComBat_matlab_') for f in features]
+    #
+    # # # Run the Combat function: only for training
+    # ComBat(features_train_in=features,
+    #        labels_train=objectlabels,
+    #        config=config,
+    #        features_train_out=features_train_out)
+    #
+    # # Run the Combat function: now for train + testing
+    # ComBat(features_train_in=features[0:4],
+    #        labels_train=objectlabels,
+    #        config=config,
+    #        features_train_out=features_train_out[0:4],
+    #        features_test_in=features[4:],
+    #        labels_test=objectlabels,
+    #        features_test_out=features_train_out[4:])
 
     # Remove the feature files
     for i in glob.glob(os.path.join(example_data_dir, '*features_ComBat*.hdf5')):

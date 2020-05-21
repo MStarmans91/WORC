@@ -441,7 +441,8 @@ def fit_and_score(X, y, scoring,
             ReliefSel = SelectMulticlassRelief(n_neighbours=n_neighbours,
                                                sample_size=sample_size,
                                                distance_p=distance_p,
-                                               numf=numf)
+                                               numf=numf,
+                                               random_state=random_seed)
             ReliefSel.fit(feature_values, y)
             if verbose:
                 print("Original Length: " + str(len(feature_values[0])))
@@ -449,6 +450,9 @@ def fit_and_score(X, y, scoring,
             if verbose:
                 print("New Length: " + str(len(feature_values[0])))
             feature_labels = ReliefSel.transform(feature_labels)
+            feature_labels.sort()
+            for l in feature_labels[0]:
+                print(l)
 
     # Delete the object if we do not need to return it
     if not return_all:

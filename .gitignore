@@ -130,3 +130,5 @@ dmypy.json
 WORC/exampledata/*.hdf5
 WORC/external/*
 WORC/exampledata/ICCvalues.csv
+WORC/tests/*.png
+WORC/tests/*.mat

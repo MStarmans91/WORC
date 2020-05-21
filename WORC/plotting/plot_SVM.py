@@ -604,6 +604,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                     stats["Percentage Selected 95%:"] = f"{np.nanmean(percentages_selected)} {str(compute_confidence(percentages_selected, N_1, N_2, alpha))}"
 
             # Extract statistics on how often patients got classified correctly
+            rankings = dict()
             alwaysright = dict()
             alwayswrong = dict()
             percentages = dict()
@@ -626,9 +627,9 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                     alwayswrong[i_ID] = label
                     print(f"Always Wrong: {i_ID}, label {label}.")
 
-            stats["Always right"] = alwaysright
-            stats["Always wrong"] = alwayswrong
-            stats['Percentages'] = percentages
+            rankings["Always right"] = alwaysright
+            rankings["Always wrong"] = alwayswrong
+            rankings['Percentages'] = percentages
         else:
             # Regression
             stats['R2-score 95%: '] = f"{np.nanmean(r2_score)} {str(compute_confidence(r2score, N_1, N_2, alpha))}"
@@ -649,7 +650,12 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         for k, v in stats.items():
             print(f"{k} : {v}.")
 
-        return stats
+        # Combine stats and rankings in one output
+        output = dict()
+        output['Statistics'] = stats
+        output['Rankings'] = rankings
+
+        return output
 
 
 def combine_multiple_estimators(predictions, label_data, multilabel_type, label_types,

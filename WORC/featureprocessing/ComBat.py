@@ -28,11 +28,14 @@ from sys import platform
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from sklearn.preprocessing import StandardScaler
 from neuroCombat import neuroCombat
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
 
 
 def ComBat(features_train_in, labels_train, config, features_train_out,
            features_test_in=None, labels_test=None, features_test_out=None,
-           VarianceThreshold=True, scaler=False):
+           VarianceThreshold=True, scaler=False, logarithmic=False):
     """
     Apply ComBat feature harmonization.
 
@@ -131,6 +134,11 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     all_features_matrix = np.asarray(all_features)
     all_labels = np.squeeze(all_labels)
 
+    # Apply logarithm if required
+    if logarithmic:
+        print('\t Taking log10 of features before applying ComBat.')
+        all_features_matrix = np.log10(all_features_matrix)
+
     # Convert all_labels to dictionary
     all_labels = {k: v for k, v in zip(label_data_train['label_name'], all_labels)}
 
@@ -165,6 +173,10 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                                        per_feature=config['ComBat']['per_feature'])
     else:
         raise WORCKeyError(f"Language {config['ComBat']['language']} unknown.")
+
+    # Convert values back if logarithm was used
+    if logarithmic:
+        data_harmonized = 10 ** data_harmonized
 
     # Convert again to train hdf5 files
     parameters = {'batch': config['ComBat']['batch'],
@@ -218,7 +230,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
 
 def ComBatPython(dat, batch, mod=None, par=1,
-                 eb=1, per_feature='true'):
+                 eb=1, per_feature=False, plotting=False):
     """
     Run the ComBat Function python script.
 
@@ -238,20 +250,141 @@ def ComBatPython(dat, batch, mod=None, par=1,
     batch_col = 'batch'
     if par == 0:
         parametric = False
-    else:
+    elif par == 1:
         parametric = True
+    else:
+        raise WORCValueError(f'Par should be 0 or 1, now {par}.')
 
     if eb == 0:
         eb = False
-    else:
+    elif eb == 1:
         eb = True
+    else:
+        raise WORCValueError(f'eb should be 0 or 1, now {eb}.')
+
+    if per_feature == 0:
+        per_feature = False
+    elif per_feature == 1:
+        per_feature = True
+    else:
+        raise WORCValueError(f'per_feature should be 0 or 1, now {per_feature}.')
 
     # execute ComBat
-    data_harmonized = neuroCombat(dat=dat, covars=covars, batch_col=batch_col,
-                                  categorical_cols=categorical_cols,
-                                  eb=eb, parametric=parametric)
+    if not per_feature:
+        data_harmonized = neuroCombat(dat=dat, covars=covars, batch_col=batch_col,
+                                      categorical_cols=categorical_cols,
+                                      eb=eb, parametric=parametric)
+    elif per_feature:
+        print('\t Executing ComBat per feature.')
+        data_harmonized = np.zeros(dat.shape)
+        # Shape: (features, samples)
+        for i in range(dat.shape[0]):
+            if eb:
+                # Copy feature + random noise
+                random_feature = np.random.rand(dat[i, :].shape[0])
+                feat_temp = np.asarray([dat[i, :], dat[i, :] + random_feature])
+            else:
+                # Just use the single feature
+                feat_temp = np.asarray([dat[i, :]])
+
+            feat_temp = neuroCombat(dat=feat_temp, covars=covars,
+                                    batch_col=batch_col,
+                                    categorical_cols=categorical_cols,
+                                    eb=eb, parametric=parametric)
+            data_harmonized[i, :] = feat_temp[0, :]
+
+            if plotting:
+                feat1 = dat[i, :]
+                feat1_harm = data_harmonized[i, :]
+                print(len(feat1))
+
+                feat1_b1 = [f for f, b in zip(feat1, batch[0]) if b == 1.0]
+                feat1_b2 = [f for f, b in zip(feat1, batch[0]) if b == 2.0]
+                print(len(feat1_b1))
+                print(len(feat1_b2))
+
+                feat1_harm_b1 = [f for f, b in zip(feat1_harm, batch[0]) if b == 1.0]
+                feat1_harm_b2 = [f for f, b in zip(feat1_harm, batch[0]) if b == 2.0]
+
+                plt.figure()
+                ax = plt.subplot(2, 1, 1)
+                ax.scatter(np.ones((len(feat1_b1))), feat1_b1, color='red')
+                ax.scatter(np.ones((len(feat1_b2))) + 1, feat1_b2, color='blue')
+                plt.title('Before Combat')
+
+                ax = plt.subplot(2, 1, 2)
+                ax.scatter(np.ones((len(feat1_b1))), feat1_harm_b1, color='red')
+                ax.scatter(np.ones((len(feat1_b2))) + 1, feat1_harm_b2, color='blue')
+                plt.title('After Combat')
+
+                plt.show()
+
+    else:
+        raise WORCValueError(f'per_feature should be False or True, now {per_feature}.')
 
     return data_harmonized
+
+
+def Synthetictest(n_patients=50, n_features=10, par=1, eb=1,
+                  per_feature=True, difscale=False, logarithmic=False,
+                  oddpatient=False, oddfeat=False):
+    """Test for ComBat with Synthetic data."""
+    features = np.zeros((n_features, n_patients))
+    batch = list()
+
+    # First batch: Gaussian with loc 0, scale 1
+    for i in range(0, int(n_patients/2)):
+        if i == 1 and oddpatient:
+            feat_temp = [np.random.normal(loc=10.0, scale=1.0) for i in range(n_features)]
+        elif oddfeat:
+            feat_temp = [np.random.normal(loc=0.0, scale=1.0) for i in range(n_features - 1)] + [np.random.normal(loc=10000.0, scale=1.0)]
+        features[:, i] = feat_temp
+        batch.append(1)
+
+    # First batch: Gaussian with loc 1, scale 1
+    for i in range(int(n_patients/2), n_patients):
+        feat_temp = [np.random.normal(loc=5.0, scale=1.0) for i in range(n_features)]
+        if oddfeat:
+            feat_temp = [np.random.normal(loc=5.0, scale=1.0) for i in range(n_features - 1)] + [np.random.normal(loc=10000.0, scale=1.0)]
+
+        if difscale:
+            feat_temp = [f + 1000 for f in feat_temp]
+        features[:, i] = feat_temp
+        batch.append(2)
+
+    # Create mod var
+    mod = [[np.random.randint(30, 100) for i in range(n_patients)]]
+
+    # Apply ComBat
+    batch = np.asarray([batch])
+    mod = np.transpose(np.asarray(mod))
+    if logarithmic:
+        minfeat = np.min(features)
+        features = np.log10(features + np.abs(minfeat) + 1E-100)
+
+    data_harmonized = ComBatPython(dat=features, batch=batch, mod=mod, par=par,
+                                   eb=eb, per_feature=per_feature)
+
+    if logarithmic:
+        data_harmonized = 10 ** data_harmonized - np.abs(minfeat)
+
+    f = plt.figure()
+    ax = plt.subplot(2, 1, 1)
+    ax.scatter(np.ones((int(n_patients/2))), features[0, 0:int(n_patients/2)], color='red')
+    ax.scatter(np.ones((n_patients - int(n_patients/2))) + 1, features[0, int(n_patients/2):], color='blue')
+    plt.title('Before Combat')
+
+    ax = plt.subplot(2, 1, 2)
+    ax.scatter(np.ones((int(n_patients/2))), data_harmonized[0, 0:int(n_patients/2)], color='red')
+    ax.scatter(np.ones((n_patients - int(n_patients/2))) + 1, data_harmonized[0, int(n_patients/2):], color='blue')
+    plt.title('After Combat')
+
+    plt.show()
+    f.savefig(f'combat_par{par}_eb{eb}_perfeat{per_feature}.png')
+
+    # Logarithmic: not useful, as we have negative numbers, and (almost) zeros.
+    # so combat gives unuseful results.
+    # Same feature twice with eb and par: nans
 
 
 def ComBatMatlab(dat, batch, command, mod=None, par=1, per_feature='true'):

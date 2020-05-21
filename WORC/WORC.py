@@ -289,7 +289,7 @@ class WORC(object):
         config['ComBat']['batch'] = 'Hospital'
         config['ComBat']['mod'] = 'Age'
         config['ComBat']['par'] = '1'
-        config['ComBat']['eb'] = 'true'
+        config['ComBat']['eb'] = '1'
         config['ComBat']['per_feature'] = '0'
         config['ComBat']['excluded_features'] = 'sf_, of_, semf_, pf_'
         config['ComBat']['matlab'] = 'C:\\Program Files\\MATLAB\\R2015b\\bin\\matlab.exe'
@@ -760,12 +760,16 @@ class WORC(object):
                         # Optionally, add ComBat Harmonization
                         if self.configs[0]['General']['ComBat'] == 'True':
                             # Link features to ComBat
-                            self.links_Combat1_train[label].append(self.ComBat.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
-                            self.links_Combat1_train[label][i_node].collapse = 'train'
+                            self.links_Combat1_train[label] = list()
+                            for i_node, fname in enumerate(self.featurecalculators[label]):
+                                self.links_Combat1_train[label].append(self.ComBat.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
+                                self.links_Combat1_train[label][i_node].collapse = 'train'
 
                             if self.images_test or self.features_test:
-                                self.links_Combat1_test[label].append(self.ComBat.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
-                                self.links_Combat1_test[label][i_node].collapse = 'test'
+                                self.links_Combat1_test[label] = list()
+                                for i_node, fname in enumerate(self.featurecalculators[label]):
+                                    self.links_Combat1_test[label].append(self.ComBat.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
+                                    self.links_Combat1_test[label][i_node].collapse = 'test'
 
                         # -----------------------------------------------------
                         # Classification nodes
@@ -853,10 +857,12 @@ class WORC(object):
         self.link_combat_2 = self.network.create_link(self.source_patientclass_train.output, self.ComBat.inputs['patientclass_train'])
         self.link_combat_1.collapse = 'conf'
         self.link_combat_2.collapse = 'pctrain'
+        self.links_Combat1_train = dict()
+        self.links_Combat1_test = dict()
 
         # Link Combat output to both sink and classify node
         self.links_Combat_out_train = self.classify.inputs['features_train']['ComBat'] << self.ComBat.outputs['features_train_out']
-        self.links_Combat_out_train.collapse = 'train'
+        self.links_Combat_out_train.collapse = 'ComBat'
         self.sinks_features_train_ComBat.input = self.ComBat.outputs['features_train_out']
 
         if self.images_test or self.features_test:
@@ -869,7 +875,7 @@ class WORC(object):
 
             # Link Combat output to both sink and classify node
             self.links_Combat_out_test = self.classify.inputs['features_test']['ComBat'] << self.ComBat.outputs['features_test_out']
-            self.links_Combat_out_test.collapse = 'test'
+            self.links_Combat_out_test.collapse = 'ComBat'
             self.sinks_features_test_ComBat.input = self.ComBat.outputs['features_test_out']
 
     def add_preprocessing(self, preprocess_node, label, nmod):
@@ -1445,6 +1451,7 @@ class WORC(object):
         self.sink_data['classification'] = ("vfs://output/{}/estimator_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):

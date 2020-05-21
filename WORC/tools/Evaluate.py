@@ -82,6 +82,13 @@ class Evaluate(object):
                                      tool_version='1.0',
                                      id='statistical_test_features',
                                      resources=ResourceLimit(memory='4G'))
+
+        self.node_decomposition =\
+            self.network.create_node('worc/Decomposition:1.0',
+                                     tool_version='1.0',
+                                     id='decomposition',
+                                     resources=ResourceLimit(memory='4G'))
+
         self.node_Ranked_Percentages =\
             self.network.create_node('worc/PlotRankedScores:1.0',
                                      tool_version='1.0',
@@ -118,6 +125,9 @@ class Evaluate(object):
             self.network.create_sink('CSVFile',
                                      id='StatisticalTestFeatures_CSV')
 
+        self.sink_decomposition_PNG =\
+            self.network.create_sink('PNGFile', id='Decomposition_PNG')
+
         self.sink_Ranked_Percentages_Zip =\
             self.network.create_sink('ZipFile', id='RankedPercentages_Zip')
         self.sink_Ranked_Percentages_CSV =\
@@ -142,6 +152,7 @@ class Evaluate(object):
         self.sink_Barchart_Tex.input = self.node_Barchart.outputs['output_tex']
 
         self.sink_STest_CSV.input = self.node_STest.outputs['performance']
+        self.sink_decomposition_png.input = self.node_decomposition.outputs['output']
 
         self.sink_Ranked_Percentages_Zip.input =\
             self.node_Ranked_Percentages.outputs['output_zip']
@@ -216,45 +227,46 @@ class Evaluate(object):
             self.create_links_Addon()
 
     def create_links_Standalone(self):
-            # Sources from the Evaluate network are used
-            self.node_ROC.inputs['prediction'] = self.source_Estimator.output
-            self.node_ROC.inputs['pinfo'] = self.source_PatientInfo.output
+        """Create links in network between nodes when using standalone."""
+        # Sources from the Evaluate network are used
+        self.node_ROC.inputs['prediction'] = self.source_Estimator.output
+        self.node_ROC.inputs['pinfo'] = self.source_PatientInfo.output
 
-            self.node_SVM.inputs['prediction'] = self.source_Estimator.output
-            self.node_SVM.inputs['pinfo'] = self.source_PatientInfo.output
+        self.node_SVM.inputs['prediction'] = self.source_Estimator.output
+        self.node_SVM.inputs['pinfo'] = self.source_PatientInfo.output
 
-            self.node_Barchart.inputs['prediction'] = self.source_Estimator.output
+        self.node_Barchart.inputs['prediction'] = self.source_Estimator.output
 
-            self.links_STest_Features = list()
-            self.links_Boxplots_Features = list()
-            for idx, label in enumerate(self.labels):
-                self.links_STest_Features.append(self.node_STest.inputs['features'][str(label)] << self.source_Features[idx].output)
-                self.links_STest_Features[idx].collapse = 'features'
-                self.links_Boxplots_Features.append(self.node_Boxplots_Features.inputs['features'][str(label)] << self.source_Features[idx].output)
-                self.links_Boxplots_Features[idx].collapse = 'features'
+        self.links_STest_Features = list()
+        self.links_Boxplots_Features = list()
+        for idx, label in enumerate(self.labels):
+            self.links_STest_Features.append(self.node_STest.inputs['features'][str(label)] << self.source_Features[idx].output)
+            self.links_STest_Features[idx].collapse = 'features'
+            self.links_Boxplots_Features.append(self.node_Boxplots_Features.inputs['features'][str(label)] << self.source_Features[idx].output)
+            self.links_Boxplots_Features[idx].collapse = 'features'
 
-            self.node_STest.inputs['patientclass'] = self.source_PatientInfo.output
-            self.node_STest.inputs['config'] = self.source_Config.output
+        self.node_STest.inputs['patientclass'] = self.source_PatientInfo.output
+        self.node_STest.inputs['config'] = self.source_Config.output
 
-            self.node_Boxplots_Features.inputs['patientclass'] = self.source_PatientInfo.output
-            self.node_Boxplots_Features.inputs['config'] = self.source_Config.output
+        self.node_Boxplots_Features.inputs['patientclass'] = self.source_PatientInfo.output
+        self.node_Boxplots_Features.inputs['config'] = self.source_Config.output
 
-            self.node_Ranked_Percentages.inputs['estimator'] = self.source_Estimator.output
-            self.node_Ranked_Percentages.inputs['pinfo'] = self.source_PatientInfo.output
-            self.link_images_perc = self.network.create_link(self.source_Images.output, self.node_Ranked_Percentages.inputs['images'])
-            self.link_images_perc.collapse = 'patients'
-            self.link_segmentations_perc = self.network.create_link(self.source_Segmentations.output, self.node_Ranked_Percentages.inputs['segmentations'])
-            self.link_segmentations_perc.collapse = 'patients'
+        self.node_Ranked_Percentages.inputs['estimator'] = self.source_Estimator.output
+        self.node_Ranked_Percentages.inputs['pinfo'] = self.source_PatientInfo.output
+        self.link_images_perc = self.network.create_link(self.source_Images.output, self.node_Ranked_Percentages.inputs['images'])
+        self.link_images_perc.collapse = 'patients'
+        self.link_segmentations_perc = self.network.create_link(self.source_Segmentations.output, self.node_Ranked_Percentages.inputs['segmentations'])
+        self.link_segmentations_perc.collapse = 'patients'
 
-            self.node_Ranked_Posteriors.inputs['estimator'] = self.source_Estimator.output
-            self.node_Ranked_Posteriors.inputs['pinfo'] = self.source_PatientInfo.output
-            self.link_images_post = self.network.create_link(self.source_Images.output, self.node_Ranked_Posteriors.inputs['images'])
-            self.link_images_post.collapse = 'patients'
-            self.link_segmentations_post = self.network.create_link(self.source_Segmentations.output, self.node_Ranked_Posteriors.inputs['segmentations'])
-            self.link_segmentations_post.collapse = 'patients'
+        self.node_Ranked_Posteriors.inputs['estimator'] = self.source_Estimator.output
+        self.node_Ranked_Posteriors.inputs['pinfo'] = self.source_PatientInfo.output
+        self.link_images_post = self.network.create_link(self.source_Images.output, self.node_Ranked_Posteriors.inputs['images'])
+        self.link_images_post.collapse = 'patients'
+        self.link_segmentations_post = self.network.create_link(self.source_Segmentations.output, self.node_Ranked_Posteriors.inputs['segmentations'])
+        self.link_segmentations_post.collapse = 'patients'
 
     def create_links_Addon(self):
-        """Create links in network between sources, nodes and sinks."""
+        """Create links in network between nodes when adding Evaluate to WORC."""
         # Sources from the WORC network are used
         prediction = self.parent.classify.outputs['classification']
         if self.parent.labels_test:
@@ -280,6 +292,7 @@ class Evaluate(object):
         self.node_Barchart.inputs['prediction'] = prediction
 
         self.links_STest_Features = dict()
+        self.links_decomposition_Features = dict()
         self.links_Boxplots_Features = dict()
         for idx, label in enumerate(self.parent.modlabels):
             # NOTE: Currently statistical testing is only done within the training set
@@ -289,27 +302,34 @@ class Evaluate(object):
                     name = node.id
                     self.links_STest_Features[name] =\
                         self.node_STest.inputs['features'][name] << node.outputs['feat_out']
+
+                    self.links_decomposition_Features[name] =\
+                        self.node_decomposition.inputs['features'][name] << node.outputs['feat_out']
+
                     self.links_Boxplots_Features[name] =\
                         self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
 
-                    # All features should be input at once
-                    self.links_STest_Features[name].collapse = 'train'
-                    self.links_Boxplots_Features[name].collapse = 'train'
             else:
                 # Feature are precomputed and given as sources
                 for node in self.parent.sources_features_train[label]:
                     name = node.id
                     self.links_STest_Features[name] =\
                         self.node_STest.inputs['features'][name] << node.output
+                    self.links_decomposition_Features[name] =\
+                        self.node_decomposition.inputs['features'][name] << node.output
                     self.links_Boxplots_Features[name] =\
                         self.node_Boxplots_Features.inputs['features'][name] << node.output
 
-                    # All features should be input at once
-                    self.links_STest_Features[name].collapse = 'train'
-                    self.links_Boxplots_Features[name].collapse = 'train'
+            # All features should be input at once
+            self.links_STest_Features[name].collapse = 'train'
+            self.links_decomposition_Features[name].collapse = 'train'
+            self.links_Boxplots_Features[name].collapse = 'train'
 
         self.node_STest.inputs['patientclass'] = pinfo
         self.node_STest.inputs['config'] = config
+
+        self.node_decomposition.inputs['patientclass'] = pinfo
+        self.node_decomposition.inputs['config'] = config
 
         self.node_Boxplots_Features.inputs['patientclass'] = pinfo
         self.node_Boxplots_Features.inputs['config'] = config
@@ -372,6 +392,9 @@ class Evaluate(object):
 
         if 'StatisticalTestFeatures_CSV' not in sink_data.keys():
             self.sink_data['StatisticalTestFeatures_CSV'] = ("vfs://output/{}/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
+        if 'Decomposition_PNG' not in sink_data.keys():
+            self.sink_data['Decomposition_PNG'] = ("vfs://output/{}/Decomposition_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'RankedPercentages_Zip' not in sink_data.keys():
             self.sink_data['RankedPercentages_Zip'] = ("vfs://output/{}/RankedPercentages_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
