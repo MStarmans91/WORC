@@ -1,5 +1,5 @@
-============= ======= =======
-Subkey        Default Options
-============= ======= =======
-OverfitScaler False   False  
-============= ======= =======
+============= ======= ===========
+Subkey        Default Options    
+============= ======= ===========
+OverfitScaler False   True, False
+============= ======= ===========

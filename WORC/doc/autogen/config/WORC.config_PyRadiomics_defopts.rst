@@ -1,17 +1,17 @@
-================= =========== ===========
-Subkey            Default     Options    
-================= =========== ===========
-geometryTolerance 0.0001      0.0001     
-normalize         False       False      
-normalizeScale    100         100        
-interpolator      sitkBSpline sitkBSpline
-preCrop           True        True       
-binCount          16          16         
-force2D           True        True       
-force2Ddimension  0           0          
-voxelArrayShift   300         300        
-Original          True        True       
-Wavelet           True        True       
-LoG               True        True       
-label             1           1          
-================= =========== ===========
+================= =========== ========================================================================================================================
+Subkey            Default     Options                                                                                                                 
+================= =========== ========================================================================================================================
+geometryTolerance 0.0001      Float                                                                                                                   
+normalize         False       True, False                                                                                                             
+normalizeScale    100         Integer                                                                                                                 
+interpolator      sitkBSpline See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .
+preCrop           True        True, False                                                                                                             
+binCount          16          Integer                                                                                                                 
+force2D           False       True, False                                                                                                             
+force2Ddimension  0           0 = axial, 1 = coronal, 2 = sagital                                                                                     
+voxelArrayShift   300         Integer                                                                                                                 
+Original          True        True, False                                                                                                             
+Wavelet           True        True, False                                                                                                             
+LoG               True        True, False                                                                                                             
+label             1           Integer                                                                                                                 
+================= =========== ========================================================================================================================

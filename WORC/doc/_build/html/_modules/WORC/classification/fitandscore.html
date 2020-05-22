@@ -602,7 +602,8 @@
             <span class="n">ReliefSel</span> <span class="o">=</span> <span class="n">SelectMulticlassRelief</span><span class="p">(</span><span class="n">n_neighbours</span><span class="o">=</span><span class="n">n_neighbours</span><span class="p">,</span>
                                                <span class="n">sample_size</span><span class="o">=</span><span class="n">sample_size</span><span class="p">,</span>
                                                <span class="n">distance_p</span><span class="o">=</span><span class="n">distance_p</span><span class="p">,</span>
-                                               <span class="n">numf</span><span class="o">=</span><span class="n">numf</span><span class="p">)</span>
+                                               <span class="n">numf</span><span class="o">=</span><span class="n">numf</span><span class="p">,</span>
+                                               <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
             <span class="n">ReliefSel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
@@ -610,6 +611,9 @@
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
             <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">ReliefSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
+            <span class="n">feature_labels</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
 
     <span class="c1"># Delete the object if we do not need to return it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>

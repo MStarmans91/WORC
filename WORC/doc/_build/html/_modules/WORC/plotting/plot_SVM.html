@@ -765,6 +765,7 @@
                     <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;Percentage Selected 95%:&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;{np.nanmean(percentages_selected)} {str(compute_confidence(percentages_selected, N_1, N_2, alpha))}&quot;</span>
 
             <span class="c1"># Extract statistics on how often patients got classified correctly</span>
+            <span class="n">rankings</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
             <span class="n">alwaysright</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
             <span class="n">alwayswrong</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
             <span class="n">percentages</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -787,9 +788,9 @@
                     <span class="n">alwayswrong</span><span class="p">[</span><span class="n">i_ID</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
                     <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Always Wrong: </span><span class="si">{i_ID}</span><span class="s2">, label </span><span class="si">{label}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
-            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;Always right&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alwaysright</span>
-            <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;Always wrong&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alwayswrong</span>
-            <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">percentages</span>
+            <span class="n">rankings</span><span class="p">[</span><span class="s2">&quot;Always right&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alwaysright</span>
+            <span class="n">rankings</span><span class="p">[</span><span class="s2">&quot;Always wrong&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alwayswrong</span>
+            <span class="n">rankings</span><span class="p">[</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">percentages</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Regression</span>
             <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;R2-score 95%: &#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;{np.nanmean(r2_score)} {str(compute_confidence(r2score, N_1, N_2, alpha))}&quot;</span>
@@ -810,7 +811,12 @@
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{k}</span><span class="s2"> : </span><span class="si">{v}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">stats</span></div>
+        <span class="c1"># Combine stats and rankings in one output</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">output</span><span class="p">[</span><span class="s1">&#39;Statistics&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span>
+        <span class="n">output</span><span class="p">[</span><span class="s1">&#39;Rankings&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rankings</span>
+
+        <span class="k">return</span> <span class="n">output</span></div>
 
 
 <div class="viewcode-block" id="combine_multiple_estimators"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_SVM.combine_multiple_estimators">[docs]</a><span class="k">def</span> <span class="nf">combine_multiple_estimators</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">multilabel_type</span><span class="p">,</span> <span class="n">label_types</span><span class="p">,</span>
