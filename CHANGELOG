@@ -12,7 +12,7 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_
 Added
 ~~~~~~~
 - Catch error if number of segmentations supplied does not match number of
-  images.
+  images. 
 - Add support in SimpleWORC and BasicWORC for multiple segmentations per
   patient.
 - Chi2 test in statistical testing.
