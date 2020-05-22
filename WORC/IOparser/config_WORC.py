@@ -43,8 +43,9 @@ def load_config(config_file_path):
     settings_dict['ImageFeatures']['image_type'] =\
         str(settings['ImageFeatures']['image_type'])
 
-    settings_dict['General']['FeatureCalculator'] =\
-        str(settings['General']['FeatureCalculator'])
+    settings_dict['General']['FeatureCalculators'] =\
+        [str(item).strip() for item in
+         settings['General']['FeatureCalculators'].split(',')]
 
     settings_dict['General']['Preprocessing'] =\
         str(settings['General']['Preprocessing'])

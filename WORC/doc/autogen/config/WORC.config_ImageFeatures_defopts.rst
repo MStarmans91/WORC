@@ -8,9 +8,9 @@ texture_Gabor       False               True, False
 texture_LBP         True                True, False               
 texture_GLCM        True                True, False               
 texture_GLCMMS      True                True, False               
-texture_GLRLM       True                True, False               
-texture_GLSZM       True                True, False               
-texture_NGTDM       True                True, False               
+texture_GLRLM       False               True, False               
+texture_GLSZM       False               True, False               
+texture_NGTDM       False               True, False               
 coliage             False               True, False               
 vessel              False               True, False               
 log                 False               True, False               

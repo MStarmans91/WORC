@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,25 +61,28 @@ def construct_classifier(config):
                                             class_weight='balanced',
                                             n_estimators=config['RFn_estimators'],
                                             min_samples_split=config['RFmin_samples_split'],
-                                            max_depth=config['RFmax_depth'])
+                                            max_depth=config['RFmax_depth'],
+                                            random_state=config['random_seed'])
 
     elif config['classifiers'] == 'RFR':
         # Random forest kernel regression
         classifier = RandomForestRegressor(verbose=0,
                                            n_estimators=config['RFn_estimators'],
                                            min_samples_split=config['RFmin_samples_split'],
-                                           max_depth=config['RFmax_depth'])
+                                           max_depth=config['RFmax_depth'],
+                                           random_state=config['random_seed'])
 
     elif config['classifiers'] == 'ElasticNet':
         # Elastic Net Regression
         classifier = ElasticNet(alpha=config['ElasticNet_alpha'],
                                 l1_ratio=config['ElasticNet_l1_ratio'],
-                                max_iter=max_iter)
+                                max_iter=max_iter,
+                                random_state=config['random_seed'])
 
     elif config['classifiers'] == 'Lasso':
         # LASSO Regression
-        param_grid = {'alpha': scipy.stats.uniform(loc=1.0, scale=0.5)}
-        classifier = Lasso(max_iter=max_iter)
+        classifier = Lasso(max_iter=max_iter,
+                           random_state=config['random_seed'])
 
     elif config['classifiers'] == 'SGD':
         # Stochastic Gradient Descent classifier
@@ -87,7 +90,8 @@ def construct_classifier(config):
                                    alpha=config['SGD_alpha'],
                                    l1_ratio=config['SGD_l1_ratio'],
                                    loss=config['SGD_loss'],
-                                   penalty=config['SGD_penalty'])
+                                   penalty=config['SGD_penalty'],
+                                   random_state=config['random_seed'])
 
     elif config['classifiers'] == 'SGDR':
         # Stochastic Gradient Descent regressor
@@ -95,13 +99,15 @@ def construct_classifier(config):
                                   alpha=config['SGD_alpha'],
                                   l1_ratio=config['SGD_l1_ratio'],
                                   loss=config['SGD_loss'],
-                                  penalty=config['SGD_penalty'])
+                                  penalty=config['SGD_penalty'],
+                                  random_state=config['random_seed'])
 
     elif config['classifiers'] == 'LR':
         # Logistic Regression
         classifier = LogisticRegression(max_iter=max_iter,
                                         penalty=config['LRpenalty'],
-                                        C=config['LRC'])
+                                        C=config['LRC'],
+                                        random_state=config['random_seed'])
     elif config['classifiers'] == 'GaussianNB':
         # Naive Bayes classifier using Gaussian distributions
         classifier = GaussianNB()
@@ -146,9 +152,10 @@ def construct_SVM(config, regression=False):
 
     max_iter = config['max_iter']
     if not regression:
-        clf = SVC(class_weight='balanced', probability=True, max_iter=max_iter)
+        clf = SVC(class_weight='balanced', probability=True, max_iter=max_iter,
+                  random_state=config['random_seed'])
     else:
-        clf = SVMR(max_iter=max_iter)
+        clf = SVMR(max_iter=max_iter, random_state=config['random_seed'])
 
     clf.kernel = str(config['SVMKernel'])
     clf.C = config['SVMC']

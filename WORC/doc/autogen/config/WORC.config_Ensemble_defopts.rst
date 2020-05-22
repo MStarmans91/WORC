@@ -1,5 +1,5 @@
 ====== ======= =======
 Subkey Default Options
 ====== ======= =======
-Use    1       Integer
+Use    50      Integer
 ====== ======= =======

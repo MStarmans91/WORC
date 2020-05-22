@@ -1,6 +1,9 @@
-====== ======= =================
-Subkey Default Options          
-====== ======= =================
-ROI    Full    True, False, Full
-Method z_score z_score, minmed  
-====== ======= =================
+=============== ======== =================
+Subkey          Default  Options          
+=============== ======== =================
+ROI             Full     True, False, Full
+ROIDetermine    Provided Provided, Otsu   
+ROIdilate       False    True, False      
+ROIdilateradius 10       Integer > 0      
+Method          z_score  z_score, minmed  
+=============== ======== =================

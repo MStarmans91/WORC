@@ -44,7 +44,7 @@ def load_config(config_file_path):
                      'Featsel': dict(), 'FeatureScaling': dict(),
                      'SampleProcessing': dict(), 'Imputation': dict(),
                      'Ensemble': dict(), 'Bootstrap': dict(),
-                     'FeatPreProcess': dict()}
+                     'FeatPreProcess': dict(), 'Evaluation': dict()}
 
     settings_dict['General']['cross_validation'] =\
         settings['General'].getboolean('cross_validation')
@@ -59,28 +59,24 @@ def load_config(config_file_path):
         settings['General'].getboolean('tempsave')
 
     settings_dict['Featsel']['Variance'] =\
-        [str(item).strip() for item in
-         settings['Featsel']['Variance'].split(',')]
+        settings['Featsel'].getfloat('Variance')
 
     settings_dict['Featsel']['SelectFromModel'] =\
-        [str(item).strip() for item in
-         settings['Featsel']['SelectFromModel'].split(',')]
+        settings['Featsel'].getfloat('SelectFromModel')
 
     settings_dict['Featsel']['GroupwiseSearch'] =\
         [str(item).strip() for item in
          settings['Featsel']['GroupwiseSearch'].split(',')]
 
     settings_dict['Featsel']['UsePCA'] =\
-        [str(item).strip() for item in
-         settings['Featsel']['UsePCA'].split(',')]
+        settings['Featsel'].getfloat('UsePCA')
 
     settings_dict['Featsel']['PCAType'] =\
         [str(item).strip() for item in
          settings['Featsel']['PCAType'].split(',')]
 
     settings_dict['Featsel']['StatisticalTestUse'] =\
-        [str(item).strip() for item in
-         settings['Featsel']['StatisticalTestUse'].split(',')]
+        settings['Featsel'].getfloat('StatisticalTestUse')
 
     settings_dict['Featsel']['StatisticalTestMetric'] =\
         [str(item).strip() for item in
@@ -91,8 +87,7 @@ def load_config(config_file_path):
          settings['Featsel']['StatisticalTestThreshold'].split(',')]
 
     settings_dict['Featsel']['ReliefUse'] =\
-        [str(item).strip() for item in
-         settings['Featsel']['ReliefUse'].split(',')]
+        settings['Featsel'].getfloat('ReliefUse')
 
     settings_dict['Featsel']['ReliefNN'] =\
         [int(str(item).strip()) for item in
@@ -125,8 +120,9 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Imputation']['n_neighbors'].split(',')]
 
-    settings_dict['General']['FeatureCalculator'] =\
-        str(settings['General']['FeatureCalculator'])
+    settings_dict['General']['FeatureCalculators'] =\
+        [str(item).strip() for item in
+         settings['General']['FeatureCalculators'].split(',')]
 
     # Feature selection options
     for key in settings['SelectFeatGroup'].keys():
@@ -293,5 +289,9 @@ def load_config(config_file_path):
 
     settings_dict['Bootstrap']['N_iterations'] =\
         settings['Bootstrap'].getint('N_iterations')
+
+    # Settings for evaluation
+    settings_dict['Evaluation']['OverfitScaler'] =\
+        settings['Evaluation'].getboolean('OverfitScaler')
 
     return settings_dict

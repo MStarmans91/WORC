@@ -150,6 +150,37 @@ are computed or not.
 .. include:: ../autogen/config/WORC.config_ImageFeatures_defopts.rst
 
 
+.. _config-PyRadiomics:
+PyRadiomics
+~~~~~~~~~~~~~
+If using the PyRadiomics toolbox, you can specify some settings for the
+feature computation here. For more information, see
+https://pyradiomics.readthedocs.io/en/latest/customization.htm.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_PyRadiomics_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_PyRadiomics_defopts.rst
+
+.. _config-ComBat:
+ComBat
+~~~~~~~~~~~~~
+If using the ComBat toolbox, you can specify some settings for the
+feature harmonization here. For more information, see
+https://github.com/Jfortin1/ComBatHarmonization.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_ComBat_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_ComBat_defopts.rst
+
+
 .. _config-Featsel:
 Featsel
 ~~~~~~~
@@ -359,4 +390,3 @@ Besides cross validation, WORC supports bootstrapping on the test set for perfor
 **Defaults and Options:**
 
 .. include:: ../autogen/config/WORC.config_Bootstrap_defopts.rst
-

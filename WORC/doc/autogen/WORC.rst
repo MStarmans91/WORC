@@ -43,6 +43,8 @@ Subpackages
     WORC.plotting
     WORC.processing
     WORC.resources
+    WORC.statistics
+    WORC.tests
     WORC.tools
     WORC.validators
 

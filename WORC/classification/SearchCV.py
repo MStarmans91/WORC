@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,7 @@ from sklearn.utils.fixes import MaskedArray
 
 from sklearn.model_selection._search import ParameterSampler
 from sklearn.model_selection._search import ParameterGrid, _check_param_grid
+from sklearn.preprocessing import StandardScaler
 
 from abc import ABCMeta, abstractmethod
 from collections import Sized, defaultdict
@@ -564,19 +565,50 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             Xt, _ = self.preprocess(Xt)
             return self.best_estimator_.transform(Xt)
 
-    def preprocess(self, X, y=None):
+    def preprocess(self, X, y=None, training=False):
         '''Apply the available preprocssing methods to the features'''
         if self.best_preprocessor is not None:
             X = self.best_preprocessor.transform(X)
 
-        if self.best_scaler is not None:
-            X = self.best_scaler.transform(X)
+        if not training and hasattr(self, 'overfit_scaler') and self.overfit_scaler:
+            # Overfit the feature scaling on the test set
+            # NOTE: Never use this in an actual model, only to assess how
+            # different your features are in your train and test sets
+            m = '[WORC WARNING] You choose to overfit the feature scaling. ' +\
+                'Never use this in an actual model, only to assess how ' +\
+                'different your features are in your train and test sets.'
+            print(m)
+            scaler = StandardScaler().fit(X)
+
+            if scaler is not None:
+                X = scaler.transform(X)
+        else:
+            if self.best_scaler is not None:
+                X = self.best_scaler.transform(X)
 
         if self.best_imputer is not None:
             X = self.best_imputer.transform(X)
 
         # Replace nan if still left
         X = replacenan(np.asarray(X)).tolist()
+
+        if self.best_groupsel is not None:
+            X = self.best_groupsel.transform(X)
+
+        if self.best_varsel is not None:
+            X = self.best_varsel.transform(X)
+
+        if self.best_reliefsel is not None:
+            X = self.best_reliefsel.transform(X)
+
+        if self.best_modelsel is not None:
+            X = self.best_modelsel.transform(X)
+
+        if self.best_pca is not None:
+            X = self.best_pca.transform(X)
+
+        if self.best_statisticalsel is not None:
+            X = self.best_statisticalsel.transform(X)
 
         # Only oversample in training phase, i.e. if we have the labels
         if y is not None:
@@ -585,24 +617,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
             if self.best_RandomOverSampler is not None:
                 X, y = self.best_RandomOverSampler.fit_sample(X, y)
-
-        if self.best_groupsel is not None:
-            X = self.best_groupsel.transform(X)
-
-        if self.best_varsel is not None:
-            X = self.best_varsel.transform(X)
-
-        if self.best_statisticalsel is not None:
-            X = self.best_statisticalsel.transform(X)
-
-        if self.best_reliefsel is not None:
-            X = self.best_reliefsel.transform(X)
-
-        if self.best_pca is not None:
-            X = self.best_pca.transform(X)
-
-        if self.best_modelsel is not None:
-            X = self.best_modelsel.transform(X)
 
         return X, y
 
@@ -823,7 +837,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Fit the estimator using the preprocessed features
         X = [x[0] for x in X]
-        X, y = self.preprocess(X, y)
+        X, y = self.preprocess(X, y, training=True)
 
         parameters_est = delete_nonestimator_parameters(parameters_est)
         best_estimator = cc.construct_classifier(parameters_all)
@@ -851,7 +865,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         return self
 
     def create_ensemble(self, X_train, Y_train, verbose=None, initialize=True,
-                        scoring=None, method=50):
+                        scoring=None, method=50, overfit_scaler=False):
         '''
 
         Create an (optimal) ensemble of a combination of hyperparameter settings
@@ -1272,6 +1286,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                            p_est, train, train,
                                            verbose=False)
 
+            # Determine whether to overfit the feature scaling on the test set
+            base_estimator.overfit_scaler = overfit_scaler
+
             estimators.append(base_estimator)
 
         self.ensemble = Ensemble(estimators)
@@ -1324,9 +1341,9 @@ class BaseSearchCVfastr(BaseSearchCV):
         parameters_temp = dict()
         try:
             for num, parameters in enumerate(parameter_iterable):
-
                 parameters["Number"] = str(num)
                 parameters_temp[str(num)] = parameters
+
         except ValueError:
             # One of the parameters gives an error. Find out which one.
             param_grid = dict()
@@ -1432,34 +1449,36 @@ class BaseSearchCVfastr(BaseSearchCV):
                         tmpdir=os.path.join(tempfolder, 'tmp'),
                         execution_plugin=self.fastr_plugin)
 
-        # Read in the output data once finished
-        # TODO: expanding fastr url is probably a nicer way
+        # Check whether all jobs have finished
+        expected_no_files = len(traintest_files) * len(parameter_files)
         sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
+        if len(sink_files) != expected_no_files:
+            difference = expected_no_files - len(sink_files)
+            fname = os.path.join(tempfolder, 'tmp')
+            message = ('Fitting classifiers has failed for ' +
+                       f'{difference} / {expected_no_files} files. The temporary ' +
+                       f'results where not deleted and can be found in {tempfolder}. ' +
+                       'Probably your fitting and scoring failed: check out ' +
+                       'the tmp/fitandscore folder within the tempfolder for ' +
+                       'the fastr job temporary results or run: fastr trace ' +
+                       f'"{fname}{os.path.sep}__sink_data__.json" --samples.')
+            raise WORCexceptions.WORCValueError(message)
+
+        # Read in the output data once finished
         save_data = list()
         for output in sink_files:
             data = pd.read_hdf(output)
             save_data.extend(list(data['RET']))
 
         # if one choose to see train score, "out" will contain train score info
-        try:
-            if self.return_train_score:
-                (train_scores, test_scores, test_sample_counts,
-                 fit_time, score_time, parameters_est, parameters_all) =\
-                  zip(*save_data)
-            else:
-                (test_scores, test_sample_counts,
-                 fit_time, score_time, parameters_est, parameters_all) =\
-                  zip(*save_data)
-        except ValueError as e:
-            print(e)
-            tempfolder = os.path.join(tempfolder, 'tmp')
-            message = ('Fitting classifiers has failed. The temporary ' +
-                       f'results where not deleted and can be found in {tempfolder}. ' +
-                       'Probably your fitting and scoring failed: check out ' +
-                       'the tmp/fitandscore folder within the tempfolder for ' +
-                       'the fastr job temporary results or run: fastr trace ' +
-                       f'{tmpfolder}{os.path.sep}__sink_data__.json --samples.')
-            raise WORCexceptions.WORCValueError(message)
+        if self.return_train_score:
+            (train_scores, test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) =\
+              zip(*save_data)
+        else:
+            (test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) =\
+              zip(*save_data)
 
         # Remove the temporary folder used
         shutil.rmtree(tempfolder)

@@ -36,6 +36,12 @@ def main():
                         help='Performance (JSON)')
     args = parser.parse_args()
 
+    if type(args.pc) is list:
+        args.pc = ''.join(args.pc)
+
+    if type(args.cf) is list:
+        args.cf = ''.join(args.cf)
+        
     StatisticalTestFeatures(features=args.feat,
                             patientinfo=args.pc,
                             config=args.cf,

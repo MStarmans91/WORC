@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>classification Package &mdash; WORC 3.1.3 documentation</title>
+  <title>classification Package &mdash; WORC 3.1.4 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.3
+                3.1.4
               </div>
             
           
@@ -90,6 +90,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
 </ul>
@@ -103,7 +106,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">classification Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classification</span></code> Package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.AdvancedSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">AdvancedSampler</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.ObjectSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#objectsampler-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.RankedSVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.SearchCV"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.construct_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">construct_classifier</span></code> Module</a></li>
@@ -125,6 +128,8 @@
 <li class="toctree-l3"><a class="reference internal" href="WORC.plotting.html">plotting Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.resources.html">resources Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.statistics.html">statistics Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.tests.html">tests Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
 </ul>
@@ -292,6 +297,42 @@ as sampled value.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="WORC.classification.AdvancedSampler.boolean_uniform">
+<em class="property">class </em><code class="descclassname">WORC.classification.AdvancedSampler.</code><code class="descname">boolean_uniform</code><span class="sig-paren">(</span><em>loc=0</em>, <em>scale=1</em>, <em>threshold=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/AdvancedSampler.html#boolean_uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.AdvancedSampler.boolean_uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Uniform distribution thresholded at a certain value to output booleans.</p>
+<p>Note: as Booleans cannot be saved in JSOn, which WORC later does, this
+object returns strings.</p>
+<dl class="attribute">
+<dt id="WORC.classification.AdvancedSampler.boolean_uniform.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.classification.AdvancedSampler', '__doc__': '\n    Uniform distribution thresholded at a certain value to output booleans.\n\n    Note: as Booleans cannot be saved in JSOn, which WORC later does, this\n    object returns strings.\n\n    ', '__init__': &lt;function boolean_uniform.__init__&gt;, 'rvs': &lt;function boolean_uniform.rvs&gt;, '__dict__': &lt;attribute '__dict__' of 'boolean_uniform' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'boolean_uniform' objects&gt;})</em><a class="headerlink" href="#WORC.classification.AdvancedSampler.boolean_uniform.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.classification.AdvancedSampler.boolean_uniform.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>loc=0</em>, <em>scale=1</em>, <em>threshold=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/AdvancedSampler.html#boolean_uniform.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.AdvancedSampler.boolean_uniform.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.classification.AdvancedSampler.boolean_uniform.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.classification.AdvancedSampler'</em><a class="headerlink" href="#WORC.classification.AdvancedSampler.boolean_uniform.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.classification.AdvancedSampler.boolean_uniform.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.classification.AdvancedSampler.boolean_uniform.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.classification.AdvancedSampler.boolean_uniform.rvs">
+<code class="descname">rvs</code><span class="sig-paren">(</span><em>size=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/AdvancedSampler.html#boolean_uniform.rvs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.AdvancedSampler.boolean_uniform.rvs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="WORC.classification.AdvancedSampler.discrete_uniform">
 <em class="property">class </em><code class="descclassname">WORC.classification.AdvancedSampler.</code><code class="descname">discrete_uniform</code><span class="sig-paren">(</span><em>loc=-1</em>, <em>scale=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/AdvancedSampler.html#discrete_uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.AdvancedSampler.discrete_uniform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
@@ -391,65 +432,8 @@ as sampled value.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-WORC.classification.ObjectSampler">
-<span id="objectsampler-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module<a class="headerlink" href="#module-WORC.classification.ObjectSampler" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler">
-<em class="property">class </em><code class="descclassname">WORC.classification.ObjectSampler.</code><code class="descname">ObjectSampler</code><span class="sig-paren">(</span><em>method</em>, <em>sampling_strategy='auto'</em>, <em>SMOTE_ratio=1</em>, <em>SMOTE_neighbors=5</em>, <em>n_jobs=1</em>, <em>n_neighbors=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Samples objects for learning based on various under-, over- and combined sampling methods.</p>
-<p>The choice of included methods is largely based on:</p>
-<p>He, Haibo, and Edwardo A. Garcia. “Learning from imbalanced data.”
-IEEE Transactions on Knowledge &amp; Data Engineering 9 (2008): 1263-1284.</p>
-<dl class="attribute">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.__dict__">
-<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.classification.ObjectSampler', '__doc__': '\n    Samples objects for learning based on various under-, over- and combined sampling methods.\n\n    The choice of included methods is largely based on:\n\n    He, Haibo, and Edwardo A. Garcia. &quot;Learning from imbalanced data.&quot;\n    IEEE Transactions on Knowledge &amp; Data Engineering 9 (2008): 1263-1284.\n\n\n    ', '__init__': &lt;function ObjectSampler.__init__&gt;, 'init_RandomUnderSampling': &lt;function ObjectSampler.init_RandomUnderSampling&gt;, 'init_NearMiss': &lt;function ObjectSampler.init_NearMiss&gt;, 'init_RandomOverSampling': &lt;function ObjectSampler.init_RandomOverSampling&gt;, 'init_SMOTE': &lt;function ObjectSampler.init_SMOTE&gt;, 'fit': &lt;function ObjectSampler.fit&gt;, '__dict__': &lt;attribute '__dict__' of 'ObjectSampler' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'ObjectSampler' objects&gt;})</em><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.__dict__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>method</em>, <em>sampling_strategy='auto'</em>, <em>SMOTE_ratio=1</em>, <em>SMOTE_neighbors=5</em>, <em>n_jobs=1</em>, <em>n_neighbors=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.classification.ObjectSampler'</em><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.__weakref__">
-<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.__weakref__" title="Permalink to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.init_NearMiss">
-<code class="descname">init_NearMiss</code><span class="sig-paren">(</span><em>sampling_strategy</em>, <em>n_neighbors</em>, <em>n_jobs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.init_NearMiss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.init_NearMiss" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.init_RandomOverSampling">
-<code class="descname">init_RandomOverSampling</code><span class="sig-paren">(</span><em>sampling_strategy</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.init_RandomOverSampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.init_RandomOverSampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.init_RandomUnderSampling">
-<code class="descname">init_RandomUnderSampling</code><span class="sig-paren">(</span><em>sampling_strategy</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.init_RandomUnderSampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.init_RandomUnderSampling" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.ObjectSampler.ObjectSampler.init_SMOTE">
-<code class="descname">init_SMOTE</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/ObjectSampler.html#ObjectSampler.init_SMOTE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.ObjectSampler.ObjectSampler.init_SMOTE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="objectsampler-module">
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module<a class="headerlink" href="#objectsampler-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-WORC.classification.RankedSVM">
 <span id="rankedsvm-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module<a class="headerlink" href="#module-WORC.classification.RankedSVM" title="Permalink to this headline">¶</a></h2>
@@ -555,7 +539,7 @@ SVs              - The ith support vector is stored in SVs[:,i]</p>
 
 <dl class="method">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.create_ensemble">
-<code class="descname">create_ensemble</code><span class="sig-paren">(</span><em>X_train</em>, <em>Y_train</em>, <em>verbose=None</em>, <em>initialize=True</em>, <em>scoring=None</em>, <em>method=50</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.create_ensemble"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.create_ensemble" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_ensemble</code><span class="sig-paren">(</span><em>X_train</em>, <em>Y_train</em>, <em>verbose=None</em>, <em>initialize=True</em>, <em>scoring=None</em>, <em>method=50</em>, <em>overfit_scaler=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.create_ensemble"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.create_ensemble" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an (optimal) ensemble of a combination of hyperparameter settings
 and the associated groupsels, PCAs, estimators etc.</p>
 <p>Based on Caruana et al. 2004, but a little different:</p>
@@ -647,7 +631,7 @@ underlying estimator.</p>
 
 <dl class="method">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.preprocess">
-<code class="descname">preprocess</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.preprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.preprocess" title="Permalink to this definition">¶</a></dt>
+<code class="descname">preprocess</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em>, <em>training=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.preprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.preprocess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply the available preprocssing methods to the features</p>
 </dd></dl>
 
@@ -2229,10 +2213,10 @@ the fitted object.</p>
 <dt>ReliefSel: WORC ReliefSel Object</dt><dd><p>Either None if the RELIEF feature selection is not used, or
 the fitted object.</p>
 </dd>
-<dt>sm: WORC SMOTE Object</dt><dd><p>Either None if the SMOTE oversampling is not used, or
+<dt>Snote: WORC SMOTE Object</dt><dd><p>Either None if the SMOTE oversampling is not used, or
 the fitted object.</p>
 </dd>
-<dt>ros: WORC ROS Object</dt><dd><p>Either None if Random Oversampling is not used, or
+<dt>RandOverSample: WORC RandomOverSampler Object</dt><dd><p>Either None if Random Oversampling is not used, or
 the fitted object.</p>
 </dd>
 </dl>
@@ -2314,7 +2298,7 @@ Calculation of Multi Class AUC according to classpy: <a class="reference externa
 <span id="parameter-optimization-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_optimization</span></code> Module<a class="headerlink" href="#module-WORC.classification.parameter_optimization" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.classification.parameter_optimization.random_search_parameters">
-<code class="descclassname">WORC.classification.parameter_optimization.</code><code class="descname">random_search_parameters</code><span class="sig-paren">(</span><em>features</em>, <em>labels</em>, <em>N_iter</em>, <em>test_size</em>, <em>param_grid</em>, <em>scoring_method</em>, <em>n_splits=5</em>, <em>n_jobspercore=200</em>, <em>use_fastr=False</em>, <em>n_cores=1</em>, <em>fastr_plugin=None</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/parameter_optimization.html#random_search_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.parameter_optimization.random_search_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.classification.parameter_optimization.</code><code class="descname">random_search_parameters</code><span class="sig-paren">(</span><em>features</em>, <em>labels</em>, <em>N_iter</em>, <em>test_size</em>, <em>param_grid</em>, <em>scoring_method</em>, <em>n_splits=5</em>, <em>n_jobspercore=200</em>, <em>use_fastr=False</em>, <em>n_cores=1</em>, <em>fastr_plugin=None</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em>, <em>random_seed=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/parameter_optimization.html#random_search_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.parameter_optimization.random_search_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Train a classifier and simultaneously optimizes hyperparameters using a
 randomized search.</p>
 <dl>
@@ -2355,29 +2339,6 @@ param_grid: dictionary containing all possible hyperparameters and their</p>
 </div>
 <div class="section" id="module-WORC.classification.trainclassifier">
 <span id="trainclassifier-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">trainclassifier</span></code> Module<a class="headerlink" href="#module-WORC.classification.trainclassifier" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="WORC.classification.trainclassifier.load_features">
-<code class="descclassname">WORC.classification.trainclassifier.</code><code class="descname">load_features</code><span class="sig-paren">(</span><em>feat</em>, <em>patientinfo</em>, <em>label_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/trainclassifier.html#load_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.trainclassifier.load_features" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read feature files and stack the features per patient in an array.
-Additionally, if a patient label file is supplied, the features from
-a patient will be matched to the labels.</p>
-<dl>
-<dt>featurefiles: list, mandatory</dt><dd><p>List containing all paths to the .hdf5 feature files to be loaded.
-The argument should contain a list per modelity, e.g.
-[[features_mod1_patient1, features_mod1_patient2, …],</p>
-<blockquote>
-<div><p>[features_mod2_patient1, features_mod2_patient2, …]].</p>
-</div></blockquote>
-</dd>
-<dt>patientinfo: string, optional</dt><dd><p>Path referring to the .txt file to be used to read patient
-labels from. See the Github Wiki for the format.</p>
-</dd>
-<dt>label_names: list, optional</dt><dd><p>List containing all the labels that should be extracted from
-the patientinfo file.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="function">
 <dt id="WORC.classification.trainclassifier.trainclassifier">
 <code class="descclassname">WORC.classification.trainclassifier.</code><code class="descname">trainclassifier</code><span class="sig-paren">(</span><em>feat_train</em>, <em>patientinfo_train</em>, <em>config</em>, <em>output_hdf</em>, <em>output_json</em>, <em>feat_test=None</em>, <em>patientinfo_test=None</em>, <em>fixedsplits=None</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/trainclassifier.html#trainclassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.trainclassifier.trainclassifier" title="Permalink to this definition">¶</a></dt>

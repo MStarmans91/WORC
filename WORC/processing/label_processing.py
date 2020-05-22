@@ -231,7 +231,7 @@ def findlabeldata(patientinfo, label_type, filenames,
         ifound = 0
         matches = list()
         for i_num, i_patient in enumerate(label_data_temp['patient_IDs']):
-            if i_patient in str(feat):
+            if i_patient.lower() in str(feat).lower():
 
                 # Match: add the patient ID to the ID's and to the matches
                 patient_IDs.append(i_patient)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,14 +22,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import WORC.IOparser.config_io_classifier as config_io
 import os
-from WORC.trainclassifier import load_features
+from WORC.IOparser.file_io import load_features
 from sklearn.decomposition import PCA, SparsePCA, KernelPCA
 from sklearn.manifold import TSNE
 
 
-def Decomposition(features, patientinfo, config, output, label_type=None):
-    '''
-    Perform a decomposition to two components of the feature space with various methods.
+def Decomposition(features, patientinfo, config, output, label_type=None,
+                  verbose=True):
+    """
+    Perform decompositions to two components of the feature space.
+
     Useage is similar to StatisticalTestFeatures.
 
     Parameters
@@ -57,24 +59,15 @@ def Decomposition(features, patientinfo, config, output, label_type=None):
     verbose: boolean, default True
             print final feature values and labels to command line or not.
 
-    '''
+    """
     # Load variables from the config file
     config = config_io.load_config(config)
-
-    if type(patientinfo) is list:
-        patientinfo = ''.join(patientinfo)
-
-    if type(config) is list:
-        config = ''.join(config)
-
-    if type(output) is list:
-        output = ''.join(output)
 
     # Create output folder if required
     if not os.path.exists(os.path.dirname(output)):
         os.makedirs(os.path.dirname(output))
 
-    if label_type is not None:
+    if label_type is None:
         label_type = config['Labels']['label_names']
 
     # Read the features and classification data
@@ -91,8 +84,8 @@ def Decomposition(features, patientinfo, config, output, label_type=None):
     # -----------------------------------------------------------------------
     # Perform decomposition
     print("Performing decompositions.")
-    label_value = label_data['mutation_label']
-    label_name = label_data['mutation_name']
+    label_value = label_data['label']
+    label_name = label_data['label_name']
 
     # Reduce to two components for plotting
     n_components = 2
@@ -103,13 +96,13 @@ def Decomposition(features, patientinfo, config, output, label_type=None):
         class1 = [i for j, i in enumerate(feature_values) if classlabels[j] == 1]
         class2 = [i for j, i in enumerate(feature_values) if classlabels[j] == 0]
 
-        f = plt.figure()
+        f = plt.figure(figsize=(20, 15))
 
         # -------------------------------------------------------
         # Fit PCA
         pca = PCA(n_components=n_components)
         pca.fit(feature_values)
-        explained_variance_ratio = pca.explained_variance_ratio_
+        explained_variance_ratio = np.sum(pca.explained_variance_ratio_)
         class1_pca = pca.transform(class1)
         class2_pca = pca.transform(class2)
 
@@ -119,7 +112,7 @@ def Decomposition(features, patientinfo, config, output, label_type=None):
         plt.subplots_adjust(hspace=0.3, wspace=0.2)
         ax.scatter(class1_pca[:, 0], class1_pca[:, 1], color='blue')
         ax.scatter(class2_pca[:, 0], class2_pca[:, 1], color='green')
-        ax.set_title(('PCA: {} variance.').format(str(explained_variance_ratio)))
+        ax.set_title(f'PCA: {round(explained_variance_ratio, 3)} variance.')
 
         # -------------------------------------------------------
         # Fit Sparse PCA
@@ -173,10 +166,9 @@ def Decomposition(features, patientinfo, config, output, label_type=None):
 
         # -------------------------------------------------------
         # Maximize figure to get correct spacings
-        mng = plt.get_current_fig_manager()
-        mng.resize(*mng.window.maxsize())
+        # mng = plt.get_current_fig_manager()
+        # mng.resize(*mng.window.maxsize())
 
         # High DTI to  make sure we save the maximized image
         f.savefig(output, dpi=600)
         print(("Decomposition saved as {} !").format(output))
-

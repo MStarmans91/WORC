@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,13 +33,23 @@ def main():
                         help='Configuration')
     parser.add_argument('-output', '--output', metavar='output',
                         dest='output', type=str, required=True, nargs='+',
-                        help='Output (Zip)')
+                        help='Output (PNG)')
     args = parser.parse_args()
+
+    # Convert inputs to lists
+    if type(args.pc) is list:
+        args.pc = ''.join(args.pc)
+
+    if type(args.cf) is list:
+        args.cf = ''.join(args.cf)
+
+    if type(args.output) is list:
+        args.output = ''.join(args.output)
 
     Decomposition(features=args.feat,
                   patientinfo=args.pc,
                   config=args.cf,
-                  output=args.perf,
+                  output=args.output,
                   verbose=False)
 
 

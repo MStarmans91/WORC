@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +50,27 @@ class discrete_uniform():
             return int(self.uniform_dist.rvs(random_state=random_state))
         else:
             return int(self.uniform_dist.rvs(size=size, random_state=random_state))
+
+
+class boolean_uniform():
+    '''
+    Uniform distribution thresholded at a certain value to output booleans.
+
+    Note: as Booleans cannot be saved in JSOn, which WORC later does, this
+    object returns strings.
+
+    '''
+    def __init__(self, loc=0, scale=1, threshold=0.5):
+        self.loc = loc
+        self.scale = scale
+        self.threshold = threshold
+        self.uniform_dist = uniform(loc=self.loc, scale=self.scale)
+
+    def rvs(self, size=None, random_state=None):
+        if size is None:
+            return str(self.uniform_dist.rvs(random_state=random_state) < self.threshold)
+        else:
+            return str([k < self.threshold for k in self.uniform_dist.rvs(size=size, random_state=random_state)])
 
 
 class exp_uniform():

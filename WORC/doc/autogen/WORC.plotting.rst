@@ -55,10 +55,19 @@ plotting Package
     :show-inheritance:
     :special-members:
 
-:mod:`plot_boxplot` Module
---------------------------
+:mod:`plot_boxplot_features` Module
+-----------------------------------
 
-.. automodule:: WORC.plotting.plot_boxplot
+.. automodule:: WORC.plotting.plot_boxplot_features
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`plot_boxplot_performance` Module
+--------------------------------------
+
+.. automodule:: WORC.plotting.plot_boxplot_performance
     :members:
     :undoc-members:
     :show-inheritance:

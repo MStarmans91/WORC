@@ -18,9 +18,9 @@
 import os
 import csv
 import numpy as np
-from scipy.stats import ttest_ind, ranksums, mannwhitneyu
+from scipy.stats import ttest_ind, ranksums, mannwhitneyu, chi2_contingency
 import WORC.IOparser.config_io_classifier as config_io
-from WORC.classification.trainclassifier import load_features
+from WORC.IOparser.file_io import load_features
 
 
 def StatisticalTestFeatures(features, patientinfo, config, output=None,
@@ -106,6 +106,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
         subheader.append('Welch')
         subheader.append('Wilcoxon')
         subheader.append('Mann-Whitney')
+        subheader.append('Chi2')
         subheader.append('')
 
     # Open the output file
@@ -122,6 +123,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
         pvalueswelch = list()
         pvalueswil = list()
         pvaluesmw = list()
+        pvalueschi2 = list()
 
         for num, fl in enumerate(feature_labels):
             fv = feature_values[:, num]
@@ -136,8 +138,22 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
             try:
                 pvaluesmw.append(mannwhitneyu(class1, class2)[1])
             except ValueError as e:
-                print("[PREDICT Warning] " + str(e) + '. Replacing metric value by 1.')
+                print("[WORC Warning] " + str(e) + '. Replacing metric value by 1.')
                 pvaluesmw.append(1)
+
+            # Optional: perform chi2 test. Only do this when categorical, which we define as less than 20 options.
+            unique_values = list(set(fv))
+            unique_values.sort()
+            if len(unique_values) <= 20:
+                class1_count = [class1.count(i) for i in unique_values]
+                class2_count = [class2.count(i) for i in unique_values]
+                obs = np.array([class1_count, class2_count])
+
+                _, p, _, _ = chi2_contingency(obs)
+                pvalueschi2.append(p)
+            else:
+                print("[WORC Warning] " + fl + " is no categorical variable. Replacing chi2 metric value by 1.")
+                pvalueschi2.append(1)
 
         # Sort based on p-values:
         indices = np.argsort(np.asarray(pvaluesmw))
@@ -147,11 +163,13 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
         pvalueswelch = np.asarray(pvalueswelch)[indices].tolist()
         pvalueswil = np.asarray(pvalueswil)[indices].tolist()
         pvaluesmw = np.asarray(pvaluesmw)[indices].tolist()
+        pvalueschi2 = np.asarray(pvalueschi2)[indices].tolist()
 
         savedict[i_name[0]]['ttest'] = pvalues
         savedict[i_name[0]]['welch'] = pvalueswelch
         savedict[i_name[0]]['wil'] = pvalueswil
         savedict[i_name[0]]['mw'] = pvaluesmw
+        savedict[i_name[0]]['chi2'] = pvalueschi2
         savedict[i_name[0]]['labels'] = feature_labels_o
 
     if output is not None:
@@ -164,6 +182,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
                 writelist.append(labeldict['welch'][num])
                 writelist.append(labeldict['wil'][num])
                 writelist.append(labeldict['mw'][num])
+                writelist.append(labeldict['chi2'][num])
                 writelist.append('')
 
             wr.writerow(writelist)

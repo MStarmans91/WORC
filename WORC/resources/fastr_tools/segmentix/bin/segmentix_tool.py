@@ -16,7 +16,7 @@
 # limitations under the License.
 
 import argparse
-from segmentix import segmentix
+from WORC.processing.segmentix import segmentix
 from shutil import copyfile
 
 
@@ -29,7 +29,7 @@ def main():
                         type=str, required=False, nargs='+',
                         help='Clinical data on patient (DICOM)')
     parser.add_argument('-segin', '--segin', metavar='segmentation', dest='seg',
-                        type=str, required=False, nargs='+',
+                        type=str, required=True, nargs='+',
                         help='Segmentation input (ITK Image)')
     parser.add_argument('-mask', '--mask', metavar='mask', dest='mask',
                         type=str, required=False, nargs='+',
@@ -38,9 +38,28 @@ def main():
                         dest='para', type=str, required=True,
                         help='Parameters')
     parser.add_argument('-segout', '--segout', metavar='Features',
-                        dest='out', type=str, required=False,
+                        dest='out', type=str, required=True,
                         help='Segmentation output (ITK Image)')
     args = parser.parse_args()
+
+    # Convert inputs from lists to single arguments
+    if type(args.im) is list:
+        args.im = ''.join(args.im)
+
+    if type(args.md) is list:
+        args.md = ''.join(args.md)
+
+    if type(args.mask) is list:
+        args.mask = ''.join(args.mask)
+
+    if type(args.para) is list:
+        args.para = ''.join(args.para)
+
+    if type(args.out) is list:
+        args.out = ''.join(args.out)
+
+    if type(args.seg) is list:
+        args.seg = ''.join(args.seg)
 
     if 'Dummy' in str(args.im):
         # Image is a dummy, so we do not do anything with the segmentation but

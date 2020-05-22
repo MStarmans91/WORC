@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
 from sklearn.model_selection._validation import _fit_and_score
 import numpy as np
 from sklearn.linear_model import Lasso
@@ -174,11 +173,11 @@ def fit_and_score(X, y, scoring,
         Either None if the RELIEF feature selection is not used, or
         the fitted object.
 
-    sm: WORC SMOTE Object
+    Snote: WORC SMOTE Object
         Either None if the SMOTE oversampling is not used, or
         the fitted object.
 
-    ros: WORC ROS Object
+    RandOverSample: WORC RandomOverSampler Object
         Either None if Random Oversampling is not used, or
         the fitted object.
 
@@ -189,6 +188,23 @@ def fit_and_score(X, y, scoring,
     score_time = np.inf
     train_score = np.nan
     test_score = np.nan
+    Smote = None
+    imputer = None
+    scaler = None
+    GroupSel = None
+    SelectModel = None
+    pca = None
+    StatisticalSel = None
+    VarSel = None
+    ReliefSel = None
+    RandOverSample = None
+
+    if return_train_score:
+        ret = [train_score, test_score, test_sample_counts,
+               fit_time, score_time, para, para]
+    else:
+        ret = [test_score, test_sample_counts,
+               fit_time, score_time, para, para]
 
     # We copy the parameter object so we can alter it and keep the original
     if verbose:
@@ -204,6 +220,11 @@ def fit_and_score(X, y, scoring,
 
     para_estimator = delete_cc_para(para_estimator)
 
+    # Get random seed from parameters
+    random_seed = para_estimator['random_seed']
+    random_state = check_random_state(random_seed)
+    del para_estimator['random_seed']
+
     # X is a tuple: split in two arrays
     feature_values = np.asarray([x[0] for x in X])
     feature_labels = np.asarray([x[1] for x in X])
@@ -216,16 +237,14 @@ def fit_and_score(X, y, scoring,
 
         if para_estimator['FeatureScaling'] == 'z_score':
             scaler = StandardScaler().fit(feature_values)
+        elif para_estimator['FeatureScaling'] == 'robust':
+            scaler = RobustScaler().fit(feature_values)
         elif para_estimator['FeatureScaling'] == 'minmax':
             scaler = MinMaxScaler().fit(feature_values)
-        else:
-            scaler = None
 
         if scaler is not None:
             feature_values = scaler.transform(feature_values)
         del para_estimator['FeatureScaling']
-    else:
-        scaler = None
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -244,10 +263,6 @@ def fit_and_score(X, y, scoring,
                               n_neighbors=imp_nn)
             imputer.fit(feature_values)
             feature_values = imputer.transform(feature_values)
-        else:
-            imputer = None
-    else:
-        imputer = None
 
     if 'Imputation' in para_estimator.keys():
         del para_estimator['Imputation']
@@ -262,121 +277,40 @@ def fit_and_score(X, y, scoring,
     feature_values = replacenan(feature_values, verbose=verbose, feature_labels=feature_labels[0])
 
     # ------------------------------------------------------------------------
-    # Use SMOTE oversampling
-    if 'SampleProcessing_SMOTE' in para_estimator.keys():
-        if para_estimator['SampleProcessing_SMOTE'] == 'True':
-
-            # Determine our starting balance
-            pos_initial = int(np.sum(y))
-            neg_initial = int(len(y) - pos_initial)
-            len_in = len(y)
-
-            # Fit SMOTE object and transform dataset
-            # NOTE: need to save random state for this one as well!
-            sm = SMOTE(random_state=None,
-                       ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
-                       m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
-                       kind='borderline1',
-                       n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
-
-            feature_values, y = sm.fit_sample(feature_values, y)
-
-            # Also make sure our feature label object has the same size
-            # NOTE: Not sure if this is the best implementation
-            feature_labels = np.asarray([feature_labels[0] for x in X])
-
-            # Note the user what SMOTE did
-            pos = int(np.sum(y))
-            neg = int(len(y) - pos)
-            if verbose:
-                message = f"Sampling with SMOTE from {len_in} ({pos_initial} pos," +\
-                          f" {neg_initial} neg) to {len(y)} ({pos} pos, {neg} neg) patients."
-                print(message)
-        else:
-            sm = None
-
-    if 'SampleProcessing_SMOTE' in para_estimator.keys():
-        del para_estimator['SampleProcessing_SMOTE']
-        del para_estimator['SampleProcessing_SMOTE_ratio']
-        del para_estimator['SampleProcessing_SMOTE_neighbors']
-        del para_estimator['SampleProcessing_SMOTE_n_cores']
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del sm
-
-    # ------------------------------------------------------------------------
-    # Full Oversampling: To Do
-    if 'SampleProcessing_Oversampling' in para_estimator.keys():
-        if para_estimator['SampleProcessing_Oversampling'] == 'True':
-            if verbose:
-                print('Oversample underrepresented classes in training.')
-
-            # Oversample underrepresented classes in training
-            # We always use a factor 1, e.g. all classes end up with an
-            # equal number of samples
-            if len(y.shape) == 1:
-                # Single Class, use imblearn oversampling
-
-                # Create another random state
-                # NOTE: Also need to save this random seed. Can be same as SMOTE
-                random_seed2 = np.random.randint(5000)
-                random_state2 = check_random_state(random_seed2)
-
-                ros = RandomOverSampler(random_state=random_state2)
-                feature_values, y = ros.fit_sample(feature_values, y)
-
-            else:
-                # Multi class, use own method as imblearn cannot do this
-                sumclass = [np.sum(y[:, i]) for i in range(y.shape[1])]
-                maxclass = np.argmax(sumclass)
-                for i in range(y.shape[1]):
-                    if i != maxclass:
-                        # Oversample
-                        nz = np.nonzero(y[:, i])[0]
-                        noversample = sumclass[maxclass] - sumclass[i]
-                        while noversample > 0:
-                            n_sample = random.randint(0, len(nz) - 1)
-                            n_sample = nz[n_sample]
-                            i_sample = y[n_sample, :]
-                            x_sample = feature_values[n_sample]
-                            y = np.vstack((y, i_sample))
-                            feature_values.append(x_sample)
-                            noversample -= 1
-        else:
-            ros = None
-
-    if 'SampleProcessing_Oversampling' in para_estimator.keys():
-        del para_estimator['SampleProcessing_Oversampling']
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del ros
-
-    # ------------------------------------------------------------------------
     # Groupwise feature selection
     if 'SelectGroups' in para_estimator:
         if verbose:
             print("Selecting groups of features.")
         del para_estimator['SelectGroups']
         # TODO: more elegant way to solve this
-        feature_groups = ["histogram_features", "orientation_features",
-                          "patient_features", "semantic_features",
-                          "shape_features",
-                          "coliage_features", 'vessel_features',
-                          "phase_features", "log_features",
-                          "texture_gabor_features", "texture_glcm_features",
-                          "texture_glcmms_features", "texture_glrlm_features",
-                          "texture_glszm_features", 'texture_gldzm_features',
-                          "texture_ngtdm_features",
-                          "texture_lbp_features", "texture_ngldm_features",
-                          'wavelet_features', 'rgrd_features',
-                          'location_features', 'fractal_features',
-                          'texture_GLDZM_features']
+        feature_groups = ['shape_features',
+                          'histogram_features',
+                          'orientation_features',
+                          'texture_gabor_features',
+                          'texture_glcm_features',
+                          'texture_gldm_features',
+                          'texture_glcmms_features',
+                          'texture_glrlm_features',
+                          'texture_glszm_features',
+                          'texture_gldzm_features',
+                          'texture_ngtdm_features',
+                          'texture_ngldm_features',
+                          'texture_lbp_features',
+                          'patient_features',
+                          'semantic_features',
+                          'coliage_features',
+                          'vessel_features',
+                          'phase_features',
+                          'fractal_features',
+                          'location_features',
+                          'rgrd_features',
+                          'original_features',
+                          'wavelet_features',
+                          'log_features']
 
-        # Backwards compatability
-        if 'texture_features' in para_estimator.keys():
-            feature_groups.append('texture_features')
+        # First take out the toolbox selection, which is a list
+        toolboxes = para_estimator['toolbox']
+        del para_estimator['toolbox']
 
         # Check per feature group if the parameter is present
         parameters_featsel = dict()
@@ -393,7 +327,8 @@ def fit_and_score(X, y, scoring,
 
             parameters_featsel[group] = value
 
-        GroupSel = SelectGroups(parameters=parameters_featsel)
+        GroupSel = SelectGroups(parameters=parameters_featsel,
+                                toolboxes=toolboxes)
         GroupSel.fit(feature_labels[0])
         if verbose:
             print("Original Length: " + str(len(feature_values[0])))
@@ -401,8 +336,6 @@ def fit_and_score(X, y, scoring,
         if verbose:
             print("New Length: " + str(len(feature_values[0])))
         feature_labels = GroupSel.transform(feature_labels)
-    else:
-        GroupSel = None
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -415,22 +348,11 @@ def fit_and_score(X, y, scoring,
             print('[WARNING]: No features are selected! Probably all feature groups were set to False. Parameters:')
             print(para)
 
-        # Return a zero performance dummy
-        VarSel = None
-        scaler = None
-        SelectModel = None
-        pca = None
-        StatisticalSel = None
-        ReliefSel = None
-
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
-        ret = [train_score, test_score, test_sample_counts,
-               fit_time, score_time, para_estimator, para]
-
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
         else:
             return ret
 
@@ -457,11 +379,9 @@ def fit_and_score(X, y, scoring,
         except ValueError:
             if verbose:
                 print('[WARNING]: No features meet the selected Variance threshold! Skipping selection.')
-            VarSel = None
         if verbose:
             print("New Length: " + str(len(feature_values[0])))
-    else:
-        VarSel = None
+
     del para_estimator['Featsel_Variance']
 
     # Delete the object if we do not need to return it
@@ -477,15 +397,11 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         # Return a zero performance dummy
-        scaler = None
-        SelectModel = None
-        pca = None
-        StatisticalSel = None
         ret = [train_score, test_score, test_sample_counts,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
         else:
             return ret
 
@@ -499,14 +415,11 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         # Return a zero performance dummy
-        scaler = None
-        SelectModel = None
-        pca = None
         ret = [train_score, test_score, test_sample_counts,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
         else:
             return ret
 
@@ -528,7 +441,8 @@ def fit_and_score(X, y, scoring,
             ReliefSel = SelectMulticlassRelief(n_neighbours=n_neighbours,
                                                sample_size=sample_size,
                                                distance_p=distance_p,
-                                               numf=numf)
+                                               numf=numf,
+                                               random_state=random_seed)
             ReliefSel.fit(feature_values, y)
             if verbose:
                 print("Original Length: " + str(len(feature_values[0])))
@@ -536,10 +450,9 @@ def fit_and_score(X, y, scoring,
             if verbose:
                 print("New Length: " + str(len(feature_values[0])))
             feature_labels = ReliefSel.transform(feature_labels)
-        else:
-            ReliefSel = None
-    else:
-        ReliefSel = None
+            feature_labels.sort()
+            for l in feature_labels[0]:
+                print(l)
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -575,8 +488,6 @@ def fit_and_score(X, y, scoring,
         if verbose:
             print("New Length: " + str(len(feature_values[0])))
         feature_labels = SelectModel.transform(feature_labels)
-    else:
-        SelectModel = None
 
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']
@@ -594,7 +505,7 @@ def fit_and_score(X, y, scoring,
             print("Original Length: " + str(len(feature_values[0])))
         if para_estimator['PCAType'] == '95variance':
             # Select first X components that describe 95 percent of the explained variance
-            pca = PCA(n_components=None)
+            pca = PCA(n_components=None, random_state=random_seed)
             pca.fit(feature_values)
             evariance = pca.explained_variance_ratio_
             num = 0
@@ -604,26 +515,24 @@ def fit_and_score(X, y, scoring,
                 num += 1
 
             # Make a PCA based on the determined amound of components
-            pca = PCA(n_components=num)
+            pca = PCA(n_components=num, random_state=random_seed)
             pca.fit(feature_values)
             feature_values = pca.transform(feature_values)
 
         else:
-            # Assume a fixed number of components
-            n_components = int(para_estimator['PCAType'])
+            # Assume a fixed number of components: cannot be larger than
+            # n_samples
+            n_components = min(len(feature_values), int(para_estimator['PCAType']))
 
             if n_components >= len(feature_values[0]):
                 print(f"[WORC WARNING] PCA n_components ({n_components})> n_features ({len(feature_values[0])}): skipping PCA.")
-                pca = None
             else:
-                pca = PCA(n_components=n_components)
+                pca = PCA(n_components=n_components, random_state=random_seed)
                 pca.fit(feature_values)
                 feature_values = pca.transform(feature_values)
 
         if verbose:
             print("New Length: " + str(len(feature_values[0])))
-    else:
-        pca = None
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -652,14 +561,9 @@ def fit_and_score(X, y, scoring,
             feature_labels = StatisticalSel.transform(feature_labels)
             if verbose:
                 print("New Length: " + str(len(feature_values[0])))
-            print("New Length: " + str(len(feature_values[0])))
-        else:
-            StatisticalSel = None
         del para_estimator['StatisticalTestUse']
         del para_estimator['StatisticalTestMetric']
         del para_estimator['StatisticalTestThreshold']
-    else:
-        StatisticalSel = None
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -677,16 +581,93 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         # Return a zero performance dummy
-        scaler = None
-        SelectModel = None
-        pca = None
         ret = [train_score, test_score, test_sample_counts,
                fit_time, score_time, para_estimator, para]
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
         else:
             return ret
+
+    # ------------------------------------------------------------------------
+    # Use SMOTE oversampling
+    if 'SampleProcessing_SMOTE' in para_estimator.keys():
+        if para_estimator['SampleProcessing_SMOTE'] == 'True':
+
+            # Determine our starting balance
+            pos_initial = int(np.sum(y))
+            neg_initial = int(len(y) - pos_initial)
+            len_in = len(y)
+
+            # Fit SMOTE object and transform dataset
+            # NOTE: need to save random state for this one as well!
+            Smote = SMOTE(random_state=random_state,
+                          ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
+                          m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
+                          kind='borderline1',
+                          n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
+
+            feature_values, y = Smote.fit_sample(feature_values, y)
+
+            # Also make sure our feature label object has the same size
+            # NOTE: Not sure if this is the best implementation
+            feature_labels = np.asarray([feature_labels[0] for x in X])
+
+            # Note the user what SMOTE did
+            pos = int(np.sum(y))
+            neg = int(len(y) - pos)
+            if verbose:
+                message = f"Sampling with SMOTE from {len_in} ({pos_initial} pos," +\
+                          f" {neg_initial} neg) to {len(y)} ({pos} pos, {neg} neg) patients."
+                print(message)
+
+        del para_estimator['SampleProcessing_SMOTE']
+        del para_estimator['SampleProcessing_SMOTE_ratio']
+        del para_estimator['SampleProcessing_SMOTE_neighbors']
+        del para_estimator['SampleProcessing_SMOTE_n_cores']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del Smote
+
+    # ------------------------------------------------------------------------
+    # Full Oversampling: To Do
+    if 'SampleProcessing_Oversampling' in para_estimator.keys():
+        if para_estimator['SampleProcessing_Oversampling'] == 'True':
+            if verbose:
+                print('Oversample underrepresented classes in training.')
+
+            # Oversample underrepresented classes in training
+            # We always use a factor 1, e.g. all classes end up with an
+            # equal number of samples
+            if len(y.shape) == 1:
+                # Single Class, use imblearn oversampling
+                RandOverSample = RandomOverSampler(random_state=random_state)
+                feature_values, y = RandOverSample.fit_sample(feature_values, y)
+
+            else:
+                # Multi class, use own method as imblearn cannot do this
+                sumclass = [np.sum(y[:, i]) for i in range(y.shape[1])]
+                maxclass = np.argmax(sumclass)
+                for i in range(y.shape[1]):
+                    if i != maxclass:
+                        # Oversample
+                        nz = np.nonzero(y[:, i])[0]
+                        noversample = sumclass[maxclass] - sumclass[i]
+                        while noversample > 0:
+                            n_sample = random.randint(0, len(nz) - 1)
+                            n_sample = nz[n_sample]
+                            i_sample = y[n_sample, :]
+                            x_sample = feature_values[n_sample]
+                            y = np.vstack((y, i_sample))
+                            feature_values.append(x_sample)
+                            noversample -= 1
+
+        del para_estimator['SampleProcessing_Oversampling']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del RandOverSample
 
     # ----------------------------------------------------------------
     # Fitting and scoring
@@ -727,12 +708,12 @@ def fit_and_score(X, y, scoring,
                              return_times, error_score)
     except (ValueError, LinAlgError) as e:
         if type(estimator) == LDA:
-            print('[WARNING]: skipping this setting due to LDA Error: ' + e.message)
+            print(f'[WARNING]: skipping this setting due to LDA Error: {e}.')
             ret = [train_score, test_score, test_sample_counts,
                    fit_time, score_time, para_estimator, para]
 
             if return_all:
-                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
             else:
                 return ret
         else:
@@ -750,7 +731,7 @@ def fit_and_score(X, y, scoring,
     ret.append(para)
 
     if return_all:
-        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, sm, ros
+        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
     else:
         return ret
 
@@ -798,6 +779,9 @@ def delete_nonestimator_parameters(parameters):
     if 'SampleProcessing_Oversampling' in parameters.keys():
         del parameters['SampleProcessing_Oversampling']
 
+    if 'random_seed' in parameters.keys():
+        del parameters['random_seed']
+
     return parameters
 
 
@@ -821,9 +805,7 @@ def replacenan(image_features, verbose=True, feature_labels=None):
 
 
 def delete_cc_para(para):
-    '''
-    Delete all parameters that are involved in classifier construction.
-    '''
+    """Delete all parameters that are involved in classifier construction."""
     deletekeys = ['classifiers',
                   'max_iter',
                   'SVMKernel',

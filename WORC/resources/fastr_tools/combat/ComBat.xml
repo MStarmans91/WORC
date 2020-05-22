@@ -1,0 +1,42 @@
+<tool id="ComBat" name="ComBat" version="1.0">
+    <description>A wrapper around PREDICT's Radiomics patient classification.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="ComBat_tool.py" />
+    </targets>
+    <description>
+       ComBat.py features_train [features_test] pc_train [pc_test] config features_train_out [features_test_out]
+       output = ComBat Harmonized features
+
+       TODO: cardinality is now equal to features train, but for two feature computation toolboxes, this is twice the required amount.
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="features_train" name="Input feature files of the training dataset" datatype="HDF5" prefix="--feat_train" cardinality="1-*" repeat_prefix="false" required="true" />
+        <input id="features_test" name="Input feature files of the test dataset" datatype="HDF5" prefix="--feat_test" cardinality="*" repeat_prefix="false" required="false" />
+        <input id="patientclass_train" name="patientclass_train" datatype="PatientInfoFile" prefix="--pc_train" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="patientclass_test" name="patientclass_test" datatype="PatientInfoFile" prefix="--pc_test" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="config" name="config" datatype="ParameterFile" prefix="--conf" cardinality="1-*" repeat_prefix="false" required="true" />
+    </inputs>
+    <outputs>
+      <output id="features_train_out" name="Output feature files of the training dataset" datatype="HDF5" cardinality="as:features_train[0]" nospace="False" order="0" prefix="--feat_train_out" required="true" />
+      <output id="features_test_out" name="Output feature files of the test dataset" datatype="HDF5" cardinality="as:features_test[0]" nospace="False" order="0"  prefix="--feat_test_out" required="false" />
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help>
+    To Do
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

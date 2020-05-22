@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +21,11 @@ import os
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
 from WORC.plotting.plot_SVM import plot_SVM
-import WORC.IOparser.file_io as file_io
+from WORC.IOparser.file_io import load_features
 import WORC.IOparser.config_io_classifier as config_io
 from scipy.stats import uniform
-from WORC.classification.AdvancedSampler import discrete_uniform, log_uniform
+from WORC.classification.AdvancedSampler import discrete_uniform, \
+    log_uniform, boolean_uniform
 
 
 def trainclassifier(feat_train, patientinfo_train, config,
@@ -173,7 +174,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     # Extract hyperparameter grid settings for SearchCV from config
     param_grid['FeatPreProcess'] = config['FeatPreProcess']['Use']
-    param_grid['Featsel_Variance'] = config['Featsel']['Variance']
+    param_grid['Featsel_Variance'] =\
+        boolean_uniform(threshold=config['Featsel']['Variance'])
 
     param_grid['Imputation'] = config['Imputation']['use']
     param_grid['ImputationMethod'] = config['Imputation']['strategy']
@@ -181,13 +183,16 @@ def trainclassifier(feat_train, patientinfo_train, config,
         discrete_uniform(loc=config['Imputation']['n_neighbors'][0],
                          scale=config['Imputation']['n_neighbors'][1])
 
-    param_grid['SelectFromModel'] = config['Featsel']['SelectFromModel']
+    param_grid['SelectFromModel'] =\
+        boolean_uniform(threshold=config['Featsel']['SelectFromModel'])
 
-    param_grid['UsePCA'] = config['Featsel']['UsePCA']
+    param_grid['UsePCA'] =\
+        boolean_uniform(threshold=config['Featsel']['UsePCA'])
     param_grid['PCAType'] = config['Featsel']['PCAType']
 
     param_grid['StatisticalTestUse'] =\
-        config['Featsel']['StatisticalTestUse']
+        boolean_uniform(threshold=config['Featsel']['StatisticalTestUse'])
+
     param_grid['StatisticalTestMetric'] =\
         config['Featsel']['StatisticalTestMetric']
     param_grid['StatisticalTestThreshold'] =\
@@ -195,7 +200,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
                     scale=config['Featsel']['StatisticalTestThreshold'][1])
 
     param_grid['ReliefUse'] =\
-        config['Featsel']['ReliefUse']
+        boolean_uniform(threshold=config['Featsel']['ReliefUse'])
 
     param_grid['ReliefNN'] =\
         discrete_uniform(loc=config['Featsel']['ReliefNN'][0],
@@ -212,6 +217,10 @@ def trainclassifier(feat_train, patientinfo_train, config,
     param_grid['ReliefNumFeatures'] =\
         discrete_uniform(loc=config['Featsel']['ReliefNumFeatures'][0],
                          scale=config['Featsel']['ReliefNumFeatures'][1])
+
+    # Add a random seed, which is required for many methods
+    param_grid['random_seed'] =\
+        discrete_uniform(loc=0, scale=2**32 - 1)
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
@@ -248,18 +257,21 @@ def trainclassifier(feat_train, patientinfo_train, config,
         not any(clf in regressors for clf in config['Classification']['classifiers'])
 
     # Calculate statistics of performance
+    overfit_scaler = config['Evaluation']['OverfitScaler']
     if feat_test is None:
         if not isclassifier:
             statistics = plot_SVM(trained_classifier, label_data_train,
                                   label_type, ensemble=config['Ensemble']['Use'],
                                   bootstrap=config['Bootstrap']['Use'],
-                                  bootstrap_N=config['Bootstrap']['N_iterations'])
+                                  bootstrap_N=config['Bootstrap']['N_iterations'],
+                                  overfit_scaler=overfit_scaler)
         else:
             statistics = plot_SVM(trained_classifier, label_data_train,
                                   label_type, modus=modus,
                                   ensemble=config['Ensemble']['Use'],
                                   bootstrap=config['Bootstrap']['Use'],
-                                  bootstrap_N=config['Bootstrap']['N_iterations'])
+                                  bootstrap_N=config['Bootstrap']['N_iterations'],
+                                  overfit_scaler=overfit_scaler)
     else:
         if patientinfo_test is not None:
             if not isclassifier:
@@ -268,7 +280,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
                                       label_type,
                                       ensemble=config['Ensemble']['Use'],
                                       bootstrap=config['Bootstrap']['Use'],
-                                      bootstrap_N=config['Bootstrap']['N_iterations'])
+                                      bootstrap_N=config['Bootstrap']['N_iterations'],
+                                      overfit_scaler=overfit_scaler)
             else:
                 statistics = plot_SVM(trained_classifier,
                                       label_data_test,
@@ -276,7 +289,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
                                       modus=modus,
                                       ensemble=config['Ensemble']['Use'],
                                       bootstrap=config['Bootstrap']['Use'],
-                                      bootstrap_N=config['Bootstrap']['N_iterations'])
+                                      bootstrap_N=config['Bootstrap']['N_iterations'],
+                                      overfit_scaler=overfit_scaler)
         else:
             statistics = None
 
@@ -291,49 +305,3 @@ def trainclassifier(feat_train, patientinfo_train, config,
         json.dump(savedict, fp, sort_keys=True, indent=4)
 
     print("Saved data!")
-
-
-def load_features(feat, patientinfo, label_type):
-    ''' Read feature files and stack the features per patient in an array.
-        Additionally, if a patient label file is supplied, the features from
-        a patient will be matched to the labels.
-
-        Parameters
-        ----------
-        featurefiles: list, mandatory
-                List containing all paths to the .hdf5 feature files to be loaded.
-                The argument should contain a list per modelity, e.g.
-                [[features_mod1_patient1, features_mod1_patient2, ...],
-                 [features_mod2_patient1, features_mod2_patient2, ...]].
-
-        patientinfo: string, optional
-                Path referring to the .txt file to be used to read patient
-                labels from. See the Github Wiki for the format.
-
-        label_names: list, optional
-                List containing all the labels that should be extracted from
-                the patientinfo file.
-
-    '''
-    # Split the feature files per modality
-    feat_temp = list()
-    modnames = list()
-    for feat_mod in feat:
-        feat_mod_temp = [str(item).strip() for item in feat_mod.split(',')]
-
-        # The first item contains the name of the modality, followed by a = sign
-        temp = [str(item).strip() for item in feat_mod_temp[0].split('=')]
-        modnames.append(temp[0])
-        feat_mod_temp[0] = temp[1]
-
-        # Append the files to the main list
-        feat_temp.append(feat_mod_temp)
-
-    feat = feat_temp
-
-    # Read the features and classification data
-    label_data, image_features =\
-        file_io.load_data(feat, patientinfo,
-                          label_type, modnames)
-
-    return label_data, image_features

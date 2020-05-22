@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>processing Package &mdash; WORC 3.1.3 documentation</title>
+  <title>processing Package &mdash; WORC 3.1.4 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.3
+                3.1.4
               </div>
             
           
@@ -90,6 +90,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
 </ul>
@@ -111,9 +114,13 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.ExtractNLargestBlobsn"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ExtractNLargestBlobsn</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.classes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classes</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.label_processing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">preprocessing</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.segmentix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">segmentix</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.resources.html">resources Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.statistics.html">statistics Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.tests.html">tests Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
 </ul>
@@ -349,6 +356,89 @@ label_type (list): List of the names of the labels to load</p>
 <dt>dict: A dict containing ‘patient_IDs’, ‘label’ and</dt><dd><p>‘label_type’</p>
 </dd>
 </dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.processing.preprocessing">
+<span id="preprocessing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">preprocessing</span></code> Module<a class="headerlink" href="#module-WORC.processing.preprocessing" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.processing.preprocessing.preprocess">
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">preprocess</code><span class="sig-paren">(</span><em>imagefile</em>, <em>config</em>, <em>metadata=None</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#preprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.preprocess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply preprocessing to an image to prepare it for feture extration</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.processing.segmentix">
+<span id="segmentix-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">segmentix</span></code> Module<a class="headerlink" href="#module-WORC.processing.segmentix" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.processing.segmentix.dilate_contour">
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">dilate_contour</code><span class="sig-paren">(</span><em>contour</em>, <em>radius=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#dilate_contour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.dilate_contour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dilate the contour</p>
+<dl class="simple">
+<dt>contour: numpy array</dt><dd><p>Array containing the contour</p>
+</dd>
+<dt>radius: int, default 5</dt><dd><p>Radius of ring to be extracted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.segmentix.get_ring">
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">get_ring</code><span class="sig-paren">(</span><em>contour</em>, <em>radius=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#get_ring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.get_ring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a ring on the boundary of the contour.</p>
+<dl class="simple">
+<dt>contour: numpy array</dt><dd><p>Array containing the contour</p>
+</dd>
+<dt>radius: int, default 5</dt><dd><p>Radius of ring to be extracted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.segmentix.mask_contour">
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">mask_contour</code><span class="sig-paren">(</span><em>contour</em>, <em>mask</em>, <em>method='multiply'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#mask_contour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.mask_contour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a mask to a contour.</p>
+<dl class="simple">
+<dt>contour: numpy array</dt><dd><p>Array containing the contour</p>
+</dd>
+<dt>mask: string</dt><dd><p>path referring to the mask used for the final segmentation.
+Should be a format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+.raw, .tiff, .nrrd.</p>
+</dd>
+<dt>method: string</dt><dd><p>How masking is applied: can be subtract or pairwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.segmentix.segmentix">
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">segmentix</code><span class="sig-paren">(</span><em>parameters</em>, <em>image=None</em>, <em>segmentation=None</em>, <em>output=None</em>, <em>metadata_file=None</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#segmentix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.segmentix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Segmentix is a mixture of processing methods that can be applied to
+agument a segmentation. Examples include selecting only the largest blob
+and the application of morphological operations.</p>
+<dl class="simple">
+<dt>parameters: string, mandatory</dt><dd><p>Contains the path referring to a .ini file in which the
+parameters to be used are specified. See the Github Wiki
+for more details on the format and content.</p>
+</dd>
+<dt>image: string, optional</dt><dd><p>Note implemented yet! Image to be used for automatic segmentation.</p>
+</dd>
+<dt>segmentation: string, currently mandatory</dt><dd><p>path referring to the input segmentation file. Should be a
+format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+.raw, .tiff, .nrrd.</p>
+</dd>
+<dt>output: string, mandatory</dt><dd><p>path referring to the output segmentation file. Should be a
+format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+.raw, .tiff, .nrrd.</p>
+</dd>
+<dt>metadata_file: string, optional</dt><dd><p>Note implemented yet! Path referring to the .dcm from which
+fields can be used as metadata for segmentation.</p>
+</dd>
+<dt>mask: string, optional</dt><dd><p>path referring to the mask used for the final segmentation.
+Should be a format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+.raw, .tiff, .nrrd.</p>
 </dd>
 </dl>
 </dd></dl>
