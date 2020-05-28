@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.1.3 documentation</title>
+  <title>Configuration &mdash; WORC 3.1.4 documentation</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Resource File Formats" href="file_description.html" />
+    <link rel="next" title="Additional functionality" href="additionalfunctionality.html" />
     <link rel="prev" title="User Manual" href="user_manual.html" /> 
 </head>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.3
+                3.1.4
               </div>
             
           
@@ -97,6 +97,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#segmentix">Segmentix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#normalize">Normalize</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#imagefeatures">ImageFeatures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyradiomics">PyRadiomics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#combat">ComBat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#featsel">Featsel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#selectfeatgroup">SelectFeatGroup</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#imputation">Imputation</a></li>
@@ -112,6 +114,9 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -261,11 +266,17 @@ list can be created by using commas for separation, e.g.
 <tr class="row-odd"><td><p>Classification</p></td>
 <td><p><a class="reference internal" href="#config-classification"><span class="std std-ref">Classification</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>CrossValidation</p></td>
+<tr class="row-even"><td><p>ComBat</p></td>
+<td><p><a class="reference internal" href="#config-combat"><span class="std std-ref">ComBat</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>CrossValidation</p></td>
 <td><p><a class="reference internal" href="#config-crossvalidation"><span class="std std-ref">CrossValidation</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>Ensemble</p></td>
+<tr class="row-even"><td><p>Ensemble</p></td>
 <td><p><a class="reference internal" href="#config-ensemble"><span class="std std-ref">Ensemble</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Evaluation</p></td>
+<td><p><span class="xref std std-ref">Evaluation</span></p></td>
 </tr>
 <tr class="row-even"><td><p>FeatPreProcess</p></td>
 <td><p><span class="xref std std-ref">FeatPreProcess</span></p></td>
@@ -294,13 +305,16 @@ list can be created by using commas for separation, e.g.
 <tr class="row-even"><td><p>Normalize</p></td>
 <td><p><a class="reference internal" href="#config-normalize"><span class="std std-ref">Normalize</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>SampleProcessing</p></td>
+<tr class="row-odd"><td><p>PyRadiomics</p></td>
+<td><p><a class="reference internal" href="#config-pyradiomics"><span class="std std-ref">PyRadiomics</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>SampleProcessing</p></td>
 <td><p><a class="reference internal" href="#config-sampleprocessing"><span class="std std-ref">SampleProcessing</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>Segmentix</p></td>
+<tr class="row-odd"><td><p>Segmentix</p></td>
 <td><p><a class="reference internal" href="#config-segmentix"><span class="std std-ref">Segmentix</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>SelectFeatGroup</p></td>
+<tr class="row-even"><td><p>SelectFeatGroup</p></td>
 <td><p><a class="reference internal" href="#config-selectfeatgroup"><span class="std std-ref">SelectFeatGroup</span></a></p></td>
 </tr>
 </tbody>
@@ -317,8 +331,8 @@ backend.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col style="width: 14%" />
+<col style="width: 86%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -332,8 +346,8 @@ backend.</p>
 <tr class="row-odd"><td><p>Segmentix</p></td>
 <td><p>Determine whether to use Segmentix tool for segmentation preprocessing.</p></td>
 </tr>
-<tr class="row-even"><td><p>FeatureCalculator</p></td>
-<td><p>Specifies which feature calculation tool should be used.</p></td>
+<tr class="row-even"><td><p>FeatureCalculators</p></td>
+<td><p>Specifies which feature calculation tools should be used. A list can be provided to use multiple tools.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Preprocessing</p></td>
 <td><p>Specifies which tool will be used for image preprocessing.</p></td>
@@ -353,14 +367,20 @@ backend.</p>
 <tr class="row-even"><td><p>tempsave</p></td>
 <td><p>Determines whether after every cross validation iteration the result will be saved, in addition to the result after all iterations. Especially useful for debugging.</p></td>
 </tr>
+<tr class="row-odd"><td><p>AssumeSameImageAndMaskMetadata</p></td>
+<td><p>Make the assumption that the image and mask have the same metadata. If True and there is a mismatch, metadata from the image will be copied to the mask.</p></td>
+</tr>
+<tr class="row-even"><td><p>ComBat</p></td>
+<td><p>Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See &lt;<a class="reference external" href="https://github.com/Jfortin1/ComBatHarmonization">https://github.com/Jfortin1/ComBatHarmonization</a> for more information./&gt;`_ .</p></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 14%" />
-<col style="width: 22%" />
-<col style="width: 64%" />
+<col style="width: 15%" />
+<col style="width: 28%" />
+<col style="width: 56%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -374,12 +394,12 @@ backend.</p>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>Segmentix</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
-<tr class="row-even"><td><p>FeatureCalculator</p></td>
-<td><p>predict/CalcFeatures:1.0</p></td>
-<td><p>predict/CalcFeatures:1.0, pyradiomics/CF_pyradiomics:1.0, your own tool reference</p></td>
+<tr class="row-even"><td><p>FeatureCalculators</p></td>
+<td><p>[predict/CalcFeatures:1.0, pyradiomics/Pyradiomics:1.0]</p></td>
+<td><p>predict/CalcFeatures:1.0, pyradiomics/Pyradiomics:1.0, pyradiomics/CF_pyradiomics:1.0, your own tool reference</p></td>
 </tr>
 <tr class="row-odd"><td><p>Preprocessing</p></td>
 <td><p>worc/PreProcess:1.0</p></td>
@@ -405,6 +425,14 @@ backend.</p>
 <td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
+<tr class="row-odd"><td><p>AssumeSameImageAndMaskMetadata</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>ComBat</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -415,8 +443,8 @@ tool in the general configuration.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 8%" />
-<col style="width: 92%" />
+<col style="width: 16%" />
+<col style="width: 84%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -439,14 +467,20 @@ tool in the general configuration.</p>
 <tr class="row-even"><td><p>fillholes</p></td>
 <td><p>Determines whether hole filling will be used.</p></td>
 </tr>
+<tr class="row-odd"><td><p>remove_small_objects</p></td>
+<td><p>Determines whether small objects will be removed.</p></td>
+</tr>
+<tr class="row-even"><td><p>min_object_size</p></td>
+<td><p>Minimum of objects in voxels to not be removed if small objects are removed</p></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 26%" />
-<col style="width: 23%" />
-<col style="width: 51%" />
+<col style="width: 43%" />
+<col style="width: 17%" />
+<col style="width: 39%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -472,8 +506,16 @@ tool in the general configuration.</p>
 <td><p>Integer &gt; 0</p></td>
 </tr>
 <tr class="row-even"><td><p>fillholes</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>remove_small_objects</p></td>
 <td><p>False</p></td>
 <td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>min_object_size</p></td>
+<td><p>2</p></td>
+<td><p>Integer &gt; 0</p></td>
 </tr>
 </tbody>
 </table>
@@ -487,8 +529,8 @@ tutorial) provided as DICOM are scaled to Hounsfield Units.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 2%" />
-<col style="width: 98%" />
+<col style="width: 6%" />
+<col style="width: 94%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -499,7 +541,16 @@ tutorial) provided as DICOM are scaled to Hounsfield Units.</p>
 <tr class="row-even"><td><p>ROI</p></td>
 <td><p>If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Method</p></td>
+<tr class="row-odd"><td><p>ROIDetermine</p></td>
+<td><p>Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.</p></td>
+</tr>
+<tr class="row-even"><td><p>ROIdilate</p></td>
+<td><p>Determine whether the ROI has to be dilated with a disc element or not.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ROIdilateradius</p></td>
+<td><p>Radius of disc element to be used in ROI dilation.</p></td>
+</tr>
+<tr class="row-even"><td><p>Method</p></td>
 <td><p>Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.</p></td>
 </tr>
 </tbody>
@@ -507,9 +558,9 @@ tutorial) provided as DICOM are scaled to Hounsfield Units.</p>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
+<col style="width: 38%" />
 <col style="width: 20%" />
-<col style="width: 23%" />
-<col style="width: 57%" />
+<col style="width: 43%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -522,7 +573,19 @@ tutorial) provided as DICOM are scaled to Hounsfield Units.</p>
 <td><p>Full</p></td>
 <td><p>True, False, Full</p></td>
 </tr>
-<tr class="row-odd"><td><p>Method</p></td>
+<tr class="row-odd"><td><p>ROIDetermine</p></td>
+<td><p>Provided</p></td>
+<td><p>Provided, Otsu</p></td>
+</tr>
+<tr class="row-even"><td><p>ROIdilate</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>ROIdilateradius</p></td>
+<td><p>10</p></td>
+<td><p>Integer &gt; 0</p></td>
+</tr>
+<tr class="row-even"><td><p>Method</p></td>
 <td><p>z_score</p></td>
 <td><p>z_score, minmed</p></td>
 </tr>
@@ -675,15 +738,15 @@ are computed or not.</p>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>texture_GLRLM</p></td>
-<td><p>True</p></td>
+<td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>texture_GLSZM</p></td>
-<td><p>True</p></td>
+<td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>texture_NGTDM</p></td>
-<td><p>True</p></td>
+<td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>coliage</p></td>
@@ -761,6 +824,225 @@ are computed or not.</p>
 </tbody>
 </table>
 </div>
+<div class="section" id="pyradiomics">
+<h3>PyRadiomics<a class="headerlink" href="#pyradiomics" title="Permalink to this headline">¶</a></h3>
+<p>If using the PyRadiomics toolbox, you can specify some settings for the
+feature computation here. For more information, see
+<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.htm">https://pyradiomics.readthedocs.io/en/latest/customization.htm</a>.</p>
+<p><strong>Description:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 94%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>geometryTolerance</p></td>
+<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-odd"><td><p>normalize</p></td>
+<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-even"><td><p>normalizeScale</p></td>
+<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-odd"><td><p>interpolator</p></td>
+<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/">https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-even"><td><p>preCrop</p></td>
+<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-odd"><td><p>binCount</p></td>
+<td><p>We advice to use a fixed bin count instead of a fixed bin width, as on imaging modalities such as MRI, the scale of the values varies a lot, which is incompatible with a fixed bin width. See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-even"><td><p>force2D</p></td>
+<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-odd"><td><p>force2Ddimension</p></td>
+<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-even"><td><p>voxelArrayShift</p></td>
+<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-odd"><td><p>Original</p></td>
+<td><p>Enable/Disable computation of original image features.</p></td>
+</tr>
+<tr class="row-even"><td><p>Wavelet</p></td>
+<td><p>Enable/Disable computation of wavelet image features.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LoG</p></td>
+<td><p>Enable/Disable computation of Laplacian of Gaussian (LoG) image features.</p></td>
+</tr>
+<tr class="row-even"><td><p>label</p></td>
+<td><p>“Intensity” of the pixels in the mask to be used for feature extraction. If using segmentix, use 1, as your mask will be boolean. Otherwise, select the integer(s) corresponding to the ROI in your mask.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Defaults and Options:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 7%" />
+<col style="width: 81%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Options</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>geometryTolerance</p></td>
+<td><p>0.0001</p></td>
+<td><p>Float</p></td>
+</tr>
+<tr class="row-odd"><td><p>normalize</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>normalizeScale</p></td>
+<td><p>100</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-odd"><td><p>interpolator</p></td>
+<td><p>sitkBSpline</p></td>
+<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/">https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/</a>&gt;`_ .</p></td>
+</tr>
+<tr class="row-even"><td><p>preCrop</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>binCount</p></td>
+<td><p>16</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>force2D</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>force2Ddimension</p></td>
+<td><p>0</p></td>
+<td><p>0 = axial, 1 = coronal, 2 = sagital</p></td>
+</tr>
+<tr class="row-even"><td><p>voxelArrayShift</p></td>
+<td><p>300</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-odd"><td><p>Original</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>Wavelet</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>LoG</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>label</p></td>
+<td><p>1</p></td>
+<td><p>Integer</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="combat">
+<h3>ComBat<a class="headerlink" href="#combat" title="Permalink to this headline">¶</a></h3>
+<p>If using the ComBat toolbox, you can specify some settings for the
+feature harmonization here. For more information, see
+<a class="reference external" href="https://github.com/Jfortin1/ComBatHarmonization">https://github.com/Jfortin1/ComBatHarmonization</a>.</p>
+<p><strong>Description:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 91%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>language</p></td>
+<td><p>Name of software implementation to use.</p></td>
+</tr>
+<tr class="row-odd"><td><p>batch</p></td>
+<td><p>Name of batch variable = variable to correct for.</p></td>
+</tr>
+<tr class="row-even"><td><p>mod</p></td>
+<td><p>Name of moderation variable(s) = variables for which variation in features will be “preserverd”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>par</p></td>
+<td><p>Either use the parametric (1) or non-parametric version (0) of ComBat.</p></td>
+</tr>
+<tr class="row-even"><td><p>eb</p></td>
+<td><p>Either use the emperical Bayes (1) or simply mean shifting version (0) of ComBat.</p></td>
+</tr>
+<tr class="row-odd"><td><p>per_feature</p></td>
+<td><p>Either use ComBat for all features combined (0) or per feature (1), in which case a second feature equal to the single feature plus random noise will be added if eb=1</p></td>
+</tr>
+<tr class="row-even"><td><p>excluded_features</p></td>
+<td><p>Provide substrings of feature labels of features which should be excluded from ComBat. Recommended to use for features unaffected by the batch variable.</p></td>
+</tr>
+<tr class="row-odd"><td><p>matlab</p></td>
+<td><p>If using Matlab, path to Matlab executable.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Defaults and Options:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 48%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Options</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>language</p></td>
+<td><p>python</p></td>
+<td><p>python, matlab</p></td>
+</tr>
+<tr class="row-odd"><td><p>batch</p></td>
+<td><p>Hospital</p></td>
+<td><p>String</p></td>
+</tr>
+<tr class="row-even"><td><p>mod</p></td>
+<td><p>Age</p></td>
+<td><p>String(s)</p></td>
+</tr>
+<tr class="row-odd"><td><p>par</p></td>
+<td><p>1</p></td>
+<td><p>0 or 1</p></td>
+</tr>
+<tr class="row-even"><td><p>eb</p></td>
+<td><p>1</p></td>
+<td><p>0 or 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>per_feature</p></td>
+<td><p>0</p></td>
+<td><p>0 or 1</p></td>
+</tr>
+<tr class="row-even"><td><p>excluded_features</p></td>
+<td><p><a href="#id3"><span class="problematic" id="id4">sf_</span></a>, <a href="#id5"><span class="problematic" id="id6">of_</span></a>, <a href="#id7"><span class="problematic" id="id8">semf_</span></a>, <a href="#id9"><span class="problematic" id="id10">pf_</span></a></p></td>
+<td><p>List of strings, comma separated</p></td>
+</tr>
+<tr class="row-odd"><td><p>matlab</p></td>
+<td><p>C:Program FilesMATLABR2015bbinmatlab.exe</p></td>
+<td><p>String</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="featsel">
 <h3>Featsel<a class="headerlink" href="#featsel" title="Permalink to this headline">¶</a></h3>
 <p>When using the PREDICT toolbox for classification, these settings can be
@@ -773,8 +1055,8 @@ containing the actual values, e.g. value1, value2.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 9%" />
-<col style="width: 91%" />
+<col style="width: 8%" />
+<col style="width: 92%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -789,16 +1071,16 @@ containing the actual values, e.g. value1, value2.</p>
 <td><p>Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.</p></td>
 </tr>
 <tr class="row-even"><td><p>SelectFromModel</p></td>
-<td><p>Select features by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/">sklearn”s SelectFromModel</a>.</p></td>
+<td><p>Percentage of times features are selected by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/">sklearn”s SelectFromModel</a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p>UsePCA</p></td>
-<td><p>If True, Use Principle Component Analysis (PCA) to select features.</p></td>
+<td><p>Percentage of times Principle Component Analysis (PCA) is used to select features.</p></td>
 </tr>
 <tr class="row-even"><td><p>PCAType</p></td>
 <td><p>Method to select number of components using PCA: Either the number of components that explains 95% of the variance, or use a fixed number of components.95variance</p></td>
 </tr>
 <tr class="row-odd"><td><p>StatisticalTestUse</p></td>
-<td><p>If True, use statistical test to select features.</p></td>
+<td><p>Percentage of times a statistical test is used to select features.</p></td>
 </tr>
 <tr class="row-even"><td><p>StatisticalTestMetric</p></td>
 <td><p>Define the type of statistical test to be used.</p></td>
@@ -807,7 +1089,7 @@ containing the actual values, e.g. value1, value2.</p>
 <td><p>Specify a threshold for the p-value threshold used in the statistical test to select features. The first element defines the lower boundary, the other the upper boundary. Random sampling will occur between the boundaries.</p></td>
 </tr>
 <tr class="row-even"><td><p>ReliefUse</p></td>
-<td><p>If True, use Relief to select features.</p></td>
+<td><p>Percentage of times Relief is used to select features.</p></td>
 </tr>
 <tr class="row-odd"><td><p>ReliefNN</p></td>
 <td><p>Min and max of number of nearest neighbors search range in Relief.</p></td>
@@ -826,9 +1108,9 @@ containing the actual values, e.g. value1, value2.</p>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 38%" />
-<col style="width: 38%" />
+<col style="width: 29%" />
+<col style="width: 28%" />
+<col style="width: 43%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -838,40 +1120,40 @@ containing the actual values, e.g. value1, value2.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Variance</p></td>
-<td><p>True</p></td>
-<td><p>Boolean(s)</p></td>
+<td><p>1.0</p></td>
+<td><p>Float</p></td>
 </tr>
 <tr class="row-odd"><td><p>GroupwiseSearch</p></td>
 <td><p>True</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-even"><td><p>SelectFromModel</p></td>
-<td><p>False</p></td>
-<td><p>Boolean(s)</p></td>
+<td><p>0.0</p></td>
+<td><p>Float</p></td>
 </tr>
 <tr class="row-odd"><td><p>UsePCA</p></td>
-<td><p>False</p></td>
-<td><p>Boolean(s)</p></td>
+<td><p>0.25</p></td>
+<td><p>Float</p></td>
 </tr>
 <tr class="row-even"><td><p>PCAType</p></td>
-<td><p>95variance</p></td>
+<td><p>95variance, 10, 50, 100</p></td>
 <td><p>Inteteger(s), 95variance</p></td>
 </tr>
 <tr class="row-odd"><td><p>StatisticalTestUse</p></td>
-<td><p>False</p></td>
-<td><p>Boolean(s)</p></td>
+<td><p>0.25</p></td>
+<td><p>Float</p></td>
 </tr>
 <tr class="row-even"><td><p>StatisticalTestMetric</p></td>
-<td><p>ttest, Welch, Wilcoxon, MannWhitneyU</p></td>
+<td><p>MannWhitneyU</p></td>
 <td><p>ttest, Welch, Wilcoxon, MannWhitneyU</p></td>
 </tr>
 <tr class="row-odd"><td><p>StatisticalTestThreshold</p></td>
-<td><p>-2, 1.5</p></td>
+<td><p>-3, 2.5</p></td>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 <tr class="row-even"><td><p>ReliefUse</p></td>
-<td><p>False</p></td>
-<td><p>Boolean(s)</p></td>
+<td><p>0.25</p></td>
+<td><p>Float</p></td>
 </tr>
 <tr class="row-odd"><td><p>ReliefNN</p></td>
 <td><p>2, 4</p></td>
@@ -886,7 +1168,7 @@ containing the actual values, e.g. value1, value2.</p>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 <tr class="row-even"><td><p>ReliefNumFeatures</p></td>
-<td><p>25, 200</p></td>
+<td><p>25, 100</p></td>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 </tbody>
@@ -928,38 +1210,38 @@ recommended, and looks as follows:</p>
 <tr class="row-even"><td><p>texture_GLCM_features</p></td>
 <td><p>If True, use GLCM texture features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_GLCMMS_features</p></td>
+<tr class="row-odd"><td><p>texture_GLDM_features</p></td>
+<td><p>If True, use GLDM texture features in model.</p></td>
+</tr>
+<tr class="row-even"><td><p>texture_GLCMMS_features</p></td>
 <td><p>If True, use GLCM Multislice texture features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_GLRLM_features</p></td>
+<tr class="row-odd"><td><p>texture_GLRLM_features</p></td>
 <td><p>If True, use GLRLM texture features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_GLSZM_features</p></td>
+<tr class="row-even"><td><p>texture_GLSZM_features</p></td>
 <td><p>If True, use GLSZM texture features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_GLDZM_features</p></td>
+<tr class="row-odd"><td><p>texture_GLDZM_features</p></td>
 <td><p>If True, use GLDZM texture features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_NGTDM_features</p></td>
+<tr class="row-even"><td><p>texture_NGTDM_features</p></td>
 <td><p>If True, use NGTDM texture features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_NGLDM_features</p></td>
+<tr class="row-odd"><td><p>texture_NGLDM_features</p></td>
 <td><p>If True, use NGLDM texture features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_LBP_features</p></td>
+<tr class="row-even"><td><p>texture_LBP_features</p></td>
 <td><p>If True, use LBP texture features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>patient_features</p></td>
+<tr class="row-odd"><td><p>patient_features</p></td>
 <td><p>If True, use patient features in model.</p></td>
 </tr>
-<tr class="row-odd"><td><p>semantic_features</p></td>
+<tr class="row-even"><td><p>semantic_features</p></td>
 <td><p>If True, use semantic features in model.</p></td>
 </tr>
-<tr class="row-even"><td><p>coliage_features</p></td>
+<tr class="row-odd"><td><p>coliage_features</p></td>
 <td><p>If True, use coliage features in model.</p></td>
-</tr>
-<tr class="row-odd"><td><p>log_features</p></td>
-<td><p>If True, use log features in model.</p></td>
 </tr>
 <tr class="row-even"><td><p>vessel_features</p></td>
 <td><p>If True, use vessel features in model.</p></td>
@@ -976,17 +1258,26 @@ recommended, and looks as follows:</p>
 <tr class="row-even"><td><p>rgrd_features</p></td>
 <td><p>If True, use rgrd features in model.</p></td>
 </tr>
+<tr class="row-odd"><td><p>toolbox</p></td>
+<td><p>List of names of toolboxes to be used, or All</p></td>
+</tr>
+<tr class="row-even"><td><p>original_features</p></td>
+<td><p>If True, use original features in model.</p></td>
+</tr>
 <tr class="row-odd"><td><p>wavelet_features</p></td>
 <td><p>If True, use wavelet features in model.</p></td>
+</tr>
+<tr class="row-even"><td><p>log_features</p></td>
+<td><p>If True, use log features in model.</p></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 52%" />
-<col style="width: 25%" />
-<col style="width: 23%" />
+<col style="width: 24%" />
+<col style="width: 27%" />
+<col style="width: 49%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -1015,47 +1306,47 @@ recommended, and looks as follows:</p>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_GLCMMS_features</p></td>
+<tr class="row-odd"><td><p>texture_GLDM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_GLRLM_features</p></td>
+<tr class="row-even"><td><p>texture_GLCMMS_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_GLSZM_features</p></td>
+<tr class="row-odd"><td><p>texture_GLRLM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_GLDZM_features</p></td>
+<tr class="row-even"><td><p>texture_GLSZM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_NGTDM_features</p></td>
+<tr class="row-odd"><td><p>texture_GLDZM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>texture_NGLDM_features</p></td>
+<tr class="row-even"><td><p>texture_NGTDM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>texture_LBP_features</p></td>
+<tr class="row-odd"><td><p>texture_NGLDM_features</p></td>
 <td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>patient_features</p></td>
+<tr class="row-even"><td><p>texture_LBP_features</p></td>
+<td><p>True, False</p></td>
+<td><p>Boolean(s)</p></td>
+</tr>
+<tr class="row-odd"><td><p>patient_features</p></td>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>semantic_features</p></td>
+<tr class="row-even"><td><p>semantic_features</p></td>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>coliage_features</p></td>
-<td><p>False</p></td>
-<td><p>Boolean(s)</p></td>
-</tr>
-<tr class="row-odd"><td><p>log_features</p></td>
+<tr class="row-odd"><td><p>coliage_features</p></td>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
@@ -1079,7 +1370,19 @@ recommended, and looks as follows:</p>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
+<tr class="row-odd"><td><p>toolbox</p></td>
+<td><p>All, PREDICT, PyRadiomics</p></td>
+<td><p>All, or name of toolbox (PREDICT, PyRadiomics)</p></td>
+</tr>
+<tr class="row-even"><td><p>original_features</p></td>
+<td><p>True</p></td>
+<td><p>Boolean(s)</p></td>
+</tr>
 <tr class="row-odd"><td><p>wavelet_features</p></td>
+<td><p>False</p></td>
+<td><p>Boolean(s)</p></td>
+</tr>
+<tr class="row-even"><td><p>log_features</p></td>
 <td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
@@ -1132,7 +1435,7 @@ selected.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>use</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>strategy</p></td>
@@ -1242,8 +1545,8 @@ hyperparameters can also be found there.</p>
 <table class="docutils align-center">
 <colgroup>
 <col style="width: 9%" />
-<col style="width: 17%" />
-<col style="width: 75%" />
+<col style="width: 19%" />
+<col style="width: 72%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -1261,7 +1564,7 @@ hyperparameters can also be found there.</p>
 <td><p>Any <a class="reference external" href="https://fastr.readthedocs.io/en/develop/_autogen/fastr.reference.html#executionplugin-reference/">fastr execution plugin</a> .</p></td>
 </tr>
 <tr class="row-even"><td><p>classifiers</p></td>
-<td><p>SVM</p></td>
+<td><p>SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB</p></td>
 <td><p>SVM , SVR, SGD, SGDR, RF, LDA, QDA, ComplementND, GaussianNB, LR, RFR, Lasso, ElasticNet. All are estimators from <a class="reference external" href="https://scikit-learn.org/stable//">sklearn</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>max_iter</p></td>
@@ -1499,11 +1802,11 @@ set: <code class="docutils literal notranslate"><span class="pre">config[Genetic
 </tr>
 <tr class="row-even"><td><p>url</p></td>
 <td><p>WIP</p></td>
-<td><p>Not Supported Yet</p></td>
+<td><p>WIP</p></td>
 </tr>
 <tr class="row-odd"><td><p>projectID</p></td>
 <td><p>WIP</p></td>
-<td><p>Not Supported Yet</p></td>
+<td><p>WIP</p></td>
 </tr>
 </tbody>
 </table>
@@ -1618,9 +1921,9 @@ your hyperparameter optimization procedure here.</p>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 39%" />
-<col style="width: 19%" />
-<col style="width: 42%" />
+<col style="width: 32%" />
+<col style="width: 16%" />
+<col style="width: 52%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -1635,7 +1938,7 @@ your hyperparameter optimization procedure here.</p>
 </tr>
 <tr class="row-odd"><td><p>scaling_method</p></td>
 <td><p>z_score</p></td>
-<td><p>z_score, minmax</p></td>
+<td><p>z_score, minmax, robust</p></td>
 </tr>
 </tbody>
 </table>
@@ -1685,7 +1988,7 @@ Minority Over-sampling Technique to oversample your data.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>SMOTE</p></td>
-<td><p>True</p></td>
+<td><p>False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>SMOTE_ratio</p></td>
@@ -1740,7 +2043,7 @@ performing workflow.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Use</p></td>
-<td><p>1</p></td>
+<td><p>50</p></td>
 <td><p>Integer</p></td>
 </tr>
 </tbody>
@@ -1788,7 +2091,7 @@ performing workflow.</p>
 <td><p>Boolean</p></td>
 </tr>
 <tr class="row-odd"><td><p>N_iterations</p></td>
-<td><p>1000</p></td>
+<td><p>100</p></td>
 <td><p>Integer</p></td>
 </tr>
 </tbody>
@@ -1805,7 +2108,7 @@ performing workflow.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="file_description.html" class="btn btn-neutral float-right" title="Resource File Formats" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="additionalfunctionality.html" class="btn btn-neutral float-right" title="Additional functionality" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="user_manual.html" class="btn btn-neutral float-left" title="User Manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

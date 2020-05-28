@@ -118,7 +118,13 @@ class BasicWORC(SimpleWORC):
         self._config_builder._custom_overrides['Labels'] = dict()
         self._config_builder._custom_overrides['Labels']['label_names'] = self._worc.label_names
 
-        self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())]
+        # Find out how many configs we need to make
+        if self._worc.images_train:
+          nmod = len(self._worc.images_train)
+        else:
+          nmod = len(self.features_train)
+
+        self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
         self._worc.build()
         if self._add_evaluation:
             self._worc.add_evaluation(label_type=self._label_names[self._selected_label])

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.1.3 documentation</title>
+  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.1.4 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.3
+                3.1.4
               </div>
             
           
@@ -88,6 +88,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
@@ -310,7 +313,6 @@
                        <span class="n">output_itk</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zoomfactor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
     <span class="c1"># Match the images to the label data</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Matching image and segmentation data to labels.&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
     <span class="n">label_data</span><span class="p">,</span> <span class="n">images</span> <span class="o">=</span>\
         <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">pinfo</span><span class="p">,</span>
                          <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
@@ -329,10 +331,10 @@
     <span class="c1"># Order the images and segmentations in the scores ordering</span>
     <span class="n">ordering</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">PIDs_images</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pid</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">PIDs_images</span><span class="p">:</span>
             <span class="n">ordering</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PIDs_images</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pid</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] Patient </span><span class="si">{}</span><span class="s1"> not in images list!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WORC Warning] Patient </span><span class="si">{pid}</span><span class="s1"> not in images list!&#39;</span><span class="p">)</span>
 
     <span class="n">PIDs_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">PIDs_images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ordering</span><span class="p">]</span>
     <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ordering</span><span class="p">]</span>

@@ -1,0 +1,12 @@
+================= ======================================================================================================================================================================
+Subkey            Description                                                                                                                                                           
+================= ======================================================================================================================================================================
+language          Name of software implementation to use.                                                                                                                               
+batch             Name of batch variable = variable to correct for.                                                                                                                     
+mod               Name of moderation variable(s) = variables for which variation in features will be "preserverd".                                                                      
+par               Either use the parametric (1) or non-parametric version (0) of ComBat.                                                                                                
+eb                Either use the emperical Bayes (1) or simply mean shifting version (0) of ComBat.                                                                                     
+per_feature       Either use ComBat for all features combined (0) or per feature (1), in which case a second feature equal to the single feature plus random noise will be added if eb=1
+excluded_features Provide substrings of feature labels of features which should be excluded from ComBat. Recommended to use for features unaffected by the batch variable.              
+matlab            If using Matlab, path to Matlab executable.                                                                                                                           
+================= ======================================================================================================================================================================

@@ -88,7 +88,7 @@ class StatisticalTestThreshold(BaseEstimator, SelectorMixin):
                     try:
                         metric_value_temp = self.metric_function(class1, class2, **self.parameters)[1]
                     except ValueError as e:
-                        print("[PREDICT Warning] " + str(e) + '. Replacing metric value by 1.')
+                        print("[WORC Warning] " + str(e) + '. Replacing metric value by 1.')
                         metric_value_temp
 
                     metric_values.append(metric_value_temp)
@@ -103,7 +103,7 @@ class StatisticalTestThreshold(BaseEstimator, SelectorMixin):
                 try:
                     metric_value = self.metric_function(class1, class2, **self.parameters)[1]
                 except ValueError as e:
-                    print("[PREDICT Warning] " + str(e) + '. Replacing metric value by 1.')
+                    print("[WORC Warning] " + str(e) + '. Replacing metric value by 1.')
                     metric_value = 1
 
             self.metric_values.append(metric_value)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,61 +16,31 @@
 # limitations under the License.
 
 import SimpleITK as sitk
-import argparse
 import pydicom
 import WORC.IOparser.config_preprocessing as config_io
 import os
+from WORC.processing.segmentix import dilate_contour
+import numpy as np
 
 
-def main():
-    parser = argparse.ArgumentParser(description='Feature extraction')
-    parser.add_argument('-im', '--im', metavar='image', nargs='+',
-                        dest='im', type=str, required=False,
-                        help='Images to calculate features on')
-    parser.add_argument('-md', '--md', metavar='metadata', dest='md',
-                        type=str, required=False, nargs='+',
-                        help='Clinical data on patient (DICOM)')
-    parser.add_argument('-mask', '--mask', metavar='mask', dest='mask',
-                        type=str, required=False, nargs='+',
-                        help='Mask that can be used in normalization')
-    parser.add_argument('-para', '--para', metavar='Parameters', nargs='+',
-                        dest='para', type=str, required=True,
-                        help='Parameters')
-    parser.add_argument('-out', '--out', metavar='Features',
-                        dest='out', type=str, required=False,
-                        help='Image output (ITK Image)')
-    args = parser.parse_args()
-
-    # Convert list inputs to strings
-    if type(args.im) is list:
-        args.im = ''.join(args.im)
-
-    if type(args.md) is list:
-        args.md = ''.join(args.md)
-
-    if type(args.mask) is list:
-        args.mask = ''.join(args.mask)
-
-    if type(args.para) is list:
-        args.para = ''.join(args.para)
-
-    if type(args.out) is list:
-        args.out = ''.join(args.out)
-
+def preprocess(imagefile, config, metadata=None, mask=None):
+    '''
+    Apply preprocessing to an image to prepare it for feture extration
+    '''
     # Read the config, image and if given masks and metadata
-    config = config_io.load_config(args.para)
-    image = sitk.ReadImage(args.im)
+    config = config_io.load_config(config)
+    image = sitk.ReadImage(imagefile)
 
-    if args.md is not None:
-        metadata = pydicom.read_file(args.md)
+    if metadata is not None:
+        metadata = pydicom.read_file(metadata)
 
-    if args.mask is not None:
-        mask = sitk.ReadImage(args.mask)
+    if mask is not None:
+        mask = sitk.ReadImage(mask)
 
     # Convert image to Hounsfield units if type is CT
     image_type = config['ImageFeatures']['image_type']
     # NOTE: We only do this if the input is a DICOM folder
-    if 'CT' in image_type and not os.path.isfile(args.im):
+    if 'CT' in image_type and not os.path.isfile(imagefile):
         print('Converting intensity to Hounsfield units.')
         image = image*metadata.RescaleSlope +\
             metadata.RescaleIntercept
@@ -81,8 +51,23 @@ def main():
         image = sitk.Normalize(image)
     elif config['Normalize']['ROI'] == 'True':
         print('Apply scaling of image based on a Region Of Interest.')
-        if args.mask is None:
-            raise IOError('Mask input required for ROI normalization.')
+
+        # Dilate the mask if required
+        if config['Normalize']['ROIdilate'] == 'True':
+            radius = config['Normalize']['ROIdilateradius']
+            print(f"Dilating ROI with radius {radius}.")
+            mask = sitk.GetArrayFromImage(mask)
+            mask = dilate_contour(mask, radius)
+            mask = mask.astype(np.uint8)
+            mask = sitk.GetImageFromArray(mask)
+
+        if mask is None:
+            if config['Normalize']['ROIDetermine'] == 'Provided':
+                raise IOError('Mask input required for ROI normalization.')
+            elif config['Normalize']['ROIDetermine'] == 'Otsu':
+                mask = 1 - sitk.OtsuThreshold(image)
+            else:
+                raise IOError(f"{config['Normalize']['ROIDetermine']} is not a valid method!")
         else:
             if config['Normalize']['Method'] == 'z_score':
                 print('Apply scaling using z-scoring based on the ROI')
@@ -92,7 +77,17 @@ def main():
                 mask = sitk.Cast(mask, 0)
 
                 LabelFilter = sitk.LabelStatisticsImageFilter()
-                LabelFilter.Execute(image, mask)
+                try:
+                    LabelFilter.Execute(image, mask)
+                except RuntimeError as e:
+                    if config['General']['AssumeSameImageAndMaskMetadata']:
+                        print(f'[WORC Warning] error: {e}.')
+                        print(f'[WORC Warning] Assuming image and mask have same metadata.')
+                        mask.CopyInformation(image)
+                        LabelFilter.Execute(image, mask)
+                    else:
+                        raise RuntimeError(e)
+
                 ROI_mean = LabelFilter.GetMean(1)
                 ROI_std = LabelFilter.GetSigma(1)
 
@@ -100,12 +95,22 @@ def main():
                                         shift=-ROI_mean,
                                         scale=1.0/ROI_std)
             elif config['Normalize']['Method'] == 'minmed':
-                print('Apply scaling using the minimum and mean of the ROI')
+                print('Apply scaling using the minimum and median of the ROI')
                 image = sitk.Cast(image, 9)
                 mask = sitk.Cast(mask, 0)
 
                 LabelFilter = sitk.LabelStatisticsImageFilter()
-                LabelFilter.Execute(image, mask)
+                try:
+                    LabelFilter.Execute(image, mask)
+                except RuntimeError as e:
+                    if config['General']['AssumeSameImageAndMaskMetadata']:
+                        print(f'[WORC Warning] error: {e}.')
+                        print(f'[WORC Warning] Assuming image and mask have same metadata.')
+                        mask.CopyInformation(image)
+                        LabelFilter.Execute(image, mask)
+                    else:
+                        raise RuntimeError(e)
+
                 ROI_median = LabelFilter.GetMedian(1)
                 ROI_minimum = LabelFilter.GetMinimum(1)
 
@@ -115,9 +120,4 @@ def main():
     else:
         print('No preprocessing was applied.')
 
-    # Save the output
-    sitk.WriteImage(image, args.out)
-
-
-if __name__ == '__main__':
-    main()
+    return image

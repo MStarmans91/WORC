@@ -126,5 +126,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Practice tutorial file
-WORC/tutorial
+# Example data
+WORC/exampledata/*.hdf5
+WORC/external/*
+WORC/exampledata/ICCvalues.csv
+WORC/tests/*.png
+WORC/tests/*.mat
+>>>>>>> 27b0c7c767990d079e59a5c7f143961497f3100f

@@ -107,7 +107,7 @@ class SimpleWORC():
         if len(features) == 0:
             raise NoFeaturesFoundException(f'{directory}{glob}{image_file_name}')
 
-        features_per_subject = {feature.parent.name: feature.as_uri() for feature in features}
+        features_per_subject = {feature.parent.name: feature.as_uri().replace('%20', ' ') for feature in features}
         if is_training:
             self._features_train.append(features_per_subject)
         else:
@@ -123,7 +123,7 @@ class SimpleWORC():
         if len(images) == 0:
             raise NoImagesFoundException(f'{directory}{glob}{image_file_name}')
 
-        images_per_subject = {image.parent.name: image.as_uri() for image in images}
+        images_per_subject = {image.parent.name: image.as_uri().replace('%20', ' ') for image in images}
         if is_training:
             self._images_train.append(images_per_subject)
         else:
@@ -140,7 +140,7 @@ class SimpleWORC():
         if len(segmentations) == 0:
             raise NoSegmentationsFoundException(str(directory))
 
-        segmentations_per_subject = {image.parent.name: image.as_uri() for image in segmentations}
+        segmentations_per_subject = {image.parent.name: image.as_uri().replace('%20', ' ') for image in segmentations}
         if is_training:
             self._segmentations_train.append(segmentations_per_subject)
         else:
@@ -157,9 +157,9 @@ class SimpleWORC():
 
         # TODO: implement sanity check labels file e.g. is it a labels file and are there labels available
         if is_training:
-            self._labels_file_train = labels_file.as_uri()
+            self._labels_file_train = labels_file.as_uri().replace('%20', ' ')
         else:
-            self._labels_file_test = labels_file.as_uri()
+            self._labels_file_test = labels_file.as_uri().replace('%20', ' ')
 
     def semantics_from_this_file(self, file_path, is_training=True):
         semantics_file = Path(file_path).expanduser()
@@ -172,9 +172,9 @@ class SimpleWORC():
 
         # TODO: implement sanity check semantics file e.g. is it a semantics file and are there semantics available
         if is_training:
-            self._semantics_file_train = semantics_file.as_uri()
+            self._semantics_file_train = semantics_file.as_uri().replace('%20', ' ')
         else:
-            self._semantics_file_test = semantics_file.as_uri()
+            self._semantics_file_test = semantics_file.as_uri().replace('%20', ' ')
 
     def predict_labels(self, label_names: list):
         if not self._labels_file_train:
@@ -293,7 +293,14 @@ class SimpleWORC():
         self._config_builder._custom_overrides['Labels'] = dict()
         self._config_builder._custom_overrides['Labels']['label_names'] = self._worc.label_names
 
-        self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())]
+        # Find out how many configs we need to make
+        if self._worc.images_train:
+          nmod = len(self._worc.images_train)
+        else:
+          nmod = len(self.features_train)
+
+        self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
+
         self._worc.build()
         if self._add_evaluation:
             self._worc.add_evaluation(label_type=self._label_names[self._selected_label])
@@ -301,10 +308,20 @@ class SimpleWORC():
         self._worc.set()
         self._worc.execute()
 
-    def binary_classification(self, estimators=['SVM'], scoring_method='f1', coarse=True):
+    def binary_classification(self, estimators=None, scoring_method='f1', coarse=True):
+        if coarse and estimators is None:
+            estimators = ['SVM']
+        elif estimators is None:
+            estimators = ['SVM', 'SVM', 'SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB']
+
         self._set_and_validate_estimators(estimators, scoring_method, 'classification', coarse)
 
-    def regression(self, estimators=['SVR'], scoring_method='r2', coarse=True):
+    def regression(self, estimators=None, scoring_method='r2', coarse=True):
+        if coarse and estimators is None:
+            estimators = ['SVR']
+        elif estimators is None:
+            estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR']
+
         self._set_and_validate_estimators(estimators, scoring_method, 'regression', coarse)
 
     def survival(self, estimators, scoring_method, coarse=True):

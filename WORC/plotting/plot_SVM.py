@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ from WORC.classification import metrics
 import WORC.addexceptions as ae
 from sklearn.base import is_regressor
 from collections import OrderedDict
+from sklearn.utils import resample
 
 
 def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_scoring):
@@ -46,8 +47,8 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_s
         print(' - iteration {it + 1} / {n_iter}.')
         # NOTE: Explicitly exclude validation set, elso refit and score
         # somehow still seems to use it.
-        X_train_temp = [X_train[i] for i in train]
-        Y_train_temp = [Y_train[i] for i in train]
+        X_train_temp = [prediction[label_type]['X_train'][i] for i in train]
+        Y_train_temp = [prediction[label_type]['Y_train'][i] for i in train]
         train_temp = range(0, len(train))
 
         # Refit a SearchCV object with the provided parameters
@@ -83,7 +84,8 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
              modus='singlelabel',
              thresholds=None, survival=False,
              generalization=False, shuffle_estimators=False,
-             bootstrap=False, bootstrap_N=1000):
+             bootstrap=False, bootstrap_N=1000,
+             overfit_scaler=False):
     '''
     Plot the output of a single binary estimator, e.g. a SVM.
 
@@ -164,7 +166,6 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
 
     # Select the estimator from the pandas dataframe to use
     keys = prediction.keys()
-    SVMs = list()
     if label_type is None:
         label_type = keys[0]
 
@@ -175,6 +176,8 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                 # Singlelabel: convert to list
                 label_type = [[label_type]]
             label_data = lp.load_labels(label_data, label_type)
+        else:
+            raise ae.WORCValueError(f"Label data {label_data} incorrect: not a dictionary, or file does not exist.")
 
     n_labels = len(label_type)
     patient_IDs = label_data['patient_IDs']
@@ -187,12 +190,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         label_type = keys[0]
 
     # Extract the estimators, features and labels
-    SVMs = prediction[label_type]['classifiers']
-    regression = is_regressor(SVMs[0].best_estimator_)
-    Y_test = prediction[label_type]['Y_test']
-    X_test = prediction[label_type]['X_test']
-    X_train = prediction[label_type]['X_train']
-    Y_train = prediction[label_type]['Y_train']
+    regression = is_regressor(prediction[label_type]['classifiers'][0].best_estimator_)
     feature_labels = prediction[label_type]['feature_labels']
 
     # Create lists for performance measures
@@ -241,39 +239,54 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         y_predictions = list()
         pids = list()
 
+    # Extract sample size
+    N_1 = float(len(prediction[label_type]['patient_ID_train'][0]))
+    N_2 = float(len(prediction[label_type]['patient_ID_test'][0]))
+
+    # Convert tuples to lists if required
+    if type(prediction[label_type]['X_test']) is tuple:
+        prediction[label_type]['X_test'] = list(prediction[label_type]['X_test'])
+        prediction[label_type]['X_train'] = list(prediction[label_type]['X_train'])
+        prediction[label_type]['Y_train'] = list(prediction[label_type]['Y_train'])
+        prediction[label_type]['Y_test'] = list(prediction[label_type]['Y_test'])
+        prediction[label_type]['patient_ID_test'] = list(prediction[label_type]['patient_ID_test'])
+        prediction[label_type]['patient_ID_train'] = list(prediction[label_type]['patient_ID_train'])
+        prediction[label_type]['classifiers'] = list(prediction[label_type]['classifiers'])
+
     # Loop over the test sets, which correspond to cross-validation
     # or bootstrapping iterations
+    n_iter = len(prediction[label_type]['Y_test'])
     if bootstrap:
         iterobject = range(0, bootstrap_N)
     else:
-        iterobject = range(0, len(Y_test))
+        iterobject = range(0, n_iter)
 
     for i in iterobject:
         print("\n")
         if bootstrap:
             print(f"Bootstrap {i + 1} / {bootstrap_N}.")
         else:
-            print(f"Cross validation {i + 1} / {len(Y_test)}.")
+            print(f"Cross-validation {i + 1} / {n_iter}.")
 
         test_indices = list()
 
         # When bootstrapping, there is only a single train/test set.
         if bootstrap:
-            X_test_temp = X_test[0]
-            X_train_temp = X_train[0]
-            Y_train_temp = Y_train[0]
-            Y_test_temp = Y_test[0]
+            X_test_temp = prediction[label_type]['X_test'][0]
+            X_train_temp = prediction[label_type]['X_train'][0]
+            Y_train_temp = prediction[label_type]['Y_train'][0]
+            Y_test_temp = prediction[label_type]['Y_test'][0]
             test_patient_IDs = prediction[label_type]['patient_ID_test'][0]
             train_patient_IDs = prediction[label_type]['patient_ID_train'][0]
-            fitted_model = SVMs[0]
+            fitted_model = prediction[label_type]['classifiers'][0]
         else:
-            X_test_temp = X_test[i]
-            X_train_temp = X_train[i]
-            Y_train_temp = Y_train[i]
-            Y_test_temp = Y_test[i]
+            X_test_temp = prediction[label_type]['X_test'][i]
+            X_train_temp = prediction[label_type]['X_train'][i]
+            Y_train_temp = prediction[label_type]['Y_train'][i]
+            Y_test_temp = prediction[label_type]['Y_test'][i]
             test_patient_IDs = prediction[label_type]['patient_ID_test'][i]
             train_patient_IDs = prediction[label_type]['patient_ID_train'][i]
-            fitted_model = SVMs[i]
+            fitted_model = prediction[label_type]['classifiers'][i]
 
         # If bootstrap, generate a bootstrapped sample
         if bootstrap:
@@ -326,7 +339,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         if bootstrap and i > 0:
             # For bootstrapping, only do this at the first iteration
             pass
-        elif ensemble > 1 and not fitted_model.ensemble:
+        elif not fitted_model.ensemble:
             # NOTE: Added for backwards compatability
             if not hasattr(fitted_model, 'cv_iter'):
                 cv_iter = list(fitted_model.cv.split(X_train_temp, Y_train_temp))
@@ -336,7 +349,8 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             X_train_temp = [(x, feature_labels) for x in X_train_temp]
             fitted_model.create_ensemble(X_train_temp, Y_train_temp,
                                          method=ensemble, verbose=verbose,
-                                         scoring=ensemble_scoring)
+                                         scoring=ensemble_scoring,
+                                         overfit_scaler=overfit_scaler)
 
         # Create prediction
         y_prediction = fitted_model.predict(X_test_temp)
@@ -524,22 +538,31 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
             coxcoef.append(cph.summary['coef']['predict'])
             coxp.append(cph.summary['p']['predict'])
 
+        # Delete some objects to save memory in cross-validtion
+        if not bootstrap:
+            del fitted_model, X_test_temp, X_train_temp, Y_train_temp
+            del Y_test_temp, test_patient_IDs, train_patient_IDs
+            prediction[label_type]['X_test'][i] = None
+            prediction[label_type]['X_train'][i] = None
+            prediction[label_type]['Y_train'][i] = None
+            prediction[label_type]['Y_test'][i] = None
+            prediction[label_type]['patient_ID_test'][i] = None
+            prediction[label_type]['patient_ID_train'][i] = None
+            prediction[label_type]['classifiers'][i] = None
+
     if output in ['scores', 'decision']:
         # Return the scores and true values of all patients
         return y_truths, y_scores, y_predictions, pids
     elif output == 'stats':
         # Compute statistics
-        # Extract sample size
-        N_1 = float(len(train_patient_IDs))
-        N_2 = float(len(test_patient_IDs))
 
         # Compute alpha confidence intervals (CIs)
         stats = dict()
         if not regression:
             if bootstrap:
                 # Compute once for the real test set the performance
-                X_test_temp = X_test[0]
-                y_truth = Y_test[0]
+                X_test_temp = prediction[label_type]['X_test'][0]
+                y_truth = prediction[label_type]['Y_test'][0]
                 y_prediction = fitted_model.predict(X_test_temp)
 
                 if regression:
@@ -557,7 +580,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                 stats["Accuracy 95%:"] = f"{accuracy_test} {str(compute_confidence_bootstrap(accuracy, accuracy_test, N_1, alpha))}"
                 stats["BCA 95%:"] = f"{bca_test} {str(compute_confidence_bootstrap(bca, bca_test, N_1, alpha))}"
                 stats["AUC 95%:"] = f"{auc_test} {str(compute_confidence_bootstrap(auc, auc_test, N_1, alpha))}"
-                stats["F1-score 95%:"] = f"{f1_score_list_test} {str(compute_confidence_bootstrap(f1_score_list, f1_score_test, N_1, alpha))}"
+                stats["F1-score 95%:"] = f"{f1_score_test} {str(compute_confidence_bootstrap(f1_score_list, f1_score_test, N_1, alpha))}"
                 stats["Precision 95%:"] = f"{precision_test} {str(compute_confidence_bootstrap(precision, precision_test, N_1, alpha))}"
                 stats["NPV 95%:"] = f"{npv_test} {str(compute_confidence_bootstrap(npv, npv_test, N_1, alpha))}"
                 stats["Sensitivity 95%: "] = f"{sensitivity_test} {str(compute_confidence_bootstrap(sensitivity, sensitivity_test, N_1, alpha))}"
@@ -581,6 +604,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                     stats["Percentage Selected 95%:"] = f"{np.nanmean(percentages_selected)} {str(compute_confidence(percentages_selected, N_1, N_2, alpha))}"
 
             # Extract statistics on how often patients got classified correctly
+            rankings = dict()
             alwaysright = dict()
             alwayswrong = dict()
             percentages = dict()
@@ -603,9 +627,9 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
                     alwayswrong[i_ID] = label
                     print(f"Always Wrong: {i_ID}, label {label}.")
 
-            stats["Always right"] = alwaysright
-            stats["Always wrong"] = alwayswrong
-            stats['Percentages'] = percentages
+            rankings["Always right"] = alwaysright
+            rankings["Always wrong"] = alwayswrong
+            rankings['Percentages'] = percentages
         else:
             # Regression
             stats['R2-score 95%: '] = f"{np.nanmean(r2_score)} {str(compute_confidence(r2score, N_1, N_2, alpha))}"
@@ -626,7 +650,12 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
         for k, v in stats.items():
             print(f"{k} : {v}.")
 
-        return stats
+        # Combine stats and rankings in one output
+        output = dict()
+        output['Statistics'] = stats
+        output['Rankings'] = rankings
+
+        return output
 
 
 def combine_multiple_estimators(predictions, label_data, multilabel_type, label_types,

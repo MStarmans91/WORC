@@ -22,10 +22,8 @@ from radiomics import featureextractor
 import collections
 
 
-def AllFeatures(image, mask):
-    # Define settings for signature calculation
-    # These are currently set equal to the respective default values
-    kwargs = {}
+def convertconfig(parameters):
+    kwargs = dict()
     kwargs['binWidth'] = 25
     kwargs['resampledPixelSpacing'] = None  # [3,3,3] is an example for defining resampling (voxels with size 3x3x3mm)
     kwargs['interpolator'] = sitk.sitkBSpline
@@ -43,6 +41,36 @@ def AllFeatures(image, mask):
 
     # NOTE: A little more tolerance may be required on matching the dimensions
     kwargs['geometryTolerance'] = 1E-3
+
+    return kwargs
+
+
+def AllFeatures(image, mask, parameters=None):
+    if parameters is None:
+        # Default settings for signature calculation from PyRadiomics
+        kwargs = {}
+
+        # These are currently set equal to the respective default values
+        kwargs['binWidth'] = 25
+        kwargs['resampledPixelSpacing'] = None  # [3,3,3] is an example for defining resampling (voxels with size 3x3x3mm)
+        kwargs['interpolator'] = sitk.sitkBSpline
+        kwargs['verbose'] = True
+
+        # Specific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml
+        kwargs['normalize'] = True
+        kwargs['normalizeScale'] = 100
+        kwargs['preCrop'] = True
+        kwargs['force2D'] = True
+        kwargs['force2Ddimension'] = 0  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
+        kwargs['binWidth'] = 5
+        kwargs['voxelArrayShift'] = 300
+        kwargs['label'] = 1
+
+        # NOTE: A little more tolerance may be required on matching the dimensions
+        kwargs['geometryTolerance'] = 1E-3
+    else:
+        # Extract fields of parameters dict to right kwargs arguments
+        kwargs = convertconfig(parameters)
 
     # Initialize wrapperClass to generate signature
     extractor = featureextractor.RadiomicsFeaturesExtractor(**kwargs)

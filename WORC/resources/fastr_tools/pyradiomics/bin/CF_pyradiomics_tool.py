@@ -35,7 +35,7 @@ def main():
                         type=str, required=True, nargs='+',
                         help='Segmentation to calculate features on')
     parser.add_argument('-para', '--para', metavar='Parameters', nargs='+',
-                        dest='para', type=str, required=False,
+                        dest='para', type=str, required=True,
                         help='Parameters')
     parser.add_argument('-out', '--out', metavar='Features',
                         dest='out', type=str, required=False,
@@ -51,7 +51,11 @@ def main():
     if type(args.out) is list:
         args.out = ''.join(args.out)
 
-    featureVector, settings = CalcFeatures(image=args.im, mask=args.seg)
+    if type(args.para) is list:
+        args.para = ''.join(args.para)
+
+    featureVector, settings = CalcFeatures(image=args.im, mask=args.seg,
+                                           parameters=args.para)
 
     if 'rdf' in args.out:
         # Write output to rdf

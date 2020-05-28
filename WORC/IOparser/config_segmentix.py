@@ -56,4 +56,13 @@ def load_config(config_file_path):
     settings_dict['Segmentix']['fillholes'] =\
         settings['Segmentix'].getboolean('fillholes')
 
+    settings_dict['Segmentix']['remove_small_objects'] =\
+        settings['Segmentix'].getboolean('remove_small_objects')
+
+    settings_dict['Segmentix']['min_object_size'] =\
+        int(settings['Segmentix']['min_object_size'])
+
+    settings_dict['Segmentix']['AssumeSameImageAndMaskMetadata'] =\
+        settings['General'].getboolean('AssumeSameImageAndMaskMetadata')
+
     return settings_dict

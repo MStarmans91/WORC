@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2011-2014 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2011-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +16,23 @@
 # limitations under the License.
 
 import os
+from sys import platform
+
+# Go to directory of this folder.
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-# os.system('python3 doc_clean.py')
-# print('python3 generate_modules.py ..' + os.path.sep + ' -d .' + os.path.sep + ' -s rst -f')
-# os.system('python3 generate_modules.py ..' + os.path.sep + ' -d .' + os.path.sep + ' -s rst -f')
-# print('python3 generate_config.py')
-# os.system('python3 generate_config.py')
+
+if platform == "linux" or platform == "linux2":
+    ex = 'python3'
+elif platform == "win32":
+    ex = 'python'
+
+print(f'{ex} doc_clean.py')
+os.system(f'{ex} doc_clean.py')
+print(f'{ex} generate_modules.py ..{os.path.sep} -d .{os.path.sep} -s rst -f')
+os.system(f'{ex} generate_modules.py ..{os.path.sep} -d .{os.path.sep} -s rst -f')
+print(f'{ex} generate_config.py')
+os.system(f'{ex} generate_config.py')
 
 print('make html')
 os.system('make html')
