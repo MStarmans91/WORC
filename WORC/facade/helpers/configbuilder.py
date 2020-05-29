@@ -78,8 +78,8 @@ class ConfigBuilder():
             },
             'CrossValidation': {'N_iterations': '3'},
             'HyperOptimization': {'n_splits': '2',
-                                  'N_iterations': '1000',
-                                  'n_jobspercore': '500'},
+                                  'N_iterations': '100', # Default: 1000
+                                  'n_jobspercore': '50'}, # Default: 500
             'Ensemble': {'Use': '1'}
         }
         self.custom_config_overrides(overrides)
@@ -108,11 +108,20 @@ class ConfigBuilder():
                 'ReliefUse': '0.25'
             },
             # Extensive cross-validation and hyperoptimization
-            'CrossValidation': {'N_iterations': '100'},
-            'HyperOptimization': {'N_iterations': '100000',
-                                  'n_jobspercore': '4000'},
+            'CrossValidation': {'N_iterations': '4'}, # Default: 100
+            'HyperOptimization': {'N_iterations': '1000', # Default: 100000
+                                  'n_jobspercore': '200'}, # Default: 4000
             # Make use of ensembling
-            'Ensemble': {'Use': '50'}
+            'Ensemble': {'Use': '1'}, # Default: 50
+
+            # Add multicore execution
+            'Classification': {'fastr': 'True',
+                               'fastr_plugin': 'ProcessPoolExecution',
+                               'max_iter': '1000'},
+
+            # Change joblib settings
+            'General': {'Joblib_ncores': '5',
+                        'Joblib_backend': 'multiprocessing'}
         }
         self.custom_config_overrides(overrides)
         return overrides
