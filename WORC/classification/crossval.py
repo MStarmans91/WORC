@@ -29,8 +29,9 @@ from WORC.classification.regressors import regressors
 
 def crossval(config, label_data, image_features,
              param_grid=None, use_fastr=False,
-             fastr_plugin=None, tempsave=False,
-             fixedsplits=None, ensemble={'Use': False}, outputfolder=None,
+             use_SMAC=False, fastr_plugin=None,
+             tempsave=False, fixedsplits=None,
+             ensemble={'Use': False}, outputfolder=None,
              modus='singlelabel'):
     """
     Constructs multiple individual classifiers based on the label settings
@@ -70,6 +71,10 @@ def crossval(config, label_data, image_features,
             If True, fastr is used to split the hyperparameter optimization in
             separate jobs. Parameters for the splitting can be specified in the
             config file. Especially suited for clusters.
+
+    use_SMAC: boolean, default False
+            If False, random search is used to optimize the hyperparameters.
+            If True, SMAC is used to optimize the hyperparameters.
 
     fastr_plugin: string, default None
             Determines which plugin is used for fastr executions.
