@@ -1302,6 +1302,210 @@ class BaseSearchCVfastr(BaseSearchCV):
     def _fit(self, X, y, groups, parameter_iterable):
         """Actual fitting,  performing the search over parameters."""
 
+        # Added to gain understanding (printing doesn't work)
+        f = open('/home/mitchell/fit_param_distributions.txt', 'a')
+        f.write(str((self.param_distributions)))
+
+        regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
+        isclassifier =\
+            not any(clf in regressors for clf in self.param_distributions['classifiers'])
+
+        cv = check_cv(self.cv, y, classifier=isclassifier)
+
+        X, y, groups = indexable(X, y, groups)
+        n_splits = cv.get_n_splits(X, y, groups)
+        if self.verbose > 0 and isinstance(parameter_iterable, Sized):
+            n_candidates = len(parameter_iterable)
+            print(f"Fitting {n_splits} folds for each of {n_candidates} candidates, totalling {n_candidates * n_splits} fits.")
+
+        cv_iter = list(cv.split(X, y, groups))
+        name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
+        if not os.path.exists(tempfolder):
+            os.makedirs(tempfolder)
+
+        # Draw parameter sample
+        for num, parameters in enumerate(parameter_iterable):
+            parameter_sample = parameters
+            break
+
+        # Preprocess features if required
+        if 'FeatPreProcess' in parameter_sample:
+            if parameter_sample['FeatPreProcess'] == 'True':
+                print("Preprocessing features.")
+                feature_values = np.asarray([x[0] for x in X])
+                feature_labels = np.asarray([x[1] for x in X])
+                preprocessor = Preprocessor(verbose=False)
+                preprocessor.fit(feature_values, feature_labels=feature_labels[0, :])
+                feature_values = preprocessor.transform(feature_values)
+                feature_labels = preprocessor.transform(feature_labels)
+                X = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
+
+        # Create the parameter files
+        parameters_temp = dict()
+        try:
+            for num, parameters in enumerate(parameter_iterable):
+                parameters["Number"] = str(num)
+                parameters_temp[str(num)] = parameters
+
+        except ValueError:
+            # One of the parameters gives an error. Find out which one.
+            param_grid = dict()
+            for k, v in parameter_iterable.param_distributions.iteritems():
+                param_grid[k] = v
+                sampled_params = ParameterSampler(param_grid, 5)
+                try:
+                    for num, parameters in enumerate(sampled_params):
+                        a = 1
+                except ValueError:
+                    break
+
+            message = 'One or more of the values in your parameter sampler ' +\
+                      'is either not iterable, or the distribution cannot ' +\
+                      'generate valid samples. Please check your  ' +\
+                      f' parameters. At least {k} gives an error.'
+            raise WORCexceptions.WORCValueError(message)
+
+        # Split the parameters files in equal parts
+        keys = list(parameters_temp.keys())
+        keys = chunks(keys, self.n_jobspercore)
+        parameter_files = dict()
+        for num, k in enumerate(keys):
+            temp_dict = dict()
+            for number in k:
+                temp_dict[number] = parameters_temp[number]
+
+            fname = f'settings_{num}.json'
+            sourcename = os.path.join(tempfolder, 'parameters', fname)
+            if not os.path.exists(os.path.dirname(sourcename)):
+                os.makedirs(os.path.dirname(sourcename))
+            with open(sourcename, 'w') as fp:
+                json.dump(temp_dict, fp, indent=4)
+
+            parameter_files[str(num)] =\
+                f'vfs://tmp/GS/{name}/parameters/{fname}'
+
+        # Create test-train splits
+        traintest_files = dict()
+        # TODO: ugly nummering solution
+        num = 0
+        for train, test in cv_iter:
+            source_labels = ['train', 'test']
+
+            source_data = pd.Series([train, test],
+                                    index=source_labels,
+                                    name='Train-test data')
+
+            fname = f'traintest_{num}.hdf5'
+            sourcename = os.path.join(tempfolder, 'traintest', fname)
+            if not os.path.exists(os.path.dirname(sourcename)):
+                os.makedirs(os.path.dirname(sourcename))
+            traintest_files[str(num)] = f'vfs://tmp/GS/{name}/traintest/{fname}'
+
+            sourcelabel = f"Source Data Iteration {num}"
+            source_data.to_hdf(sourcename, sourcelabel)
+
+            num += 1
+
+        # Create the files containing the estimator and settings
+        estimator_labels = ['X', 'y', 'scoring',
+                            'verbose', 'fit_params', 'return_train_score',
+                            'return_n_test_samples',
+                            'return_times', 'return_parameters',
+                            'error_score']
+
+        estimator_data = pd.Series([X, y, self.scoring,
+                                    False,
+                                    self.fit_params, self.return_train_score,
+                                    True, True, True,
+                                    self.error_score],
+                                   index=estimator_labels,
+                                   name='estimator Data')
+        fname = 'estimatordata.hdf5'
+        estimatorname = os.path.join(tempfolder, fname)
+        estimator_data.to_hdf(estimatorname, 'Estimator Data')
+
+        estimatordata = f"vfs://tmp/GS/{name}/{fname}"
+
+        # Create the fastr network
+        network = fastr.create_network('WORC_GridSearch_' + name)
+        estimator_data = network.create_source('HDF5', id='estimator_source')
+        traintest_data = network.create_source('HDF5', id='traintest')
+        parameter_data = network.create_source('JsonFile', id='parameters')
+        sink_output = network.create_sink('HDF5', id='output')
+
+        fitandscore = network.create_node('worc/fitandscore:1.0', tool_version='1.0', id='fitandscore', resources=ResourceLimit(memory='2G'))
+        fitandscore.inputs['estimatordata'].input_group = 'estimator'
+        fitandscore.inputs['traintest'].input_group = 'traintest'
+        fitandscore.inputs['parameters'].input_group = 'parameters'
+
+        fitandscore.inputs['estimatordata'] = estimator_data.output
+        fitandscore.inputs['traintest'] = traintest_data.output
+        fitandscore.inputs['parameters'] = parameter_data.output
+        sink_output.input = fitandscore.outputs['fittedestimator']
+
+        source_data = {'estimator_source': estimatordata,
+                       'traintest': traintest_files,
+                       'parameters': parameter_files}
+        sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
+
+        network.execute(source_data, sink_data,
+                        tmpdir=os.path.join(tempfolder, 'tmp'),
+                        execution_plugin=self.fastr_plugin)
+
+        # Check whether all jobs have finished
+        expected_no_files = len(traintest_files) * len(parameter_files)
+        sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
+        if len(sink_files) != expected_no_files:
+            difference = expected_no_files - len(sink_files)
+            fname = os.path.join(tempfolder, 'tmp')
+            message = ('Fitting classifiers has failed for ' +
+                       f'{difference} / {expected_no_files} files. The temporary ' +
+                       f'results where not deleted and can be found in {tempfolder}. ' +
+                       'Probably your fitting and scoring failed: check out ' +
+                       'the tmp/fitandscore folder within the tempfolder for ' +
+                       'the fastr job temporary results or run: fastr trace ' +
+                       f'"{fname}{os.path.sep}__sink_data__.json" --samples.')
+            raise WORCexceptions.WORCValueError(message)
+
+        # Read in the output data once finished
+        save_data = list()
+        for output in sink_files:
+            data = pd.read_hdf(output)
+            save_data.extend(list(data['RET']))
+
+        # if one choose to see train score, "out" will contain train score info
+        if self.return_train_score:
+            (train_scores, test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) =\
+              zip(*save_data)
+        else:
+            (test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) =\
+              zip(*save_data)
+
+        # Remove the temporary folder used
+        shutil.rmtree(tempfolder)
+
+        # Process the results of the fitting procedure
+        self.process_fit(n_splits=n_splits,
+                         parameters_est=parameters_est,
+                         parameters_all=parameters_all,
+                         test_sample_counts=test_sample_counts,
+                         test_scores=test_scores,
+                         train_scores=train_scores,
+                         fit_time=fit_time,
+                         score_time=score_time,
+                         cv_iter=cv_iter,
+                         X=X, y=y)
+
+
+class BaseSearchCVSMAC(BaseSearchCV):
+    """Base class for Bayesian hyper parameter search with cross-validation."""
+
+    def _fit(self, X, y, groups, parameter_iterable):
+        """Actual fitting,  performing the search over parameters."""
+
         regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
         isclassifier =\
             not any(clf in regressors for clf in self.param_distributions['classifiers'])
