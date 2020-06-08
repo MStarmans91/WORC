@@ -22,7 +22,7 @@ import os
 import time
 from time import gmtime, strftime
 from sklearn.model_selection import train_test_split
-from .parameter_optimization import random_search_parameters
+from .parameter_optimization import random_search_parameters, guided_search_parameters
 import WORC.addexceptions as ae
 from WORC.classification.regressors import regressors
 
@@ -306,7 +306,15 @@ def crossval(config, label_data, image_features,
             config['HyperOptimization']['use_fastr'] = use_fastr
             config['HyperOptimization']['fastr_plugin'] = fastr_plugin
             n_cores = config['General']['Joblib_ncores']
-            trained_classifier = random_search_parameters(features=X_train,
+            if use_SMAC:
+                trained_classifier = guided_search_parameters(features=X_train,
+                                                          labels=Y_train,
+                                                          parameters=config,
+                                                          n_cores=n_cores,
+                                                          random_seed=random_seed,
+                                                          **config['HyperOptimization'])
+            else:
+                trained_classifier = random_search_parameters(features=X_train,
                                                           labels=Y_train,
                                                           param_grid=param_grid,
                                                           n_cores=n_cores,

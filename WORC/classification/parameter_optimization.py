@@ -71,14 +71,14 @@ def random_search_parameters(features, labels, N_iter, test_size,
     if use_fastr:
         if use_SMAC:
             random_search = GuidedSearchCVSMAC(param_distributions=param_grid,
-                                                    n_iter=N_iter,
-                                                    scoring=scoring_method,
-                                                    n_jobs=n_cores,
-                                                    n_jobspercore=n_jobspercore,
-                                                    maxlen=maxlen,
-                                                    verbose=1, cv=cv,
-                                                    fastr_plugin=fastr_plugin,
-                                                    ranking_score=ranking_score)
+                                               n_iter=N_iter,
+                                               scoring=scoring_method,
+                                               n_jobs=n_cores,
+                                               n_jobspercore=n_jobspercore,
+                                               maxlen=maxlen,
+                                               verbose=1, cv=cv,
+                                               fastr_plugin=fastr_plugin,
+                                               ranking_score=ranking_score)
         else:
             random_search = RandomizedSearchCVfastr(param_distributions=param_grid,
                                                     n_iter=N_iter,
@@ -107,3 +107,71 @@ def random_search_parameters(features, labels, N_iter, test_size,
     print(random_search.best_score_)
 
     return random_search
+
+
+def guided_search_parameters(features, labels, N_iter, test_size,
+                             parameters, scoring_method, n_splits=5,
+                             n_jobspercore=200, use_fastr=False,
+                             use_SMAC=False, n_cores=1, fastr_plugin=None,
+                             maxlen=100, ranking_score='test_score',
+                             random_seed=None):
+    """
+    Train a classifier and simultaneously optimizes hyperparameters using a
+    guided search.
+
+    Arguments:
+        features: numpy array containing the training features.
+        labels: list containing the object labels to be trained on.
+        N_iter: integer listing the number of iterations to be used in the
+                hyperparameter optimization.
+        test_size: float listing the test size percentage used in the cross
+                   validation.
+        classifier: sklearn classifier to be tested
+        param_grid: dictionary containing all possible hyperparameters and their
+                    values or distrubitions.
+        scoring_method: string defining scoring method used in optimization,
+                        e.g. f1_weighted for a SVM.
+        n_jobsperscore: integer listing the number of jobs that are ran on a
+                        single core when using the fastr randomized search.
+        use_fastr: Boolean determining of either fastr or joblib should be used
+                   for the opimization.
+        use_SMAC: Boolean determining whether SMAC should be used for the
+                  hyperparameter optimization, or random search.
+        fastr_plugin: determines which plugin is used for fastr executions.
+                When None, uses the default plugin from the fastr config.
+
+    Returns:
+        random_search: sklearn randomsearch object containing the results.
+    """
+    if random_seed is None:
+        random_seed = np.random.randint(1, 5000)
+    random_state = check_random_state(random_seed)
+
+    regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
+    if any(clf in regressors for clf in parameters['Classification']['classifiers']):
+        # We cannot do a stratified shuffle split with regression
+        cv = ShuffleSplit(n_splits=n_splits, test_size=test_size,
+                          random_state=random_state)
+    else:
+        cv = StratifiedShuffleSplit(n_splits=n_splits, test_size=test_size,
+                                    random_state=random_state)
+
+    # Only use fastr for now
+    guided_search = GuidedSearchCVSMAC(param_distributions=parameters,
+                                       n_iter=N_iter,
+                                       scoring=scoring_method,
+                                       n_jobs=n_cores,
+                                       n_jobspercore=n_jobspercore,
+                                       maxlen=maxlen,
+                                       verbose=1, cv=cv,
+                                       fastr_plugin=fastr_plugin,
+                                       ranking_score=ranking_score)
+
+    guided_search.fit(features, labels)
+    print("Best found parameters:")
+    for i in guided_search.best_params_:
+        print(f'{i}: {guided_search.best_params_[i]}.')
+    print("\n Best score using best parameters:")
+    print(guided_search.best_score_)
+
+    return guided_search
