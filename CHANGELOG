@@ -6,13 +6,29 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-3.1.4 - Unreleased
+3.1.5 - Unreleased
+------------------
+
+Added
+~~~~~~~
+
+Changed
+~~~~~~~
+
+
+Fixed
+~~~~~
+- Cardinality of decomposition tool was incorrect.
+- Work on ComBat integration in WORC network.
+
+
+3.1.4 - 2020-05-26
 ------------------
 
 Added
 ~~~~~~~
 - Catch error if number of segmentations supplied does not match number of
-  images. 
+  images.
 - Add support in SimpleWORC and BasicWORC for multiple segmentations per
   patient.
 - Chi2 test in statistical testing.

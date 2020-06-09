@@ -240,7 +240,7 @@ def ComBatPython(dat, batch, mod=None, par=1,
     covars = dict()
     covars['batch'] = batch[0]
     categorical_cols = list()
-    if mod is not None:
+    if mod is not None and mod != []:
         for i_mod in range(mod.shape[1]):
             label = f'mod_{i_mod}'
             covars[label] = [m for m in mod[:, i_mod]]

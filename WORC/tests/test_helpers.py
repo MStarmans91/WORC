@@ -21,12 +21,23 @@ import os
 
 
 def find_exampledatadir():
-    '''
-    Test ComBat feature harmonization.
-    '''
+    """Find WORC example data folder."""
     # Check if example data directory exists
-    example_data_dir = WORCDirectoryDetector().do_detection()
-    if not example_data_dir:
+    base_dir = WORCDirectoryDetector().do_detection()
+    if not base_dir:
         raise WORCValueError('WORC installation directory not detected!')
     else:
-        return os.path.join(example_data_dir, 'exampledata')
+        return os.path.join(base_dir, 'exampledata')
+
+
+def find_testdatadir():
+    """Find WORC test data folder."""
+    # Check if example data directory exists
+    base_dir = WORCDirectoryDetector().do_detection()
+    if not base_dir:
+        raise WORCValueError('WORC installation directory not detected!')
+    else:
+        testdatadir = os.path.join(base_dir, 'test', 'tmp')
+        if not os.path.exists(testdatadir):
+            os.mkdir(testdatadir)
+        return testdatadir
