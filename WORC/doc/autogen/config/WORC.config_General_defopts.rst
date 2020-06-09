@@ -11,5 +11,5 @@ Joblib_ncores                  1                                                
 Joblib_backend                 threading                                               multiprocessing, threading                                                                                    
 tempsave                       False                                                   True, False                                                                                                   
 AssumeSameImageAndMaskMetadata False                                                   True, False                                                                                                   
-ComBat                         False                                                   False                                                                                                         
+ComBat                         False                                                   True, False                                                                                                   
 ============================== ======================================================= ==============================================================================================================

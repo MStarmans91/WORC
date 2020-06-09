@@ -6,7 +6,7 @@ histogram_features      If True, use histogram features in model.
 orientation_features    If True, use orientation features in model.            
 texture_Gabor_features  If True, use Gabor texture features in model.          
 texture_GLCM_features   If True, use GLCM texture features in model.           
-texture_GLDM_features   WIP                                                    
+texture_GLDM_features   If True, use GLDM texture features in model.           
 texture_GLCMMS_features If True, use GLCM Multislice texture features in model.
 texture_GLRLM_features  If True, use GLRLM texture features in model.          
 texture_GLSZM_features  If True, use GLSZM texture features in model.          

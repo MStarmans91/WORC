@@ -223,6 +223,9 @@
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;min_object_size&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="nb">int</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;min_object_size&#39;</span><span class="p">])</span>
 
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">][</span><span class="s1">&#39;AssumeSameImageAndMaskMetadata&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;AssumeSameImageAndMaskMetadata&#39;</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">settings_dict</span></div>
 </pre></div>
 

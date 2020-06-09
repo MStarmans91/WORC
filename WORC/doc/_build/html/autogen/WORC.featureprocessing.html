@@ -111,7 +111,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">featureprocessing Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">featureprocessing</span></code> Package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#combat-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#decomposition-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Decomposition</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Decomposition"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Decomposition</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.FeatureConverter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FeatureConverter</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.ICCThreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ICCThreshold</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Imputer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Imputer</span></code> Module</a></li>
@@ -209,8 +209,37 @@
 <div class="section" id="combat-module">
 <h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module<a class="headerlink" href="#combat-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="decomposition-module">
-<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Decomposition</span></code> Module<a class="headerlink" href="#decomposition-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-WORC.featureprocessing.Decomposition">
+<span id="decomposition-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Decomposition</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.Decomposition" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.featureprocessing.Decomposition.Decomposition">
+<code class="descclassname">WORC.featureprocessing.Decomposition.</code><code class="descname">Decomposition</code><span class="sig-paren">(</span><em>features</em>, <em>patientinfo</em>, <em>config</em>, <em>output</em>, <em>label_type=None</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Decomposition.html#Decomposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Decomposition.Decomposition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform decompositions to two components of the feature space.</p>
+<p>Useage is similar to StatisticalTestFeatures.</p>
+<dl class="simple">
+<dt>features: string, mandatory</dt><dd><p>contains the paths to all .hdf5 feature files used.
+modalityname1=file1,file2,file3,… modalityname2=file1,…
+Thus, modalities names are always between a space and a equal
+sign, files are split by commas. We assume that the lists of
+files for each modality has the same length. Files on the
+same position on each list should belong to the same patient.</p>
+</dd>
+<dt>patientinfo: string, mandatory</dt><dd><p>Contains the path referring to a .txt file containing the
+patient label(s) and value(s) to be used for learning. See
+the Github Wiki for the format.</p>
+</dd>
+<dt>config: string, mandatory</dt><dd><p>path referring to a .ini file containing the parameters
+used for feature extraction. See the Github Wiki for the possible
+fields and their description.</p>
+</dd>
+</dl>
+<p># TODO: outputs</p>
+<dl class="simple">
+<dt>verbose: boolean, default True</dt><dd><p>print final feature values and labels to command line or not.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="module-WORC.featureprocessing.FeatureConverter">
 <span id="featureconverter-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">FeatureConverter</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.FeatureConverter" title="Permalink to this headline">¶</a></h2>

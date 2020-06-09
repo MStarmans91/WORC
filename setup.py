@@ -97,7 +97,7 @@ setup(
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',
-    author='M. Starmans',
+    author='M. P. A. Starmans',
     author_email='m.starmans@erasmusmc.nl',
     license='Apache License, Version 2.0',
     classifiers=[

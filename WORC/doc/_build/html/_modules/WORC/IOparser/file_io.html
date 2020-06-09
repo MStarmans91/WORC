@@ -332,9 +332,9 @@
 
 
 <div class="viewcode-block" id="convert_config_pyradiomics"><a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.convert_config_pyradiomics">[docs]</a><span class="k">def</span> <span class="nf">convert_config_pyradiomics</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert fields from WORC confiparser object to a PyRadiomics compatible dictionary</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Creatae main config structure</span>
     <span class="n">outputconfig</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;imageType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -343,15 +343,27 @@
     <span class="c1"># Take out the specific PyRadiomics values</span>
     <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;geometryTolerance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;geometryTolerance&#39;</span><span class="p">])</span>
 
-    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
     <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;normalizeScale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalizeScale&#39;</span><span class="p">])</span>
 
     <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;interpolator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;interpolator&#39;</span><span class="p">]</span>
 
-    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
     <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
 
-    <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
     <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;force2Ddimension&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2Ddimension&#39;</span><span class="p">])</span>
 
     <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;voxelArrayShift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;voxelArrayShift&#39;</span><span class="p">])</span>

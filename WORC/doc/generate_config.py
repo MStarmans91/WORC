@@ -114,6 +114,7 @@ def generate_config_options():
     config['General']['Joblib_backend'] = 'multiprocessing, threading'
     config['General']['tempsave'] = 'True, False'
     config['General']['AssumeSameImageAndMaskMetadata'] = 'True, False'
+    config['General']['ComBat'] = 'True, False'
 
     # Segmentix
     config['Segmentix'] = dict()
@@ -183,6 +184,33 @@ def generate_config_options():
 
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Integer > 0'
+
+    # Pyradiomics - feature calculation
+    config['PyRadiomics'] = dict()
+    config['PyRadiomics']['geometryTolerance'] = 'Float'
+    config['PyRadiomics']['normalize'] = 'True, False'
+    config['PyRadiomics']['normalizeScale'] = 'Integer'
+    config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
+    config['PyRadiomics']['preCrop'] = 'True, False'
+    config['PyRadiomics']['binCount'] = 'Integer' # BinWidth to sensitive for normalization, thus use binCount
+    config['PyRadiomics']['force2D'] = 'True, False'
+    config['PyRadiomics']['force2Ddimension'] = '0 = axial, 1 = coronal, 2 = sagital'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
+    config['PyRadiomics']['voxelArrayShift'] = 'Integer'
+    config['PyRadiomics']['Original'] = 'True, False'
+    config['PyRadiomics']['Wavelet'] = 'True, False'
+    config['PyRadiomics']['LoG'] = 'True, False'
+    config['PyRadiomics']['label'] = 'Integer'
+
+    # ComBat Feature Harmonization
+    config['ComBat'] = dict()
+    config['ComBat']['language'] = 'python, matlab'
+    config['ComBat']['batch'] = 'String'
+    config['ComBat']['mod'] = 'String(s)'
+    config['ComBat']['par'] = '0 or 1'
+    config['ComBat']['eb'] = '0 or 1'
+    config['ComBat']['per_feature'] = '0 or 1'
+    config['ComBat']['excluded_features'] = 'List of strings, comma separated'
+    config['ComBat']['matlab'] = 'String'
 
     # Feature preprocessing before all below takes place
     config['FeatPreProcess'] = dict()
@@ -307,6 +335,10 @@ def generate_config_options():
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Integer'
 
+    # Evaluation options
+    config['Evaluation'] = dict()
+    config['Evaluation']['OverfitScaler'] = 'True, False'
+
     # Bootstrap options
     config['Bootstrap'] = dict()
     config['Bootstrap']['Use'] = 'Boolean'
@@ -330,6 +362,7 @@ def generate_config_descriptions():
     config['General']['Joblib_backend'] = 'Type of backend to be used by joblib for multicore processing.'
     config['General']['tempsave'] = 'Determines whether after every cross validation iteration the result will be saved, in addition to the result after all iterations. Especially useful for debugging.'
     config['General']['AssumeSameImageAndMaskMetadata'] = 'Make the assumption that the image and mask have the same metadata. If True and there is a mismatch, metadata from the image will be copied to the mask.'
+    config['General']['ComBat'] = 'Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See <https://github.com/Jfortin1/ComBatHarmonization for more information./>`_ .'
 
     # Segmentix
     config['Segmentix'] = dict()
@@ -400,6 +433,33 @@ def generate_config_descriptions():
 
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Radius to determine boundary of between inner part and edge in Frangi vessel filter.'
+
+    # Pyradiomics - feature calculation
+    config['PyRadiomics'] = dict()
+    config['PyRadiomics']['geometryTolerance'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['normalize'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['normalizeScale'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
+    config['PyRadiomics']['preCrop'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['binCount'] = 'We advice to use a fixed bin count instead of a fixed bin width, as on imaging modalities such as MRI, the scale of the values varies a lot, which is incompatible with a fixed bin width. See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['force2D'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['force2Ddimension'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['voxelArrayShift'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['Original'] = 'Enable/Disable computation of original image features.'
+    config['PyRadiomics']['Wavelet'] = 'Enable/Disable computation of wavelet image features.'
+    config['PyRadiomics']['LoG'] = 'Enable/Disable computation of Laplacian of Gaussian (LoG) image features.'
+    config['PyRadiomics']['label'] = '"Intensity" of the pixels in the mask to be used for feature extraction. If using segmentix, use 1, as your mask will be boolean. Otherwise, select the integer(s) corresponding to the ROI in your mask.'
+
+    # ComBat Feature Harmonization
+    config['ComBat'] = dict()
+    config['ComBat']['language'] = 'Name of software implementation to use.'
+    config['ComBat']['batch'] = 'Name of batch variable = variable to correct for.'
+    config['ComBat']['mod'] = 'Name of moderation variable(s) = variables for which variation in features will be "preserverd".'
+    config['ComBat']['par'] = 'Either use the parametric (1) or non-parametric version (0) of ComBat.'
+    config['ComBat']['eb'] = 'Either use the emperical Bayes (1) or simply mean shifting version (0) of ComBat.'
+    config['ComBat']['per_feature'] = 'Either use ComBat for all features combined (0) or per feature (1), in which case a second feature equal to the single feature plus random noise will be added if eb=1'
+    config['ComBat']['excluded_features'] = 'Provide substrings of feature labels of features which should be excluded from ComBat. Recommended to use for features unaffected by the batch variable.'
+    config['ComBat']['matlab'] = 'If using Matlab, path to Matlab executable.'
 
     # Feature preprocessing before all below takes place
     config['FeatPreProcess'] = dict()
@@ -518,6 +578,10 @@ def generate_config_descriptions():
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.'
+
+    # Evaluation options
+    config['Evaluation'] = dict()
+    config['Evaluation']['OverfitScaler'] = 'Wheter to fit a separate scaler on the test set (=overfitting) or use scaler on training dataset. Only used for experimental purposes: never overfit your scaler for the actual performance evaluation.'
 
     # Bootstrap options
     config['Bootstrap'] = dict()
