@@ -11,6 +11,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+# Mock imports to eliminate some issues with C-extensions
+autodoc_mock_imports = ['radiomics', 'pyradiomics']
+
+
 from collections import namedtuple
 import os
 import sys

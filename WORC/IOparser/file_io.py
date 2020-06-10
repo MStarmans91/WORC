@@ -108,7 +108,7 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
                 label_data, image_features =\
                     lp.findlabeldata(patientinfo,
                                      label_names,
-                                     pids=pfiles,
+                                     pids=pids,
                                      image_features_temp=image_features)
             else:
                 label_data, image_features =\
