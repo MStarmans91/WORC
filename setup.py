@@ -35,7 +35,7 @@ with open('requirements-setup.txt', 'r') as fp:
 
 # Remove c-dependent libraries from requirements to get install_requires
 remove_elements = ['PREDICT']
-install_requires = [i for i in _requires if not any(l in i for l in remove_elements)
+install_requires = [i for i in _requires if not any(l in i for l in remove_elements)]
 
 def scan_dir(path, prefix=None):
     if prefix is None:

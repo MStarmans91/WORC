@@ -120,7 +120,7 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
                      ensemble=ensemble,
                      output='stats')
 
-    percentages = stats['Percentages']
+    percentages = stats['Rankings']['Percentages']
     ranking = np.argsort(list(percentages.values()))
     ranked_percentages_temp = [list(percentages.values())[r] for r in ranking]
     ranked_PIDs = [list(percentages.keys())[r] for r in ranking]
