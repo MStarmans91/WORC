@@ -109,13 +109,13 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
                     lp.findlabeldata(patientinfo,
                                      label_names,
                                      pids=pids,
-                                     image_features_temp=image_features)
+                                     objects=image_features)
             else:
                 label_data, image_features =\
                     lp.findlabeldata(patientinfo,
                                      label_names,
                                      filenames=pfiles,
-                                     image_features_temp=image_features)
+                                     objects=image_features)
         except ValueError as e:
             message = str(e) + '. Please take a look at your labels' +\
                 ' file and make sure it is formatted correctly. ' +\

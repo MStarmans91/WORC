@@ -12,7 +12,7 @@
 # serve to show the default.
 
 # Mock imports to eliminate some issues with C-extensions
-autodoc_mock_imports = ['radiomics', 'pyradiomics']
+autodoc_mock_imports = ['radiomics', 'pyradiomics', 'PREDICT']
 
 
 from collections import namedtuple

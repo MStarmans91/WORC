@@ -156,12 +156,12 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
         lp.findlabeldata(pinfo,
                          [label_type],
                          images,
-                         images)
+                         objects=images)
     _, segmentations =\
         lp.findlabeldata(pinfo,
                          [label_type],
                          segmentations,
-                         segmentations)
+                         objects=segmentations)
 
     PIDs_images = label_data['patient_IDs'].tolist()
     PIDs_images = [i.lower() for i in PIDs_images]

@@ -203,8 +203,8 @@ def load_label_XNAT(label_info):
     return label_names, patient_ID, label_status
 
 
-def findlabeldata(patientinfo, label_type, filenames=None, pids=None,
-                  image_features_temp=None):
+def findlabeldata(patientinfo, label_type, filenames=None,
+                  objects_temp=None, pids=None):
     """
     Load the label data and match to the unage features.
 
@@ -212,7 +212,7 @@ def findlabeldata(patientinfo, label_type, filenames=None, pids=None,
         patientinfo (string): file with patient label data
         label_type (string): name of the label read out from patientinfo
         filenames (list): names of the patient feature files, used for matching
-        image_features (np.array or list): array of the features
+        objects (np.array or list): array of objects you want to order as well
 
     Returns:
         label_data (dict): contains patient ids, their labels and the label name
@@ -233,7 +233,7 @@ def findlabeldata(patientinfo, label_type, filenames=None, pids=None,
     else:
         raise ae.WORCValueError('Either input pids or filenames for label matching!')
 
-    image_features = list()
+    objects = list()
     for i_feat, feat in enumerate(iterator):
         ifound = 0
         matches = list()
@@ -245,8 +245,8 @@ def findlabeldata(patientinfo, label_type, filenames=None, pids=None,
                 matches.append(i_patient)
 
                 # If there are feature files given, add it to the list
-                if image_features_temp is not None:
-                    image_features.append(image_features_temp[i_feat])
+                if objects_temp is not None:
+                    objects.append(objects_temp[i_feat])
 
                 # For each label that we have, add the value to the label list
                 for i_len in range(len(label_data_temp['label_name'])):
@@ -271,7 +271,7 @@ def findlabeldata(patientinfo, label_type, filenames=None, pids=None,
     label_data['label'] = np.asarray(label_value)
     label_data['label_name'] = label_data_temp['label_name']
 
-    return label_data, image_features
+    return label_data, objects
 
 
 def load_config_XNAT(config_file_path):
