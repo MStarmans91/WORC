@@ -203,7 +203,7 @@ def load_label_XNAT(label_info):
     return label_names, patient_ID, label_status
 
 
-def findlabeldata(patientinfo, label_type, filenames,
+def findlabeldata(patientinfo, label_type, filenames=None, pids=None,
                   image_features_temp=None):
     """
     Load the label data and match to the unage features.
@@ -225,9 +225,16 @@ def findlabeldata(patientinfo, label_type, filenames,
     for i_len in range(len(label_data_temp['label_name'])):
         label_value.append(list())
 
-    # Check per feature file if there is a match in the label data
+    # Check per feature file / pid if there is a match in the label data
+    if filenames:
+        iterator = filenames
+    elif pids:
+        iterator = pids
+    else:
+        raise ae.WORCValueError('Either input pids or filenames for label matching!')
+
     image_features = list()
-    for i_feat, feat in enumerate(filenames):
+    for i_feat, feat in enumerate(iterator):
         ifound = 0
         matches = list()
         for i_num, i_patient in enumerate(label_data_temp['patient_IDs']):
@@ -255,9 +262,6 @@ def findlabeldata(patientinfo, label_type, filenames,
         elif ifound == 0:
             message = ('No entry found in labeling for feature file {}.').format(str(feat))
             raise ae.WORCKeyError(message)
-
-    # if image_features_temp is not None:
-    #     image_features = np.asarray(image_features)
 
     # Convert to arrays
     for i_len in range(len(label_value)):

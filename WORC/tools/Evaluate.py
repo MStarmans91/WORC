@@ -298,21 +298,39 @@ class Evaluate(object):
             # NOTE: Currently statistical testing is only done within the training set
             if self.parent.sources_images_train:
                 # Features are computed within the network
-                for node in self.parent.featureconverter_train[label]:
-                    name = node.id
+                if self.parent.configs[0]['General']['ComBat'] == 'True':
+                    name = 'ComBat'
+                    # Take features from ComBat
                     self.links_STest_Features[name] =\
-                        self.node_STest.inputs['features'][name] << node.outputs['feat_out']
+                        self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_STest.inputs['features'])
 
                     self.links_decomposition_Features[name] =\
-                        self.node_decomposition.inputs['features'][name] << node.outputs['feat_out']
+                        self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_decomposition.inputs['features'])
 
                     self.links_Boxplots_Features[name] =\
-                        self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
+                        self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_Boxplots_Features.inputs['features'])
 
                     # All features should be input at once
-                    self.links_STest_Features[name].collapse = 'train'
-                    self.links_decomposition_Features[name].collapse = 'train'
-                    self.links_Boxplots_Features[name].collapse = 'train'
+                    self.links_STest_Features[name].collapse = 'ComBat'
+                    self.links_decomposition_Features[name].collapse = 'ComBat'
+                    self.links_Boxplots_Features[name].collapse = 'ComBat'
+                else:
+                    # Take features directly from feature computation toolboxes
+                    for node in self.parent.featureconverter_train[label]:
+                        name = node.id
+                        self.links_STest_Features[name] =\
+                            self.node_STest.inputs['features'][name] << node.outputs['feat_out']
+
+                        self.links_decomposition_Features[name] =\
+                            self.node_decomposition.inputs['features'][name] << node.outputs['feat_out']
+
+                        self.links_Boxplots_Features[name] =\
+                            self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
+
+                        # All features should be input at once
+                        self.links_STest_Features[name].collapse = 'train'
+                        self.links_decomposition_Features[name].collapse = 'train'
+                        self.links_Boxplots_Features[name].collapse = 'train'
             else:
                 # Feature are precomputed and given as sources
                 for node in self.parent.sources_features_train[label]:

@@ -49,6 +49,7 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
     # Read out all feature values and labels
     image_features_temp = list()
     feature_labels_all = list()
+    pids = list()
     for i_patient in range(0, len(featurefiles[0])):
         feature_values_temp = list()
         feature_labels_temp = list()
@@ -66,6 +67,19 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
 
         # Also make a list of all unique label names
         feature_labels_all = feature_labels_all + list(set(feature_labels_temp) - set(feature_labels_all))
+
+        # If PID in feature file, use those
+        if 'patient' in list(feat_temp.keys()):
+            pids.append(feat_temp.patient)
+
+    # Check when we found patient ID's, if we did for all objects
+    if pids:
+        if len(pids) != len(image_features_temp):
+            raise WORCexceptions.WORCValueError(f'Length of pids {len(pids)}' +
+                                                'does not match' +
+                                                'number of objects ' +
+                                                str(len(image_features_temp)) +
+                                                f'Found {pids}.')
 
     # If some objects miss certain features, we will identify these with NaN values
     feature_labels_all.sort()
@@ -90,11 +104,18 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
         # We use the feature files of the first modality to match to patient name
         pfiles = featurefiles[0]
         try:
-            label_data, image_features =\
-                lp.findlabeldata(patientinfo,
-                                 label_names,
-                                 pfiles,
-                                 image_features)
+            if pids:
+                label_data, image_features =\
+                    lp.findlabeldata(patientinfo,
+                                     label_names,
+                                     pids=pfiles,
+                                     image_features_temp=image_features)
+            else:
+                label_data, image_features =\
+                    lp.findlabeldata(patientinfo,
+                                     label_names,
+                                     filenames=pfiles,
+                                     image_features_temp=image_features)
         except ValueError as e:
             message = str(e) + '. Please take a look at your labels' +\
                 ' file and make sure it is formatted correctly. ' +\

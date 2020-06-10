@@ -861,7 +861,7 @@ class WORC(object):
         self.links_Combat1_test = dict()
 
         # Link Combat output to both sink and classify node
-        self.links_Combat_out_train = self.classify.inputs['features_train']['ComBat'] << self.ComBat.outputs['features_train_out']
+        self.links_Combat_out_train = self.network.create_link(self.ComBat.outputs['features_train_out'], self.classify.inputs['features_train'])
         self.links_Combat_out_train.collapse = 'ComBat'
         self.sinks_features_train_ComBat.input = self.ComBat.outputs['features_train_out']
 
@@ -874,7 +874,7 @@ class WORC(object):
             self.link_combat_3.collapse = 'pctest'
 
             # Link Combat output to both sink and classify node
-            self.links_Combat_out_test = self.classify.inputs['features_test']['ComBat'] << self.ComBat.outputs['features_test_out']
+            self.links_Combat_out_test =  self.network.create_link(self.ComBat.outputs['features_test_out'], self.classify.inputs['features_test'])
             self.links_Combat_out_test.collapse = 'ComBat'
             self.sinks_features_test_ComBat.input = self.ComBat.outputs['features_test_out']
 

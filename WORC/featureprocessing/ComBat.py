@@ -184,6 +184,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                   'par': config['ComBat']['par']}
     name = 'Image features: ComBat corrected'
     panda_labels = ['parameters',
+                    'patient',
                     'feature_values',
                     'feature_labels']
 
@@ -198,7 +199,8 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
             zip(*sorted(zip(feature_labels, feature_values_temp)))
 
         # Convert to pandas Series and save as hdf5
-        panda_data = pd.Series([parameters, feature_values_temp,
+        pid = label_data_train['patient_IDs'][fnum]
+        panda_data = pd.Series([parameters, pid, feature_values_temp,
                                 feature_labels_temp],
                                index=panda_labels,
                                name=name
@@ -219,7 +221,8 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                 zip(*sorted(zip(feature_labels, feature_values_temp)))
 
             # Convert to pandas Series and save as hdf5
-            panda_data = pd.Series([parameters, feature_values_temp,
+            pid = label_data_test['patient_IDs'][fnum]
+            panda_data = pd.Series([parameters, pid, feature_values_temp,
                                     feature_labels_temp],
                                    index=panda_labels,
                                    name=name
