@@ -11,15 +11,18 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 Added
 ~~~~~~~
+- Labelprocessing can now also handle having patient ID in the feature files.
 
 Changed
 ~~~~~~~
-
+- Output of plot_SVM function is better ordered.
 
 Fixed
 ~~~~~
 - Cardinality of decomposition tool was incorrect.
-- Work on ComBat integration in WORC network.
+- Fixed on ComBat integration in WORC network.
+- Documentation didn't build due to C-extension dependencies of PyRadiomics,
+  and thus therefore also PREDICT. Fixed in setup.py and readthedocs files.
 
 
 3.1.4 - 2020-05-26
