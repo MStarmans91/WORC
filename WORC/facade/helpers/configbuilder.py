@@ -64,22 +64,36 @@ class ConfigBuilder():
 
     def coarse_overrides(self):
         overrides = {
+            'General': {
+                # Use only one feature extraction toolbox
+                'FeatureCalculators': '[predict/CalcFeatures:1.0]'
+            },
             'ImageFeatures': {
+                # Extract only a subset of features
                 'texture_Gabor': 'False',
                 'vessel': 'False',
                 'log': 'False',
                 'phase': 'False',
             },
             'SelectFeatGroup': {
+                # No search has to be conducted for excluded features
                 'texture_Gabor_features': 'False',
                 'log_features': 'False',
                 'vessel_features': 'False',
                 'phase_features': 'False',
+                'toolbox': 'PREDICT'
             },
-            'CrossValidation': {'N_iterations': '3'},
+            'CrossValidation': {
+                # Only perform a 3x random-split cross-validation
+                'N_iterations': '3',
+                # Set a fixed seed, so we get the same result every time
+                'fixed_seed': ' True'
+                },
+            # Hyperoptimization is very minimal
             'HyperOptimization': {'n_splits': '2',
                                   'N_iterations': '1000',
                                   'n_jobspercore': '500'},
+            # No ensembling
             'Ensemble': {'Use': '1'}
         }
         self.custom_config_overrides(overrides)
