@@ -214,8 +214,6 @@ class SimpleWORC():
 
         if coarse:
             self._config_builder.coarse_overrides()
-        else:
-            self._config_builder.full_overrides()
 
         self._method = method
 

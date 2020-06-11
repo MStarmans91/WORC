@@ -216,7 +216,7 @@ class WORC(object):
         config['ImageFeatures']['shape'] = 'True'
         config['ImageFeatures']['histogram'] = 'True'
         config['ImageFeatures']['orientation'] = 'True'
-        config['ImageFeatures']['texture_Gabor'] = 'False'
+        config['ImageFeatures']['texture_Gabor'] = 'True'
         config['ImageFeatures']['texture_LBP'] = 'True'
         config['ImageFeatures']['texture_GLCM'] = 'True'
         config['ImageFeatures']['texture_GLCMMS'] = 'True'
@@ -224,9 +224,9 @@ class WORC(object):
         config['ImageFeatures']['texture_GLSZM'] = 'False'
         config['ImageFeatures']['texture_NGTDM'] = 'False'
         config['ImageFeatures']['coliage'] = 'False'
-        config['ImageFeatures']['vessel'] = 'False'
-        config['ImageFeatures']['log'] = 'False'
-        config['ImageFeatures']['phase'] = 'False'
+        config['ImageFeatures']['vessel'] = 'True'
+        config['ImageFeatures']['log'] = 'True'
+        config['ImageFeatures']['phase'] = 'True'
 
         # Parameter settings for PREDICT feature calculation
         # Defines only naming of modalities
@@ -332,11 +332,11 @@ class WORC(object):
         config['SelectFeatGroup']['patient_features'] = 'False'
         config['SelectFeatGroup']['semantic_features'] = 'False'
         config['SelectFeatGroup']['coliage_features'] = 'False'
-        config['SelectFeatGroup']['vessel_features'] = 'False'
-        config['SelectFeatGroup']['phase_features'] = 'False'
-        config['SelectFeatGroup']['fractal_features'] = 'False'
-        config['SelectFeatGroup']['location_features'] = 'False'
-        config['SelectFeatGroup']['rgrd_features'] = 'False'
+        config['SelectFeatGroup']['vessel_features'] = 'True, False'
+        config['SelectFeatGroup']['phase_features'] = 'True, False'
+        config['SelectFeatGroup']['fractal_features'] = 'True, False'
+        config['SelectFeatGroup']['location_features'] = 'True, False'
+        config['SelectFeatGroup']['rgrd_features'] = 'True, False'
 
         # Select features per toolbox, or simply all
         config['SelectFeatGroup']['toolbox'] = 'All, PREDICT, PyRadiomics'
@@ -1452,6 +1452,7 @@ class WORC(object):
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.sink_data['features_test_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):

@@ -17,6 +17,9 @@ Added
 Changed
 ~~~~~~~
 - Output of plot_SVM function is better ordered.
+- Several defaults, as we now have PyRadiomics fully embedded, resulting in
+  a large increase in features.
+- No more overrides for the full config, as the default now is the full config.
 
 Fixed
 ~~~~~
@@ -24,6 +27,7 @@ Fixed
 - ComBat integration in WORC network now works properly.
 - Documentation didn't build due to C-extension dependencies of PyRadiomics,
   and thus therefore also PREDICT. Fixed in setup.py and readthedocs files.
+- Documentation building.
 
 
 3.1.4 - 2020-05-26
