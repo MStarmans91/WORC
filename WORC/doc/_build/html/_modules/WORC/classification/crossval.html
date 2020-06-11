@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -84,6 +84,17 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
 </ul>
 
@@ -170,11 +181,11 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">gmtime</span><span class="p">,</span> <span class="n">strftime</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">.parameter_optimization</span> <span class="k">import</span> <span class="n">random_search_parameters</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">gmtime</span><span class="p">,</span> <span class="n">strftime</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">.parameter_optimization</span> <span class="kn">import</span> <span class="n">random_search_parameters</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.regressors</span> <span class="k">import</span> <span class="n">regressors</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.regressors</span> <span class="kn">import</span> <span class="n">regressors</span>
 
 
 <div class="viewcode-block" id="crossval"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.crossval">[docs]</a><span class="k">def</span> <span class="nf">crossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span><span class="p">,</span>
@@ -309,8 +320,8 @@
             <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;Cross validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">N_iterations</span><span class="p">)))</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">((</span><span class="s1">&#39;Cross validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">N_iterations</span><span class="p">)))</span>
             <span class="n">timestamp</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span> <span class="n">gmtime</span><span class="p">())</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{timestamp}</span><span class="s1">.&#39;</span><span class="p">)</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{timestamp}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">fixed_seed</span><span class="p">:</span>
                 <span class="n">random_seed</span> <span class="o">=</span> <span class="n">i</span><span class="o">**</span><span class="mi">2</span>
             <span class="k">else</span><span class="p">:</span>
@@ -495,8 +506,8 @@
 
             <span class="c1"># Print elapsed time</span>
             <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{elapsed}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{elapsed}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{</span><span class="n">elapsed</span><span class="si">}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{</span><span class="n">elapsed</span><span class="si">}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
 
         <span class="p">[</span><span class="n">classifiers</span><span class="p">,</span> <span class="n">X_train_set</span><span class="p">,</span> <span class="n">X_test_set</span><span class="p">,</span> <span class="n">Y_train_set</span><span class="p">,</span> <span class="n">Y_test_set</span><span class="p">,</span>
          <span class="n">patient_ID_train_set</span><span class="p">,</span> <span class="n">patient_ID_test_set</span><span class="p">,</span> <span class="n">seed_set</span><span class="p">]</span> <span class="o">=</span>\
