@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.tools.Evaluate &mdash; WORC 3.1.4 documentation</title>
+  <title>WORC.tools.Evaluate &mdash; WORC 3.1.5 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.4
+                3.1.5
               </div>
             
           
@@ -84,17 +84,6 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/facades.html">Facades</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
 </ul>
 
@@ -459,21 +448,39 @@
             <span class="c1"># NOTE: Currently statistical testing is only done within the training set</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sources_images_train</span><span class="p">:</span>
                 <span class="c1"># Features are computed within the network</span>
-                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">]:</span>
-                    <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">id</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
+                    <span class="c1"># Take features from ComBat</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                        <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
 
                     <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                        <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
 
                     <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                        <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
 
                     <span class="c1"># All features should be input at once</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Take features directly from feature computation toolboxes</span>
+                    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">]:</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">id</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                            <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
+
+                        <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                            <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
+
+                        <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                            <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
+
+                        <span class="c1"># All features should be input at once</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Feature are precomputed and given as sources</span>
                 <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sources_features_train</span><span class="p">[</span><span class="n">label</span><span class="p">]:</span>

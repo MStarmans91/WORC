@@ -33,10 +33,6 @@ with open('test_requirements.txt', 'r') as fh:
 with open('requirements-setup.txt', 'r') as fp:
     setup_requirements = list(filter(bool, (line.strip() for line in fp)))
 
-# Remove c-dependent libraries from requirements to get install_requires
-remove_elements = ['PREDICT']
-install_requires = [i for i in _requires if not any(l in i for l in remove_elements)]
-
 def scan_dir(path, prefix=None):
     if prefix is None:
         prefix = path
@@ -96,7 +92,7 @@ class NoseTestCommand(TestCommand):
 
 setup(
     name='WORC',
-    version='3.1.4',
+    version='3.1.5',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',
@@ -134,7 +130,7 @@ setup(
                   # If any package contains *.ini files, include them
                   'src': ['IOparser/*.ini']},
     # data_files=[(config_d, [worc_config])],
-    install_requires=install_requires,
+    install_requires=_requires,
     tests_require=_tests_require,
     test_suite='nose.collector',
     cmdclass={'test': NoseTestCommand},

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>processing Package &mdash; WORC 3.1.4 documentation</title>
+  <title>processing Package &mdash; WORC 3.1.5 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.4
+                3.1.5
               </div>
             
           
@@ -85,18 +85,7 @@
               
             
             
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="../static/introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/facades.html">Facades</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
-</ul>
-<ul class="current">
+              <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="WORC.html">WORC Package</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="WORC.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a></li>
@@ -262,13 +251,13 @@ numberToExtract: number of blobs to extract (integer).</p>
 <span id="label-processing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module<a class="headerlink" href="#module-WORC.processing.label_processing" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.processing.label_processing.findlabeldata">
-<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">findlabeldata</code><span class="sig-paren">(</span><em>patientinfo</em>, <em>label_type</em>, <em>filenames</em>, <em>image_features_temp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#findlabeldata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.findlabeldata" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">findlabeldata</code><span class="sig-paren">(</span><em>patientinfo</em>, <em>label_type</em>, <em>filenames=None</em>, <em>objects=None</em>, <em>pids=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#findlabeldata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.findlabeldata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the label data and match to the unage features.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>patientinfo (string): file with patient label data
 label_type (string): name of the label read out from patientinfo
 filenames (list): names of the patient feature files, used for matching
-image_features (np.array or list): array of the features</p>
+objects (np.array or list): array of objects you want to order as well</p>
 </dd>
 <dt>Returns:</dt><dd><p>label_data (dict): contains patient ids, their labels and the label name</p>
 </dd>

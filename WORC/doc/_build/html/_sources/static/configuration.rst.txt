@@ -181,6 +181,21 @@ https://github.com/Jfortin1/ComBatHarmonization.
 .. include:: ../autogen/config/WORC.config_ComBat_defopts.rst
 
 
+.. _config-FeatPreProcess:
+FeatPreProcess
+~~~~~~~~~~~~~
+Before the features are given to the classification function, and thus the
+hyperoptimization, these can be preprocessed as following.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_FeatPreProcess_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_FeatPreProcess_defopts.rst
+
+
 .. _config-Featsel:
 Featsel
 ~~~~~~~
@@ -376,6 +391,20 @@ performing workflow.
 **Defaults and Options:**
 
 .. include:: ../autogen/config/WORC.config_Ensemble_defopts.rst
+
+
+.. _config-Evaluation:
+Evaluation
+~~~~~~~~
+In the evaluation of the performance, several adjustments can be made.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_Evaluation_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Evaluation_defopts.rst
 
 
 .. _config-Bootstrap:

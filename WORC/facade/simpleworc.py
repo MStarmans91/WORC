@@ -339,7 +339,7 @@ class SimpleWORC():
 
     def set_multicore_execution(self):
         self._worc.fastr_plugin = 'ProcessPoolExecution'
-        self._config_builder.custom_config_overrides['Classification']['fastr_plugin'] = 'ProcessPoolExecution'
+        self.add_config_overrides({'Classification': {'fastr_plugin': 'ProcessPoolExecution'}})
 
     def features_from_radiomix_xlsx(self, feature_file):
         self._radiomix_feature_file = feature_file

@@ -1,4 +1,4 @@
-WORC v3.1.4
+WORC v3.1.5
 ===========
 
 Workflow for Optimal Radiomics Classification
@@ -114,7 +114,8 @@ License
 This package is covered by the open source `APACHE 2.0
 License <APACHE-LICENSE-2.0>`__.
 
-When using WORC, please cite this repository.
+When using WORC, please cite this repository using the following DOI:
+|DOI|
 
 Contact
 -------
@@ -183,3 +184,5 @@ to input them on every request.
    :target: https://worc.readthedocs.io/en/latest/?badge=latest
 .. |image3| image:: https://badge.fury.io/py/WORC.svg
    :target: https://badge.fury.io/py/WORC
+.. |DOI| image:: https://zenodo.org/badge/92295542.svg
+   :target: https://zenodo.org/badge/latestdoi/92295542
