@@ -501,7 +501,7 @@ class WORC(object):
                 self.link_class_1.collapse = 'conf'
                 self.link_class_2.collapse = 'pctrain'
 
-
+                if self.TrainTest:
                     # FIXME: the naming here is ugly
                     self.link_class_3 = self.network.create_link(self.source_patientclass_test.output, self.classify.inputs['patientclass_test'])
                     self.link_class_3.collapse = 'pctest'
