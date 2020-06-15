@@ -165,7 +165,9 @@ def guided_search_parameters(features, labels, N_iter, test_size,
                                        maxlen=maxlen,
                                        verbose=1, cv=cv,
                                        fastr_plugin=fastr_plugin,
-                                       ranking_score=ranking_score)
+                                       ranking_score=ranking_score,
+                                       features=features,
+                                       labels=labels)
 
     guided_search.fit(features, labels)
     print("Best found parameters:")

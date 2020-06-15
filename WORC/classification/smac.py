@@ -19,9 +19,7 @@ from ConfigSpace.conditions import InCondition
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, \
     UniformFloatHyperparameter, UniformIntegerHyperparameter
 from smac.configspace import ConfigurationSpace
-from smac.scenario.scenario import Scenario
-from smac.facade.smac_hpo_facade import SMAC4HPO
-from sklearn.model_selection import cross_val_score
+from WORC.classification.fitandscore import fit_and_score
 
 
 def build_smac_config(parameters):
@@ -41,15 +39,15 @@ def build_smac_config(parameters):
     cs = ConfigurationSpace()
 
     # The first argument to parse is the choice of classifier
-    classifier = CategoricalHyperparameter('classifier',
+    classifier = CategoricalHyperparameter('classifiers',
                                            choices=['SVM', 'RF'])
     cs.add_hyperparameter(classifier)
 
     # SVM (5 hyperparameters)
     # kernel and C are directly conditional on the SVM choice
-    kernel = CategoricalHyperparameter('kernel',
+    kernel = CategoricalHyperparameter('SVMKernel',
                                        choices=parameters['Classification']['SVMKernel'])
-    C = UniformFloatHyperparameter('C',
+    C = UniformFloatHyperparameter('SVMC',
                                    lower=0.001,
                                    upper=1000,
                                    log=True)
@@ -59,14 +57,14 @@ def build_smac_config(parameters):
                        InCondition(child=C, parent=classifier, values=['SVM'])])
 
     # degree, coef0 and gamma are conditional on the kernel choice
-    degree = UniformIntegerHyperparameter('degree',
+    degree = UniformIntegerHyperparameter('SVMdegree',
                                           lower=parameters['Classification']['SVMdegree'][0],
                                           upper=parameters['Classification']['SVMdegree'][0] + \
                                                 parameters['Classification']['SVMdegree'][1])
-    coef0 = UniformFloatHyperparameter('coef0',
+    coef0 = UniformFloatHyperparameter('SVMcoef0',
                                        lower=parameters['Classification']['SVMcoef0'][0],
                                        upper=parameters['Classification']['SVMcoef0'][1])
-    gamma = UniformFloatHyperparameter('gamma',
+    gamma = UniformFloatHyperparameter('SVMgamma',
                                        lower=0.001,
                                        upper=10,
                                        log=True)
@@ -76,13 +74,13 @@ def build_smac_config(parameters):
                        InCondition(child=gamma, parent=kernel, values=['poly', 'rbf'])])
 
     # RF (3 hyperparameters)
-    n_estimators = UniformIntegerHyperparameter('n_estimators',
+    n_estimators = UniformIntegerHyperparameter('RFn_estimators',
                                                 lower=10,
                                                 upper=100)
-    max_depth = UniformIntegerHyperparameter('max_depth',
+    max_depth = UniformIntegerHyperparameter('RFmax_depth',
                                              lower=5,
                                              upper=10)
-    min_samples_split = UniformIntegerHyperparameter('min_samples_split',
+    min_samples_split = UniformIntegerHyperparameter('RFmin_samples_split',
                                                      lower=2,
                                                      upper=5)
     cs.add_hyperparameters([n_estimators, max_depth, min_samples_split])
@@ -91,3 +89,6 @@ def build_smac_config(parameters):
                        InCondition(child=min_samples_split, parent=classifier, values=['RF'])])
 
     return cs
+
+
+

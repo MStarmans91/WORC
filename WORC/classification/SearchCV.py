@@ -58,6 +58,11 @@ from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.featureprocessing.Preprocessor import Preprocessor
 
+# Imports used in the Bayesian optimization
+from WORC.classification.smac import build_smac_config
+from smac.scenario.scenario import Scenario
+from smac.facade.smac_hpo_facade import SMAC4HPO
+
 
 def rms_score(truth, prediction):
     ''' Root-mean-square-error metric'''
@@ -2600,39 +2605,69 @@ class GridSearchCVJoblib(BaseSearchCVJoblib):
 class BaseSearchCVSMAC(BaseSearchCV):
     """Base class for Bayesian hyper parameter search with cross-validation."""
 
-    def _fit(self, X, y, groups, parameter_iterable):
+    def _fit(self, X, y, groups, parameters):
         """Actual fitting,  performing the search over parameters."""
 
-        # Added to gain understanding (printing doesn't work)
-        f = open('/home/mitchell/right_function_call.txt', 'a')
-        f.write('Well done, you called the right function.')
-
         regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
-        isclassifier =\
-            not any(clf in regressors for clf in self.param_distributions['classifiers'])
+        isclassifier = \
+            not any(clf in regressors for clf in self.param_distributions['Classification']['classifiers'])
 
         cv = check_cv(self.cv, y, classifier=isclassifier)
 
-        X, y, groups = indexable(X, y, groups)
-        n_splits = cv.get_n_splits(X, y, groups)
-        if self.verbose > 0 and isinstance(parameter_iterable, Sized):
-            n_candidates = len(parameter_iterable)
-            print(f"Fitting {n_splits} folds for each of {n_candidates} candidates, totalling {n_candidates * n_splits} fits.")
+        self.features, self.labels, groups = indexable(self.features, self.labels, groups)
+        n_splits = cv.get_n_splits(self.features, self.labels, groups)
+        if self.verbose > 0 and isinstance(parameters, Sized):
+            n_candidates = len(parameters)
+            print(f"Fitting {n_splits} folds for each of {n_candidates}" + \
+                  " candidates, totalling" + \
+                  " {n_candidates * n_splits} fits")
 
-        cv_iter = list(cv.split(X, y, groups))
-        name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
-        tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
-        if not os.path.exists(tempfolder):
-            os.makedirs(tempfolder)
+        pre_dispatch = self.pre_dispatch
+        cv_iter = list(cv.split(self.features, self.labels, groups))
 
-        # Draw parameter sample
-        for num, parameters in enumerate(parameter_iterable):
-            parameter_sample = parameters
+        print_n_splits = open('/home/mitchell/print_n_splits.txt', 'a')
+        print_n_splits.write('n_splits: ' + str(n_splits) + ' ')
+        print_n_splits.write(str(cv_iter))
+
+
+        # Build the SMAC configuration
+        cs = build_smac_config(parameters)
+        
+        # Create the Scenario object to define the optimization settings
+        scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
+                             "runcount-limit": 10, # max. number of function evaluations;
+                             "cs": cs,
+                             "deterministic": "true"
+                             })
+
+        # Do one cv split
+        for train, test in cv_iter:
+            self.train = train
+            self.test = test
             break
 
+        # Run the optimization
+        smac = SMAC4HPO(scenario=scenario, rng=self.random_state,
+                        tae_runner=self._score_cfg)
+
+        opt_config = smac.optimize()
+        opt_value_print = open('/home/mitchell/opt_value.txt', 'a')
+        opt_value_print.write(str(opt_config))
+        opt_value_print.write(str(self._score_cfg(opt_config)))
+
+        best_parameters = opt_config.get_dictionary()
+        best_parameters['random_seed'] = self.random_state
+        best_parameters['max_iter'] = 1000
+        best_parameters['FeatPreProcess'] = False
+        best_parameters['Featsel_Variance'] = False
+
+
+        # Skip the preprocessing for now, by setting FeatPreProcess
+        # always to False. Next section is not accurate at this point.
+
         # Preprocess features if required
-        if 'FeatPreProcess' in parameter_sample:
-            if parameter_sample['FeatPreProcess'] == 'True':
+        if 'FeatPreProcess' in best_parameters:
+            if best_parameters['FeatPreProcess'] == 'True':
                 print("Preprocessing features.")
                 feature_values = np.asarray([x[0] for x in X])
                 feature_labels = np.asarray([x[1] for x in X])
@@ -2642,153 +2677,38 @@ class BaseSearchCVSMAC(BaseSearchCV):
                 feature_labels = preprocessor.transform(feature_labels)
                 X = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
 
-        # Create the parameter files
-        parameters_temp = dict()
-        try:
-            for num, parameters in enumerate(parameter_iterable):
-                parameters["Number"] = str(num)
-                parameters_temp[str(num)] = parameters
-
-        except ValueError:
-            # One of the parameters gives an error. Find out which one.
-            param_grid = dict()
-            for k, v in parameter_iterable.param_distributions.iteritems():
-                param_grid[k] = v
-                sampled_params = ParameterSampler(param_grid, 5)
-                try:
-                    for num, parameters in enumerate(sampled_params):
-                        a = 1
-                except ValueError:
-                    break
-
-            message = 'One or more of the values in your parameter sampler ' +\
-                      'is either not iterable, or the distribution cannot ' +\
-                      'generate valid samples. Please check your  ' +\
-                      f' parameters. At least {k} gives an error.'
-            raise WORCexceptions.WORCValueError(message)
-
-        # Split the parameters files in equal parts
-        keys = list(parameters_temp.keys())
-        keys = chunks(keys, self.n_jobspercore)
-        parameter_files = dict()
-        for num, k in enumerate(keys):
-            temp_dict = dict()
-            for number in k:
-                temp_dict[number] = parameters_temp[number]
-
-            fname = f'settings_{num}.json'
-            sourcename = os.path.join(tempfolder, 'parameters', fname)
-            if not os.path.exists(os.path.dirname(sourcename)):
-                os.makedirs(os.path.dirname(sourcename))
-            with open(sourcename, 'w') as fp:
-                json.dump(temp_dict, fp, indent=4)
-
-            parameter_files[str(num)] =\
-                f'vfs://tmp/GS/{name}/parameters/{fname}'
-
-        # Create test-train splits
-        traintest_files = dict()
-        # TODO: ugly nummering solution
-        num = 0
-        for train, test in cv_iter:
-            source_labels = ['train', 'test']
-
-            source_data = pd.Series([train, test],
-                                    index=source_labels,
-                                    name='Train-test data')
-
-            fname = f'traintest_{num}.hdf5'
-            sourcename = os.path.join(tempfolder, 'traintest', fname)
-            if not os.path.exists(os.path.dirname(sourcename)):
-                os.makedirs(os.path.dirname(sourcename))
-            traintest_files[str(num)] = f'vfs://tmp/GS/{name}/traintest/{fname}'
-
-            sourcelabel = f"Source Data Iteration {num}"
-            source_data.to_hdf(sourcename, sourcelabel)
-
-            num += 1
-
-        # Create the files containing the estimator and settings
-        estimator_labels = ['X', 'y', 'scoring',
-                            'verbose', 'fit_params', 'return_train_score',
-                            'return_n_test_samples',
-                            'return_times', 'return_parameters',
-                            'error_score']
-
-        estimator_data = pd.Series([X, y, self.scoring,
-                                    False,
-                                    self.fit_params, self.return_train_score,
-                                    True, True, True,
-                                    self.error_score],
-                                   index=estimator_labels,
-                                   name='estimator Data')
-        fname = 'estimatordata.hdf5'
-        estimatorname = os.path.join(tempfolder, fname)
-        estimator_data.to_hdf(estimatorname, 'Estimator Data')
-
-        estimatordata = f"vfs://tmp/GS/{name}/{fname}"
-
-        # Create the fastr network
-        network = fastr.create_network('WORC_GridSearch_' + name)
-        estimator_data = network.create_source('HDF5', id='estimator_source')
-        traintest_data = network.create_source('HDF5', id='traintest')
-        parameter_data = network.create_source('JsonFile', id='parameters')
-        sink_output = network.create_sink('HDF5', id='output')
-
-        fitandscore = network.create_node('worc/fitandscore:1.0', tool_version='1.0', id='fitandscore', resources=ResourceLimit(memory='2G'))
-        fitandscore.inputs['estimatordata'].input_group = 'estimator'
-        fitandscore.inputs['traintest'].input_group = 'traintest'
-        fitandscore.inputs['parameters'].input_group = 'parameters'
-
-        fitandscore.inputs['estimatordata'] = estimator_data.output
-        fitandscore.inputs['traintest'] = traintest_data.output
-        fitandscore.inputs['parameters'] = parameter_data.output
-        sink_output.input = fitandscore.outputs['fittedestimator']
-
-        source_data = {'estimator_source': estimatordata,
-                       'traintest': traintest_files,
-                       'parameters': parameter_files}
-        sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
-
-        network.execute(source_data, sink_data,
-                        tmpdir=os.path.join(tempfolder, 'tmp'),
-                        execution_plugin=self.fastr_plugin)
-
-        # Check whether all jobs have finished
-        expected_no_files = len(traintest_files) * len(parameter_files)
-        sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
-        if len(sink_files) != expected_no_files:
-            difference = expected_no_files - len(sink_files)
-            fname = os.path.join(tempfolder, 'tmp')
-            message = ('Fitting classifiers has failed for ' +
-                       f'{difference} / {expected_no_files} files. The temporary ' +
-                       f'results where not deleted and can be found in {tempfolder}. ' +
-                       'Probably your fitting and scoring failed: check out ' +
-                       'the tmp/fitandscore folder within the tempfolder for ' +
-                       'the fastr job temporary results or run: fastr trace ' +
-                       f'"{fname}{os.path.sep}__sink_data__.json" --samples.')
-            raise WORCexceptions.WORCValueError(message)
-
-        # Read in the output data once finished
-        save_data = list()
-        for output in sink_files:
-            data = pd.read_hdf(output)
-            save_data.extend(list(data['RET']))
+        out = Parallel(
+            n_jobs=1, verbose=self.verbose,
+            pre_dispatch=pre_dispatch
+        )(delayed(fit_and_score)(self.features, self.labels, self.scoring,
+                                 train, test, best_parameters,
+                                 fit_params=self.fit_params,
+                                 return_train_score=self.return_train_score,
+                                 return_n_test_samples=True,
+                                 return_times=True, return_parameters=True,
+                                 error_score=self.error_score,
+                                 verbose=False,
+                                 return_all=False)
+          for train, test in cv_iter)
+        save_data = zip(*out)
 
         # if one choose to see train score, "out" will contain train score info
         if self.return_train_score:
             (train_scores, test_scores, test_sample_counts,
-             fit_time, score_time, parameters_est, parameters_all) =\
-              zip(*save_data)
+             fit_time, score_time, parameters_est, parameters_all) = \
+                save_data
         else:
             (test_scores, test_sample_counts,
-             fit_time, score_time, parameters_est, parameters_all) =\
-              zip(*save_data)
-
-        # Remove the temporary folder used
-        shutil.rmtree(tempfolder)
-
-        # Process the results of the fitting procedure
+             fit_time, score_time, parameters_est, parameters_all) = \
+                save_data
+        '''
+        process_fit_input = open('/home/mitchell/fit_input_smac.txt', 'a')
+        process_fit_input.write('n_splits: ' + str(n_splits) + ', parameters_est: ' + str(parameters_est)
+                                + ', parameters_all: ' + str(parameters_all)
+                                + ', test_sample_counts: ' + str(test_sample_counts) + ', test_scores: '
+                                + str(test_scores) + ', train_scores: ' + str(train_scores)
+                                + ', cv_iter: ' + str(cv_iter))
+        '''
         self.process_fit(n_splits=n_splits,
                          parameters_est=parameters_est,
                          parameters_all=parameters_all,
@@ -2799,6 +2719,35 @@ class BaseSearchCVSMAC(BaseSearchCV):
                          score_time=score_time,
                          cv_iter=cv_iter,
                          X=X, y=y)
+
+        return self
+
+    def _score_cfg(self, cfg):
+        # Construct a new dictionary with parameters from the input configuration
+        tested_configs = open('/home/mitchell/tested_configs.txt', 'a')
+        tested_configs.write(str(cfg.get_dictionary()) + '\n')
+        # Replace all None-values with default placeholders in the configuration
+        # parameters = {k: cfg[k] for k in cfg if cfg[k]}
+        parameters = cfg.get_dictionary()
+        parameters['random_seed'] = self.random_state
+        parameters['max_iter'] = 1000
+        parameters['FeatPreProcess'] = False
+        parameters['Featsel_Variance'] = False
+
+        ret = fit_and_score(self.features, self.labels, self.scoring,
+                            self.train, self.test, parameters,
+                            fit_params=self.fit_params,
+                            return_train_score=True,
+                            return_n_test_samples=True,
+                            return_times=True, return_parameters=True,
+                            error_score=self.error_score,
+                            verbose=False,
+                            return_all=False)
+
+        score = 1 - ret[1] # We minimize
+        tested_configs.write(str(score) + '\n')
+
+        return score
 
 
 class GuidedSearchCVSMAC(BaseSearchCVSMAC):
@@ -3015,7 +2964,8 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
                  error_score='raise', return_train_score=True,
                  n_jobspercore=100, fastr_plugin=None, maxlen=100,
-                 ranking_score='test_score'):
+                 ranking_score='test_score', features={}, labels={},
+                 train=None, test=None):
         super(GuidedSearchCVSMAC, self).__init__(
              param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
              n_iter=n_iter, random_state=random_state, n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
@@ -3023,6 +2973,10 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
              return_train_score=return_train_score,
              n_jobspercore=n_jobspercore, fastr_plugin=fastr_plugin,
              maxlen=maxlen, ranking_score=ranking_score)
+        self.features = features
+        self.labels = labels
+        self.train = train
+        self.test = test
 
     def fit(self, X, y=None, groups=None):
         """Run fit on the estimator with randomly drawn parameters.
@@ -3042,7 +2996,7 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
             train/test set.
         """
         print("Fit: " + str(self.n_iter))
-        sampled_params = ParameterSampler(self.param_distributions,
-                                          self.n_iter,
-                                          random_state=self.random_state)
-        return self._fit(X, y, groups, sampled_params)
+        #sampled_params = ParameterSampler(self.param_distributions,
+        #                                  self.n_iter,
+        #                                  random_state=self.random_state)
+        return self._fit(X, y, groups, self.param_distributions)
