@@ -2635,7 +2635,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         
         # Create the Scenario object to define the optimization settings
         scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
-                             "runcount-limit": 10, # max. number of function evaluations;
+                             "runcount-limit": 100, # max. number of function evaluations;
                              "cs": cs,
                              "deterministic": "true"
                              })
@@ -2734,17 +2734,27 @@ class BaseSearchCVSMAC(BaseSearchCV):
         parameters['FeatPreProcess'] = False
         parameters['Featsel_Variance'] = False
 
-        ret = fit_and_score(self.features, self.labels, self.scoring,
-                            self.train, self.test, parameters,
-                            fit_params=self.fit_params,
-                            return_train_score=True,
-                            return_n_test_samples=True,
-                            return_times=True, return_parameters=True,
-                            error_score=self.error_score,
-                            verbose=False,
-                            return_all=False)
+        # Set up the cross-validation
+        cv = check_cv(self.cv, self.labels, classifier=True)
+        cv_iter = list(cv.split(self.features, self.labels))
 
-        score = 1 - ret[1] # We minimize
+        # Fit the classifier and store the result
+        all_test_scores = []
+        for train, test in cv_iter:
+            ret = fit_and_score(self.features, self.labels, self.scoring,
+                                train, test, parameters,
+                                fit_params=self.fit_params,
+                                return_train_score=True,
+                                return_n_test_samples=True,
+                                return_times=True, return_parameters=True,
+                                error_score=self.error_score,
+                                verbose=False,
+                                return_all=False)
+            all_test_scores.append(ret[1])
+
+        # Return the average score over all cross-validation folds
+        mean_test_score = np.mean(all_test_scores)
+        score = 1 - mean_test_score # We minimize so take the inverse
         tested_configs.write(str(score) + '\n')
 
         return score
