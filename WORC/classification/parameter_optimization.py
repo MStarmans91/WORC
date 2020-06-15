@@ -24,7 +24,7 @@ from WORC.classification.SearchCV import RandomizedSearchCVfastr, RandomizedSear
 def random_search_parameters(features, labels, N_iter, test_size,
                              param_grid, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
-                             use_SMAC=False, n_cores=1, fastr_plugin=None,
+                             n_cores=1, fastr_plugin=None,
                              maxlen=100, ranking_score='test_score',
                              random_seed=None):
     """
@@ -47,8 +47,6 @@ def random_search_parameters(features, labels, N_iter, test_size,
                         single core when using the fastr randomized search.
         use_fastr: Boolean determining of either fastr or joblib should be used
                    for the opimization.
-        use_SMAC: Boolean determining whether SMAC should be used for the
-                  hyperparameter optimization, or random search.
         fastr_plugin: determines which plugin is used for fastr executions.
                 When None, uses the default plugin from the fastr config.
 
@@ -69,26 +67,15 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                     random_state=random_state)
 
     if use_fastr:
-        if use_SMAC:
-            random_search = GuidedSearchCVSMAC(param_distributions=param_grid,
-                                               n_iter=N_iter,
-                                               scoring=scoring_method,
-                                               n_jobs=n_cores,
-                                               n_jobspercore=n_jobspercore,
-                                               maxlen=maxlen,
-                                               verbose=1, cv=cv,
-                                               fastr_plugin=fastr_plugin,
-                                               ranking_score=ranking_score)
-        else:
-            random_search = RandomizedSearchCVfastr(param_distributions=param_grid,
-                                                    n_iter=N_iter,
-                                                    scoring=scoring_method,
-                                                    n_jobs=n_cores,
-                                                    n_jobspercore=n_jobspercore,
-                                                    maxlen=maxlen,
-                                                    verbose=1, cv=cv,
-                                                    fastr_plugin=fastr_plugin,
-                                                    ranking_score=ranking_score)
+        random_search = RandomizedSearchCVfastr(param_distributions=param_grid,
+                                                n_iter=N_iter,
+                                                scoring=scoring_method,
+                                                n_jobs=n_cores,
+                                                n_jobspercore=n_jobspercore,
+                                                maxlen=maxlen,
+                                                verbose=1, cv=cv,
+                                                fastr_plugin=fastr_plugin,
+                                                ranking_score=ranking_score)
     else:
         random_search = RandomizedSearchCVJoblib(param_distributions=param_grid,
                                                  n_iter=N_iter,
@@ -112,12 +99,12 @@ def random_search_parameters(features, labels, N_iter, test_size,
 def guided_search_parameters(features, labels, N_iter, test_size,
                              parameters, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
-                             use_SMAC=False, n_cores=1, fastr_plugin=None,
+                             n_cores=1, fastr_plugin=None,
                              maxlen=100, ranking_score='test_score',
                              random_seed=None):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
-    guided search.
+    Bayesian optimization approach.
 
     Arguments:
         features: numpy array containing the training features.
@@ -135,13 +122,11 @@ def guided_search_parameters(features, labels, N_iter, test_size,
                         single core when using the fastr randomized search.
         use_fastr: Boolean determining of either fastr or joblib should be used
                    for the opimization.
-        use_SMAC: Boolean determining whether SMAC should be used for the
-                  hyperparameter optimization, or random search.
         fastr_plugin: determines which plugin is used for fastr executions.
                 When None, uses the default plugin from the fastr config.
 
     Returns:
-        random_search: sklearn randomsearch object containing the results.
+        guided_search: object containing the results
     """
     if random_seed is None:
         random_seed = np.random.randint(1, 5000)
@@ -156,7 +141,6 @@ def guided_search_parameters(features, labels, N_iter, test_size,
         cv = StratifiedShuffleSplit(n_splits=n_splits, test_size=test_size,
                                     random_state=random_state)
 
-    # Only use fastr for now
     guided_search = GuidedSearchCVSMAC(param_distributions=parameters,
                                        n_iter=N_iter,
                                        scoring=scoring_method,

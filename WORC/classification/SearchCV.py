@@ -2605,66 +2605,52 @@ class GridSearchCVJoblib(BaseSearchCVJoblib):
 class BaseSearchCVSMAC(BaseSearchCV):
     """Base class for Bayesian hyper parameter search with cross-validation."""
 
-    def _fit(self, X, y, groups, parameters):
+    def _fit(self, groups):
         """Actual fitting,  performing the search over parameters."""
 
         regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
         isclassifier = \
             not any(clf in regressors for clf in self.param_distributions['Classification']['classifiers'])
 
-        cv = check_cv(self.cv, y, classifier=isclassifier)
+        cv = check_cv(self.cv, self.labels, classifier=isclassifier)
 
         self.features, self.labels, groups = indexable(self.features, self.labels, groups)
         n_splits = cv.get_n_splits(self.features, self.labels, groups)
-        if self.verbose > 0 and isinstance(parameters, Sized):
-            n_candidates = len(parameters)
-            print(f"Fitting {n_splits} folds for each of {n_candidates}" + \
-                  " candidates, totalling" + \
-                  " {n_candidates * n_splits} fits")
 
         pre_dispatch = self.pre_dispatch
         cv_iter = list(cv.split(self.features, self.labels, groups))
 
-        print_n_splits = open('/home/mitchell/print_n_splits.txt', 'a')
-        print_n_splits.write('n_splits: ' + str(n_splits) + ' ')
-        print_n_splits.write(str(cv_iter))
-
-
         # Build the SMAC configuration
-        cs = build_smac_config(parameters)
+        cs = build_smac_config(self.param_distributions)
         
         # Create the Scenario object to define the optimization settings
         scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
-                             "runcount-limit": 100, # max. number of function evaluations;
+                             "runcount-limit": self.n_iter,  # max. number of function evaluations;
                              "cs": cs,
                              "deterministic": "true"
                              })
-
-        # Do one cv split
-        for train, test in cv_iter:
-            self.train = train
-            self.test = test
-            break
 
         # Run the optimization
         smac = SMAC4HPO(scenario=scenario, rng=self.random_state,
                         tae_runner=self._score_cfg)
 
         opt_config = smac.optimize()
+
+        # Write the best found configuration and its score to a file
         opt_value_print = open('/home/mitchell/opt_value.txt', 'a')
         opt_value_print.write(str(opt_config))
         opt_value_print.write(str(self._score_cfg(opt_config)))
 
+        # Convert the best found configuration to a dictionary
         best_parameters = opt_config.get_dictionary()
+        # Add some parameters that are used for fitting, but are not part of the optimization
         best_parameters['random_seed'] = self.random_state
         best_parameters['max_iter'] = 1000
         best_parameters['FeatPreProcess'] = False
         best_parameters['Featsel_Variance'] = False
 
-
         # Skip the preprocessing for now, by setting FeatPreProcess
-        # always to False. Next section is not accurate at this point.
-
+        # always to False. This next section is not accurate at this point.
         # Preprocess features if required
         if 'FeatPreProcess' in best_parameters:
             if best_parameters['FeatPreProcess'] == 'True':
@@ -2677,6 +2663,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                 feature_labels = preprocessor.transform(feature_labels)
                 X = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
 
+        # Score the best found result and save the full results
         out = Parallel(
             n_jobs=1, verbose=self.verbose,
             pre_dispatch=pre_dispatch
@@ -2701,14 +2688,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
             (test_scores, test_sample_counts,
              fit_time, score_time, parameters_est, parameters_all) = \
                 save_data
-        '''
-        process_fit_input = open('/home/mitchell/fit_input_smac.txt', 'a')
-        process_fit_input.write('n_splits: ' + str(n_splits) + ', parameters_est: ' + str(parameters_est)
-                                + ', parameters_all: ' + str(parameters_all)
-                                + ', test_sample_counts: ' + str(test_sample_counts) + ', test_scores: '
-                                + str(test_scores) + ', train_scores: ' + str(train_scores)
-                                + ', cv_iter: ' + str(cv_iter))
-        '''
+
         self.process_fit(n_splits=n_splits,
                          parameters_est=parameters_est,
                          parameters_all=parameters_all,
@@ -2718,17 +2698,14 @@ class BaseSearchCVSMAC(BaseSearchCV):
                          fit_time=fit_time,
                          score_time=score_time,
                          cv_iter=cv_iter,
-                         X=X, y=y)
+                         X=self.features, y=self.labels)
 
         return self
 
     def _score_cfg(self, cfg):
         # Construct a new dictionary with parameters from the input configuration
-        tested_configs = open('/home/mitchell/tested_configs.txt', 'a')
-        tested_configs.write(str(cfg.get_dictionary()) + '\n')
-        # Replace all None-values with default placeholders in the configuration
-        # parameters = {k: cfg[k] for k in cfg if cfg[k]}
         parameters = cfg.get_dictionary()
+        # Add some parameters that are used for fitting, but are not part of the optimization
         parameters['random_seed'] = self.random_state
         parameters['max_iter'] = 1000
         parameters['FeatPreProcess'] = False
@@ -2754,16 +2731,15 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         # Return the average score over all cross-validation folds
         mean_test_score = np.mean(all_test_scores)
-        score = 1 - mean_test_score # We minimize so take the inverse
-        tested_configs.write(str(score) + '\n')
+        score = 1 - mean_test_score  # We minimize so take the inverse
 
         return score
 
 
 class GuidedSearchCVSMAC(BaseSearchCVSMAC):
-    """Randomized search on hyper parameters.
+    """Guided search on hyperparameters.
 
-    RandomizedSearchCV implements a "fit" and a "score" method.
+    GuidedSearchCV implements a "fit" and a "score" method.
     It also implements "predict", "predict_proba", "decision_function",
     "transform" and "inverse_transform" if they are implemented in the
     estimator used.
@@ -2771,10 +2747,9 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
     The parameters of the estimator used to apply these methods are optimized
     by cross-validated search over parameter settings.
 
-    In contrast to GridSearchCV, not all parameter values are tried out, but
-    rather a fixed number of parameter settings is sampled from the specified
-    distributions. The number of parameter settings that are tried is
-    given by n_iter.
+    The optimization is performed using the Sequential Model-based Algorithm
+    Configuration (SMAC) method. A probabilistic model of the objective function
+    is constructed and updated with each function evaluation.
 
     If all parameters are presented as a list,
     sampling without replacement is performed. If at least one parameter
@@ -2782,25 +2757,16 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
     It is highly recommended to use continuous distributions for continuous
     parameters.
 
-    Read more in the :ref:`User Guide <randomized_parameter_search>`.
-
     Parameters
     ----------
-    estimator : estimator object.
-        A object of that type is instantiated for each grid point.
-        This is assumed to implement the scikit-learn estimator interface.
-        Either estimator needs to provide a ``score`` function,
-        or ``scoring`` must be passed.
-
     param_distributions : dict
-        Dictionary with parameters names (string) as keys and distributions
-        or lists of parameters to try. Distributions must provide a ``rvs``
-        method for sampling (such as those from scipy.stats.distributions).
-        If a list is given, it is sampled uniformly.
+        Dictionary with parameter names (string) as keys and details of their
+        domains as values. From this dictionary the complete search space
+        will later be constructed.
 
     n_iter : int, default=10
-        Number of parameter settings that are sampled. n_iter trades
-        off runtime vs quality of the solution.
+        Number of function evaluations allowed in each optimization sequence
+        of SMAC.
 
     scoring : string, callable or None, default=None
         A string (see model evaluation documentation) or
@@ -2974,8 +2940,7 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
                  error_score='raise', return_train_score=True,
                  n_jobspercore=100, fastr_plugin=None, maxlen=100,
-                 ranking_score='test_score', features={}, labels={},
-                 train=None, test=None):
+                 ranking_score='test_score', features={}, labels={}):
         super(GuidedSearchCVSMAC, self).__init__(
              param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
              n_iter=n_iter, random_state=random_state, n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
@@ -2985,8 +2950,6 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
              maxlen=maxlen, ranking_score=ranking_score)
         self.features = features
         self.labels = labels
-        self.train = train
-        self.test = test
 
     def fit(self, X, y=None, groups=None):
         """Run fit on the estimator with randomly drawn parameters.
@@ -3006,7 +2969,7 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
             train/test set.
         """
         print("Fit: " + str(self.n_iter))
-        #sampled_params = ParameterSampler(self.param_distributions,
-        #                                  self.n_iter,
-        #                                  random_state=self.random_state)
-        return self._fit(X, y, groups, self.param_distributions)
+        self.features = X
+        self.labels = y
+
+        return self._fit(groups)
