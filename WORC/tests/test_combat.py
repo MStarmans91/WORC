@@ -133,12 +133,17 @@ def test_combat_fastr():
     link_combat_1.collapse = 'conf'
     link_combat_2.collapse = 'pctrain'
 
+    # Mimic using two feature toolboxes
     links_Combat1_train = node_combat.inputs['features_train']['MR_0'] << source_features.output
     links_Combat1_train.collapse = 'features'
+
+    links_Combat2_train = node_combat.inputs['features_train']['MR_1'] << source_features.output
+    links_Combat2_train.collapse = 'features'
 
     links_Combat_out_train = sink_features.input << node_combat.outputs['features_train_out']
     links_Combat_out_train.collapse = 'ComBat'
 
+    # Provide source and sink data
     source_data = dict()
     source_data['features_in'] = features
     source_data['labels'] = objectlabels
