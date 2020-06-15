@@ -1534,7 +1534,7 @@ class WORC(object):
                     self.sink_data['features_train_' + label + '_' + f] = ("vfs://output/{}/Features/features_{}_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, f, label)
 
             if self.labels_test:
-                self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/{}/Segmentations/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/{}/Segmentations/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 self.sink_data['segmentations_out_elastix_test_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 self.sink_data['images_out_elastix_test_' + label] = ("vfs://output/{}/Images/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 if hasattr(self, 'featurecalculators'):
