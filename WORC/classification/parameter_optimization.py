@@ -24,7 +24,7 @@ from WORC.classification.SearchCV import RandomizedSearchCVfastr, RandomizedSear
 def random_search_parameters(features, labels, N_iter, test_size,
                              param_grid, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
-                             n_cores=1, fastr_plugin=None,
+                             use_SMAC=False, n_cores=1, fastr_plugin=None,
                              maxlen=100, ranking_score='test_score',
                              random_seed=None):
     """
@@ -47,6 +47,8 @@ def random_search_parameters(features, labels, N_iter, test_size,
                         single core when using the fastr randomized search.
         use_fastr: Boolean determining of either fastr or joblib should be used
                    for the opimization.
+        use_SMAC: Boolean determining whether the SMAC algorithm should be used
+                    for the hyperparameter optimization.
         fastr_plugin: determines which plugin is used for fastr executions.
                 When None, uses the default plugin from the fastr config.
 
