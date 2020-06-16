@@ -205,7 +205,7 @@ def generate_config_options():
     config['ComBat'] = dict()
     config['ComBat']['language'] = 'python, matlab'
     config['ComBat']['batch'] = 'String'
-    config['ComBat']['mod'] = 'String(s)'
+    config['ComBat']['mod'] = 'String(s), or []'
     config['ComBat']['par'] = '0 or 1'
     config['ComBat']['eb'] = '0 or 1'
     config['ComBat']['per_feature'] = '0 or 1'

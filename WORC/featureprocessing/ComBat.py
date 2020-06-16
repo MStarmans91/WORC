@@ -140,18 +140,26 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
         all_features_matrix = np.log10(all_features_matrix)
 
     # Convert all_labels to dictionary
-    all_labels = {k: v for k, v in zip(label_data_train['label_name'], all_labels)}
+    if len(all_labels.shape) == 1:
+        # No mod variables
+        all_labels = {label_data_train['label_name'][0]: all_labels}
+    else:
+        all_labels = {k: v for k, v in zip(label_data_train['label_name'], all_labels)}
 
     # Split labels in batch and moderation labels
+    bat = config['ComBat']['batch']
+    mod = config['ComBat']['mod']
+    print(f'\t Using batch variable {bat}, mod variables {mod}.')
     batch = [all_labels[l] for l in all_labels.keys() if l in config['ComBat']['batch']]
     if config['ComBat']['mod'][0] == '[]':
-        mod = []
+        mod = None
     else:
         mod = [all_labels[l] for l in all_labels.keys() if l in config['ComBat']['mod']]
 
     # Convert all inputs to arrays with right shape
     all_features_matrix = np.transpose(all_features_matrix)
-    mod = np.transpose(np.asarray(mod))
+    if mod is not None:
+        mod = np.transpose(np.asarray(mod))
 
     # Run ComBatin Matlab
     if config['ComBat']['language'] == 'matlab':
@@ -241,9 +249,9 @@ def ComBatPython(dat, batch, mod=None, par=1,
     """
     # convert inputs to neuroCombat format.
     covars = dict()
-    covars['batch'] = batch[0]
     categorical_cols = list()
-    if mod is not None and mod != []:
+    covars['batch'] = batch[0]
+    if mod is not None:
         for i_mod in range(mod.shape[1]):
             label = f'mod_{i_mod}'
             covars[label] = [m for m in mod[:, i_mod]]
