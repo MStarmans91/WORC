@@ -36,57 +36,106 @@ def build_smac_config(parameters):
         optimization
     """
 
+    cf = parameters['Classification']
     cs = ConfigurationSpace()
 
     # The first argument to parse is the choice of classifier
     classifier = CategoricalHyperparameter('classifiers',
-                                           choices=['SVM', 'RF'])
+                                           choices=['SVM', 'RF', 'LR', 'LDA', 'QDA'])
     cs.add_hyperparameter(classifier)
 
-    # SVM (5 hyperparameters)
-    # kernel and C are directly conditional on the SVM choice
+    # SVM
+    # 5 hyperparameters:
+    #   1) kernel       | conditional on classifier: SVM
+    #   2) C            | conditional on classifier: SVM
+    #
+    #   3) degree       | conditional on kernel: poly
+    #   4) gamma        | conditional on kernel: poly, rbf
+    #   5) coef0        | conditional on kernel: poly
     kernel = CategoricalHyperparameter('SVMKernel',
-                                       choices=parameters['Classification']['SVMKernel'])
+                                       choices=cf['SVMKernel'])
     C = UniformFloatHyperparameter('SVMC',
-                                   lower=0.001,
-                                   upper=1000,
+                                   lower=pow(10, cf['SVMC'][0]),
+                                   upper=pow(10, cf['SVMC'][0] + cf['SVMC'][1]),
                                    log=True)
     cs.add_hyperparameters([kernel, C])
-    # Add parameters conditional on SVM choice
     cs.add_conditions([InCondition(child=kernel, parent=classifier, values=['SVM']),
                        InCondition(child=C, parent=classifier, values=['SVM'])])
 
-    # degree, coef0 and gamma are conditional on the kernel choice
     degree = UniformIntegerHyperparameter('SVMdegree',
-                                          lower=parameters['Classification']['SVMdegree'][0],
-                                          upper=parameters['Classification']['SVMdegree'][0] + \
-                                                parameters['Classification']['SVMdegree'][1])
+                                          lower=cf['SVMdegree'][0],
+                                          upper=cf['SVMdegree'][0] + cf['SVMdegree'][1])
     coef0 = UniformFloatHyperparameter('SVMcoef0',
-                                       lower=parameters['Classification']['SVMcoef0'][0],
-                                       upper=parameters['Classification']['SVMcoef0'][1])
+                                       lower=cf['SVMcoef0'][0],
+                                       upper=cf['SVMcoef0'][1])
     gamma = UniformFloatHyperparameter('SVMgamma',
-                                       lower=0.001,
-                                       upper=10,
+                                       lower=pow(10, cf['SVMgamma'][0]),
+                                       upper=pow(10, cf['SVMgamma'][0] + cf['SVMgamma'][1]),
                                        log=True)
     cs.add_hyperparameters([degree, coef0, gamma])
     cs.add_conditions([InCondition(child=degree, parent=kernel, values=['poly']),
                        InCondition(child=coef0, parent=kernel, values=['poly']),
                        InCondition(child=gamma, parent=kernel, values=['poly', 'rbf'])])
 
-    # RF (3 hyperparameters)
+    # RF
+    # 3 hyperparameters:
+    #   1) n_estimators         | conditional on classifier: RF
+    #   2) max_depth            | conditional on classifier: RF
+    #   3) min_samples_split    | conditional on classifier: RF
     n_estimators = UniformIntegerHyperparameter('RFn_estimators',
-                                                lower=10,
-                                                upper=100)
+                                                lower=cf['RFn_estimators'][0],
+                                                upper=cf['RFn_estimators'][0] + cf['RFn_estimators'][1])
     max_depth = UniformIntegerHyperparameter('RFmax_depth',
-                                             lower=5,
-                                             upper=10)
+                                             lower=cf['RFmax_depth'][0],
+                                             upper=cf['RFmax_depth'][0] + cf['RFmax_depth'][1])
     min_samples_split = UniformIntegerHyperparameter('RFmin_samples_split',
-                                                     lower=2,
-                                                     upper=5)
+                                                     lower=cf['RFmin_samples_split'][0],
+                                                     upper=cf['RFmin_samples_split'][0] + cf['RFmin_samples_split'][1])
     cs.add_hyperparameters([n_estimators, max_depth, min_samples_split])
     cs.add_conditions([InCondition(child=n_estimators, parent=classifier, values=['RF']),
                        InCondition(child=max_depth, parent=classifier, values=['RF']),
                        InCondition(child=min_samples_split, parent=classifier, values=['RF'])])
+
+    # LR
+    # 2 hyperparameters:
+    #   1) penalty          | conditional on classifier: LR
+    #   2) C                | conditional on classifier: LR
+    penalty = CategoricalHyperparameter('LRpenalty', choices=cf['LRpenalty'])
+    C = UniformFloatHyperparameter('LRC',
+                                   lower=cf['LRC'][0],
+                                   upper=cf['LRC'][0] + cf['LRC'][1])
+    cs.add_hyperparameters([penalty, C])
+    cs.add_conditions([InCondition(child=penalty, parent=classifier, values=['LR']),
+                       InCondition(child=C, parent=classifier, values=['LR'])])
+
+    # LDA
+    # 2 hyperparameters:
+    #   1) solver           | conditional on classifier: LDA
+    #
+    #   2) shrinkage        | conditional on solver: lsqr, eigen
+    solver = CategoricalHyperparameter('LDA_solver', choices=cf['LDA_solver'])
+    cs.add_hyperparameter(solver)
+    cs.add_condition(InCondition(child=solver, parent=classifier, values=['LDA']))
+
+    shrinkage = UniformFloatHyperparameter('LDA_shrinkage',
+                                           lower=pow(10, cf['LDA_shrinkage'][0]),
+                                           upper=pow(10, cf['LDA_shrinkage'][0] + cf['LDA_shrinkage'][1]),
+                                           log=True)
+    cs.add_hyperparameter(shrinkage)
+    cs.add_condition(InCondition(child=shrinkage, parent=solver, values=['lsqr', 'eigen']))
+
+    # QDA
+    # 1 hyperparameter:
+    #   1) reg_param        | conditional on classifier: QDA
+    reg_param = UniformFloatHyperparameter('QDA_reg_param',
+                                           lower=pow(10, cf['QDA_reg_param'][0]),
+                                           upper=pow(10, cf['QDA_reg_param'][0] + cf['QDA_reg_param'][1]),
+                                           log=True)
+    cs.add_hyperparameter(reg_param)
+    cs.add_condition(InCondition(child=reg_param, parent=classifier, values=['QDA']))
+
+    f = open('/home/mitchell/cs.txt', 'a')
+    f.write(str(cs))
 
     return cs
 
