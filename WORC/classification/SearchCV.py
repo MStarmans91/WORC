@@ -2620,6 +2620,9 @@ class BaseSearchCVSMAC(BaseSearchCV):
         pre_dispatch = self.pre_dispatch
         cv_iter = list(cv.split(self.features, self.labels, groups))
 
+        filething = open('/home/mitchell/param_distributions.txt', 'a')
+        filething.write(str(self.param_distributions))
+
         # Build the SMAC configuration
         cs = build_smac_config(self.param_distributions)
         
@@ -2645,7 +2648,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         best_parameters = opt_config.get_dictionary()
         # Add some parameters that are used for fitting, but are not part of the optimization
         best_parameters['random_seed'] = self.random_state
-        best_parameters['max_iter'] = 1000
+        best_parameters['max_iter'] = self.param_distributions['Classification']['max_iter'][0]
         best_parameters['FeatPreProcess'] = False
         best_parameters['Featsel_Variance'] = False
 
@@ -2707,7 +2710,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         parameters = cfg.get_dictionary()
         # Add some parameters that are used for fitting, but are not part of the optimization
         parameters['random_seed'] = self.random_state
-        parameters['max_iter'] = 1000
+        parameters['max_iter'] = self.param_distributions['Classification']['max_iter'][0]
         parameters['FeatPreProcess'] = False
         parameters['Featsel_Variance'] = False
 
@@ -2732,6 +2735,9 @@ class BaseSearchCVSMAC(BaseSearchCV):
         # Return the average score over all cross-validation folds
         mean_test_score = np.mean(all_test_scores)
         score = 1 - mean_test_score  # We minimize so take the inverse
+
+        f = open('/home/mitchell/tested_configs.txt', 'a')
+        f.write(str(parameters) + '\n' + str(score) + '\n')
 
         return score
 
