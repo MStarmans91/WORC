@@ -134,6 +134,57 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(reg_param)
     cs.add_condition(InCondition(child=reg_param, parent=classifier, values=['QDA']))
 
+    ### Preprocessing ###
+    # 9 preprocessing steps are included:
+    #   1. Scaling
+    #   2. Imputation
+    #   3. Groupwise selection
+    #   4. Variance selection
+    #   5. Relief
+    #   6. Select from model
+    #   7. PCA
+    #   8. Statistical test
+    #   9. Oversampling
+
+    # Feature scaling
+    # 1 hyperparameter:
+    #   1) scaling method
+    scaling = CategoricalHyperparameter('use_featureScaling',
+                                        choices=['True', 'False'])
+    cs.add_hyperparameter(scaling)
+
+    scaling_method = CategoricalHyperparameter('FeatureScaling',
+                                               choices=[parameters['FeatureScaling']['scaling_method']])
+    cs.add_hyperparameter(scaling_method)
+    cs.add_condition(InCondition(child=scaling_method, parent=scaling, values=['True']))
+
+    # Feature imputation
+    # 2 hyperparameters:
+    #   1) strategy
+    #   2) n_neighbors          | Conditional on strategy: knn
+    imputation = CategoricalHyperparameter('Imputation',
+                                           choices=['True', 'False'])
+    cs.add_hyperparameter(imputation)
+
+    imputation_strategy = CategoricalHyperparameter('ImputationMethod',
+                                                    choices=parameters['Imputation']['strategy'])
+    cs.add_hyperparameter(imputation_strategy)
+    cs.add_condition(InCondition(child=imputation_strategy, parent=imputation,
+                                 values=['True']))
+
+    imputation_n_neighbors = UniformIntegerHyperparameter('ImputationNeighbours',
+                                                          lower=parameters['Imputation']['n_neighbors'][0],
+                                                          upper=parameters['Imputation']['n_neighbors'][0] +
+                                                          parameters['Imputation']['n_neighbors'][1])
+    cs.add_hyperparameter(imputation_n_neighbors)
+    cs.add_condition(InCondition(child=imputation_n_neighbors, parent=imputation_strategy,
+                                 values=['knn']))
+
+    # PCA
+    # 1 hyperparameter:
+    #   1) type
+
+
     f = open('/home/mitchell/cs.txt', 'a')
     f.write(str(cs))
 
