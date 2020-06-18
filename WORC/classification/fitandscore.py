@@ -545,7 +545,8 @@ def fit_and_score(X, y, scoring,
 
     if 'UsePCA' in para_estimator.keys():
         del para_estimator['UsePCA']
-        del para_estimator['PCAType']
+        if 'PCAType' in para_estimator.keys():
+            del para_estimator['PCAType']
 
     # --------------------------------------------------------------------
     # Feature selection based on a statistical test

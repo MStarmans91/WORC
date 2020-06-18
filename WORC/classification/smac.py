@@ -182,7 +182,23 @@ def build_smac_config(parameters):
 
     # PCA
     # 1 hyperparameter:
-    #   1) type
+    #   1) variance
+    #
+    #   2) n_components     | Conditional on type: n_components
+    pca = CategoricalHyperparameter('UsePCA', choices=['True', 'False'])
+    cs.add_hyperparameter(pca)
+
+    pca_type = CategoricalHyperparameter('PCAType', choices=['95variance', 'n_components'])
+    cs.add_hyperparameter(pca_type)
+    cs.add_condition(InCondition(child=pca_type, parent=pca, values=['True']))
+
+    pca_n_components = UniformIntegerHyperparameter('n_components',
+                                                    lower=10,
+                                                    upper=100)
+    cs.add_hyperparameter(pca_n_components)
+    cs.add_condition(InCondition(child=pca_n_components, parent=pca_type,
+                                 values=['n_components']))
+
 
 
     f = open('/home/mitchell/cs.txt', 'a')
