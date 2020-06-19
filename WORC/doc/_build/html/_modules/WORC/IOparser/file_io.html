@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.IOparser.file_io &mdash; WORC 3.1.5 documentation</title>
+  <title>WORC.IOparser.file_io &mdash; WORC 3.2.0 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.5
+                3.2.0
               </div>
             
           
@@ -236,11 +236,11 @@
     <span class="c1"># Check when we found patient ID&#39;s, if we did for all objects</span>
     <span class="k">if</span> <span class="n">pids</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_features_temp</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Length of pids </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span> <span class="o">+</span>
+            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Length of pids {len(pids)}&#39;</span> <span class="o">+</span>
                                                 <span class="s1">&#39;does not match&#39;</span> <span class="o">+</span>
                                                 <span class="s1">&#39;number of objects &#39;</span> <span class="o">+</span>
                                                 <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_features_temp</span><span class="p">))</span> <span class="o">+</span>
-                                                <span class="sa">f</span><span class="s1">&#39;Found </span><span class="si">{</span><span class="n">pids</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                                                <span class="n">f</span><span class="s1">&#39;Found </span><span class="si">{pids}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
     <span class="c1"># If some objects miss certain features, we will identify these with NaN values</span>
     <span class="n">feature_labels_all</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>

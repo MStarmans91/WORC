@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Changelog &mdash; WORC 3.1.5 documentation</title>
+  <title>Changelog &mdash; WORC 3.2.0 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.5
+                3.2.0
               </div>
             
           
@@ -95,7 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">3.1.5 - 2020-06-10</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3.2.0 - 2020-06-19</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
@@ -241,7 +241,7 @@
 <p>The format is based on <a class="reference external" href="http://keepachangelog.com/">Keep a Changelog</a>
 and this project adheres to <a class="reference external" href="http://semver.org/">Semantic Versioning</a></p>
 <div class="section" id="id1">
-<h2>3.1.5 - 2020-06-10<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>3.2.0 - 2020-06-19<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
@@ -253,6 +253,9 @@ Was required for ComBat.</p></li>
 <h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Output of plot_SVM function is better ordered.</p></li>
+<li><p>Several defaults, as we now have PyRadiomics fully embedded, resulting in
+a large increase in features.</p></li>
+<li><p>No more overrides for the full config, as the default now is the full config.</p></li>
 </ul>
 </div>
 <div class="section" id="fixed">
@@ -262,6 +265,8 @@ Was required for ComBat.</p></li>
 <li><p>ComBat integration in WORC network now works properly.</p></li>
 <li><p>Documentation didn’t build due to C-extension dependencies of PyRadiomics,
 and thus therefore also PREDICT. Fixed in setup.py and readthedocs files.</p></li>
+<li><p>Documentation building.</p></li>
+<li><p>Bugfix in segmentix test output url.</p></li>
 </ul>
 </div>
 </div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.estimators &mdash; WORC 3.1.5 documentation</title>
+  <title>WORC.classification.estimators &mdash; WORC 3.2.0 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.5
+                3.2.0
               </div>
             
           
@@ -177,10 +177,10 @@
 <span class="c1"># limitations under the License.</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">ClassifierMixin</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="kn">import</span> <span class="n">check_is_fitted</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils.multiclass</span> <span class="kn">import</span> <span class="n">unique_labels</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.RankedSVM</span> <span class="kn">import</span> <span class="n">RankSVM_train</span><span class="p">,</span> <span class="n">RankSVM_test</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">ClassifierMixin</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.multiclass</span> <span class="k">import</span> <span class="n">unique_labels</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.RankedSVM</span> <span class="k">import</span> <span class="n">RankSVM_train</span><span class="p">,</span> <span class="n">RankSVM_test</span>
 
 
 <div class="viewcode-block" id="RankedSVM"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.estimators.RankedSVM">[docs]</a><span class="k">class</span> <span class="nc">RankedSVM</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">ClassifierMixin</span><span class="p">):</span>
@@ -198,7 +198,7 @@
 <span class="sd">    y_ : array, shape = [n_samples]</span>
 <span class="sd">        The labels passed during :meth:`fit`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="RankedSVM.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.estimators.RankedSVM.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lambda_tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+<div class="viewcode-block" id="RankedSVM.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.estimators.RankedSVM.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cost</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lambda_tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
                  <span class="n">norm_tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">svm</span><span class="o">=</span><span class="s1">&#39;Poly&#39;</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                  <span class="n">coefficient</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cost</span> <span class="o">=</span> <span class="n">cost</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.1.5 documentation</title>
+  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.2.0 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.5
+                3.2.0
               </div>
             
           
@@ -178,15 +178,15 @@
 
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVM</span> <span class="kn">import</span> <span class="n">plot_SVM</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVM</span> <span class="k">import</span> <span class="n">plot_SVM</span>
 <span class="kn">import</span> <span class="nn">WORC.processing.label_processing</span> <span class="k">as</span> <span class="nn">lp</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">WORC.plotting</span> <span class="kn">import</span> <span class="n">plot_images</span> <span class="k">as</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting</span> <span class="k">import</span> <span class="n">plot_images</span> <span class="k">as</span> <span class="n">pi</span>
 <span class="kn">import</span> <span class="nn">SimpleITK</span> <span class="k">as</span> <span class="nn">sitk</span>
-<span class="kn">from</span> <span class="nn">WORC.addexceptions</span> <span class="kn">import</span> <span class="n">WORCKeyError</span>
+<span class="kn">from</span> <span class="nn">WORC.addexceptions</span> <span class="k">import</span> <span class="n">WORCKeyError</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
 
 
@@ -334,7 +334,7 @@
         <span class="k">if</span> <span class="n">pid</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">PIDs_images</span><span class="p">:</span>
             <span class="n">ordering</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PIDs_images</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pid</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[WORC Warning] Patient </span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1"> not in images list!&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WORC Warning] Patient </span><span class="si">{pid}</span><span class="s1"> not in images list!&#39;</span><span class="p">)</span>
 
     <span class="n">PIDs_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">PIDs_images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ordering</span><span class="p">]</span>
     <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ordering</span><span class="p">]</span>

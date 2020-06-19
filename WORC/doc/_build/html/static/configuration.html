@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.1.5 documentation</title>
+  <title>Configuration &mdash; WORC 3.2.0 documentation</title>
   
 
   
@@ -21,10 +21,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.5
+                3.2.0
               </div>
             
           
@@ -251,7 +251,7 @@ list can be created by using commas for separation, e.g.
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <p>The config object can be indexed as <code class="docutils literal notranslate"><span class="pre">config[key][subkey]</span> <span class="pre">=</span> <span class="pre">value</span></code>. The various keys, subkeys, and the values
 (description, defaults and options) can be found below.</p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 75%" />
@@ -331,7 +331,7 @@ WORC on a cluster with nodes supporting only a single core to be used
 per node, e.g. the BIGR cluster, use only 1 core and threading as a
 backend.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 14%" />
 <col style="width: 86%" />
@@ -378,7 +378,7 @@ backend.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 15%" />
 <col style="width: 28%" />
@@ -443,7 +443,7 @@ backend.</p>
 <p>These fields are only important if you specified using the segmentix
 tool in the general configuration.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 16%" />
 <col style="width: 84%" />
@@ -478,7 +478,7 @@ tool in the general configuration.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 43%" />
 <col style="width: 17%" />
@@ -529,7 +529,7 @@ Currently, only normalization is included: hence the dictionary name is
 <em>Normalize</em>. Additionally, scans with image type CT (see later in the
 tutorial) provided as DICOM are scaled to Hounsfield Units.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -558,7 +558,7 @@ tutorial) provided as DICOM are scaled to Hounsfield Units.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 38%" />
 <col style="width: 20%" />
@@ -600,7 +600,7 @@ tutorial) provided as DICOM are scaled to Hounsfield Units.</p>
 feature computation here. Also, you can select if the certain features
 are computed or not.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 16%" />
 <col style="width: 84%" />
@@ -698,7 +698,7 @@ are computed or not.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 30%" />
 <col style="width: 30%" />
@@ -724,7 +724,7 @@ are computed or not.</p>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>texture_Gabor</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>texture_LBP</p></td>
@@ -756,15 +756,15 @@ are computed or not.</p>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>vessel</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>log</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>phase</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>image_type</p></td>
@@ -832,7 +832,7 @@ are computed or not.</p>
 feature computation here. For more information, see
 <a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.htm">https://pyradiomics.readthedocs.io/en/latest/customization.htm</a>.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -885,7 +885,7 @@ feature computation here. For more information, see
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 11%" />
 <col style="width: 7%" />
@@ -959,7 +959,7 @@ feature computation here. For more information, see
 feature harmonization here. For more information, see
 <a class="reference external" href="https://github.com/Jfortin1/ComBatHarmonization">https://github.com/Jfortin1/ComBatHarmonization</a>.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 9%" />
 <col style="width: 91%" />
@@ -976,28 +976,28 @@ feature harmonization here. For more information, see
 <tr class="row-odd"><td><p>batch</p></td>
 <td><p>Name of batch variable = variable to correct for.</p></td>
 </tr>
-<tr class="row-even"><td><p>mod</p></td>
-<td><p>Name of moderation variable(s) = variables for which variation in features will be “preserverd”.</p></td>
-</tr>
-<tr class="row-odd"><td><p>par</p></td>
+<tr class="row-even"><td><p>par</p></td>
 <td><p>Either use the parametric (1) or non-parametric version (0) of ComBat.</p></td>
 </tr>
-<tr class="row-even"><td><p>eb</p></td>
+<tr class="row-odd"><td><p>eb</p></td>
 <td><p>Either use the emperical Bayes (1) or simply mean shifting version (0) of ComBat.</p></td>
 </tr>
-<tr class="row-odd"><td><p>per_feature</p></td>
+<tr class="row-even"><td><p>per_feature</p></td>
 <td><p>Either use ComBat for all features combined (0) or per feature (1), in which case a second feature equal to the single feature plus random noise will be added if eb=1</p></td>
 </tr>
-<tr class="row-even"><td><p>excluded_features</p></td>
+<tr class="row-odd"><td><p>excluded_features</p></td>
 <td><p>Provide substrings of feature labels of features which should be excluded from ComBat. Recommended to use for features unaffected by the batch variable.</p></td>
 </tr>
-<tr class="row-odd"><td><p>matlab</p></td>
+<tr class="row-even"><td><p>matlab</p></td>
 <td><p>If using Matlab, path to Matlab executable.</p></td>
+</tr>
+<tr class="row-odd"><td><p>mod</p></td>
+<td><p>Name of moderation variable(s) = variables for which variation in features will be “preserverd”.</p></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 18%" />
 <col style="width: 48%" />
@@ -1018,29 +1018,29 @@ feature harmonization here. For more information, see
 <td><p>Hospital</p></td>
 <td><p>String</p></td>
 </tr>
-<tr class="row-even"><td><p>mod</p></td>
-<td><p>Age</p></td>
-<td><p>String(s)</p></td>
-</tr>
-<tr class="row-odd"><td><p>par</p></td>
+<tr class="row-even"><td><p>par</p></td>
 <td><p>1</p></td>
 <td><p>0 or 1</p></td>
 </tr>
-<tr class="row-even"><td><p>eb</p></td>
+<tr class="row-odd"><td><p>eb</p></td>
 <td><p>1</p></td>
 <td><p>0 or 1</p></td>
 </tr>
-<tr class="row-odd"><td><p>per_feature</p></td>
+<tr class="row-even"><td><p>per_feature</p></td>
 <td><p>0</p></td>
 <td><p>0 or 1</p></td>
 </tr>
-<tr class="row-even"><td><p>excluded_features</p></td>
+<tr class="row-odd"><td><p>excluded_features</p></td>
 <td><p><a href="#id3"><span class="problematic" id="id4">sf_</span></a>, <a href="#id5"><span class="problematic" id="id6">of_</span></a>, <a href="#id7"><span class="problematic" id="id8">semf_</span></a>, <a href="#id9"><span class="problematic" id="id10">pf_</span></a></p></td>
 <td><p>List of strings, comma separated</p></td>
 </tr>
-<tr class="row-odd"><td><p>matlab</p></td>
+<tr class="row-even"><td><p>matlab</p></td>
 <td><p>C:Program FilesMATLABR2015bbinmatlab.exe</p></td>
 <td><p>String</p></td>
+</tr>
+<tr class="row-odd"><td><p>mod</p></td>
+<td><p>Label1, Label2</p></td>
+<td><p>String(s), or []</p></td>
 </tr>
 </tbody>
 </table>
@@ -1050,7 +1050,7 @@ feature harmonization here. For more information, see
 <p>Before the features are given to the classification function, and thus the
 hyperoptimization, these can be preprocessed as following.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -1067,7 +1067,7 @@ hyperoptimization, these can be preprocessed as following.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 30%" />
 <col style="width: 35%" />
@@ -1097,7 +1097,7 @@ which finally the best setting in combination with the other
 hyperparameters is selected. Again, these should be formatted as string
 containing the actual values, e.g. value1, value2.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 8%" />
 <col style="width: 92%" />
@@ -1150,7 +1150,7 @@ containing the actual values, e.g. value1, value2.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 29%" />
 <col style="width: 28%" />
@@ -1228,7 +1228,7 @@ value.</p>
 selecting all, none or a single group. This is still supported, but not
 recommended, and looks as follows:</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 29%" />
 <col style="width: 71%" />
@@ -1317,7 +1317,7 @@ recommended, and looks as follows:</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 24%" />
 <col style="width: 27%" />
@@ -1395,23 +1395,23 @@ recommended, and looks as follows:</p>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-even"><td><p>vessel_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>phase_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-even"><td><p>fractal_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>location_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-even"><td><p>rgrd_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>toolbox</p></td>
@@ -1442,7 +1442,7 @@ values per field, of which random samples will be drawn of which finally
 the best setting in combination with the other hyperparameters is
 selected.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 7%" />
 <col style="width: 93%" />
@@ -1465,7 +1465,7 @@ selected.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 44%" />
@@ -1500,7 +1500,7 @@ following settings. Almost all of these are used in CASH. Most of the
 classifiers are implemented using sklearn; hence descriptions of the
 hyperparameters can also be found there.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 88%" />
@@ -1586,7 +1586,7 @@ hyperparameters can also be found there.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 9%" />
 <col style="width: 19%" />
@@ -1703,7 +1703,7 @@ hyperparameters can also be found there.</p>
 <p>When using the PREDICT toolbox for classification and you specified
 using cross validation, specify the following settings.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 88%" />
@@ -1726,7 +1726,7 @@ using cross validation, specify the following settings.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 46%" />
 <col style="width: 27%" />
@@ -1761,7 +1761,7 @@ label used for classification.</p>
 <p>This part is really important, as it should match your label file.
 Suppose your patientclass.txt file you supplied as source for labels
 looks like this:</p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 38%" />
 <col style="width: 31%" />
@@ -1797,7 +1797,7 @@ want to use Label1 for classification, then set:</p>
 <p>If you want to first train a classifier on Label1 and then Label2,
 set: <code class="docutils literal notranslate"><span class="pre">config[Genetics][label_names]</span> <span class="pre">=</span> <span class="pre">Label1,</span> <span class="pre">Label2</span></code></p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 11%" />
 <col style="width: 89%" />
@@ -1823,7 +1823,7 @@ set: <code class="docutils literal notranslate"><span class="pre">config[Genetic
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 23%" />
 <col style="width: 29%" />
@@ -1860,7 +1860,7 @@ set: <code class="docutils literal notranslate"><span class="pre">config[Genetic
 <p>When using the PREDICT toolbox for classification, you have to supply
 your hyperparameter optimization procedure here.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 9%" />
 <col style="width: 91%" />
@@ -1895,7 +1895,7 @@ your hyperparameter optimization procedure here.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 8%" />
@@ -1943,7 +1943,7 @@ your hyperparameter optimization procedure here.</p>
 <h3>FeatureScaling<a class="headerlink" href="#featurescaling" title="Permalink to this headline">¶</a></h3>
 <p>Determines which method is applied to scale each feature.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 24%" />
 <col style="width: 76%" />
@@ -1963,7 +1963,7 @@ your hyperparameter optimization procedure here.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 32%" />
 <col style="width: 16%" />
@@ -1992,7 +1992,7 @@ your hyperparameter optimization procedure here.</p>
 <p>Before performing the hyperoptimization, you can use SMOTE: Synthetic
 Minority Over-sampling Technique to oversample your data.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 7%" />
 <col style="width: 93%" />
@@ -2018,7 +2018,7 @@ Minority Over-sampling Technique to oversample your data.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 31%" />
 <col style="width: 14%" />
@@ -2056,7 +2056,7 @@ Minority Over-sampling Technique to oversample your data.</p>
 radiomics, hence the default is to not use it and select only the best
 performing workflow.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 5%" />
 <col style="width: 95%" />
@@ -2073,7 +2073,7 @@ performing workflow.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 30%" />
 <col style="width: 35%" />
@@ -2097,7 +2097,7 @@ performing workflow.</p>
 <h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
 <p>In the evaluation of the performance, several adjustments can be made.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -2114,7 +2114,7 @@ performing workflow.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 42%" />
 <col style="width: 23%" />
@@ -2138,7 +2138,7 @@ performing workflow.</p>
 <h3>Bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this headline">¶</a></h3>
 <p>Besides cross validation, WORC supports bootstrapping on the test set for performance evaluation.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 21%" />
 <col style="width: 79%" />
@@ -2158,7 +2158,7 @@ performing workflow.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-default">
+<table class="docutils align-center">
 <colgroup>
 <col style="width: 46%" />
 <col style="width: 27%" />
