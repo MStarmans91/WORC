@@ -84,7 +84,7 @@ Besides a Jupyter notebook with instructions, we provide there also an example s
 ## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
 
-When using WORC, please cite this repository using the following DOI: [![DOI](https://zenodo.org/badge/92295542.svg)](https://zenodo.org/badge/latestdoi/92295542)
+When using WORC, please cite this repository using the following DOI: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg)](https://zenodo.org/badge/latestdoi/92295542)
 
 ## Contact
 We are happy to help you with any questions. Please sent us a mail or place an issue on the Github.
