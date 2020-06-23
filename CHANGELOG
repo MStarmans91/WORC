@@ -29,6 +29,8 @@ Fixed
   and thus therefore also PREDICT. Fixed in setup.py and readthedocs files.
 - Documentation building.
 - Bugfix in segmentix test output url.
+- Bugfix in SimpleWORC facade when using features.
+- Warning when using Evaluation pipeline without images.
 
 
 3.1.4 - 2020-05-26

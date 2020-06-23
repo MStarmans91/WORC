@@ -293,9 +293,9 @@ class SimpleWORC():
 
         # Find out how many configs we need to make
         if self._worc.images_train:
-          nmod = len(self._worc.images_train)
+            nmod = len(self._worc.images_train)
         else:
-          nmod = len(self.features_train)
+            nmod = len(self._worc.features_train)
 
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
 

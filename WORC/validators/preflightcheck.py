@@ -54,6 +54,12 @@ class MinSubjectsValidator(AbstractValidator):
             raise ae.WORCValueError(f'Less than {min_subjects} subjects (you have {simpleworc._num_subjects}) will probably make WORC crash due to a split in the test/validation set having only one subject. Use at least {min_subjects} subjects or more.')
 
 
+class EvaluateValidator(AbstractValidator):
+    def _validate(self, simpleworc, *args, **kwargs):
+        if simpleworc._add_evaluation and not simpleworc._images_train:
+            raise ae.WORCValueError(f'You have added the evaluation pipeline, but have not provided images, which is currently required. We will work on this option in a future release.')
+
+
 class SamplesWarning(AbstractValidator):
     # Not really a validator, but more a good practice. Hence this won't throw an exception but prints a warning instead.
     def _validate(self, simpleworc, *args, **kwargs):
@@ -113,7 +119,8 @@ class ValidatorsFactory:
         return [
             SimpleValidator(),
             MinSubjectsValidator(),
-            SamplesWarning()
+            SamplesWarning(),
+            EvaluateValidator()
         ]
 
 
