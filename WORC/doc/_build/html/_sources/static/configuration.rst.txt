@@ -16,9 +16,6 @@ will be ignored. Additionally, .py files from the ``$FASTRHOME/config.d`` folder
 as well. You will see that upon installation, WORC has already put a ``WORC_config.py`` file in the
 ``config.d`` folder.
 
-For a sample configuration file and a complete overview of the options in ``config.py`` see
-the :ref:`configuration-chapter` section.
-
 % Note: Above was originally from quick start
 As ``WORC`` and the default tools used are mostly Python based, we've chosen
 to put our configuration in a ``configparser`` object. This has several
@@ -183,7 +180,7 @@ https://github.com/Jfortin1/ComBatHarmonization.
 
 .. _config-FeatPreProcess:
 FeatPreProcess
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 Before the features are given to the classification function, and thus the
 hyperoptimization, these can be preprocessed as following.
 
@@ -395,7 +392,7 @@ performing workflow.
 
 .. _config-Evaluation:
 Evaluation
-~~~~~~~~
+~~~~~~~~~~
 In the evaluation of the performance, several adjustments can be made.
 
 **Description:**

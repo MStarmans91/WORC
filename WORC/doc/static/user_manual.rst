@@ -26,7 +26,7 @@ The WORC toolbox consists of one main object, the WORC object:
 
 It's attributes are split in a couple of categories. We will not discuss
 the WORC.defaultconfig() function here, which generates the default
-configuration, as it is listed in a separate page, see the :doc:`config file section </configuration.rst>`.
+configuration, as it is listed in a separate page, see the :ref:`config-chapter`
 
 
 
