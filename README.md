@@ -3,9 +3,9 @@
 
 ## Information
 
-| Linux                          | Windows                       | Documentation                 | PyPi                          |
-|--------------------------------|-------------------------------|-------------------------------|-------------------------------|
-| [![][tci-linx]][tci-linx-lnk]  | [![][tci-wind]][tci-wind-lnk] | [![][doc]][doc-lnk]           | [![][pypi]][pypi-lnk]         |
+| Linux                          | Windows                       | Documentation                 | PyPi                          |Citing WORC          |
+|--------------------------------|-------------------------------|-------------------------------|-------------------------------|---------------------|
+| [![][tci-linx]][tci-linx-lnk]  | [![][tci-wind]][tci-wind-lnk] | [![][doc]][doc-lnk]           | [![][pypi]][pypi-lnk]         | [![][DOI]][DOI-lnk] | 
 
 [tci-linx]: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=1
 [tci-linx-lnk]: https://travis-ci.com/MStarmans91/WORC
@@ -18,6 +18,9 @@
 
 [pypi]: https://badge.fury.io/py/WORC.svg
 [pypi-lnk]: https://badge.fury.io/py/WORC
+
+[DOI]: https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg
+[DOI-lnk]: https://zenodo.org/badge/latestdoi/92295542
 
 # Introduction
 
@@ -84,7 +87,7 @@ Besides a Jupyter notebook with instructions, we provide there also an example s
 ## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
 
-When using WORC, please cite this repository using the following DOI: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg)](https://zenodo.org/badge/latestdoi/92295542)
+When using WORC, please cite this repository using the following DOI: [![][DOI]][DOI-lnk].
 
 ## Contact
 We are happy to help you with any questions. Please sent us a mail or place an issue on the Github.
