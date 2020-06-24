@@ -73,6 +73,8 @@ class SamplesWarning(AbstractValidator):
 
 class InvalidLabelsValidator(AbstractValidator):
     def _validate(self, simpleworc):
+        errstr = None
+
         try:
             labels, subjects, _ = load_label_csv(simpleworc._labels_file_train)
         except ae.WORCAssertionError as wae:
@@ -92,12 +94,12 @@ class InvalidLabelsValidator(AbstractValidator):
 
         # check subject names for substrings of eachother
         subjects_matches = self._get_all_substrings_for_array(subjects)
-        if labels_matches:
+        if subjects_matches:
             # if not empty we have a problem
             errstr = "Found subject(s) that are a substring of other subject(s). This is currently not allowed in WORC. Rename the following subject(s):\n"
             for subject, matches in subjects_matches.items():
                 for match in matches:
-                    errstr += f"{label} is a substring of {match}\n"
+                    errstr += f"{subject} is a substring of {match}\n"
 
         if errstr:
             raise ae.WORCValueError(errstr)
@@ -120,7 +122,8 @@ class ValidatorsFactory:
             SimpleValidator(),
             MinSubjectsValidator(),
             SamplesWarning(),
-            EvaluateValidator()
+            EvaluateValidator(),
+            InvalidLabelsValidator()
         ]
 
 
