@@ -32,13 +32,13 @@ def test_combat():
 
     # Check if example data required exists
     features = glob.glob(os.path.join(example_data_dir, 'examplefeatures_Patient*.hdf5'))
-    if len(features) < 6:
-        message = 'Too few example features for ComBat testing not found!' +\
+    if len(features) < 7:
+        message = 'Too few example features for ComBat testing not found! ' +\
             'Run the create_example_data script from the WORC exampledata ' +\
             'directory!'
         raise WORCValueError(message)
-    elif len(features) > 6:
-        message = 'Too many example features for ComBat testing not found!' +\
+    elif len(features) > 7:
+        message = 'Too many example features for ComBat testing not found! ' +\
             'Run the create_example_data script from the WORC exampledata ' +\
             'directory!'
         raise WORCValueError(message)
@@ -53,19 +53,19 @@ def test_combat():
     # Synthetictest()
 
     # # Run the Combat function: only for training
-    ComBat(features_train_in=features,
-           labels_train=objectlabels,
-           config=config,
-           features_train_out=features_train_out)
-
-    # # Run the Combat function: now for train + testing
-    # ComBat(features_train_in=features[0:4],
+    # ComBat(features_train_in=features,
     #        labels_train=objectlabels,
     #        config=config,
-    #        features_train_out=features_train_out[0:4],
-    #        features_test_in=features[4:],
-    #        labels_test=objectlabels,
-    #        features_test_out=features_train_out[4:])
+    #        features_train_out=features_train_out)
+
+    # # Run the Combat function: now for train + testing
+    ComBat(features_train_in=features[0:4],
+           labels_train=objectlabels,
+           config=config,
+           features_train_out=features_train_out[0:4],
+           features_test_in=features[4:],
+           labels_test=objectlabels,
+           features_test_out=features_train_out[4:])
 
     # # Matlab
     # config = os.path.join(example_data_dir, 'ComBatConfig_matlab.ini')
@@ -87,8 +87,8 @@ def test_combat():
     #        features_test_out=features_train_out[4:])
 
     # Remove the feature files
-    for i in glob.glob(os.path.join(example_data_dir, '*features_ComBat*.hdf5')):
-        os.remove(i)
+    # for i in glob.glob(os.path.join(example_data_dir, '*features_ComBat*.hdf5')):
+    #     os.remove(i)
 
 
 def test_combat_fastr():
@@ -113,7 +113,6 @@ def test_combat_fastr():
 
     # Python
     config = os.path.join(example_data_dir, 'ComBatConfig_python.ini')
-    features_train_out = [f.replace('examplefeatures_', 'examplefeatures_ComBat_python_') for f in features]
 
     # Create the fastr network
     experiment = fastr.create_network('test_ComBat')
@@ -153,7 +152,6 @@ def test_combat_fastr():
     sink_data['features_out'] = "vfs://output/test_ComBat/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}"
 
     # Execute
-    tmpdir = os.path.join(fastr.config.mounts['tmp'], 'test_ComBat')
     experiment.execute(source_data, sink_data, execution_plugin='LinearExecution')
 
     # Remove the feature files
@@ -162,4 +160,4 @@ def test_combat_fastr():
 
 
 if __name__ == "__main__":
-    test_combat_fastr()
+    test_combat()

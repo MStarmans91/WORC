@@ -22,7 +22,7 @@ import os
 currentdir = os.path.dirname(os.path.realpath(__file__))
 
 
-def create_random_features(n_objects=6, n_features=10):
+def create_random_features(n_objects=7, n_features=10):
     """
     Create n_objects sets of random features and save in files. Format based
     on PREDICT python package.

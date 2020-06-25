@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ import scipy.io as sio
 import WORC.IOparser.file_io as wio
 import WORC.IOparser.config_io_combat as cio
 import numpy as np
+import random
 import pandas as pd
 from WORC.addexceptions import WORCValueError, WORCKeyError
 import tempfile
@@ -42,7 +43,9 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     Based on: https://github.com/Jfortin1/ComBatHarmonization
     """
     # Load the config
-    print('Initializing ComBat.')
+    print('############################################################')
+    print('#                    Initializing ComBat.                  #')
+    print('############################################################\n')
     config = cio.load_config(config)
     excluded_features = config['ComBat']['excluded_features']
 
@@ -59,6 +62,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
     feature_labels = image_features_train[0][1]
     image_features_train = [i[0] for i in image_features_train]
+    label_data_train['patient_IDs'] = list(label_data_train['patient_IDs'])
 
     # Exclude features
     if excluded_features:
@@ -105,6 +109,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
                               label_type=label_names)
 
         image_features_test = [i[0] for i in image_features_test]
+        label_data_test['patient_IDs'] = list(label_data_test['patient_IDs'])
 
         if excluded_features:
             image_features_test_combat = [np.asarray(i)[included_feature_indices].tolist() for i in image_features_test]
@@ -151,17 +156,92 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
     mod = config['ComBat']['mod']
     print(f'\t Using batch variable {bat}, mod variables {mod}.')
     batch = [all_labels[l] for l in all_labels.keys() if l in config['ComBat']['batch']]
+    batch = batch[0]
     if config['ComBat']['mod'][0] == '[]':
         mod = None
     else:
         mod = [all_labels[l] for l in all_labels.keys() if l in config['ComBat']['mod']]
+
+    # Set parameters for output files
+    parameters = {'batch': config['ComBat']['batch'],
+                  'mod': config['ComBat']['mod'],
+                  'par': config['ComBat']['par']}
+    name = 'Image features: ComBat corrected'
+    panda_labels = ['parameters',
+                    'patient',
+                    'feature_values',
+                    'feature_labels']
+    feature_labels = feature_labels_combat + feature_labels_noncombat
 
     # Convert all inputs to arrays with right shape
     all_features_matrix = np.transpose(all_features_matrix)
     if mod is not None:
         mod = np.transpose(np.asarray(mod))
 
-    # Run ComBatin Matlab
+    # Patients identified with batch -1.0 should be skipped
+    skipname = 'Image features: ComBat skipped'
+    ntrain = len(image_features_train_combat)
+    ndel = 0
+    print(features_test_out)
+    for bnum, b in enumerate(batch):
+        bnum -= ndel
+        if b == -1.0:
+            if bnum < ntrain - ndel:
+                # Training patient
+                print('train')
+                pid = label_data_train['patient_IDs'][bnum]
+                out = features_train_out[bnum]
+
+                # Combine ComBat and non-ComBat features
+                feature_values_temp = list(all_features_matrix[:, bnum]) + list(image_features_train_noncombat[bnum])
+
+                # Delete patient for later processing
+                del label_data_train['patient_IDs'][bnum]
+                del image_features_train_noncombat[bnum]
+                del features_train_out[bnum]
+                image_features_train_combat = np.delete(image_features_train_combat, bnum, 0)
+
+            else:
+                # Test patient
+                print('test')
+                pid = label_data_test['patient_IDs'][bnum - ntrain]
+                out = features_test_out[bnum - ntrain]
+
+                # Combine ComBat and non-ComBat features
+                feature_values_temp = list(all_features_matrix[:, bnum]) + list(image_features_test_noncombat[bnum - ntrain])
+
+                # Delete patient for later processing
+                del label_data_test['patient_IDs'][bnum - ntrain]
+                del image_features_test_noncombat[bnum - ntrain]
+                del features_test_out[bnum - ntrain]
+                image_features_test_combat = np.delete(image_features_test_combat, bnum - ntrain, 0)
+
+            # Delete some other variables for later processing
+            all_features_matrix = np.delete(all_features_matrix, bnum, 1)
+            mod = np.delete(mod, bnum, 0)
+            batch = np.delete(batch, bnum, 0)
+
+            # Notify user
+            print(f'[WARNING] Skipping patient {pid} as batch variable is -1.0.')
+
+            # Sort based on feature label
+            feature_labels_temp, feature_values_temp =\
+                zip(*sorted(zip(feature_labels, feature_values_temp)))
+
+            # Convert to pandas Series and save as hdf5
+            panda_data = pd.Series([parameters, pid, feature_values_temp,
+                                    feature_labels_temp],
+                                   index=panda_labels,
+                                   name=skipname
+                                   )
+
+            print(f'\t Saving image features to: {out}.')
+            panda_data.to_hdf(out, 'image_features')
+
+            ndel += 1
+
+    print(features_test_out)
+    # Run ComBat in Matlab
     if config['ComBat']['language'] == 'matlab':
         print('\t Executing ComBat through Matlab')
         data_harmonized = ComBatMatlab(dat=all_features_matrix,
@@ -187,17 +267,7 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
         data_harmonized = 10 ** data_harmonized
 
     # Convert again to train hdf5 files
-    parameters = {'batch': config['ComBat']['batch'],
-                  'mod': config['ComBat']['mod'],
-                  'par': config['ComBat']['par']}
-    name = 'Image features: ComBat corrected'
-    panda_labels = ['parameters',
-                    'patient',
-                    'feature_values',
-                    'feature_labels']
-
     feature_values_train_combat = [data_harmonized[:, i] for i in range(len(image_features_train_combat))]
-    feature_labels = feature_labels_combat + feature_labels_noncombat
     for fnum, i_feat in enumerate(feature_values_train_combat):
         # Combine ComBat and non-ComBat features
         feature_values_temp = i_feat.tolist() + image_features_train_noncombat[fnum]
@@ -219,8 +289,11 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
     # Repeat for testing if required
     if features_test_in:
+        print(len(image_features_test_combat))
+        print(data_harmonized.shape[1])
         feature_values_test_combat = [data_harmonized[:, i] for i in range(data_harmonized.shape[1] - len(image_features_test_combat), data_harmonized.shape[1])]
         for fnum, i_feat in enumerate(feature_values_test_combat):
+            print(fnum)
             # Combine ComBat and non-ComBat features
             feature_values_temp = i_feat.tolist() + image_features_test_noncombat[fnum]
 
@@ -250,7 +323,7 @@ def ComBatPython(dat, batch, mod=None, par=1,
     # convert inputs to neuroCombat format.
     covars = dict()
     categorical_cols = list()
-    covars['batch'] = batch[0]
+    covars['batch'] = batch
     if mod is not None:
         for i_mod in range(mod.shape[1]):
             label = f'mod_{i_mod}'
@@ -337,29 +410,48 @@ def ComBatPython(dat, batch, mod=None, par=1,
 
 
 def Synthetictest(n_patients=50, n_features=10, par=1, eb=1,
-                  per_feature=True, difscale=False, logarithmic=False,
-                  oddpatient=False, oddfeat=False):
+                  per_feature=False, difscale=False, logarithmic=False,
+                  oddpatient=True, oddfeat=True, samefeat=True):
     """Test for ComBat with Synthetic data."""
     features = np.zeros((n_features, n_patients))
     batch = list()
 
     # First batch: Gaussian with loc 0, scale 1
     for i in range(0, int(n_patients/2)):
+        feat_temp = [np.random.normal(loc=0.0, scale=1.0) for i in range(n_features)]
         if i == 1 and oddpatient:
             feat_temp = [np.random.normal(loc=10.0, scale=1.0) for i in range(n_features)]
         elif oddfeat:
             feat_temp = [np.random.normal(loc=0.0, scale=1.0) for i in range(n_features - 1)] + [np.random.normal(loc=10000.0, scale=1.0)]
+
+        if samefeat:
+            feat_temp[-1] = 1
+
         features[:, i] = feat_temp
         batch.append(1)
 
-    # First batch: Gaussian with loc 1, scale 1
+    # Get directions for features
+    directions = list()
+    for i in range(n_features):
+        direction = random.random()
+        if direction > 0.5:
+            directions.append(1.0)
+        else:
+            directions.append(-1.0)
+
+    # First batch: Gaussian with loc 5, scale 1
     for i in range(int(n_patients/2), n_patients):
-        feat_temp = [np.random.normal(loc=5.0, scale=1.0) for i in range(n_features)]
+        feat_temp = [np.random.normal(loc=direction*5.0, scale=1.0) for i in range(n_features)]
         if oddfeat:
             feat_temp = [np.random.normal(loc=5.0, scale=1.0) for i in range(n_features - 1)] + [np.random.normal(loc=10000.0, scale=1.0)]
 
         if difscale:
             feat_temp = [f + 1000 for f in feat_temp]
+
+        feat_temp = np.multiply(feat_temp, directions)
+        if samefeat:
+            feat_temp[-1] = 1
+
         features[:, i] = feat_temp
         batch.append(2)
 
@@ -379,19 +471,20 @@ def Synthetictest(n_patients=50, n_features=10, par=1, eb=1,
     if logarithmic:
         data_harmonized = 10 ** data_harmonized - np.abs(minfeat)
 
-    f = plt.figure()
-    ax = plt.subplot(2, 1, 1)
-    ax.scatter(np.ones((int(n_patients/2))), features[0, 0:int(n_patients/2)], color='red')
-    ax.scatter(np.ones((n_patients - int(n_patients/2))) + 1, features[0, int(n_patients/2):], color='blue')
-    plt.title('Before Combat')
+    for i in range(n_features):
+        f = plt.figure()
+        ax = plt.subplot(2, 1, 1)
+        ax.scatter(np.ones((int(n_patients/2))), features[i, 0:int(n_patients/2)], color='red')
+        ax.scatter(np.ones((n_patients - int(n_patients/2))) + 1, features[i, int(n_patients/2):], color='blue')
+        plt.title('Before Combat')
 
-    ax = plt.subplot(2, 1, 2)
-    ax.scatter(np.ones((int(n_patients/2))), data_harmonized[0, 0:int(n_patients/2)], color='red')
-    ax.scatter(np.ones((n_patients - int(n_patients/2))) + 1, data_harmonized[0, int(n_patients/2):], color='blue')
-    plt.title('After Combat')
+        ax = plt.subplot(2, 1, 2)
+        ax.scatter(np.ones((int(n_patients/2))), data_harmonized[i, 0:int(n_patients/2)], color='red')
+        ax.scatter(np.ones((n_patients - int(n_patients/2))) + 1, data_harmonized[i, int(n_patients/2):], color='blue')
+        plt.title('After Combat')
 
-    plt.show()
-    f.savefig(f'combat_par{par}_eb{eb}_perfeat{per_feature}.png')
+        plt.show()
+        f.savefig(f'combat_par{par}_eb{eb}_perfeat{per_feature}_feat{i}.png')
 
     # Logarithmic: not useful, as we have negative numbers, and (almost) zeros.
     # so combat gives unuseful results.
