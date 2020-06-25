@@ -62,6 +62,7 @@ from WORC.featureprocessing.Preprocessor import Preprocessor
 from WORC.classification.smac import build_smac_config
 from smac.scenario.scenario import Scenario
 from smac.facade.smac_hpo_facade import SMAC4HPO
+import heapq
 
 
 def rms_score(truth, prediction):
@@ -2620,8 +2621,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         pre_dispatch = self.pre_dispatch
         cv_iter = list(cv.split(self.features, self.labels, groups))
 
-        filething = open('/home/mitchell/param_distributions.txt', 'a')
-        filething.write(str(self.param_distributions))
+        bctest = open('/home/mitchell/best_configs.txt', 'a')
 
         # Build the SMAC configuration
         cs = build_smac_config(self.param_distributions)
@@ -2630,27 +2630,80 @@ class BaseSearchCVSMAC(BaseSearchCV):
         scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                              "runcount-limit": self.n_iter,  # max. number of function evaluations;
                              "cs": cs,
-                             "deterministic": "true"
+                             "deterministic": "true",
+                             "output_dir": "/home/mitchell/runs"
                              })
 
-        # Run the optimization
-        smac = SMAC4HPO(scenario=scenario, rng=self.random_state,
-                        tae_runner=self._score_cfg)
+        # Define the scoring function
+        def score_cfg(cfg):
+            # Construct a new dictionary with parameters from the input configuration
+            parameters = self.convert_cfg(cfg.get_dictionary())
 
+            # Set up the cross-validation
+            cv = check_cv(self.cv, self.labels, classifier=True)
+            cv_iter = list(cv.split(self.features, self.labels))
+
+            # Fit the classifier and store the result
+            all_test_scores = []
+            for train, test in cv_iter:
+                ret = fit_and_score(self.features, self.labels, self.scoring,
+                                    train, test, parameters,
+                                    fit_params=self.fit_params,
+                                    return_train_score=True,
+                                    return_n_test_samples=True,
+                                    return_times=True, return_parameters=True,
+                                    error_score=self.error_score,
+                                    verbose=False,
+                                    return_all=False)
+                all_test_scores.append(ret[1])
+
+            # Return the average score over all cross-validation folds
+            mean_test_score = np.mean(all_test_scores)
+            score = 1 - mean_test_score  # We minimize so take the inverse
+
+            f = open('/home/mitchell/tested_configs.txt', 'a')
+            f.write(str(parameters) + '\n' + str(score) + '\n')
+
+            return score
+
+        # Run the optimization
+        run_id = random.randint(0, 2**32 - 1)
+        smac = SMAC4HPO(scenario=scenario, rng=self.random_state,
+                        tae_runner=score_cfg, run_id=run_id)
         opt_config = smac.optimize()
+
+        # Load in the runhistory data
+        runhistory_file = open('/home/mitchell/runs/run_' + str(run_id) +
+                               '/runhistory.json')
+        runhistory = json.load(runhistory_file)
+        bctest.write('runhistory: ' + str(runhistory) + '\n')
+
+        best_configs = []
+        # Loop over all evaluated configurations
+        for i in range(len(runhistory['configs'])):
+            # We want the highest priority (low number) to be associated
+            # with the worst scores so take the inverse again
+            score = 1 - runhistory['data'][i][1][0]
+            config = runhistory['configs'][str(i + 1)]
+            parameters = self.convert_cfg(config)
+            # If the list is shorter than the maximum
+            # length, add the configuration
+            if len(best_configs) < self.maxlen:
+                heapq.heappush(best_configs, (score, i, parameters))
+            # Otherwise, check if this config outperforms the worst one in the list
+            # We use i to break ties between scores
+            elif best_configs[0][0] < score:
+                heapq.heapreplace(best_configs, (score, i, parameters))
+
+        bctest.write('best_configs: ' + str(best_configs))
 
         # Write the best found configuration and its score to a file
         opt_value_print = open('/home/mitchell/opt_value.txt', 'a')
-        opt_value_print.write(str(opt_config))
-        opt_value_print.write(str(self._score_cfg(opt_config)))
+        opt_value_print.write(str(opt_config) + '\n')
+        opt_value_print.write(str(score_cfg(opt_config)) + '\n')
 
         # Convert the best found configuration to a dictionary
         best_parameters = opt_config.get_dictionary()
-        # Add some parameters that are used for fitting, but are not part of the optimization
-        best_parameters['random_seed'] = self.random_state
-        best_parameters['max_iter'] = self.param_distributions['Classification']['max_iter'][0]
-        best_parameters['FeatPreProcess'] = False
-        best_parameters['Featsel_Variance'] = False
 
         # Skip the preprocessing for now, by setting FeatPreProcess
         # always to False. This next section is not accurate at this point.
@@ -2671,7 +2724,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
             n_jobs=1, verbose=self.verbose,
             pre_dispatch=pre_dispatch
         )(delayed(fit_and_score)(self.features, self.labels, self.scoring,
-                                 train, test, best_parameters,
+                                 train, test, parameters,
                                  fit_params=self.fit_params,
                                  return_train_score=self.return_train_score,
                                  return_n_test_samples=True,
@@ -2679,6 +2732,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                                  error_score=self.error_score,
                                  verbose=False,
                                  return_all=False)
+          for score, iter, parameters in best_configs
           for train, test in cv_iter)
         save_data = zip(*out)
 
@@ -2705,41 +2759,27 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         return self
 
-    def _score_cfg(self, cfg):
-        # Construct a new dictionary with parameters from the input configuration
-        parameters = cfg.get_dictionary()
+    def convert_cfg(self, cfg):
+        parameters = cfg
         # Add some parameters that are used for fitting, but are not part of the optimization
         parameters['random_seed'] = self.random_state
         parameters['max_iter'] = self.param_distributions['Classification']['max_iter'][0]
         parameters['FeatPreProcess'] = False
         parameters['Featsel_Variance'] = False
 
-        # Set up the cross-validation
-        cv = check_cv(self.cv, self.labels, classifier=True)
-        cv_iter = list(cv.split(self.features, self.labels))
+        # No featureScaling flag is accepted in fit_and_score,
+        # so remove it
+        parameters.pop('use_featureScaling')
+        # fit_and_score requires a flag but only if it is true
+        if parameters['Imputation'] == 'False':
+            parameters.pop('Imputation')
+        # 'PCAType' is either '95variance' or an int
+        if parameters['UsePCA'] == 'True' and \
+                parameters['PCAType'] == 'n_components':
+            parameters['PCAType'] = parameters.pop('n_components')
 
-        # Fit the classifier and store the result
-        all_test_scores = []
-        for train, test in cv_iter:
-            ret = fit_and_score(self.features, self.labels, self.scoring,
-                                train, test, parameters,
-                                fit_params=self.fit_params,
-                                return_train_score=True,
-                                return_n_test_samples=True,
-                                return_times=True, return_parameters=True,
-                                error_score=self.error_score,
-                                verbose=False,
-                                return_all=False)
-            all_test_scores.append(ret[1])
+        return parameters
 
-        # Return the average score over all cross-validation folds
-        mean_test_score = np.mean(all_test_scores)
-        score = 1 - mean_test_score  # We minimize so take the inverse
-
-        f = open('/home/mitchell/tested_configs.txt', 'a')
-        f.write(str(parameters) + '\n' + str(score) + '\n')
-
-        return score
 
 
 class GuidedSearchCVSMAC(BaseSearchCVSMAC):
@@ -2946,7 +2986,7 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
                  error_score='raise', return_train_score=True,
                  n_jobspercore=100, fastr_plugin=None, maxlen=100,
-                 ranking_score='test_score', features={}, labels={}):
+                 ranking_score='test_score', features=None, labels=None):
         super(GuidedSearchCVSMAC, self).__init__(
              param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
              n_iter=n_iter, random_state=random_state, n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,

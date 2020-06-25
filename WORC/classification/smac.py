@@ -41,7 +41,7 @@ def build_smac_config(parameters):
 
     # The first argument to parse is the choice of classifier
     classifier = CategoricalHyperparameter('classifiers',
-                                           choices=['SVM', 'RF', 'LR', 'LDA', 'QDA'])
+                                           choices=['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB'])
     cs.add_hyperparameter(classifier)
 
     # SVM
@@ -133,6 +133,10 @@ def build_smac_config(parameters):
                                            log=True)
     cs.add_hyperparameter(reg_param)
     cs.add_condition(InCondition(child=reg_param, parent=classifier, values=['QDA']))
+
+    # GaussianNB
+    # 0 hyperparameters
+
 
     ### Preprocessing ###
     # 9 preprocessing steps are included:
