@@ -14,11 +14,11 @@ Original           True        True, False
 Wavelet            False       True, False                                                                                                             
 LoG                False       True, False                                                                                                             
 label              1           Integer                                                                                                                 
-extract_firstorder False       False                                                                                                                   
-extract_shape      True        True                                                                                                                    
-texture_GLCM       False       False                                                                                                                   
-texture_GLRLM      True        True                                                                                                                    
-texture_GLSZM      True        True                                                                                                                    
-texture_GLDM       True        True                                                                                                                    
-texture_NGTDM      True        True                                                                                                                    
+extract_firstorder False       True, False                                                                                                             
+extract_shape      True        True, False                                                                                                             
+texture_GLCM       False       True, False                                                                                                             
+texture_GLRLM      True        True, False                                                                                                             
+texture_GLSZM      True        True, False                                                                                                             
+texture_GLDM       True        True, False                                                                                                             
+texture_NGTDM      True        True, False                                                                                                             
 ================== =========== ========================================================================================================================

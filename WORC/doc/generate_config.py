@@ -201,6 +201,15 @@ def generate_config_options():
     config['PyRadiomics']['LoG'] = 'True, False'
     config['PyRadiomics']['label'] = 'Integer'
 
+    # Enabled PyRadiomics features
+    config['PyRadiomics']['extract_firstorder'] = 'True, False'
+    config['PyRadiomics']['extract_shape'] = 'True, False'
+    config['PyRadiomics']['texture_GLCM'] = 'True, False'
+    config['PyRadiomics']['texture_GLRLM'] = 'True, False'
+    config['PyRadiomics']['texture_GLSZM'] = 'True, False'
+    config['PyRadiomics']['texture_GLDM'] = 'True, False'
+    config['PyRadiomics']['texture_NGTDM'] = 'True, False'
+
     # ComBat Feature Harmonization
     config['ComBat'] = dict()
     config['ComBat']['language'] = 'python, matlab'
@@ -449,6 +458,15 @@ def generate_config_descriptions():
     config['PyRadiomics']['Wavelet'] = 'Enable/Disable computation of wavelet image features.'
     config['PyRadiomics']['LoG'] = 'Enable/Disable computation of Laplacian of Gaussian (LoG) image features.'
     config['PyRadiomics']['label'] = '"Intensity" of the pixels in the mask to be used for feature extraction. If using segmentix, use 1, as your mask will be boolean. Otherwise, select the integer(s) corresponding to the ROI in your mask.'
+
+    # Enabled PyRadiomics features
+    config['PyRadiomics']['extract_firstorder'] = 'Determine whether first order features are computed or not.'
+    config['PyRadiomics']['extract_shape'] = 'Determine whether shape features are computed or not.'
+    config['PyRadiomics']['texture_GLCM'] = 'Determine whether GLCM features are computed or not.'
+    config['PyRadiomics']['texture_GLRLM'] = 'Determine whether GLRLM features are computed or not.'
+    config['PyRadiomics']['texture_GLSZM'] = 'Determine whether GLSZM features are computed or not.'
+    config['PyRadiomics']['texture_GLDM'] = 'Determine whether GLDM features are computed or not.'
+    config['PyRadiomics']['texture_NGTDM'] = 'Determine whether NGTDM features are computed or not.'
 
     # ComBat Feature Harmonization
     config['ComBat'] = dict()
