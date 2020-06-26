@@ -52,7 +52,7 @@ Modularity and standardization: fastr
 
 The first step of building WORC was to standardize radiomics in components to create a modular workflow.
 The available radiomics methods were all in different software languages, hence my framework had to support this as well.
-Luckily, some of my colleagues had the same issues and decided to create a new workflow engine: `fastr http://journal.frontiersin.org/article/10.3389/fict.2016.00015/full/>`_.
+Luckily, some of my colleagues had the same issues and decided to create a new workflow engine: `fastr <http://journal.frontiersin.org/article/10.3389/fict.2016.00015/full/>`_.
 I highly recommend to read at least `the introductory page of the manual <https://fastr.readthedocs.io/en/stable/static/introduction.html/>`_ in order to get familiar with the basic concept of fastr .
 
 To illustrate the principles of fastr, one of the simpler workflows created by WORC using fastr is shown in the figure below.

@@ -203,8 +203,8 @@ def load_label_XNAT(label_info):
     return label_names, patient_ID, label_status
 
 
-def findlabeldata(patientinfo, label_type, filenames,
-                  image_features_temp=None):
+def findlabeldata(patientinfo, label_type, filenames=None,
+                  objects=None, pids=None):
     """
     Load the label data and match to the unage features.
 
@@ -212,7 +212,7 @@ def findlabeldata(patientinfo, label_type, filenames,
         patientinfo (string): file with patient label data
         label_type (string): name of the label read out from patientinfo
         filenames (list): names of the patient feature files, used for matching
-        image_features (np.array or list): array of the features
+        objects (np.array or list): array of objects you want to order as well
 
     Returns:
         label_data (dict): contains patient ids, their labels and the label name
@@ -225,9 +225,16 @@ def findlabeldata(patientinfo, label_type, filenames,
     for i_len in range(len(label_data_temp['label_name'])):
         label_value.append(list())
 
-    # Check per feature file if there is a match in the label data
-    image_features = list()
-    for i_feat, feat in enumerate(filenames):
+    # Check per feature file / pid if there is a match in the label data
+    if filenames:
+        iterator = filenames
+    elif pids:
+        iterator = pids
+    else:
+        raise ae.WORCValueError('Either input pids or filenames for label matching!')
+
+    objects_out = list()
+    for i_feat, feat in enumerate(iterator):
         ifound = 0
         matches = list()
         for i_num, i_patient in enumerate(label_data_temp['patient_IDs']):
@@ -238,8 +245,8 @@ def findlabeldata(patientinfo, label_type, filenames,
                 matches.append(i_patient)
 
                 # If there are feature files given, add it to the list
-                if image_features_temp is not None:
-                    image_features.append(image_features_temp[i_feat])
+                if objects is not None:
+                    objects_out.append(objects[i_feat])
 
                 # For each label that we have, add the value to the label list
                 for i_len in range(len(label_data_temp['label_name'])):
@@ -256,9 +263,6 @@ def findlabeldata(patientinfo, label_type, filenames,
             message = ('No entry found in labeling for feature file {}.').format(str(feat))
             raise ae.WORCKeyError(message)
 
-    # if image_features_temp is not None:
-    #     image_features = np.asarray(image_features)
-
     # Convert to arrays
     for i_len in range(len(label_value)):
         label_value[i_len] = np.asarray(label_value[i_len])
@@ -267,7 +271,7 @@ def findlabeldata(patientinfo, label_type, filenames,
     label_data['label'] = np.asarray(label_value)
     label_data['label_name'] = label_data_temp['label_name']
 
-    return label_data, image_features
+    return label_data, objects_out
 
 
 def load_config_XNAT(config_file_path):

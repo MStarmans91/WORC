@@ -22,11 +22,11 @@ import os
 currentdir = os.path.dirname(os.path.realpath(__file__))
 
 
-def create_random_features(n_objects=6, n_features=10):
-    '''
+def create_random_features(n_objects=7, n_features=10):
+    """
     Create n_objects sets of random features and save in files. Format based
     on PREDICT python package.
-    '''
+    """
     # Create some input values for all objects
     feature_labels = [f'rf_randomlabel_{i}' for i in range(n_features)]
     image_type = 'None'
@@ -36,7 +36,11 @@ def create_random_features(n_objects=6, n_features=10):
 
     for i in range(n_objects):
         # Create output name and random feature values and labels
-        feature_values = np.random.rand((n_features)).tolist()
+        if i < float(n_objects) / 2.0:
+            feature_values = [np.random.normal(loc=5.0, scale=2.0) for i in range(n_features)]
+        else:
+            feature_values = [np.random.normal(loc=10.0, scale=2.0) for i in range(n_features)]
+
         output = os.path.join(currentdir, f'examplefeatures_Patient-{str(i).zfill(3)}.hdf5')
 
         # Convert to pandas Series and save as hdf5

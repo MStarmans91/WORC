@@ -6,13 +6,40 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-3.1.4 - 2020-05-22
+3.2.0 - 2020-06-26
+------------------
+
+Added
+~~~~~~~
+- Labelprocessing can now also handle having patient ID in the feature files.
+  Was required for ComBat.
+
+Changed
+~~~~~~~
+- Output of plot_SVM function is better ordered.
+- Several defaults, as we now have PyRadiomics fully embedded, resulting in
+  a large increase in features.
+- No more overrides for the full config, as the default now is the full config.
+
+Fixed
+~~~~~
+- Cardinality of decomposition tool was incorrect.
+- ComBat integration in WORC network now works properly.
+- Documentation didn't build due to C-extension dependencies of PyRadiomics,
+  and thus therefore also PREDICT. Fixed in setup.py and readthedocs files.
+- Documentation building.
+- Bugfix in segmentix test output url.
+- Bugfix in SimpleWORC facade when using features.
+- Warning when using Evaluation pipeline without images.
+
+
+3.1.4 - 2020-05-26
 ------------------
 
 Added
 ~~~~~~~
 - Catch error if number of segmentations supplied does not match number of
-  images. 
+  images.
 - Add support in SimpleWORC and BasicWORC for multiple segmentations per
   patient.
 - Chi2 test in statistical testing.

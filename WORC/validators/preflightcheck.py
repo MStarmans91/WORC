@@ -54,6 +54,12 @@ class MinSubjectsValidator(AbstractValidator):
             raise ae.WORCValueError(f'Less than {min_subjects} subjects (you have {simpleworc._num_subjects}) will probably make WORC crash due to a split in the test/validation set having only one subject. Use at least {min_subjects} subjects or more.')
 
 
+class EvaluateValidator(AbstractValidator):
+    def _validate(self, simpleworc, *args, **kwargs):
+        if simpleworc._add_evaluation and not simpleworc._images_train:
+            raise ae.WORCValueError(f'You have added the evaluation pipeline, but have not provided images, which is currently required. We will work on this option in a future release.')
+
+
 class SamplesWarning(AbstractValidator):
     # Not really a validator, but more a good practice. Hence this won't throw an exception but prints a warning instead.
     def _validate(self, simpleworc, *args, **kwargs):
@@ -67,6 +73,8 @@ class SamplesWarning(AbstractValidator):
 
 class InvalidLabelsValidator(AbstractValidator):
     def _validate(self, simpleworc):
+        errstr = None
+
         try:
             labels, subjects, _ = load_label_csv(simpleworc._labels_file_train)
         except ae.WORCAssertionError as wae:
@@ -86,12 +94,12 @@ class InvalidLabelsValidator(AbstractValidator):
 
         # check subject names for substrings of eachother
         subjects_matches = self._get_all_substrings_for_array(subjects)
-        if labels_matches:
+        if subjects_matches:
             # if not empty we have a problem
             errstr = "Found subject(s) that are a substring of other subject(s). This is currently not allowed in WORC. Rename the following subject(s):\n"
             for subject, matches in subjects_matches.items():
                 for match in matches:
-                    errstr += f"{label} is a substring of {match}\n"
+                    errstr += f"{subject} is a substring of {match}\n"
 
         if errstr:
             raise ae.WORCValueError(errstr)
@@ -113,7 +121,9 @@ class ValidatorsFactory:
         return [
             SimpleValidator(),
             MinSubjectsValidator(),
-            SamplesWarning()
+            SamplesWarning(),
+            EvaluateValidator(),
+            InvalidLabelsValidator()
         ]
 
 

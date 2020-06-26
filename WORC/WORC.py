@@ -153,6 +153,7 @@ class WORC(object):
         self.CopyMetadata = True
         self.segmode = []
         self._add_evaluation = False
+        self.TrainTest = False
 
         # Memory settings for all fastr nodes
         self.fastr_memory_parameters = dict()
@@ -216,7 +217,7 @@ class WORC(object):
         config['ImageFeatures']['shape'] = 'True'
         config['ImageFeatures']['histogram'] = 'True'
         config['ImageFeatures']['orientation'] = 'True'
-        config['ImageFeatures']['texture_Gabor'] = 'False'
+        config['ImageFeatures']['texture_Gabor'] = 'True'
         config['ImageFeatures']['texture_LBP'] = 'True'
         config['ImageFeatures']['texture_GLCM'] = 'True'
         config['ImageFeatures']['texture_GLCMMS'] = 'True'
@@ -224,9 +225,9 @@ class WORC(object):
         config['ImageFeatures']['texture_GLSZM'] = 'False'
         config['ImageFeatures']['texture_NGTDM'] = 'False'
         config['ImageFeatures']['coliage'] = 'False'
-        config['ImageFeatures']['vessel'] = 'False'
-        config['ImageFeatures']['log'] = 'False'
-        config['ImageFeatures']['phase'] = 'False'
+        config['ImageFeatures']['vessel'] = 'True'
+        config['ImageFeatures']['log'] = 'True'
+        config['ImageFeatures']['phase'] = 'True'
 
         # Parameter settings for PREDICT feature calculation
         # Defines only naming of modalities
@@ -275,19 +276,27 @@ class WORC(object):
         config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
         config['PyRadiomics']['voxelArrayShift'] = '300'
         config['PyRadiomics']['Original'] = 'True'
-        config['PyRadiomics']['Wavelet'] = 'True'
-        config['PyRadiomics']['LoG'] = 'True'
+        config['PyRadiomics']['Wavelet'] = 'False'
+        config['PyRadiomics']['LoG'] = 'False'
 
         if config['General']['Segmentix'] == 'True':
             config['PyRadiomics']['label'] = '1'
         else:
             config['PyRadiomics']['label'] = '255'
 
+        # Enabled PyRadiomics features
+        config['PyRadiomics']['extract_firstorder'] = 'False'
+        config['PyRadiomics']['extract_shape'] = 'True'
+        config['PyRadiomics']['texture_GLCM'] = 'False'
+        config['PyRadiomics']['texture_GLRLM'] = 'True'
+        config['PyRadiomics']['texture_GLSZM'] = 'True'
+        config['PyRadiomics']['texture_GLDM'] = 'True'
+        config['PyRadiomics']['texture_NGTDM'] = 'True'
+
         # ComBat Feature Harmonization
         config['ComBat'] = dict()
         config['ComBat']['language'] = 'python'
         config['ComBat']['batch'] = 'Hospital'
-        config['ComBat']['mod'] = 'Age'
         config['ComBat']['par'] = '1'
         config['ComBat']['eb'] = '1'
         config['ComBat']['per_feature'] = '0'
@@ -332,19 +341,19 @@ class WORC(object):
         config['SelectFeatGroup']['patient_features'] = 'False'
         config['SelectFeatGroup']['semantic_features'] = 'False'
         config['SelectFeatGroup']['coliage_features'] = 'False'
-        config['SelectFeatGroup']['vessel_features'] = 'False'
-        config['SelectFeatGroup']['phase_features'] = 'False'
-        config['SelectFeatGroup']['fractal_features'] = 'False'
-        config['SelectFeatGroup']['location_features'] = 'False'
-        config['SelectFeatGroup']['rgrd_features'] = 'False'
+        config['SelectFeatGroup']['vessel_features'] = 'True, False'
+        config['SelectFeatGroup']['phase_features'] = 'True, False'
+        config['SelectFeatGroup']['fractal_features'] = 'True, False'
+        config['SelectFeatGroup']['location_features'] = 'True, False'
+        config['SelectFeatGroup']['rgrd_features'] = 'True, False'
 
         # Select features per toolbox, or simply all
         config['SelectFeatGroup']['toolbox'] = 'All, PREDICT, PyRadiomics'
 
         # Select original features, or after transformation of feature space
         config['SelectFeatGroup']['original_features'] = 'True'
-        config['SelectFeatGroup']['wavelet_features'] = 'False'
-        config['SelectFeatGroup']['log_features'] = 'False'
+        config['SelectFeatGroup']['wavelet_features'] = 'True, False'
+        config['SelectFeatGroup']['log_features'] = 'True, False'
 
         # Feature imputation
         config['Imputation'] = dict()
@@ -388,6 +397,7 @@ class WORC(object):
         # Options for the object/patient labels that are used
         config['Labels'] = dict()
         config['Labels']['label_names'] = 'Label1, Label2'
+        config['ComBat']['mod'] = config['Labels']['label_names']  # Variation due to label to predict should be maintained
         config['Labels']['modus'] = 'singlelabel'
         config['Labels']['url'] = 'WIP'
         config['Labels']['projectID'] = 'WIP'
@@ -409,7 +419,7 @@ class WORC(object):
 
         # Sample processing options
         config['SampleProcessing'] = dict()
-        config['SampleProcessing']['SMOTE'] = 'False'
+        config['SampleProcessing']['SMOTE'] = 'True, False'
         config['SampleProcessing']['SMOTE_ratio'] = '1, 0'
         config['SampleProcessing']['SMOTE_neighbors'] = '5, 15'
         config['SampleProcessing']['Oversampling'] = 'False'
@@ -454,6 +464,9 @@ class WORC(object):
     def build_training(self):
         """Build the training network based on the given attributes."""
         # We either need images or features for Radiomics
+        if self.images_test or self.features_test:
+            self.TrainTest = True
+
         if self.images_train or self.features_train:
             print('Building training network...')
             # We currently require labels for supervised learning
@@ -497,7 +510,7 @@ class WORC(object):
                 self.link_class_1.collapse = 'conf'
                 self.link_class_2.collapse = 'pctrain'
 
-                if self.images_test or self.features_test:
+                if self.TrainTest:
                     # FIXME: the naming here is ugly
                     self.link_class_3 = self.network.create_link(self.source_patientclass_test.output, self.classify.inputs['patientclass_test'])
                     self.link_class_3.collapse = 'pctest'
@@ -536,7 +549,7 @@ class WORC(object):
 
                     self.featurecalculators = dict()
 
-                    if self.images_test or self.features_test:
+                    if self.TrainTest:
                         # A test set is supplied, for which nodes also need to be created
                         self.calcfeatures_test = dict()
                         self.featureconverter_test = dict()
@@ -581,7 +594,7 @@ class WORC(object):
                         self.converters_masks_train = dict()
                         self.nodes_segmentix_train = dict()
 
-                        if self.images_test or self.features_test:
+                        if self.TrainTest:
                             # Also use segmentix on the tes set
                             self.sinks_segmentations_segmentix_test = dict()
                             self.sources_masks_test = dict()
@@ -619,7 +632,7 @@ class WORC(object):
                         # Create required sources and sinks
                         self.sources_parameters[label] = self.network.create_source('ParameterFile', id='config_' + label)
                         self.sources_images_train[label] = self.network.create_source('ITKImageFile', id='images_train_' + label, node_group='train')
-                        if self.images_test or self.features_test:
+                        if self.TrainTest:
                             self.sources_images_test[label] = self.network.create_source('ITKImageFile', id='images_test_' + label, node_group='test')
 
                         if self.metadata_train and len(self.metadata_train) >= nmod + 1:
@@ -647,7 +660,7 @@ class WORC(object):
                             # Use WORC PXCastConvet for converting image formats
                             memory = self.fastr_memory_parameters['WORCCastConvert']
                             self.converters_im_train[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_im_train_' + label, resources=ResourceLimit(memory=memory))
-                            if self.images_test or self.features_test:
+                            if self.TrainTest:
                                 self.converters_im_test[label] = self.network.create_node('worc/WORCCastConvert:0.3.2', tool_version='0.1', id='convert_im_test_' + label, resources=ResourceLimit(memory=memory))
 
                         else:
@@ -655,7 +668,7 @@ class WORC(object):
 
                         # Create required links
                         self.converters_im_train[label].inputs['image'] = self.sources_images_train[label].output
-                        if self.images_test or self.features_test:
+                        if self.TrainTest:
                             self.converters_im_test[label].inputs['image'] = self.sources_images_test[label].output
 
                         # -----------------------------------------------------
@@ -674,7 +687,7 @@ class WORC(object):
                         # Add lists for feature calculation and converter objects
                         self.calcfeatures_train[label] = list()
                         self.featureconverter_train[label] = list()
-                        if self.images_test or self.features_test:
+                        if self.TrainTest:
                             self.calcfeatures_test[label] = list()
                             self.featureconverter_test[label] = list()
 
@@ -702,7 +715,7 @@ class WORC(object):
                             self.converters_seg_train[label].inputs['image'] =\
                                 self.sources_segmentations_train[label].output
 
-                            if self.images_test or self.features_test:
+                            if self.TrainTest:
                                 self.sources_segmentations_test[label] =\
                                     self.network.create_source('ITKImageFile',
                                                                id='segmentations_test_' + label,
@@ -744,17 +757,17 @@ class WORC(object):
                                         self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
                                             self.converters_seg_train[label].outputs['image']
 
-                                if self.images_test or self.features_test:
+                                if self.TrainTest:
                                     if self.segmode == 'Provided':
-                                        self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
-                                            self.converters_seg_train[label].outputs['image']
+                                        self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
+                                            self.converters_seg_test[label].outputs['image']
                                     elif self.segmode == 'Register':
                                         if nmod > 0:
                                             self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
                                                 self.transformix_seg_nodes_test[label].outputs['image']
                                         else:
-                                            self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
-                                                self.converters_seg_train[label].outputs['image']
+                                            self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
+                                                self.converters_seg_test[label].outputs['image']
 
                         # -----------------------------------------------------
                         # Optionally, add ComBat Harmonization
@@ -765,7 +778,7 @@ class WORC(object):
                                 self.links_Combat1_train[label].append(self.ComBat.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
                                 self.links_Combat1_train[label][i_node].collapse = 'train'
 
-                            if self.images_test or self.features_test:
+                            if self.TrainTest:
                                 self.links_Combat1_test[label] = list()
                                 for i_node, fname in enumerate(self.featurecalculators[label]):
                                     self.links_Combat1_test[label].append(self.ComBat.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
@@ -776,7 +789,7 @@ class WORC(object):
                         # Add the features from this modality to the classifier node input
                         self.links_C1_train[label] = list()
                         self.sinks_features_train[label] = list()
-                        if self.images_test or self.features_test:
+                        if self.TrainTest:
                             self.links_C1_test[label] = list()
                             self.sinks_features_test[label] = list()
 
@@ -793,11 +806,16 @@ class WORC(object):
                             self.sinks_features_train[label][i_node].input = self.featureconverter_train[label][i_node].outputs['feat_out']
 
                             # Similar for testing workflow
-                            if self.images_test or self.features_test:
+                            if self.TrainTest:
+                                # Create sink for feature outputs
                                 self.sinks_features_test[label].append(self.network.create_sink('HDF5', id='features_test_' + label + '_' + fname))
+
+                                # Append features to the classification
                                 if not self.configs[0]['General']['ComBat'] == 'True':
                                     self.links_C1_test[label].append(self.classify.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
                                     self.links_C1_test[label][i_node].collapse = 'test'
+
+                                # Save output
                                 self.sinks_features_test[label][i_node].input = self.featureconverter_test[label][i_node].outputs['feat_out']
 
                 else:
@@ -828,7 +846,10 @@ class WORC(object):
                         self.links_C1_train[label].collapse = 'train'
 
                         if self.features_test:
+                            # Create a node for the feature computation
                             self.sources_features_test[label] = self.network.create_source('HDF5', id='features_test_' + label, node_group='test')
+
+                            # Add the features from this modality to the classifier node input
                             self.links_C1_test[label] = self.classify.inputs['features_test'][str(label)] << self.sources_features_test[label].output
                             self.links_C1_test[label].collapse = 'test'
 
@@ -861,11 +882,11 @@ class WORC(object):
         self.links_Combat1_test = dict()
 
         # Link Combat output to both sink and classify node
-        self.links_Combat_out_train = self.classify.inputs['features_train']['ComBat'] << self.ComBat.outputs['features_train_out']
+        self.links_Combat_out_train = self.network.create_link(self.ComBat.outputs['features_train_out'], self.classify.inputs['features_train'])
         self.links_Combat_out_train.collapse = 'ComBat'
         self.sinks_features_train_ComBat.input = self.ComBat.outputs['features_train_out']
 
-        if self.images_test or self.features_test:
+        if self.TrainTest:
             # Create sink for ComBat output
             self.sinks_features_test_ComBat = self.network.create_sink('HDF5', id='features_test_ComBat')
 
@@ -874,7 +895,7 @@ class WORC(object):
             self.link_combat_3.collapse = 'pctest'
 
             # Link Combat output to both sink and classify node
-            self.links_Combat_out_test = self.classify.inputs['features_test']['ComBat'] << self.ComBat.outputs['features_test_out']
+            self.links_Combat_out_test = self.network.create_link(self.ComBat.outputs['features_test_out'], self.classify.inputs['features_test'])
             self.links_Combat_out_test.collapse = 'ComBat'
             self.sinks_features_test_ComBat.input = self.ComBat.outputs['features_test_out']
 
@@ -882,14 +903,14 @@ class WORC(object):
         """Add nodes required for preprocessing of images."""
         memory = self.fastr_memory_parameters['Preprocessing']
         self.preprocessing_train[label] = self.network.create_node(preprocess_node, tool_version='1.0', id='preprocessing_train_' + label, resources=ResourceLimit(memory=memory))
-        if self.images_test or self.features_test:
+        if self.TrainTest:
             self.preprocessing_test[label] = self.network.create_node(preprocess_node, tool_version='1.0', id='preprocessing_test_' + label, resources=ResourceLimit(memory=memory))
 
         # Create required links
         self.preprocessing_train[label].inputs['parameters'] = self.sources_parameters[label].output
         self.preprocessing_train[label].inputs['image'] = self.converters_im_train[label].outputs['image']
 
-        if self.images_test or self.features_test:
+        if self.TrainTest:
             self.preprocessing_test[label].inputs['parameters'] = self.sources_parameters[label].output
             self.preprocessing_test[label].inputs['image'] = self.converters_im_test[label].outputs['image']
 
@@ -922,7 +943,7 @@ class WORC(object):
                                      id='calcfeatures_train_' + node_ID,
                                      resources=ResourceLimit(memory=memory))
 
-        if self.images_test or self.features_test:
+        if self.TrainTest:
             node_test =\
                 self.network.create_node(calcfeat_node,
                                          tool_version='1.0',
@@ -946,7 +967,7 @@ class WORC(object):
             node_train.inputs['format'] =\
                 self.source_format_pyradiomics.output
 
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 node_test.inputs['format'] =\
                     self.source_format_pyradiomics.output
 
@@ -962,7 +983,7 @@ class WORC(object):
         node_train.inputs['image'] =\
             self.preprocessing_train[label].outputs['image']
 
-        if self.images_test or self.features_test:
+        if self.TrainTest:
             if 'pyradiomics' in calcfeat_node.lower():
                 node_test.inputs['parameters'] =\
                     self.source_config_pyradiomics[label].output
@@ -1024,7 +1045,7 @@ class WORC(object):
         conv_train.inputs['toolbox'] = self.source_toolbox_name[label].output
         conv_train.inputs['config'] = self.sources_parameters[label].output
 
-        if self.images_test or self.features_test:
+        if self.TrainTest:
             conv_test =\
                 self.network.create_node('worc/FeatureConverter:1.0',
                                          tool_version='1.0',
@@ -1038,7 +1059,7 @@ class WORC(object):
         # Append to nodes to list
         self.calcfeatures_train[label].append(node_train)
         self.featureconverter_train[label].append(conv_train)
-        if self.images_test or self.features_test:
+        if self.TrainTest:
             self.calcfeatures_test[label].append(node_test)
             self.featureconverter_test[label].append(conv_test)
 
@@ -1088,7 +1109,7 @@ class WORC(object):
             self.converters_seg_train[label].inputs['image'] =\
                 self.sources_segmentations_train[label].output
 
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 self.sources_segmentations_test[label] =\
                     self.network.create_source('ITKImageFile',
                                                id='segmentations_test_' + label,
@@ -1133,7 +1154,7 @@ class WORC(object):
                                          id='transformix_im_train_' + label,
                                          resources=ResourceLimit(memory=memory_transformix))
 
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 self.elastix_nodes_test[label] =\
                     self.network.create_node(elastix_node,
                                              tool_version='0.2',
@@ -1186,7 +1207,7 @@ class WORC(object):
                 self.transformix_seg_nodes_train[label].inputs['image'] =\
                     self.converters_seg_train[self.modlabels[0]].outputs['image']
 
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 self.elastix_nodes_test[label].inputs['fixed_image'] =\
                     self.converters_im_test[label].outputs['image']
                 self.elastix_nodes_test[label].inputs['moving_image'] =\
@@ -1228,7 +1249,7 @@ class WORC(object):
 
             self.link_elparam_train.collapse = 'elpara'
 
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 self.link_elparam_test =\
                     self.network.create_link(self.source_Elastix_Parameters[label].output,
                                              self.elastix_nodes_test[label].inputs['parameters'])
@@ -1241,7 +1262,7 @@ class WORC(object):
                 self.elastix_nodes_train[label].inputs['moving_mask'] =\
                     self.converters_masks_train[self.modlabels[0]].outputs['image']
 
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 if self.masks_test:
                     self.elastix_nodes_test[label].inputs['fixed_mask'] =\
                         self.converters_masks_test[label].outputs['image']
@@ -1261,7 +1282,7 @@ class WORC(object):
             self.edittransformfile_nodes_train[label].inputs['transform'] =\
                 self.elastix_nodes_train[label].outputs['transform'][-1]
 
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 self.edittransformfile_nodes_test[label] =\
                     self.network.create_node('elastixtools/EditElastixTransformFile:0.1',
                                              tool_version='0.1',
@@ -1283,7 +1304,7 @@ class WORC(object):
             self.transformix_im_nodes_train[label].inputs['image'] =\
                 self.converters_im_train[self.modlabels[0]].outputs['image']
 
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 self.transformix_seg_nodes_test[label].inputs['transform'] =\
                     self.edittransformfile_nodes_test[label].outputs['transform']
 
@@ -1293,10 +1314,10 @@ class WORC(object):
                 self.transformix_im_nodes_test[label].inputs['image'] =\
                     self.converters_im_test[self.modlabels[0]].outputs['image']
 
-            for i_node in range(len(self.calcfeatures_test[label])):
+            for i_node in range(len(self.calcfeatures_train[label])):
                 self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
                     self.transformix_seg_nodes_train[label].outputs['image']
-                if self.images_test or self.features_test:
+                if self.TrainTest:
                     self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
                         self.transformix_seg_nodes_test[label].outputs['image']
 
@@ -1323,7 +1344,7 @@ class WORC(object):
                 self.transformix_im_nodes_train[label].outputs['image']
 
             # Save output for the test set
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 self.sinks_transformations_test[label] =\
                     self.network.create_sink('ElastixTransformFile',
                                              id='transformations_test_' + label)
@@ -1382,7 +1403,7 @@ class WORC(object):
         self.sinks_segmentations_segmentix_train[label].input =\
             self.nodes_segmentix_train[label].outputs['segmentation_out']
 
-        if self.images_test or self.features_test:
+        if self.TrainTest:
             self.sinks_segmentations_segmentix_test[label] =\
                 self.network.create_sink('ITKImageFile',
                                          id='segmentations_out_segmentix_test_' + label)
@@ -1417,7 +1438,7 @@ class WORC(object):
             self.calcfeatures_train[label][i_node].inputs['segmentation'] =\
                 self.nodes_segmentix_train[label].outputs['segmentation_out']
 
-            if self.images_test or self.features_test:
+            if self.TrainTest:
                 self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
                     self.nodes_segmentix_test[label].outputs['segmentation_out']
 
@@ -1452,6 +1473,7 @@ class WORC(object):
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.sink_data['features_test_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):
@@ -1521,7 +1543,7 @@ class WORC(object):
                     self.sink_data['features_train_' + label + '_' + f] = ("vfs://output/{}/Features/features_{}_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, f, label)
 
             if self.labels_test:
-                self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/Segmentations/{}/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
+                self.sink_data['segmentations_out_segmentix_test_' + label] = ("vfs://output/{}/Segmentations/seg_{}_segmentix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 self.sink_data['segmentations_out_elastix_test_' + label] = ("vfs://output/{}/Elastix/seg_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 self.sink_data['images_out_elastix_test_' + label] = ("vfs://output/{}/Images/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 if hasattr(self, 'featurecalculators'):
@@ -1533,7 +1555,7 @@ class WORC(object):
                 # Segmode is only non-empty if segmentations are provided
                 if self.segmode == 'Register':
                     self.sink_data['transformations_train_' + label] = ("vfs://output/{}/Elastix/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
-                    if self.images_test or self.features_test:
+                    if self.TrainTest:
                         self.sink_data['transformations_test_' + label] = ("vfs://output/{}/Elastix/transformation_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
 
         if self._add_evaluation:
@@ -1570,6 +1592,11 @@ class WORC(object):
         """Save the config files to physical files and add to network."""
         # If the configuration files are confiparse objects, write to file
         self.pyradiomics_configs = list()
+
+        # Make sure we can dump blank values for PyRadiomics
+        yaml.SafeDumper.add_representer(type(None),
+                                        lambda dumper, value: dumper.represent_scalar(u'tag:yaml.org,2002:null', ''))
+
         for num, c in enumerate(self.configs):
             if type(c) != configparser.ConfigParser:
                 # A filepath (not a fastr source) is provided. Hence we read
@@ -1588,7 +1615,7 @@ class WORC(object):
                 cfile_pyradiomics = os.path.join(self.fastr_tmpdir, f"config_pyradiomics_{self.name}_{num}.yaml")
                 config_pyradiomics = io.convert_config_pyradiomics(c)
                 with open(cfile_pyradiomics, 'w') as file:
-                    yaml.dump(config_pyradiomics, file)
+                    yaml.safe_dump(config_pyradiomics, file)
                 cfile_pyradiomics = Path(self.fastr_tmpdir) / f"config_pyradiomics_{self.name}_{num}.yaml"
                 self.pyradiomics_configs.append(cfile_pyradiomics.as_uri().replace('%20', ' '))
 

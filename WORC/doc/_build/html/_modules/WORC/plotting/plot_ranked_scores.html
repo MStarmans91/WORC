@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.1.4 documentation</title>
+  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.2.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.4
+                3.2.0
               </div>
             
           
@@ -281,7 +281,7 @@
                      <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
                      <span class="n">output</span><span class="o">=</span><span class="s1">&#39;stats&#39;</span><span class="p">)</span>
 
-    <span class="n">percentages</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span>
+    <span class="n">percentages</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Rankings&#39;</span><span class="p">][</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span>
     <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">percentages</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
     <span class="n">ranked_percentages_temp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">percentages</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
     <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">percentages</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
@@ -317,12 +317,12 @@
         <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">pinfo</span><span class="p">,</span>
                          <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
                          <span class="n">images</span><span class="p">,</span>
-                         <span class="n">images</span><span class="p">)</span>
+                         <span class="n">objects</span><span class="o">=</span><span class="n">images</span><span class="p">)</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">segmentations</span> <span class="o">=</span>\
         <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">pinfo</span><span class="p">,</span>
                          <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
                          <span class="n">segmentations</span><span class="p">,</span>
-                         <span class="n">segmentations</span><span class="p">)</span>
+                         <span class="n">objects</span><span class="o">=</span><span class="n">segmentations</span><span class="p">)</span>
 
     <span class="n">PIDs_images</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
     <span class="n">PIDs_images</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">PIDs_images</span><span class="p">]</span>

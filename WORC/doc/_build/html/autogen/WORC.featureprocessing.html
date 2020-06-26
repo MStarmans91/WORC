@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>featureprocessing Package &mdash; WORC 3.1.4 documentation</title>
+  <title>featureprocessing Package &mdash; WORC 3.2.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.4
+                3.2.0
               </div>
             
           
@@ -110,7 +110,7 @@
 <li class="toctree-l3"><a class="reference internal" href="WORC.fastrconfig.html">fastrconfig Package</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">featureprocessing Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">featureprocessing</span></code> Package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#combat-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.ComBat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Decomposition"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Decomposition</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.FeatureConverter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FeatureConverter</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.ICCThreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ICCThreshold</span></code> Module</a></li>
@@ -206,8 +206,35 @@
 <div class="section" id="id1">
 <h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">featureprocessing</span></code> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-WORC.featureprocessing"></span></div>
-<div class="section" id="combat-module">
-<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module<a class="headerlink" href="#combat-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-WORC.featureprocessing.ComBat">
+<span id="combat-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.ComBat" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.featureprocessing.ComBat.ComBat">
+<code class="descclassname">WORC.featureprocessing.ComBat.</code><code class="descname">ComBat</code><span class="sig-paren">(</span><em>features_train_in</em>, <em>labels_train</em>, <em>config</em>, <em>features_train_out</em>, <em>features_test_in=None</em>, <em>labels_test=None</em>, <em>features_test_out=None</em>, <em>VarianceThreshold=True</em>, <em>scaler=False</em>, <em>logarithmic=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#ComBat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.ComBat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply ComBat feature harmonization.</p>
+<p>Based on: <a class="reference external" href="https://github.com/Jfortin1/ComBatHarmonization">https://github.com/Jfortin1/ComBatHarmonization</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.featureprocessing.ComBat.ComBatMatlab">
+<code class="descclassname">WORC.featureprocessing.ComBat.</code><code class="descname">ComBatMatlab</code><span class="sig-paren">(</span><em>dat</em>, <em>batch</em>, <em>command</em>, <em>mod=None</em>, <em>par=1</em>, <em>per_feature='true'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#ComBatMatlab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.ComBatMatlab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the ComBat Function Matlab script.</p>
+<p>par = 0 is non-parametric.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.featureprocessing.ComBat.ComBatPython">
+<code class="descclassname">WORC.featureprocessing.ComBat.</code><code class="descname">ComBatPython</code><span class="sig-paren">(</span><em>dat</em>, <em>batch</em>, <em>mod=None</em>, <em>par=1</em>, <em>eb=1</em>, <em>per_feature=False</em>, <em>plotting=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#ComBatPython"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.ComBatPython" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the ComBat Function python script.</p>
+<p>par = 0 is non-parametric.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.featureprocessing.ComBat.Synthetictest">
+<code class="descclassname">WORC.featureprocessing.ComBat.</code><code class="descname">Synthetictest</code><span class="sig-paren">(</span><em>n_patients=50</em>, <em>n_features=10</em>, <em>par=1</em>, <em>eb=1</em>, <em>per_feature=False</em>, <em>difscale=False</em>, <em>logarithmic=False</em>, <em>oddpatient=True</em>, <em>oddfeat=True</em>, <em>samefeat=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#Synthetictest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.Synthetictest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for ComBat with Synthetic data.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-WORC.featureprocessing.Decomposition">
 <span id="decomposition-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Decomposition</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.Decomposition" title="Permalink to this headline">¶</a></h2>

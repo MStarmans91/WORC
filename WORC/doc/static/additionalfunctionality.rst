@@ -11,28 +11,32 @@ as this repository is not installable. If you would like to use ComBat, the
 following steps have to be performed:
 
 1. Go to the folder where WORC is installed.
-2. Create a folder called "ComBat" in the external folder within the WORC
-  installation folder.
-3. Go the the mentioned Github, clone or download the repository, and put
-  the contents in the created ComBat folder.
+2. Create a folder called "ComBat" in the external folder within the WORC installation folder.
+3. Go the the mentioned Github, clone or download the repository, and put the contents in the created ComBat folder.
 
 Note: we currently use the MatLab based implementation. Make sure you have
 MatLab installed on your machine.
 
 Elastix
 ---------
+Documentation WIP.
 
 Regression
 ------------
+Documentation WIP.
 
 Survival
 ----------
+Documentation WIP.
 
 Evaluation
 -----------
+Documentation WIP.
 
 Segmentix
 ----------
+Documentation WIP.
 
 ICC
 ----
+Documentation WIP.

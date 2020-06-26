@@ -214,8 +214,6 @@ class SimpleWORC():
 
         if coarse:
             self._config_builder.coarse_overrides()
-        else:
-            self._config_builder.full_overrides()
 
         self._method = method
 
@@ -295,9 +293,9 @@ class SimpleWORC():
 
         # Find out how many configs we need to make
         if self._worc.images_train:
-          nmod = len(self._worc.images_train)
+            nmod = len(self._worc.images_train)
         else:
-          nmod = len(self.features_train)
+            nmod = len(self._worc.features_train)
 
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
 
@@ -339,7 +337,7 @@ class SimpleWORC():
 
     def set_multicore_execution(self):
         self._worc.fastr_plugin = 'ProcessPoolExecution'
-        self._config_builder.custom_config_overrides['Classification']['fastr_plugin'] = 'ProcessPoolExecution'
+        self.add_config_overrides({'Classification': {'fastr_plugin': 'ProcessPoolExecution'}})
 
     def features_from_radiomix_xlsx(self, feature_file):
         self._radiomix_feature_file = feature_file

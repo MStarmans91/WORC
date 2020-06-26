@@ -145,4 +145,5 @@ def generate_feature_boxplots(image_features, label_data, output_zip, dpi=500,
 
         # Copy the image to the zipfile and remove image
         zipf.write(outputname, os.path.basename(outputname))
+        plt.close()
         os.remove(outputname)
