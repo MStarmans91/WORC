@@ -26,3 +26,6 @@ lifelines>=0.21.1
 PREDICT>=3.1.4
 python-dateutil<=2.8.0
 pyyaml>=5.3.1
+ConfigSpace>=0.4.13
+smac==0.12.0
+scikit-image==0.15.0
