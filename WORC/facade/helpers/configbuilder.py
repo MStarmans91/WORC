@@ -82,6 +82,10 @@ class ConfigBuilder():
                 'phase_features': 'False',
                 'toolbox': 'PREDICT'
             },
+            # Do not use any resampling
+            'SampleProcessing': {
+                'SMOTE': 'False',
+                },
             'CrossValidation': {
                 # Only perform a 3x random-split cross-validation
                 'N_iterations': '3',

@@ -24,6 +24,6 @@ location_features       True, False               Boolean(s)
 rgrd_features           True, False               Boolean(s)                                    
 toolbox                 All, PREDICT, PyRadiomics All, or name of toolbox (PREDICT, PyRadiomics)
 original_features       True                      Boolean(s)                                    
-wavelet_features        False                     Boolean(s)                                    
-log_features            False                     Boolean(s)                                    
+wavelet_features        True, False               Boolean(s)                                    
+log_features            True, False               Boolean(s)                                    
 ======================= ========================= ==============================================

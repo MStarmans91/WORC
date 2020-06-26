@@ -276,13 +276,22 @@ class WORC(object):
         config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
         config['PyRadiomics']['voxelArrayShift'] = '300'
         config['PyRadiomics']['Original'] = 'True'
-        config['PyRadiomics']['Wavelet'] = 'True'
-        config['PyRadiomics']['LoG'] = 'True'
+        config['PyRadiomics']['Wavelet'] = 'False'
+        config['PyRadiomics']['LoG'] = 'False'
 
         if config['General']['Segmentix'] == 'True':
             config['PyRadiomics']['label'] = '1'
         else:
             config['PyRadiomics']['label'] = '255'
+
+        # Enabled PyRadiomics features
+        config['PyRadiomics']['extract_firstorder'] = 'False'
+        config['PyRadiomics']['extract_shape'] = 'True'
+        config['PyRadiomics']['texture_GLCM'] = 'False'
+        config['PyRadiomics']['texture_GLRLM'] = 'True'
+        config['PyRadiomics']['texture_GLSZM'] = 'True'
+        config['PyRadiomics']['texture_GLDM'] = 'True'
+        config['PyRadiomics']['texture_NGTDM'] = 'True'
 
         # ComBat Feature Harmonization
         config['ComBat'] = dict()
@@ -343,8 +352,8 @@ class WORC(object):
 
         # Select original features, or after transformation of feature space
         config['SelectFeatGroup']['original_features'] = 'True'
-        config['SelectFeatGroup']['wavelet_features'] = 'False'
-        config['SelectFeatGroup']['log_features'] = 'False'
+        config['SelectFeatGroup']['wavelet_features'] = 'True, False'
+        config['SelectFeatGroup']['log_features'] = 'True, False'
 
         # Feature imputation
         config['Imputation'] = dict()
@@ -410,7 +419,7 @@ class WORC(object):
 
         # Sample processing options
         config['SampleProcessing'] = dict()
-        config['SampleProcessing']['SMOTE'] = 'False'
+        config['SampleProcessing']['SMOTE'] = 'True, False'
         config['SampleProcessing']['SMOTE_ratio'] = '1, 0'
         config['SampleProcessing']['SMOTE_neighbors'] = '5, 15'
         config['SampleProcessing']['Oversampling'] = 'False'
@@ -1583,6 +1592,11 @@ class WORC(object):
         """Save the config files to physical files and add to network."""
         # If the configuration files are confiparse objects, write to file
         self.pyradiomics_configs = list()
+
+        # Make sure we can dump blank values for PyRadiomics
+        yaml.SafeDumper.add_representer(type(None),
+                                        lambda dumper, value: dumper.represent_scalar(u'tag:yaml.org,2002:null', ''))
+
         for num, c in enumerate(self.configs):
             if type(c) != configparser.ConfigParser:
                 # A filepath (not a fastr source) is provided. Hence we read
@@ -1601,7 +1615,7 @@ class WORC(object):
                 cfile_pyradiomics = os.path.join(self.fastr_tmpdir, f"config_pyradiomics_{self.name}_{num}.yaml")
                 config_pyradiomics = io.convert_config_pyradiomics(c)
                 with open(cfile_pyradiomics, 'w') as file:
-                    yaml.dump(config_pyradiomics, file)
+                    yaml.safe_dump(config_pyradiomics, file)
                 cfile_pyradiomics = Path(self.fastr_tmpdir) / f"config_pyradiomics_{self.name}_{num}.yaml"
                 self.pyradiomics_configs.append(cfile_pyradiomics.as_uri().replace('%20', ' '))
 

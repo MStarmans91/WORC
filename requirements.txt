@@ -1,6 +1,6 @@
 configparser>=3.5.0
 drmaa>=0.7.6
-fastr>=3.2.1
+fastr>=3.2.3
 ghalton>=0.6.1
 imbalanced-learn==0.4.3
 lifelines>=0.21.1

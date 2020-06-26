@@ -199,6 +199,7 @@ def convert_config_pyradiomics(config):
     outputconfig = dict()
     outputconfig['imageType'] = dict()
     outputconfig['setting'] = dict()
+    outputconfig['featureClass'] = dict()
 
     # Take out the specific PyRadiomics values
     outputconfig['setting']['geometryTolerance'] = float(config['PyRadiomics']['geometryTolerance'])
@@ -250,5 +251,21 @@ def convert_config_pyradiomics(config):
         sigmas = sigmas.split(',')
         sigmas = [int(s) for s in sigmas]
         outputconfig['imageType']['LoG']['sigma'] = sigmas
+
+    # Determine which features to extract:
+    if config['PyRadiomics']['extract_firstorder'] == 'True':
+        outputconfig['featureClass']['firstorder'] = None
+    if config['PyRadiomics']['extract_shape'] == 'True':
+        outputconfig['featureClass']['shape'] = None
+    if config['PyRadiomics']['texture_GLCM'] == 'True':
+        outputconfig['featureClass']['glcm'] = None
+    if config['PyRadiomics']['texture_GLRLM'] == 'True':
+        outputconfig['featureClass']['glrlm'] = None
+    if config['PyRadiomics']['texture_GLSZM'] == 'True':
+        outputconfig['featureClass']['glszm'] = None
+    if config['PyRadiomics']['texture_GLDM'] == 'True':
+        outputconfig['featureClass']['gldm'] = None
+    if config['PyRadiomics']['texture_NGTDM'] == 'True':
+        outputconfig['featureClass']['ngtdm'] = None
 
     return outputconfig
