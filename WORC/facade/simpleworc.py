@@ -343,3 +343,8 @@ class SimpleWORC():
 
     def features_from_radiomix_xlsx(self, feature_file):
         self._radiomix_feature_file = feature_file
+
+    def add_experiment_config_overrides(self, use_smac, cv_iter, cv_splits,
+                                        opt_iter, n_ensembles):
+        self._config_builder.experiment_overrides(use_smac, cv_iter, cv_splits,
+                                                  opt_iter, n_ensembles)

@@ -108,9 +108,11 @@ class ConfigBuilder():
                 'ReliefUse': '0.25'
             },
             # Extensive cross-validation and hyperoptimization
-            'CrossValidation': {'N_iterations': '4'}, # Default: 100
-            'HyperOptimization': {'N_iterations': '1000', # Default: 100000
-                                  'n_jobspercore': '200'}, # Default: 4000
+            'CrossValidation': {'N_iterations': '1'}, # Default: 100
+            'HyperOptimization': {'N_iterations': '10', # Default: 100000
+                                  'n_jobspercore': '1',
+                                  'use_SMAC': 'True',
+                                  'n_splits': 1}, # Default: 4000
             # Make use of ensembling
             'Ensemble': {'Use': '1'}, # Default: 50
 
@@ -172,5 +174,19 @@ class ConfigBuilder():
             fastr.config.queue_report_interval = 120
         else:
             overrides = {} # not a cluster or unsupported
+
+        return overrides
+
+    def experiment_overrides(self, use_smac='True', cv_iter='100', cv_splits='5',
+                             opt_iter='100000', n_ensembles='50'):
+        overrides = {
+            'CrossValidation': {'N_iterations': cv_iter},  # Default: 100
+            'HyperOptimization': {'N_iterations': opt_iter,  # Default: 100000
+                                  'use_SMAC': use_smac,
+                                  'n_splits': cv_splits},  # Default: 4000
+            # Make use of ensembling
+            'Ensemble': {'Use': n_ensembles},  # Default: 50
+        }
+        self.custom_config_overrides(overrides)
 
         return overrides
