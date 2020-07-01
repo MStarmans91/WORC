@@ -2631,7 +2631,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                              "runcount-limit": self.n_iter,  # max. number of function evaluations;
                              "cs": cs,
                              "deterministic": "true",
-                             "output_dir": "/home/mitchell/runs"
+                             "output_dir": "/home/mdeen/SMAC_output"
                              })
 
         # Define the scoring function
