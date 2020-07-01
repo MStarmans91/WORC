@@ -2621,8 +2621,6 @@ class BaseSearchCVSMAC(BaseSearchCV):
         pre_dispatch = self.pre_dispatch
         cv_iter = list(cv.split(self.features, self.labels, groups))
 
-        bctest = open('/home/mitchell/best_configs.txt', 'a')
-
         # Build the SMAC configuration
         cs = build_smac_config(self.param_distributions)
         
@@ -2661,9 +2659,6 @@ class BaseSearchCVSMAC(BaseSearchCV):
             mean_test_score = np.mean(all_test_scores)
             score = 1 - mean_test_score  # We minimize so take the inverse
 
-            f = open('/home/mitchell/tested_configs.txt', 'a')
-            f.write(str(parameters) + '\n' + str(score) + '\n')
-
             return score
 
         # Run the optimization
@@ -2673,10 +2668,9 @@ class BaseSearchCVSMAC(BaseSearchCV):
         opt_config = smac.optimize()
 
         # Load in the runhistory data
-        runhistory_file = open('/home/mitchell/runs/run_' + str(run_id) +
+        runhistory_file = open('/home/mdeen/SMAC_output/run_' + str(run_id) +
                                '/runhistory.json')
         runhistory = json.load(runhistory_file)
-        bctest.write('runhistory: ' + str(runhistory) + '\n')
 
         best_configs = []
         # Loop over all evaluated configurations
@@ -2694,13 +2688,6 @@ class BaseSearchCVSMAC(BaseSearchCV):
             # We use i to break ties between scores
             elif best_configs[0][0] < score:
                 heapq.heapreplace(best_configs, (score, i, parameters))
-
-        bctest.write('best_configs: ' + str(best_configs))
-
-        # Write the best found configuration and its score to a file
-        opt_value_print = open('/home/mitchell/opt_value.txt', 'a')
-        opt_value_print.write(str(opt_config) + '\n')
-        opt_value_print.write(str(score_cfg(opt_config)) + '\n')
 
         # Convert the best found configuration to a dictionary
         best_parameters = opt_config.get_dictionary()
