@@ -1,12 +1,15 @@
+.. _facades-chapter:
+
 Facades
 ============
 
-
-
 SimpleWORC
+-----------
+
+BasicWorc
 --------------
 Documentation WIP.
 
-BasicWORC
+WORC
 ----------
 Documentation WIP.

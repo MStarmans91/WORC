@@ -14,7 +14,6 @@ matrix:
         - choco install python --version 3.7.4
         - python --version
         - python -m pip install --upgrade pip
-        - pip3 install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
         - pip3 install -r requirements.txt
       env:
         - PATH=/c/Python37:/c/Python37/Scripts:$PATH
@@ -30,7 +29,6 @@ matrix:
       before_install:
        - sudo apt-get -qq update
        - sudo apt-get -qq -y install git
-       - pip install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
        - pip install -r requirements.txt
       env:
         - WORCDEBUG=true

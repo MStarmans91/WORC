@@ -6,6 +6,18 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+Unreleased
+------------------
+
+Added
+~~~~~~~
+- Major documentation update.
+
+Changed
+~~~~~~~
+- PyRadiomics setup not dependent on pre-install of numpy anymore, so altered
+  travis, yml, setup, and documentation.
+
 3.2.0 - 2020-06-26
 ------------------
 
