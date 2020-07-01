@@ -204,10 +204,6 @@ def build_smac_config(parameters):
                                  values=['n_components']))
 
 
-
-    f = open('/home/mitchell/cs.txt', 'a')
-    f.write(str(cs))
-
     return cs
 
 
