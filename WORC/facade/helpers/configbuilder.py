@@ -112,18 +112,9 @@ class ConfigBuilder():
             'HyperOptimization': {'N_iterations': '10', # Default: 100000
                                   'n_jobspercore': '1',
                                   'use_SMAC': 'True',
-                                  'n_splits': 1}, # Default: 4000
+                                  'n_splits': '1'}, # Default: 4000
             # Make use of ensembling
             'Ensemble': {'Use': '1'}, # Default: 50
-
-            # Add multicore execution
-            'Classification': {'fastr': 'True',
-                               'fastr_plugin': 'ProcessPoolExecution',
-                               'max_iter': '1000'},
-
-            # Change joblib settings
-            'General': {'Joblib_ncores': '5',
-                        'Joblib_backend': 'multiprocessing'}
         }
         self.custom_config_overrides(overrides)
         return overrides
