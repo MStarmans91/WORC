@@ -506,7 +506,18 @@ def fit_and_score(X, y, scoring,
         if para_estimator['PCAType'] == '95variance':
             # Select first X components that describe 95 percent of the explained variance
             pca = PCA(n_components=None, random_state=random_seed)
-            pca.fit(feature_values)
+            try:
+                pca.fit(feature_values)
+            except (ValueError, LinAlgError) as e:
+                print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+                ret = [train_score, test_score, test_sample_counts,
+                       fit_time, score_time, para_estimator, para]
+
+                if return_all:
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
+                else:
+                    return ret
+
             evariance = pca.explained_variance_ratio_
             num = 0
             sum = 0
@@ -516,7 +527,18 @@ def fit_and_score(X, y, scoring,
 
             # Make a PCA based on the determined amound of components
             pca = PCA(n_components=num, random_state=random_seed)
-            pca.fit(feature_values)
+            try:
+                pca.fit(feature_values)
+            except (ValueError, LinAlgError) as e:
+                print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+                ret = [train_score, test_score, test_sample_counts,
+                       fit_time, score_time, para_estimator, para]
+
+                if return_all:
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
+                else:
+                    return ret
+
             feature_values = pca.transform(feature_values)
 
         else:

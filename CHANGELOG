@@ -18,6 +18,10 @@ Changed
 - PyRadiomics setup not dependent on pre-install of numpy anymore, so altered
   travis, yml, setup, and documentation.
 
+Fixed
+~~~~~
+- Catch error when PCA does not converge in fit and score function.
+
 3.2.0 - 2020-06-26
 ------------------
 
