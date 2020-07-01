@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,28 +11,30 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="classification Package" href="WORC.classification.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> WORC
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> WORC
           
 
           
@@ -78,6 +79,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -134,6 +136,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -172,7 +175,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="WORC.html">WORC Package</a> &raquo;</li>
         
@@ -199,9 +202,9 @@
 <h1>IOparser Package<a class="headerlink" href="#ioparser-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WORC.IOparser.config_WORC">
 <span id="config-worc-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_WORC</span></code> Module<a class="headerlink" href="#module-WORC.IOparser.config_WORC" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.IOparser.config_WORC.load_config">
-<code class="descclassname">WORC.IOparser.config_WORC.</code><code class="descname">load_config</code><span class="sig-paren">(</span><em>config_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_WORC.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_WORC.load_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.IOparser.config_WORC.</code><code class="sig-name descname">load_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_WORC.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_WORC.load_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a WORC configuration file.</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><p>config_file_path: path to the configuration file to be parsed.</p>
@@ -214,17 +217,17 @@
 </div>
 <div class="section" id="module-WORC.IOparser.config_io_PyRadiomics">
 <span id="config-io-pyradiomics-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_io_PyRadiomics</span></code> Module<a class="headerlink" href="#module-WORC.IOparser.config_io_PyRadiomics" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.IOparser.config_io_PyRadiomics.load_config">
-<code class="descclassname">WORC.IOparser.config_io_PyRadiomics.</code><code class="descname">load_config</code><span class="sig-paren">(</span><em>config_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_io_PyRadiomics.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_io_PyRadiomics.load_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.IOparser.config_io_PyRadiomics.</code><code class="sig-name descname">load_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_io_PyRadiomics.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_io_PyRadiomics.load_config" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="module-WORC.IOparser.config_io_classifier">
 <span id="config-io-classifier-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_io_classifier</span></code> Module<a class="headerlink" href="#module-WORC.IOparser.config_io_classifier" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.IOparser.config_io_classifier.load_config">
-<code class="descclassname">WORC.IOparser.config_io_classifier.</code><code class="descname">load_config</code><span class="sig-paren">(</span><em>config_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_io_classifier.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_io_classifier.load_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.IOparser.config_io_classifier.</code><code class="sig-name descname">load_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_io_classifier.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_io_classifier.load_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the config ini, parse settings to WORC</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>config_file_path (String): path of the .ini config file</p>
@@ -237,9 +240,9 @@
 </div>
 <div class="section" id="module-WORC.IOparser.config_io_combat">
 <span id="config-io-combat-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_io_combat</span></code> Module<a class="headerlink" href="#module-WORC.IOparser.config_io_combat" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.IOparser.config_io_combat.load_config">
-<code class="descclassname">WORC.IOparser.config_io_combat.</code><code class="descname">load_config</code><span class="sig-paren">(</span><em>config_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_io_combat.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_io_combat.load_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.IOparser.config_io_combat.</code><code class="sig-name descname">load_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_io_combat.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_io_combat.load_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the config ini, parse settings to WORC</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>config_file_path (String): path of the .ini config file</p>
@@ -252,9 +255,9 @@
 </div>
 <div class="section" id="module-WORC.IOparser.config_preprocessing">
 <span id="config-preprocessing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_preprocessing</span></code> Module<a class="headerlink" href="#module-WORC.IOparser.config_preprocessing" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.IOparser.config_preprocessing.load_config">
-<code class="descclassname">WORC.IOparser.config_preprocessing.</code><code class="descname">load_config</code><span class="sig-paren">(</span><em>config_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_preprocessing.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_preprocessing.load_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.IOparser.config_preprocessing.</code><code class="sig-name descname">load_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_preprocessing.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_preprocessing.load_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a WORC configuration file.</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><p>config_file_path: path to the configuration file to be parsed.</p>
@@ -267,9 +270,9 @@
 </div>
 <div class="section" id="module-WORC.IOparser.config_segmentix">
 <span id="config-segmentix-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">config_segmentix</span></code> Module<a class="headerlink" href="#module-WORC.IOparser.config_segmentix" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.IOparser.config_segmentix.load_config">
-<code class="descclassname">WORC.IOparser.config_segmentix.</code><code class="descname">load_config</code><span class="sig-paren">(</span><em>config_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_segmentix.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_segmentix.load_config" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.IOparser.config_segmentix.</code><code class="sig-name descname">load_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/config_segmentix.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.config_segmentix.load_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse a segmentix configuration file.</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><p>config_file_path: path to the configuration file to be parsed.</p>
@@ -282,15 +285,15 @@
 </div>
 <div class="section" id="module-WORC.IOparser.file_io">
 <span id="file-io-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">file_io</span></code> Module<a class="headerlink" href="#module-WORC.IOparser.file_io" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.IOparser.file_io.convert_config_pyradiomics">
-<code class="descclassname">WORC.IOparser.file_io.</code><code class="descname">convert_config_pyradiomics</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/file_io.html#convert_config_pyradiomics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.file_io.convert_config_pyradiomics" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.IOparser.file_io.</code><code class="sig-name descname">convert_config_pyradiomics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/file_io.html#convert_config_pyradiomics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.file_io.convert_config_pyradiomics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert fields from WORC confiparser object to a PyRadiomics compatible dictionary</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.IOparser.file_io.load_data">
-<code class="descclassname">WORC.IOparser.file_io.</code><code class="descname">load_data</code><span class="sig-paren">(</span><em>featurefiles</em>, <em>patientinfo=None</em>, <em>label_names=None</em>, <em>modnames=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/file_io.html#load_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.file_io.load_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.IOparser.file_io.</code><code class="sig-name descname">load_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">featurefiles</span></em>, <em class="sig-param"><span class="n">patientinfo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">label_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">modnames</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/file_io.html#load_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.file_io.load_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read feature files and stack the features per patient in an array.
 Additionally, if a patient label file is supplied, the features from
 a patient will be matched to the labels.</p>
@@ -311,9 +314,9 @@ the patientinfo file.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.IOparser.file_io.load_features">
-<code class="descclassname">WORC.IOparser.file_io.</code><code class="descname">load_features</code><span class="sig-paren">(</span><em>feat</em>, <em>patientinfo</em>, <em>label_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/file_io.html#load_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.file_io.load_features" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.IOparser.file_io.</code><code class="sig-name descname">load_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">feat</span></em>, <em class="sig-param"><span class="n">patientinfo</span></em>, <em class="sig-param"><span class="n">label_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/IOparser/file_io.html#load_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.IOparser.file_io.load_features" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read feature files and stack the features per patient in an array.
 Additionally, if a patient label file is supplied, the features from
 a patient will be matched to the labels.</p>
@@ -357,11 +360,19 @@ the patientinfo file.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -372,7 +383,6 @@ the patientinfo file.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

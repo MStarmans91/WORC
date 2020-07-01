@@ -19,14 +19,10 @@ all functionality required for conducting basic experiments. The ``BasicWORC`` o
 object and provides several more advances functions. The specific functionalities of these two facades and the
 ``WORC`` object itself can be found in this section.
 
-Doe deze dingen gewoon in de packages zelf door docstrings toe te voegen! Hier dan alleen globaal de functionaliteit
-beschrijven en aparte dingen
-
-The SimpleWORC Object
-~~~~~~~~~~~~~~~~~~~~~~
-
-The BasicWORC Object
-~~~~~~~~~~~~~~~~~~~~~~
+For documentation on ``SimpleWORC`` and ``BasicWORC``, please look at the documentation
+within those modules: :py:mod:`WORC.facade.simpleworc` . Many of the functions are actually wrappers to interact with the WORC
+object, and therefore use the functionality described below. For basic usage, only using
+``SimpleWORC`` and it's respective documentation should be sufficient.
 
 The WORC Object
 ~~~~~~~~~~~~~~~~

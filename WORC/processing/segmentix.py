@@ -161,7 +161,9 @@ def segmentix(parameters, image=None, segmentation=None,
     if config['Segmentix']['remove_small_objects']:
         print('[Segmentix] Removing small objects.')
         min_size = config['Segmentix']['min_object_size']
-        contour = morphology.remove_small_objects(contour, min_size=min_size, connectivity=2, in_place=False)
+        contour = morphology.remove_small_objects(contour, min_size=min_size,
+                                                  connectivity=2,
+                                                  in_place=False)
 
     if config['Segmentix']['N_blobs'] != 0:
         print('[Segmentix] Extracting largest blob.')

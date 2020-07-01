@@ -1,20 +1,19 @@
 Quick start guide
 =================
 
-This manual will show users how to install WORC, configure WORC and construct and run simple networks.
+This manual will show users how to install WORC, configure WORC and construct and run a simple experiment.
 
 .. _installation-chapter:
 
 Installation
 ------------
 
-You can install WORC either using pip, or from the source code.
-
-.. note:: The version of PyRadiomics which WORC currently uses requires numpy to be installed beforehand. Make sure you do so, e.g. ``pip install numpy``.
+You can install WORC either using pip, or from the source code. We strongly advice you to install ``WORC`` in a `virtualenv <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_.
 
 
-Installing via pip
-``````````````````
+
+**Installing via pip**
+
 
 You can simply install WORC using ``pip``:
 
@@ -22,11 +21,7 @@ You can simply install WORC using ``pip``:
 
     pip install WORC
 
-.. note:: You might want to consider installing ``WORC`` in a `virtualenv <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_
-
-
-Installing from source code
-```````````````````````````
+**Installing from source code**
 
 To install from source code, use git via the command-line:
 
@@ -35,26 +30,7 @@ To install from source code, use git via the command-line:
     git clone https://github.com/MStarmans91/WORC.git  # for http
     git clone ssh://git@github.com:MStarmans91/WORC.git # for ssh
 
-.. _subsec-installing:
-
-To install to your current Python environment, run:
-
-.. code-block:: bash
-
-    cd WORC/
-    pip install .
-
-This installs the scripts and packages in the default system folders. For
-Windows this is the python ``site-packages`` directory for the WORC python
-library. For Ubuntu this is in the ``/usr/local/lib/python3.x/dist-packages/`` folder.
-
-.. note:: If you want to develop WORC, you might want to use ``pip install -e .`` to get an editable install
-
-.. note:: You might want to consider installing ``WORC`` in a
-    `virtualenv <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_
-
-Windows installation
-````````````````````
+**Windows installation**
 
 On Windows, we strongly recommend to install python through the
 `Anaconda distribution <https://www.anaconda.com/distribution/#windows>`_.
@@ -78,10 +54,14 @@ If you run into any issue, you can first debug your network using
 If you're stuck, feel free to post an issue on the `WORC Github <https://github.com/MStarmans91/WORC/>`_.
 
 
-Hello World
-------------
+Running an experiment
+---------------------
 
 Below is the same script as found in the SimpleWORC tutorial found in the `WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_.
+In this tutorial, we will make use of the ``SimpleWORC`` facade, which simplifies interacting with ``WORC``.
+Additional information on ``SimpleWORC`` can be found in the
+:ref:`User Manual <usermanual-chapter>`. This chapter also includes the documentation on using the ``BasicWORC`` facade,
+which is slightly more advanced, and the ``WORC`` object directly, which provides the most advanced options.
 
 Import packages
 ```````````````
@@ -243,8 +223,7 @@ Tips and Tricks
 
 For tips and tricks on running a full experiment instead of this simple
 example, adding more evaluation options, debugging a crashed network etcetera,
-please go to :ref:`usermanual-chapter` or follow the intermediate
-or advanced tutorials on `WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_.
+please go to :ref:`User Manual <usermanual-chapter>` chapter.
 
 Some things we would advice to always do:
 

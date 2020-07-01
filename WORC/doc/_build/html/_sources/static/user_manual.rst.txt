@@ -3,35 +3,41 @@
 User Manual
 ===========
 
-In this chapter we will discuss the parts of Fastr in more detail. We will give a more complete overview of the system
+In this chapter we will discuss the parts of WORC in more detail. We will give a more complete overview of the system
 and describe the more advanced features.
 
 .. _tools:
 
-The SimpleWORC object
+
+
+Interacting with WORC
 ---------------------
+The WORC toolbox is build around of one main object, the WORC object. This object provides all functionality
+of the toolbox. However, to make certain functionalities easier to use and limit the complexity,
+we have constructed two facades. The ``SimpleWORC`` facade is the simplest to interact with and provides
+all functionality required for conducting basic experiments. The ``BasicWORC`` object is based on the ``SimpleWORC``
+object and provides several more advances functions. The specific functionalities of these two facades and the
+``WORC`` object itself can be found in this section.
 
-Documentation WIP
+For documentation on ``SimpleWORC`` and ``BasicWORC``, please look at the documentation
+within those modules: :py:mod:`WORC.facade.simpleworc` . Many of the functions are actually wrappers to interact with the WORC
+object, and therefore use the functionality described below. For basic usage, only using
+``SimpleWORC`` and it's respective documentation should be sufficient.
 
-
-The WORC object
----------------------
-The WORC toolbox consists of one main object, the WORC object:
-
-
-
+The WORC Object
+~~~~~~~~~~~~~~~~
 .. code-block:: python
 
    import WORC
    network = WORC.WORC('somename')
 
-
-
 It's attributes are split in a couple of categories. We will not discuss
 the WORC.defaultconfig() function here, which generates the default
-configuration, as it is listed in a separate page, see the :ref:`config-chapter`
+configuration, as it is listed in a separate page, see the :ref:`Config chapter <config-chapter>`
 
 
+Input file definitions
+----------------------
 
 Attributes: Sources
 ~~~~~~~~~~~~~~~~~~~

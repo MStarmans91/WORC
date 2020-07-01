@@ -1,3 +1,5 @@
+..  additonalfunctionality-chapter:
+
 Additional functionality
 ========================
 
