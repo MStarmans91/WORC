@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-Unreleased
+3.2.1 - 2020-07-02
 ------------------
 
 Added
@@ -17,6 +17,13 @@ Changed
 ~~~~~~~
 - PyRadiomics setup not dependent on pre-install of numpy anymore, so altered
   travis, yml, setup, and documentation.
+- PREDICT updated, change dependencies.
+- Defaults are now a bit different: see argumentation in the documentation.
+  Main thing is that PyRadiomics and PREDICT both compute certain features,
+  so it's redundant to use both. Additionally, the wavelet features
+  from PyRadiomics add +1000 features, which did not seem to help in many
+  experiments while majorly slowing down the computation.
+  
 
 Fixed
 ~~~~~
