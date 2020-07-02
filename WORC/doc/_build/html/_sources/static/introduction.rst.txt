@@ -97,6 +97,4 @@ Currently, WORC solves the problem as following:
 
 1. Generate a large number of different pipelines.
 2. Execute them and rank them.
-3. Create and ensemble of the X best performing pipelines.
-
-More information on this can be found in X.
+3. Create and ensemble of the 50 best performing pipelines.

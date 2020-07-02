@@ -198,7 +198,7 @@ class WORC(object):
         config['Segmentix']['mask'] = 'subtract'
         config['Segmentix']['segtype'] = 'None'
         config['Segmentix']['segradius'] = '5'
-        config['Segmentix']['N_blobs'] = '1'
+        config['Segmentix']['N_blobs'] = '0'
         config['Segmentix']['fillholes'] = 'True'
         config['Segmentix']['remove_small_objects'] = 'False'
         config['Segmentix']['min_object_size'] = '2'
