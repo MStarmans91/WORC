@@ -37,10 +37,10 @@ NGTDM             5
 Gabor filter      144
 LoG filter        36
 Vessel filter     36
-LBP               108
+LBP               36
 Phase features    36
 ----------------- ---------------------------------------------------
-Total             595
+**Total**         **523**
 ================= ===================================================
 
 
@@ -306,7 +306,7 @@ Again, a range of parameters is used to compute the LBP:
         config['ImageFeatures']['LBP_radius'] = '3, 8, 15'
         config['ImageFeatures']['LBP_npoints'] = '12, 24, 36'
 
-Again, for all parameter combinations, the images are "filtered" (the LBP produces an image with the same
+For all parameter combinations, as each npoints corresponds to a radius setting, the images are "filtered" (the LBP produces an image with the same
 dimensions as the original, similar to a filtering operation) per 2-D slice and the PREDICT histogram features
 as :ref:`discussed earlier <features-histogram>` are extracted from the filtered images, both for the inner and outer
 region.
