@@ -243,6 +243,9 @@ Some things we would advice to always do:
 
           experiment.set_multicore_execution()
 
+  This is not required when running WORC on the BIGR or SURFSara Cartesius cluster,
+  as automatic detectors for these clusters have been built into SimpleWORC and BasicWORC.
+
 * Add extensive evaluation: ``experiment.add_evaluation()`` before ``experiment.execute()``:
 
 .. code-block:: python

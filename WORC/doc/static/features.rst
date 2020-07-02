@@ -1,7 +1,7 @@
 ..  features-chapter:
 
-Features
-===========
+Radiomics Features
+==================
 
 WORC is not a feature extraction toolbox, but a workflow management and foremost workflow optimization method / toolbox.
 However, feature extraction is generally part of the workflow. Users can add their own feature toolbox, but the default
@@ -170,6 +170,8 @@ The GLCM counts the co-occurences of neighbouring pixels of each gray level valu
 the distance between pixels, and the angle in which co-occurences are counted. As generally beforehand it
 is not known which of these settings may lead to relevant features, the GLCM at multiple values is extracted:
 
+.. code-block:: python
+
     config['ImageFeatures']['GLCM_angles'] = '0, 0.79, 1.57, 2.36'
     config['ImageFeatures']['GLCM_distances'] = '1, 3'
 
@@ -257,6 +259,8 @@ Gabor filter features
 These features are extracted through PREDICT by first applying a set of Gabor filters to the image with the following
 parameters:
 
+.. code-block:: python
+
         config['ImageFeatures']['gabor_frequencies'] = '0.05, 0.2, 0.5'
         config['ImageFeatures']['gabor_angles'] = '0, 45, 90, 135'
 
@@ -268,6 +272,8 @@ Laplacian of Gaussian (LoG) filter features
 -------------------------------------------
 Similar to the Gabor features, these features are extracted after the filtering the image, now with a LoG filter.
 WORC includes the width of the Gaussian part of the filter as parameter:
+
+.. code-block:: python
 
         config['ImageFeatures']['log_sigma'] = '1, 5, 10'
 
@@ -283,6 +289,8 @@ vessel filter from the following paper:
 
 As the filter triggers on tubular structeres, these filter may be used to not only detect vessels but any tube like
 structure. The following parameters are used, see also the paper:
+
+.. code-block:: python
 
         config['ImageFeatures']['vessel_scale_range'] = '1, 10'
         config['ImageFeatures']['vessel_scale_step'] = '2'
@@ -303,6 +311,8 @@ We recommend the following article for information about LBPs:
 
 Again, a range of parameters is used to compute the LBP:
 
+.. code-block:: python
+
         config['ImageFeatures']['LBP_radius'] = '3, 8, 15'
         config['ImageFeatures']['LBP_npoints'] = '12, 24, 36'
 
@@ -321,6 +331,8 @@ measures based on congruency or symmetry of phase may result in relevant feature
 please see the work of `Peter Kovesi <https://www.peterkovesi.com/matlabfns/index.html/>`_.
 
 Local phase computations serves as a filter, with the following parameters:
+
+.. code-block:: python
 
         config['ImageFeatures']['phase_minwavelength'] = '3'
         config['ImageFeatures']['phase_nscale'] = '5'

@@ -31,6 +31,7 @@ from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
     CartesiusClusterDetector
 
 from WORC.validators.preflightcheck import ValidatorsFactory
+from functools import wraps
 
 
 def _for_all_methods(decorator):
@@ -44,7 +45,7 @@ def _for_all_methods(decorator):
     return decorate
 
 
-def _error_buldozer(func):
+def _error_bulldozer(func):
     """Checks whether raised errors are known or should never occur."""
     _valid_exceptions = [
         PathNotFoundException, NoImagesFoundException,
@@ -56,6 +57,7 @@ def _error_buldozer(func):
 
     unexpected_exception_exception = Exception('A blackhole to another dimenstion has opened. This exception should never be thrown. Double check your code or make an issue on the WORC github so that we can fix this issue.')
 
+    @wraps(func)
     def dec(*args, **kwargs):
         try:
             func(*args, **kwargs)
@@ -66,7 +68,7 @@ def _error_buldozer(func):
     return dec
 
 
-@_for_all_methods(_error_buldozer)
+@_for_all_methods(_error_bulldozer)
 class SimpleWORC():
     """Facade around the main WORC object for simple interaction."""
     def __init__(self, name='WORC'):

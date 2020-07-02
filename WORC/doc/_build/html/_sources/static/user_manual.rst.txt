@@ -3,12 +3,11 @@
 User Manual
 ===========
 
-In this chapter we will discuss the parts of WORC in more detail. We will give a more complete overview of the system
+In this chapter we will discuss the parts of WORC in more detail, mostly focussed on the inputs,
+outputs, and the various workflow possible. We will give a more complete overview of the system
 and describe the more advanced features.
 
 .. _tools:
-
-
 
 Interacting with WORC
 ---------------------
@@ -20,7 +19,7 @@ object and provides several more advances functions. The specific functionalitie
 ``WORC`` object itself can be found in this section.
 
 For documentation on ``SimpleWORC`` and ``BasicWORC``, please look at the documentation
-within those modules: :py:mod:`WORC.facade.simpleworc` . Many of the functions are actually wrappers to interact with the WORC
+within those modules: :py:mod:`WORC.facade.simpleworc` and :py:mod:`WORC.facade.basicworc`. Many of the functions are actually wrappers to interact with the WORC
 object, and therefore use the functionality described below. For basic usage, only using
 ``SimpleWORC`` and it's respective documentation should be sufficient.
 
@@ -33,7 +32,9 @@ The WORC Object
 
 It's attributes are split in a couple of categories. We will not discuss
 the WORC.defaultconfig() function here, which generates the default
-configuration, as it is listed in a separate page, see the :ref:`Config chapter <config-chapter>`
+configuration, as it is listed in a separate page, see the :ref:`Config chapter <config-chapter>`.
+More detailed documentation of the various functions can be found in the docstrings of :py:mod:`WORC.WORC`:
+we will mostly focus on the attributes, inputs, outputs and workflows here.
 
 
 Input file definitions

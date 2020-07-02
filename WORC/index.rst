@@ -67,7 +67,6 @@ WORC Documentation
     static/user_manual.rst
     static/configuration.rst
     static/additionalfunctionality.rst
-    static/facades.rst
     static/features.rst
     static/developerdocumentation.rst
     static/file_description.rst

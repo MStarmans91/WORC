@@ -15,13 +15,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .simpleworc import SimpleWORC, _for_all_methods, _error_buldozer
+from .simpleworc import SimpleWORC, _for_all_methods, _error_bulldozer
 import os
 import fastr
 from .helpers.processing import convert_radiomix_features
 
 
-@_for_all_methods(_error_buldozer)
+@_for_all_methods(_error_bulldozer)
 class BasicWORC(SimpleWORC):
     def __init__(self, name='WORC'):
         super().__init__(name)
