@@ -115,6 +115,7 @@ def crossval(config, label_data, image_features,
 
     # Cross-validation iteration to start with
     start = 0
+    save_data = list()
     if tempsave:
         tempfolder = os.path.join(outputfolder, 'tempsave')
         if not os.path.exists(tempfolder):
@@ -124,6 +125,17 @@ def crossval(config, label_data, image_features,
             # Previous tempsaves, start where we left of
             tempsaves = glob.glob(tempfolder, 'tempsave_*.hdf5')
             start = len(tempsaves)
+
+            # Load previous tempsaves and add to save data
+            tempsaves.sort()
+            for t in tempsaves:
+                t = pd.read_hdf(t)
+                t = temp_save_data['Constructed crossvalidation']
+                temp_save_data = (t.trained_classifier, t.X_train, t.X_test,
+                                  t.Y_train, t.Y_test, t.patient_ID_train,
+                                  t.patient_ID_test, t.random_seed)
+
+                save_data.append(temp_save_data)
 
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
@@ -160,7 +172,8 @@ def crossval(config, label_data, image_features,
         if modus == 'singlelabel':
             i_class_temp = i_class.ravel()
 
-        save_data = list()
+        if not tempsave:
+            save_data = list()
 
         for i in range(start, N_iterations):
             print(('Cross validation iteration {} / {} .').format(str(i + 1), str(N_iterations)))
