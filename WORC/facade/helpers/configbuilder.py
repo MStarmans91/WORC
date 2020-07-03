@@ -169,12 +169,13 @@ class ConfigBuilder():
         return overrides
 
     def experiment_overrides(self, use_smac='True', cv_iter='100', cv_splits='5',
-                             opt_iter='100000', n_ensembles='50'):
+                             opt_iter='100000', jobs_per_core='4000', n_ensembles='50'):
         overrides = {
             'CrossValidation': {'N_iterations': cv_iter},  # Default: 100
             'HyperOptimization': {'N_iterations': opt_iter,  # Default: 100000
                                   'use_SMAC': use_smac,
-                                  'n_splits': cv_splits},  # Default: 4000
+                                  'n_splits': cv_splits,
+                                  'n_jobspercore': jobs_per_core},  # Default: 4000
             # Make use of ensembling
             'Ensemble': {'Use': n_ensembles},  # Default: 50
         }
