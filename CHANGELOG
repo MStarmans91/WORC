@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+Unreleased
+------------------
+
+Fixed
+~~~~~
+- Bugfix in ComBat when not using mod variable and skipping patients.
+
 3.2.1 - 2020-07-02
 ------------------
 
@@ -23,7 +30,7 @@ Changed
   so it's redundant to use both. Additionally, the wavelet features
   from PyRadiomics add +1000 features, which did not seem to help in many
   experiments while majorly slowing down the computation.
-  
+
 
 Fixed
 ~~~~~

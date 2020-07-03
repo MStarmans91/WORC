@@ -1584,7 +1584,15 @@ class WORC(object):
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 
     def add_evaluation(self, label_type):
-        """Add branch for evaluation of performance to network."""
+        """Add branch for evaluation of performance to network.
+
+        Note: should be done after build, before set:
+        WORC.build()
+        WORC.add_evaluation(label_type)
+        WORC.set()
+        WORC.execute()
+        
+        """
         self.Evaluate = Evaluate(label_type=label_type, parent=self)
         self._add_evaluation = True
 

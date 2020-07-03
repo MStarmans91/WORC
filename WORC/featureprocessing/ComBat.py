@@ -218,7 +218,8 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
 
             # Delete some other variables for later processing
             all_features_matrix = np.delete(all_features_matrix, bnum, 1)
-            mod = np.delete(mod, bnum, 0)
+            if mod is not None:
+                mod = np.delete(mod, bnum, 0)
             batch = np.delete(batch, bnum, 0)
 
             # Notify user
