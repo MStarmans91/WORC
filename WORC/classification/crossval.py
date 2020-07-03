@@ -113,10 +113,17 @@ def crossval(config, label_data, image_features,
     logfilename = os.path.join(outputfolder, 'classifier.log')
     print("Logging to file " + str(logfilename))
 
+    # Cross-validation iteration to start with
+    start = 0
     if tempsave:
         tempfolder = os.path.join(outputfolder, 'tempsave')
         if not os.path.exists(tempfolder):
+            # No previous tempsaves
             os.makedirs(tempfolder)
+        else:
+            # Previous tempsaves, start where we left of
+            tempsaves = glob.glob(tempfolder, 'tempsave_*.hdf5')
+            start = len(tempsaves)
 
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
@@ -155,7 +162,7 @@ def crossval(config, label_data, image_features,
 
         save_data = list()
 
-        for i in range(0, N_iterations):
+        for i in range(start, N_iterations):
             print(('Cross validation iteration {} / {} .').format(str(i + 1), str(N_iterations)))
             logging.debug(('Cross validation iteration {} / {} .').format(str(i + 1), str(N_iterations)))
             timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
@@ -432,9 +439,7 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
 
     classifier_labelss = dict()
 
-    print('features')
     logging.debug('Starting classifier')
-    print(len(image_features_train))
 
     # Determine modus
     if modus == 'singlelabel':

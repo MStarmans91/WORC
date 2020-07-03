@@ -451,8 +451,6 @@ def fit_and_score(X, y, scoring,
                 print("New Length: " + str(len(feature_values[0])))
             feature_labels = ReliefSel.transform(feature_labels)
             feature_labels.sort()
-            for l in feature_labels[0]:
-                print(l)
 
     # Delete the object if we do not need to return it
     if not return_all:

@@ -9,6 +9,11 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_
 Unreleased
 ------------------
 
+Added
+~~~~~~~
+- In classify node, when using temporary saves, start from where
+  the process previously stopped instead of from the beginning.
+
 Fixed
 ~~~~~
 - Bugfix in ComBat when not using mod variable and skipping patients.
