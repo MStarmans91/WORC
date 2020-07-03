@@ -25,6 +25,7 @@ from sklearn.model_selection import train_test_split
 from .parameter_optimization import random_search_parameters
 import WORC.addexceptions as ae
 from WORC.classification.regressors import regressors
+import glob
 
 
 def crossval(config, label_data, image_features,
@@ -123,14 +124,14 @@ def crossval(config, label_data, image_features,
             os.makedirs(tempfolder)
         else:
             # Previous tempsaves, start where we left of
-            tempsaves = glob.glob(tempfolder, 'tempsave_*.hdf5')
+            tempsaves = glob.glob(os.path.join(tempfolder, 'tempsave_*.hdf5'))
             start = len(tempsaves)
 
             # Load previous tempsaves and add to save data
             tempsaves.sort()
             for t in tempsaves:
                 t = pd.read_hdf(t)
-                t = temp_save_data['Constructed crossvalidation']
+                t = t['Constructed crossvalidation']
                 temp_save_data = (t.trained_classifier, t.X_train, t.X_test,
                                   t.Y_train, t.Y_test, t.patient_ID_train,
                                   t.patient_ID_test, t.random_seed)
