@@ -345,6 +345,6 @@ class SimpleWORC():
         self._radiomix_feature_file = feature_file
 
     def add_experiment_config_overrides(self, use_smac, cv_iter, cv_splits,
-                                        opt_iter, n_ensembles):
+                                        opt_iter, jobs_per_core, n_ensembles):
         self._config_builder.experiment_overrides(use_smac, cv_iter, cv_splits,
-                                                  opt_iter, n_ensembles)
+                                                  opt_iter, jobs_per_core, n_ensembles)
