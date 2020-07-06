@@ -2637,6 +2637,8 @@ class BaseSearchCVSMAC(BaseSearchCV):
             # Construct a new dictionary with parameters from the input configuration
             parameters = self.convert_cfg(cfg.get_dictionary())
 
+            print('Scoring function called' + '\n')
+
             # Set up the cross-validation
             cv = check_cv(self.cv, self.labels, classifier=True)
             cv_iter = list(cv.split(self.features, self.labels))
@@ -2662,10 +2664,15 @@ class BaseSearchCVSMAC(BaseSearchCV):
             return score
 
         # Run the optimization
+
+        # Here we will create and execute a fastr network
+
         run_id = random.randint(0, 2**32 - 1)
         smac = SMAC4HPO(scenario=scenario, rng=self.random_state,
                         tae_runner=score_cfg, run_id=run_id)
         opt_config = smac.optimize()
+
+        print('Successfully completed the smac.optimize() function' + '\n')
 
         # Load in the runhistory data
         runhistory_file = open('/scratch/mdeen/SMAC_output/run_' + str(run_id) +
