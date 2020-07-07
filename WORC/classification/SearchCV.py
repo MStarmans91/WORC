@@ -2718,7 +2718,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         crashing_config = {'UsePCA': 'False',
                            'classifiers': 'LR',
                            'LRC': 0.4001607630812365,
-                           'LRpenalty': 'l1',
+                           'LRpenalty': 'l2',
                            'random_seed': self.random_state,
                            'max_iter': self.param_distributions['Classification']['max_iter'][0],
                            'FeatPreProcess': False,
