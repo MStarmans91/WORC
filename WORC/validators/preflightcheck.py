@@ -85,9 +85,9 @@ class InvalidLabelsValidator(AbstractValidator):
         errstr = None
 
         try:
-            if simpleworc._labels_file_train):
+            if simpleworc._labels_file_train:
                 labels, subjects, _ = load_label_csv(simpleworc._labels_file_train)
-            elif simpleworc.labels_file_train):
+            elif simpleworc.labels_file_train:
                 labels, subjects, _ = load_label_csv(simpleworc.labels_file_train)
             else:
                 raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
