@@ -2621,6 +2621,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         pre_dispatch = self.pre_dispatch
         cv_iter = list(cv.split(self.features, self.labels, groups))
 
+        '''
         # Build the SMAC configuration
         cs = build_smac_config(self.param_distributions)
         
@@ -2712,6 +2713,18 @@ class BaseSearchCVSMAC(BaseSearchCV):
                 feature_values = preprocessor.transform(feature_values)
                 feature_labels = preprocessor.transform(feature_labels)
                 X = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
+        '''
+        # Make a temporary artificial configuration
+        crashing_config = {'UsePCA': 'False',
+                           'classifiers': 'LR',
+                           'LRC': 0.4001607630812365,
+                           'LRpenalty': 'l1',
+                           'random_seed': self.random_state,
+                           'max_iter': self.param_distributions['Classification']['max_iter'][0],
+                           'FeatPreProcess': False,
+                           'Featsel_Variance': False
+                           }
+        best_configs = [(0, 0, crashing_config)]
 
         # Score the best found result and save the full results
         out = Parallel(
