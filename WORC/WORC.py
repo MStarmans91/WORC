@@ -198,7 +198,7 @@ class WORC(object):
         config['Segmentix']['mask'] = 'subtract'
         config['Segmentix']['segtype'] = 'None'
         config['Segmentix']['segradius'] = '5'
-        config['Segmentix']['N_blobs'] = '0'
+        config['Segmentix']['N_blobs'] = '1'
         config['Segmentix']['fillholes'] = 'True'
         config['Segmentix']['remove_small_objects'] = 'False'
         config['Segmentix']['min_object_size'] = '2'
@@ -1591,7 +1591,7 @@ class WORC(object):
         WORC.add_evaluation(label_type)
         WORC.set()
         WORC.execute()
-        
+
         """
         self.Evaluate = Evaluate(label_type=label_type, parent=self)
         self._add_evaluation = True
