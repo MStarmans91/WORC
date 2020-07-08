@@ -113,6 +113,7 @@ class ConfigBuilder():
                                   'n_jobspercore': '1',
                                   'use_SMAC': 'True',
                                   'n_splits': '1'}, # Default: 4000
+            'Classification': {'max_iter': 100},
             # Make use of ensembling
             'Ensemble': {'Use': '1'}, # Default: 50
         }
