@@ -63,6 +63,7 @@ from WORC.classification.smac import build_smac_config
 from smac.scenario.scenario import Scenario
 from smac.facade.smac_hpo_facade import SMAC4HPO
 import heapq
+from datetime import datetime
 
 
 def rms_score(truth, prediction):
@@ -2665,13 +2666,15 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         # Here we will create and execute a fastr network
 
-        run_id = random.randint(0, 2**32 - 1)
+        #run_id = random.randint(0, 2**32 - 1)
+        current_date_time = datetime.now()
+        run_id = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
         smac = SMAC4HPO(scenario=scenario, rng=self.random_state,
                         tae_runner=score_cfg, run_id=run_id)
         opt_config = smac.optimize()
 
         # Load in the runhistory data
-        runhistory_file = open('/scratch/mdeen/SMAC_output/run_' + str(run_id) +
+        runhistory_file = open('/scratch/mdeen/SMAC_output/' + str(run_id) +
                                '/runhistory.json')
         runhistory = json.load(runhistory_file)
 
