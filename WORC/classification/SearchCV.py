@@ -2674,7 +2674,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         opt_config = smac.optimize()
 
         # Load in the runhistory data
-        runhistory_file = open('/scratch/mdeen/SMAC_output/' + run_name + str(run_id) +
+        runhistory_file = open('/scratch/mdeen/SMAC_output/' + run_name + '/run_' + str(run_id) +
                                '/runhistory.json')
         runhistory = json.load(runhistory_file)
 
