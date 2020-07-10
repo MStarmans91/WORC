@@ -2776,13 +2776,15 @@ class BaseSearchCVSMAC(BaseSearchCV):
         # fit_and_score requires a flag but only if it is true
         if parameters['Imputation'] == 'False':
             parameters.pop('Imputation')
-        # Delete three more flags from the config if they are false
+        # Delete four more flags from the config if they are false
         if parameters['StatisticalTestUse'] == 'False':
             parameters.pop('StatisticalTestUse')
         if parameters['SampleProcessing_SMOTE'] == 'False':
             parameters.pop('SampleProcessing_SMOTE')
         if parameters['SampleProcessing_Oversampling'] == 'False':
             parameters.pop('SampleProcessing_Oversampling')
+        if parameters['ReliefUse'] == 'False':
+            parameters.pop('ReliefUse')
         # 'PCAType' is either '95variance' or an int
         if parameters['UsePCA'] == 'True' and \
                 parameters['PCAType'] == 'n_components':
