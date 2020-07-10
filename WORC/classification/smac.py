@@ -272,9 +272,31 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=statistical_test_threshold, parent=statistical_test,
                                  values=['True']))
 
-    
+    # Oversampling
+    # 0 hyperparameters
+    oversampling = CategoricalHyperparameter('SampleProcessing_Oversampling', choices=['True', 'False'])
+    cs.add_hyperparameter(oversampling)
 
+    # SMOTE oversampling
+    # 2 hyperparameters:
+    #   1) ratio
+    #   2) neighbors
+    smote = CategoricalHyperparameter('SampleProcessing_SMOTE', choices=['True', 'False'])
+    cs.add_hyperparameter(smote)
 
+    smote_ratio = UniformFloatHyperparameter('SampleProcessing_SMOTE_ratio',
+                                             lower=parameters['SampleProcessing']['SMOTE_ratio'][0],
+                                             upper=parameters['SampleProcessing']['SMOTE_ratio'][0] +
+                                                   parameters['SampleProcessing']['SMOTE_ratio'][1])
+    cs.add_hyperparameter(smote_ratio)
+    cs.add_condition(InCondition(child=smote_ratio, parent=smote, values=['True']))
+
+    smote_neighbors = UniformIntegerHyperparameter('SampleProcessing_SMOTE_neighbors',
+                                                   lower=parameters['SampleProcessing']['SMOTE_neighbors'][0],
+                                                   upper=parameters['SampleProcessing']['SMOTE_neighbors'][0] +
+                                                         parameters['SampleProcessing']['SMOTE_neighbors'][1])
+    cs.add_hyperparameter(smote_neighbors)
+    cs.add_condition(InCondition(child=smote_neighbors, parent=smote, values=['True']))
 
     return cs
 
