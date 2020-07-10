@@ -185,8 +185,8 @@ def build_smac_config(parameters):
                                  values=['knn']))
 
     # PCA
-    # 1 hyperparameter:
-    #   1) variance
+    # 2 hyperparameter:
+    #   1) type
     #
     #   2) n_components     | Conditional on type: n_components
     pca = CategoricalHyperparameter('UsePCA', choices=['True', 'False'])
@@ -202,6 +202,11 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(pca_n_components)
     cs.add_condition(InCondition(child=pca_n_components, parent=pca_type,
                                  values=['n_components']))
+
+    # Variance selection
+    # 0 hyperparameters
+    variance_selection = CategoricalHyperparameter('Featsel_Variance', choices=['True', 'False'])
+    cs.add_hyperparameter(variance_selection)
 
 
     return cs
