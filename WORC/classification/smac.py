@@ -179,13 +179,13 @@ def build_smac_config(parameters):
     imputation_n_neighbors = UniformIntegerHyperparameter('ImputationNeighbours',
                                                           lower=parameters['Imputation']['n_neighbors'][0],
                                                           upper=parameters['Imputation']['n_neighbors'][0] +
-                                                          parameters['Imputation']['n_neighbors'][1])
+                                                                parameters['Imputation']['n_neighbors'][1])
     cs.add_hyperparameter(imputation_n_neighbors)
     cs.add_condition(InCondition(child=imputation_n_neighbors, parent=imputation_strategy,
                                  values=['knn']))
 
     # PCA
-    # 2 hyperparameter:
+    # 2 hyperparameters:
     #   1) type
     #
     #   2) n_components     | Conditional on type: n_components
@@ -207,6 +207,45 @@ def build_smac_config(parameters):
     # 0 hyperparameters
     variance_selection = CategoricalHyperparameter('Featsel_Variance', choices=['True', 'False'])
     cs.add_hyperparameter(variance_selection)
+
+    # Relief
+    # 4 hyperparameters:
+    #   1) NN
+    #   2) Sample size
+    #   3) DistanceP
+    #   4) Numfeatures
+    relief = CategoricalHyperparameter('ReliefUse', choices=['True', 'False'])
+    cs.add_hyperparameter(relief)
+
+    relief_NN = UniformIntegerHyperparameter('ReliefNN',
+                                             lower=parameters['Featsel']['ReliefNN'][0],
+                                             upper=parameters['Featsel']['ReliefNN'][0] +
+                                                   parameters['Featsel']['ReliefNN'][1])
+    cs.add_hyperparameter(relief_NN)
+    cs.add_condition(InCondition(child=relief_NN, parent=relief, values=['True']))
+
+    relief_sample_size = UniformIntegerHyperparameter('ReliefSampleSize',
+                                                      lower=parameters['Featsel']['ReliefSampleSize'][0],
+                                                      upper=parameters['Featsel']['ReliefSampleSize'][0] +
+                                                            parameters['Featsel']['ReliefSampleSize'][1])
+    cs.add_hyperparameter(relief_sample_size)
+    cs.add_condition(InCondition(child=relief_sample_size, parent=relief, values=['True']))
+
+    relief_distanceP = UniformIntegerHyperparameter('ReliefDistanceP',
+                                                      lower=parameters['Featsel']['ReliefDistanceP'][0],
+                                                      upper=parameters['Featsel']['ReliefDistanceP'][0] +
+                                                            parameters['Featsel']['ReliefDistanceP'][1])
+    cs.add_hyperparameter(relief_distanceP)
+    cs.add_condition(InCondition(child=relief_distanceP, parent=relief, values=['True']))
+
+    relief_numFeatures = UniformIntegerHyperparameter('ReliefNumFeatures',
+                                                      lower=parameters['Featsel']['ReliefNumFeatures'][0],
+                                                      upper=parameters['Featsel']['ReliefNumFeatures'][0] +
+                                                            parameters['Featsel']['ReliefNumFeatures'][1])
+    cs.add_hyperparameter(relief_numFeatures)
+    cs.add_condition(InCondition(child=relief_numFeatures, parent=relief, values=['True']))
+
+
 
 
     return cs

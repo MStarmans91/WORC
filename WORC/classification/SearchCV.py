@@ -2769,8 +2769,6 @@ class BaseSearchCVSMAC(BaseSearchCV):
         # Add some parameters that are used for fitting, but are not part of the optimization
         parameters['random_seed'] = self.random_state
         parameters['max_iter'] = self.param_distributions['Classification']['max_iter'][0]
-        parameters['FeatPreProcess'] = False
-        parameters['Featsel_Variance'] = False
 
         # No featureScaling flag is accepted in fit_and_score,
         # so remove it
