@@ -17,9 +17,10 @@
 
 from ConfigSpace.conditions import InCondition
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, \
-    UniformFloatHyperparameter, UniformIntegerHyperparameter
+    UniformFloatHyperparameter, UniformIntegerHyperparameter, \
+    Constant
 from smac.configspace import ConfigurationSpace
-from WORC.classification.fitandscore import fit_and_score
+
 
 
 def build_smac_config(parameters):
@@ -100,7 +101,7 @@ def build_smac_config(parameters):
     # 2 hyperparameters:
     #   1) penalty          | conditional on classifier: LR
     #   2) C                | conditional on classifier: LR
-    penalty = CategoricalHyperparameter('LRpenalty', choices=cf['LRpenalty'])
+    penalty = CategoricalHyperparameter('LRpenalty', choices=['l1'])
     C = UniformFloatHyperparameter('LRC',
                                    lower=cf['LRC'][0],
                                    upper=cf['LRC'][0] + cf['LRC'][1])
@@ -297,6 +298,9 @@ def build_smac_config(parameters):
                                                          parameters['SampleProcessing']['SMOTE_neighbors'][1])
     cs.add_hyperparameter(smote_neighbors)
     cs.add_condition(InCondition(child=smote_neighbors, parent=smote, values=['True']))
+
+    smote_cores = Constant('SampleProcessing_SMOTE_n_cores', value=parameters['General']['Joblib_ncores'])
+    cs.add_hyperparameter(smote_cores)
 
     return cs
 
