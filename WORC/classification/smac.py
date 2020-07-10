@@ -285,10 +285,15 @@ def build_smac_config(parameters):
     smote = CategoricalHyperparameter('SampleProcessing_SMOTE', choices=['True', 'False'])
     cs.add_hyperparameter(smote)
 
+    '''
+    Currently smote_ratio seems to be a constant with value 1,
+    so this implementation is not working right now
     smote_ratio = UniformFloatHyperparameter('SampleProcessing_SMOTE_ratio',
                                              lower=parameters['SampleProcessing']['SMOTE_ratio'][0],
                                              upper=parameters['SampleProcessing']['SMOTE_ratio'][0] +
                                                    parameters['SampleProcessing']['SMOTE_ratio'][1])
+    '''
+    smote_ratio = Constant('SampleProcessing_SMOTE_ratio', value=1)
     cs.add_hyperparameter(smote_ratio)
     cs.add_condition(InCondition(child=smote_ratio, parent=smote, values=['True']))
 
