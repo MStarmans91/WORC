@@ -259,7 +259,7 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(statistical_test)
 
     statistical_test_metric = CategoricalHyperparameter('StatisticalTestMetric',
-                                                        choices=[parameters['Featsel']['StatisticalTestMetric']])
+                                                        choices=parameters['Featsel']['StatisticalTestMetric'])
     cs.add_hyperparameter(statistical_test_metric)
     cs.add_condition(InCondition(child=statistical_test_metric, parent=statistical_test,
                                  values=['True']))
