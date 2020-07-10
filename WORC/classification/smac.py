@@ -196,7 +196,7 @@ def build_smac_config(parameters):
     #   2) Sample size
     #   3) DistanceP
     #   4) Numfeatures
-    relief = CategoricalHyperparameter('ReliefUse', choices=['True', 'False'])
+    relief = CategoricalHyperparameter('ReliefUse', choices=['False'])
     cs.add_hyperparameter(relief)
 
     relief_NN = UniformIntegerHyperparameter('ReliefNN',
@@ -229,8 +229,8 @@ def build_smac_config(parameters):
 
     # Select from model
     # 0 hyperparameters
-    select_from_model = CategoricalHyperparameter('SelectFromModel', choices=['True', 'False'])
-    cs.add_hyperparameter(select_from_model)
+    #select_from_model = CategoricalHyperparameter('SelectFromModel', choices=['True', 'False'])
+    #cs.add_hyperparameter(select_from_model)
 
     # PCA
     # 2 hyperparameters:
@@ -275,8 +275,8 @@ def build_smac_config(parameters):
 
     # Oversampling
     # 0 hyperparameters
-    oversampling = CategoricalHyperparameter('SampleProcessing_Oversampling', choices=['True', 'False'])
-    cs.add_hyperparameter(oversampling)
+    #oversampling = CategoricalHyperparameter('SampleProcessing_Oversampling', choices=['True', 'False'])
+    #cs.add_hyperparameter(oversampling)
 
     # SMOTE oversampling
     # 2 hyperparameters:
