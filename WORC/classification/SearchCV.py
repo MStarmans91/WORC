@@ -2626,11 +2626,13 @@ class BaseSearchCVSMAC(BaseSearchCV):
         cs = build_smac_config(self.param_distributions)
         
         # Create the Scenario object to define the optimization settings
+        current_date_time = datetime.now()
+        run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
         scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                              "runcount-limit": self.n_iter,  # max. number of function evaluations;
                              "cs": cs,
                              "deterministic": "true",
-                             "output_dir": "/scratch/mdeen/SMAC_output"
+                             "output_dir": "/scratch/mdeen/SMAC_output/" + run_name
                              })
 
         # Define the scoring function
@@ -2666,15 +2668,13 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         # Here we will create and execute a fastr network
 
-        #run_id = random.randint(0, 2**32 - 1)
-        current_date_time = datetime.now()
-        run_id = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
+        run_id = random.randint(0, 2**32 - 1)
         smac = SMAC4HPO(scenario=scenario, rng=self.random_state,
                         tae_runner=score_cfg, run_id=run_id)
         opt_config = smac.optimize()
 
         # Load in the runhistory data
-        runhistory_file = open('/scratch/mdeen/SMAC_output/' + str(run_id) +
+        runhistory_file = open('/scratch/mdeen/SMAC_output/' + run_name + str(run_id) +
                                '/runhistory.json')
         runhistory = json.load(runhistory_file)
 
