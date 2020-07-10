@@ -306,6 +306,7 @@ def build_smac_config(parameters):
 
     smote_cores = Constant('SampleProcessing_SMOTE_n_cores', value=parameters['General']['Joblib_ncores'])
     cs.add_hyperparameter(smote_cores)
+    cs.add_condition(InCondition(child=smote_cores, parent=smote, values=['True']))
 
     return cs
 
