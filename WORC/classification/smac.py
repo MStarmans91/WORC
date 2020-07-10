@@ -184,25 +184,6 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=imputation_n_neighbors, parent=imputation_strategy,
                                  values=['knn']))
 
-    # PCA
-    # 2 hyperparameters:
-    #   1) type
-    #
-    #   2) n_components     | Conditional on type: n_components
-    pca = CategoricalHyperparameter('UsePCA', choices=['True', 'False'])
-    cs.add_hyperparameter(pca)
-
-    pca_type = CategoricalHyperparameter('PCAType', choices=['95variance', 'n_components'])
-    cs.add_hyperparameter(pca_type)
-    cs.add_condition(InCondition(child=pca_type, parent=pca, values=['True']))
-
-    pca_n_components = UniformIntegerHyperparameter('n_components',
-                                                    lower=10,
-                                                    upper=100)
-    cs.add_hyperparameter(pca_n_components)
-    cs.add_condition(InCondition(child=pca_n_components, parent=pca_type,
-                                 values=['n_components']))
-
     # Variance selection
     # 0 hyperparameters
     variance_selection = CategoricalHyperparameter('Featsel_Variance', choices=['True', 'False'])
@@ -245,6 +226,53 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(relief_numFeatures)
     cs.add_condition(InCondition(child=relief_numFeatures, parent=relief, values=['True']))
 
+    # Select from model
+    # 0 hyperparameters
+    select_from_model = CategoricalHyperparameter('SelectFromModel', choices=['True', 'False'])
+    cs.add_hyperparameter(select_from_model)
+
+    # PCA
+    # 2 hyperparameters:
+    #   1) type
+    #
+    #   2) n_components     | Conditional on type: n_components
+    pca = CategoricalHyperparameter('UsePCA', choices=['True', 'False'])
+    cs.add_hyperparameter(pca)
+
+    pca_type = CategoricalHyperparameter('PCAType', choices=['95variance', 'n_components'])
+    cs.add_hyperparameter(pca_type)
+    cs.add_condition(InCondition(child=pca_type, parent=pca, values=['True']))
+
+    pca_n_components = UniformIntegerHyperparameter('n_components',
+                                                    lower=10,
+                                                    upper=100)
+    cs.add_hyperparameter(pca_n_components)
+    cs.add_condition(InCondition(child=pca_n_components, parent=pca_type,
+                                 values=['n_components']))
+
+    # Statistical test
+    # 2 hyperparameters:
+    #   1) Metric
+    #   2) Threshold
+    statistical_test = CategoricalHyperparameter('StatisticalTestUse', choices=['True', 'False'])
+    cs.add_hyperparameter(statistical_test)
+
+    statistical_test_metric = CategoricalHyperparameter('StatisticalTestMetric',
+                                                        choices=[parameters['Featsel']['StatisticalTestMetric']])
+    cs.add_hyperparameter(statistical_test_metric)
+    cs.add_condition(InCondition(child=statistical_test_metric, parent=statistical_test,
+                                 values=['True']))
+
+    statistical_test_threshold = UniformFloatHyperparameter('StatisticalTestThreshold',
+                                                            lower=pow(10, parameters['Featsel']['StatisticalTestThreshold'][0]),
+                                                            upper=pow(10, parameters['Featsel']['StatisticalTestThreshold'][0] +
+                                                                  parameters['Featsel']['StatisticalTestThreshold'][1]),
+                                                            log=True)
+    cs.add_hyperparameter(statistical_test_threshold)
+    cs.add_condition(InCondition(child=statistical_test_threshold, parent=statistical_test,
+                                 values=['True']))
+
+    
 
 
 
