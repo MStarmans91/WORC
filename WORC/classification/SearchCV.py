@@ -2781,10 +2781,10 @@ class BaseSearchCVSMAC(BaseSearchCV):
             parameters.pop('StatisticalTestUse')
         if parameters['SampleProcessing_SMOTE'] == 'False':
             parameters.pop('SampleProcessing_SMOTE')
-        if parameters['SampleProcessing_Oversampling'] == 'False':
-            parameters.pop('SampleProcessing_Oversampling')
-        if parameters['ReliefUse'] == 'False':
-            parameters.pop('ReliefUse')
+        #if parameters['SampleProcessing_Oversampling'] == 'False':
+        #    parameters.pop('SampleProcessing_Oversampling')
+        #if parameters['ReliefUse'] == 'False':
+        #    parameters.pop('ReliefUse')
         # 'PCAType' is either '95variance' or an int
         if parameters['UsePCA'] == 'True' and \
                 parameters['PCAType'] == 'n_components':
