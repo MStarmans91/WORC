@@ -87,7 +87,7 @@ def main():
         nonlocal data
 
         # Fit the classifier and store the result
-        all_scores = []
+        all_scores = np.array()
         all_test_scores = []
         for train, test in data['cv_iter']:
             ret = fit_and_score(data['X'], data['y'], data['scoring'],
@@ -105,7 +105,7 @@ def main():
 
         # Process the results:
         # Return the average score over all cross-validation folds
-        mean_train_score = np.mean(all_scores[:,0], axis=0)
+        mean_train_score = all_scores[:,0].mean(axis=0)
         print('all_scores: ' + str(all_scores) + '\n')
         print('mean_train_score: ' + str(mean_train_score) + '\n')
         mean_test_score = np.mean(all_test_scores)
