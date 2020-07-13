@@ -69,7 +69,7 @@ def main():
     run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
     scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                          "runcount-limit": data['n_iter'],  # max. number of function evaluations;
-                         "cs": data['cs'],
+                         "cs": data['search_space'],
                          "deterministic": "true",
                          "output_dir": "/scratch/mdeen/SMAC_output/" + run_name
                          })
