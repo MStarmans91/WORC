@@ -47,8 +47,8 @@ def main():
     # Convert lists into strings
     if type(args.ed) is list:
         args.ed = ''.join(args.ed)
-    if type(args.tt) is list:
-        args.tt = ''.join(args.tt)
+    #if type(args.tt) is list:
+    #    args.tt = ''.join(args.tt)
     #if type(args.para) is list:
     #    args.para = ''.join(args.para)
     if type(args.out) is list:
@@ -103,7 +103,8 @@ def main():
 
         return score
 
-
+    f = open('/scratch/mdeen/testfiles/called.txt', 'a')
+    f.write('This line of code was called')
     run_id = random.randint(0, 2 ** 32 - 1)
     smac = SMAC4HPO(scenario=scenario,
                     tae_runner=score_cfg, run_id=run_id)
