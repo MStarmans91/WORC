@@ -105,8 +105,9 @@ def main():
 
         # Process the results:
         # Return the average score over all cross-validation folds
-        mean_scores = np.mean(all_scores, axis=0)
-        print(str(mean_scores))
+        mean_train_score = np.mean(all_scores[*][0], axis=0)
+        print('all_scores: ' + str(all_scores) + '\n')
+        print('mean_train_score: ' + str(mean_train_score) + '\n')
         mean_test_score = np.mean(all_test_scores)
         score = 1 - mean_test_score  # We minimize so take the inverse
 
