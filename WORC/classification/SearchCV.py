@@ -2629,7 +2629,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
         if not os.path.exists(tempfolder):
             os.makedirs(tempfolder)
-
+        '''
         traintest_files = dict()
         num = 0
         for train, test in cv_iter:
@@ -2649,7 +2649,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
             source_data.to_hdf(sourcename, sourcelabel)
 
             num += 1
-
+        '''
         # Create the files containing the estimator and settings
         estimator_labels = ['X', 'y', 'search_space', 'cv_iter', 'scoring',
                             'verbose', 'fit_params', 'return_train_score',
@@ -2668,7 +2668,9 @@ class BaseSearchCVSMAC(BaseSearchCV):
         estimatorname = os.path.join(tempfolder, fname)
         estimator_data.to_hdf(estimatorname, 'Estimator Data')
 
+        f = open('/scratch/mdeen/testfiles/estimatordata.txt', 'a')
         estimatordata = f"vfs://tmp/GS/{name}/{fname}"
+        f.write(estimatordata)
 
         # Create the fastr network
         network = fastr.create_network('WORC_SMAC_' + name)
@@ -2688,10 +2690,10 @@ class BaseSearchCVSMAC(BaseSearchCV):
         #fitandscore.inputs['parameters'] = parameter_data.output
         sink_output.input = smac_node.outputs['fittedestimator']
 
-        source_data = {'estimator_source': estimatordata
+        source_data = {'estimator_source': estimatordata}
                        #'traintest': traintest_files,
                        #'parameters': parameter_files
-                       }
+
         sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
 
         network.execute(source_data, sink_data,
