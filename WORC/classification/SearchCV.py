@@ -2679,7 +2679,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         smac_node = network.create_node('worc/smac:1.0', tool_version='1.0', id='smac',
                                           resources=ResourceLimit(memory='2G'))
-        smac_node.inputs['estimatordata'].input_group = 'estimator'
+        #smac_node.inputs['estimatordata'].input_group = 'estimator'
         #fitandscore.inputs['traintest'].input_group = 'traintest'
         #fitandscore.inputs['parameters'].input_group = 'parameters'
 
@@ -2688,7 +2688,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         #fitandscore.inputs['parameters'] = parameter_data.output
         sink_output.input = smac_node.outputs['fittedestimator']
 
-        source_data = {'estimator_source': [estimatordata]}
+        source_data = {'estimator_source': estimatordata}
 
         sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
 
