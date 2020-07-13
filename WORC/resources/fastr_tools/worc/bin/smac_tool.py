@@ -79,7 +79,6 @@ def main():
 
         # Read the input and output data from the smac_tool
         nonlocal data
-        print('nonlocal data: ' + str(data) + '\n')
         nonlocal output
 
         # Fit the classifier and store the result
@@ -96,6 +95,8 @@ def main():
                                 verbose=data['verbose'],
                                 return_all=False)
             all_test_scores.append(ret[1])
+            output.append(ret)
+            print('output: ' + str(output) + '\n')
 
         # Return the average score over all cross-validation folds
         mean_test_score = np.mean(all_test_scores)
