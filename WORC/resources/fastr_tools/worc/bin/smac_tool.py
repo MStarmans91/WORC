@@ -97,6 +97,7 @@ def main():
                                 return_all=False)
             all_test_scores.append(ret[1])
             output.append([ret])
+            print(str(output))
 
         # Return the average score over all cross-validation folds
         mean_test_score = np.mean(all_test_scores)
