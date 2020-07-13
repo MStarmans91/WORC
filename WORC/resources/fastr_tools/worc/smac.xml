@@ -8,7 +8,7 @@
       <target os="*" arch="*" interpreter="python" paths='bin/' bin="smac_tool.py" />
     </targets>
     <description>
-       fitandscore.py input output
+       smac input output
        output = fitted estimator
     </description>
     <authors>

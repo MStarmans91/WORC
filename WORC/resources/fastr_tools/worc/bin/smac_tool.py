@@ -33,9 +33,9 @@ def main():
     parser.add_argument('-ed', '--ed', metavar='ed',
                         dest='ed', type=str, required=True,
                         help='Estimator data in (HDF)')
-    parser.add_argument('-tt', '--tt', metavar='tt',
-                        dest='tt', type=str, required=True,
-                        help='Train- and testdata in (HDF)')
+    #parser.add_argument('-tt', '--tt', metavar='tt',
+    #                    dest='tt', type=str, required=True,
+    #                    help='Train- and testdata in (HDF)')
     #parser.add_argument('-para', '--para', metavar='para',
     #                    dest='para', type=str, required=True,
     #                    help='Parameters (JSON)')
