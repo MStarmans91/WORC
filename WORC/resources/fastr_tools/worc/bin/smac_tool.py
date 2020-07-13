@@ -25,7 +25,7 @@ from smac.facade.smac_hpo_facade import SMAC4HPO
 from datetime import datetime
 import random
 import numpy as np
-import heapq
+import csv
 
 
 def main():
@@ -60,12 +60,18 @@ def main():
     #with open(args.para, 'rb') as fp:
     #    para = json.load(fp)
 
-    # Create the output storage
-    output = []
 
     # Run the smac optimization
     current_date_time = datetime.now()
     run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
+
+    # Create the output storage
+    with open('/scratch/mdeen/tested_configs/') as file:
+        csvwriter = csv.writer(file, delimiter=',',
+                               quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        csvwriter.writerow(['train_score', 'test_score', 'test_sample_counts',
+                            'fit_time', 'score_time', 'para_estimator', 'para'])
+
     scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                          "runcount-limit": data['n_iter'],  # max. number of function evaluations;
                          "cs": data['search_space'],
@@ -79,9 +85,9 @@ def main():
 
         # Read the input and output data from the smac_tool
         nonlocal data
-        nonlocal output
 
         # Fit the classifier and store the result
+        all_scores = []
         all_test_scores = []
         for train, test in data['cv_iter']:
             ret = fit_and_score(data['X'], data['y'], data['scoring'],
@@ -94,11 +100,13 @@ def main():
                                 error_score=data['error_score'],
                                 verbose=data['verbose'],
                                 return_all=False)
+            all_scores.append(ret)
             all_test_scores.append(ret[1])
-            output.append(ret)
-            print('output: ' + str(output) + '\n')
 
+        # Process the results:
         # Return the average score over all cross-validation folds
+        mean_scores = np.mean(all_scores, axis=0)
+        print(str(mean_scores))
         mean_test_score = np.mean(all_test_scores)
         score = 1 - mean_test_score  # We minimize so take the inverse
 
