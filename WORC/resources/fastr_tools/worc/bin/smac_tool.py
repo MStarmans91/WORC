@@ -142,11 +142,11 @@ def main():
     source_data.to_hdf(args.out, 'RET')
 
 
-def convert_cfg(self, cfg):
+def convert_cfg(cfg):
     parameters = cfg
     # Add some parameters that are used for fitting, but are not part of the optimization
-    parameters['random_seed'] = self.random_state
-    parameters['max_iter'] = self.param_distributions['Classification']['max_iter'][0]
+    parameters['random_seed'] = 42
+    parameters['max_iter'] = 10000
 
     # No featureScaling flag is accepted in fit_and_score,
     # so remove it
