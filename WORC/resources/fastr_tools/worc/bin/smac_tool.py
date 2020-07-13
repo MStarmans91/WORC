@@ -62,6 +62,7 @@ def main():
 
     # Create the output storage
     output = []
+    print(str(data))
 
     # Run the smac optimization
     current_date_time = datetime.now()
@@ -103,8 +104,6 @@ def main():
 
         return score
 
-    f = open('/scratch/mdeen/testfiles/called.txt', 'a')
-    f.write('This line of code was called')
     run_id = random.randint(0, 2 ** 32 - 1)
     smac = SMAC4HPO(scenario=scenario,
                     tae_runner=score_cfg, run_id=run_id)
