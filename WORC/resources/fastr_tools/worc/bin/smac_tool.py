@@ -66,7 +66,7 @@ def main():
     run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
 
     # Create the output storage
-    with open('/scratch/mdeen/tested_configs/') as file:
+    with open('/scratch/mdeen/tested_configs/' + run_name + '.csv') as file:
         csvwriter = csv.writer(file, delimiter=',',
                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
         csvwriter.writerow(['train_score', 'test_score', 'test_sample_counts',
