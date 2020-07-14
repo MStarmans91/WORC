@@ -12,6 +12,7 @@ Unreleased
 Fixed
 ~~~~~
 - Preflightcheck now also compatible with BasicWORC.
+- Bug in PyRadiomics feature converter: can now handle 2D images.
 
 Added
 ~~~~~~~

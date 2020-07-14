@@ -68,42 +68,42 @@ class Evaluate(object):
         self.node_ROC =\
             self.network.create_node('worc/PlotROC:1.0', tool_version='1.0',
                                      id='plot_ROC',
-                                     resources=ResourceLimit(memory='4G'))
+                                     resources=ResourceLimit(memory='12G'))
         self.node_SVM =\
             self.network.create_node('worc/PlotSVM:1.0', tool_version='1.0',
                                      id='plot_SVM',
-                                     resources=ResourceLimit(memory='4G'))
+                                     resources=ResourceLimit(memory='12G'))
         self.node_Barchart =\
             self.network.create_node('worc/PlotBarchart:1.0',
                                      tool_version='1.0', id='plot_Barchart',
-                                     resources=ResourceLimit(memory='4G'))
+                                     resources=ResourceLimit(memory='12G'))
         self.node_STest =\
             self.network.create_node('worc/StatisticalTestFeatures:1.0',
                                      tool_version='1.0',
                                      id='statistical_test_features',
-                                     resources=ResourceLimit(memory='4G'))
+                                     resources=ResourceLimit(memory='12G'))
 
         self.node_decomposition =\
             self.network.create_node('worc/Decomposition:1.0',
                                      tool_version='1.0',
                                      id='decomposition',
-                                     resources=ResourceLimit(memory='4G'))
+                                     resources=ResourceLimit(memory='12G'))
 
         self.node_Ranked_Percentages =\
             self.network.create_node('worc/PlotRankedScores:1.0',
                                      tool_version='1.0',
                                      id='plot_ranked_percentages',
-                                     resources=ResourceLimit(memory='8G'))
+                                     resources=ResourceLimit(memory='20G'))
         self.node_Ranked_Posteriors =\
             self.network.create_node('worc/PlotRankedScores:1.0',
                                      tool_version='1.0',
                                      id='plot_ranked_posteriors',
-                                     resources=ResourceLimit(memory='8G'))
+                                     resources=ResourceLimit(memory='20G'))
         self.node_Boxplots_Features =\
             self.network.create_node('worc/PlotBoxplotFeatures:1.0',
                                      tool_version='1.0',
                                      id='plot_boxplot_features',
-                                     resources=ResourceLimit(memory='4G'))
+                                     resources=ResourceLimit(memory='12G'))
 
         # Create sinks
         self.sink_ROC_PNG =\
