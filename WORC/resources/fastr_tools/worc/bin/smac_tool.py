@@ -109,9 +109,15 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
-        mean_train_score = df['train_score'].mean()
 
-        print('mean_train_score: ' + str(mean_train_score) + '\n')
+        with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'w') as file:
+            csvwriter = csv.writer(file, delimiter=',',
+                                   quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            csvwriter.writerow([df['train_score'].mean(), df['test_score'].mean(),
+                                df['test_sample_counts'][0], df['fit_time'].mean(),
+                                df['score_time'].mean(), df['para_estimator'][0],
+                                df['para'][0]])
+
         mean_test_score = np.mean(all_test_scores)
         score = 1 - mean_test_score  # We minimize so take the inverse
 
