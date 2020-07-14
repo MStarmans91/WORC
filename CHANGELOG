@@ -9,19 +9,23 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_
 Unreleased
 ------------------
 
-Fixed
-~~~~~
-- Preflightcheck now also compatible with BasicWORC.
-- Bug in PyRadiomics feature converter: can now handle 2D images.
-
 Added
 ~~~~~~~
 - In classify node, when using temporary saves, start from where
   the process previously stopped instead of from the beginning.
+- Imputation to ComBat.
+
+Changed
+~~~~~~~
+- Imputation is now the first step in the workflows. More logical as
+  scaler and variance threshold can crash on missing values.
 
 Fixed
 ~~~~~
+- Preflightcheck now also compatible with BasicWORC.
 - Bugfix in ComBat when not using mod variable and skipping patients.
+- Bug in PyRadiomics feature converter: can now handle 2D images.
+
 
 3.2.1 - 2020-07-02
 ------------------
@@ -40,7 +44,6 @@ Changed
   so it's redundant to use both. Additionally, the wavelet features
   from PyRadiomics add +1000 features, which did not seem to help in many
   experiments while majorly slowing down the computation.
-
 
 Fixed
 ~~~~~

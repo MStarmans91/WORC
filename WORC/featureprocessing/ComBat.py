@@ -32,6 +32,7 @@ from neuroCombat import neuroCombat
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
+from WORC.featureprocessing.Imputer import Imputer
 
 
 def ComBat(features_train_in, labels_train, config, features_train_out,
@@ -90,6 +91,15 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
         image_features_train_noncombat = []
         feature_labels_noncombat = []
 
+    # Detect NaNs, otherwise first feature imputation is required
+    if any(np.isnan(a) for a in np.asarray(image_features_train_combat).flatten()):
+        print('\t [WARNING] NaNs detected, applying median imputation')
+        imputer = Imputer(missing_values=np.nan, strategy='median')
+        imputer.fit(image_features_train_combat)
+        image_features_train_combat = imputer.transform(image_features_train_combat)
+    else:
+        imputer = None
+
     # Apply a scaler to the features
     if scaler:
         print('\t Fitting scaler on dataset.')
@@ -117,6 +127,10 @@ def ComBat(features_train_in, labels_train, config, features_train_out,
         else:
             image_features_test_combat = image_features_test
             image_features_test_noncombat = []
+
+        # Apply imputation if required
+        if imputer is not None:
+            image_features_test_combat = imputer.transform(image_features_test_combat)
 
         # Apply a scaler to the features
         if scaler:
