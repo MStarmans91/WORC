@@ -24,9 +24,7 @@ import numpy as np
 
 
 def preprocess(imagefile, config, metadata=None, mask=None):
-    '''
-    Apply preprocessing to an image to prepare it for feture extration
-    '''
+    """Apply preprocessing to an image to prepare it for feture extration."""
     # Read the config, image and if given masks and metadata
     config = config_io.load_config(config)
     image = sitk.ReadImage(imagefile)
@@ -46,15 +44,62 @@ def preprocess(imagefile, config, metadata=None, mask=None):
             metadata.RescaleIntercept
 
     # Apply the preprocessing
-    if config['Normalize']['ROI'] == 'Full':
+    if config['Preprocessing']['Normalize']:
+        method = config['Preprocessing']['Method']
+        normalize = config['Preprocessing']['Normalize_ROI']
+        dilate = config['Preprocessing']['ROIdilate']
+        radius = config['Preprocessing']['ROIdilateradius']
+        ROIDetermine = config['Preprocessing']['ROIDetermine']
+        metadata = config['General']['AssumeSameImageAndMaskMetadata']
+        image = normalize_image(image=image,
+                                mask=mask,
+                                method=method,
+                                Normalize_ROI=normalize,
+                                Dilate_ROI=dilate,
+                                ROI_dilate_radius=radius,
+                                ROIDetermine=ROIDetermine,
+                                AssumeSameImageAndMaskMetadata=metadata)
+    else:
+        print('No preprocessing was applied.')
+
+    return image
+
+
+def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',
+                    Dilate_ROI='True',
+                    ROI_dilate_radius=5, ROIDetermine='Provided',
+                    AssumeSameImageAndMaskMetadata=True):
+    """Apply normalization to an image.
+
+    Parameters
+    ----------
+    image: ITK Image
+        Image to normalize
+    mask: None or ITK Image
+        Optional: mask to be used for normalization
+    method: string, default z_score
+        Method to be used for normalization.
+    Normalize_ROI: string, default Full
+        ROI to use for normalization
+    Dilate_ROI: string, default True
+        Whether to dilate the ROI or not
+    ROI_dilate_radius: int, default 5
+        Radius to use for ROI dilation.
+    ROIDetermine: string, default provided
+        Whether mask is used as ROI or it is determined, e.g. through Otsu.
+    AssumeSameImageAndMaskMetadata: boolean
+        If True, copy metadata from image to mask.
+
+    """
+    if Normalize_ROI == 'Full':
         print('Apply z-scoring on full image.')
         image = sitk.Normalize(image)
-    elif config['Normalize']['ROI'] == 'True':
+    elif Normalize_ROI == 'True':
         print('Apply scaling of image based on a Region Of Interest.')
 
         # Dilate the mask if required
-        if config['Normalize']['ROIdilate'] == 'True':
-            radius = config['Normalize']['ROIdilateradius']
+        if Dilate_ROI == 'True':
+            radius = ROI_dilate_radius
             print(f"Dilating ROI with radius {radius}.")
             mask = sitk.GetArrayFromImage(mask)
             mask = dilate_contour(mask, radius)
@@ -62,14 +107,14 @@ def preprocess(imagefile, config, metadata=None, mask=None):
             mask = sitk.GetImageFromArray(mask)
 
         if mask is None:
-            if config['Normalize']['ROIDetermine'] == 'Provided':
+            if ROIDetermine:
                 raise IOError('Mask input required for ROI normalization.')
-            elif config['Normalize']['ROIDetermine'] == 'Otsu':
+            elif ROIDetermine == 'Otsu':
                 mask = 1 - sitk.OtsuThreshold(image)
             else:
-                raise IOError(f"{config['Normalize']['ROIDetermine']} is not a valid method!")
+                raise IOError(f"{ROIDetermine} is not a valid method!")
         else:
-            if config['Normalize']['Method'] == 'z_score':
+            if method == 'z_score':
                 print('Apply scaling using z-scoring based on the ROI')
 
                 # Cast to float to allow proper processing
@@ -80,7 +125,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                 try:
                     LabelFilter.Execute(image, mask)
                 except RuntimeError as e:
-                    if config['General']['AssumeSameImageAndMaskMetadata']:
+                    if AssumeSameImageAndMaskMetadata:
                         print(f'[WORC Warning] error: {e}.')
                         print(f'[WORC Warning] Assuming image and mask have same metadata.')
                         mask.CopyInformation(image)
@@ -94,7 +139,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                 image = sitk.ShiftScale(image,
                                         shift=-ROI_mean,
                                         scale=1.0/ROI_std)
-            elif config['Normalize']['Method'] == 'minmed':
+            elif method == 'minmed':
                 print('Apply scaling using the minimum and median of the ROI')
                 image = sitk.Cast(image, 9)
                 mask = sitk.Cast(mask, 0)
@@ -103,7 +148,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                 try:
                     LabelFilter.Execute(image, mask)
                 except RuntimeError as e:
-                    if config['General']['AssumeSameImageAndMaskMetadata']:
+                    if AssumeSameImageAndMaskMetadata:
                         print(f'[WORC Warning] error: {e}.')
                         print(f'[WORC Warning] Assuming image and mask have same metadata.')
                         mask.CopyInformation(image)
@@ -117,7 +162,5 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                 image = sitk.ShiftScale(image,
                                         shift=-ROI_minimum,
                                         scale=0.5/ROI_median)
-    else:
-        print('No preprocessing was applied.')
 
     return image

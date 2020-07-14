@@ -37,23 +37,26 @@ def load_config(config_file_path):
     settings = configparser.ConfigParser()
     settings.read(config_file_path)
 
-    settings_dict = {'Normalize': dict(), 'ImageFeatures': dict(),
+    settings_dict = {'Preprocessing': dict(), 'ImageFeatures': dict(),
                      'General': dict()}
 
-    settings_dict['Normalize']['ROI'] =\
-        str(settings['Normalize']['ROI'])
+    settings_dict['Preprocessing']['Normalize'] =\
+        settings['Preprocessing'].getboolean('Normalize')
 
-    settings_dict['Normalize']['ROIdilate'] =\
-        str(settings['Normalize']['ROIdilate'])
+    settings_dict['Preprocessing']['Normalize_ROI'] =\
+        str(settings['Preprocessing']['Normalize_ROI'])
 
-    settings_dict['Normalize']['ROIDetermine'] =\
-        str(settings['Normalize']['ROIDetermine'])
+    settings_dict['Preprocessing']['ROIdilate'] =\
+        str(settings['Preprocessing']['ROIdilate'])
 
-    settings_dict['Normalize']['ROIdilateradius'] =\
-        int(settings['Normalize']['ROIdilateradius'])
+    settings_dict['Preprocessing']['ROIDetermine'] =\
+        str(settings['Preprocessing']['ROIDetermine'])
 
-    settings_dict['Normalize']['Method'] =\
-        str(settings['Normalize']['Method'])
+    settings_dict['Preprocessing']['ROIdilateradius'] =\
+        int(settings['Preprocessing']['ROIdilateradius'])
+
+    settings_dict['Preprocessing']['Method'] =\
+        str(settings['Preprocessing']['Method'])
 
     settings_dict['ImageFeatures']['image_type'] =\
         [str(item).strip() for item in

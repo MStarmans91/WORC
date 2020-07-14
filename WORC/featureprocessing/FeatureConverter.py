@@ -33,13 +33,15 @@ def convert_pyradiomics_featurevector(featureVector):
         COM_index = eval(featureVector['diagnostics_Mask-original_CenterOfMassIndex'])
         featureVector['of_original_COM_Index_x'] = COM_index[0]
         featureVector['of_original_COM_Index_y'] = COM_index[1]
-        featureVector['of_original_COM_Index_z'] = COM_index[2]
+        if len(COM_index) == 3:
+            featureVector['of_original_COM_Index_z'] = COM_index[2]
 
     if 'diagnostics_Mask-original_CenterOfMass' in list(featureVector.keys()):
         COM = eval(featureVector['diagnostics_Mask-original_CenterOfMass'])
         featureVector['of_original_COM_x'] = COM[0]
         featureVector['of_original_COM_y'] = COM[1]
-        featureVector['of_original_COM_z'] = COM[2]
+        if len(COM) == 3:
+            featureVector['of_original_COM_z'] = COM[2]
 
     # Delete all diagnostics features:
     omitted = ['Image', 'Mask', 'diagnostics']

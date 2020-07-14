@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.tools.Evaluate &mdash; WORC 3.2.1 documentation</title>
+  <title>WORC.tools.Evaluate &mdash; WORC 3.2.2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.2.1
+                3.2.2
               </div>
             
           
@@ -229,42 +229,42 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotROC:1.0&#39;</span><span class="p">,</span> <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                      <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_ROC&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;4G&#39;</span><span class="p">))</span>
+                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_SVM</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotSVM:1.0&#39;</span><span class="p">,</span> <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                      <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_SVM&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;4G&#39;</span><span class="p">))</span>
+                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotBarchart:1.0&#39;</span><span class="p">,</span>
                                      <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_Barchart&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;4G&#39;</span><span class="p">))</span>
+                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/StatisticalTestFeatures:1.0&#39;</span><span class="p">,</span>
                                      <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                      <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;statistical_test_features&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;4G&#39;</span><span class="p">))</span>
+                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/Decomposition:1.0&#39;</span><span class="p">,</span>
                                      <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                      <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;decomposition&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;4G&#39;</span><span class="p">))</span>
+                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotRankedScores:1.0&#39;</span><span class="p">,</span>
                                      <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                      <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_ranked_percentages&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;8G&#39;</span><span class="p">))</span>
+                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;20G&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotRankedScores:1.0&#39;</span><span class="p">,</span>
                                      <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                      <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_ranked_posteriors&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;8G&#39;</span><span class="p">))</span>
+                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;20G&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotBoxplotFeatures:1.0&#39;</span><span class="p">,</span>
                                      <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                      <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_boxplot_features&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;4G&#39;</span><span class="p">))</span>
+                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">))</span>
 
         <span class="c1"># Create sinks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_PNG</span> <span class="o">=</span>\

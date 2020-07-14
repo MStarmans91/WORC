@@ -1,7 +1,8 @@
 =============== ======== =================
 Subkey          Default  Options          
 =============== ======== =================
-ROI             Full     True, False, Full
+Normalize       True     True, False      
+Normalize_ROI   Full     True, False, Full
 ROIDetermine    Provided Provided, Otsu   
 ROIdilate       False    True, False      
 ROIdilateradius 10       Integer > 0      

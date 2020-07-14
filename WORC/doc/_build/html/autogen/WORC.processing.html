@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>processing Package &mdash; WORC 3.2.1 documentation</title>
+  <title>processing Package &mdash; WORC 3.2.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.2.1
+                3.2.2
               </div>
             
           
@@ -364,9 +364,33 @@ label_type (list): List of the names of the labels to load</p>
 <div class="section" id="module-WORC.processing.preprocessing">
 <span id="preprocessing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">preprocessing</span></code> Module<a class="headerlink" href="#module-WORC.processing.preprocessing" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="WORC.processing.preprocessing.normalize_image">
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">normalize_image</code><span class="sig-paren">(</span><em>image</em>, <em>mask=None</em>, <em>method='z_score'</em>, <em>Normalize_ROI='Full'</em>, <em>Dilate_ROI='True'</em>, <em>ROI_dilate_radius=5</em>, <em>ROIDetermine='Provided'</em>, <em>AssumeSameImageAndMaskMetadata=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#normalize_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.normalize_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply normalization to an image.</p>
+<dl class="simple">
+<dt>image: ITK Image</dt><dd><p>Image to normalize</p>
+</dd>
+<dt>mask: None or ITK Image</dt><dd><p>Optional: mask to be used for normalization</p>
+</dd>
+<dt>method: string, default z_score</dt><dd><p>Method to be used for normalization.</p>
+</dd>
+<dt>Normalize_ROI: string, default Full</dt><dd><p>ROI to use for normalization</p>
+</dd>
+<dt>Dilate_ROI: string, default True</dt><dd><p>Whether to dilate the ROI or not</p>
+</dd>
+<dt>ROI_dilate_radius: int, default 5</dt><dd><p>Radius to use for ROI dilation.</p>
+</dd>
+<dt>ROIDetermine: string, default provided</dt><dd><p>Whether mask is used as ROI or it is determined, e.g. through Otsu.</p>
+</dd>
+<dt>AssumeSameImageAndMaskMetadata: boolean</dt><dd><p>If True, copy metadata from image to mask.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="WORC.processing.preprocessing.preprocess">
 <code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">preprocess</code><span class="sig-paren">(</span><em>imagefile</em>, <em>config</em>, <em>metadata=None</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#preprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.preprocess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply preprocessing to an image to prepare it for feture extration</p>
+<dd><p>Apply preprocessing to an image to prepare it for feture extration.</p>
 </dd></dl>
 
 </div>

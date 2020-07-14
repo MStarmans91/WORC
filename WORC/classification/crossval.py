@@ -25,6 +25,7 @@ from sklearn.model_selection import train_test_split
 from .parameter_optimization import random_search_parameters
 import WORC.addexceptions as ae
 from WORC.classification.regressors import regressors
+import glob
 
 
 def crossval(config, label_data, image_features,
@@ -113,10 +114,29 @@ def crossval(config, label_data, image_features,
     logfilename = os.path.join(outputfolder, 'classifier.log')
     print("Logging to file " + str(logfilename))
 
+    # Cross-validation iteration to start with
+    start = 0
+    save_data = list()
     if tempsave:
         tempfolder = os.path.join(outputfolder, 'tempsave')
         if not os.path.exists(tempfolder):
+            # No previous tempsaves
             os.makedirs(tempfolder)
+        else:
+            # Previous tempsaves, start where we left of
+            tempsaves = glob.glob(os.path.join(tempfolder, 'tempsave_*.hdf5'))
+            start = len(tempsaves)
+
+            # Load previous tempsaves and add to save data
+            tempsaves.sort()
+            for t in tempsaves:
+                t = pd.read_hdf(t)
+                t = t['Constructed crossvalidation']
+                temp_save_data = (t.trained_classifier, t.X_train, t.X_test,
+                                  t.Y_train, t.Y_test, t.patient_ID_train,
+                                  t.patient_ID_test, t.random_seed)
+
+                save_data.append(temp_save_data)
 
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
@@ -153,9 +173,10 @@ def crossval(config, label_data, image_features,
         if modus == 'singlelabel':
             i_class_temp = i_class.ravel()
 
-        save_data = list()
+        if not tempsave:
+            save_data = list()
 
-        for i in range(0, N_iterations):
+        for i in range(start, N_iterations):
             print(('Cross validation iteration {} / {} .').format(str(i + 1), str(N_iterations)))
             logging.debug(('Cross validation iteration {} / {} .').format(str(i + 1), str(N_iterations)))
             timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
@@ -432,9 +453,7 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
 
     classifier_labelss = dict()
 
-    print('features')
     logging.debug('Starting classifier')
-    print(len(image_features_train))
 
     # Determine modus
     if modus == 'singlelabel':

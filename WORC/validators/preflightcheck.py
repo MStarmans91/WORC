@@ -34,10 +34,15 @@ class AbstractValidator(ABC):
 class SimpleValidator(AbstractValidator):
     def _validate(self, simpleworc, *args, **kwargs):
         if not simpleworc._labels_file_train:
-            raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
+            if hasattr(simpleworc, 'labels_file_train'):
+                if not simpleworc.labels_file_train:
+                    raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
+            else:
+                raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
 
         if not simpleworc._label_names:
-            raise ae.WORCValueError(f'No label(s) to predict selected. Use SimpleWorc().predict_labels(**) to select labels.')
+            if not simpleworc.label_names:
+                raise ae.WORCValueError(f'No label(s) to predict selected. Use SimpleWorc().predict_labels(**) to select labels.')
 
         if not simpleworc._method:
             raise ae.WORCValueError(f'No method selected. Call function binary_classification(**) or regression(**) or survival(**) on SimpleWorc().')
@@ -46,6 +51,12 @@ class SimpleValidator(AbstractValidator):
             for num, (ims, segs) in enumerate(zip(simpleworc._images_train, simpleworc._segmentations_train)):
                 if ims.keys() != segs.keys():
                     raise ae.WORCValueError(f'Subjects in images_train and segmentations_train are not the same for modality {num}.')
+
+        if hasattr(simpleworc, 'images_train'):
+            if simpleworc.images_train:
+                for num, (ims, segs) in enumerate(zip(simpleworc.images_train, simpleworc.segmentations_train)):
+                    if ims.keys() != segs.keys():
+                        raise ae.WORCValueError(f'Subjects in images_train and segmentations_train are not the same for modality {num}.')
 
 
 class MinSubjectsValidator(AbstractValidator):
@@ -56,8 +67,13 @@ class MinSubjectsValidator(AbstractValidator):
 
 class EvaluateValidator(AbstractValidator):
     def _validate(self, simpleworc, *args, **kwargs):
-        if simpleworc._add_evaluation and not simpleworc._images_train:
-            raise ae.WORCValueError(f'You have added the evaluation pipeline, but have not provided images, which is currently required. We will work on this option in a future release.')
+        if simpleworc._add_evaluation:
+            if not simpleworc._images_train:
+                if hasattr(simpleworc, 'images_train'):
+                    if not simpleworc.images_train:
+                        raise ae.WORCValueError(f'You have added the evaluation pipeline, but have not provided images, which is currently required. We will work on this option in a future release.')
+                else:
+                    raise ae.WORCValueError(f'You have added the evaluation pipeline, but have not provided images, which is currently required. We will work on this option in a future release.')
 
 
 class SamplesWarning(AbstractValidator):
@@ -76,7 +92,13 @@ class InvalidLabelsValidator(AbstractValidator):
         errstr = None
 
         try:
-            labels, subjects, _ = load_label_csv(simpleworc._labels_file_train)
+            if simpleworc._labels_file_train:
+                labels, subjects, _ = load_label_csv(simpleworc._labels_file_train)
+            elif simpleworc.labels_file_train:
+                labels, subjects, _ = load_label_csv(simpleworc.labels_file_train)
+            else:
+                raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
+
         except ae.WORCAssertionError as wae:
             if 'First column should be patient ID' in str(wae):
                 # TODO: print wrong column name and file so that it is clear what needs to be replaced in which file
