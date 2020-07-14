@@ -66,11 +66,11 @@ def main():
     run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
 
     # Create the output storage
-    with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'w') as file:
-        csvwriter = csv.writer(file, delimiter=',',
-                               quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        csvwriter.writerow(['train_score', 'test_score', 'test_sample_counts',
-                            'fit_time', 'score_time', 'para_estimator', 'para'])
+    #with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'w') as file:
+    #    csvwriter = csv.writer(file, delimiter=',',
+    #                           quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    #    csvwriter.writerow(['train_score', 'test_score', 'test_sample_counts',
+    #                        'fit_time', 'score_time', 'para_estimator', 'para'])
 
     scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                          "runcount-limit": data['n_iter'],  # max. number of function evaluations;
@@ -83,12 +83,12 @@ def main():
         # Construct a new dictionary with parameters from the input configuration
         parameters = convert_cfg(cfg.get_dictionary())
 
-        # Read the input and output data from the smac_tool
+        # Read the data from the smac_tool
         nonlocal data
+        nonlocal run_name
 
         # Fit the classifier and store the result
         all_scores = []
-        all_test_scores = []
         for train, test in data['cv_iter']:
             ret = fit_and_score(data['X'], data['y'], data['scoring'],
                                 train, test, parameters,
@@ -101,7 +101,6 @@ def main():
                                 verbose=data['verbose'],
                                 return_all=False)
             all_scores.append(ret)
-            all_test_scores.append(ret[1])
 
         # Process the results:
         # Return the average score over all cross-validation folds
@@ -110,7 +109,7 @@ def main():
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
 
-        with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'w') as file:
+        with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
             csvwriter = csv.writer(file, delimiter=',',
                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
             csvwriter.writerow([df['train_score'].mean(), df['test_score'].mean(),
@@ -118,8 +117,7 @@ def main():
                                 df['score_time'].mean(), df['para_estimator'][0],
                                 df['para'][0]])
 
-        mean_test_score = np.mean(all_test_scores)
-        score = 1 - mean_test_score  # We minimize so take the inverse
+        score = 1 - df['test_score'].mean()  # We minimize so take the inverse
 
         return score
 
@@ -153,6 +151,12 @@ def main():
 '''
 
     source_labels = ['RET']
+
+    with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
+        csvreader = csv.reader(file)
+        output = list(csvreader)
+
+    print('Final output: ' + str(output))
 
     source_data =\
         pd.Series(output,
