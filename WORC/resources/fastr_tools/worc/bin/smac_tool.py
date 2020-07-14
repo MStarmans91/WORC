@@ -152,7 +152,7 @@ def main():
 
     source_labels = ['RET']
 
-    with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
+    with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', newline='') as file:
         csvreader = csv.reader(file)
         output = list(csvreader)
 
