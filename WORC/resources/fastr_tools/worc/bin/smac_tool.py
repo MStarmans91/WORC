@@ -105,11 +105,12 @@ def main():
 
         # Process the results:
         # Return the average score over all cross-validation folds
-        df = pd.DataFrame(all_scores, index=['train_score', 'test_score',
+        print('all_scores: ' + str(all_scores) + '\n')
+        df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
         mean_train_score = df['train_score'].mean()
-        print('all_scores: ' + str(all_scores) + '\n')
+
         print('mean_train_score: ' + str(mean_train_score) + '\n')
         mean_test_score = np.mean(all_test_scores)
         score = 1 - mean_test_score  # We minimize so take the inverse
