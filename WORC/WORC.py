@@ -193,6 +193,15 @@ class WORC(object):
         config['General']['AssumeSameImageAndMaskMetadata'] = 'False'
         config['General']['ComBat'] = 'False'
 
+        # Preprocessing
+        config['Preprocessing'] = dict()
+        config['Preprocessing']['Normalize'] = 'True'
+        config['Preprocessing']['Normalize_ROI'] = 'Full'
+        config['Preprocessing']['ROIDetermine'] = 'Provided'
+        config['Preprocessing']['ROIdilate'] = 'False'
+        config['Preprocessing']['ROIdilateradius'] = '10'
+        config['Preprocessing']['Method'] = 'z_score'
+
         # Segmentix
         config['Segmentix'] = dict()
         config['Segmentix']['mask'] = 'subtract'
@@ -202,14 +211,6 @@ class WORC(object):
         config['Segmentix']['fillholes'] = 'True'
         config['Segmentix']['remove_small_objects'] = 'False'
         config['Segmentix']['min_object_size'] = '2'
-
-        # Preprocessing
-        config['Normalize'] = dict()
-        config['Normalize']['ROI'] = 'Full'
-        config['Normalize']['ROIDetermine'] = 'Provided'
-        config['Normalize']['ROIdilate'] = 'False'
-        config['Normalize']['ROIdilateradius'] = '10'
-        config['Normalize']['Method'] = 'z_score'
 
         # PREDICT - Feature calculation
         # Determine which features are calculated
@@ -319,16 +320,16 @@ class WORC(object):
         config['Featsel']['StatisticalTestThreshold'] = '-3, 2.5'
         config['Featsel']['ReliefUse'] = '0.25'
         config['Featsel']['ReliefNN'] = '2, 4'
-        config['Featsel']['ReliefSampleSize'] = '1, 1'
+        config['Featsel']['ReliefSampleSize'] = '0.75, 0.25'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
-        config['Featsel']['ReliefNumFeatures'] = '25, 100'
+        config['Featsel']['ReliefNumFeatures'] = '10, 50, 100'
 
         # Groupwise Featureselection options
         config['SelectFeatGroup'] = dict()
         config['SelectFeatGroup']['shape_features'] = 'True, False'
         config['SelectFeatGroup']['histogram_features'] = 'True, False'
         config['SelectFeatGroup']['orientation_features'] = 'True, False'
-        config['SelectFeatGroup']['texture_Gabor_features'] = 'False'
+        config['SelectFeatGroup']['texture_Gabor_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLCM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLDM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_GLCMMS_features'] = 'True, False'

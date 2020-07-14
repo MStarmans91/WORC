@@ -19,12 +19,16 @@ Changed
 ~~~~~~~
 - Imputation is now the first step in the workflows. More logical as
   scaler and variance threshold can crash on missing values.
+- In config, preprocessing fields are now actually called preprocessing and
+  not normalize.
 
 Fixed
 ~~~~~
 - Preflightcheck now also compatible with BasicWORC.
 - Bugfix in ComBat when not using mod variable and skipping patients.
 - Bug in PyRadiomics feature converter: can now handle 2D images.
+- ReliefSampleSize parameter is now a uniform distribution, which it should be.
+- Gabor features now actually used in model instead of only computing them.
 
 
 3.2.1 - 2020-07-02
