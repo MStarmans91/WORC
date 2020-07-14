@@ -159,7 +159,7 @@ def main():
     print('Final output: ' + str(output))
 
     source_data =\
-        pd.Series(output,
+        pd.Series([output],
                   index=source_labels,
                   name='SMAC Output')
     source_data.to_hdf(args.out, 'RET')
