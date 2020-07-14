@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC Package &mdash; WORC 3.2.1 documentation</title>
+  <title>WORC Package &mdash; WORC 3.2.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.2.1
+                3.2.2
               </div>
             
           
@@ -337,6 +337,11 @@ Segmentations should be of the ITK Image type.</p>
 <dt id="WORC.WORC.WORC.add_evaluation">
 <code class="descname">add_evaluation</code><span class="sig-paren">(</span><em>label_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_evaluation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.WORC.WORC.add_evaluation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add branch for evaluation of performance to network.</p>
+<p>Note: should be done after build, before set:
+WORC.build()
+WORC.add_evaluation(label_type)
+WORC.set()
+WORC.execute()</p>
 </dd></dl>
 
 <dl class="method">

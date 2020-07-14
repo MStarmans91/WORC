@@ -4,7 +4,7 @@ Subkey                  Default                   Options
 shape_features          True, False               Boolean(s)                                    
 histogram_features      True, False               Boolean(s)                                    
 orientation_features    True, False               Boolean(s)                                    
-texture_Gabor_features  False                     Boolean(s)                                    
+texture_Gabor_features  True, False               Boolean(s)                                    
 texture_GLCM_features   True, False               Boolean(s)                                    
 texture_GLDM_features   True, False               Boolean(s)                                    
 texture_GLCMMS_features True, False               Boolean(s)                                    
