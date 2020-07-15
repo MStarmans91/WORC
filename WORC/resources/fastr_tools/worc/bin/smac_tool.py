@@ -111,7 +111,7 @@ def main():
                                              'score_time', 'para_estimator', 'para'])
         with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as f:
             #df.to_csv(f, mode='a', header=f.tell()==0)
-            df.to_hdf(f, mode='a', append=True)
+            df.to_hdf(f, 'smac configs', mode='a', append=True)
 
         #with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
         #    csvwriter = csv.writer(file, delimiter=',')
