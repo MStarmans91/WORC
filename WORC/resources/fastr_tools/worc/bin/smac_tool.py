@@ -108,13 +108,15 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
+        with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as f:
+            df.to_csv(f, mode='a', header=f.tell()==0)
 
-        with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
-            csvwriter = csv.writer(file, delimiter=',')
-            csvwriter.writerow([float(df['train_score'].mean()), df['test_score'].mean(),
-                                df['test_sample_counts'][0], df['fit_time'].mean(),
-                                df['score_time'].mean(), df['para_estimator'][0],
-                                df['para'][0]])
+        #with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
+        #    csvwriter = csv.writer(file, delimiter=',')
+        #    csvwriter.writerow([df['train_score'].mean(), df['test_score'].mean(),
+        #                        df['test_sample_counts'][0], df['fit_time'].mean(),
+        #                        df['score_time'].mean(), df['para_estimator'][0],
+        #                        df['para'][0]])
 
         score = 1 - df['test_score'].mean()  # We minimize so take the inverse
 
@@ -151,27 +153,8 @@ def main():
 
     source_labels = ['RET']
 
-    with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', newline='') as file:
-        csvreader = csv.reader(file)
-        output = list(csvreader)
-
-    for ret in output:
-        for i in range(7):
-            # test_sample counts
-            if i == 2:
-                ret[i] = int(ret[i])
-            # fit params
-            if i == 5:
-                ret[i] = dict(ret[i])
-            # para
-            if i == 6:
-                ret[i] = dict(ret[i])
-            else:
-                ret[i] = float(ret[i])
-
-
-    #with open('/scratch/mdeen/ret-smac.txt', 'a') as retfile:
-    #    retfile.write(str([output]))
+    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_name + '.csv')
+    output = output_df.values.tolist()
 
     print(str([output]))
 
