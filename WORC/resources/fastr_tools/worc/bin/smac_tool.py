@@ -111,7 +111,7 @@ def main():
 
         with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
             csvwriter = csv.writer(file, delimiter=',')
-            csvwriter.writerow([df['train_score'].mean(), df['test_score'].mean(),
+            csvwriter.writerow([float(df['train_score'].mean()), df['test_score'].mean(),
                                 df['test_sample_counts'][0], df['fit_time'].mean(),
                                 df['score_time'].mean(), df['para_estimator'][0],
                                 df['para'][0]])
