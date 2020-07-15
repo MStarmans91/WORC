@@ -158,6 +158,8 @@ def main():
     with open('/scratch/mdeen/ret-smac.txt', 'a') as retfile:
         retfile.write(str([output]))
 
+    print(str([output]))
+
     source_data =\
         pd.Series([output],
                   index=source_labels,
