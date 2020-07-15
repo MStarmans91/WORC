@@ -158,6 +158,7 @@ def main():
     output = output_df.values.tolist()
     # Convert string to dict:
     for ret in output:
+        print('ret[5] type: ' + str(type(ret[5])))
         ret[5] = ast.literal_eval(ret[5])
         ret[6] = ast.literal_eval(ret[6])
 
