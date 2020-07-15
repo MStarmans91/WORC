@@ -2744,7 +2744,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                          fit_time=fit_time,
                          score_time=score_time,
                          cv_iter=cv_iter,
-                         X=X, y=y)
+                         X=self.features, y=self.labels)
         '''
         # Skip the preprocessing for now, by setting FeatPreProcess
         # always to False. This next section is not accurate at this point.
