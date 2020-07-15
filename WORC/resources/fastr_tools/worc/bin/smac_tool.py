@@ -159,6 +159,8 @@ def main():
     # Convert string to dict:
     for ret in output:
         print('Ret[5] type: ' + str(type(ret[5])) + ' and form: ' + str(ret[5]))
+        ret[5] = ast.literal_eval(ret[5])
+        print('Ret[5] type: ' + str(type(ret[5])) + ' and form: ' + str(ret[5]))
 
     print(str([output]))
 
