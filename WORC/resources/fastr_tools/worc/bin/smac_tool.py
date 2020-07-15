@@ -110,8 +110,7 @@ def main():
                                              'score_time', 'para_estimator', 'para'])
 
         with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
-            csvwriter = csv.writer(file, delimiter=',',
-                                   quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            csvwriter = csv.writer(file, delimiter=',')
             csvwriter.writerow([df['train_score'].mean(), df['test_score'].mean(),
                                 df['test_sample_counts'][0], df['fit_time'].mean(),
                                 df['score_time'].mean(), df['para_estimator'][0],
@@ -156,7 +155,8 @@ def main():
         csvreader = csv.reader(file)
         output = list(csvreader)
 
-    print('Final output: ' + str(output))
+    with open('/scratch/mdeen/ret-smac.txt', 'a') as retfile:
+        retfile.write([output])
 
     source_data =\
         pd.Series([output],
