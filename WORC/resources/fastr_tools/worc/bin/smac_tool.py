@@ -26,6 +26,7 @@ from datetime import datetime
 import random
 import numpy as np
 import csv
+import ast
 
 
 def main():
@@ -155,6 +156,10 @@ def main():
 
     output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_name + '.csv')
     output = output_df.values.tolist()
+    # Convert string to dict:
+    for ret in output:
+        ret[5] = ast.literal_eval(ret[5])
+        ret[6] = ast.literal_eval(ret[6])
 
     print(str([output]))
 
