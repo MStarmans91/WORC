@@ -73,6 +73,8 @@ def main():
 
     source_labels = ['RET']
 
+    print(str([ret]))
+
     source_data =\
         pd.Series([ret],
                   index=source_labels,
