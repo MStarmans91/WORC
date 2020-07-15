@@ -66,11 +66,11 @@ def main():
     run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
 
     # Create the output storage
-    #with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'w') as file:
-    #    csvwriter = csv.writer(file, delimiter=',',
-    #                           quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    #    csvwriter.writerow(['train_score', 'test_score', 'test_sample_counts',
-    #                        'fit_time', 'score_time', 'para_estimator', 'para'])
+    with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'w') as file:
+        csvwriter = csv.writer(file, delimiter=',',
+                               quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        csvwriter.writerow(['train_score', 'test_score', 'test_sample_counts',
+                            'fit_time', 'score_time', 'para_estimator', 'para'])
 
     scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                          "runcount-limit": data['n_iter'],  # max. number of function evaluations;
