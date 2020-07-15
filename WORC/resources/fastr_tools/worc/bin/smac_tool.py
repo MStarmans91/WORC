@@ -110,7 +110,7 @@ def main():
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
         with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as f:
-            df.to_csv(f, mode='a', header=f.tell()==0)
+            df.to_csv(f, mode='a', header=f.tell()==0, index=False)
 
         #with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
         #    csvwriter = csv.writer(file, delimiter=',')
