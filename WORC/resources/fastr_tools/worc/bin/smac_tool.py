@@ -156,7 +156,7 @@ def main():
         output = list(csvreader)
 
     with open('/scratch/mdeen/ret-smac.txt', 'a') as retfile:
-        retfile.write([output])
+        retfile.write(str([output]))
 
     source_data =\
         pd.Series([output],
