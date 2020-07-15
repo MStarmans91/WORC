@@ -167,7 +167,7 @@ def main():
             if i == 6:
                 ret[i] = dict(ret[i])
             else:
-                ret[i] = int(ret[i])
+                ret[i] = float(ret[i])
 
 
     #with open('/scratch/mdeen/ret-smac.txt', 'a') as retfile:
