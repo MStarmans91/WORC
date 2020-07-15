@@ -110,8 +110,7 @@ def main():
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
         with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as f:
-            #df.to_csv(f, mode='a', header=f.tell()==0)
-            df.to_hdf(f, 'smac configs')
+            df.to_csv(f, mode='a', header=f.tell()==0)
 
         #with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
         #    csvwriter = csv.writer(file, delimiter=',')
@@ -155,9 +154,11 @@ def main():
 
     source_labels = ['RET']
 
-    output_df = pd.read_hdf('/scratch/mdeen/tested_configs/' + run_name + '.csv')
+    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_name + '.csv')
     output = output_df.values.tolist()
     # Convert string to dict:
+    for ret in output:
+        print('Ret[5] type: ' + str(type(ret[5])) + ' and form: ' + str(ret[5]))
 
     print(str([output]))
 
