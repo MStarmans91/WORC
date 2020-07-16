@@ -104,7 +104,8 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
-        with open('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' + run_info['run_id'] + '.csv', 'a') as f:
+        with open('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' +
+                  str(run_info['run_id']) + '.csv', 'a') as f:
             df.to_csv(f, mode='a', header=f.tell()==0, index=False)
 
         score = 1 - df['test_score'].mean()  # We minimize so take the inverse
@@ -141,7 +142,8 @@ def main():
 
     source_labels = ['RET']
 
-    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' + run_info['run_id'] + '.csv')
+    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' +
+                            str(run_info['run_id']) + '.csv')
     output = output_df.values.tolist()
     # Convert string to dict:
     for ret in output:
