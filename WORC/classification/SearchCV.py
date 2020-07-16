@@ -2693,8 +2693,8 @@ class BaseSearchCVSMAC(BaseSearchCV):
         current_date_time = datetime.now()
         run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
         instance_files = dict()
-        for i in range(15):
-            instance_info = [i, random.randint(0, 2 ** 32 -1), run_name]
+        for i in range(30):
+            instance_info = [i, random.randint(0, 2 ** 32 - 1), run_name]
             instance_data = pd.Series(instance_info,
                                       index=instance_labels,
                                       name=f'instance data {i}')
@@ -2715,7 +2715,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         sink_output = network.create_sink('HDF5', id='output')
 
         smac_node = network.create_node('worc/smac:1.0', tool_version='1.0', id='smac',
-                                          resources=ResourceLimit(memory='12G'))
+                                          resources=ResourceLimit(memory='4G'))
         #smac_node.inputs['estimatordata'].input_group = 'estimator'
         #fitandscore.inputs['traintest'].input_group = 'traintest'
         #fitandscore.inputs['parameters'].input_group = 'parameters'
