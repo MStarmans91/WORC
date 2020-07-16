@@ -2670,9 +2670,25 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         estimatordata = f"vfs://tmp/GS/{name}/{fname}"
 
+        # Create the files containing the instance data
+        instance_labels = ['run_id', 'run_rng']
+        instance_ids = []
+        instance_rngs = []
+        for i in range(5): # update this later to a config value
+            instance_ids[i] = i
+            instance_rngs[i] = random.randint(0, 2 ** 32 - 1)
+        instance_data = pd.Series([instance_ids, instance_rngs],
+                                  index=instance_labels,
+                                  name='instance data')
+        fname = 'instancedata.hdf5'
+        instancename = os.path.join(tempfolder, fname)
+        instance_data.to_hdf(instancename, 'Instance Data')
+        instancedata = f"vfs://tmp/GS/{name}/{fname}"
+
         # Create the fastr network
         network = fastr.create_network('WORC_SMAC_' + name)
         estimator_data = network.create_source('HDF5', id='estimator_source')
+        instance_data = network.create_source('HDF5', id='instance_source')
         #traintest_data = network.create_source('HDF5', id='traintest')
         #parameter_data = network.create_source('JsonFile', id='parameters')
         sink_output = network.create_sink('HDF5', id='output')
@@ -2684,11 +2700,13 @@ class BaseSearchCVSMAC(BaseSearchCV):
         #fitandscore.inputs['parameters'].input_group = 'parameters'
 
         smac_node.inputs['estimatordata'] = estimator_data.output
+        smac_node.inputs['instancedata'] = instance_data.output
         #fitandscore.inputs['traintest'] = traintest_data.output
         #fitandscore.inputs['parameters'] = parameter_data.output
         sink_output.input = smac_node.outputs['fittedestimator']
 
-        source_data = {'estimator_source': estimatordata}
+        source_data = {'estimator_source': estimatordata,
+                       'instance_source' : instancedata}
 
         sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
 

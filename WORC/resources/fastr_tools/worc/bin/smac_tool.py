@@ -34,6 +34,9 @@ def main():
     parser.add_argument('-ed', '--ed', metavar='ed',
                         dest='ed', type=str, required=True,
                         help='Estimator data in (HDF)')
+    parser.add_argument('-id', '--id', metavar='id',
+                        dest='id', type=str, required=True,
+                        help='Parallel run data in (HDF)')
     #parser.add_argument('-tt', '--tt', metavar='tt',
     #                    dest='tt', type=str, required=True,
     #                    help='Train- and testdata in (HDF)')
@@ -48,6 +51,8 @@ def main():
     # Convert lists into strings
     if type(args.ed) is list:
         args.ed = ''.join(args.ed)
+    if type(args.id) is list:
+        args.id = ''.join(args.id)
     #if type(args.tt) is list:
     #    args.tt = ''.join(args.tt)
     #if type(args.para) is list:
@@ -57,10 +62,12 @@ def main():
 
     # Read the data
     data = pd.read_hdf(args.ed)
+    run_info = pd.read_hdf(args.id)
     #traintest = pd.read_hdf(args.tt)
     #with open(args.para, 'rb') as fp:
     #    para = json.load(fp)
-
+    with open('/scratch/mdeen/run_info.txt', 'a') as f:
+        f.write(str(run_info))
 
     # Run the smac optimization
     current_date_time = datetime.now()

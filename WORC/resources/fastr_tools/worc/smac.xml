@@ -19,6 +19,7 @@
     <interface>
       <inputs>
           <input id="estimatordata" name="Unfitted estimator plus side data" datatype="HDF5" prefix="--ed" cardinality="1" repeat_prefix="false" required="true" />
+          <input id="instancedata" name="Parallel smac run data" datatype="HDF5" prefix="--id" cardinality="1" repeat_prefix="false" required="true" />
        </inputs>
       <outputs>
         <output id="fittedestimator" name="Fitted Estimator" datatype="HDF5" cardinality="1" nospace="False" order="0" prefix="--out" required="true"/>
