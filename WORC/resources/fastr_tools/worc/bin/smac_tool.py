@@ -71,9 +71,9 @@ def main():
                          "runcount-limit": data['n_iter'],  # max. number of function evaluations;
                          "cs": data['search_space'],
                          "deterministic": "true",
-                         "output_dir": "/scratch/mdeen/SMAC_output/" + data['run_name'],
+                         "output_dir": "/scratch/mdeen/SMAC_output/" + run_info['run_name'],
                          "shared_model": True,
-                         "input_psmac_dirs": "/scratch/mdeen/SMAC_output/" + data['run_name']
+                         "input_psmac_dirs": "/scratch/mdeen/SMAC_output/" + run_info['run_name']
                          })
 
     def score_cfg(cfg):
@@ -104,15 +104,15 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
-        with open('/scratch/mdeen/tested_configs/' + data['run_name'] + '/' + data['run_id'] + '.csv', 'a') as f:
+        with open('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' + run_info['run_id'] + '.csv', 'a') as f:
             df.to_csv(f, mode='a', header=f.tell()==0, index=False)
 
         score = 1 - df['test_score'].mean()  # We minimize so take the inverse
 
         return score
 
-    smac = SMAC4HPO(scenario=scenario, rng=data['run_rng'],
-                    tae_runner=score_cfg, run_id=data['run_id'])
+    smac = SMAC4HPO(scenario=scenario, rng=run_info['run_rng'],
+                    tae_runner=score_cfg, run_id=run_info['run_id'])
     opt_config = smac.optimize()
 
     '''
@@ -141,7 +141,7 @@ def main():
 
     source_labels = ['RET']
 
-    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + data['run_name'] + '/' + data['run_id'] + '.csv')
+    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' + run_info['run_id'] + '.csv')
     output = output_df.values.tolist()
     # Convert string to dict:
     for ret in output:
@@ -149,7 +149,7 @@ def main():
         ret[5] = ast.literal_eval(ret[5])
         ret[6] = ast.literal_eval(ret[6])
         print('Ret[6] type: ' + str(type(ret[6])) + ' and form: ' + str(ret[6]))
-        
+
     source_data =\
         pd.Series([output],
                   index=source_labels,
