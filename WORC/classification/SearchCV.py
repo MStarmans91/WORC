@@ -2693,7 +2693,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         current_date_time = datetime.now()
         run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
         instance_files = dict()
-        for i in range(5):
+        for i in range(15):
             instance_info = [i, random.randint(0, 2 ** 32 -1), run_name]
             instance_data = pd.Series(instance_info,
                                       index=instance_labels,
