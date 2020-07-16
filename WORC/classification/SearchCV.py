@@ -2671,6 +2671,9 @@ class BaseSearchCVSMAC(BaseSearchCV):
         estimatordata = f"vfs://tmp/GS/{name}/{fname}"
 
         # Create the files containing the instance data
+
+        # Attempt one
+        '''
         instance_labels = ['run_info']
         instance_info = []
         for i in range(5): # update this later to a config value
@@ -2682,6 +2685,23 @@ class BaseSearchCVSMAC(BaseSearchCV):
         instancename = os.path.join(tempfolder, fname)
         instance_data.to_hdf(instancename, 'Instance Data')
         instancedata = f"vfs://tmp/GS/{name}/{fname}"
+        '''
+
+        # Attempt two
+        instance_labels = ['run_info']
+        instance_files = dict()
+        for i in range(5):
+            instance_info = [i, random.randint(0, 2 ** 32 -1)]
+            instance_data = pd.Series(instance_info,
+                                      index=instance_labels,
+                                      name=f'instance data {i}')
+            fname = f'instancedata_{i}.hdf5'
+            instancefolder = os.path.join(tempfolder, 'instances', fname)
+            if not os.path.exists(os.path.dirname(instancefolder)):
+                os.makedirs(os.path.dirname(instancefolder))
+            instance_data.to_hdf(instancefolder, 'Instance Data')
+            instancedata = f'vfs://tmp/GS/{name}/instances/{fname}'
+            instance_files[f'{i}'] = instancedata
 
         # Create the fastr network
         network = fastr.create_network('WORC_SMAC_' + name)
@@ -2704,7 +2724,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         sink_output.input = smac_node.outputs['fittedestimator']
 
         source_data = {'estimator_source': estimatordata,
-                       'instance_source' : instancedata}
+                       'instance_source' : instance_files}
 
         sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
 
