@@ -2675,8 +2675,8 @@ class BaseSearchCVSMAC(BaseSearchCV):
         instance_ids = []
         instance_rngs = []
         for i in range(5): # update this later to a config value
-            instance_ids[i] = i
-            instance_rngs[i] = random.randint(0, 2 ** 32 - 1)
+            instance_ids.append(i)
+            instance_rngs.append(random.randint(0, 2 ** 32 - 1))
         instance_data = pd.Series([instance_ids, instance_rngs],
                                   index=instance_labels,
                                   name='instance data')
