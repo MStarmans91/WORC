@@ -2672,12 +2672,10 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         # Create the files containing the instance data
         instance_labels = ['run_id', 'run_rng']
-        instance_ids = []
-        instance_rngs = []
+        instance_tuples = []
         for i in range(5): # update this later to a config value
-            instance_ids.append(i)
-            instance_rngs.append(random.randint(0, 2 ** 32 - 1))
-        instance_data = pd.Series([instance_ids, instance_rngs],
+            instance_tuples.append((i, random.randint(0, 2 ** 32 - 1)))
+        instance_data = pd.Series([instance_tuples],
                                   index=instance_labels,
                                   name='instance data')
         fname = 'instancedata.hdf5'
