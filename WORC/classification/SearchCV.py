@@ -2671,7 +2671,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         estimatordata = f"vfs://tmp/GS/{name}/{fname}"
 
         # Create the files containing the instance data
-        instance_labels = ['run_id', 'run_rng']
+        instance_labels = ['run_info']
         instance_tuples = []
         for i in range(5): # update this later to a config value
             instance_tuples.append((i, random.randint(0, 2 ** 32 - 1)))
