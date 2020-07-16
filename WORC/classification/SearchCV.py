@@ -2735,9 +2735,8 @@ class BaseSearchCVSMAC(BaseSearchCV):
                         tmpdir=os.path.join(tempfolder, 'tmp'),
                         execution_plugin=self.fastr_plugin)
 
-        '''
         # Check whether all jobs have finished
-        expected_no_files = len(traintest_files) * len(parameter_files)
+        expected_no_files = len(instance_files)
         sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
         if len(sink_files) != expected_no_files:
             difference = expected_no_files - len(sink_files)
@@ -2746,13 +2745,10 @@ class BaseSearchCVSMAC(BaseSearchCV):
                        f'{difference} / {expected_no_files} files. The temporary ' +
                        f'results where not deleted and can be found in {tempfolder}. ' +
                        'Probably your fitting and scoring failed: check out ' +
-                       'the tmp/fitandscore folder within the tempfolder for ' +
+                       'the tmp/smac folder within the tempfolder for ' +
                        'the fastr job temporary results or run: fastr trace ' +
                        f'"{fname}{os.path.sep}__sink_data__.json" --samples.')
             raise WORCexceptions.WORCValueError(message)
-        '''
-
-        sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
 
         # Read in the output data once finished
         save_data = list()
