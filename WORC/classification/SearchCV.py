@@ -2688,7 +2688,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         '''
 
         # Attempt two
-        instance_labels = ['run_info']
+        instance_labels = ['run_id', 'run_rng']
         instance_files = dict()
         for i in range(5):
             instance_info = [i, random.randint(0, 2 ** 32 -1)]
