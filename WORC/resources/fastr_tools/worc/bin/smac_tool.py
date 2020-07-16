@@ -22,7 +22,6 @@ from joblib import Parallel, delayed
 from WORC.classification.fitandscore import fit_and_score
 from smac.scenario.scenario import Scenario
 from smac.facade.smac_hpo_facade import SMAC4HPO
-from datetime import datetime
 import random
 import numpy as np
 import csv
@@ -66,25 +65,15 @@ def main():
     #traintest = pd.read_hdf(args.tt)
     #with open(args.para, 'rb') as fp:
     #    para = json.load(fp)
-    with open('/scratch/mdeen/run_info.txt', 'a') as f:
-        f.write(str(run_info))
 
-    # Run the smac optimization
-    current_date_time = datetime.now()
-    run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
-
-    # Create the output storage
-    #with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'w') as file:
-    #    csvwriter = csv.writer(file, delimiter=',',
-    #                           quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    #    csvwriter.writerow(['train_score', 'test_score', 'test_sample_counts',
-    #                        'fit_time', 'score_time', 'para_estimator', 'para'])
 
     scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                          "runcount-limit": data['n_iter'],  # max. number of function evaluations;
                          "cs": data['search_space'],
                          "deterministic": "true",
-                         "output_dir": "/scratch/mdeen/SMAC_output/" + run_name
+                         "output_dir": "/scratch/mdeen/SMAC_output/" + data['run_name'],
+                         "shared_model": True,
+                         "input_psmac_dirs": "/scratch/mdeen/SMAC_output/" + data['run_name']
                          })
 
     def score_cfg(cfg):
@@ -93,7 +82,6 @@ def main():
 
         # Read the data from the smac_tool
         nonlocal data
-        nonlocal run_name
 
         # Fit the classifier and store the result
         all_scores = []
@@ -116,23 +104,15 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
-        with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as f:
+        with open('/scratch/mdeen/tested_configs/' + data['run_name'] + '/' + data['run_id'] + '.csv', 'a') as f:
             df.to_csv(f, mode='a', header=f.tell()==0, index=False)
-
-        #with open('/scratch/mdeen/tested_configs/' + run_name + '.csv', 'a') as file:
-        #    csvwriter = csv.writer(file, delimiter=',')
-        #    csvwriter.writerow([df['train_score'].mean(), df['test_score'].mean(),
-        #                        df['test_sample_counts'][0], df['fit_time'].mean(),
-        #                        df['score_time'].mean(), df['para_estimator'][0],
-        #                        df['para'][0]])
 
         score = 1 - df['test_score'].mean()  # We minimize so take the inverse
 
         return score
 
-    run_id = random.randint(0, 2 ** 32 - 1)
-    smac = SMAC4HPO(scenario=scenario,
-                    tae_runner=score_cfg, run_id=run_id)
+    smac = SMAC4HPO(scenario=scenario, rng=data['run_rng'],
+                    tae_runner=score_cfg, run_id=data['run_id'])
     opt_config = smac.optimize()
 
     '''
@@ -161,7 +141,7 @@ def main():
 
     source_labels = ['RET']
 
-    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_name + '.csv')
+    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + data['run_name'] + '/' + data['run_id'] + '.csv')
     output = output_df.values.tolist()
     # Convert string to dict:
     for ret in output:
@@ -169,9 +149,7 @@ def main():
         ret[5] = ast.literal_eval(ret[5])
         ret[6] = ast.literal_eval(ret[6])
         print('Ret[6] type: ' + str(type(ret[6])) + ' and form: ' + str(ret[6]))
-
-    print(str([output]))
-
+        
     source_data =\
         pd.Series([output],
                   index=source_labels,

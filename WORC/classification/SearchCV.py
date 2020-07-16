@@ -60,6 +60,7 @@ from WORC.featureprocessing.Preprocessor import Preprocessor
 
 # Imports used in the Bayesian optimization
 from WORC.classification.smac import build_smac_config
+from datetime import datetime
 
 
 def rms_score(truth, prediction):
@@ -2688,10 +2689,12 @@ class BaseSearchCVSMAC(BaseSearchCV):
         '''
 
         # Attempt two
-        instance_labels = ['run_id', 'run_rng']
+        instance_labels = ['run_id', 'run_rng', 'run_name']
+        current_date_time = datetime.now()
+        run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
         instance_files = dict()
         for i in range(5):
-            instance_info = [i, random.randint(0, 2 ** 32 -1)]
+            instance_info = [i, random.randint(0, 2 ** 32 -1), run_name]
             instance_data = pd.Series(instance_info,
                                       index=instance_labels,
                                       name=f'instance data {i}')
