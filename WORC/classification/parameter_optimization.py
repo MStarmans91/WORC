@@ -26,7 +26,7 @@ def random_search_parameters(features, labels, N_iter, test_size,
                              n_jobspercore=200, use_fastr=False,
                              use_SMAC=False, n_cores=1, fastr_plugin=None,
                              maxlen=100, ranking_score='test_score',
-                             random_seed=None):
+                             random_seed=None, n_SMAC_cores=10):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
     randomized search.
@@ -51,6 +51,7 @@ def random_search_parameters(features, labels, N_iter, test_size,
                     for the hyperparameter optimization.
         fastr_plugin: determines which plugin is used for fastr executions.
                 When None, uses the default plugin from the fastr config.
+        n_SMAC_cores: determines the number of cores used to run smac in parallel.
 
     Returns:
         random_search: sklearn randomsearch object containing the results.
@@ -128,6 +129,7 @@ def guided_search_parameters(features, labels, N_iter, test_size,
                     for the hyperparameter optimization.
         fastr_plugin: determines which plugin is used for fastr executions.
                 When None, uses the default plugin from the fastr config.
+        n_SMAC_cores: determines the number of cores used to run smac in parallel.
 
     Returns:
         guided_search: object containing the results
