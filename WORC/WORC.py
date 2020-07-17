@@ -412,6 +412,7 @@ class WORC(object):
         config['HyperOptimization']['n_jobspercore'] = '2000'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
+        config['HyperOptimization']['use_SMAC'] = 'True' # only working when using fastr in classification
 
         # Feature scaling options
         config['FeatureScaling'] = dict()

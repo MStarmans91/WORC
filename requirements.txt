@@ -26,3 +26,6 @@ tables>=3.5.1
 tqdm>=4.7.1
 xlrd>=1.2.0
 xnat>=0.2.2
+emcee==3.0.2
+pyrfr==0.8.0
+smac==0.12.0

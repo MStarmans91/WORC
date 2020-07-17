@@ -73,6 +73,9 @@ def main():
 
     source_labels = ['RET']
 
+    with open('/scratch/mdeen/ret.txt', 'a') as file:
+        file.write(str([ret]))
+
     source_data =\
         pd.Series([ret],
                   index=source_labels,

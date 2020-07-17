@@ -236,7 +236,11 @@ def fit_and_score(X, y, scoring,
             imp_type = para_estimator['ImputationMethod']
             if verbose:
                 print(f'Imputing NaN with {imp_type}.')
-            imp_nn = para_estimator['ImputationNeighbours']
+            # Only used with KNN in SMAC, otherwise assign default
+            if 'ImputationNeighbours' in para_estimator.keys():
+                imp_nn = para_estimator['ImputationNeighbours']
+            else:
+                imp_nn = 8
 
             imputer = Imputer(missing_values=np.nan, strategy=imp_type,
                               n_neighbors=imp_nn)
@@ -246,7 +250,8 @@ def fit_and_score(X, y, scoring,
     if 'Imputation' in para_estimator.keys():
         del para_estimator['Imputation']
         del para_estimator['ImputationMethod']
-        del para_estimator['ImputationNeighbours']
+        if 'ImputationNeighbours' in para_estimator.keys():
+            del para_estimator['ImputationNeighbours']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -560,7 +565,8 @@ def fit_and_score(X, y, scoring,
 
     if 'UsePCA' in para_estimator.keys():
         del para_estimator['UsePCA']
-        del para_estimator['PCAType']
+        if 'PCAType' in para_estimator.keys():
+            del para_estimator['PCAType']
 
     # --------------------------------------------------------------------
     # Feature selection based on a statistical test

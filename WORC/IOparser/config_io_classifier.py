@@ -256,6 +256,8 @@ def load_config(config_file_path):
         settings['HyperOptimization'].getint('maxlen')
     settings_dict['HyperOptimization']['ranking_score'] = \
         str(settings['HyperOptimization']['ranking_score'])
+    settings_dict['HyperOptimization']['use_SMAC'] =\
+        settings['HyperOptimization'].getboolean('use_SMAC')
 
     settings_dict['FeatureScaling']['scale_features'] =\
         settings['FeatureScaling'].getboolean('scale_features')
