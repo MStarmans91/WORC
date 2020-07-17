@@ -60,9 +60,6 @@ from WORC.featureprocessing.Preprocessor import Preprocessor
 
 # Imports used in the Bayesian optimization
 from WORC.classification.smac import build_smac_config
-from smac.scenario.scenario import Scenario
-from smac.facade.smac_hpo_facade import SMAC4HPO
-import heapq
 from datetime import datetime
 
 
@@ -2624,80 +2621,166 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         # Build the SMAC configuration
         cs = build_smac_config(self.param_distributions)
-        
-        # Create the Scenario object to define the optimization settings
-        current_date_time = datetime.now()
-        run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
-        scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
-                             "runcount-limit": self.n_iter,  # max. number of function evaluations;
-                             "cs": cs,
-                             "deterministic": "true",
-                             "output_dir": "/scratch/mdeen/SMAC_output/" + run_name
-                             })
-
-        # Define the scoring function
-        def score_cfg(cfg):
-            # Construct a new dictionary with parameters from the input configuration
-            parameters = self.convert_cfg(cfg.get_dictionary())
-
-            # Set up the cross-validation
-            cv = check_cv(self.cv, self.labels, classifier=True)
-            cv_iter = list(cv.split(self.features, self.labels))
-
-            # Fit the classifier and store the result
-            all_test_scores = []
-            for train, test in cv_iter:
-                ret = fit_and_score(self.features, self.labels, self.scoring,
-                                    train, test, parameters,
-                                    fit_params=self.fit_params,
-                                    return_train_score=True,
-                                    return_n_test_samples=True,
-                                    return_times=True, return_parameters=True,
-                                    error_score=self.error_score,
-                                    verbose=False,
-                                    return_all=False)
-                all_test_scores.append(ret[1])
-
-            # Return the average score over all cross-validation folds
-            mean_test_score = np.mean(all_test_scores)
-            score = 1 - mean_test_score  # We minimize so take the inverse
-
-            return score
 
         # Run the optimization
 
         # Here we will create and execute a fastr network
+        # Create test-train splits
+        name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
+        if not os.path.exists(tempfolder):
+            os.makedirs(tempfolder)
+        '''
+        traintest_files = dict()
+        num = 0
+        for train, test in cv_iter:
+            source_labels = ['train', 'test']
 
-        run_id = random.randint(0, 2**32 - 1)
-        smac = SMAC4HPO(scenario=scenario, rng=self.random_state,
-                        tae_runner=score_cfg, run_id=run_id)
-        opt_config = smac.optimize()
+            source_data = pd.Series([train, test],
+                                    index=source_labels,
+                                    name='Train-test data')
 
-        # Load in the runhistory data
-        runhistory_file = open('/scratch/mdeen/SMAC_output/' + run_name + '/run_' + str(run_id) +
-                               '/runhistory.json')
-        runhistory = json.load(runhistory_file)
+            fname = f'traintest_{num}.hdf5'
+            sourcename = os.path.join(tempfolder, 'traintest', fname)
+            if not os.path.exists(os.path.dirname(sourcename)):
+                os.makedirs(os.path.dirname(sourcename))
+            traintest_files[str(num)] = f'vfs://tmp/GS/{name}/traintest/{fname}'
 
-        best_configs = []
-        # Loop over all evaluated configurations
-        for i in range(len(runhistory['configs'])):
-            # We want the highest priority (low number) to be associated
-            # with the worst scores so take the inverse again
-            score = 1 - runhistory['data'][i][1][0]
-            config = runhistory['configs'][str(i + 1)]
-            parameters = self.convert_cfg(config)
-            # If the list is shorter than the maximum
-            # length, add the configuration
-            if len(best_configs) < self.maxlen:
-                heapq.heappush(best_configs, (score, i, parameters))
-            # Otherwise, check if this config outperforms the worst one in the list
-            # We use i to break ties between scores
-            elif best_configs[0][0] < score:
-                heapq.heapreplace(best_configs, (score, i, parameters))
+            sourcelabel = f"Source Data Iteration {num}"
+            source_data.to_hdf(sourcename, sourcelabel)
 
-        # Convert the best found configuration to a dictionary
-        best_parameters = opt_config.get_dictionary()
+            num += 1
+        '''
+        # Create the files containing the estimator and settings
+        estimator_labels = ['X', 'y', 'search_space', 'cv_iter', 'scoring',
+                            'verbose', 'fit_params', 'return_train_score',
+                            'return_n_test_samples',
+                            'return_times', 'return_parameters',
+                            'error_score', 'n_iter']
 
+        estimator_data = pd.Series([self.features, self.labels, cs,
+                                    cv_iter, self.scoring, False,
+                                    self.fit_params, self.return_train_score,
+                                    True, True, True,
+                                    self.error_score, self.n_iter],
+                                   index=estimator_labels,
+                                   name='estimator Data')
+        fname = 'estimatordata.hdf5'
+        estimatorname = os.path.join(tempfolder, fname)
+        estimator_data.to_hdf(estimatorname, 'Estimator Data')
+
+        estimatordata = f"vfs://tmp/GS/{name}/{fname}"
+
+        # Create the files containing the instance data
+
+        # Attempt one
+        '''
+        instance_labels = ['run_info']
+        instance_info = []
+        for i in range(5): # update this later to a config value
+            instance_info.append([i, random.randint(0, 2 ** 32 - 1)])
+        instance_data = pd.Series([instance_info],
+                                  index=instance_labels,
+                                  name='instance data')
+        fname = 'instancedata.hdf5'
+        instancename = os.path.join(tempfolder, fname)
+        instance_data.to_hdf(instancename, 'Instance Data')
+        instancedata = f"vfs://tmp/GS/{name}/{fname}"
+        '''
+
+        # Attempt two
+        instance_labels = ['run_id', 'run_rng', 'run_name']
+        current_date_time = datetime.now()
+        run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
+        instance_files = dict()
+        for i in range(30):
+            instance_info = [i, random.randint(0, 2 ** 32 - 1), run_name]
+            instance_data = pd.Series(instance_info,
+                                      index=instance_labels,
+                                      name=f'instance data {i}')
+            fname = f'instancedata_{i}.hdf5'
+            instancefolder = os.path.join(tempfolder, 'instances', fname)
+            if not os.path.exists(os.path.dirname(instancefolder)):
+                os.makedirs(os.path.dirname(instancefolder))
+            instance_data.to_hdf(instancefolder, 'Instance Data')
+            instancedata = f'vfs://tmp/GS/{name}/instances/{fname}'
+            instance_files[f'{i}'] = instancedata
+
+        # Create the fastr network
+        network = fastr.create_network('WORC_SMAC_' + name)
+        estimator_data = network.create_source('HDF5', id='estimator_source')
+        instance_data = network.create_source('HDF5', id='instance_source')
+        #traintest_data = network.create_source('HDF5', id='traintest')
+        #parameter_data = network.create_source('JsonFile', id='parameters')
+        sink_output = network.create_sink('HDF5', id='output')
+
+        smac_node = network.create_node('worc/smac:1.0', tool_version='1.0', id='smac',
+                                          resources=ResourceLimit(memory='4G'))
+        #smac_node.inputs['estimatordata'].input_group = 'estimator'
+        #fitandscore.inputs['traintest'].input_group = 'traintest'
+        #fitandscore.inputs['parameters'].input_group = 'parameters'
+
+        smac_node.inputs['estimatordata'] = estimator_data.output
+        smac_node.inputs['instancedata'] = instance_data.output
+        #fitandscore.inputs['traintest'] = traintest_data.output
+        #fitandscore.inputs['parameters'] = parameter_data.output
+        sink_output.input = smac_node.outputs['fittedestimator']
+
+        source_data = {'estimator_source': estimatordata,
+                       'instance_source' : instance_files}
+
+        sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
+
+        network.execute(source_data, sink_data,
+                        tmpdir=os.path.join(tempfolder, 'tmp'),
+                        execution_plugin=self.fastr_plugin)
+
+        # Check whether all jobs have finished
+        expected_no_files = len(instance_files)
+        sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
+        if len(sink_files) != expected_no_files:
+            difference = expected_no_files - len(sink_files)
+            fname = os.path.join(tempfolder, 'tmp')
+            message = ('Fitting classifiers has failed for ' +
+                       f'{difference} / {expected_no_files} files. The temporary ' +
+                       f'results where not deleted and can be found in {tempfolder}. ' +
+                       'Probably your fitting and scoring failed: check out ' +
+                       'the tmp/smac folder within the tempfolder for ' +
+                       'the fastr job temporary results or run: fastr trace ' +
+                       f'"{fname}{os.path.sep}__sink_data__.json" --samples.')
+            raise WORCexceptions.WORCValueError(message)
+
+        # Read in the output data once finished
+        save_data = list()
+        for output in sink_files:
+            data = pd.read_hdf(output)
+            save_data.extend(list(data['RET']))
+
+        # if one choose to see train score, "out" will contain train score info
+        if self.return_train_score:
+            (train_scores, test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) = \
+                zip(*save_data)
+        else:
+            (test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) = \
+                zip(*save_data)
+
+        # Remove the temporary folder used
+        shutil.rmtree(tempfolder)
+
+        # Process the results of the fitting procedure
+        self.process_fit(n_splits=n_splits,
+                         parameters_est=parameters_est,
+                         parameters_all=parameters_all,
+                         test_sample_counts=test_sample_counts,
+                         test_scores=test_scores,
+                         train_scores=train_scores,
+                         fit_time=fit_time,
+                         score_time=score_time,
+                         cv_iter=cv_iter,
+                         X=self.features, y=self.labels)
+        '''
         # Skip the preprocessing for now, by setting FeatPreProcess
         # always to False. This next section is not accurate at this point.
         # Preprocess features if required
@@ -2711,7 +2794,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                 feature_values = preprocessor.transform(feature_values)
                 feature_labels = preprocessor.transform(feature_labels)
                 X = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
-        '''
+        
         # Make a temporary artificial configuration
         crashing_config = {'UsePCA': 'False',
                            'classifiers': 'LR',
@@ -2723,7 +2806,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                            'Featsel_Variance': False
                            }
         best_configs = [(0, 0, crashing_config)]
-        '''
+        
         # Score the best found result and save the full results
         out = Parallel(
             n_jobs=1, verbose=self.verbose,
@@ -2740,7 +2823,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
           for score, iter, parameters in best_configs
           for train, test in cv_iter)
         save_data = zip(*out)
-
+        
         # if one choose to see train score, "out" will contain train score info
         if self.return_train_score:
             (train_scores, test_scores, test_sample_counts,
@@ -2761,7 +2844,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                          score_time=score_time,
                          cv_iter=cv_iter,
                          X=self.features, y=self.labels)
-
+        '''
         return self
 
     def convert_cfg(self, cfg):

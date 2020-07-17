@@ -101,7 +101,7 @@ def build_smac_config(parameters):
     # 2 hyperparameters:
     #   1) penalty          | conditional on classifier: LR
     #   2) C                | conditional on classifier: LR
-    penalty = CategoricalHyperparameter('LRpenalty', choices=['l2'])
+    penalty = CategoricalHyperparameter('LRpenalty', choices=cf['LRpenalty'])
     C = UniformFloatHyperparameter('LRC',
                                    lower=cf['LRC'][0],
                                    upper=cf['LRC'][0] + cf['LRC'][1])
