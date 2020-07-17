@@ -1524,7 +1524,7 @@ class RandomizedSearchCVfastr(BaseSearchCVfastr):
     It is highly recommended to use continuous distributions for continuous
     parameters.
 
-    Read more in the :ref:`User Guide <randomized_parameter_search>`.
+    Read more in the sklearn user guide.
 
     Parameters
     ----------
@@ -1590,7 +1590,7 @@ class RandomizedSearchCVfastr(BaseSearchCVfastr):
         either binary or multiclass, :class:`StratifiedKFold` is used. In all
         other cases, :class:`KFold` is used.
 
-        Refer :ref:`User Guide <cross_validation>` for the various
+        Refer the sklearn user guide for the various
         cross-validation strategies that can be used here.
 
     refit : boolean, default=True
@@ -1842,7 +1842,7 @@ class GridSearchCVfastr(BaseSearchCVfastr):
     The parameters of the estimator used to apply these methods are optimized
     by cross-validated grid-search over a parameter grid.
 
-    Read more in the :ref:`User Guide <grid_search>`.
+    Read more in the sklearn user guide.
 
     Parameters
     ----------
@@ -1904,7 +1904,7 @@ class GridSearchCVfastr(BaseSearchCVfastr):
         either binary or multiclass, :class:`StratifiedKFold` is used. In all
         other cases, :class:`KFold` is used.
 
-        Refer :ref:`User Guide <cross_validation>` for the various
+        Refer the sklearn user guide for the various
         cross-validation strategies that can be used here.
 
     refit : boolean, default=True
@@ -2114,7 +2114,7 @@ class RandomizedSearchCVJoblib(BaseSearchCVJoblib):
     It is highly recommended to use continuous distributions for continuous
     parameters.
 
-    Read more in the :ref:`User Guide <randomized_parameter_search>`.
+    Read more in the sklearn user guide.
 
     Parameters
     ----------
@@ -2180,7 +2180,7 @@ class RandomizedSearchCVJoblib(BaseSearchCVJoblib):
         either binary or multiclass, :class:`StratifiedKFold` is used. In all
         other cases, :class:`KFold` is used.
 
-        Refer :ref:`User Guide <cross_validation>` for the various
+        Refer sklearn user guide for the various
         cross-validation strategies that can be used here.
 
     refit : boolean, default=True
@@ -2351,7 +2351,7 @@ class GridSearchCVJoblib(BaseSearchCVJoblib):
     The parameters of the estimator used to apply these methods are optimized
     by cross-validated grid-search over a parameter grid.
 
-    Read more in the :ref:`User Guide <grid_search>`.
+    Read more in the sklearn user guide.
 
     Parameters
     ----------
@@ -2413,7 +2413,7 @@ class GridSearchCVJoblib(BaseSearchCVJoblib):
         either binary or multiclass, :class:`StratifiedKFold` is used. In all
         other cases, :class:`KFold` is used.
 
-        Refer :ref:`User Guide <cross_validation>` for the various
+        Refer sklearn user guide for the various
         cross-validation strategies that can be used here.
 
     refit : boolean, default=True

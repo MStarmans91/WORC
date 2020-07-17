@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.crossval &mdash; WORC 3.1.4 documentation</title>
+  <title>WORC.classification.crossval &mdash; WORC 3.2.2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.4
+                3.2.2
               </div>
             
           
@@ -89,7 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -186,6 +186,7 @@
 <span class="kn">from</span> <span class="nn">.parameter_optimization</span> <span class="k">import</span> <span class="n">random_search_parameters</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.regressors</span> <span class="k">import</span> <span class="n">regressors</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 
 
 <div class="viewcode-block" id="crossval"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.crossval">[docs]</a><span class="k">def</span> <span class="nf">crossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span><span class="p">,</span>
@@ -274,10 +275,29 @@
     <span class="n">logfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputfolder</span><span class="p">,</span> <span class="s1">&#39;classifier.log&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Logging to file &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">logfilename</span><span class="p">))</span>
 
+    <span class="c1"># Cross-validation iteration to start with</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">save_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">tempsave</span><span class="p">:</span>
         <span class="n">tempfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputfolder</span><span class="p">,</span> <span class="s1">&#39;tempsave&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">):</span>
+            <span class="c1"># No previous tempsaves</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Previous tempsaves, start where we left of</span>
+            <span class="n">tempsaves</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tempsave_*.hdf5&#39;</span><span class="p">))</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tempsaves</span><span class="p">)</span>
+
+            <span class="c1"># Load previous tempsaves and add to save data</span>
+            <span class="n">tempsaves</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tempsaves</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;Constructed crossvalidation&#39;</span><span class="p">]</span>
+                <span class="n">temp_save_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">X_test</span><span class="p">,</span>
+                                  <span class="n">t</span><span class="o">.</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">patient_ID_train</span><span class="p">,</span>
+                                  <span class="n">t</span><span class="o">.</span><span class="n">patient_ID_test</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
+
+                <span class="n">save_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_save_data</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">[:]:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
@@ -314,9 +334,10 @@
         <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
             <span class="n">i_class_temp</span> <span class="o">=</span> <span class="n">i_class</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
-        <span class="n">save_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tempsave</span><span class="p">:</span>
+            <span class="n">save_data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N_iterations</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">N_iterations</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;Cross validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">N_iterations</span><span class="p">)))</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">((</span><span class="s1">&#39;Cross validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">N_iterations</span><span class="p">)))</span>
             <span class="n">timestamp</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span> <span class="n">gmtime</span><span class="p">())</span>
@@ -593,9 +614,7 @@
 
     <span class="n">classifier_labelss</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;features&#39;</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Starting classifier&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_features_train</span><span class="p">))</span>
 
     <span class="c1"># Determine modus</span>
     <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
@@ -696,7 +715,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>

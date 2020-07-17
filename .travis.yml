@@ -14,53 +14,33 @@ matrix:
         - choco install python --version 3.7.4
         - python --version
         - python -m pip install --upgrade pip
-        - pip3 install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
         - pip3 install -r requirements.txt
       env:
         - PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - WORCDEBUG=true
       install:
-      - python setup.py -q install
-      - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
+        - python setup.py -q install
+        - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
       # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
       # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
-      script: python WORCTutorial/WORCTutorialSimple.py
+      script: 
+        - python WORCTutorial/WORCTutorialSimple.py
     - name: "Linux"
       before_install:
-      - sudo apt-get -qq update
-      - sudo apt-get -qq -y install git
-      - pip install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
-      - pip install -r requirements.txt
+       - sudo apt-get -qq update
+       - sudo apt-get -qq -y install git
+       - pip install -r requirements.txt
       env:
         - WORCDEBUG=true
       install:
-      - python setup.py -q install
-      - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
-      # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
-      # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
+        - python setup.py -q install
+        - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
+        # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
+        # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
       script:
-      - python WORCTutorial/WORCTutorialSimple.py
-      - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
-      - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_pyradiomics --samples HN1331
-      - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
-    # - name: "MacOS"
-    #   os: osx
-    #   osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
-    #   language: shell
-    #   before_install:
-    #     - python3 --version
-    #     - pip3 install -U pip
-    #     - pip3 install numpy # Not doing so may give issues with PyRadiomics, as it depends on numpy upon installation
-    #   env:
-    #     - WORCDEBUG=true
-    #   install:
-    #   - python3 setup.py -q install
-    #   - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
-    #   # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
-    #   # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
-    #   script:
-    #     - python3 WORCTutorial/WORCTutorialSimple.py
-    #     - fastr trace /var/folders/17/5mc7816d3mndxjqgplq6057w0000gn/T/WORC_Example_STWStrategyHN4/__sink_data__.json --sinks features_train_CT_0 --samples HN1331
+        - python WORCTutorial/WORCTutorialSimple.py
+        - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
+        - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
 
 notifications:
   slack:

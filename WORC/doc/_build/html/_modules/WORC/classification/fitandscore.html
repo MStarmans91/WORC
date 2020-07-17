@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.fitandscore &mdash; WORC 3.1.4 documentation</title>
+  <title>WORC.classification.fitandscore &mdash; WORC 3.2.2 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.1.4
+                3.2.2
               </div>
             
           
@@ -89,7 +89,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -215,9 +215,9 @@
 <span class="sd">    Fit an estimator to a dataset and score the performance. The following</span>
 <span class="sd">    methods can currently be applied as preprocessing before fitting, in</span>
 <span class="sd">    this order:</span>
-<span class="sd">    1. Select features based on feature type group (e.g. shape, histogram).</span>
-<span class="sd">    2. Oversampling</span>
-<span class="sd">    3. Apply feature imputation (WIP).</span>
+<span class="sd">    1. Apply feature imputation</span>
+<span class="sd">    2. Select features based on feature type group (e.g. shape, histogram).</span>
+<span class="sd">    3. Oversampling</span>
 <span class="sd">    4. Apply feature selection based on variance of feature among patients.</span>
 <span class="sd">    5. Univariate statistical testing (e.g. t-test, Wilcoxon).</span>
 <span class="sd">    6. Scale features with e.g. z-scoring.</span>
@@ -391,27 +391,6 @@
     <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="p">])</span>
 
     <span class="c1"># ------------------------------------------------------------------------</span>
-    <span class="c1"># Feature scaling</span>
-    <span class="k">if</span> <span class="s1">&#39;FeatureScaling&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitting scaler and transforming features.&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;z_score&#39;</span><span class="p">:</span>
-            <span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;robust&#39;</span><span class="p">:</span>
-            <span class="n">scaler</span> <span class="o">=</span> <span class="n">RobustScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;minmax&#39;</span><span class="p">:</span>
-            <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">feature_values</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span>
-
-    <span class="c1"># Delete the object if we do not need to return it</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
-        <span class="k">del</span> <span class="n">scaler</span>
-
-    <span class="c1"># ------------------------------------------------------------------------</span>
     <span class="c1"># Feature imputation</span>
     <span class="k">if</span> <span class="s1">&#39;Imputation&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
@@ -436,6 +415,27 @@
 
     <span class="c1"># Remove any NaN feature values if these are still left after imputation</span>
     <span class="n">feature_values</span> <span class="o">=</span> <span class="n">replacenan</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">feature_labels</span><span class="o">=</span><span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># ------------------------------------------------------------------------</span>
+    <span class="c1"># Feature scaling</span>
+    <span class="k">if</span> <span class="s1">&#39;FeatureScaling&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitting scaler and transforming features.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;z_score&#39;</span><span class="p">:</span>
+            <span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;robust&#39;</span><span class="p">:</span>
+            <span class="n">scaler</span> <span class="o">=</span> <span class="n">RobustScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;minmax&#39;</span><span class="p">:</span>
+            <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">feature_values</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Delete the object if we do not need to return it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">scaler</span>
 
     <span class="c1"># ------------------------------------------------------------------------</span>
     <span class="c1"># Groupwise feature selection</span>
@@ -612,8 +612,6 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
             <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">ReliefSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
             <span class="n">feature_labels</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
 
     <span class="c1"># Delete the object if we do not need to return it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
@@ -667,7 +665,18 @@
         <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;95variance&#39;</span><span class="p">:</span>
             <span class="c1"># Select first X components that describe 95 percent of the explained variance</span>
             <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
-            <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">LinAlgError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WARNING]: skipping this setting due to PCA Error: </span><span class="si">{e}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_score</span><span class="p">,</span> <span class="n">test_score</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                       <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">para_estimator</span><span class="p">,</span> <span class="n">para</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Smote</span><span class="p">,</span> <span class="n">RandOverSample</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">ret</span>
+
             <span class="n">evariance</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
             <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
@@ -677,7 +686,18 @@
 
             <span class="c1"># Make a PCA based on the determined amound of components</span>
             <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">num</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
-            <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">LinAlgError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WARNING]: skipping this setting due to PCA Error: </span><span class="si">{e}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_score</span><span class="p">,</span> <span class="n">test_score</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                       <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">para_estimator</span><span class="p">,</span> <span class="n">para</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Smote</span><span class="p">,</span> <span class="n">RandOverSample</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">ret</span>
+
             <span class="n">feature_values</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
@@ -1007,7 +1027,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>

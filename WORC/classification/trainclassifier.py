@@ -207,8 +207,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
                          scale=config['Featsel']['ReliefNN'][1])
 
     param_grid['ReliefSampleSize'] =\
-        discrete_uniform(loc=config['Featsel']['ReliefSampleSize'][0],
-                         scale=config['Featsel']['ReliefSampleSize'][1])
+        uniform(loc=config['Featsel']['ReliefSampleSize'][0],
+                scale=config['Featsel']['ReliefSampleSize'][1])
 
     param_grid['ReliefDistanceP'] =\
         discrete_uniform(loc=config['Featsel']['ReliefDistanceP'][0],

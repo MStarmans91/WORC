@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.1.4 documentation</title>
+  <title>Configuration &mdash; WORC 3.2.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.4
+                3.2.2
               </div>
             
           
@@ -99,6 +99,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#imagefeatures">ImageFeatures</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pyradiomics">PyRadiomics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#combat">ComBat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#featpreprocess">FeatPreProcess</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#featsel">Featsel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#selectfeatgroup">SelectFeatGroup</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#imputation">Imputation</a></li>
@@ -109,13 +110,14 @@
 <li class="toctree-l3"><a class="reference internal" href="#featurescaling">FeatureScaling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sampleprocessing">SampleProcessing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ensemble">Ensemble</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bootstrap">Bootstrap</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
@@ -198,8 +200,6 @@ to locate your input and output folders and how much you want to parallelize the
 will be ignored. Additionally, .py files from the <code class="docutils literal notranslate"><span class="pre">$FASTRHOME/config.d</span></code> folder will be parsed
 as well. You will see that upon installation, WORC has already put a <code class="docutils literal notranslate"><span class="pre">WORC_config.py</span></code> file in the
 <code class="docutils literal notranslate"><span class="pre">config.d</span></code> folder.</p>
-<p>For a sample configuration file and a complete overview of the options in <code class="docutils literal notranslate"><span class="pre">config.py</span></code> see
-the <span class="xref std std-ref">configuration-chapter</span> section.</p>
 <p>% Note: Above was originally from quick start
 As <code class="docutils literal notranslate"><span class="pre">WORC</span></code> and the default tools used are mostly Python based, we’ve chosen
 to put our configuration in a <code class="docutils literal notranslate"><span class="pre">configparser</span></code> object. This has several
@@ -276,10 +276,10 @@ list can be created by using commas for separation, e.g.
 <td><p><a class="reference internal" href="#config-ensemble"><span class="std std-ref">Ensemble</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>Evaluation</p></td>
-<td><p><span class="xref std std-ref">Evaluation</span></p></td>
+<td><p><a class="reference internal" href="#config-evaluation"><span class="std std-ref">Evaluation</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>FeatPreProcess</p></td>
-<td><p><span class="xref std std-ref">FeatPreProcess</span></p></td>
+<td><p><a class="reference internal" href="#config-featpreprocess"><span class="std std-ref">FeatPreProcess</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>Featsel</p></td>
 <td><p><a class="reference internal" href="#config-featsel"><span class="std std-ref">Featsel</span></a></p></td>
@@ -302,8 +302,8 @@ list can be created by using commas for separation, e.g.
 <tr class="row-odd"><td><p>Labels</p></td>
 <td><p><a class="reference internal" href="#config-labels"><span class="std std-ref">Labels</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>Normalize</p></td>
-<td><p><a class="reference internal" href="#config-normalize"><span class="std std-ref">Normalize</span></a></p></td>
+<tr class="row-even"><td><p>Preprocessing</p></td>
+<td><p><span class="xref std std-ref">Preprocessing</span></p></td>
 </tr>
 <tr class="row-odd"><td><p>PyRadiomics</p></td>
 <td><p><a class="reference internal" href="#config-pyradiomics"><span class="std std-ref">PyRadiomics</span></a></p></td>
@@ -527,70 +527,7 @@ Currently, only normalization is included: hence the dictionary name is
 <em>Normalize</em>. Additionally, scans with image type CT (see later in the
 tutorial) provided as DICOM are scaled to Hounsfield Units.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
-<colgroup>
-<col style="width: 6%" />
-<col style="width: 94%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Subkey</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>ROI</p></td>
-<td><p>If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.</p></td>
-</tr>
-<tr class="row-odd"><td><p>ROIDetermine</p></td>
-<td><p>Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.</p></td>
-</tr>
-<tr class="row-even"><td><p>ROIdilate</p></td>
-<td><p>Determine whether the ROI has to be dilated with a disc element or not.</p></td>
-</tr>
-<tr class="row-odd"><td><p>ROIdilateradius</p></td>
-<td><p>Radius of disc element to be used in ROI dilation.</p></td>
-</tr>
-<tr class="row-even"><td><p>Method</p></td>
-<td><p>Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.</p></td>
-</tr>
-</tbody>
-</table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
-<colgroup>
-<col style="width: 38%" />
-<col style="width: 20%" />
-<col style="width: 43%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Subkey</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Options</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>ROI</p></td>
-<td><p>Full</p></td>
-<td><p>True, False, Full</p></td>
-</tr>
-<tr class="row-odd"><td><p>ROIDetermine</p></td>
-<td><p>Provided</p></td>
-<td><p>Provided, Otsu</p></td>
-</tr>
-<tr class="row-even"><td><p>ROIdilate</p></td>
-<td><p>False</p></td>
-<td><p>True, False</p></td>
-</tr>
-<tr class="row-odd"><td><p>ROIdilateradius</p></td>
-<td><p>10</p></td>
-<td><p>Integer &gt; 0</p></td>
-</tr>
-<tr class="row-even"><td><p>Method</p></td>
-<td><p>z_score</p></td>
-<td><p>z_score, minmed</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section" id="imagefeatures">
 <h3>ImageFeatures<a class="headerlink" href="#imagefeatures" title="Permalink to this headline">¶</a></h3>
@@ -722,7 +659,7 @@ are computed or not.</p>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>texture_Gabor</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>texture_LBP</p></td>
@@ -754,15 +691,15 @@ are computed or not.</p>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>vessel</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>log</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>phase</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>image_type</p></td>
@@ -845,7 +782,7 @@ feature computation here. For more information, see
 <td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
 </tr>
 <tr class="row-odd"><td><p>normalize</p></td>
-<td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+<td><p>WIP</p></td>
 </tr>
 <tr class="row-even"><td><p>normalizeScale</p></td>
 <td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
@@ -880,12 +817,33 @@ feature computation here. For more information, see
 <tr class="row-even"><td><p>label</p></td>
 <td><p>“Intensity” of the pixels in the mask to be used for feature extraction. If using segmentix, use 1, as your mask will be boolean. Otherwise, select the integer(s) corresponding to the ROI in your mask.</p></td>
 </tr>
+<tr class="row-odd"><td><p>extract_firstorder</p></td>
+<td><p>Determine whether first order features are computed or not.</p></td>
+</tr>
+<tr class="row-even"><td><p>extract_shape</p></td>
+<td><p>Determine whether shape features are computed or not.</p></td>
+</tr>
+<tr class="row-odd"><td><p>texture_GLCM</p></td>
+<td><p>Determine whether GLCM features are computed or not.</p></td>
+</tr>
+<tr class="row-even"><td><p>texture_GLRLM</p></td>
+<td><p>Determine whether GLRLM features are computed or not.</p></td>
+</tr>
+<tr class="row-odd"><td><p>texture_GLSZM</p></td>
+<td><p>Determine whether GLSZM features are computed or not.</p></td>
+</tr>
+<tr class="row-even"><td><p>texture_GLDM</p></td>
+<td><p>Determine whether GLDM features are computed or not.</p></td>
+</tr>
+<tr class="row-odd"><td><p>texture_NGTDM</p></td>
+<td><p>Determine whether NGTDM features are computed or not.</p></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 11%" />
+<col style="width: 12%" />
 <col style="width: 7%" />
 <col style="width: 81%" />
 </colgroup>
@@ -902,7 +860,7 @@ feature computation here. For more information, see
 </tr>
 <tr class="row-odd"><td><p>normalize</p></td>
 <td><p>False</p></td>
-<td><p>True, False</p></td>
+<td><p>False</p></td>
 </tr>
 <tr class="row-even"><td><p>normalizeScale</p></td>
 <td><p>100</p></td>
@@ -937,16 +895,44 @@ feature computation here. For more information, see
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>Wavelet</p></td>
-<td><p>True</p></td>
+<td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>LoG</p></td>
-<td><p>True</p></td>
+<td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>label</p></td>
 <td><p>1</p></td>
 <td><p>Integer</p></td>
+</tr>
+<tr class="row-odd"><td><p>extract_firstorder</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>extract_shape</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>texture_GLCM</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>texture_GLRLM</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>texture_GLSZM</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>texture_GLDM</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>texture_NGTDM</p></td>
+<td><p>True</p></td>
+<td><p>True, False</p></td>
 </tr>
 </tbody>
 </table>
@@ -974,23 +960,23 @@ feature harmonization here. For more information, see
 <tr class="row-odd"><td><p>batch</p></td>
 <td><p>Name of batch variable = variable to correct for.</p></td>
 </tr>
-<tr class="row-even"><td><p>mod</p></td>
-<td><p>Name of moderation variable(s) = variables for which variation in features will be “preserverd”.</p></td>
-</tr>
-<tr class="row-odd"><td><p>par</p></td>
+<tr class="row-even"><td><p>par</p></td>
 <td><p>Either use the parametric (1) or non-parametric version (0) of ComBat.</p></td>
 </tr>
-<tr class="row-even"><td><p>eb</p></td>
+<tr class="row-odd"><td><p>eb</p></td>
 <td><p>Either use the emperical Bayes (1) or simply mean shifting version (0) of ComBat.</p></td>
 </tr>
-<tr class="row-odd"><td><p>per_feature</p></td>
+<tr class="row-even"><td><p>per_feature</p></td>
 <td><p>Either use ComBat for all features combined (0) or per feature (1), in which case a second feature equal to the single feature plus random noise will be added if eb=1</p></td>
 </tr>
-<tr class="row-even"><td><p>excluded_features</p></td>
+<tr class="row-odd"><td><p>excluded_features</p></td>
 <td><p>Provide substrings of feature labels of features which should be excluded from ComBat. Recommended to use for features unaffected by the batch variable.</p></td>
 </tr>
-<tr class="row-odd"><td><p>matlab</p></td>
+<tr class="row-even"><td><p>matlab</p></td>
 <td><p>If using Matlab, path to Matlab executable.</p></td>
+</tr>
+<tr class="row-odd"><td><p>mod</p></td>
+<td><p>Name of moderation variable(s) = variables for which variation in features will be “preserverd”.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1016,29 +1002,71 @@ feature harmonization here. For more information, see
 <td><p>Hospital</p></td>
 <td><p>String</p></td>
 </tr>
-<tr class="row-even"><td><p>mod</p></td>
-<td><p>Age</p></td>
-<td><p>String(s)</p></td>
-</tr>
-<tr class="row-odd"><td><p>par</p></td>
+<tr class="row-even"><td><p>par</p></td>
 <td><p>1</p></td>
 <td><p>0 or 1</p></td>
 </tr>
-<tr class="row-even"><td><p>eb</p></td>
+<tr class="row-odd"><td><p>eb</p></td>
 <td><p>1</p></td>
 <td><p>0 or 1</p></td>
 </tr>
-<tr class="row-odd"><td><p>per_feature</p></td>
+<tr class="row-even"><td><p>per_feature</p></td>
 <td><p>0</p></td>
 <td><p>0 or 1</p></td>
 </tr>
-<tr class="row-even"><td><p>excluded_features</p></td>
+<tr class="row-odd"><td><p>excluded_features</p></td>
 <td><p><a href="#id3"><span class="problematic" id="id4">sf_</span></a>, <a href="#id5"><span class="problematic" id="id6">of_</span></a>, <a href="#id7"><span class="problematic" id="id8">semf_</span></a>, <a href="#id9"><span class="problematic" id="id10">pf_</span></a></p></td>
 <td><p>List of strings, comma separated</p></td>
 </tr>
-<tr class="row-odd"><td><p>matlab</p></td>
+<tr class="row-even"><td><p>matlab</p></td>
 <td><p>C:Program FilesMATLABR2015bbinmatlab.exe</p></td>
 <td><p>String</p></td>
+</tr>
+<tr class="row-odd"><td><p>mod</p></td>
+<td><p>Label1, Label2</p></td>
+<td><p>String(s), or []</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="featpreprocess">
+<h3>FeatPreProcess<a class="headerlink" href="#featpreprocess" title="Permalink to this headline">¶</a></h3>
+<p>Before the features are given to the classification function, and thus the
+hyperoptimization, these can be preprocessed as following.</p>
+<p><strong>Description:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 94%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Use</p></td>
+<td><p>If True, use feature preprocessor in the classify node. Currently excluded features with &gt;80% NaNs.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Defaults and Options:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 35%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Options</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Use</p></td>
+<td><p>False</p></td>
+<td><p>Boolean</p></td>
 </tr>
 </tbody>
 </table>
@@ -1160,15 +1188,15 @@ containing the actual values, e.g. value1, value2.</p>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 <tr class="row-even"><td><p>ReliefSampleSize</p></td>
-<td><p>1, 1</p></td>
-<td><p>Two Integers: loc and scale</p></td>
+<td><p>0.75, 0.25</p></td>
+<td><p>Two Floats: loc and scale</p></td>
 </tr>
 <tr class="row-odd"><td><p>ReliefDistanceP</p></td>
 <td><p>1, 3</p></td>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 <tr class="row-even"><td><p>ReliefNumFeatures</p></td>
-<td><p>25, 100</p></td>
+<td><p>10, 50, 100</p></td>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 </tbody>
@@ -1299,7 +1327,7 @@ recommended, and looks as follows:</p>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>texture_Gabor_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-even"><td><p>texture_GLCM_features</p></td>
@@ -1351,23 +1379,23 @@ recommended, and looks as follows:</p>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-even"><td><p>vessel_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>phase_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-even"><td><p>fractal_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>location_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-even"><td><p>rgrd_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>toolbox</p></td>
@@ -1379,11 +1407,11 @@ recommended, and looks as follows:</p>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>wavelet_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-even"><td><p>log_features</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 </tbody>
@@ -1976,9 +2004,9 @@ Minority Over-sampling Technique to oversample your data.</p>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 31%" />
-<col style="width: 14%" />
-<col style="width: 55%" />
+<col style="width: 28%" />
+<col style="width: 21%" />
+<col style="width: 51%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -1988,7 +2016,7 @@ Minority Over-sampling Technique to oversample your data.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>SMOTE</p></td>
-<td><p>False</p></td>
+<td><p>True, False</p></td>
 <td><p>Boolean(s)</p></td>
 </tr>
 <tr class="row-odd"><td><p>SMOTE_ratio</p></td>
@@ -2045,6 +2073,47 @@ performing workflow.</p>
 <tr class="row-even"><td><p>Use</p></td>
 <td><p>50</p></td>
 <td><p>Integer</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="evaluation">
+<h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
+<p>In the evaluation of the performance, several adjustments can be made.</p>
+<p><strong>Description:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 6%" />
+<col style="width: 94%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OverfitScaler</p></td>
+<td><p>Wheter to fit a separate scaler on the test set (=overfitting) or use scaler on training dataset. Only used for experimental purposes: never overfit your scaler for the actual performance evaluation.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Defaults and Options:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 23%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Options</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>OverfitScaler</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
 </tr>
 </tbody>
 </table>
@@ -2120,7 +2189,7 @@ performing workflow.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
