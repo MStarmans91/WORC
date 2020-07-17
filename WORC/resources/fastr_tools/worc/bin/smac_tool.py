@@ -16,16 +16,12 @@
 # limitations under the License.
 
 import argparse
-import json
 import pandas as pd
-from joblib import Parallel, delayed
 from WORC.classification.fitandscore import fit_and_score
 from smac.scenario.scenario import Scenario
 from smac.facade.smac_hpo_facade import SMAC4HPO
-import random
-import numpy as np
-import csv
 import ast
+import os
 
 
 def main():
@@ -105,8 +101,11 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
-        with open('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '__' +
-                  str(run_info['run_id']) + '.csv', 'a') as f:
+        fname = '/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' + \
+                str(run_info['run_id']) + '.csv'
+        if not os.path.exists(os.path.dirname(fname)):
+            os.makedirs(os.path.dirname(fname))
+        with open(fname, 'a') as f:
             df.to_csv(f, mode='a', header=f.tell()==0, index=False)
 
         score = 1 - df['test_score'].mean()  # We minimize so take the inverse
@@ -143,7 +142,7 @@ def main():
 
     source_labels = ['RET']
 
-    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '__' +
+    output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' +
                             str(run_info['run_id']) + '.csv')
     output = output_df.values.tolist()
     # Convert string to dict:
