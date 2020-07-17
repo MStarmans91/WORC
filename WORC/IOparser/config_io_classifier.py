@@ -259,7 +259,7 @@ def load_config(config_file_path):
     settings_dict['HyperOptimization']['use_SMAC'] =\
         settings['HyperOptimization'].getboolean('use_SMAC')
     settings_dict['HyperOptimization']['n_SMAC_cores'] =\
-        int(settings['HyperOptimzation']['n_SMAC_cores'])
+        int(settings['HyperOptimization']['n_SMAC_cores'])
 
     settings_dict['FeatureScaling']['scale_features'] =\
         settings['FeatureScaling'].getboolean('scale_features')
