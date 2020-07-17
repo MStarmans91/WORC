@@ -11,6 +11,10 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+# Mock imports to eliminate some issues with C-extensions
+autodoc_mock_imports = ['radiomics', 'pyradiomics', 'PREDICT']
+
+
 from collections import namedtuple
 import os
 import sys
@@ -73,7 +77,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'WORC'
-copyright = '2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of ' \
+copyright = '2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of ' \
             'Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -164,7 +168,7 @@ else:
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ['static/sources']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.

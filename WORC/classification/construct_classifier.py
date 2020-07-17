@@ -107,8 +107,7 @@ def construct_classifier(config):
         classifier = LogisticRegression(max_iter=max_iter,
                                         penalty=config['LRpenalty'],
                                         C=config['LRC'],
-                                        random_state=config['random_seed'],
-                                        solver='lbfgs')
+                                        random_state=config['random_seed'])
     elif config['classifiers'] == 'GaussianNB':
         # Naive Bayes classifier using Gaussian distributions
         classifier = GaussianNB()

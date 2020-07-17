@@ -1,4 +1,4 @@
-WORC v3.1.4
+WORC v3.2.2
 ===========
 
 Workflow for Optimal Radiomics Classification
@@ -7,11 +7,12 @@ Workflow for Optimal Radiomics Classification
 Information
 -----------
 
-+--------------------+-------------------+-------------------+-------------------+
-| Linux              | Windows           | Documentation     | PyPi              |
-+====================+===================+===================+===================+
-| |image0|           | |image1|          | |image2|          | |image3|          |
-+--------------------+-------------------+-------------------+-------------------+
++-----------------+-----------------+-----------------+-----------------+------------+
+| Linux           | Windows         | Documentation   | PyPi            | Citing     |
+|                 |                 |                 |                 | WORC       |
++=================+=================+=================+=================+============+
+| |image0|        | |image1|        | |image2|        | |image3|        | |image4|   |
++-----------------+-----------------+-----------------+-----------------+------------+
 
 Introduction
 ============
@@ -114,7 +115,8 @@ License
 This package is covered by the open source `APACHE 2.0
 License <APACHE-LICENSE-2.0>`__.
 
-When using WORC, please cite this repository.
+When using WORC, please cite this repository using the following DOI:
+|image5|.
 
 Contact
 -------
@@ -183,3 +185,7 @@ to input them on every request.
    :target: https://worc.readthedocs.io/en/latest/?badge=latest
 .. |image3| image:: https://badge.fury.io/py/WORC.svg
    :target: https://badge.fury.io/py/WORC
+.. |image4| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg
+   :target: https://zenodo.org/badge/latestdoi/92295542
+.. |image5| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg
+   :target: https://zenodo.org/badge/latestdoi/92295542

@@ -40,7 +40,6 @@ class ConfigBuilder():
                             'Joblib_backend': 'threading'},
                 'Classification': {'fastr': 'True',
                                    'fastr_plugin': 'DRMAAExecution'},
-                'HyperOptimization': {'n_jobspercore': '4000'}
             }
         elif CartesiusClusterDetector().do_detection():
             overrides = {
@@ -64,58 +63,41 @@ class ConfigBuilder():
 
     def coarse_overrides(self):
         overrides = {
+            'General': {
+                # Use only one feature extraction toolbox
+                'FeatureCalculators': '[predict/CalcFeatures:1.0]'
+            },
             'ImageFeatures': {
+                # Extract only a subset of features
                 'texture_Gabor': 'False',
                 'vessel': 'False',
                 'log': 'False',
                 'phase': 'False',
             },
             'SelectFeatGroup': {
+                # No search has to be conducted for excluded features
                 'texture_Gabor_features': 'False',
                 'log_features': 'False',
                 'vessel_features': 'False',
                 'phase_features': 'False',
+                'toolbox': 'PREDICT'
             },
-            'CrossValidation': {'N_iterations': '3'},
+            # Do not use any resampling
+            'SampleProcessing': {
+                'SMOTE': 'False',
+                },
+            'CrossValidation': {
+                # Only perform a 3x random-split cross-validation
+                'N_iterations': '3',
+                # Set a fixed seed, so we get the same result every time
+                'fixed_seed': ' True'
+                },
+            # Hyperoptimization is very minimal
             'HyperOptimization': {'n_splits': '2',
-                                  'N_iterations': '100', # Default: 1000
-                                  'n_jobspercore': '50'}, # Default: 500
+                                  'N_iterations': '1000',
+                                  'n_jobspercore': '500'},
+            # No ensembling
             'Ensemble': {'Use': '1'}
-        }
-        self.custom_config_overrides(overrides)
-        return overrides
-
-    def full_overrides(self):
-        overrides = {
-            # Compute all available features
-            'ImageFeatures': {
-                'texture_Gabor': 'True',
-                'vessel': 'True',
-                'log': 'True',
-                'phase': 'True',
-            },
-            # Also take these features into account in the feature groupwise selection
-            'SelectFeatGroup': {
-                'texture_Gabor_features': 'True, False',
-                'log_features': 'True, False',
-                'vessel_features': 'True, False',
-                'phase_features': 'True, False',
-            },
-            # Use some more feature selection methods
-            'Featsel': {
-                'UsePCA': '0.25',
-                'StatisticalTestUse': '0.25',
-                'ReliefUse': '0.25'
-            },
-            # Extensive cross-validation and hyperoptimization
-            'CrossValidation': {'N_iterations': '1'}, # Default: 100
-            'HyperOptimization': {'N_iterations': '10', # Default: 100000
-                                  'n_jobspercore': '1',
-                                  'use_SMAC': 'True',
-                                  'n_splits': '1'}, # Default: 4000
-            'Classification': {'max_iter': 100000},
-            # Make use of ensembling
-            'Ensemble': {'Use': '1'}, # Default: 50
         }
         self.custom_config_overrides(overrides)
         return overrides

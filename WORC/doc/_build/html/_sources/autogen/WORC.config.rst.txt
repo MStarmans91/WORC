@@ -15,7 +15,7 @@ HyperOptimization :ref:`HyperOptimization <config-HyperOptimization>`
 ImageFeatures     :ref:`ImageFeatures <config-ImageFeatures>`        
 Imputation        :ref:`Imputation <config-Imputation>`              
 Labels            :ref:`Labels <config-Labels>`                      
-Normalize         :ref:`Normalize <config-Normalize>`                
+Preprocessing     :ref:`Preprocessing <config-Preprocessing>`        
 PyRadiomics       :ref:`PyRadiomics <config-PyRadiomics>`            
 SampleProcessing  :ref:`SampleProcessing <config-SampleProcessing>`  
 Segmentix         :ref:`Segmentix <config-Segmentix>`                

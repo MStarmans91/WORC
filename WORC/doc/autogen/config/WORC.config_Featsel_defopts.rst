@@ -11,7 +11,7 @@ StatisticalTestMetric    MannWhitneyU            ttest, Welch, Wilcoxon, MannWhi
 StatisticalTestThreshold -3, 2.5                 Two Integers: loc and scale         
 ReliefUse                0.25                    Float                               
 ReliefNN                 2, 4                    Two Integers: loc and scale         
-ReliefSampleSize         1, 1                    Two Integers: loc and scale         
+ReliefSampleSize         0.75, 0.25              Two Floats: loc and scale           
 ReliefDistanceP          1, 3                    Two Integers: loc and scale         
-ReliefNumFeatures        25, 100                 Two Integers: loc and scale         
+ReliefNumFeatures        10, 50, 100             Two Integers: loc and scale         
 ======================== ======================= ====================================

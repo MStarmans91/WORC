@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC &mdash; WORC 3.1.4 documentation</title>
+  <title>WORC &mdash; WORC 3.2.2 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                3.1.4
+                3.2.2
               </div>
             
           
@@ -90,7 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/additionalfunctionality.html">Additional functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a></li>
@@ -208,14 +208,9 @@ can address various problems.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/quick_start.html">Quick start guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#installation">Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#installing-via-pip">Installing via pip</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#installing-from-source-code">Installing from source code</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#windows-installation">Windows installation</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#installation">Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#tutorials">Tutorials</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#hello-world">Hello World</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#running-an-experiment">Running an experiment</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#import-packages">Import packages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#input">Input</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#the-actual-experiment">The actual experiment</a></li>
@@ -226,7 +221,11 @@ can address various problems.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#the-simpleworc-object">The SimpleWORC object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#interacting-with-worc">Interacting with WORC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#the-worc-object">The WORC Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#input-file-definitions">Input file definitions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#attributes-sources">Attributes: Sources</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#attributes-settings">Attributes: Settings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#attributes-functions">Attributes: Functions</a></li>
@@ -249,6 +248,7 @@ can address various problems.</p>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#imagefeatures">ImageFeatures</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#pyradiomics">PyRadiomics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#combat">ComBat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/configuration.html#featpreprocess">FeatPreProcess</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#featsel">Featsel</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#selectfeatgroup">SelectFeatGroup</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#imputation">Imputation</a></li>
@@ -259,96 +259,137 @@ can address various problems.</p>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#featurescaling">FeatureScaling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#sampleprocessing">SampleProcessing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#ensemble">Ensemble</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/configuration.html#evaluation">Evaluation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#bootstrap">Bootstrap</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/additionalfunctionality.html">Additional functionality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#evaluation">Evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#combat">ComBat</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#elastix">Elastix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#regression">Regression</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#survival">Survival</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#evaluation">Evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#segmentix">Segmentix</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#icc">ICC</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="static/facades.html">Facades</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/facades.html#simpleworc">SimpleWORC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/facades.html#basicworc">BasicWORC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="static/features.html">Radiomics Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#histogram-features">Histogram features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#shape-features">Shape features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#orientation-features">Orientation features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#texture-features">Texture features</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/features.html#gray-level-co-occurence-matrix-glcm">Gray-Level Co-occurence Matrix (GLCM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/features.html#gray-level-run-length-matrix-glrlm">Gray-Level Run Length Matrix (GLRLM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/features.html#gray-level-size-zone-matrix-glszm">Gray-Level Size Zone Matrix (GLSZM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/features.html#neighborhood-gray-tone-difference-matrix-ngtdm">Neighborhood Gray Tone Difference Matrix (NGTDM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/features.html#gabor-filter-features">Gabor filter features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#laplacian-of-gaussian-log-filter-features">Laplacian of Gaussian (LoG) filter features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#vessel-filter-features">Vessel filter features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#local-binary-patterns-lbp">Local Binary Patterns (LBP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#local-phase-features">Local phase features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#patient-features">Patient features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#semantic-features">Semantic features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/features.html#other-extraction-choices">Other extraction choices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/features.html#filtering-on-roi-or-full-image">Filtering on ROI or full image.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/features.html#feature-extraction-parameter-selection">Feature extraction parameter selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/features.html#wavelet-features">Wavelet features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/features.html#fixed-bin-width-vs-fixed-bin-size">Fixed bin width vs fixed bin size</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/developerdocumentation.html">Developer documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="static/developerdocumentation.html#adding-a-feature-processing-toolbox">Adding a feature processing toolbox</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/developerdocumentation.html#testing-and-example-data">Testing and example data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/developerdocumentation.html#facades">Facades</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/developerdocumentation.html#adding-methods-to-hyperoptimization">Adding methods to hyperoptimization</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id1">3.1.4 - 2020-05-22</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id1">3.2.2 - 2020-07-14</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#fixed">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id2">3.1.3 - 2020-01-24</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id2">3.2.1 - 2020-07-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id3">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id4">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id5">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id6">3.1.2 - 2019-12-09</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id6">3.2.0 - 2020-06-26</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id7">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id8">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id9">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id10">3.1.1 - 2019-11-28</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id10">3.1.4 - 2020-05-26</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id11">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id12">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id13">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id14">3.1.0 - 2019-10-16</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id14">3.1.3 - 2020-01-24</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id15">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id16">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id17">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id18">3.0.0 - 2019-05-08</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id18">3.1.2 - 2019-12-09</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id19">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id20">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id21">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id22">2.1.3 - 2019-04-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id23">Changed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id22">3.1.1 - 2019-11-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id23">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id24">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id25">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id24">2.1.2 - 2019-04-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id25">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id26">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id27">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id26">3.1.0 - 2019-10-16</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id27">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id28">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id29">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id28">2.1.1 - 2019-02-15</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id29">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id30">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id31">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id30">3.0.0 - 2019-05-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id31">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id32">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id33">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id32">2.1.0 - 2018-08-09</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id33">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id34">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id35">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id34">2.1.3 - 2019-04-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id35">Changed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id36">2.0.0 - 2018-02-13</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id36">2.1.2 - 2019-04-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id37">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id38">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id39">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id40">2.1.1 - 2019-02-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id41">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id42">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id43">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id44">2.1.0 - 2018-08-09</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id45">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id46">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id47">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id48">2.0.0 - 2018-02-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id49">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id50">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id51">Fixed</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="static/changelog.html#rc1-2017-05-08">1.0.0rc1 - 2017-05-08</a></li>
@@ -420,7 +461,7 @@ can address various problems.</p>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.featureprocessing.html">featureprocessing Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">featureprocessing</span></code> Package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#combat-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.ComBat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.Decomposition"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Decomposition</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.FeatureConverter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FeatureConverter</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.featureprocessing.html#module-WORC.featureprocessing.ICCThreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ICCThreshold</span></code> Module</a></li>
@@ -466,9 +507,10 @@ can address various problems.</p>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.tests.html">tests Package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#test-combat-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_combat</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_combat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_combat</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_helpers</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_iccthreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_iccthreshold</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#test-validators-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_validators</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.tools.html">tools Package</a><ul>
@@ -519,7 +561,7 @@ can address various problems.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>

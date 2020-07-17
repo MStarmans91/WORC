@@ -1,0 +1,35 @@
+<tool id="smac" name="smac" version="1.0">
+    <description>A wrapper around the smac function for hyperparameter optimization.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="smac_tool.py" />
+    </targets>
+    <description>
+       smac input output
+       output = fitted estimator
+    </description>
+    <authors>
+        <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+      </authors>
+    </command>
+    <repository />
+    <interface>
+      <inputs>
+          <input id="estimatordata" name="Unfitted estimator plus side data" datatype="HDF5" prefix="--ed" cardinality="1" repeat_prefix="false" required="true" />
+          <input id="instancedata" name="Parallel smac run data" datatype="HDF5" prefix="--id" cardinality="1" repeat_prefix="false" required="true" />
+       </inputs>
+      <outputs>
+        <output id="fittedestimator" name="Fitted Estimator" datatype="HDF5" cardinality="1" nospace="False" order="0" prefix="--out" required="true"/>
+      </outputs>
+    </interface>
+    <requirements />
+    <tests />
+    <help> TODO
+    </help>
+    <cite>
+    </cite>
+    <references />
+  </tool>

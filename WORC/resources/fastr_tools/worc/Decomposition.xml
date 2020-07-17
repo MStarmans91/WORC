@@ -17,7 +17,7 @@
   <repository />
   <interface>
     <inputs>
-        <input id="features" name="Input feature files of first modality" datatype="HDF5" prefix="--feat" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="features" name="Input feature files of first modality" datatype="HDF5" prefix="--feat" cardinality="1-*" repeat_prefix="false" required="true" />
         <input id="patientclass" name="patientclass" datatype="PatientInfoFile" prefix="--pc" cardinality="1" repeat_prefix="false" required="true" />
         <input id="config" name="config" datatype="ParameterFile" prefix="--conf" cardinality="1-*" repeat_prefix="false" required="true" />
      </inputs>

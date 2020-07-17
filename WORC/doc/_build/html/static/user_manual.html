@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>User Manual &mdash; WORC 3.1.4 documentation</title>
+  <title>User Manual &mdash; WORC 3.2.2 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.1.4
+                3.2.2
               </div>
             
           
@@ -89,7 +89,11 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User Manual</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#the-simpleworc-object">The SimpleWORC object</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#interacting-with-worc">Interacting with WORC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-worc-object">The WORC Object</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#input-file-definitions">Input file definitions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#attributes-sources">Attributes: Sources</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#images-and-segmentations">Images and segmentations</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#semantics">Semantics</a></li>
@@ -113,7 +117,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
@@ -186,19 +190,36 @@
             
   <div class="section" id="user-manual">
 <h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
-<p>In this chapter we will discuss the parts of Fastr in more detail. We will give a more complete overview of the system
+<p>In this chapter we will discuss the parts of WORC in more detail, mostly focussed on the inputs,
+outputs, and the various workflow possible. We will give a more complete overview of the system
 and describe the more advanced features.</p>
-<div class="section" id="the-simpleworc-object">
-<span id="tools"></span><h2>The SimpleWORC object<a class="headerlink" href="#the-simpleworc-object" title="Permalink to this headline">¶</a></h2>
-<p>#TODO: Write this part about SimpleWORC, all other parts move to WORC.rst.</p>
-<p>The WORC toolbox consists of one main object, the WORC object:</p>
+<div class="section" id="interacting-with-worc">
+<span id="tools"></span><h2>Interacting with WORC<a class="headerlink" href="#interacting-with-worc" title="Permalink to this headline">¶</a></h2>
+<p>The WORC toolbox is build around of one main object, the WORC object. This object provides all functionality
+of the toolbox. However, to make certain functionalities easier to use and limit the complexity,
+we have constructed two facades. The <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> facade is the simplest to interact with and provides
+all functionality required for conducting basic experiments. The <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code> object is based on the <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code>
+object and provides several more advances functions. The specific functionalities of these two facades and the
+<code class="docutils literal notranslate"><span class="pre">WORC</span></code> object itself can be found in this section.</p>
+<p>For documentation on <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> and <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code>, please look at the documentation
+within those modules: <a class="reference internal" href="../autogen/WORC.facade.html#module-WORC.facade.simpleworc" title="WORC.facade.simpleworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC.facade.simpleworc</span></code></a> and <a class="reference internal" href="../autogen/WORC.facade.html#module-WORC.facade.basicworc" title="WORC.facade.basicworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC.facade.basicworc</span></code></a>. Many of the functions are actually wrappers to interact with the WORC
+object, and therefore use the functionality described below. For basic usage, only using
+<code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> and it’s respective documentation should be sufficient.</p>
+<div class="section" id="the-worc-object">
+<h3>The WORC Object<a class="headerlink" href="#the-worc-object" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
 <span class="n">network</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>It’s attributes are split in a couple of categories. We will not discuss
 the WORC.defaultconfig() function here, which generates the default
-configuration, as it is listed in a separate page, see the <span class="xref std std-doc">config file section</span>.</p>
+configuration, as it is listed in a separate page, see the <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">Config chapter</span></a>.
+More detailed documentation of the various functions can be found in the docstrings of <a class="reference internal" href="../autogen/WORC.html#module-WORC.WORC" title="WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC.WORC</span></code></a>:
+we will mostly focus on the attributes, inputs, outputs and workflows here.</p>
+</div>
+</div>
+<div class="section" id="input-file-definitions">
+<h2>Input file definitions<a class="headerlink" href="#input-file-definitions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="attributes-sources">
 <h3>Attributes: Sources<a class="headerlink" href="#attributes-sources" title="Permalink to this headline">¶</a></h3>
 <p>There are numerous WORC attributes which serve as source nodes for the
@@ -528,7 +549,7 @@ be foud in the exampledata folder as well.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>

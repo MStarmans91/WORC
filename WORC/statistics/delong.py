@@ -15,11 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-'''
-
-Adopted from https://github.com/yandexdataschool/roc_comparison.
-
-'''
+"""Adopted from https://github.com/yandexdataschool/roc_comparison."""
 
 import numpy as np
 import scipy.stats
@@ -29,10 +25,12 @@ import scipy.stats
 # https://github.com/Netflix/vmaf/
 def compute_midrank(x):
     """Computes midranks.
+
     Args:
        x - a 1D numpy array
     Returns:
        array of midranks
+
     """
     J = np.argsort(x)
     Z = x[J]
@@ -54,10 +52,12 @@ def compute_midrank(x):
 
 def compute_midrank_weight(x, sample_weight):
     """Computes midranks.
+
     Args:
        x - a 1D numpy array
     Returns:
        array of midranks
+
     """
     J = np.argsort(x)
     Z = x[J]
@@ -77,7 +77,8 @@ def compute_midrank_weight(x, sample_weight):
 
 
 def fastDeLong(predictions_sorted_transposed, label_1_count):
-    """
+    """Fast DeLong test computation.
+
     The fast version of DeLong's method for computing the covariance of
     unadjusted AUC.
     Args:
@@ -97,6 +98,7 @@ def fastDeLong(predictions_sorted_transposed, label_1_count):
        year={2014},
        publisher={IEEE}
      }
+
     """
     # Short variables are named as they are in the paper
     m = label_1_count
@@ -123,11 +125,13 @@ def fastDeLong(predictions_sorted_transposed, label_1_count):
 
 def calc_pvalue(aucs, sigma):
     """Computes log(10) of p-values.
+
     Args:
        aucs: 1D array of AUCs
        sigma: AUC DeLong covariances
     Returns:
        log10(pvalue)
+
     """
     l = np.array([[1, -1]])
     z = np.abs(np.diff(aucs)) / np.sqrt(np.dot(np.dot(l, sigma), l.T))
@@ -147,11 +151,12 @@ def compute_ground_truth_statistics(ground_truth, sample_weight=None):
 
 
 def delong_roc_variance(ground_truth, predictions):
-    """
-    Computes ROC AUC variance for a single set of predictions
+    """Computes ROC AUC variance for a single set of predictions.
+
     Args:
        ground_truth: np.array of 0 and 1
        predictions: np.array of floats of the probability of being class 1
+
     """
     sample_weight = None
     order, label_1_count, ordered_sample_weight = compute_ground_truth_statistics(
@@ -163,14 +168,15 @@ def delong_roc_variance(ground_truth, predictions):
 
 
 def delong_roc_test(ground_truth, predictions_one, predictions_two):
-    """
-    Computes log(p-value) for hypothesis that two ROC AUCs are different
+    """Computes log(p-value) for hypothesis that two ROC AUCs are different.
+
     Args:
        ground_truth: np.array of 0 and 1
        predictions_one: predictions of the first model,
           np.array of floats of the probability of being class 1
        predictions_two: predictions of the second model,
           np.array of floats of the probability of being class 1
+
     """
     order, label_1_count, _ = compute_ground_truth_statistics(ground_truth)
     predictions_sorted_transposed = np.vstack((predictions_one, predictions_two))[:, order]

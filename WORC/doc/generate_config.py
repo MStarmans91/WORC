@@ -127,12 +127,13 @@ def generate_config_options():
     config['Segmentix']['min_object_size'] = 'Integer > 0'
 
     # Preprocessing
-    config['Normalize'] = dict()
-    config['Normalize']['ROI'] = 'True, False, Full'
-    config['Normalize']['ROIDetermine'] = 'Provided, Otsu'
-    config['Normalize']['ROIdilate'] = 'True, False'
-    config['Normalize']['ROIdilateradius'] = 'Integer > 0'
-    config['Normalize']['Method'] = 'z_score, minmed'
+    config['Preprocessing'] = dict()
+    config['Preprocessing']['Normalize'] = 'True, False'
+    config['Preprocessing']['Normalize_ROI'] = 'True, False, Full'
+    config['Preprocessing']['ROIDetermine'] = 'Provided, Otsu'
+    config['Preprocessing']['ROIdilate'] = 'True, False'
+    config['Preprocessing']['ROIdilateradius'] = 'Integer > 0'
+    config['Preprocessing']['Method'] = 'z_score, minmed'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -188,7 +189,7 @@ def generate_config_options():
     # Pyradiomics - feature calculation
     config['PyRadiomics'] = dict()
     config['PyRadiomics']['geometryTolerance'] = 'Float'
-    config['PyRadiomics']['normalize'] = 'True, False'
+    config['PyRadiomics']['Preprocessing'] = 'True, False'
     config['PyRadiomics']['normalizeScale'] = 'Integer'
     config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
     config['PyRadiomics']['preCrop'] = 'True, False'
@@ -201,11 +202,20 @@ def generate_config_options():
     config['PyRadiomics']['LoG'] = 'True, False'
     config['PyRadiomics']['label'] = 'Integer'
 
+    # Enabled PyRadiomics features
+    config['PyRadiomics']['extract_firstorder'] = 'True, False'
+    config['PyRadiomics']['extract_shape'] = 'True, False'
+    config['PyRadiomics']['texture_GLCM'] = 'True, False'
+    config['PyRadiomics']['texture_GLRLM'] = 'True, False'
+    config['PyRadiomics']['texture_GLSZM'] = 'True, False'
+    config['PyRadiomics']['texture_GLDM'] = 'True, False'
+    config['PyRadiomics']['texture_NGTDM'] = 'True, False'
+
     # ComBat Feature Harmonization
     config['ComBat'] = dict()
     config['ComBat']['language'] = 'python, matlab'
     config['ComBat']['batch'] = 'String'
-    config['ComBat']['mod'] = 'String(s)'
+    config['ComBat']['mod'] = 'String(s), or []'
     config['ComBat']['par'] = '0 or 1'
     config['ComBat']['eb'] = '0 or 1'
     config['ComBat']['per_feature'] = '0 or 1'
@@ -232,7 +242,7 @@ def generate_config_options():
     config['Featsel']['StatisticalTestThreshold'] = 'Two Integers: loc and scale'
     config['Featsel']['ReliefUse'] = 'Float'
     config['Featsel']['ReliefNN'] = 'Two Integers: loc and scale'
-    config['Featsel']['ReliefSampleSize'] = 'Two Integers: loc and scale'
+    config['Featsel']['ReliefSampleSize'] = 'Two Floats: loc and scale'
     config['Featsel']['ReliefDistanceP'] = 'Two Integers: loc and scale'
     config['Featsel']['ReliefNumFeatures'] = 'Two Integers: loc and scale'
 
@@ -375,12 +385,13 @@ def generate_config_descriptions():
     config['Segmentix']['min_object_size'] = 'Minimum of objects in voxels to not be removed if small objects are removed'
 
     # Preprocessing
-    config['Normalize'] = dict()
-    config['Normalize']['ROI'] = 'If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.'
-    config['Normalize']['ROIDetermine'] = 'Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.'
-    config['Normalize']['ROIdilate'] = 'Determine whether the ROI has to be dilated with a disc element or not.'
-    config['Normalize']['ROIdilateradius'] = 'Radius of disc element to be used in ROI dilation.'
-    config['Normalize']['Method'] = 'Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.'
+    config['Preprocessing'] = dict()
+    config['Preprocessing']['Normalize'] = 'Determine whether to use normalization in preprocessing of image or not.'
+    config['Preprocessing']['Normalize_ROI'] = 'If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.'
+    config['Preprocessing']['ROIDetermine'] = 'Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.'
+    config['Preprocessing']['ROIdilate'] = 'Determine whether the ROI has to be dilated with a disc element or not.'
+    config['Preprocessing']['ROIdilateradius'] = 'Radius of disc element to be used in ROI dilation.'
+    config['Preprocessing']['Method'] = 'Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -437,7 +448,7 @@ def generate_config_descriptions():
     # Pyradiomics - feature calculation
     config['PyRadiomics'] = dict()
     config['PyRadiomics']['geometryTolerance'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
-    config['PyRadiomics']['normalize'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['Preprocessing'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['normalizeScale'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
     config['PyRadiomics']['preCrop'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
@@ -449,6 +460,15 @@ def generate_config_descriptions():
     config['PyRadiomics']['Wavelet'] = 'Enable/Disable computation of wavelet image features.'
     config['PyRadiomics']['LoG'] = 'Enable/Disable computation of Laplacian of Gaussian (LoG) image features.'
     config['PyRadiomics']['label'] = '"Intensity" of the pixels in the mask to be used for feature extraction. If using segmentix, use 1, as your mask will be boolean. Otherwise, select the integer(s) corresponding to the ROI in your mask.'
+
+    # Enabled PyRadiomics features
+    config['PyRadiomics']['extract_firstorder'] = 'Determine whether first order features are computed or not.'
+    config['PyRadiomics']['extract_shape'] = 'Determine whether shape features are computed or not.'
+    config['PyRadiomics']['texture_GLCM'] = 'Determine whether GLCM features are computed or not.'
+    config['PyRadiomics']['texture_GLRLM'] = 'Determine whether GLRLM features are computed or not.'
+    config['PyRadiomics']['texture_GLSZM'] = 'Determine whether GLSZM features are computed or not.'
+    config['PyRadiomics']['texture_GLDM'] = 'Determine whether GLDM features are computed or not.'
+    config['PyRadiomics']['texture_NGTDM'] = 'Determine whether NGTDM features are computed or not.'
 
     # ComBat Feature Harmonization
     config['ComBat'] = dict()

@@ -94,7 +94,7 @@ def load_config(config_file_path):
          settings['Featsel']['ReliefNN'].split(',')]
 
     settings_dict['Featsel']['ReliefSampleSize'] =\
-        [int(str(item).strip()) for item in
+        [float(str(item).strip()) for item in
          settings['Featsel']['ReliefSampleSize'].split(',')]
 
     settings_dict['Featsel']['ReliefDistanceP'] =\

@@ -54,9 +54,9 @@ def fit_and_score(X, y, scoring,
     Fit an estimator to a dataset and score the performance. The following
     methods can currently be applied as preprocessing before fitting, in
     this order:
-    1. Select features based on feature type group (e.g. shape, histogram).
-    2. Oversampling
-    3. Apply feature imputation (WIP).
+    1. Apply feature imputation
+    2. Select features based on feature type group (e.g. shape, histogram).
+    3. Oversampling
     4. Apply feature selection based on variance of feature among patients.
     5. Univariate statistical testing (e.g. t-test, Wilcoxon).
     6. Scale features with e.g. z-scoring.
@@ -230,27 +230,6 @@ def fit_and_score(X, y, scoring,
     feature_labels = np.asarray([x[1] for x in X])
 
     # ------------------------------------------------------------------------
-    # Feature scaling
-    if 'FeatureScaling' in para_estimator.keys():
-        if verbose:
-            print("Fitting scaler and transforming features.")
-
-        if para_estimator['FeatureScaling'] == 'z_score':
-            scaler = StandardScaler().fit(feature_values)
-        elif para_estimator['FeatureScaling'] == 'robust':
-            scaler = RobustScaler().fit(feature_values)
-        elif para_estimator['FeatureScaling'] == 'minmax':
-            scaler = MinMaxScaler().fit(feature_values)
-
-        if scaler is not None:
-            feature_values = scaler.transform(feature_values)
-        del para_estimator['FeatureScaling']
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del scaler
-
-    # ------------------------------------------------------------------------
     # Feature imputation
     if 'Imputation' in para_estimator.keys():
         if para_estimator['Imputation'] == 'True':
@@ -280,6 +259,27 @@ def fit_and_score(X, y, scoring,
 
     # Remove any NaN feature values if these are still left after imputation
     feature_values = replacenan(feature_values, verbose=verbose, feature_labels=feature_labels[0])
+
+    # ------------------------------------------------------------------------
+    # Feature scaling
+    if 'FeatureScaling' in para_estimator.keys():
+        if verbose:
+            print("Fitting scaler and transforming features.")
+
+        if para_estimator['FeatureScaling'] == 'z_score':
+            scaler = StandardScaler().fit(feature_values)
+        elif para_estimator['FeatureScaling'] == 'robust':
+            scaler = RobustScaler().fit(feature_values)
+        elif para_estimator['FeatureScaling'] == 'minmax':
+            scaler = MinMaxScaler().fit(feature_values)
+
+        if scaler is not None:
+            feature_values = scaler.transform(feature_values)
+        del para_estimator['FeatureScaling']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del scaler
 
     # ------------------------------------------------------------------------
     # Groupwise feature selection
@@ -456,8 +456,6 @@ def fit_and_score(X, y, scoring,
                 print("New Length: " + str(len(feature_values[0])))
             feature_labels = ReliefSel.transform(feature_labels)
             feature_labels.sort()
-            for l in feature_labels[0]:
-                print(l)
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -511,7 +509,18 @@ def fit_and_score(X, y, scoring,
         if para_estimator['PCAType'] == '95variance':
             # Select first X components that describe 95 percent of the explained variance
             pca = PCA(n_components=None, random_state=random_seed)
-            pca.fit(feature_values)
+            try:
+                pca.fit(feature_values)
+            except (ValueError, LinAlgError) as e:
+                print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+                ret = [train_score, test_score, test_sample_counts,
+                       fit_time, score_time, para_estimator, para]
+
+                if return_all:
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
+                else:
+                    return ret
+
             evariance = pca.explained_variance_ratio_
             num = 0
             sum = 0
@@ -521,7 +530,18 @@ def fit_and_score(X, y, scoring,
 
             # Make a PCA based on the determined amound of components
             pca = PCA(n_components=num, random_state=random_seed)
-            pca.fit(feature_values)
+            try:
+                pca.fit(feature_values)
+            except (ValueError, LinAlgError) as e:
+                print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+                ret = [train_score, test_score, test_sample_counts,
+                       fit_time, score_time, para_estimator, para]
+
+                if return_all:
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Smote, RandOverSample
+                else:
+                    return ret
+
             feature_values = pca.transform(feature_values)
 
         else:
