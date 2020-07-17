@@ -34,24 +34,24 @@ class ObjectSampler(object):
 
     def __init__(self, method,
                  sampling_strategy='auto',
-                 ratio=1,
-                 k_neighbors=5,
-                 kind='borderline-1',
                  n_jobs=1,
                  n_neighbors=3,
-                 threshold_cleaning=0.5
-                 ):
+                 k_neighbors=5,
+                 ratio=1,
+                 threshold_cleaning=0.5):
         """Initialize object."""
         # Initialize a random state
         self.random_seed = np.random.randint(5000)
         self.random_state = check_random_state(self.random_seed)
 
         # Initialize all objects as Nones: overriden when required by functions
-        self.sampling_strategy = None
         self.object = None
-        self.k_neighbors = None
+        self.sampling_strategy = None
         self.n_jobs = None
+        self.n_neighbors = None
+        self.k_neighbors = None
         self.ratio = None
+        self.threshold_cleaning = None
 
         if method == 'RandomUnderSampling':
             self.init_RandomUnderSampling(sampling_strategy)
@@ -65,12 +65,11 @@ class ObjectSampler(object):
         elif method == 'ADASYN':
             self.init_ADASYN(sampling_strategy, ratio, n_neighbors, n_jobs)
         elif method == 'BorderlineSMOTE':
-            self.init_BorderlineSMOTE(ratio, k_neighbors, kind, n_jobs)
+            self.init_BorderlineSMOTE(ratio, k_neighbors, n_jobs)
         elif method == 'SMOTE':
-            self.init_SMOTE(ratio, k_neighbors, kind, n_jobs)
+            self.init_SMOTE(ratio, k_neighbors, n_jobs)
         elif method == 'SMOTEENN':
-            self.init_SMOTEENN(sampling_strategy, ratio, k_neighbors, kind,
-                               n_jobs)
+            self.init_SMOTEENN(sampling_strategy, ratio, k_neighbors, n_jobs)
         elif method == 'SMOTETomek':
             self.init_SMOTETomek(sampling_strategy, ratio, n_jobs)
         else:
@@ -101,8 +100,9 @@ class ObjectSampler(object):
                                                     n_jobs=n_jobs)
 
         self.sampling_strategy = sampling_strategy
-        self.threshold_cleaning = threshold_cleaning
+        self.n_neighbors = n_neighbors
         self.n_jobs = n_jobs
+        self.threshold_cleaning = threshold_cleaning
 
     def init_RandomOverSampling(self, sampling_strategy):
         """Creata a random over sampler object."""
@@ -123,36 +123,30 @@ class ObjectSampler(object):
         self.n_neighbors = n_neighbors
         self.n_jobs = n_jobs
 
-    def init_BorderlineSMOTE(self, ratio, k_neighbors, kind, n_jobs):
+    def init_BorderlineSMOTE(self, ratio, k_neighbors, n_jobs):
         """Creata a BorderlineSMOTE sampler object."""
         self.object =\
             over_sampling.BorderlineSMOTE(random_state=self.random_state,
                                           ratio=ratio,
                                           k_neighbors=k_neighbors,
-                                          kind=kind,
                                           n_jobs=n_jobs)
 
         self.ratio = ratio
         self.k_neighbors = k_neighbors
-        self.kind = kind
         self.n_jobs = n_jobs
 
-    def init_SMOTE(self, ratio, k_neighbors, kind, n_jobs):
+    def init_SMOTE(self, ratio, k_neighbors, n_jobs):
         """Creata a SMOTE sampler object."""
-        sm = SMOTE(random_state=self.random_state,
-                   ratio=ratio,
-                   k_neighbors=k_neighbors,
-                   kind=kind,
-                   n_jobs=n_jobs)
-
-        self.object = sm
+        self.object = SMOTE(random_state=self.random_state,
+                            ratio=ratio,
+                            k_neighbors=k_neighbors,
+                            n_jobs=n_jobs)
 
         self.ratio = ratio
         self.k_neighbors = k_neighbors
-        self.kind = kind
         self.n_jobs = n_jobs
 
-    def init_SMOTEEN(self, sampling_strategy, ratio, n_jobs):
+    def init_SMOTEENN(self, sampling_strategy, ratio, n_jobs):
         """Creata a SMOTEEN sampler object."""
         self.object =\
             combine.SMOTEENN(random_state=self.random_state,
@@ -160,8 +154,8 @@ class ObjectSampler(object):
                              ratio=ratio,
                              n_jobs=n_jobs)
 
-        self.ratio = ratio
         self.sampling_strategy = sampling_strategy
+        self.ratio = ratio
         self.n_jobs = n_jobs
 
     def init_SMOTETomek(self, sampling_strategy, ratio, n_jobs):
@@ -172,8 +166,8 @@ class ObjectSampler(object):
                                ratio=ratio,
                                n_jobs=n_jobs)
 
-        self.ratio = ratio
         self.sampling_strategy = sampling_strategy
+        self.ratio = ratio
         self.n_jobs = n_jobs
 
     def fit(self, **kwargs):

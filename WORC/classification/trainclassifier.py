@@ -162,15 +162,15 @@ def trainclassifier(feat_train, patientinfo_train, config,
             param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
 
     # Add parameters for oversampling methods
-    param_grid['SampleProcessing_SMOTE'] = config['SampleProcessing']['SMOTE']
-    param_grid['SampleProcessing_SMOTE_ratio'] =\
-        uniform(loc=config['SampleProcessing']['SMOTE_ratio'][0],
-                scale=config['SampleProcessing']['SMOTE_ratio'][1])
-    param_grid['SampleProcessing_SMOTE_neighbors'] =\
-        discrete_uniform(loc=config['SampleProcessing']['SMOTE_neighbors'][0],
-                         scale=config['SampleProcessing']['SMOTE_neighbors'][1])
-    param_grid['SampleProcessing_SMOTE_n_cores'] = [config['General']['Joblib_ncores']]
-    param_grid['SampleProcessing_Oversampling'] = config['SampleProcessing']['Oversampling']
+    param_grid['Resampling_SMOTE'] = config['Resampling']['SMOTE']
+    param_grid['Resampling_SMOTE_ratio'] =\
+        uniform(loc=config['Resampling']['SMOTE_ratio'][0],
+                scale=config['Resampling']['SMOTE_ratio'][1])
+    param_grid['Resampling_SMOTE_neighbors'] =\
+        discrete_uniform(loc=config['Resampling']['SMOTE_neighbors'][0],
+                         scale=config['Resampling']['SMOTE_neighbors'][1])
+    param_grid['Resampling_SMOTE_n_cores'] = [config['General']['Joblib_ncores']]
+    param_grid['Resampling_Oversampling'] = config['Resampling']['Oversampling']
 
     # Extract hyperparameter grid settings for SearchCV from config
     param_grid['FeatPreProcess'] = config['FeatPreProcess']['Use']

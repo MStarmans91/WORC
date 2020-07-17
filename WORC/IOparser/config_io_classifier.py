@@ -42,7 +42,7 @@ def load_config(config_file_path):
                      'Labels': dict(), 'HyperOptimization': dict(),
                      'Classification': dict(), 'SelectFeatGroup': dict(),
                      'Featsel': dict(), 'FeatureScaling': dict(),
-                     'SampleProcessing': dict(), 'Imputation': dict(),
+                     'Resampling': dict(), 'Imputation': dict(),
                      'Ensemble': dict(), 'Bootstrap': dict(),
                      'FeatPreProcess': dict(), 'Evaluation': dict()}
 
@@ -263,21 +263,21 @@ def load_config(config_file_path):
         str(settings['FeatureScaling']['scaling_method'])
 
     # Settings for sample processing, i.e. oversampling, undersampling etc
-    settings_dict['SampleProcessing']['SMOTE'] =\
+    settings_dict['Resampling']['SMOTE'] =\
         [str(item).strip() for item in
-         settings['SampleProcessing']['SMOTE'].split(',')]
+         settings['Resampling']['SMOTE'].split(',')]
 
-    settings_dict['SampleProcessing']['SMOTE_ratio'] =\
+    settings_dict['Resampling']['SMOTE_ratio'] =\
         [int(str(item).strip()) for item in
-         settings['SampleProcessing']['SMOTE_ratio'].split(',')]
+         settings['Resampling']['SMOTE_ratio'].split(',')]
 
-    settings_dict['SampleProcessing']['SMOTE_neighbors'] =\
+    settings_dict['Resampling']['SMOTE_neighbors'] =\
         [int(str(item).strip()) for item in
-         settings['SampleProcessing']['SMOTE_neighbors'].split(',')]
+         settings['Resampling']['SMOTE_neighbors'].split(',')]
 
-    settings_dict['SampleProcessing']['Oversampling'] =\
+    settings_dict['Resampling']['Oversampling'] =\
         [str(item).strip() for item in
-         settings['SampleProcessing']['Oversampling'].split(',')]
+         settings['Resampling']['Oversampling'].split(',')]
 
     # Settings for ensembling
     settings_dict['Ensemble']['Use'] =\

@@ -611,8 +611,8 @@ def fit_and_score(X, y, scoring,
 
     # ------------------------------------------------------------------------
     # Use SMOTE oversampling
-    if 'SampleProcessing_SMOTE' in para_estimator.keys():
-        if para_estimator['SampleProcessing_SMOTE'] == 'True':
+    if 'Resampling_SMOTE' in para_estimator.keys():
+        if para_estimator['Resampling_SMOTE'] == 'True':
 
             # Determine our starting balance
             pos_initial = int(np.sum(y))
@@ -622,10 +622,10 @@ def fit_and_score(X, y, scoring,
             # Fit SMOTE object and transform dataset
             # NOTE: need to save random state for this one as well!
             Smote = SMOTE(random_state=random_state,
-                          ratio=para_estimator['SampleProcessing_SMOTE_ratio'],
-                          m_neighbors=para_estimator['SampleProcessing_SMOTE_neighbors'],
+                          ratio=para_estimator['Resampling_SMOTE_ratio'],
+                          m_neighbors=para_estimator['Resampling_SMOTE_neighbors'],
                           kind='borderline1',
-                          n_jobs=para_estimator['SampleProcessing_SMOTE_n_cores'])
+                          n_jobs=para_estimator['Resampling_SMOTE_n_cores'])
 
             feature_values, y = Smote.fit_sample(feature_values, y)
 
@@ -641,10 +641,10 @@ def fit_and_score(X, y, scoring,
                           f" {neg_initial} neg) to {len(y)} ({pos} pos, {neg} neg) patients."
                 print(message)
 
-        del para_estimator['SampleProcessing_SMOTE']
-        del para_estimator['SampleProcessing_SMOTE_ratio']
-        del para_estimator['SampleProcessing_SMOTE_neighbors']
-        del para_estimator['SampleProcessing_SMOTE_n_cores']
+        del para_estimator['Resampling_SMOTE']
+        del para_estimator['Resampling_SMOTE_ratio']
+        del para_estimator['Resampling_SMOTE_neighbors']
+        del para_estimator['Resampling_SMOTE_n_cores']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -652,8 +652,8 @@ def fit_and_score(X, y, scoring,
 
     # ------------------------------------------------------------------------
     # Full Oversampling: To Do
-    if 'SampleProcessing_Oversampling' in para_estimator.keys():
-        if para_estimator['SampleProcessing_Oversampling'] == 'True':
+    if 'Resampling_Oversampling' in para_estimator.keys():
+        if para_estimator['Resampling_Oversampling'] == 'True':
             if verbose:
                 print('Oversample underrepresented classes in training.')
 
@@ -683,7 +683,7 @@ def fit_and_score(X, y, scoring,
                             feature_values.append(x_sample)
                             noversample -= 1
 
-        del para_estimator['SampleProcessing_Oversampling']
+        del para_estimator['Resampling_Oversampling']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -790,14 +790,14 @@ def delete_nonestimator_parameters(parameters):
         del parameters['StatisticalTestMetric']
         del parameters['StatisticalTestThreshold']
 
-    if 'SampleProcessing_SMOTE' in parameters.keys():
-        del parameters['SampleProcessing_SMOTE']
-        del parameters['SampleProcessing_SMOTE_ratio']
-        del parameters['SampleProcessing_SMOTE_neighbors']
-        del parameters['SampleProcessing_SMOTE_n_cores']
+    if 'Resampling_SMOTE' in parameters.keys():
+        del parameters['Resampling_SMOTE']
+        del parameters['Resampling_SMOTE_ratio']
+        del parameters['Resampling_SMOTE_neighbors']
+        del parameters['Resampling_SMOTE_n_cores']
 
-    if 'SampleProcessing_Oversampling' in parameters.keys():
-        del parameters['SampleProcessing_Oversampling']
+    if 'Resampling_Oversampling' in parameters.keys():
+        del parameters['Resampling_Oversampling']
 
     if 'random_seed' in parameters.keys():
         del parameters['random_seed']
