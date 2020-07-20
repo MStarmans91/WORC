@@ -63,8 +63,8 @@ def main():
     #with open(args.para, 'rb') as fp:
     #    para = json.load(fp)
 
-    init_design = InitialDesign(cs=data['search_space'],
-                                init_budget=0.1*data['n_iter'])
+    #init_design = InitialDesign(cs=data['search_space'],
+    #                            init_budget=0.1*data['n_iter'])
 
     scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                          #"runcount-limit": data['n_iter'],  # max. number of function evaluations;
@@ -116,8 +116,7 @@ def main():
         return score
 
     smac = SMAC4HPO(scenario=scenario, rng=run_info['run_rng'],
-                    tae_runner=score_cfg, run_id=run_info['run_id'],
-                    initial_design=init_design)
+                    tae_runner=score_cfg, run_id=run_info['run_id'])
     opt_config = smac.optimize()
 
     '''
