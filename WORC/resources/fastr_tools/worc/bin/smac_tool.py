@@ -64,7 +64,8 @@ def main():
 
 
     scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
-                         "runcount-limit": data['n_iter'],  # max. number of function evaluations;
+                         #"runcount-limit": data['n_iter'],  # max. number of function evaluations;
+                         "wallclock-limit": data['n_iter'],
                          "cs": data['search_space'],
                          "deterministic": "true",
                          "output_dir": "/scratch/mdeen/SMAC_output/" + run_info['run_name'],
