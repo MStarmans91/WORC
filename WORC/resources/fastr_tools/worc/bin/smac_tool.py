@@ -71,7 +71,7 @@ def main():
                          "output_dir": "/scratch/mdeen/SMAC_output/" + run_info['run_name'],
                          "shared_model": True,
                          "input_psmac_dirs": "/scratch/mdeen/SMAC_output/" + run_info['run_name'],
-                         "abort_on_first_run_crash": "true"
+                         "abort_on_first_run_crash": "false"
                          })
 
     def score_cfg(cfg):
