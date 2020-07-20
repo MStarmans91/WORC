@@ -97,7 +97,6 @@ def main():
 
         # Process the results:
         # Return the average score over all cross-validation folds
-        print('all_scores: ' + str(all_scores) + '\n')
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
@@ -147,10 +146,8 @@ def main():
     output = output_df.values.tolist()
     # Convert string to dict:
     for ret in output:
-        print('Ret[6] type: ' + str(type(ret[6])) + ' and form: ' + str(ret[6]))
         ret[5] = ast.literal_eval(ret[5])
         ret[6] = ast.literal_eval(ret[6])
-        print('Ret[6] type: ' + str(type(ret[6])) + ' and form: ' + str(ret[6]))
 
     source_data =\
         pd.Series([output],
