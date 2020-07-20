@@ -20,6 +20,7 @@ import pandas as pd
 from WORC.classification.fitandscore import fit_and_score
 from smac.scenario.scenario import Scenario
 from smac.facade.smac_hpo_facade import SMAC4HPO
+from smac.initial_design.initial_design import InitialDesign
 import ast
 import os
 
@@ -62,6 +63,8 @@ def main():
     #with open(args.para, 'rb') as fp:
     #    para = json.load(fp)
 
+    init_design = InitialDesign(cs=data['search_space'],
+                                init_budget=0.1*data['n_iter'])
 
     scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                          #"runcount-limit": data['n_iter'],  # max. number of function evaluations;
@@ -71,7 +74,7 @@ def main():
                          "output_dir": "/scratch/mdeen/SMAC_output/" + run_info['run_name'],
                          "shared_model": True,
                          "input_psmac_dirs": "/scratch/mdeen/SMAC_output/" + run_info['run_name']
-                         #"abort_on_first_run_crash": "false"
+                         "abort_on_first_run_crash": "false"
                          })
 
     def score_cfg(cfg):
@@ -113,7 +116,8 @@ def main():
         return score
 
     smac = SMAC4HPO(scenario=scenario, rng=run_info['run_rng'],
-                    tae_runner=score_cfg, run_id=run_info['run_id'])
+                    tae_runner=score_cfg, run_id=run_info['run_id'],
+                    initial_design=init_design)
     opt_config = smac.optimize()
 
     '''
