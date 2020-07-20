@@ -116,6 +116,9 @@ class ConfigBuilder():
     def _debug_config_overrides(self):
         if DebugDetector().do_detection():
             overrides = {
+                'General': {
+                    'Segmentix': 'False'
+                    },
                 'ImageFeatures': {
                     'texture_Gabor': 'False',
                     'vessel': 'False',
@@ -124,25 +127,31 @@ class ConfigBuilder():
                     'texture_LBP': 'False',
                     'texture_GLCMMS': 'False',
                     'texture_GLRLM': 'False',
-                    'texture_NGTDM': 'False',
-                },
+                    'texture_NGTDM': 'False'
+                    },
                 'PyRadiomics': {
                     'Wavelet': 'False',
                     'LoG': 'False'
-                },
+                    },
                 'SelectFeatGroup': {
                     'texture_Gabor_features': 'False',
                     'log_features': 'False',
                     'vessel_features': 'False',
-                    'phase_features': 'False',
-                },
-                'CrossValidation': {'N_iterations': '2',
-                                    'fixed_seed': ' True'},
-                'HyperOptimization': {'N_iterations': '10',
-                                      'n_jobspercore': '10',
-                                      'n_splits': '2'},
-                'Ensemble': {'Use': '1'},
-                'SampleProcessing': {'SMOTE': 'False'},
+                    'phase_features': 'False'
+                    },
+                'Resampling': {
+                    'Use': 'True',
+                    },
+                'CrossValidation': {
+                    'N_iterations': '2',
+                    'fixed_seed': ' True'
+                    },
+                'HyperOptimization': {
+                    'N_iterations': '10',
+                    'n_jobspercore': '10',
+                    'n_splits': '2'
+                    },
+                'Ensemble': {'Use': '1'}
             }
 
             # Additionally, turn queue reporting system on
