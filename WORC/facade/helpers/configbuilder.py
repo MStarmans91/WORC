@@ -84,8 +84,8 @@ class ConfigBuilder():
                 'toolbox': 'PREDICT'
             },
             # Do not use any resampling
-            'SampleProcessing': {
-                'SMOTE': 'False',
+            'Resampling': {
+                'Use': 'False',
                 },
             'CrossValidation': {
                 # Only perform a 3x random-split cross-validation

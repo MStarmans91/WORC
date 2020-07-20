@@ -298,6 +298,7 @@ class WORC(object):
         config['ComBat'] = dict()
         config['ComBat']['language'] = 'python'
         config['ComBat']['batch'] = 'Hospital'
+        config['ComBat']['mod'] = '[]'
         config['ComBat']['par'] = '1'
         config['ComBat']['eb'] = '1'
         config['ComBat']['per_feature'] = '0'
@@ -362,6 +363,18 @@ class WORC(object):
         config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
         config['Imputation']['n_neighbors'] = '5, 5'
 
+        # Resampling options
+        config['Resampling'] = dict()
+        config['Resampling']['Use'] = 'True, False'
+        config['Resampling']['Method'] =\
+            'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
+            'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
+            'SMOTEENN, SMOTETomek'
+        config['Resampling']['sampling_strategy'] = 'auto, majority, not minority, not majority, all'
+        config['Resampling']['n_neighbors'] = '3, 12'
+        config['Resampling']['k_neighbors'] = '5, 15'
+        config['Resampling']['threshold_cleaning'] = '0.25, 0.5'
+
         # Classification
         config['Classification'] = dict()
         config['Classification']['fastr'] = 'True'
@@ -398,7 +411,6 @@ class WORC(object):
         # Options for the object/patient labels that are used
         config['Labels'] = dict()
         config['Labels']['label_names'] = 'Label1, Label2'
-        config['ComBat']['mod'] = config['Labels']['label_names']  # Variation due to label to predict should be maintained
         config['Labels']['modus'] = 'singlelabel'
         config['Labels']['url'] = 'WIP'
         config['Labels']['projectID'] = 'WIP'
@@ -416,20 +428,7 @@ class WORC(object):
         # Feature scaling options
         config['FeatureScaling'] = dict()
         config['FeatureScaling']['scale_features'] = 'True'
-        config['FeatureScaling']['scaling_method'] = 'z_score'
-
-        # Resampling options
-        config['Resampling'] = dict()
-        config['Resampling']['Method'] = 'False,' +\
-            'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
-            'NeigbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
-            'SMOTEENN, SMOTETomek'
-        config['Resampling']['sampling_strategy'] = ''
-        config['Resampling']['n_jobs'] = '1'
-        config['Resampling']['n_neighbors'] = '3, 12'
-        config['Resampling']['k_neighbors'] = '5, 15'
-        config['Resampling']['ratio'] = '0.8, 0.2'
-        config['Resampling']['threshold_cleaning'] = '0.25, 0.5'
+        config['FeatureScaling']['scaling_method'] = 'z_score, robust, minmax'
 
         # Ensemble options
         config['Ensemble'] = dict()
@@ -1660,7 +1659,7 @@ class WORC(object):
             self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'],
                                              self.name)
 
-        # self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
+        self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 
     def add_evaluation(self, label_type):
         """Add branch for evaluation of performance to network.
