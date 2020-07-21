@@ -88,8 +88,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -178,13 +178,12 @@
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
-
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">uniform</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
 <span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVM</span> <span class="k">import</span> <span class="n">plot_SVM</span>
 <span class="kn">from</span> <span class="nn">WORC.IOparser.file_io</span> <span class="k">import</span> <span class="n">load_features</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.config_io_classifier</span> <span class="k">as</span> <span class="nn">config_io</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">uniform</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> \
     <span class="n">log_uniform</span><span class="p">,</span> <span class="n">boolean_uniform</span>
 
@@ -193,8 +192,9 @@
                     <span class="n">output_hdf</span><span class="p">,</span> <span class="n">output_json</span><span class="p">,</span>
                     <span class="n">feat_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">patientinfo_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Train a classifier using machine learning from features. By default, if no</span>
+    <span class="sd">&quot;&quot;&quot;Train a classifier using machine learning from features.</span>
+
+<span class="sd">    By default, if no</span>
 <span class="sd">    split in training and test is supplied, a cross validation</span>
 <span class="sd">    will be performed.</span>
 
@@ -246,8 +246,7 @@
 <span class="sd">    verbose: boolean, default True</span>
 <span class="sd">            print final feature values and labels to command line or not.</span>
 
-<span class="sd">    &#39;&#39;&#39;</span>
-
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Convert inputs from lists to strings</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">patientinfo_train</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
         <span class="n">patientinfo_train</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">patientinfo_train</span><span class="p">)</span>
@@ -323,15 +322,21 @@
             <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">]</span>
 
     <span class="c1"># Add parameters for oversampling methods</span>
-    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE&#39;</span><span class="p">]</span>
-    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_ratio&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_ratio&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_ratio&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_neighbors&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_neighbors&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_n_cores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Joblib_ncores&#39;</span><span class="p">]]</span>
-    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_Oversampling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;Oversampling&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Resampling_Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Resampling_Method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Resampling_sampling_strategy&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;sampling_strategy&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Resampling_n_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Resampling_k_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;k_neighbors&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;k_neighbors&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Resampling_threshold_cleaning&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;threshold_cleaning&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;threshold_cleaning&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Resampling_n_cores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Joblib_ncores&#39;</span><span class="p">]]</span>
 
     <span class="c1"># Extract hyperparameter grid settings for SearchCV from config</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;FeatPreProcess&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatPreProcess&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span>

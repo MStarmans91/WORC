@@ -104,9 +104,7 @@ class WORC(object):
         CopyMetadata: Boolean, default True
             when using elastix, copy metadata from image to segmentation or not
 
-
     """
-
     def __init__(self, name='test'):
         """Initialize WORC object.
 
@@ -192,6 +190,13 @@ class WORC(object):
         config['General']['tempsave'] = 'False'
         config['General']['AssumeSameImageAndMaskMetadata'] = 'False'
         config['General']['ComBat'] = 'False'
+
+        # Options for the object/patient labels that are used
+        config['Labels'] = dict()
+        config['Labels']['label_names'] = 'Label1, Label2'
+        config['Labels']['modus'] = 'singlelabel'
+        config['Labels']['url'] = 'WIP'
+        config['Labels']['projectID'] = 'WIP'
 
         # Preprocessing
         config['Preprocessing'] = dict()
@@ -305,6 +310,17 @@ class WORC(object):
         config['ComBat']['excluded_features'] = 'sf_, of_, semf_, pf_'
         config['ComBat']['matlab'] = 'C:\\Program Files\\MATLAB\\R2015b\\bin\\matlab.exe'
 
+        # Feature imputation
+        config['Imputation'] = dict()
+        config['Imputation']['use'] = 'True'
+        config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
+        config['Imputation']['n_neighbors'] = '5, 5'
+
+        # Feature scaling options
+        config['FeatureScaling'] = dict()
+        config['FeatureScaling']['scale_features'] = 'True'
+        config['FeatureScaling']['scaling_method'] = 'z_score, robust, minmax'
+
         # Feature preprocessing before all below takes place
         config['FeatPreProcess'] = dict()
         config['FeatPreProcess']['Use'] = 'False'
@@ -357,12 +373,6 @@ class WORC(object):
         config['SelectFeatGroup']['wavelet_features'] = 'True, False'
         config['SelectFeatGroup']['log_features'] = 'True, False'
 
-        # Feature imputation
-        config['Imputation'] = dict()
-        config['Imputation']['use'] = 'True'
-        config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
-        config['Imputation']['n_neighbors'] = '5, 5'
-
         # Resampling options
         config['Resampling'] = dict()
         config['Resampling']['Use'] = 'True, False'
@@ -408,13 +418,6 @@ class WORC(object):
         config['CrossValidation']['test_size'] = '0.2'
         config['CrossValidation']['fixed_seed'] = 'False'
 
-        # Options for the object/patient labels that are used
-        config['Labels'] = dict()
-        config['Labels']['label_names'] = 'Label1, Label2'
-        config['Labels']['modus'] = 'singlelabel'
-        config['Labels']['url'] = 'WIP'
-        config['Labels']['projectID'] = 'WIP'
-
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
@@ -424,11 +427,6 @@ class WORC(object):
         config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
-
-        # Feature scaling options
-        config['FeatureScaling'] = dict()
-        config['FeatureScaling']['scale_features'] = 'True'
-        config['FeatureScaling']['scaling_method'] = 'z_score, robust, minmax'
 
         # Ensemble options
         config['Ensemble'] = dict()

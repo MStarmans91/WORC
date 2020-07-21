@@ -66,8 +66,8 @@ WORC Documentation
     static/quick_start.rst
     static/user_manual.rst
     static/configuration.rst
-    static/additionalfunctionality.rst
     static/features.rst
+    static/additionalfunctionality.rst
     static/developerdocumentation.rst
     static/file_description.rst
     static/changelog.rst
