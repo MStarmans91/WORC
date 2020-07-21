@@ -31,6 +31,8 @@ Fixed
 - IMPORTANT: Previously, all methods except the machine learning where fit on
   both the training and validation set together in fitandscore. This led
   to overfitting on the validation set. Now, these are properly split.
+- Bugfix in Evaluate standalone for decompositon tool.
+- Applied imputation in decomposition if NaNs are detected.
 
 3.2.2 - 2020-07-14
 ------------------

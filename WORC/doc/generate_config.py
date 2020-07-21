@@ -541,7 +541,7 @@ def generate_config_descriptions():
     config['Imputation']['n_neighbors'] = 'When using k-Nearest Neighbors (kNN) for feature imputation, determines the number of neighbors used for imputation. Can be a single integer or a list.'
 
     # Sample processing options
-    config['SampleProcessing'] = dict()https://imbalanced-learn.readthedocs.io/en/stable/api.html
+    config['SampleProcessing'] = dict()
     config['SampleProcessing']['SMOTE'] =
     config['SampleProcessing']['SMOTE_ratio'] = 'Determine the ratio of oversampling. If 1, the minority class will be oversampled to the same size as the majority class. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
     config['SampleProcessing']['SMOTE_neighbors'] = 'Number of neighbors used in SMOTE. This should be much smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
