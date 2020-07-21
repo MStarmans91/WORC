@@ -64,7 +64,10 @@ def main():
     #    para = json.load(fp)
 
     #init_design = InitialDesign(cs=data['search_space'],
-    #                            init_budget=0.1*data['n_iter'])
+    #                            init_budget=0.1*data['n_iter'],
+    #                            rng=run_info['run_rng'],
+    #                            traj_logger=None,
+    #                            ta_run_limit=100)
 
     scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
                          #"runcount-limit": data['n_iter'],  # max. number of function evaluations;

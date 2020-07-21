@@ -2691,7 +2691,8 @@ class BaseSearchCVSMAC(BaseSearchCV):
         # Attempt two
         instance_labels = ['run_id', 'run_rng', 'run_name']
         current_date_time = datetime.now()
-        run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S')
+        random_id = random.randint(1000, 9999)
+        run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S' + str(random_id))
         instance_files = dict()
         for i in range(self.param_distributions['HyperOptimization']['n_SMAC_cores']):
             instance_info = [i, random.randint(0, 2 ** 32 - 1), run_name]
