@@ -68,78 +68,102 @@ class Evaluate(object):
         self.node_ROC =\
             self.network.create_node('worc/PlotROC:1.0', tool_version='1.0',
                                      id='plot_ROC',
-                                     resources=ResourceLimit(memory='12G'))
+                                     resources=ResourceLimit(memory='12G'),
+                                     step_id='Evaluation')
         self.node_SVM =\
             self.network.create_node('worc/PlotSVM:1.0', tool_version='1.0',
                                      id='plot_SVM',
-                                     resources=ResourceLimit(memory='12G'))
+                                     resources=ResourceLimit(memory='12G'),
+                                     step_id='Evaluation')
         self.node_Barchart =\
             self.network.create_node('worc/PlotBarchart:1.0',
                                      tool_version='1.0', id='plot_Barchart',
-                                     resources=ResourceLimit(memory='12G'))
+                                     resources=ResourceLimit(memory='12G'),
+                                     step_id='Evaluation')
         self.node_STest =\
             self.network.create_node('worc/StatisticalTestFeatures:1.0',
                                      tool_version='1.0',
                                      id='statistical_test_features',
-                                     resources=ResourceLimit(memory='12G'))
+                                     resources=ResourceLimit(memory='12G'),
+                                     step_id='Evaluation')
 
         self.node_decomposition =\
             self.network.create_node('worc/Decomposition:1.0',
                                      tool_version='1.0',
                                      id='decomposition',
-                                     resources=ResourceLimit(memory='12G'))
+                                     resources=ResourceLimit(memory='12G'),
+                                     step_id='Evaluation')
 
         self.node_Ranked_Percentages =\
             self.network.create_node('worc/PlotRankedScores:1.0',
                                      tool_version='1.0',
                                      id='plot_ranked_percentages',
-                                     resources=ResourceLimit(memory='20G'))
+                                     resources=ResourceLimit(memory='20G'),
+                                     step_id='Evaluation')
         self.node_Ranked_Posteriors =\
             self.network.create_node('worc/PlotRankedScores:1.0',
                                      tool_version='1.0',
                                      id='plot_ranked_posteriors',
-                                     resources=ResourceLimit(memory='20G'))
+                                     resources=ResourceLimit(memory='20G'),
+                                     step_id='Evaluation')
         self.node_Boxplots_Features =\
             self.network.create_node('worc/PlotBoxplotFeatures:1.0',
                                      tool_version='1.0',
                                      id='plot_boxplot_features',
-                                     resources=ResourceLimit(memory='12G'))
+                                     resources=ResourceLimit(memory='12G'),
+                                     step_id='Evaluation')
 
         # Create sinks
         self.sink_ROC_PNG =\
-            self.network.create_sink('PNGFile', id='ROC_PNG')
+            self.network.create_sink('PNGFile', id='ROC_PNG',
+                                     step_id='general_sinks')
         self.sink_ROC_Tex =\
-            self.network.create_sink('TexFile', id='ROC_Tex')
+            self.network.create_sink('TexFile', id='ROC_Tex',
+                                     step_id='general_sinks')
         self.sink_ROC_CSV =\
-            self.network.create_sink('CSVFile', id='ROC_CSV')
+            self.network.create_sink('CSVFile', id='ROC_CSV',
+                                     step_id='general_sinks')
 
         self.sink_SVM_Json =\
-            self.network.create_sink('JsonFile', id='SVM_Json')
+            self.network.create_sink('JsonFile', id='SVM_Json',
+                                     step_id='general_sinks')
 
         self.sink_Barchart_PNG =\
-            self.network.create_sink('PNGFile', id='Barchart_PNG')
+            self.network.create_sink('PNGFile', id='Barchart_PNG',
+                                     step_id='general_sinks')
         self.sink_Barchart_Tex =\
-            self.network.create_sink('TexFile', id='Barchart_Tex')
+            self.network.create_sink('TexFile',
+                                     id='Barchart_Tex',
+                                     step_id='general_sinks')
 
         self.sink_STest_CSV =\
             self.network.create_sink('CSVFile',
-                                     id='StatisticalTestFeatures_CSV')
+                                     id='StatisticalTestFeatures_CSV',
+                                     step_id='general_sinks')
 
         self.sink_decomposition_PNG =\
-            self.network.create_sink('PNGFile', id='Decomposition_PNG')
+            self.network.create_sink('PNGFile', id='Decomposition_PNG',
+                                     step_id='general_sinks')
 
         self.sink_Ranked_Percentages_Zip =\
-            self.network.create_sink('ZipFile', id='RankedPercentages_Zip')
+            self.network.create_sink('ZipFile', id='RankedPercentages_Zip',
+                                     step_id='general_sinks')
+
         self.sink_Ranked_Percentages_CSV =\
-            self.network.create_sink('CSVFile', id='RankedPercentages_CSV')
+            self.network.create_sink('CSVFile', id='RankedPercentages_CSV',
+                                     step_id='general_sinks')
 
         self.sink_Ranked_Posteriors_Zip =\
-            self.network.create_sink('ZipFile', id='RankedPosteriors_Zip')
+            self.network.create_sink('ZipFile', id='RankedPosteriors_Zip',
+                                     step_id='general_sinks')
+
         self.sink_Ranked_Posteriors_CSV =\
-            self.network.create_sink('CSVFile', id='RankedPosteriors_CSV')
+            self.network.create_sink('CSVFile', id='RankedPosteriors_CSV',
+                                     step_id='general_sinks')
 
         self.sink_Boxplots_Features_Zip =\
-            self.network.create_sink('ZipFile', id='BoxplotsFeatures_Zip')
+            self.network.create_sink('ZipFile', id='BoxplotsFeatures_Zip',
+                                     step_id='general_sinks')
 
         # Create links to sinks
         self.sink_ROC_PNG.input = self.node_ROC.outputs['output_png']
@@ -173,10 +197,12 @@ class Evaluate(object):
 
         self.source_LabelType =\
             self.network.create_constant('String', [self.label_type],
-                                         id='LabelType')
+                                         id='LabelType',
+                                         step_id='Evaluation')
         self.source_Ensemble =\
             self.network.create_constant('String', [self.ensemble],
-                                         id='Ensemble')
+                                         id='Ensemble',
+                                         step_id='Evaluation')
 
         # Create sources if not supplied by a WORC network
         if self.mode == 'StandAlone':

@@ -163,7 +163,7 @@ def download_HeadAndNeck(datafolder=None, nsubjects=10):
         if not os.path.exists(datafolder):
             os.makedirs(datafolder)
 
-    xnat_url = 'https://xnat.bmia.nl/'
+    xnat_url = 'https://xnat.bmia.nl'
     project_name = 'stwstrategyhn1'
     download_project(project_name, xnat_url, datafolder, nsubjects=nsubjects,
                      verbose=True)

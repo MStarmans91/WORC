@@ -6,6 +6,32 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+Unreleased
+------------------
+
+Added
+~~~~~~~
+- Graphviz vizualization of network is now nicely grouped.
+- Properly integrated ObjectSampler
+- Verbose option to fit and score tool
+
+Changed
+~~~~~~~
+- Some defaults, based on computation time.
+- Do not skip workflow if feature selection selects zero features,
+  but disable the feature selection.
+- Do not skip workflow if resampling is unsuccesfull,
+  but disable the resampling.
+- Default scaling is now not only Z-score, but also MinMax and Robust
+
+Fixed
+~~~~~
+- Bug when using both elastix and segmentix.
+- Bug when using elastix in train-test workflow.
+- IMPORTANT: Previously, all methods except the machine learning where fit on
+  both the training and validation set together in fitandscore. This led
+  to overfitting on the validation set. Now, these are properly split.
+
 3.2.2 - 2020-07-14
 ------------------
 

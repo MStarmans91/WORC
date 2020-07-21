@@ -22,14 +22,14 @@ import WORC.addexceptions as ae
 
 
 def load_config(config_file_path):
-    """
-    Load the config ini, parse settings to WORC
+    """Load the config ini, parse settings to WORC.
 
     Args:
         config_file_path (String): path of the .ini config file
 
     Returns:
         settings_dict (dict): dict with the loaded settings
+
     """
     if not os.path.exists(config_file_path):
         e = f'File {config_file_path} does not exist!'
@@ -42,7 +42,7 @@ def load_config(config_file_path):
                      'Labels': dict(), 'HyperOptimization': dict(),
                      'Classification': dict(), 'SelectFeatGroup': dict(),
                      'Featsel': dict(), 'FeatureScaling': dict(),
-                     'SampleProcessing': dict(), 'Imputation': dict(),
+                     'Resampling': dict(), 'Imputation': dict(),
                      'Ensemble': dict(), 'Bootstrap': dict(),
                      'FeatPreProcess': dict(), 'Evaluation': dict()}
 
@@ -58,6 +58,13 @@ def load_config(config_file_path):
     settings_dict['General']['tempsave'] =\
         settings['General'].getboolean('tempsave')
 
+    # Feature Scaling
+    settings_dict['FeatureScaling']['scale_features'] =\
+        settings['FeatureScaling'].getboolean('scale_features')
+    settings_dict['FeatureScaling']['scaling_method'] =\
+        str(settings['FeatureScaling']['scaling_method'])
+
+    # Feature selection
     settings_dict['Featsel']['Variance'] =\
         settings['Featsel'].getfloat('Variance')
 
@@ -129,6 +136,31 @@ def load_config(config_file_path):
         settings_dict['SelectFeatGroup'][key] =\
             [str(item).strip() for item in
              settings['SelectFeatGroup'][key].split(',')]
+
+    # Settings for sample processing, i.e. oversampling, undersampling etc
+    settings_dict['Resampling']['Use'] =\
+        [str(item).strip() for item in
+         settings['Resampling']['Use'].split(',')]
+
+    settings_dict['Resampling']['Method'] =\
+        [str(item).strip() for item in
+         settings['Resampling']['Method'].split(',')]
+
+    settings_dict['Resampling']['sampling_strategy'] =\
+        [str(item).strip() for item in
+         settings['Resampling']['sampling_strategy'].split(',')]
+
+    settings_dict['Resampling']['n_neighbors'] =\
+        [int(str(item).strip()) for item in
+         settings['Resampling']['n_neighbors'].split(',')]
+
+    settings_dict['Resampling']['k_neighbors'] =\
+        [int(str(item).strip()) for item in
+         settings['Resampling']['k_neighbors'].split(',')]
+
+    settings_dict['Resampling']['threshold_cleaning'] =\
+        [float(str(item).strip()) for item in
+         settings['Resampling']['threshold_cleaning'].split(',')]
 
     # Classification options
     settings_dict['Classification']['fastr'] =\
@@ -256,28 +288,6 @@ def load_config(config_file_path):
         settings['HyperOptimization'].getint('maxlen')
     settings_dict['HyperOptimization']['ranking_score'] = \
         str(settings['HyperOptimization']['ranking_score'])
-
-    settings_dict['FeatureScaling']['scale_features'] =\
-        settings['FeatureScaling'].getboolean('scale_features')
-    settings_dict['FeatureScaling']['scaling_method'] =\
-        str(settings['FeatureScaling']['scaling_method'])
-
-    # Settings for sample processing, i.e. oversampling, undersampling etc
-    settings_dict['SampleProcessing']['SMOTE'] =\
-        [str(item).strip() for item in
-         settings['SampleProcessing']['SMOTE'].split(',')]
-
-    settings_dict['SampleProcessing']['SMOTE_ratio'] =\
-        [int(str(item).strip()) for item in
-         settings['SampleProcessing']['SMOTE_ratio'].split(',')]
-
-    settings_dict['SampleProcessing']['SMOTE_neighbors'] =\
-        [int(str(item).strip()) for item in
-         settings['SampleProcessing']['SMOTE_neighbors'].split(',')]
-
-    settings_dict['SampleProcessing']['Oversampling'] =\
-        [str(item).strip() for item in
-         settings['SampleProcessing']['Oversampling'].split(',')]
 
     # Settings for ensembling
     settings_dict['Ensemble']['Use'] =\

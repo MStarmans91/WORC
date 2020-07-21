@@ -281,6 +281,18 @@ def generate_config_options():
     config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
     config['Imputation']['n_neighbors'] = 'Two Integers: loc and scale'
 
+    # Resampling options
+    config['Resampling'] = dict()
+    config['Resampling']['Use'] = 'Boolean(s)'
+    config['Resampling']['Method'] =\
+        'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
+        'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
+        'SMOTEENN, SMOTETomek'
+    config['Resampling']['sampling_strategy'] = 'auto, majority, not minority, not majority, all'
+    config['Resampling']['n_neighbors'] = 'Two Integers: loc and scale'
+    config['Resampling']['k_neighbors'] = 'Two Integers: loc and scale'
+    config['Resampling']['threshold_cleaning'] = 'Two Floats: loc and scale'
+
     # Classification
     config['Classification'] = dict()
     config['Classification']['fastr'] = 'True, False'
@@ -333,13 +345,6 @@ def generate_config_options():
     config['FeatureScaling'] = dict()
     config['FeatureScaling']['scale_features'] = 'Boolean(s)'
     config['FeatureScaling']['scaling_method'] = 'z_score, minmax, robust'
-
-    # Sample processing options
-    config['SampleProcessing'] = dict()
-    config['SampleProcessing']['SMOTE'] = 'Boolean(s)'
-    config['SampleProcessing']['SMOTE_ratio'] = 'Two Integers: loc and scale'
-    config['SampleProcessing']['SMOTE_neighbors'] = 'Two Integers: loc and scale'
-    config['SampleProcessing']['Oversampling'] = 'Boolean(s)'
 
     # Ensemble options
     config['Ensemble'] = dict()
@@ -535,6 +540,22 @@ def generate_config_descriptions():
     config['Imputation']['strategy'] = 'Method to be used for imputation.'
     config['Imputation']['n_neighbors'] = 'When using k-Nearest Neighbors (kNN) for feature imputation, determines the number of neighbors used for imputation. Can be a single integer or a list.'
 
+    # Sample processing options
+    config['SampleProcessing'] = dict()https://imbalanced-learn.readthedocs.io/en/stable/api.html
+    config['SampleProcessing']['SMOTE'] =
+    config['SampleProcessing']['SMOTE_ratio'] = 'Determine the ratio of oversampling. If 1, the minority class will be oversampled to the same size as the majority class. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['SampleProcessing']['SMOTE_neighbors'] = 'Number of neighbors used in SMOTE. This should be much smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['SampleProcessing']['Oversampling'] = 'Determine whether to random oversampling.'
+
+    # Resampling options
+    config['Resampling'] = dict()
+    config['Resampling']['Use'] = 'Determine whether to use Object (e.g. patient) resampling.'
+    config['Resampling']['Method'] = 'One of the methods adopted, see also imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/api/>`_. '
+    config['Resampling']['sampling_strategy'] = 'Sampling strategy, see also imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/api/>`_. '
+    config['Resampling']['n_neighbors'] = 'Number of n_neighbors used in resampling. This should be (much) smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['Resampling']['k_neighbors'] = 'Number of n_neighbors used in resampling. This should be (much) smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['Resampling']['threshold_cleaning'] = 'Threshold for cleaning of samples. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+
     # Classification
     config['Classification'] = dict()
     config['Classification']['fastr'] = 'Use fastr for the optimization gridsearch (recommended on clusters, default) or if set to False , joblib (recommended for PCs but not on Windows).'
@@ -542,25 +563,25 @@ def generate_config_descriptions():
     config['Classification']['classifiers'] = "Select the estimator(s) to use. Most are implemented using `sklearn <https://scikit-learn.org/stable/>`_. For abbreviations, see above."
     config['Classification']['max_iter'] = 'Maximum number of iterations to use in training an estimator. Only for specific estimators, see `sklearn <https://scikit-learn.org/stable/>`_.'
     config['Classification']['SVMKernel'] = 'When using a SVM, specify the kernel type.'
-    config['Classification']['SVMC'] = 'Range of the SVM slack parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
-    config['Classification']['SVMdegree'] = 'Range of the SVM polynomial degree when using a polynomial kernel. We sample on a uniform scale: the parameters specify the range (a, a + b). '
-    config['Classification']['SVMcoef0'] = 'Range of SVM homogeneity parameter. We sample on a uniform scale: the parameters specify the range (a, a + b). '
-    config['Classification']['SVMgamma'] = 'Range of the SVM gamma parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b)'
-    config['Classification']['RFn_estimators'] = 'Range of number of trees in a RF. We sample on a uniform scale: the parameters specify the range (a, a + b).'
-    config['Classification']['RFmin_samples_split'] = 'Range of minimum number of samples required to split a branch in a RF. We sample on a uniform scale: the parameters specify the range (a, a + b). '
-    config['Classification']['RFmax_depth'] = 'Range of maximum depth of a RF. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['Classification']['SVMC'] = 'Range of the SVM slack parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
+    config['Classification']['SVMdegree'] = 'Range of the SVM polynomial degree when using a polynomial kernel. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['Classification']['SVMcoef0'] = 'Range of SVM homogeneity parameter. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['Classification']['SVMgamma'] = 'Range of the SVM gamma parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale)'
+    config['Classification']['RFn_estimators'] = 'Range of number of trees in a RF. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['Classification']['RFmin_samples_split'] = 'Range of minimum number of samples required to split a branch in a RF. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['Classification']['RFmax_depth'] = 'Range of maximum depth of a RF. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
     config['Classification']['LRpenalty'] = 'Penalty term used in LR.'
-    config['Classification']['LRC'] = 'Range of regularization strength in LR. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['Classification']['LRC'] = 'Range of regularization strength in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
     config['Classification']['LDA_solver'] = 'Solver used in LDA.'
-    config['Classification']['LDA_shrinkage'] = 'Range of the LDA shrinkage parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
-    config['Classification']['QDA_reg_param'] = 'Range of the QDA regularization parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b). '
-    config['Classification']['ElasticNet_alpha'] = 'Range of the ElasticNet penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
-    config['Classification']['ElasticNet_l1_ratio'] = 'Range of l1 ratio in LR. We sample on a uniform scale: the parameters specify the range (a, a + b).'
-    config['Classification']['SGD_alpha'] = 'Range of the SGD penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
-    config['Classification']['SGD_l1_ratio'] = 'Range of l1 ratio in SGD. We sample on a uniform scale: the parameters specify the range (a, a + b).'
+    config['Classification']['LDA_shrinkage'] = 'Range of the LDA shrinkage parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
+    config['Classification']['QDA_reg_param'] = 'Range of the QDA regularization parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale). '
+    config['Classification']['ElasticNet_alpha'] = 'Range of the ElasticNet penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
+    config['Classification']['ElasticNet_l1_ratio'] = 'Range of l1 ratio in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['Classification']['SGD_alpha'] = 'Range of the SGD penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
+    config['Classification']['SGD_l1_ratio'] = 'Range of l1 ratio in SGD. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
     config['Classification']['SGD_loss'] = 'hinge, Loss function of SG'
     config['Classification']['SGD_penalty'] = 'Penalty term in SGD.'
-    config['Classification']['CNB_alpha'] = 'Regularization strenght in ComplementNB. We sample on a uniform scale: the parameters specify the range (a, a + b)'
+    config['Classification']['CNB_alpha'] = 'Regularization strenght in ComplementNB. We sample on a uniform scale: the parameters specify the range (loc, loc + scale)'
 
     # CrossValidation
     config['CrossValidation'] = dict()
@@ -587,13 +608,6 @@ def generate_config_descriptions():
     config['FeatureScaling'] = dict()
     config['FeatureScaling']['scale_features'] = 'Determine whether to use feature scaling is.'
     config['FeatureScaling']['scaling_method'] = 'Determine the scaling method.'
-
-    # Sample processing options
-    config['SampleProcessing'] = dict()
-    config['SampleProcessing']['SMOTE'] = 'Determine whether to use SMOTE oversampling, see also ` imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.SMOTE.html/>`_. '
-    config['SampleProcessing']['SMOTE_ratio'] = 'Determine the ratio of oversampling. If 1, the minority class will be oversampled to the same size as the majority class. We sample on a uniform scale: the parameters specify the range (a, a + b). '
-    config['SampleProcessing']['SMOTE_neighbors'] = 'Number of neighbors used in SMOTE. This should be much smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (a, a + b).'
-    config['SampleProcessing']['Oversampling'] = 'Determine whether to random oversampling.'
 
     # Ensemble options
     config['Ensemble'] = dict()
