@@ -28,19 +28,20 @@ In total, the defaults of WORC result in the following amount of features:
 Type               Number
 ================= ===================================================
 Histogram         12
-Shape             33
+Shape             35
 Orientation       9
 GLCM(MS)          144
 GLRLM             16
 GLSZM             16
 NGTDM             5
+GLDZM             14
 Gabor filter      144
 LoG filter        36
 Vessel filter     36
 LBP               36
 Phase features    36
 ----------------- ---------------------------------------------------
-**Total**         **523**
+**Total**         **539**
 ================= ===================================================
 
 
@@ -103,7 +104,7 @@ The mean and standard deviation of following shape features are extracted:
 8. Solidity
 9. Area
 
-Additional, if pixel spacing is included in the image or metadata, the volume is computed for a total of 19 shape
+Additional, the min and max area and, if pixel spacing is included in the image or metadata, the volume is computed for a total of 21 shape
 features.
 
 In PyRadiomics, the following shape features according to the defaults are extracted:
@@ -123,7 +124,7 @@ In PyRadiomics, the following shape features according to the defaults are extra
 13. Surface Volume Ratio
 14. Voxel Volume
 
-Hence, the total number of shape features is 33.
+Hence, the total number of shape features is 35.
 
 Orientation features
 --------------------
@@ -179,7 +180,7 @@ Boht PREDICT and PyRadiomics can extract GCLM features. Again, we would like to 
 to the shape fetures, As a default, we use therefore PREDICT, as PREDICT provides two ways to do so: compute
 the GLCM and it's features per slice and aggregate, or aggregate the GLCM's of all slices and once compute features,
 which PREDICT calls GLCM Multi Slice (GLCMMS) features.
-
+re
 PREDICT extracts both for the GLCM and GLCMMS for all combinations of angles and distances the following features:
 
 1. Contrast
@@ -190,7 +191,7 @@ PREDICT extracts both for the GLCM and GLCMMS for all combinations of angles and
 6. Correlation
 
 In total, computing these six features for both the GCLM and GLCMMS for all combinations of angles and degrees
-results in a total of
+results in a total of 144 features.
 
 Gray-Level Run Length Matrix (GLRLM)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -240,6 +241,12 @@ The following GLSZM features are by default extracted:
 14. Small area emphasis
 15. Small area high gray level emphasis
 16. Small area low gray level emphasis
+
+Gray Level Dependence Matrix (GLDM)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The GLDM determines how much voxels in a neighborhood depend (e.g. are similar) to the centre
+voxel. Parameters include the distance to define the neighborhood and the similarity threshold.
+The GLDM is also extracted using PyRadiomics, and it's default therefore used.
 
 Neighborhood Gray Tone Difference Matrix (NGTDM)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -388,11 +395,3 @@ For all gray level matrix based features, WORC by default uses a fixed bin-width
 The reason for that is that we want the WORC default settings to work in a wide variety of applications,
 including those with images in arbitrary scales, which often happens when using MRI. In these cases,
 using a fixed bin-width may lead to odd features values and even errors.
-
-
-
-
-
-
-
-

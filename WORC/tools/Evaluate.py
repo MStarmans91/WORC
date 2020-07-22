@@ -70,9 +70,9 @@ class Evaluate(object):
                                      id='plot_ROC',
                                      resources=ResourceLimit(memory='12G'),
                                      step_id='Evaluation')
-        self.node_SVM =\
-            self.network.create_node('worc/PlotSVM:1.0', tool_version='1.0',
-                                     id='plot_SVM',
+        self.node_Estimator =\
+            self.network.create_node('worc/PlotEstimator:1.0', tool_version='1.0',
+                                     id='plot_Estimator',
                                      resources=ResourceLimit(memory='12G'),
                                      step_id='Evaluation')
         self.node_Barchart =\
@@ -124,8 +124,8 @@ class Evaluate(object):
             self.network.create_sink('CSVFile', id='ROC_CSV',
                                      step_id='general_sinks')
 
-        self.sink_SVM_Json =\
-            self.network.create_sink('JsonFile', id='SVM_Json',
+        self.sink_Estimator_Json =\
+            self.network.create_sink('JsonFile', id='Estimator_Json',
                                      step_id='general_sinks')
 
         self.sink_Barchart_PNG =\
@@ -170,7 +170,7 @@ class Evaluate(object):
         self.sink_ROC_Tex.input = self.node_ROC.outputs['output_tex']
         self.sink_ROC_CSV.input = self.node_ROC.outputs['output_csv']
 
-        self.sink_SVM_Json.input = self.node_SVM.outputs['output_json']
+        self.sink_Estimator_Json.input = self.node_Estimator.outputs['output_json']
 
         self.sink_Barchart_PNG.input = self.node_Barchart.outputs['output_png']
         self.sink_Barchart_Tex.input = self.node_Barchart.outputs['output_tex']
@@ -230,8 +230,8 @@ class Evaluate(object):
         self.node_ROC.inputs['ensemble'] = self.source_Ensemble.output
         self.node_ROC.inputs['label_type'] = self.source_LabelType.output
 
-        self.node_SVM.inputs['ensemble'] = self.source_Ensemble.output
-        self.node_SVM.inputs['label_type'] = self.source_LabelType.output
+        self.node_Estimator.inputs['ensemble'] = self.source_Ensemble.output
+        self.node_Estimator.inputs['label_type'] = self.source_LabelType.output
 
         self.node_Barchart.inputs['estimators'] = self.source_Ensemble.output
         self.node_Barchart.inputs['label_type'] = self.source_LabelType.output
@@ -258,8 +258,8 @@ class Evaluate(object):
         self.node_ROC.inputs['prediction'] = self.source_Estimator.output
         self.node_ROC.inputs['pinfo'] = self.source_PatientInfo.output
 
-        self.node_SVM.inputs['prediction'] = self.source_Estimator.output
-        self.node_SVM.inputs['pinfo'] = self.source_PatientInfo.output
+        self.node_Estimator.inputs['prediction'] = self.source_Estimator.output
+        self.node_Estimator.inputs['pinfo'] = self.source_PatientInfo.output
 
         self.node_Barchart.inputs['prediction'] = self.source_Estimator.output
 
@@ -320,35 +320,37 @@ class Evaluate(object):
         self.node_ROC.inputs['prediction'] = prediction
         self.node_ROC.inputs['pinfo'] = pinfo
 
-        self.node_SVM.inputs['prediction'] = prediction
-        self.node_SVM.inputs['pinfo'] = pinfo
+        self.node_Estimator.inputs['prediction'] = prediction
+        self.node_Estimator.inputs['pinfo'] = pinfo
 
         self.node_Barchart.inputs['prediction'] = prediction
 
         self.links_STest_Features = dict()
         self.links_decomposition_Features = dict()
         self.links_Boxplots_Features = dict()
-        for idx, label in enumerate(self.parent.modlabels):
-            # NOTE: Currently statistical testing is only done within the training set
-            if self.parent.sources_images_train:
-                # Features are computed within the network
-                if self.parent.configs[0]['General']['ComBat'] == 'True':
-                    name = 'ComBat'
-                    # Take features from ComBat
-                    self.links_STest_Features[name] =\
-                        self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_STest.inputs['features'])
 
-                    self.links_decomposition_Features[name] =\
-                        self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_decomposition.inputs['features'])
+        # Check if we have ComBat features
+        if self.parent.configs[0]['General']['ComBat'] == 'True':
+            name = 'ComBat'
+            # Take features from ComBat
+            self.links_STest_Features[name] =\
+                self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_STest.inputs['features'])
 
-                    self.links_Boxplots_Features[name] =\
-                        self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_Boxplots_Features.inputs['features'])
+            self.links_decomposition_Features[name] =\
+                self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_decomposition.inputs['features'])
 
-                    # All features should be input at once
-                    self.links_STest_Features[name].collapse = 'ComBat'
-                    self.links_decomposition_Features[name].collapse = 'ComBat'
-                    self.links_Boxplots_Features[name].collapse = 'ComBat'
-                else:
+            self.links_Boxplots_Features[name] =\
+                self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_Boxplots_Features.inputs['features'])
+
+            # All features should be input at once
+            self.links_STest_Features[name].collapse = 'ComBat'
+            self.links_decomposition_Features[name].collapse = 'ComBat'
+            self.links_Boxplots_Features[name].collapse = 'ComBat'
+
+        else:
+            for idx, label in enumerate(self.parent.modlabels):
+                # NOTE: Currently statistical testing is only done within the training set
+                if self.parent.sources_images_train:
                     # Take features directly from feature computation toolboxes
                     for node in self.parent.featureconverter_train[label]:
                         name = node.id
@@ -365,21 +367,21 @@ class Evaluate(object):
                         self.links_STest_Features[name].collapse = 'train'
                         self.links_decomposition_Features[name].collapse = 'train'
                         self.links_Boxplots_Features[name].collapse = 'train'
-            else:
-                # Feature are precomputed and given as sources
-                for node in self.parent.sources_features_train[label]:
-                    name = node.id
-                    self.links_STest_Features[name] =\
-                        self.node_STest.inputs['features'][name] << node.output
-                    self.links_decomposition_Features[name] =\
-                        self.node_decomposition.inputs['features'][name] << node.output
-                    self.links_Boxplots_Features[name] =\
-                        self.node_Boxplots_Features.inputs['features'][name] << node.output
+                else:
+                    # Feature are precomputed and given as sources
+                    for node in self.parent.sources_features_train[label]:
+                        name = node.id
+                        self.links_STest_Features[name] =\
+                            self.node_STest.inputs['features'][name] << node.output
+                        self.links_decomposition_Features[name] =\
+                            self.node_decomposition.inputs['features'][name] << node.output
+                        self.links_Boxplots_Features[name] =\
+                            self.node_Boxplots_Features.inputs['features'][name] << node.output
 
-                    # All features should be input at once
-                    self.links_STest_Features[name].collapse = 'train'
-                    self.links_decomposition_Features[name].collapse = 'train'
-                    self.links_Boxplots_Features[name].collapse = 'train'
+                        # All features should be input at once
+                        self.links_STest_Features[name].collapse = 'train'
+                        self.links_decomposition_Features[name].collapse = 'train'
+                        self.links_Boxplots_Features[name].collapse = 'train'
 
         self.node_STest.inputs['patientclass'] = pinfo
         self.node_STest.inputs['config'] = config
@@ -438,8 +440,8 @@ class Evaluate(object):
         if 'ROC_CSV' not in sink_data.keys():
             self.sink_data['ROC_CSV'] = ("vfs://output/{}/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
-        if 'SVM_Json' not in sink_data.keys():
-            self.sink_data['SVM_Json'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        if 'Estimator_Json' not in sink_data.keys():
+            self.sink_data['Estimator_Json'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'Barchart_PNG' not in sink_data.keys():
             self.sink_data['Barchart_PNG'] = ("vfs://output/{}/Barchart_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)

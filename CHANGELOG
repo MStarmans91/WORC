@@ -23,6 +23,8 @@ Changed
 - Do not skip workflow if resampling is unsuccesfull,
   but disable the resampling.
 - Default scaling is now not only Z-score, but also MinMax and Robust
+- Renamed plot SVM function and all functions using it, as now
+  we use all kinds of estimators.
 
 Fixed
 ~~~~~
@@ -33,6 +35,11 @@ Fixed
   to overfitting on the validation set. Now, these are properly split.
 - Bugfix in Evaluate standalone for decompositon tool.
 - Applied imputation in decomposition if NaNs are detected.
+- In the facade ConfigBuilder, an error is raised when incorrect
+  overrides are given.
+- Bugfix in statistical feature test plotting.
+- Bugfix in Evaluate when using ComBat
+
 
 3.2.2 - 2020-07-14
 ------------------
