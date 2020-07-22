@@ -24,25 +24,25 @@ Furthermore, we refer the user to the following literature:
 
 In total, the defaults of WORC result in the following amount of features:
 
-================= ===================================================
-Type               Number
-================= ===================================================
-Histogram         12
-Shape             35
-Orientation       9
-GLCM(MS)          144
-GLRLM             16
-GLSZM             16
-NGTDM             5
-GLDZM             14
-Gabor filter      144
-LoG filter        36
-Vessel filter     36
-LBP               36
-Phase features    36
------------------ ---------------------------------------------------
-**Total**         **539**
-================= ===================================================
+============================================ ===================================================
+Type                                          Number
+============================================ ===================================================
+:ref:`Histogram <features-histogram>`         12
+:ref:`Shape <features-shape>`                 35
+:ref:`Orientation <features-orientation>`     9
+:ref:`GLCM(MS) <features-GLCM>`               144
+:ref:`GLRLM <features-GLRLM>`                 16
+:ref:`GLSZM <features-GLSZM>`                 16
+:ref:`NGTDM <features-NGTDM>`                 5
+:ref:`GLDM <features-GLDM>`                   14
+:ref:`Gabor filter <features-Gabor>`          144
+:ref:`LoG filter <features-LoG>`              36
+:ref:`Vessel filter <features-vessel>`        36
+:ref:`Local Binary Patterns <features-lbp>`   36
+:ref:`Local phase <features-phase>`            36
+-------------------------------------------- ---------------------------------------------------
+**Total**                                     **539**
+============================================ ===================================================
 
 
 .. note:: The settings for the parameters are included in the feature label. For example, tf_GLCM_contrastd1.0A1.57 is
@@ -76,6 +76,8 @@ by default to avoid redundant features. PREDICT extracts the following features 
 .. note:: The minimum, maximum, range and interquartile range are extracted from the raw data, as histogram creation may
           may result in a loss of needed information.
 
+.. _features-shape:
+
 Shape features
 --------------
 Shape features describe morphological properties of the region of interest and are therefore solely based on the
@@ -99,7 +101,7 @@ The mean and standard deviation of following shape features are extracted:
 3. Roughness
 4. Convexity
 5. Circular variance
-6. PRAX
+6. Principal axis ratio (PRAX)
 7. Elliptical variance
 8. Solidity
 9. Area
@@ -126,6 +128,8 @@ In PyRadiomics, the following shape features according to the defaults are extra
 
 Hence, the total number of shape features is 35.
 
+.. _features-orientation:
+
 Orientation features
 --------------------
 Orientation features describe the orientation and location of the ROI. While these on itself
@@ -150,6 +154,8 @@ The following orientation features are extracted from PyRadiomics using the Cent
 5. COM y
 6. COM z
 
+.. _features-texture:
+
 Texture features
 -----------------
 The last group is the largest and basically contains all features not within the other groups, as a feature
@@ -159,6 +165,8 @@ If groupwise feature selection is used, each of these subgroups has an on/off hy
 Note that we have decided to split several groups from the texture features. Within the texture features,
 we have included more commonly used texture features, as these are indeed commonly grouped under texture features.
 The less well-known features are described later on in this chapter.
+
+.. _features-GLCM:
 
 Gray-Level Co-occurence Matrix (GLCM)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -193,6 +201,8 @@ PREDICT extracts both for the GLCM and GLCMMS for all combinations of angles and
 In total, computing these six features for both the GCLM and GLCMMS for all combinations of angles and degrees
 results in a total of 144 features.
 
+.. _features-GLRLM:
+
 Gray-Level Run Length Matrix (GLRLM)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The GRLM counts how many lines of a certain gray level and length occur, in a specific direction. The only
@@ -218,6 +228,8 @@ The following GRLM features are by default extracted:
 15. Short run high gray level emphasis
 16. Short run low gray level emphasis
 
+.. _features-GLSZM:
+
 Gray-Level Size Zone Matrix (GLSZM)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The GLSZM counts how many areas of a certain gray level and size occur. It therefore has no parameters.
@@ -242,11 +254,32 @@ The following GLSZM features are by default extracted:
 15. Small area high gray level emphasis
 16. Small area low gray level emphasis
 
+.. _features-GLDM:
+
 Gray Level Dependence Matrix (GLDM)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The GLDM determines how much voxels in a neighborhood depend (e.g. are similar) to the centre
 voxel. Parameters include the distance to define the neighborhood and the similarity threshold.
 The GLDM is also extracted using PyRadiomics, and it's default therefore used.
+
+The following GLDM features are used:
+
+1. Dependence Entropy
+2. Dependence Non-Uniformity
+3. Dependence Non-Uniformity Normalized
+4. Dependence Variance
+5. Gray Level Non-Uniformity
+6. Gray Level Variance
+7. High Gray Level Emphasis
+8. Large Dependence Emphasis
+9. Large Dependence High Gray Level Emphasis
+10. Large Dependence Low Gray Level Emphasis
+11. Low Gray Level Emphasis
+12. Small Dependence Emphasis
+13. Small Dependence High Gray Level Emphasis
+14. Small Dependence Low Gray Level Emphasis
+
+.. _features-NGTDM:
 
 Neighborhood Gray Tone Difference Matrix (NGTDM)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -260,6 +293,8 @@ The following NGTDM features are extracted:
 3. Complexity
 4. Contrast
 5. Strength
+
+.. _features-Gabor:
 
 Gabor filter features
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -275,6 +310,8 @@ The angles are equal to the GLCM angles, but are given in degrees. For each uniq
 the image is filtered per 2-D axial slice, after which the PREDICT histogram features
 as :ref:`discussed earlier <features-histogram>` are extracted from the filtered images.
 
+.. _features-LoG:
+
 Laplacian of Gaussian (LoG) filter features
 -------------------------------------------
 Similar to the Gabor features, these features are extracted after the filtering the image, now with a LoG filter.
@@ -286,6 +323,8 @@ WORC includes the width of the Gaussian part of the filter as parameter:
 
 Again, for all sigma's, the images are filtered per 2-D slice after which the PREDICT histogram features
 as :ref:`discussed earlier <features-histogram>` are extracted from the filtered images.
+
+.. _features-Vessel:
 
 Vessel filter features
 ----------------------
@@ -310,6 +349,8 @@ Again, for all parameter combinations, the images are filtered per 2-D slice and
 as :ref:`discussed earlier <features-histogram>` are extracted from the filtered images. This is done for
 the full ROI, the inner region, and the outer region.
 
+.. _features-LBP:
+
 Local Binary Patterns (LBP)
 ----------------------------
 We recommend the following article for information about LBPs:
@@ -327,6 +368,8 @@ For all parameter combinations, as each npoints corresponds to a radius setting,
 dimensions as the original, similar to a filtering operation) per 2-D slice and the PREDICT histogram features
 as :ref:`discussed earlier <features-histogram>` are extracted from the filtered images, both for the inner and outer
 region.
+
+.. _features-phase:
 
 Local phase features
 --------------------
@@ -348,6 +391,8 @@ Again, for all parameter combinations, the images are filtered per 2-D slice and
 as :ref:`discussed earlier <features-histogram>` are extracted from the filtered images. This is done for
 the local phase, phase congruency, and phase symmetry.
 
+.. _features-patient:
+
 Patient features
 ----------------
 In PREDICT, several features may be extracted from DICOM headers, which can be provided in the metadata source.
@@ -355,6 +400,8 @@ These include:
 
 - ``[0x10, 0x1010]``: Patient age
 - ``[0x10, 0x40]``: Patient sex
+
+.. _features-semantic:
 
 Semantic features
 -----------------
@@ -374,7 +421,7 @@ edge artefactss. A drawback could be that now the ROI surroundings influence the
 can also be a benefit as a comparison between the ROI and it's surrounding could give relevant information.
 
 Feature extraction parameter selection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Many of the extracted features have parameters to be set. For each application, the most suitable set of
 parameters may vary. Therefore, in WORC, by default many features are extracted at a range of parameters.
 We hypothesize that in the next steps, e.g. feature selection and classification, the most relevant features

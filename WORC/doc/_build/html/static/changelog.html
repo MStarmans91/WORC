@@ -277,6 +277,8 @@ but disable the feature selection.</p></li>
 <li><p>Do not skip workflow if resampling is unsuccesfull,
 but disable the resampling.</p></li>
 <li><p>Default scaling is now not only Z-score, but also MinMax and Robust</p></li>
+<li><p>Renamed plot SVM function and all functions using it, as now
+we use all kinds of estimators.</p></li>
 </ul>
 </div>
 <div class="section" id="fixed">
@@ -289,6 +291,11 @@ both the training and validation set together in fitandscore. This led
 to overfitting on the validation set. Now, these are properly split.</p></li>
 <li><p>Bugfix in Evaluate standalone for decompositon tool.</p></li>
 <li><p>Applied imputation in decomposition if NaNs are detected.</p></li>
+<li><p>In the facade ConfigBuilder, an error is raised when incorrect
+overrides are given.</p></li>
+<li><p>Bugfix in statistical feature test plotting.</p></li>
+<li><p>Bugfix in Evaluate when using ComBat</p></li>
+<li><p>Bugfix in feature converter of PyRadiomics when using 2D images.</p></li>
 </ul>
 </div>
 </div>

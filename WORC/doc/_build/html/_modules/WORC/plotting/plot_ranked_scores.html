@@ -178,7 +178,7 @@
 
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVM</span> <span class="k">import</span> <span class="n">plot_SVM</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting.plot_estimator_performance</span> <span class="k">import</span> <span class="n">plot_estimator_performance</span>
 <span class="kn">import</span> <span class="nn">WORC.processing.label_processing</span> <span class="k">as</span> <span class="nn">lp</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -273,13 +273,14 @@
 
     <span class="c1"># Determine the predicted score per patient</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determining score per patient.&#39;</span><span class="p">)</span>
-    <span class="n">stats</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
-                     <span class="n">pinfo</span><span class="p">,</span>
-                     <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
-                     <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
-                     <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
-                     <span class="n">output</span><span class="o">=</span><span class="s1">&#39;stats&#39;</span><span class="p">)</span>
+    <span class="n">stats</span> <span class="o">=</span>\
+        <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
+                                   <span class="n">pinfo</span><span class="p">,</span>
+                                   <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
+                                   <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+                                   <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="s1">&#39;stats&#39;</span><span class="p">)</span>
 
     <span class="n">percentages</span> <span class="o">=</span> <span class="n">stats</span><span class="p">[</span><span class="s1">&#39;Rankings&#39;</span><span class="p">][</span><span class="s1">&#39;Percentages&#39;</span><span class="p">]</span>
     <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">percentages</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
@@ -403,13 +404,13 @@
     <span class="c1"># Determine the predicted score per patient</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determining posterior per patient.&#39;</span><span class="p">)</span>
     <span class="n">y_truths</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">,</span> <span class="n">y_predictions</span><span class="p">,</span> <span class="n">PIDs_scores</span> <span class="o">=</span>\
-        <span class="n">plot_SVM</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
-                 <span class="n">pinfo</span><span class="p">,</span>
-                 <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
-                 <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
-                 <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
-                 <span class="n">output</span><span class="o">=</span><span class="s1">&#39;scores&#39;</span><span class="p">)</span>
+        <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
+                                   <span class="n">pinfo</span><span class="p">,</span>
+                                   <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
+                                   <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+                                   <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="s1">&#39;scores&#39;</span><span class="p">)</span>
 
     <span class="c1"># Extract all scores for each patient</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Aggregating scores per patient over all crossval iterations.&#39;</span><span class="p">)</span>

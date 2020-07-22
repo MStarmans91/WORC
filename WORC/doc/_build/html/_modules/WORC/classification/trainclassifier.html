@@ -181,7 +181,7 @@
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">uniform</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
-<span class="kn">from</span> <span class="nn">WORC.plotting.plot_SVM</span> <span class="k">import</span> <span class="n">plot_SVM</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting.plot_estimator_performance</span> <span class="k">import</span> <span class="n">plot_estimator_performance</span>
 <span class="kn">from</span> <span class="nn">WORC.IOparser.file_io</span> <span class="k">import</span> <span class="n">load_features</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.config_io_classifier</span> <span class="k">as</span> <span class="nn">config_io</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> \
@@ -415,7 +415,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">))</span>
 
-    <span class="n">trained_classifier</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">,</span> <span class="s1">&#39;SVMdata&#39;</span><span class="p">)</span>
+    <span class="n">trained_classifier</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">,</span> <span class="s1">&#39;EstimatorData&#39;</span><span class="p">)</span>
 
     <span class="c1"># Check whether we do regression or classification</span>
     <span class="n">regressors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;SVR&#39;</span><span class="p">,</span> <span class="s1">&#39;RFR&#39;</span><span class="p">,</span> <span class="s1">&#39;SGDR&#39;</span><span class="p">,</span> <span class="s1">&#39;Lasso&#39;</span><span class="p">,</span> <span class="s1">&#39;ElasticNet&#39;</span><span class="p">]</span>
@@ -426,37 +426,44 @@
     <span class="n">overfit_scaler</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">][</span><span class="s1">&#39;OverfitScaler&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">feat_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">isclassifier</span><span class="p">:</span>
-            <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
-                                  <span class="n">label_type</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                  <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                  <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
-                                  <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
+            <span class="n">statistics</span> <span class="o">=</span>\
+                <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
+                                           <span class="n">label_data_train</span><span class="p">,</span>
+                                           <span class="n">label_type</span><span class="p">,</span>
+                                           <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                           <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                           <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
+                                           <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
-                                  <span class="n">label_type</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
-                                  <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                  <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                  <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
-                                  <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
+            <span class="n">statistics</span> <span class="o">=</span>\
+                <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
+                                           <span class="n">label_data_train</span><span class="p">,</span>
+                                           <span class="n">label_type</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
+                                           <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                           <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                           <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
+                                           <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">patientinfo_test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">isclassifier</span><span class="p">:</span>
-                <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
-                                      <span class="n">label_data_test</span><span class="p">,</span>
-                                      <span class="n">label_type</span><span class="p">,</span>
-                                      <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                      <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                      <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
-                                      <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
+                <span class="n">statistics</span> <span class="o">=</span>\
+                <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
+                                           <span class="n">label_data_test</span><span class="p">,</span>
+                                           <span class="n">label_type</span><span class="p">,</span>
+                                           <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                           <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                           <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
+                                           <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">statistics</span> <span class="o">=</span> <span class="n">plot_SVM</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
-                                      <span class="n">label_data_test</span><span class="p">,</span>
-                                      <span class="n">label_type</span><span class="p">,</span>
-                                      <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
-                                      <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                      <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                      <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
-                                      <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
+                <span class="n">statistics</span> <span class="o">=</span>\
+                    <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
+                                               <span class="n">label_data_test</span><span class="p">,</span>
+                                               <span class="n">label_type</span><span class="p">,</span>
+                                               <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
+                                               <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                               <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                               <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
+                                               <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">statistics</span> <span class="o">=</span> <span class="kc">None</span>
 

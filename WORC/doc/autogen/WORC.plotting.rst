@@ -37,15 +37,6 @@ plotting Package
     :show-inheritance:
     :special-members:
 
-:mod:`plot_SVM` Module
-----------------------
-
-.. automodule:: WORC.plotting.plot_SVM
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :special-members:
-
 :mod:`plot_barchart` Module
 ---------------------------
 
@@ -68,6 +59,15 @@ plotting Package
 --------------------------------------
 
 .. automodule:: WORC.plotting.plot_boxplot_performance
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`plot_estimator_performance` Module
+----------------------------------------
+
+.. automodule:: WORC.plotting.plot_estimator_performance
     :members:
     :undoc-members:
     :show-inheritance:

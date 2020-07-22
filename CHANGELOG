@@ -39,6 +39,7 @@ Fixed
   overrides are given.
 - Bugfix in statistical feature test plotting.
 - Bugfix in Evaluate when using ComBat
+- Bugfix in feature converter of PyRadiomics when using 2D images.
 
 
 3.2.2 - 2020-07-14

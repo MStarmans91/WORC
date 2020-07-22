@@ -522,7 +522,7 @@
                     <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tempsave_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.hdf5&#39;</span><span class="p">)</span>
 
-                <span class="n">panda_data</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;SVMdata&#39;</span><span class="p">)</span>
+                <span class="n">panda_data</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;EstimatorData&#39;</span><span class="p">)</span>
                 <span class="k">del</span> <span class="n">panda_data</span><span class="p">,</span> <span class="n">panda_data_temp</span>
 
             <span class="c1"># Print elapsed time</span>
