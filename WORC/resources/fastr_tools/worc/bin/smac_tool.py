@@ -82,7 +82,10 @@ def main():
 
     def score_cfg(cfg):
         # Construct a new dictionary with parameters from the input configuration
-        parameters = convert_cfg(cfg.get_dictionary())
+        if cfg is not None:
+            parameters = convert_cfg(cfg.get_dictionary())
+        else:
+            return 2147483647
 
         # Read the data from the smac_tool
         nonlocal data
