@@ -1644,6 +1644,8 @@ class WORC(object):
             self.network.draw(file_path=self.network.id + '.svg', draw_dimensions=True)
         except graphviz.backend.ExecutableNotFound:
             print('[WORC WARNING] Graphviz executable not found: not drawing network diagram. Make sure the Graphviz executables are on your systems PATH.')
+        except graphviz.backend.CalledProcessError as e:
+            print(f'[WORC WARNING] Graphviz executable gave an error: not drawing network diagram. Original error: {e}')
 
         if DebugDetector().do_detection():
             print("Source Data:")

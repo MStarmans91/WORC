@@ -227,8 +227,8 @@ def fit_and_score(X, y, scoring,
     # Split in train and testing
     X_train, y_train = _safe_split(estimator, feature_values, y, train)
     X_test, y_test = _safe_split(estimator, feature_values, y, test, train)
-    train = range(0, len(y_train))
-    test = range(len(y_train), len(y_train) + len(y_test))
+    train = np.arange(0, len(y_train))
+    test = np.arange(len(y_train), len(y_train) + len(y_test))
 
     # ------------------------------------------------------------------------
     # Feature imputation
@@ -655,15 +655,16 @@ def fit_and_score(X, y, scoring,
                 para_estimator['Resampling_Use'] = 'False'
 
             else:
-                pos = int(np.sum(y_train))
-                neg = int(len(y_train) - pos)
-                if not any(a for a in [pos == 0, neg == 0]):
+                pos = int(np.sum(y_train_temp))
+                neg = int(len(y_train_temp) - pos)
+                if pos == 0 or neg == 0:
                     if verbose:
                         print('[WORC WARNING] Skipping resampling: zero objects returned in one or both classes.')
                     Sampler = None
                     para['Resampling_Use'] = 'False'
                 else:
-                    X_train, y_train = Sampler.transform(X_train, y_train)
+                    X_train = X_train_temp
+                    y_train = y_train_temp
 
                     # Notify the user what the resampling did
                     pos = int(np.sum(y_train))
