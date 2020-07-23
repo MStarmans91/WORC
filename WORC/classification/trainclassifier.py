@@ -161,7 +161,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
             param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
 
     # Add parameters for oversampling methods
-    param_grid['Resampling_Use'] = config['Resampling']['Use']
+    param_grid['Resampling_Use'] =\
+        boolean_uniform(threshold=config['Resampling']['Use'])
     param_grid['Resampling_Method'] = config['Resampling']['Method']
     param_grid['Resampling_sampling_strategy'] =\
         config['Resampling']['sampling_strategy']

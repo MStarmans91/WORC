@@ -25,6 +25,7 @@ Changed
 - Default scaling is now not only Z-score, but also MinMax and Robust
 - Renamed plot SVM function and all functions using it, as now
   we use all kinds of estimators.
+- L1 penalty does not work with new standard LR solver. Removed L1 penalty.
 
 Fixed
 ~~~~~
@@ -40,6 +41,7 @@ Fixed
 - Bugfix in statistical feature test plotting.
 - Bugfix in Evaluate when using ComBat
 - Bugfix in feature converter of PyRadiomics when using 2D images.
+- Catch Graphviz error.
 
 
 3.2.2 - 2020-07-14

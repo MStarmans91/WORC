@@ -375,7 +375,7 @@ class WORC(object):
 
         # Resampling options
         config['Resampling'] = dict()
-        config['Resampling']['Use'] = 'True, False'
+        config['Resampling']['Use'] = '0.20'
         config['Resampling']['Method'] =\
             'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
             'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
@@ -399,7 +399,7 @@ class WORC(object):
         config['Classification']['RFn_estimators'] = '10, 90'
         config['Classification']['RFmin_samples_split'] = '2, 3'
         config['Classification']['RFmax_depth'] = '5, 5'
-        config['Classification']['LRpenalty'] = 'l2, l1'
+        config['Classification']['LRpenalty'] = 'none, l1'
         config['Classification']['LRC'] = '0.01, 1.0'
         config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
         config['Classification']['LDA_shrinkage'] = '-5, 5'

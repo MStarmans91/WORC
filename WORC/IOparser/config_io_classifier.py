@@ -139,8 +139,7 @@ def load_config(config_file_path):
 
     # Settings for sample processing, i.e. oversampling, undersampling etc
     settings_dict['Resampling']['Use'] =\
-        [str(item).strip() for item in
-         settings['Resampling']['Use'].split(',')]
+        settings['Resampling'].getfloat('Use')
 
     settings_dict['Resampling']['Method'] =\
         [str(item).strip() for item in
