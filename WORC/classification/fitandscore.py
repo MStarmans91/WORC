@@ -657,9 +657,9 @@ def fit_and_score(X, y, scoring,
             else:
                 pos = int(np.sum(y_train_temp))
                 neg = int(len(y_train_temp) - pos)
-                if pos == 0 or neg == 0:
+                if pos < 10 or neg < 10:
                     if verbose:
-                        print('[WORC WARNING] Skipping resampling: zero objects returned in one or both classes.')
+                        print(f'[WORC WARNING] Skipping resampling: to few objects returned in one or both classes (pos: {pos}, neg: {neg}).')
                     Sampler = None
                     para['Resampling_Use'] = 'False'
                 else:
