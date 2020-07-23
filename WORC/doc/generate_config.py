@@ -283,7 +283,7 @@ def generate_config_options():
 
     # Resampling options
     config['Resampling'] = dict()
-    config['Resampling']['Use'] = 'Boolean(s)'
+    config['Resampling']['Use'] = 'Float'
     config['Resampling']['Method'] =\
         'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
         'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
@@ -492,7 +492,7 @@ def generate_config_descriptions():
 
     # Feature selection
     config['Featsel'] = dict()
-    config['Featsel']['Variance'] = 'If True, exclude features which have a variance < 0.01. Based on ` sklearn"s VarianceThreshold <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/>`_.'
+    config['Featsel']['Variance'] = 'Percentage of times features which have a variance < 0.01 are excluded. Based on ` sklearn"s VarianceThreshold <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/>`_.'
     config['Featsel']['GroupwiseSearch'] = 'Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.'
     config['Featsel']['SelectFromModel'] = 'Percentage of times features are selected by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also `sklearn"s SelectFromModel <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/>`_.'
     config['Featsel']['UsePCA'] = 'Percentage of times Principle Component Analysis (PCA) is used to select features.'
@@ -542,7 +542,7 @@ def generate_config_descriptions():
 
     # Resampling options
     config['Resampling'] = dict()
-    config['Resampling']['Use'] = 'Determine whether to use Object (e.g. patient) resampling.'
+    config['Resampling']['Use'] = 'Percentage of times Object (e.g. patient) resampling is used.'
     config['Resampling']['Method'] = 'One of the methods adopted, see also imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/api/>`_. '
     config['Resampling']['sampling_strategy'] = 'Sampling strategy, see also imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/api/>`_. '
     config['Resampling']['n_neighbors'] = 'Number of n_neighbors used in resampling. This should be (much) smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
