@@ -399,7 +399,7 @@ class WORC(object):
         config['Classification']['RFn_estimators'] = '10, 90'
         config['Classification']['RFmin_samples_split'] = '2, 3'
         config['Classification']['RFmax_depth'] = '5, 5'
-        config['Classification']['LRpenalty'] = 'none, l1'
+        config['Classification']['LRpenalty'] = 'none, l2'
         config['Classification']['LRC'] = '0.01, 1.0'
         config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
         config['Classification']['LDA_shrinkage'] = '-5, 5'
