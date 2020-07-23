@@ -172,7 +172,7 @@ class ConfigBuilder():
                     'phase_features': 'False'
                     },
                 'Resampling': {
-                    'Use': 'True',
+                    'Use': '0.5',
                     },
                 'CrossValidation': {
                     'N_iterations': '2',
