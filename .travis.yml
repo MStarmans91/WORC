@@ -30,6 +30,8 @@ matrix:
       # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
       script:
         - python WORCTutorial/WORCTutorialSimple.py
+        - fastr trace C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
+        - fastr trace C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json --sinks classification --samples all
     - name: "Linux"
       before_install:
        - sudo apt-get -qq update
