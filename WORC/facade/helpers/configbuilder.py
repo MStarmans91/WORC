@@ -117,7 +117,7 @@ class ConfigBuilder():
             },
             # Do not use any resampling
             'Resampling': {
-                'Use': 'False',
+                'Use': '0.0',
                 },
             'CrossValidation': {
                 # Only perform a 3x random-split cross-validation
