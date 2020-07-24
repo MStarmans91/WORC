@@ -115,6 +115,10 @@ class ConfigBuilder():
                 'phase_features': 'False',
                 'toolbox': 'PREDICT'
             },
+            'Imputation': {
+                # Do not use KNN on small datasets
+                'strategy': 'mean, median, most_frequent, constant',
+                },
             # Do not use any resampling
             'Resampling': {
                 'Use': '0.0',
