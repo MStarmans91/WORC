@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.fitandscore &mdash; WORC 3.2.2 documentation</title>
+  <title>WORC.classification.fitandscore &mdash; WORC 3.3.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.2.2
+                3.3.0
               </div>
             
           
@@ -388,8 +388,8 @@
     <span class="c1"># Split in train and testing</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">_safe_split</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train</span><span class="p">)</span>
     <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">_safe_split</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">train</span><span class="p">)</span>
-    <span class="n">train</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
-    <span class="n">test</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
 
     <span class="c1"># ------------------------------------------------------------------------</span>
     <span class="c1"># Feature imputation</span>
@@ -816,15 +816,16 @@
                 <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
-                <span class="n">neg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="n">pos</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">neg</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]):</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_train_temp</span><span class="p">))</span>
+                <span class="n">neg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train_temp</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="ow">or</span> <span class="n">neg</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Skipping resampling: zero objects returned in one or both classes.&#39;</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WORC WARNING] Skipping resampling: to few objects returned in one or both classes (pos: </span><span class="si">{pos}</span><span class="s1">, neg: </span><span class="si">{neg}</span><span class="s1">).&#39;</span><span class="p">)</span>
                     <span class="n">Sampler</span> <span class="o">=</span> <span class="kc">None</span>
                     <span class="n">para</span><span class="p">[</span><span class="s1">&#39;Resampling_Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">Sampler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+                    <span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train_temp</span>
+                    <span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train_temp</span>
 
                     <span class="c1"># Notify the user what the resampling did</span>
                     <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>

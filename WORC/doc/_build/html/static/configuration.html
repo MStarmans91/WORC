@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.2.2 documentation</title>
+  <title>Configuration &mdash; WORC 3.3.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.2.2
+                3.3.0
               </div>
             
           
@@ -1372,7 +1372,7 @@ containing the actual values, e.g. value1, value2.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Variance</p></td>
-<td><p>If True, exclude features which have a variance &lt; 0.01. Based on ` sklearn”s VarianceThreshold &lt;<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/">https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/</a>&gt;`_.</p></td>
+<td><p>Percentage of times features which have a variance &lt; 0.01 are excluded. Based on ` sklearn”s VarianceThreshold &lt;<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/">https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/</a>&gt;`_.</p></td>
 </tr>
 <tr class="row-odd"><td><p>GroupwiseSearch</p></td>
 <td><p>Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.</p></td>
@@ -1714,7 +1714,7 @@ All methods are adopted from <a class="reference external" href="https://imbalan
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Use</p></td>
-<td><p>Determine whether to use Object (e.g. patient) resampling.</p></td>
+<td><p>Percentage of times Object (e.g. patient) resampling is used.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Method</p></td>
 <td><p>One of the methods adopted, see also imbalanced learn &lt;<a class="reference external" href="https://imbalanced-learn.readthedocs.io/en/stable/api/">https://imbalanced-learn.readthedocs.io/en/stable/api/</a>&gt;`_.</p></td>
@@ -1748,8 +1748,8 @@ All methods are adopted from <a class="reference external" href="https://imbalan
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Use</p></td>
-<td><p>True, False</p></td>
-<td><p>Boolean(s)</p></td>
+<td><p>0.20</p></td>
+<td><p>Float</p></td>
 </tr>
 <tr class="row-odd"><td><p>Method</p></td>
 <td><p>RandomUnderSampling, RandomOverSampling, NearMiss, NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, SMOTEENN, SMOTETomek</p></td>
@@ -1929,7 +1929,7 @@ hyperparameters can also be found there.</p>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 <tr class="row-even"><td><p>LRpenalty</p></td>
-<td><p>l2, l1</p></td>
+<td><p>l2</p></td>
 <td><p>none, l2, l1</p></td>
 </tr>
 <tr class="row-odd"><td><p>LRC</p></td>

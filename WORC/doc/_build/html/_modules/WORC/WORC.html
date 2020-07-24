@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.WORC &mdash; WORC 3.2.2 documentation</title>
+  <title>WORC.WORC &mdash; WORC 3.3.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.2.2
+                3.3.0
               </div>
             
           
@@ -536,7 +536,7 @@
 
         <span class="c1"># Resampling options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True, False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.20&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span> <span class="o">=</span>\
             <span class="s1">&#39;RandomUnderSampling, RandomOverSampling, NearMiss, &#39;</span> <span class="o">+</span>\
             <span class="s1">&#39;NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, &#39;</span> <span class="o">+</span>\
@@ -560,7 +560,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFn_estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;10, 90&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFmin_samples_split&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2, 3&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFmax_depth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5, 5&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;l2, l1&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;l2&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.01, 1.0&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LDA_solver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;svd, lsqr, eigen&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LDA_shrinkage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;-5, 5&#39;</span>
@@ -1805,6 +1805,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">id</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span><span class="p">,</span> <span class="n">draw_dimensions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">ExecutableNotFound</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Graphviz executable not found: not drawing network diagram. Make sure the Graphviz executables are on your systems PATH.&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WORC WARNING] Graphviz executable gave an error: not drawing network diagram. Original error: </span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Source Data:&quot;</span><span class="p">)</span>

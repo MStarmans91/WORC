@@ -1,7 +1,7 @@
 ================== ==========================================================================================================================================================================================================
 Subkey             Description                                                                                                                                                                                               
 ================== ==========================================================================================================================================================================================================
-Use                Determine whether to use Object (e.g. patient) resampling.                                                                                                                                                
+Use                Percentage of times Object (e.g. patient) resampling is used.                                                                                                                                             
 Method             One of the methods adopted, see also imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/api/>`_.                                                                                         
 sampling_strategy  Sampling strategy, see also imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/api/>`_.                                                                                                  
 n_neighbors        Number of n_neighbors used in resampling. This should be (much) smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).
