@@ -613,7 +613,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Only resampling in training phase, i.e. if we have the labels
         if y is not None:
             if self.best_Sampler is not None:
-                X, y = self.best_Sampler.fit_sample(X, y)
+                X, y = self.best_Sampler.transform(X, y)
 
         return X, y
 
