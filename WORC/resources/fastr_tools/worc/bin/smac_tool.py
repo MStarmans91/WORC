@@ -85,7 +85,7 @@ def main():
         if cfg is not None:
             parameters = convert_cfg(cfg.get_dictionary())
         else:
-            return 2147483647
+            return float(2147483647)
 
         # Read the data from the smac_tool
         nonlocal data
