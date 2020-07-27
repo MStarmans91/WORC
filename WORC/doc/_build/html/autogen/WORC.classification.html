@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
@@ -607,7 +608,7 @@ SVs              - The ith support vector is stored in SVs[:,i]</p>
 <dl class="class">
 <dt id="WORC.classification.SearchCV.BaseSearchCV">
 <em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">BaseSearchCV</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>ranking_score='test_score'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.NewBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.MetaEstimatorMixin</span></code></p>
 <p>Base class for hyper parameter search with cross-validation.</p>
 <dl class="attribute">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.__abstractmethods__">
@@ -623,16 +624,6 @@ SVs              - The ith support vector is stored in SVs[:,i]</p>
 <dl class="attribute">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.__module__">
 <code class="descname">__module__</code><em class="property"> = 'WORC.classification.SearchCV'</em><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="WORC.classification.SearchCV.BaseSearchCV.best_params_">
-<code class="descname">best_params_</code><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.best_params_" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="WORC.classification.SearchCV.BaseSearchCV.best_score_">
-<code class="descname">best_score_</code><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.best_score_" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -735,14 +726,15 @@ underlying estimator.</p>
 
 <dl class="method">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.process_fit">
-<code class="descname">process_fit</code><span class="sig-paren">(</span><em>n_splits</em>, <em>parameters_est</em>, <em>parameters_all</em>, <em>test_sample_counts</em>, <em>test_scores</em>, <em>train_scores</em>, <em>fit_time</em>, <em>score_time</em>, <em>cv_iter</em>, <em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.process_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.process_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">process_fit</code><span class="sig-paren">(</span><em>n_splits</em>, <em>parameters_all</em>, <em>test_sample_counts</em>, <em>test_score_dicts</em>, <em>train_score_dicts</em>, <em>fit_time</em>, <em>score_time</em>, <em>cv_iter</em>, <em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.process_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.process_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the outcomes of a SearchCV fit and find the best settings
 over all cross validations from all hyperparameters tested</p>
+<p>Very similar to the _format_results function or the original SearchCV.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.refit_and_score">
-<code class="descname">refit_and_score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>parameters_all</em>, <em>parameters_est</em>, <em>train</em>, <em>test</em>, <em>verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.refit_and_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.refit_and_score" title="Permalink to this definition">¶</a></dt>
+<code class="descname">refit_and_score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>parameters_all</em>, <em>train</em>, <em>test</em>, <em>verbose=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.refit_and_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.refit_and_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Refit the base estimator and attributes such as GroupSel</p>
 <dl class="simple">
 <dt>X: array, mandatory</dt><dd><p>Array containingfor each object (rows) the feature values
@@ -753,8 +745,6 @@ over all cross validations from all hyperparameters tested</p>
 <dt>parameters_all: dictionary, mandatory</dt><dd><p>Contains the settings used for the all preprocessing functions
 and the fitting. TODO: Create a default object and show the
 fields.</p>
-</dd>
-<dt>parameters_est: dictionary, mandatory</dt><dd><p>Contains the settings used for the base estimator</p>
 </dd>
 <dt>train: list, mandatory</dt><dd><p>Indices of the objects to be used as training set.</p>
 </dd>
@@ -832,7 +822,7 @@ underlying estimator.</p>
 <dl class="class">
 <dt id="WORC.classification.SearchCV.Ensemble">
 <em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">Ensemble</code><span class="sig-paren">(</span><em>estimators</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#Ensemble"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.Ensemble" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.NewBase</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.MetaEstimatorMixin</span></code></p>
 <p>Ensemble of BaseSearchCV Estimators.</p>
 <dl class="attribute">
 <dt id="WORC.classification.SearchCV.Ensemble.__abstractmethods__">
@@ -2215,7 +2205,7 @@ actual estimator.</p>
 
 <dl class="function">
 <dt id="WORC.classification.fitandscore.fit_and_score">
-<code class="descclassname">WORC.classification.fitandscore.</code><code class="descname">fit_and_score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>scoring</em>, <em>train</em>, <em>test</em>, <em>para</em>, <em>fit_params=None</em>, <em>return_train_score=True</em>, <em>return_n_test_samples=True</em>, <em>return_times=True</em>, <em>return_parameters=True</em>, <em>error_score='raise'</em>, <em>verbose=True</em>, <em>return_all=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/fitandscore.html#fit_and_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.fitandscore.fit_and_score" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.classification.fitandscore.</code><code class="descname">fit_and_score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>scoring</em>, <em>train</em>, <em>test</em>, <em>parameters</em>, <em>fit_params=None</em>, <em>return_train_score=True</em>, <em>return_n_test_samples=True</em>, <em>return_times=True</em>, <em>return_parameters=False</em>, <em>return_estimator=False</em>, <em>error_score='raise'</em>, <em>verbose=True</em>, <em>return_all=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/fitandscore.html#fit_and_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.fitandscore.fit_and_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit an estimator to a dataset and score the performance.</p>
 <p>The following
 methods can currently be applied as preprocessing before fitting, in
@@ -2248,7 +2238,7 @@ this order:
 </dd>
 <dt>test: list, mandatory</dt><dd><p>Indices of the objects to be used as testing set.</p>
 </dd>
-<dt>para: dictionary, mandatory</dt><dd><p>Contains the settings used for the above preprocessing functions
+<dt>parameters: dictionary, mandatory</dt><dd><p>Contains the settings used for the above preprocessing functions
 and the fitting. TODO: Create a default object and show the
 fields.</p>
 </dd>
@@ -2264,6 +2254,8 @@ to the final SearchCV object.</p>
 </dd>
 <dt>return_parameters: boolean, default True</dt><dd><p>Return the parameters used in the final fit to the final SearchCV
 object.</p>
+</dd>
+<dt>return_estimator<span class="classifier">bool, default=False</span></dt><dd><p>Whether to return the fitted estimator.</p>
 </dd>
 <dt>error_score: numeric or “raise” by default</dt><dd><p>Value to assign to the score if an error occurs in estimator
 fitting. If set to “raise”, the error is raised. If a numeric
@@ -2344,6 +2336,37 @@ the data Y are entered as a ‘table’ ie subjects are in rows and repeated
 measures in columns
 One Sample Repeated measure ANOVA
 Y = XB + E with X = [FaTor / Subjects]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.classification.metrics.check_multimetric_scoring">
+<code class="descclassname">WORC.classification.metrics.</code><code class="descname">check_multimetric_scoring</code><span class="sig-paren">(</span><em>estimator</em>, <em>scoring=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/metrics.html#check_multimetric_scoring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.metrics.check_multimetric_scoring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper around sklearn function to enable more scoring options.</p>
+<p>Check the scoring parameter in cases when multiple metrics are allowed</p>
+<dl class="simple">
+<dt>estimator<span class="classifier">sklearn estimator instance</span></dt><dd><p>The estimator for which the scoring will be applied.</p>
+</dd>
+<dt>scoring<span class="classifier">string, callable, list/tuple, dict or None, default: None</span></dt><dd><p>A single string (see <span class="xref std std-ref">scoring_parameter</span>) or a callable
+(see <span class="xref std std-ref">scoring</span>) to evaluate the predictions on the test set.
+For evaluating multiple metrics, either give a list of (unique) strings
+or a dict with names as keys and callables as values.
+NOTE that when using custom scorers, each scorer should return a single
+value. Metric functions returning a list/array of values can be wrapped
+into multiple scorers that return one value each.
+See <span class="xref std std-ref">multimetric_grid_search</span> for an example.
+If None the estimator’s score method is used.
+The return value in that case will be <code class="docutils literal notranslate"><span class="pre">{'score':</span> <span class="pre">&lt;default_scorer&gt;}</span></code>.
+If the estimator’s score method is not available, a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>
+is raised.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>scorers_dict<span class="classifier">dict</span></dt><dd><p>A dict mapping each scorer name to its validated scorer.</p>
+</dd>
+<dt>is_multimetric<span class="classifier">bool</span></dt><dd><p>True if scorer is a list/tuple or dict of callables
+False if scorer is None/str/callable</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">

@@ -61,7 +61,6 @@ def main():
         para = json.load(fp)
 
     # Check whether verbose is given or not
-    print(args.verbose, type(args.verbose))
     if args.verbose is None:
         args.verbose = False
     elif args.verbose == 'False':
@@ -71,7 +70,6 @@ def main():
     else:
         raise ae.WORCKeyError(f'{args.verbose} is not a valid verbose option!')
 
-    print(args.verbose)
     # Run the tool
     n_cores = 1
     ret = Parallel(
@@ -81,11 +79,13 @@ def main():
                              scoring=data['scoring'],
                              train=traintest['train'],
                              test=traintest['test'], verbose=args.verbose,
-                             para=parameters, fit_params=data['fit_params'],
+                             parameters=parameters,
+                             fit_params=data['fit_params'],
                              return_train_score=data['return_train_score'],
                              return_parameters=data['return_parameters'],
                              return_n_test_samples=data['return_n_test_samples'],
                              return_times=data['return_times'],
+                             return_estimator=data['return_estimator'],
                              error_score=data['error_score'],
                              return_all=False)
       for parameters in para.values())
