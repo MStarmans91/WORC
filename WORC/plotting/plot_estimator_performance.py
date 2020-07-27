@@ -37,8 +37,7 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_s
         cv_iter = list(estimator.cv.split(X_train, Y_train))
         estimator.cv_iter = cv_iter
 
-    p_est = estimator.cv_results_['params'][0]
-    p_all = estimator.cv_results_['params_all'][0]
+    p_all = estimator.cv_results_['params'][0]
     n_iter = len(estimator.cv_iter)
 
     thresholds_low = list()
@@ -58,7 +57,7 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_s
                                       scoring=ensemble_scoring)
         else:
             estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
-                                      p_est, train_temp, train_temp,
+                                      train_temp, train_temp,
                                       verbose=False)
 
         # Predict and save scores
@@ -321,7 +320,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
             # Compute generalization score
             print('Shuffling estimators for random ensembling.')
             shuffle(fitted_model.cv_results_['params'])
-            shuffle(fitted_model.cv_results_['params_all'])
 
         # If required, rank according to generalization score instead of mean_validation_score
         if generalization:
@@ -333,7 +331,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
             # Rerank based on score
             indices = np.argsort(generalization_score)
             fitted_model.cv_results_['params'] = [fitted_model.cv_results_['params'][i] for i in indices[::-1]]
-            fitted_model.cv_results_['params_all'] = [fitted_model.cv_results_['params_all'][i] for i in indices[::-1]]
 
         # If requested, first let the SearchCV object create an ensemble
         if bootstrap and i > 0:

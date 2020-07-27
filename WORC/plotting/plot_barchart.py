@@ -74,7 +74,7 @@ def plot_barchart(prediction, estimators=10, label_type=None, output_tex=None,
     for n_crossval, est in enumerate(prediction.classifiers):
         for n_setting in range(0, estimators):
             # Extract parameter settings of nth estimator
-            parameters_all = est.cv_results_['params_all'][n_setting]
+            parameters_all = est.cv_results_['params'][n_setting]
 
             # Stack settings in parameters dictionary
             for k in parameters_all.keys():

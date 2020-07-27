@@ -92,10 +92,11 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">3.3.0 - 2020-07-24</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3.3.0 - 2020-07-27</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
@@ -259,18 +260,21 @@
 <p>The format is based on <a class="reference external" href="http://keepachangelog.com/">Keep a Changelog</a>
 and this project adheres to <a class="reference external" href="http://semver.org/">Semantic Versioning</a></p>
 <div class="section" id="id1">
-<h2>3.3.0 - 2020-07-24<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>3.3.0 - 2020-07-27<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Graphviz vizualization of network is now nicely grouped.</p></li>
-<li><p>Properly integrated ObjectSampler</p></li>
+<li><p>Properly integrated ObjectSampler: various resampling options now available.</p></li>
 <li><p>Verbose option to fit and score tool</p></li>
+<li><p>Validator for PyRadiomics output.</p></li>
+<li><p>FAQ version to documentation</p></li>
 </ul>
 </div>
 <div class="section" id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p>Upgraded to new versions of sklearn (0.23.1) and imbalanced learn (0.7.0)</p></li>
 <li><p>Some defaults, based on computation time.</p></li>
 <li><p>Do not skip workflow if feature selection selects zero features,
 but disable the feature selection.</p></li>

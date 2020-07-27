@@ -74,6 +74,7 @@ WORC Documentation
     static/configuration.rst
     static/features.rst
     static/additionalfunctionality.rst
+    static/faq.rst
     static/developerdocumentation.rst
     static/file_description.rst
     static/changelog.rst

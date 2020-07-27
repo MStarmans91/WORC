@@ -83,7 +83,7 @@ def convert_pyradiomics_featurevector(featureVector):
     return new_featureVector
 
 
-def convert_PREDICT(features, config, feat_out):
+def convert_PREDICT(features, feat_out):
     """
     Convert features from PREDICT toolbox to WORC compatible format.
 
@@ -108,7 +108,7 @@ def convert_PREDICT(features, config, feat_out):
     panda_data.to_hdf(feat_out, 'image_features')
 
 
-def convert_pyradiomics(features, config, feat_out):
+def convert_pyradiomics(features, feat_out=None):
     """
     Convert features from PyRadiomics toolbox to WORC compatible format.
 
@@ -135,8 +135,9 @@ def convert_pyradiomics(features, config, feat_out):
                            name='Image features'
                            )
 
-    print(f'Saving image features to {feat_out}.')
-    panda_data.to_hdf(feat_out, 'image_features')
+    if feat_out is not None:
+        print(f'Saving image features to {feat_out}.')
+        panda_data.to_hdf(feat_out, 'image_features')
 
 
 def FeatureConverter(feat_in, toolbox, config, feat_out):
@@ -161,8 +162,8 @@ def FeatureConverter(feat_in, toolbox, config, feat_out):
     """
     # Convert input features
     if toolbox == 'PREDICT':
-        convert_PREDICT(feat_in, config, feat_out)
+        convert_PREDICT(feat_in, feat_out)
     elif toolbox == 'PyRadiomics':
-        convert_pyradiomics(feat_in, config, feat_out)
+        convert_pyradiomics(feat_in, feat_out)
     else:
         raise WORCexceptions.WORCKeyError(f'Toolbox {toolbox} not recognized.')

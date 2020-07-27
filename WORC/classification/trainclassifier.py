@@ -287,13 +287,13 @@ def trainclassifier(feat_train, patientinfo_train, config,
         if patientinfo_test is not None:
             if not isclassifier:
                 statistics =\
-                plot_estimator_performance(trained_classifier,
-                                           label_data_test,
-                                           label_type,
-                                           ensemble=config['Ensemble']['Use'],
-                                           bootstrap=config['Bootstrap']['Use'],
-                                           bootstrap_N=config['Bootstrap']['N_iterations'],
-                                           overfit_scaler=overfit_scaler)
+                    plot_estimator_performance(trained_classifier,
+                                               label_data_test,
+                                               label_type,
+                                               ensemble=config['Ensemble']['Use'],
+                                               bootstrap=config['Bootstrap']['Use'],
+                                               bootstrap_N=config['Bootstrap']['N_iterations'],
+                                               overfit_scaler=overfit_scaler)
             else:
                 statistics =\
                     plot_estimator_performance(trained_classifier,
@@ -308,13 +308,11 @@ def trainclassifier(feat_train, patientinfo_train, config,
             statistics = None
 
     # Save output
-    savedict = dict()
-    savedict["Statistics"] = statistics
 
     if not os.path.exists(os.path.dirname(output_json)):
         os.makedirs(os.path.dirname(output_json))
 
     with open(output_json, 'w') as fp:
-        json.dump(savedict, fp, sort_keys=True, indent=4)
+        json.dump(statistics, fp, sort_keys=True, indent=4)
 
     print("Saved data!")

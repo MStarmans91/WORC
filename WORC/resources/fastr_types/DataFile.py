@@ -21,4 +21,5 @@ class DataFile(TypeGroup):
     description = 'General data file for features, classifiers etcetera'
     _members = frozenset(['HDF5',
                           'RDF',
-                          'CSVFile'])
+                          'CSVFile',
+                          'PyRadiomicsCSVFile'])

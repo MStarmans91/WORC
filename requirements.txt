@@ -2,7 +2,7 @@ configparser>=3.5.0
 drmaa>=0.7.6
 fastr>=3.2.3
 ghalton>=0.6.1
-imbalanced-learn==0.4.3
+imbalanced-learn==0.7.0
 lifelines>=0.21.1
 matplotlib2tikz==0.7.4
 missingpy>=0.2.0
@@ -12,12 +12,12 @@ nose-parameterized>=0.5.0
 nose>=1.3.7
 numpy>=1.16.3
 pandas>=0.24.2
-PREDICT>=3.1.5
+PREDICT>=3.1.6
 pyOpenSSL>=16.2.0
 pydicom>=1.2.2
 python-dateutil<=2.8.0
 pyyaml>=5.3.1
-scikit-learn==0.20.3
+scikit-learn==0.23.1
 scipy>=1.2.1
 SimpleITK>=1.2.0
 six>=1.10.0

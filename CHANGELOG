@@ -6,17 +6,20 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-3.3.0 - 2020-07-24
+3.3.0 - 2020-07-27
 ------------------
 
 Added
 ~~~~~~~
 - Graphviz vizualization of network is now nicely grouped.
-- Properly integrated ObjectSampler
+- Properly integrated ObjectSampler: various resampling options now available.
 - Verbose option to fit and score tool
+- Validator for PyRadiomics output.
+- FAQ version to documentation
 
 Changed
 ~~~~~~~
+- Upgraded to new versions of sklearn (0.23.1) and imbalanced learn (0.7.0)
 - Some defaults, based on computation time.
 - Do not skip workflow if feature selection selects zero features,
   but disable the feature selection.
