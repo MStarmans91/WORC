@@ -62,6 +62,7 @@ from sklearn.multiclass import OneVsRestClassifier
 from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.featureprocessing.Preprocessor import Preprocessor
+from WORC.detectors.detectors import DebugDetector
 
 
 def rms_score(truth, prediction):
@@ -1366,7 +1367,19 @@ class BaseSearchCVfastr(BaseSearchCV):
         fit_params = _check_fit_params(X, self.fit_params)
 
         # Create temporary directory for fastr
-        name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        if DebugDetector().do_detection():
+            # Specific name for easy debugging
+            debugnum = 0
+            name = 'DEBUG_' + str(debugnum)
+            tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
+            while os.path.exists(tempfolder):
+                debugnum += 1
+                name = 'DEBUG_' + str(debugnum)
+                tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
+
+        else:
+            name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+
         tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
         if not os.path.exists(tempfolder):
             os.makedirs(tempfolder)
@@ -1540,7 +1553,9 @@ class BaseSearchCVfastr(BaseSearchCV):
               zip(*save_data)
 
         # Remove the temporary folder used
-        shutil.rmtree(tempfolder)
+        if name != 'DEBUG_0':
+            # Do delete if not debugging for first iteration
+            shutil.rmtree(tempfolder)
 
         # Process the results of the fitting procedure
         self.process_fit(n_splits=n_splits,
