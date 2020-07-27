@@ -33,7 +33,7 @@ def crossval(config, label_data, image_features,
              use_SMAC=False, fastr_plugin=None,
              tempsave=False, fixedsplits=None,
              ensemble={'Use': False}, outputfolder=None,
-             modus='singlelabel'):
+             smac_result_folder=None, modus='singlelabel'):
     """
     Constructs multiple individual classifiers based on the label settings
 
@@ -333,6 +333,7 @@ def crossval(config, label_data, image_features,
                                                           parameters=config,
                                                           n_cores=n_cores,
                                                           random_seed=random_seed,
+                                                          smac_result_folder=smac_result_folder,
                                                           **config['HyperOptimization'])
             else:
                 trained_classifier = random_search_parameters(features=X_train,

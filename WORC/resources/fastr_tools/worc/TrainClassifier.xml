@@ -29,6 +29,7 @@
     <outputs>
       <output id="classification" name="Radiomics classification" datatype="HDF5" cardinality="as:config" nospace="False" order="0" prefix="--class" required="true"/>
       <output id="performance" name="Radiomics classification performance" datatype="JsonFile" cardinality="as:config" nospace="False" order="0" prefix="--perf" required="true"/>
+      <output id="smac_results" name="SMAC statistics and results" datatype="JsonFile" cardinality="as:config" prefix="--smac" required="false"/>
     </outputs>
   </interface>
   <requirements />
@@ -42,6 +43,7 @@
     -parameters PARAMETERS.ini File specifying the grid search parameters containing the feature groups to use.
     -class CLASSIFICATION.hdf5 File to write the SVM output to.
     -perf PERFORMANCE.json File containing the performance statistics of the fitted SVM.
+    -smac SMAC_RESULTS.json File containing stats and results of the SMAC optimization.
   </help>
   <cite>
   </cite>

@@ -48,6 +48,9 @@ def main():
     parser.add_argument('-fs', '--fs', metavar='fixedsplits',
                         dest='fs', type=str, required=False, nargs='+',
                         help='File containing fixed splits for iterations (XLSX)')
+    parser.add_argument('-smac', '--smac', metavar='smac_results',
+                        dest='smac_results', type=str, required=False, nargs='+',
+                        help='SMAC results (JSON)')
     args = parser.parse_args()
 
     trainclassifier(feat_train=args.feat_train,
@@ -56,6 +59,7 @@ def main():
                     output_hdf=args.hdf, output_json=args.perf,
                     feat_test=args.feat_test,
                     patientinfo_test=args.pc_test,
+                    output_smac=args.smac_results,
                     verbose=False,
                     fixedsplits=args.fs)
 

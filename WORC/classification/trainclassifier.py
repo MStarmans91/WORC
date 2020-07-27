@@ -30,7 +30,7 @@ from WORC.classification.AdvancedSampler import discrete_uniform, \
 def trainclassifier(feat_train, patientinfo_train, config,
                     output_hdf, output_json,
                     feat_test=None, patientinfo_test=None,
-                    fixedsplits=None, verbose=True):
+                    fixedsplits=None, output_smac=None, verbose=True):
     """Train a classifier using machine learning from features.
 
     By default, if no
@@ -119,6 +119,14 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     if type(fixedsplits) is list:
         fixedsplits = ''.join(fixedsplits)
+
+    if type(output_smac) is list:
+        if len(output_smac) == 1:
+            output_smac = ''.join(output_smac)
+        else:
+            # FIXME
+            print('[WORC Warning] You provided multiple output json files: only the first one will be used!')
+            output_smac = output_smac[0]
 
     # Load variables from the config file
     config = config_io.load_config(config)
@@ -230,6 +238,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
+    smac_result_folder = os.path.dirname(output_smac)
     if feat_test is None:
         trained_classifier = cv.crossval(config, label_data_train,
                                          image_features_train,
@@ -241,6 +250,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
                                          fixedsplits=fixedsplits,
                                          ensemble=config['Ensemble'],
                                          outputfolder=outputfolder,
+                                         smac_result_folder=smac_result_folder,
                                          tempsave=config['General']['tempsave'])
     else:
         trained_classifier = cv.nocrossval(config, label_data_train,

@@ -104,7 +104,8 @@ def guided_search_parameters(features, labels, N_iter, test_size,
                              n_jobspercore=200, use_fastr=False,
                              use_SMAC=True, n_cores=1, fastr_plugin=None,
                              maxlen=100, ranking_score='test_score',
-                             random_seed=None, n_SMAC_cores=10):
+                             random_seed=None, n_SMAC_cores=10,
+                             smac_result_folder=None):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
     Bayesian optimization approach.
@@ -157,7 +158,8 @@ def guided_search_parameters(features, labels, N_iter, test_size,
                                        fastr_plugin=fastr_plugin,
                                        ranking_score=ranking_score,
                                        features=features,
-                                       labels=labels)
+                                       labels=labels,
+                                       smac_result_folder=smac_result_folder)
 
     guided_search.fit(features, labels)
     print("Best found parameters:")
