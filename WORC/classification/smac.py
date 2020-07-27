@@ -279,20 +279,22 @@ def build_smac_config(parameters):
     #oversampling = CategoricalHyperparameter('SampleProcessing_Oversampling', choices=['True', 'False'])
     #cs.add_hyperparameter(oversampling)
 
+    # ! change this to new implementation later
     # SMOTE oversampling
     # 2 hyperparameters:
     #   1) ratio
     #   2) neighbors
+    '''
     smote = CategoricalHyperparameter('SampleProcessing_SMOTE', choices=['True', 'False'])
     cs.add_hyperparameter(smote)
 
     '''
-    Currently smote_ratio seems to be a constant with value 1,
-    so this implementation is not working right now
-    smote_ratio = UniformFloatHyperparameter('SampleProcessing_SMOTE_ratio',
-                                             lower=parameters['SampleProcessing']['SMOTE_ratio'][0],
-                                             upper=parameters['SampleProcessing']['SMOTE_ratio'][0] +
-                                                   parameters['SampleProcessing']['SMOTE_ratio'][1])
+    #Currently smote_ratio seems to be a constant with value 1,
+    #so this implementation is not working right now
+    #smote_ratio = UniformFloatHyperparameter('SampleProcessing_SMOTE_ratio',
+    #                                         lower=parameters['SampleProcessing']['SMOTE_ratio'][0],
+    #                                         upper=parameters['SampleProcessing']['SMOTE_ratio'][0] +
+    #                                               parameters['SampleProcessing']['SMOTE_ratio'][1])
     '''
     smote_ratio = Constant('SampleProcessing_SMOTE_ratio', value=1)
     cs.add_hyperparameter(smote_ratio)
@@ -308,6 +310,7 @@ def build_smac_config(parameters):
     smote_cores = Constant('SampleProcessing_SMOTE_n_cores', value=parameters['General']['Joblib_ncores'])
     cs.add_hyperparameter(smote_cores)
     cs.add_condition(InCondition(child=smote_cores, parent=smote, values=['True']))
+    '''
 
     return cs
 
