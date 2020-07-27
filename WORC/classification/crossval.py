@@ -333,7 +333,7 @@ def crossval(config, label_data, image_features,
                                                           parameters=config,
                                                           n_cores=n_cores,
                                                           random_seed=random_seed,
-                                                          smac_result_folder=smac_result_file,
+                                                          smac_result_file=smac_result_file,
                                                           **config['HyperOptimization'])
             else:
                 trained_classifier = random_search_parameters(features=X_train,
