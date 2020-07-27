@@ -124,7 +124,7 @@ def main():
     smac = SMAC4HPO(scenario=scenario, rng=run_info['run_rng'],
                     tae_runner=score_cfg, run_id=run_info['run_id'])
     opt_config = smac.optimize()
-    result_file = data['smac_result_folder']
+    result_file = data['smac_result_file']
     with open(result_file, 'a') as file:
         file.write('texttttttt' + '\n')
 

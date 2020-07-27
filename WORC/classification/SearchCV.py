@@ -2652,14 +2652,14 @@ class BaseSearchCVSMAC(BaseSearchCV):
                             'verbose', 'fit_params', 'return_train_score',
                             'return_n_test_samples',
                             'return_times', 'return_parameters',
-                            'error_score', 'n_iter', 'smac_result_folder']
+                            'error_score', 'n_iter', 'smac_result_file']
 
         estimator_data = pd.Series([self.features, self.labels, cs,
                                     cv_iter, self.scoring, False,
                                     self.fit_params, self.return_train_score,
                                     True, True, True,
                                     self.error_score, self.n_iter,
-                                    self.smac_result_folder],
+                                    self.smac_result_file],
                                    index=estimator_labels,
                                    name='estimator Data')
         fname = 'estimatordata.hdf5'
@@ -3080,7 +3080,7 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
                  error_score='raise', return_train_score=True,
                  n_jobspercore=100, fastr_plugin=None, maxlen=100,
                  ranking_score='test_score', features=None, labels=None,
-                 smac_result_folder=None):
+                 smac_result_file=None):
         super(GuidedSearchCVSMAC, self).__init__(
              param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
              n_iter=n_iter, random_state=random_state, n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
@@ -3090,7 +3090,7 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
              maxlen=maxlen, ranking_score=ranking_score)
         self.features = features
         self.labels = labels
-        self.smac_result_folder = smac_result_folder
+        self.smac_result_file = smac_result_file
 
     def fit(self, X, y=None, groups=None):
         """Run fit on the estimator with randomly drawn parameters.

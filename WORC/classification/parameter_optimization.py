@@ -159,7 +159,7 @@ def guided_search_parameters(features, labels, N_iter, test_size,
                                        ranking_score=ranking_score,
                                        features=features,
                                        labels=labels,
-                                       smac_result_folder=smac_result_folder)
+                                       smac_result_file=smac_result_file)
 
     guided_search.fit(features, labels)
     print("Best found parameters:")

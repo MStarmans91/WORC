@@ -238,7 +238,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
-    smac_result_folder = os.path.dirname(output_smac)
+    smac_result_file = output_smac
     if feat_test is None:
         trained_classifier = cv.crossval(config, label_data_train,
                                          image_features_train,
@@ -250,7 +250,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
                                          fixedsplits=fixedsplits,
                                          ensemble=config['Ensemble'],
                                          outputfolder=outputfolder,
-                                         smac_result_folder=smac_result_folder,
+                                         smac_result_file=smac_result_file,
                                          tempsave=config['General']['tempsave'])
     else:
         trained_classifier = cv.nocrossval(config, label_data_train,
