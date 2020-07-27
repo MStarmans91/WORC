@@ -185,9 +185,9 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=imputation_n_neighbors, parent=imputation_strategy,
                                  values=['knn']))
 
-    # Variance selection
+    # Variance selection --> always on in RS
     # 0 hyperparameters
-    variance_selection = CategoricalHyperparameter('Featsel_Variance', choices=['True', 'False'])
+    variance_selection = CategoricalHyperparameter('Featsel_Variance', choices=['True'])
     cs.add_hyperparameter(variance_selection)
 
     # Relief
@@ -228,7 +228,7 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(relief_numFeatures)
     cs.add_condition(InCondition(child=relief_numFeatures, parent=relief, values=['True']))
 
-    # Select from model
+    # Select from model --> turned off in RS
     # 0 hyperparameters
     #select_from_model = CategoricalHyperparameter('SelectFromModel', choices=['True', 'False'])
     #cs.add_hyperparameter(select_from_model)
@@ -274,7 +274,7 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=statistical_test_threshold, parent=statistical_test,
                                  values=['True']))
 
-    # Oversampling
+    # Oversampling --> turned off in RS
     # 0 hyperparameters
     #oversampling = CategoricalHyperparameter('SampleProcessing_Oversampling', choices=['True', 'False'])
     #cs.add_hyperparameter(oversampling)
