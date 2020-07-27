@@ -512,6 +512,7 @@ class WORC(object):
                 self.sink_classification = self.network.create_sink('HDF5', id='classification', step_id='general_sinks')
                 self.sink_performance = self.network.create_sink('JsonFile', id='performance', step_id='general_sinks')
                 self.sink_class_config = self.network.create_sink('ParameterFile', id='config_classification_sink', node_group='conf', step_id='general_sinks')
+                self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results', step_id='general_sinks')
 
                 # Links
                 self.sink_class_config.input = self.source_class_config.output
