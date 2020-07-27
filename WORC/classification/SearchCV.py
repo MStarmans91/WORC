@@ -24,7 +24,7 @@ from sklearn.utils.validation import indexable, check_is_fitted
 from WORC.classification.metrics import check_scoring
 from sklearn.model_selection._split import check_cv
 from scipy.stats import rankdata
-from sklearn.externals import six
+import six
 from sklearn.utils.fixes import MaskedArray
 
 from sklearn.model_selection._search import ParameterSampler
