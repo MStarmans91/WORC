@@ -196,8 +196,8 @@ def build_smac_config(parameters):
     #   2) Sample size
     #   3) DistanceP
     #   4) Numfeatures
-    '''
-    relief = CategoricalHyperparameter('ReliefUse', choices=['True', 'False'])
+
+    relief = CategoricalHyperparameter('ReliefUse', choices=['True'])
     cs.add_hyperparameter(relief)
 
     relief_NN = UniformIntegerHyperparameter('ReliefNN',
@@ -207,10 +207,10 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(relief_NN)
     cs.add_condition(InCondition(child=relief_NN, parent=relief, values=['True']))
 
-    relief_sample_size = UniformIntegerHyperparameter('ReliefSampleSize',
-                                                      lower=parameters['Featsel']['ReliefSampleSize'][0],
-                                                      upper=parameters['Featsel']['ReliefSampleSize'][0] +
-                                                            parameters['Featsel']['ReliefSampleSize'][1])
+    relief_sample_size = UniformFloatHyperparameter('ReliefSampleSize',
+                                                    lower=parameters['Featsel']['ReliefSampleSize'][0],
+                                                    upper=parameters['Featsel']['ReliefSampleSize'][0] +
+                                                          parameters['Featsel']['ReliefSampleSize'][1])
     cs.add_hyperparameter(relief_sample_size)
     cs.add_condition(InCondition(child=relief_sample_size, parent=relief, values=['True']))
 
@@ -227,7 +227,7 @@ def build_smac_config(parameters):
                                                             parameters['Featsel']['ReliefNumFeatures'][1])
     cs.add_hyperparameter(relief_numFeatures)
     cs.add_condition(InCondition(child=relief_numFeatures, parent=relief, values=['True']))
-    '''
+
     # Select from model
     # 0 hyperparameters
     #select_from_model = CategoricalHyperparameter('SelectFromModel', choices=['True', 'False'])
