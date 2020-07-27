@@ -528,6 +528,7 @@ class WORC(object):
 
                 self.sink_classification.input = self.classify.outputs['classification']
                 self.sink_performance.input = self.classify.outputs['performance']
+                self.sink_smac_results.input = self.classify.outputs['smac_results']
 
                 if self.masks_normalize_train:
                     self.sources_masks_normalize_train = dict()
