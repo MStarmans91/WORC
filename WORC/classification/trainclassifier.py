@@ -17,13 +17,12 @@
 
 import json
 import os
-
+from scipy.stats import uniform
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
-from WORC.plotting.plot_SVM import plot_SVM
+from WORC.plotting.plot_estimator_performance import plot_estimator_performance
 from WORC.IOparser.file_io import load_features
 import WORC.IOparser.config_io_classifier as config_io
-from scipy.stats import uniform
 from WORC.classification.AdvancedSampler import discrete_uniform, \
     log_uniform, boolean_uniform
 
@@ -32,8 +31,9 @@ def trainclassifier(feat_train, patientinfo_train, config,
                     output_hdf, output_json,
                     feat_test=None, patientinfo_test=None,
                     fixedsplits=None, verbose=True):
-    '''
-    Train a classifier using machine learning from features. By default, if no
+    """Train a classifier using machine learning from features.
+
+    By default, if no
     split in training and test is supplied, a cross validation
     will be performed.
 
@@ -85,8 +85,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
     verbose: boolean, default True
             print final feature values and labels to command line or not.
 
-    '''
-
+    """
     # Convert inputs from lists to strings
     if type(patientinfo_train) is list:
         patientinfo_train = ''.join(patientinfo_train)
@@ -162,15 +161,22 @@ def trainclassifier(feat_train, patientinfo_train, config,
             param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
 
     # Add parameters for oversampling methods
-    param_grid['SampleProcessing_SMOTE'] = config['SampleProcessing']['SMOTE']
-    param_grid['SampleProcessing_SMOTE_ratio'] =\
-        uniform(loc=config['SampleProcessing']['SMOTE_ratio'][0],
-                scale=config['SampleProcessing']['SMOTE_ratio'][1])
-    param_grid['SampleProcessing_SMOTE_neighbors'] =\
-        discrete_uniform(loc=config['SampleProcessing']['SMOTE_neighbors'][0],
-                         scale=config['SampleProcessing']['SMOTE_neighbors'][1])
-    param_grid['SampleProcessing_SMOTE_n_cores'] = [config['General']['Joblib_ncores']]
-    param_grid['SampleProcessing_Oversampling'] = config['SampleProcessing']['Oversampling']
+    param_grid['Resampling_Use'] =\
+        boolean_uniform(threshold=config['Resampling']['Use'])
+    param_grid['Resampling_Method'] = config['Resampling']['Method']
+    param_grid['Resampling_sampling_strategy'] =\
+        config['Resampling']['sampling_strategy']
+    param_grid['Resampling_n_neighbors'] =\
+        discrete_uniform(loc=config['Resampling']['n_neighbors'][0],
+                         scale=config['Resampling']['n_neighbors'][1])
+    param_grid['Resampling_k_neighbors'] =\
+        discrete_uniform(loc=config['Resampling']['k_neighbors'][0],
+                         scale=config['Resampling']['k_neighbors'][1])
+    param_grid['Resampling_threshold_cleaning'] =\
+        uniform(loc=config['Resampling']['threshold_cleaning'][0],
+                scale=config['Resampling']['threshold_cleaning'][1])
+
+    param_grid['Resampling_n_cores'] = [config['General']['Joblib_ncores']]
 
     # Extract hyperparameter grid settings for SearchCV from config
     param_grid['FeatPreProcess'] = config['FeatPreProcess']['Use']
@@ -251,7 +257,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
     if not os.path.exists(os.path.dirname(output_hdf)):
         os.makedirs(os.path.dirname(output_hdf))
 
-    trained_classifier.to_hdf(output_hdf, 'SVMdata')
+    trained_classifier.to_hdf(output_hdf, 'EstimatorData')
 
     # Check whether we do regression or classification
     regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
@@ -262,37 +268,44 @@ def trainclassifier(feat_train, patientinfo_train, config,
     overfit_scaler = config['Evaluation']['OverfitScaler']
     if feat_test is None:
         if not isclassifier:
-            statistics = plot_SVM(trained_classifier, label_data_train,
-                                  label_type, ensemble=config['Ensemble']['Use'],
-                                  bootstrap=config['Bootstrap']['Use'],
-                                  bootstrap_N=config['Bootstrap']['N_iterations'],
-                                  overfit_scaler=overfit_scaler)
+            statistics =\
+                plot_estimator_performance(trained_classifier,
+                                           label_data_train,
+                                           label_type,
+                                           ensemble=config['Ensemble']['Use'],
+                                           bootstrap=config['Bootstrap']['Use'],
+                                           bootstrap_N=config['Bootstrap']['N_iterations'],
+                                           overfit_scaler=overfit_scaler)
         else:
-            statistics = plot_SVM(trained_classifier, label_data_train,
-                                  label_type, modus=modus,
-                                  ensemble=config['Ensemble']['Use'],
-                                  bootstrap=config['Bootstrap']['Use'],
-                                  bootstrap_N=config['Bootstrap']['N_iterations'],
-                                  overfit_scaler=overfit_scaler)
+            statistics =\
+                plot_estimator_performance(trained_classifier,
+                                           label_data_train,
+                                           label_type, modus=modus,
+                                           ensemble=config['Ensemble']['Use'],
+                                           bootstrap=config['Bootstrap']['Use'],
+                                           bootstrap_N=config['Bootstrap']['N_iterations'],
+                                           overfit_scaler=overfit_scaler)
     else:
         if patientinfo_test is not None:
             if not isclassifier:
-                statistics = plot_SVM(trained_classifier,
-                                      label_data_test,
-                                      label_type,
-                                      ensemble=config['Ensemble']['Use'],
-                                      bootstrap=config['Bootstrap']['Use'],
-                                      bootstrap_N=config['Bootstrap']['N_iterations'],
-                                      overfit_scaler=overfit_scaler)
+                statistics =\
+                plot_estimator_performance(trained_classifier,
+                                           label_data_test,
+                                           label_type,
+                                           ensemble=config['Ensemble']['Use'],
+                                           bootstrap=config['Bootstrap']['Use'],
+                                           bootstrap_N=config['Bootstrap']['N_iterations'],
+                                           overfit_scaler=overfit_scaler)
             else:
-                statistics = plot_SVM(trained_classifier,
-                                      label_data_test,
-                                      label_type,
-                                      modus=modus,
-                                      ensemble=config['Ensemble']['Use'],
-                                      bootstrap=config['Bootstrap']['Use'],
-                                      bootstrap_N=config['Bootstrap']['N_iterations'],
-                                      overfit_scaler=overfit_scaler)
+                statistics =\
+                    plot_estimator_performance(trained_classifier,
+                                               label_data_test,
+                                               label_type,
+                                               modus=modus,
+                                               ensemble=config['Ensemble']['Use'],
+                                               bootstrap=config['Bootstrap']['Use'],
+                                               bootstrap_N=config['Bootstrap']['N_iterations'],
+                                               overfit_scaler=overfit_scaler)
         else:
             statistics = None
 

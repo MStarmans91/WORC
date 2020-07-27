@@ -19,12 +19,13 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
-import numpy as np
-import WORC.IOparser.config_io_classifier as config_io
 import os
-from WORC.IOparser.file_io import load_features
+import numpy as np
 from sklearn.decomposition import PCA, SparsePCA, KernelPCA
 from sklearn.manifold import TSNE
+from WORC.IOparser.file_io import load_features
+import WORC.IOparser.config_io_classifier as config_io
+from WORC.featureprocessing.Imputer import Imputer
 
 
 def Decomposition(features, patientinfo, config, output, label_type=None,
@@ -80,6 +81,13 @@ def Decomposition(features, patientinfo, config, output, label_type=None,
     feature_values = np.zeros([len(image_features), len(feature_labels)])
     for num, x in enumerate(image_features):
         feature_values[num, :] = x[0]
+
+    # Detect NaNs, otherwise first feature imputation is required
+    if any(np.isnan(a) for a in np.asarray(feature_values).flatten()):
+        print('\t [WARNING] NaNs detected, applying median imputation')
+        imputer = Imputer(missing_values=np.nan, strategy='median')
+        imputer.fit(feature_values)
+        feature_values = imputer.transform(feature_values)
 
     # -----------------------------------------------------------------------
     # Perform decomposition

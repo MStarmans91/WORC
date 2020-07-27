@@ -17,7 +17,7 @@
 
 import argparse
 import pandas as pd
-from WORC.plotting.plot_SVM import plot_SVM
+from WORC.plotting.plot_estimator_performance import plot_estimator_performance
 import WORC.processing.label_processing as lp
 import glob
 import numpy as np
@@ -112,13 +112,14 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
 
     # Determine the predicted score per patient
     print('Determining score per patient.')
-    stats = plot_SVM(prediction,
-                     pinfo,
-                     [label_type],
-                     show_plots=False,
-                     alpha=0.95,
-                     ensemble=ensemble,
-                     output='stats')
+    stats =\
+        plot_estimator_performance(prediction,
+                                   pinfo,
+                                   [label_type],
+                                   show_plots=False,
+                                   alpha=0.95,
+                                   ensemble=ensemble,
+                                   output='stats')
 
     percentages = stats['Rankings']['Percentages']
     ranking = np.argsort(list(percentages.values()))
@@ -242,13 +243,13 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
     # Determine the predicted score per patient
     print('Determining posterior per patient.')
     y_truths, y_scores, y_predictions, PIDs_scores =\
-        plot_SVM(prediction,
-                 pinfo,
-                 [label_type],
-                 show_plots=False,
-                 alpha=0.95,
-                 ensemble=ensemble,
-                 output='scores')
+        plot_estimator_performance(prediction,
+                                   pinfo,
+                                   [label_type],
+                                   show_plots=False,
+                                   alpha=0.95,
+                                   ensemble=ensemble,
+                                   output='scores')
 
     # Extract all scores for each patient
     print('Aggregating scores per patient over all crossval iterations.')

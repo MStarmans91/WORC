@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.SearchCV &mdash; WORC 3.2.2 documentation</title>
+  <title>WORC.classification.SearchCV &mdash; WORC 3.3.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.2.2
+                3.3.0
               </div>
             
           
@@ -88,8 +88,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -727,9 +727,18 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_estimator_</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">Xt</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BaseSearchCV.preprocess"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.preprocess">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Apply the available preprocssing methods to the features&#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;Apply the available preprocssing methods to the features.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_preprocessor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_preprocessor</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_imputer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+        <span class="c1"># Replace nan if still left</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">replacenan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_groupsel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_groupsel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">training</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;overfit_scaler&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">overfit_scaler</span><span class="p">:</span>
             <span class="c1"># Overfit the feature scaling on the test set</span>
@@ -747,15 +756,6 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_imputer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-
-        <span class="c1"># Replace nan if still left</span>
-        <span class="n">X</span> <span class="o">=</span> <span class="n">replacenan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_groupsel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_groupsel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_varsel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_varsel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
@@ -771,13 +771,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_statisticalsel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_statisticalsel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
-        <span class="c1"># Only oversample in training phase, i.e. if we have the labels</span>
+        <span class="c1"># Only resampling in training phase, i.e. if we have the labels</span>
         <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_SMOTE</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_SMOTE</span><span class="o">.</span><span class="n">fit_sample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_RandomOverSampler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_RandomOverSampler</span><span class="o">.</span><span class="n">fit_sample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_Sampler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_Sampler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span></div>
 
@@ -982,7 +979,7 @@
 
         <span class="c1"># Associate best options with new fits</span>
         <span class="p">(</span><span class="n">save_data</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">scalers</span><span class="p">,</span>\
-            <span class="n">Imputers</span><span class="p">,</span> <span class="n">PCAs</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">ros</span><span class="p">)</span> <span class="o">=</span> <span class="n">out</span>
+            <span class="n">Imputers</span><span class="p">,</span> <span class="n">PCAs</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span><span class="p">)</span> <span class="o">=</span> <span class="n">out</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_groupsel</span> <span class="o">=</span> <span class="n">GroupSel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_scaler</span> <span class="o">=</span> <span class="n">scalers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_varsel</span> <span class="o">=</span> <span class="n">VarSel</span>
@@ -993,8 +990,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">best_featlab</span> <span class="o">=</span> <span class="n">feature_labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_statisticalsel</span> <span class="o">=</span> <span class="n">StatisticalSel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_reliefsel</span> <span class="o">=</span> <span class="n">ReliefSel</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">best_SMOTE</span> <span class="o">=</span> <span class="n">sm</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">best_RandomOverSampler</span> <span class="o">=</span> <span class="n">ros</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_Sampler</span> <span class="o">=</span> <span class="n">Sampler</span>
 
         <span class="c1"># Fit the estimator using the preprocessed features</span>
         <span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="p">]</span>

@@ -570,9 +570,18 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             return self.best_estimator_.transform(Xt)
 
     def preprocess(self, X, y=None, training=False):
-        '''Apply the available preprocssing methods to the features'''
+        """Apply the available preprocssing methods to the features."""
         if self.best_preprocessor is not None:
             X = self.best_preprocessor.transform(X)
+
+        if self.best_imputer is not None:
+            X = self.best_imputer.transform(X)
+
+        # Replace nan if still left
+        X = replacenan(np.asarray(X)).tolist()
+
+        if self.best_groupsel is not None:
+            X = self.best_groupsel.transform(X)
 
         if not training and hasattr(self, 'overfit_scaler') and self.overfit_scaler:
             # Overfit the feature scaling on the test set
@@ -590,15 +599,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             if self.best_scaler is not None:
                 X = self.best_scaler.transform(X)
 
-        if self.best_imputer is not None:
-            X = self.best_imputer.transform(X)
-
-        # Replace nan if still left
-        X = replacenan(np.asarray(X)).tolist()
-
-        if self.best_groupsel is not None:
-            X = self.best_groupsel.transform(X)
-
         if self.best_varsel is not None:
             X = self.best_varsel.transform(X)
 
@@ -614,13 +614,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if self.best_statisticalsel is not None:
             X = self.best_statisticalsel.transform(X)
 
-        # Only oversample in training phase, i.e. if we have the labels
+        # Only resampling in training phase, i.e. if we have the labels
         if y is not None:
-            if self.best_SMOTE is not None:
-                X, y = self.best_SMOTE.fit_sample(X, y)
-
-            if self.best_RandomOverSampler is not None:
-                X, y = self.best_RandomOverSampler.fit_sample(X, y)
+            if self.best_Sampler is not None:
+                X, y = self.best_Sampler.transform(X, y)
 
         return X, y
 
@@ -825,7 +822,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
-            Imputers, PCAs, StatisticalSel, ReliefSel, sm, ros) = out
+            Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
         self.best_groupsel = GroupSel
         self.best_scaler = scalers
         self.best_varsel = VarSel
@@ -836,8 +833,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.best_featlab = feature_labels
         self.best_statisticalsel = StatisticalSel
         self.best_reliefsel = ReliefSel
-        self.best_SMOTE = sm
-        self.best_RandomOverSampler = ros
+        self.best_Sampler = Sampler
 
         # Fit the estimator using the preprocessed features
         X = [x[0] for x in X]

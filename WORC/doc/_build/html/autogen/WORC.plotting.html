@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>plotting Package &mdash; WORC 3.2.2 documentation</title>
+  <title>plotting Package &mdash; WORC 3.3.0 documentation</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                3.2.2
+                3.3.0
               </div>
             
           
@@ -90,8 +90,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/features.html">Radiomics Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
@@ -114,10 +114,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.compute_CI"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compute_CI</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.linstretch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">linstretch</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_ROC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ROC</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_SVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_SVM</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_barchart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_barchart</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_boxplot_features"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot_features</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_boxplot_performance"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot_performance</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_estimator_performance"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_estimator_performance</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_images"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plotminmaxresponse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
@@ -288,88 +288,6 @@ can be used to plot a Receiver Operator Characteristic (ROC) curve.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-WORC.plotting.plot_SVM">
-<span id="plot-svm-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_SVM</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_SVM" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="WORC.plotting.plot_SVM.combine_multiple_estimators">
-<code class="descclassname">WORC.plotting.plot_SVM.</code><code class="descname">combine_multiple_estimators</code><span class="sig-paren">(</span><em>predictions</em>, <em>label_data</em>, <em>multilabel_type</em>, <em>label_types</em>, <em>ensemble=1</em>, <em>strategy='argmax'</em>, <em>alpha=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_SVM.html#combine_multiple_estimators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_SVM.combine_multiple_estimators" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combine multiple estimators in a single model.</p>
-<p>Note: the multilabel_type labels should correspond to the ordering in label_types.
-Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="WORC.plotting.plot_SVM.fit_thresholds">
-<code class="descclassname">WORC.plotting.plot_SVM.</code><code class="descname">fit_thresholds</code><span class="sig-paren">(</span><em>thresholds</em>, <em>estimator</em>, <em>X_train</em>, <em>Y_train</em>, <em>ensemble</em>, <em>ensemble_scoring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_SVM.html#fit_thresholds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_SVM.fit_thresholds" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="WORC.plotting.plot_SVM.main">
-<code class="descclassname">WORC.plotting.plot_SVM.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_SVM.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_SVM.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="WORC.plotting.plot_SVM.plot_SVM">
-<code class="descclassname">WORC.plotting.plot_SVM.</code><code class="descname">plot_SVM</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_data</em>, <em>label_type</em>, <em>show_plots=False</em>, <em>alpha=0.95</em>, <em>ensemble=False</em>, <em>verbose=True</em>, <em>ensemble_scoring=None</em>, <em>output='stats'</em>, <em>modus='singlelabel'</em>, <em>thresholds=None</em>, <em>survival=False</em>, <em>generalization=False</em>, <em>shuffle_estimators=False</em>, <em>bootstrap=False</em>, <em>bootstrap_N=1000</em>, <em>overfit_scaler=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_SVM.html#plot_SVM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_SVM.plot_SVM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plot the output of a single binary estimator, e.g. a SVM.</p>
-<dl class="simple">
-<dt>prediction: pandas dataframe or string, mandatory</dt><dd><p>output of trainclassifier function, either a pandas dataframe
-or a HDF5 file</p>
-</dd>
-<dt>label_data: string, mandatory</dt><dd><p>Contains the path referring to a .txt file containing the
-patient label(s) and value(s) to be used for learning. See
-the Github Wiki for the format.</p>
-</dd>
-<dt>label_type: string, mandatory</dt><dd><p>Name of the label to extract from the label data to test the
-estimator on.</p>
-</dd>
-<dt>show_plots: Boolean, default False</dt><dd><p>Determine whether matplotlib performance plots are made.</p>
-</dd>
-<dt>alpha: float, default 0.95</dt><dd><p>Significance of confidence intervals.</p>
-</dd>
-<dt>ensemble: False, integer or ‘Caruana’</dt><dd><p>Determine whether an ensemble will be created. If so,
-either provide an integer to determine how many of the
-top performing classifiers should be in the ensemble, or use
-the string “Caruana” to use smart ensembling based on
-Caruana et al. 2004.</p>
-</dd>
-<dt>verbose: boolean, default True</dt><dd><p>Plot intermedate messages.</p>
-</dd>
-<dt>ensemble_scoring: string, default None</dt><dd><p>Metric to be used for evaluating the ensemble. If None,
-the option set in the prediction object will be used.</p>
-</dd>
-<dt>output: string, default stats</dt><dd><p>Determine which results are put out. If stats, the statistics of the
-estimator will be returned. If scores, the scores will be returned.</p>
-</dd>
-<dt>thresholds: list of integer(s), default None</dt><dd><p>If None, use default threshold of sklearn (0.5) on posteriors to
-converge to a binary prediction. If one integer is provided, use that one.
-If two integers are provided, posterior &lt; thresh[0] = 0, posterior &gt; thresh[1] = 1.</p>
-</dd>
-</dl>
-<p>Depending on the output parameters, the following outputs are returned:</p>
-<p>If output == ‘stats’:
-stats: dictionary</p>
-<blockquote>
-<div><p>Contains the confidence intervals of the performance metrics
-and the number of times each patient was classifier correctly
-or incorrectly.</p>
-</div></blockquote>
-<p>If output == ‘scores’:
-y_truths: list</p>
-<blockquote>
-<div><p>Contains the true label for each object.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>y_scores: list</dt><dd><p>Contains the score (e.g. posterior) for each object.</p>
-</dd>
-<dt>y_predictions: list</dt><dd><p>Contains the predicted label for each object.</p>
-</dd>
-<dt>pids: list</dt><dd><p>Contains the patient ID/name for each object.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
 <div class="section" id="module-WORC.plotting.plot_barchart">
 <span id="plot-barchart-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_barchart</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_barchart" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -456,6 +374,88 @@ the first label from the prediction file will be used.</p>
 <dd></dd></dl>
 
 </div>
+<div class="section" id="module-WORC.plotting.plot_estimator_performance">
+<span id="plot-estimator-performance-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_estimator_performance</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_estimator_performance" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.plotting.plot_estimator_performance.combine_multiple_estimators">
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">combine_multiple_estimators</code><span class="sig-paren">(</span><em>predictions</em>, <em>label_data</em>, <em>multilabel_type</em>, <em>label_types</em>, <em>ensemble=1</em>, <em>strategy='argmax'</em>, <em>alpha=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#combine_multiple_estimators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.combine_multiple_estimators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine multiple estimators in a single model.</p>
+<p>Note: the multilabel_type labels should correspond to the ordering in label_types.
+Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.plotting.plot_estimator_performance.fit_thresholds">
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">fit_thresholds</code><span class="sig-paren">(</span><em>thresholds</em>, <em>estimator</em>, <em>X_train</em>, <em>Y_train</em>, <em>ensemble</em>, <em>ensemble_scoring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#fit_thresholds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.fit_thresholds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="WORC.plotting.plot_estimator_performance.main">
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="WORC.plotting.plot_estimator_performance.plot_estimator_performance">
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">plot_estimator_performance</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_data</em>, <em>label_type</em>, <em>show_plots=False</em>, <em>alpha=0.95</em>, <em>ensemble=False</em>, <em>verbose=True</em>, <em>ensemble_scoring=None</em>, <em>output='stats'</em>, <em>modus='singlelabel'</em>, <em>thresholds=None</em>, <em>survival=False</em>, <em>generalization=False</em>, <em>shuffle_estimators=False</em>, <em>bootstrap=False</em>, <em>bootstrap_N=1000</em>, <em>overfit_scaler=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#plot_estimator_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.plot_estimator_performance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the output of a single estimator, e.g. a SVM.</p>
+<dl class="simple">
+<dt>prediction: pandas dataframe or string, mandatory</dt><dd><p>output of trainclassifier function, either a pandas dataframe
+or a HDF5 file</p>
+</dd>
+<dt>label_data: string, mandatory</dt><dd><p>Contains the path referring to a .txt file containing the
+patient label(s) and value(s) to be used for learning. See
+the Github Wiki for the format.</p>
+</dd>
+<dt>label_type: string, mandatory</dt><dd><p>Name of the label to extract from the label data to test the
+estimator on.</p>
+</dd>
+<dt>show_plots: Boolean, default False</dt><dd><p>Determine whether matplotlib performance plots are made.</p>
+</dd>
+<dt>alpha: float, default 0.95</dt><dd><p>Significance of confidence intervals.</p>
+</dd>
+<dt>ensemble: False, integer or ‘Caruana’</dt><dd><p>Determine whether an ensemble will be created. If so,
+either provide an integer to determine how many of the
+top performing classifiers should be in the ensemble, or use
+the string “Caruana” to use smart ensembling based on
+Caruana et al. 2004.</p>
+</dd>
+<dt>verbose: boolean, default True</dt><dd><p>Plot intermedate messages.</p>
+</dd>
+<dt>ensemble_scoring: string, default None</dt><dd><p>Metric to be used for evaluating the ensemble. If None,
+the option set in the prediction object will be used.</p>
+</dd>
+<dt>output: string, default stats</dt><dd><p>Determine which results are put out. If stats, the statistics of the
+estimator will be returned. If scores, the scores will be returned.</p>
+</dd>
+<dt>thresholds: list of integer(s), default None</dt><dd><p>If None, use default threshold of sklearn (0.5) on posteriors to
+converge to a binary prediction. If one integer is provided, use that one.
+If two integers are provided, posterior &lt; thresh[0] = 0, posterior &gt; thresh[1] = 1.</p>
+</dd>
+</dl>
+<p>Depending on the output parameters, the following outputs are returned:</p>
+<p>If output == ‘stats’:
+stats: dictionary</p>
+<blockquote>
+<div><p>Contains the confidence intervals of the performance metrics
+and the number of times each patient was classifier correctly
+or incorrectly.</p>
+</div></blockquote>
+<p>If output == ‘scores’:
+y_truths: list</p>
+<blockquote>
+<div><p>Contains the true label for each object.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>y_scores: list</dt><dd><p>Contains the score (e.g. posterior) for each object.</p>
+</dd>
+<dt>y_predictions: list</dt><dd><p>Contains the predicted label for each object.</p>
+</dd>
+<dt>pids: list</dt><dd><p>Contains the patient ID/name for each object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 <div class="section" id="module-WORC.plotting.plot_images">
 <span id="plot-images-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_images" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -470,13 +470,13 @@ the first label from the prediction file will be used.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_images.plot_im_and_overlay">
-<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">plot_im_and_overlay</code><span class="sig-paren">(</span><em>image</em>, <em>mask</em>, <em>figsize=(3</em>, <em>3)</em>, <em>alpha=0.4</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#plot_im_and_overlay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.plot_im_and_overlay" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">plot_im_and_overlay</code><span class="sig-paren">(</span><em>image</em>, <em>mask=None</em>, <em>figsize=(3</em>, <em>3)</em>, <em>alpha=0.4</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#plot_im_and_overlay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.plot_im_and_overlay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot an image in a matplotlib figure and overlay with a mask.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_images.slicer">
-<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">slicer</code><span class="sig-paren">(</span><em>image, mask, output_name, output_name_zoom=None, thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False, expand=False, boundary=False, square=False, flip=True, alpha=0.4</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#slicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.slicer" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">slicer</code><span class="sig-paren">(</span><em>image, mask=None, output_name=None, output_name_zoom=None, thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False, expand=False, boundary=False, square=False, flip=True, alpha=0.4, index=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#slicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.slicer" title="Permalink to this definition">¶</a></dt>
 <dd><p>image and mask should both be arrays</p>
 </dd></dl>
 

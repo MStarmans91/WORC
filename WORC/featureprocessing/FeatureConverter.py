@@ -53,19 +53,19 @@ def convert_pyradiomics_featurevector(featureVector):
     # Change label to be similar to PREDICT
     new_featureVector = collections.OrderedDict()
     for k in featureVector.keys():
-        if '_glcm_' in k:
+        if '_glcm' in k:
             kn = 'tf_' + k.replace('_glcm_', '_GLCM_')
-        elif '_gldm_' in k:
+        elif '_gldm' in k:
             kn = 'tf_' + k.replace('_gldm_', '_GLDM_')
-        elif '_glrlm_' in k:
+        elif '_glrlm' in k:
             kn = 'tf_' + k.replace('_glrlm_', '_GLRLM_')
-        elif '_glszm_' in k:
+        elif '_glszm' in k:
             kn = 'tf_' + k.replace('_glszm_', '_GLSZM_')
-        elif '_ngtdm_' in k:
+        elif '_ngtdm' in k:
             kn = 'tf_' + k.replace('_ngtdm_', '_NGTDM_')
-        elif '_shape_' in k:
+        elif '_shape' in k:
             kn = 'sf_' + k
-        elif '_firstorder_' in k:
+        elif '_firstorder' in k:
             kn = 'hf_' + k
         elif 'of_' in k:
             # COM

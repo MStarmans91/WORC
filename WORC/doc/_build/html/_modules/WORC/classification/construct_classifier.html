@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.construct_classifier &mdash; WORC 3.2.2 documentation</title>
+  <title>WORC.classification.construct_classifier &mdash; WORC 3.3.0 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                3.2.2
+                3.3.0
               </div>
             
           
@@ -88,8 +88,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -267,6 +267,7 @@
         <span class="c1"># Logistic Regression</span>
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
                                         <span class="n">penalty</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">],</span>
+                                        <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span>
                                         <span class="n">C</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">],</span>
                                         <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;GaussianNB&#39;</span><span class="p">:</span>

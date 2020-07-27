@@ -1,11 +1,11 @@
-# WORC v3.2.2
+# WORC v3.3.0
 ## Workflow for Optimal Radiomics Classification
 
 ## Information
 
 | Linux                          | Windows                       | Documentation                 | PyPi                          |Citing WORC          |
 |--------------------------------|-------------------------------|-------------------------------|-------------------------------|---------------------|
-| [![][tci-linx]][tci-linx-lnk]  | [![][tci-wind]][tci-wind-lnk] | [![][doc]][doc-lnk]           | [![][pypi]][pypi-lnk]         | [![][DOI]][DOI-lnk] | 
+| [![][tci-linx]][tci-linx-lnk]  | [![][tci-wind]][tci-wind-lnk] | [![][doc]][doc-lnk]           | [![][pypi]][pypi-lnk]         | [![][DOI]][DOI-lnk] |
 
 [tci-linx]: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=1
 [tci-linx-lnk]: https://travis-ci.com/MStarmans91/WORC

@@ -78,16 +78,16 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_s
     return thresholds_val
 
 
-def plot_SVM(prediction, label_data, label_type, show_plots=False,
-             alpha=0.95, ensemble=False, verbose=True,
-             ensemble_scoring=None, output='stats',
-             modus='singlelabel',
-             thresholds=None, survival=False,
-             generalization=False, shuffle_estimators=False,
-             bootstrap=False, bootstrap_N=1000,
-             overfit_scaler=False):
+def plot_estimator_performance(prediction, label_data, label_type,
+                               show_plots=False, alpha=0.95, ensemble=False,
+                               verbose=True, ensemble_scoring=None,
+                               output='stats', modus='singlelabel',
+                               thresholds=None, survival=False,
+                               generalization=False, shuffle_estimators=False,
+                               bootstrap=False, bootstrap_N=1000,
+                               overfit_scaler=False):
     '''
-    Plot the output of a single binary estimator, e.g. a SVM.
+    Plot the output of a single estimator, e.g. a SVM.
 
     Parameters
     ----------
@@ -185,7 +185,7 @@ def plot_SVM(prediction, label_data, label_type, show_plots=False,
 
     if type(label_type) is list:
         # FIXME: Support for multiple label types not supported yet.
-        print('[WORC Warning] Support for multiple label types not supported yet. Taking first label for plot_SVM.')
+        print('[WORC Warning] Support for multiple label types not supported yet. Taking first label for plot_estimator_performance.')
         original_label_type = label_type[:]
         label_type = keys[0]
 
@@ -696,8 +696,8 @@ def combine_multiple_estimators(predictions, label_data, multilabel_type, label_
     for prediction, label_type in zip(predictions, label_types):
         y_truth, y_score, y_prediction, pid,\
             y_truth_train, y_score_train, y_prediction_train, pid_train =\
-            plot_SVM(prediction, label_data, label_type,
-                     ensemble=ensemble, output='allscores')
+            plot_estimator_performance(prediction, label_data, label_type,
+                                       ensemble=ensemble, output='allscores')
         y_truths.append(y_truth)
         y_scores.append(y_score)
         y_predictions.append(y_prediction)
@@ -779,7 +779,7 @@ def main():
         prediction = sys.argv[1]
         patientinfo = sys.argv[2]
         label_type = sys.argv[3]
-    plot_SVM(prediction, patientinfo, label_type)
+    plot_estimator_performance(prediction, patientinfo, label_type)
 
 
 if __name__ == '__main__':
