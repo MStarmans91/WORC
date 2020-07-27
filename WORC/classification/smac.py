@@ -197,7 +197,7 @@ def build_smac_config(parameters):
     #   3) DistanceP
     #   4) Numfeatures
 
-    relief = CategoricalHyperparameter('ReliefUse', choices=['True'])
+    relief = CategoricalHyperparameter('ReliefUse', choices=['True', 'False'])
     cs.add_hyperparameter(relief)
 
     relief_NN = UniformIntegerHyperparameter('ReliefNN',
