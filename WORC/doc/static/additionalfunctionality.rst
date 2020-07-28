@@ -8,10 +8,6 @@ already benefit from the main functionality of WORC, i.e. the automatic algorith
 optimization. However, several additional functionalities are provided, which are discussed in
 this chapter.
 
-Evaluation
------------
-Documentation WIP.
-
 ComBat
 --------
 

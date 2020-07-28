@@ -34,3 +34,22 @@ find a label in your label file. Please make sure that one of the Patient IDs
 from your label file occurs in the filename of your inputs. For example,
 when using the example label file from the `WORC tutorial <https://github.com/MStarmans91/WORCTutorial/blob/master/Data/Examplefiles/pinfo_HN.csv/>`_,
 if your Patient ID is not listed in column 1, this error will occur.
+
+Error: ``File "...\lib\site-packages\numpy\lib\function_base.py", line 4406,`` `` in delete keep[obj,] = False`` ``IndexError: arrays used as indices must be of integer (or boolean) type``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This is an error in PyRadiomics 3.0, see also
+`this issue <https://github.com/Radiomics/pyradiomics/issues/592/>`_. It has
+currently to be manually solved by within the PyRadiomics package, in the
+``glcm``, ``gldm``, ``glrlm``, ``glszm`` and ``ngtdm`` functions,
+searching for the line starting with ``emptyGrayLevels =``. After that,
+there will be a line similar to ``P_ngtdm = numpy.delete(P_ngtdm, emptyGrayLevels, 1)``.
+Before that line, add a conditional ``if list(emptyGrayLevels):``, e.g.
+for the NGTDM:
+
+.. code-block:: python
+
+  if list(emptyGrayLevels):
+    P_ngtdm = numpy.delete(P_ngtdm, emptyGrayLevels, 1)
+
+See also my fork of PyRadiomics, which you can also install to fix the issue:
+https://github.com/MStarmans91/pyradiomics.
