@@ -224,6 +224,7 @@
 <span class="kn">from</span> <span class="nn">WORC.classification.estimators</span> <span class="k">import</span> <span class="n">RankedSVM</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.Preprocessor</span> <span class="k">import</span> <span class="n">Preprocessor</span>
+<span class="kn">from</span> <span class="nn">WORC.detectors.detectors</span> <span class="k">import</span> <span class="n">DebugDetector</span>
 
 
 <div class="viewcode-block" id="rms_score"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.rms_score">[docs]</a><span class="k">def</span> <span class="nf">rms_score</span><span class="p">(</span><span class="n">truth</span><span class="p">,</span> <span class="n">prediction</span><span class="p">):</span>
@@ -1528,7 +1529,19 @@
         <span class="n">fit_params</span> <span class="o">=</span> <span class="n">_check_fit_params</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_params</span><span class="p">)</span>
 
         <span class="c1"># Create temporary directory for fastr</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_uppercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
+            <span class="c1"># Specific name for easy debugging</span>
+            <span class="n">debugnum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;DEBUG_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">debugnum</span><span class="p">)</span>
+            <span class="n">tempfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">],</span> <span class="s1">&#39;GS&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">):</span>
+                <span class="n">debugnum</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;DEBUG_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">debugnum</span><span class="p">)</span>
+                <span class="n">tempfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">],</span> <span class="s1">&#39;GS&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_uppercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
         <span class="n">tempfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">],</span> <span class="s1">&#39;GS&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">)</span>
@@ -1702,7 +1715,9 @@
               <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
 
         <span class="c1"># Remove the temporary folder used</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;DEBUG_0&#39;</span><span class="p">:</span>
+            <span class="c1"># Do delete if not debugging for first iteration</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">)</span>
 
         <span class="c1"># Process the results of the fitting procedure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process_fit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_splits</span><span class="p">,</span>

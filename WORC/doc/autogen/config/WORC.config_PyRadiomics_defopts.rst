@@ -2,7 +2,7 @@
 Subkey             Default     Options                                                                                                                 
 ================== =========== ========================================================================================================================
 geometryTolerance  0.0001      Float                                                                                                                   
-normalize          False       False                                                                                                                   
+normalize          False       Boolean                                                                                                                 
 normalizeScale     100         Integer                                                                                                                 
 interpolator       sitkBSpline See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .
 preCrop            True        True, False                                                                                                             

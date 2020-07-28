@@ -314,7 +314,7 @@ the toolbox.</p>
 <span id="iccthreshold-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ICCThreshold</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.ICCThreshold" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">ICCThreshold</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.8</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">ICCThreshold</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on intra- or inter-class correlation
 coefficient as defined by</p>
@@ -326,7 +326,7 @@ ICC(2,1) according to definitions of the paper, but according to radiomics
 literatue (<a class="reference external" href="https://www.tandfonline.com/doi/pdf/10.1080/0284186X.2018.1445283?needAccess=true">https://www.tandfonline.com/doi/pdf/10.1080/0284186X.2018.1445283?needAccess=true</a>,
 <a class="reference external" href="https://www.tandfonline.com/doi/pdf/10.3109/0284186X.2013.812798?needAccess=true">https://www.tandfonline.com/doi/pdf/10.3109/0284186X.2013.812798?needAccess=true</a>),
 we use ICC(3,1) anyway.</p>
-<p>The default threshold of 0.80 is also based on the literature metioned
+<p>The default threshold of 0.75 is also based on the literature metioned
 above.</p>
 <dl class="attribute">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold.__abstractmethods__">
@@ -335,11 +335,11 @@ above.</p>
 
 <dl class="method">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.8</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>ICCtype: string, default ‘intra’</dt><dd><p>Type of ICC used. intra results in ICC(3,1), inter in ICC(2,1)</p>
 </dd>
-<dt>threshold: float, default 0.80</dt><dd><p>Threshold for ICC-value in order for feature to be selected</p>
+<dt>threshold: float, default 0.75</dt><dd><p>Threshold for ICC-value in order for feature to be selected</p>
 </dd>
 </dl>
 </dd></dl>
@@ -378,7 +378,7 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 
 <dl class="function">
 <dt id="WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold">
-<code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">convert_features_ICC_threshold</code><span class="sig-paren">(</span><em>features_in</em>, <em>csv_out=None</em>, <em>features_out=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#convert_features_ICC_threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">convert_features_ICC_threshold</code><span class="sig-paren">(</span><em>features_in</em>, <em>csv_out=None</em>, <em>features_out=None</em>, <em>threshold=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#convert_features_ICC_threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>For features from multiple observers, compute ICC, return values,
 and optionally apply thresholding and save output.</p>
 <p>features_in: list, containing one list per observer.

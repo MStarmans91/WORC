@@ -190,6 +190,7 @@ def generate_config_options():
     config['PyRadiomics'] = dict()
     config['PyRadiomics']['geometryTolerance'] = 'Float'
     config['PyRadiomics']['Preprocessing'] = 'True, False'
+    config['PyRadiomics']['normalize'] = 'Boolean'
     config['PyRadiomics']['normalizeScale'] = 'Integer'
     config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
     config['PyRadiomics']['preCrop'] = 'True, False'
@@ -454,6 +455,7 @@ def generate_config_descriptions():
     config['PyRadiomics'] = dict()
     config['PyRadiomics']['geometryTolerance'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['Preprocessing'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['normalize'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['normalizeScale'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
     config['PyRadiomics']['preCrop'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'

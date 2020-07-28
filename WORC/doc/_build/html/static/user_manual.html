@@ -96,17 +96,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#input-file-definitions">Input file definitions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#attributes-sources">Attributes: Sources</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#images-and-segmentations">Images and segmentations</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#semantics">Semantics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#labels">Labels</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#semantics">Semantics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#masks">Masks</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#features">Features</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#metadata">Metadata</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#elastix-para">Elastix_Para</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#attributes-settings">Attributes: Settings</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#attributes-functions">Attributes: Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fastr-settings">FASTR settings</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#construction-and-execution-commands">Construction and execution commands</a></li>
 </ul>
 </li>
@@ -118,6 +115,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
@@ -205,6 +203,8 @@ object and provides several more advances functions. The specific functionalitie
 within those modules: <a class="reference internal" href="../autogen/WORC.facade.html#module-WORC.facade.simpleworc" title="WORC.facade.simpleworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC.facade.simpleworc</span></code></a> and <a class="reference internal" href="../autogen/WORC.facade.html#module-WORC.facade.basicworc" title="WORC.facade.basicworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC.facade.basicworc</span></code></a>. Many of the functions are actually wrappers to interact with the WORC
 object, and therefore use the functionality described below. For basic usage, only using
 <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> and it’s respective documentation should be sufficient.</p>
+<p>Additionally, we advice you to take a look at the <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">configuration chapter</span></a>
+for all the settings that can be adjusted in <code class="docutils literal notranslate"><span class="pre">WORC</span></code>.</p>
 <div class="section" id="the-worc-object">
 <h3>The WORC Object<a class="headerlink" href="#the-worc-object" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
@@ -236,23 +236,20 @@ FASTR network. These are:</p>
 <li><p>fastrconfigs</p></li>
 </ul>
 <p>When using a single dataset for both training and evaluation, you should
-supply all sources in train objects. You can use several kinds of
-validation methods (e.g.cross validation) to compute the performance on
-this dataset. Optionally, you can supply a separate training and test
-set.</p>
+supply all sources in train objects. By default, performance on a single
+dataset will be evaluated using cross-validation. Optionally, you can supply
+a separate training and test set.</p>
 <p>Each source should be given as a dictionary of strings corresponding to
-the source files. Each element should correspond to a single object,
-e.g. tumor, or patient. The keys are used to match the features to the
+the source filenames. Each element should correspond to a single object for the classification,
+e.g. a patient. The keys are used to match the features to the
 label and semantics sources, so make sure these correspond to the label
-file. The values should refer to the actual source files corresponding
-to the FASTR formats, see
-<a class="reference external" href="http://fastr.readthedocs.io/en/stable/fastr.reference.html#ioplugin-reference">http://fastr.readthedocs.io/en/stable/fastr.reference.html#ioplugin-reference</a>.</p>
+file.</p>
 <p>You can off course have multiple images or ROIs per object, e.g. a liver
 ROI and a tumor ROI. This can be easily done by appending to the
 sources. For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">MR</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">MR</span><span class="o">.</span><span class="n">nii</span><span class="p">}</span>
-<span class="n">segmentations1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">tumor</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">tumor</span><span class="o">.</span><span class="n">nii</span><span class="p">}</span>
-<span class="n">segmentations2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">liver</span><span class="o">.</span><span class="n">nii</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="n">vfs</span><span class="p">:</span><span class="o">//</span><span class="n">example</span><span class="o">/</span><span class="n">liver</span><span class="o">.</span><span class="n">nii</span><span class="p">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/image_MR.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient2/image_MR.nii.gz&#39;</span><span class="p">}</span>
+<span class="n">segmentations1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/seg_tumor_MR.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient2/seg_tumor_MR.nii.gz&#39;</span><span class="p">}</span>
+<span class="n">segmentations2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/seg_liver_MR.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient2/seg_liver_MR.nii.gz&#39;</span><span class="p">}</span>
 
 <span class="n">network</span><span class="o">.</span><span class="n">images_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">images1</span><span class="p">)</span>
 <span class="n">network</span><span class="o">.</span><span class="n">images_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">images1</span><span class="p">)</span>
@@ -263,6 +260,15 @@ sources. For example:</p>
 </div>
 <p>When using multiple sequences per patients (e.g. T1 and T2), the same
 appending procedure can be used.</p>
+<p>If you want to use multiple ROIs independently per patient, e.g. multiple tumors, you can do so
+by simply adding them to the dictionary. To make sure the data is still split per patient in the
+cross-validation, please add a sample number after an underscore to the key, e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1_0&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/image_MR.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient1_1&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/image_MR.nii.gz&#39;</span><span class="p">}</span>
+<span class="n">segmentations1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1_0&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/seg_tumor1_MR.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient1_1&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/seg_tumor2_MR.nii.gz&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>If your label file (see below) contains the label ‘’patient1’‘, both samples will get this label
+in the classification.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You have to make sure the images and segmentation sources match in size.</p>
@@ -270,7 +276,7 @@ appending procedure can be used.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You have to supply a configuration file for each image or feature source you append.
-Thus, in above example, you need to append two configurations!</p>
+Thus, in the first example above, you need to append two configurations!</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -286,20 +292,17 @@ Hence make sure you supply the sequence for which you have a ROI as the first ob
 <div class="section" id="images-and-segmentations">
 <h4>Images and segmentations<a class="headerlink" href="#images-and-segmentations" title="Permalink to this headline">¶</a></h4>
 <p>The minimal input for a Radiomics pipeline consists of either images
-(plus a segmentation if you have not implemented an automatic
-segmentation tool) or features plus a label file (and a configuration,
-but you can just use the default one.</p>
-<p>If you supply these, features will be computed within the segmentations
+plus segmentations, or features, plus a label file (and a configuration,
+but you can just use the default one).</p>
+<p>If you supply images and segmentations, features will be computed within the segmentations
 on the images. They are read out using SimpleITK, which supports various
 image formats such as DICOM, NIFTI, TIFF, NRRD and MHD.</p>
 </div>
-<div class="section" id="semantics">
-<h4>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h4>
-<p>Semantic features are used in the PREDICT CalcFeatures tool. You can
-supply these as a .csv listing your features per patient. The first
-column should always be named <code class="docutils literal notranslate"><span class="pre">Patient</span></code> and contain the Patient ID. The
-other columns should contain a label for the feature and their values.
-For example:</p>
+<div class="section" id="labels">
+<span id="um-labels"></span><h4>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h4>
+<p>The labels are predicted in the classification: should be a .txt or .csv file.
+The first column should head <code class="docutils literal notranslate"><span class="pre">Patient</span></code> and contain the patient ID. The next columns
+can contain labels you want to predict, e.g. tumor type, risk, genetics. For example:</p>
 <table class="docutils align-center">
 <colgroup>
 <col style="width: 38%" />
@@ -327,36 +330,32 @@ For example:</p>
 </tr>
 </tbody>
 </table>
-<p>Similar to the patient labels, the semantic features are matched to the
-correct image/features by the name of the image/features. So in this
+<p>These labels are matched to the correct image/features by the sample names of the image/features. So in this
 case, your sources should look as following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images_train</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;source1.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;source2.nii.gz&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
-<span class="n">segmentations_train</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;seg1.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;seg2.nii.gz&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images_train</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
+<span class="n">segmentations_train</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="labels">
-<h4>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h4>
-<p>The labels are used in classification. For PREDICT, these should be
-supplied as a .txt file. Similar to the semantics, the first column
-should head <code class="docutils literal notranslate"><span class="pre">Patient</span></code> and contain the patient ID. The next columns can
-contain things you want to predict. Hence the format is similar to the
-semantics file.</p>
+<div class="section" id="semantics">
+<h4>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h4>
+<p>Semantic features are non-computational features and are extracted using PREDICT. Examples include
+using the age and sex of the patients in the classification. You can
+supply these as a .csv listing your features per patient, similar to the <a class="reference internal" href="#um-labels"><span class="std std-ref">label file</span></a></p>
 </div>
 <div class="section" id="masks">
 <h4>Masks<a class="headerlink" href="#masks" title="Permalink to this headline">¶</a></h4>
-<p>WORC contains a segmentation preprocessing tool, called segmentix. This
-tool is still under development. The idea is that you can manipulate
+<p>WORC contains a segmentation preprocessing tool, called segmentix.
+The idea is that you can manipulate
 your segmentation, e.g. using dilation, then use a mask to make sure it
-is still valid. Currently, you can only let it take a ring of a certain
-radius around your ROI and mask it.</p>
+is still valid. See the <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">config chapter</span></a> for all segmentix options.</p>
 </div>
 <div class="section" id="features">
 <h4>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h4>
 <p>If you already computed your features, e.g. from a previous run, you can
 directly supply the features instead of the images and segmentations and
 skip the feature computation step. These should be stored in .hdf5 files
-matching the PREDICT CalcFeatures format.</p>
+matching the WORC format.</p>
 </div>
 <div class="section" id="metadata">
 <h4>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h4>
@@ -374,58 +373,52 @@ transform the segmentation to the other modality. This is done in WORC
 using Elastix <a class="reference external" href="http://elastix.isi.uu.nl/">http://elastix.isi.uu.nl/</a>. In this source, you can supply
 a parameter file for Elastix to be used in the registration in .txt.
 format. Alternatively, you can use SimpleElastix to generate a parameter
-map and pass this object to WORC. <strong>Note: WORC assume your segmentation
-is made on the first WORC.images source you supply. The segmentation
-will be alingned to all other image sources.</strong></p>
+map and pass this object to <code class="docutils literal notranslate"><span class="pre">WORC</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">WORC</span></code> assumes your segmentation is made on the first
+<code class="docutils literal notranslate"><span class="pre">WORC.images_train</span></code> (or test) source you supply. The segmentation
+will be alligned to all other image sources.</p>
 </div>
 </div>
-<div class="section" id="attributes-settings">
-<h3>Attributes: Settings<a class="headerlink" href="#attributes-settings" title="Permalink to this headline">¶</a></h3>
-<p>There are several attributes in WORC which define how your pipeline is
-executed:</p>
-<ul class="simple">
-<li><p>fastr_plugin</p></li>
-<li><p>fastr_tmpdir</p></li>
-<li><p>Tools: additional workflows are stored here. Currently only includes
-a pipeline for image registration without any Radiomics.</p></li>
-<li><p>CopyMetadata: Whether to automatically copy the metadata info
-(e.g. direction of cosines) from the images to the segmentations
-before applying transformix.</p></li>
-</ul>
-<p>An explanation of the FASTR settings is given below.</p>
-</div>
-<div class="section" id="attributes-functions">
-<h3>Attributes: Functions<a class="headerlink" href="#attributes-functions" title="Permalink to this headline">¶</a></h3>
-<p>The WORC.configs() attribute contains the configparser files, which you
-can easily edit. The WORC.set() function saves these objects in a
-temporary folder and converts the filename into as FASTR source, which
-is then put in the WORC.fastrconfigs() objects. Hence you do not need to
-edit the fastrconfigs object manually.</p>
-</div>
-<div class="section" id="fastr-settings">
-<h3>FASTR settings<a class="headerlink" href="#fastr-settings" title="Permalink to this headline">¶</a></h3>
-<p>There are two WORC attributes which contain settings on running FASTR.
-In WORC.fastr_plugin, you can specify which Execution Plugin should be
-used: see also
-<a class="reference external" href="http://fastr.readthedocs.io/en/stable/fastr.reference.html#executionplugin-reference">http://fastr.readthedocs.io/en/stable/fastr.reference.html#executionplugin-reference</a>.</p>
-<p>The default is the ProcessPollExecution plugin. The WORC.fastr_tempdir
-sets the temporary directory used in your run.</p>
 </div>
 <div class="section" id="construction-and-execution-commands">
 <h3>Construction and execution commands<a class="headerlink" href="#construction-and-execution-commands" title="Permalink to this headline">¶</a></h3>
-<p>After supplying your sources, you need to build the FASTR network. This
-can be done through the WORC.build() command. Depending on your sources,
-several nodes will be added and linked. This creates the WORC.network()
-object, which is a fastr.network() object. You can edit this network
+<p>After supplying your sources as described above, you need to build the FASTR network. This
+can be done through the <code class="docutils literal notranslate"><span class="pre">WORC.build()</span></code> command. Depending on your sources,
+several nodes will be added and linked. This creates the <code class="docutils literal notranslate"><span class="pre">WORC.network</span></code>
+object, which is a <code class="docutils literal notranslate"><span class="pre">fastr.network</span></code> object. You can edit this network
 freely, e.g. add another source or node. You can print the network with
-the WORC.network.draw_network() command.</p>
+the <code class="docutils literal notranslate"><span class="pre">WORC.network.draw_network</span></code> command.</p>
 <p>Next, we have to tell the network which sources should be used in the
-source nodes. This can be done through the WORC.set() command. This will
+source nodes. This can be done through the <code class="docutils literal notranslate"><span class="pre">WORC.set()</span></code> function. This will
 put your supplied sources into the source nodes and also creates the
 needed sink nodes. You can check these by looking at the created
-WORC.source_data_data and WORC.sink objects.</p>
+<code class="docutils literal notranslate"><span class="pre">WORC.source_data</span></code> and <code class="docutils literal notranslate"><span class="pre">WORC.sink_data</span></code> objects.</p>
 <p>Finally, after completing above steps, you can execute the network
-through the WORC.execute() command.</p>
+through the <code class="docutils literal notranslate"><span class="pre">WORC.execute()</span></code> command.</p>
+<p>Thus a typical experiment in <code class="docutils literal notranslate"><span class="pre">WORC</span></code> would follow the following structure,
+assuming you have created the relevant objects as listed above:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
+
+<span class="c1"># Create object</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+
+<span class="c1"># Append sources</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">images_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">images_train</span><span class="p">)</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">segmentations_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segmentations_train</span><span class="p">)</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">labels_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels_train</span><span class="p">)</span>
+
+<span class="c1"># Create a configuration</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">experiment</span><span class="o">.</span><span class="n">defaultconfig</span><span class="p">()</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># Build, set, and execute</span>
+<span class="n">network</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="n">network</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+<span class="n">network</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="evaluation-of-your-network">
@@ -443,7 +436,7 @@ through the WORC.execute() command.</p>
 <ol class="loweralpha simple">
 <li><p>Area under the curve (AUC) of the receiver operating characteristic (ROC) curve. In a multiclass setting, weuse the multiclass AUC from the <a class="reference external" href="https://tadpole.grand-challenge.org/">TADPOLE Challenge</a>.</p></li>
 <li><p>Accuracy.</p></li>
-<li><p>Balanced classification accuracy as defined by the <a class="reference external" href="https://tadpole.grand-challenge.org/">TADPOLE Challenge</a>.</p></li>
+<li><p>Balanced Classification Accuracy (BCA) as defined by the <a class="reference external" href="https://tadpole.grand-challenge.org/">TADPOLE Challenge</a>.</p></li>
 <li><p>F1-score</p></li>
 <li><p>Sensitivity, aka recall or true positive rate</p></li>
 <li><p>Specificity, aka true negative rate</p></li>
@@ -456,11 +449,11 @@ through the WORC.execute() command.</p>
 <li><p>Mean Squared Error (MSE)</p></li>
 <li><p>Intraclass Correlation Coefficient (ICC)</p></li>
 <li><p>Pearson correlation coefficient and p-value</p></li>
-<li><p>Spearmand correlation coefficient and p-value</p></li>
+<li><p>Spearman correlation coefficient and p-value</p></li>
 </ol>
 <p>For survival, in addition to the regression scores:
-a) Concordance index
-b) Cox regression coefficient and p-value</p>
+a. Concordance index
+b. Cox regression coefficient and p-value</p>
 <p>In cross-validation, by default, 95% confidence intervals for the mean performance measures are constructed using
 the corrected resampled t-test base on all cross-validation iterations, thereby taking into account that the samples
 in the cross-validation splits are not statistically independent. See als
@@ -485,24 +478,44 @@ distributed, it’s nonparametric, and assumes independent samples.</p>
 </li>
 <li><p>Ranking patients from typical to atypical as determined by the model, based on either:</p>
 <blockquote>
-<div><p>a) The percentage of times a patient was classified correctly when occuring in the test set. Patients always correctly classified
+<div><p>a. The percentage of times a patient was classified correctly when occuring in the test set. Patients always correctly classified
 can be seen as typical examples; patients always classified incorrectly as atypical.
-b) The mean posterior of the patient when occuring in the test set.</p>
+b. The mean posterior of the patient when occuring in the test set.</p>
 <p>These measures can only be used in classification. Besides an Excel with the rankings, snapshots of the middle slice
 of the image + segmentation are saved with the ground truth label and the percentage/posterior in the filename. In
 this way, one can scroll through the patients from typical to atypical to distinguish a pattern.</p>
 </div></blockquote>
 </li>
 <li><p>A barchart of how often certain features groups were selected in the optimal methods. Only useful when using
-groupwise feature selection.</p></li>
-</ol>
-<p>By default, only the first evaluation method, e.g. metric computation, is used. The other methods can simply be added
+groupwise feature selection.</p>
+<blockquote>
+<div><p>By default, only the first evaluation method, e.g. metric computation, is used. The other methods can simply be added
 to WORC by using the <code class="docutils literal notranslate"><span class="pre">add_evaluation()</span></code> function, either directly in WORC or through the facade:</p>
+</div></blockquote>
+</li>
+<li><p>Decomposition of your feature space.</p>
+<blockquote>
+<div><p>The following decompositions are performed:</p>
+<ol class="loweralpha simple">
+<li><p>Principle Component Analysis (PCA)</p></li>
+<li><p>Sparse PCA</p></li>
+<li><p>Kernel PCA: linear kernel</p></li>
+<li><p>Kernel PCA: polynomial kernel</p></li>
+<li><p>Kernel PCA: radial basis function kernel</p></li>
+<li><p>t-SNE</p></li>
+</ol>
+<p>A decomposition can help getting insight into how your dataset can be separated. for example, if the
+regular PCA shows good separation of your classes, your classes can be split using linear combinations
+of your features.</p>
+</div></blockquote>
+</li>
+</ol>
+<p>To add the evaluation workflow, simply use the <code class="docutils literal notranslate"><span class="pre">add_evaluation</span></code> function:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
-<span class="n">network</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
+<span class="n">experiment</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
 <span class="n">label_type</span> <span class="o">=</span> <span class="s1">&#39;name_of_label_predicted_for_evaluation&#39;</span>
 <span class="o">...</span>
-<span class="n">network</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">(</span><span class="n">label_type</span><span class="p">)</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">(</span><span class="n">label_type</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
@@ -522,10 +535,11 @@ to WORC by using the <code class="docutils literal notranslate"><span class="pre
 <div class="section" id="example-data">
 <h2>Example data<a class="headerlink" href="#example-data" title="Permalink to this headline">¶</a></h2>
 <p>For many files used in typical WORC experiments, we provide example data. Some
-of these can be found in the exampledata folder within the WORC package. To
+of these can be found in the exampledata folder within the WORC package:
+<a class="reference external" href="https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata">https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata</a>. To
 save memory, for several types the example data is not included, but a script
-is provided to create the example data. This script (create_examplt_data) can
-be foud in the exampledata folder as well.</p>
+is provided to create the example data. This script (<code class="docutils literal notranslate"><span class="pre">create_example_data</span></code>) can
+be found in the exampledata folder as well.</p>
 </div>
 </div>
 
