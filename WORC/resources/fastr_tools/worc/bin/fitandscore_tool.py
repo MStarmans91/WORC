@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ import json
 import pandas as pd
 from joblib import Parallel, delayed
 from WORC.classification.fitandscore import fit_and_score
+import WORC.addexceptions as ae
 
 
 def main():
@@ -36,6 +37,9 @@ def main():
     parser.add_argument('-out', '--out', metavar='out',
                         dest='out', type=str, required=True,
                         help='Output: fitted estimator (HDF)')
+    parser.add_argument('-verbose', '--verbose', metavar='verbose',
+                        nargs='+', dest='verbose', type=str, required=False,
+                        default=None, help='verbose')
     args = parser.parse_args()
 
     # Convert lists into strings
@@ -47,6 +51,8 @@ def main():
         args.para = ''.join(args.para)
     if type(args.out) is list:
         args.out = ''.join(args.out)
+    if type(args.verbose) is list:
+        args.verbose = ''.join(args.verbose)
 
     # Read the data
     data = pd.read_hdf(args.ed)
@@ -54,19 +60,32 @@ def main():
     with open(args.para, 'rb') as fp:
         para = json.load(fp)
 
+    # Check whether verbose is given or not
+    if args.verbose is None:
+        args.verbose = False
+    elif args.verbose == 'False':
+        args.verbose = False
+    elif args.verbose == 'True':
+        args.verbose = True
+    else:
+        raise ae.WORCKeyError(f'{args.verbose} is not a valid verbose option!')
+
+    # Run the tool
     n_cores = 1
     ret = Parallel(
-        n_jobs=n_cores, verbose=data['verbose'],
+        n_jobs=n_cores, verbose=args.verbose,
         pre_dispatch=2*n_cores
     )(delayed(fit_and_score)(X=data['X'], y=data['y'],
                              scoring=data['scoring'],
                              train=traintest['train'],
-                             test=traintest['test'], verbose=data['verbose'],
-                             para=parameters, fit_params=data['fit_params'],
+                             test=traintest['test'], verbose=args.verbose,
+                             parameters=parameters,
+                             fit_params=data['fit_params'],
                              return_train_score=data['return_train_score'],
                              return_parameters=data['return_parameters'],
                              return_n_test_samples=data['return_n_test_samples'],
                              return_times=data['return_times'],
+                             return_estimator=data['return_estimator'],
                              error_score=data['error_score'],
                              return_all=False)
       for parameters in para.values())

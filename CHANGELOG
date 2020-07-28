@@ -6,6 +6,48 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.3.0 - 2020-07-28
+------------------
+
+Added
+~~~~~~~
+- Graphviz vizualization of network is now nicely grouped.
+- Properly integrated ObjectSampler: various resampling options now available.
+- Verbose option to fit and score tool
+- Validator for PyRadiomics output.
+- FAQ version to documentation
+
+Changed
+~~~~~~~
+- Upgraded to new versions of sklearn (0.23.1) and imbalanced learn (0.7.0)
+- Some defaults, based on computation time.
+- Do not skip workflow if feature selection selects zero features,
+  but disable the feature selection.
+- Do not skip workflow if resampling is unsuccesfull,
+  but disable the resampling.
+- Default scaling is now not only Z-score, but also MinMax and Robust
+- Renamed plot SVM function and all functions using it, as now
+  we use all kinds of estimators.
+- L1 penalty does not work with new standard LR solver. Removed L1 penalty.
+
+Fixed
+~~~~~
+- Bug when using both elastix and segmentix.
+- Bug when using elastix in train-test workflow.
+- IMPORTANT: Previously, all methods except the machine learning where fit on
+  both the training and validation set together in fitandscore. This led
+  to overfitting on the validation set. Now, these are properly split.
+- Bugfix in Evaluate standalone for decompositon tool.
+- Applied imputation in decomposition if NaNs are detected.
+- In the facade ConfigBuilder, an error is raised when incorrect
+  overrides are given.
+- Bugfix in statistical feature test plotting.
+- Bugfix in Evaluate when using ComBat
+- Bugfix in feature converter of PyRadiomics when using 2D images.
+- Catch Graphviz error.
+- Bug in ICC.
+
+
 3.2.2 - 2020-07-14
 ------------------
 
@@ -431,6 +473,6 @@ Fixed
 - For multiple modalities, add only optional sources like metadata when present.
 
 1.0.0rc1 - 2017-05-08
-------------------
+---------------------
 
 First release

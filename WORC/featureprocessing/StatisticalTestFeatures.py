@@ -124,10 +124,13 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
         pvalueswil = list()
         pvaluesmw = list()
         pvalueschi2 = list()
+        classlabels = i_class.ravel()
 
         for num, fl in enumerate(feature_labels):
             fv = feature_values[:, num]
-            classlabels = i_class.ravel()
+
+            # Remove NaN values
+            fv = fv[~np.isnan(fv)]
 
             class1 = [i for j, i in enumerate(fv) if classlabels[j] == 1]
             class2 = [i for j, i in enumerate(fv) if classlabels[j] == 0]
@@ -138,13 +141,16 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
             try:
                 pvaluesmw.append(mannwhitneyu(class1, class2)[1])
             except ValueError as e:
-                print("[WORC Warning] " + str(e) + '. Replacing metric value by 1.')
-                pvaluesmw.append(1)
+                print("[WORC Warning] " + str(e) + '. Replacing metric value by NaN.')
+                pvaluesmw.append(np.nan)
 
             # Optional: perform chi2 test. Only do this when categorical, which we define as less than 20 options.
             unique_values = list(set(fv))
             unique_values.sort()
-            if len(unique_values) <= 20:
+            if len(unique_values) == 1:
+                print("[WORC Warning] " + fl + " has only one value. Replacing chi2 metric value by NaN.")
+                pvalueschi2.append(np.nan)
+            elif len(unique_values) <= 20:
                 class1_count = [class1.count(i) for i in unique_values]
                 class2_count = [class2.count(i) for i in unique_values]
                 obs = np.array([class1_count, class2_count])
@@ -152,8 +158,8 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
                 _, p, _, _ = chi2_contingency(obs)
                 pvalueschi2.append(p)
             else:
-                print("[WORC Warning] " + fl + " is no categorical variable. Replacing chi2 metric value by 1.")
-                pvalueschi2.append(1)
+                print("[WORC Warning] " + fl + " is no categorical variable. Replacing chi2 metric value by NaN.")
+                pvalueschi2.append(np.nan)
 
         # Sort based on p-values:
         indices = np.argsort(np.asarray(pvaluesmw))

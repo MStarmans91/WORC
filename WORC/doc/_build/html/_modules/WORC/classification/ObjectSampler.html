@@ -1,15 +1,19 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.ObjectSampler &mdash; WORC 3.1.3 documentation</title>
+  <title>WORC.classification.ObjectSampler &mdash; WORC 3.3.0 documentation</title>
   
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
 
   
   
@@ -17,7 +21,9 @@
   
 
   
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -29,11 +35,6 @@
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -49,9 +50,12 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> WORC
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> WORC
           
 
+          
+            
+            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -59,7 +63,7 @@
             
             
               <div class="version">
-                3.1.3
+                3.3.0
               </div>
             
           
@@ -76,6 +80,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -88,8 +93,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/facades.html">Facades</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -101,6 +107,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -139,7 +146,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -161,7 +168,7 @@
   <h1>Source code for WORC.classification.ObjectSampler</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -191,79 +198,159 @@
 <span class="sd">    He, Haibo, and Edwardo A. Garcia. &quot;Learning from imbalanced data.&quot;</span>
 <span class="sd">    IEEE Transactions on Knowledge &amp; Data Engineering 9 (2008): 1263-1284.</span>
 
-
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="ObjectSampler.__init__"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
                  <span class="n">sampling_strategy</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
-                 <span class="n">SMOTE_ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="n">SMOTE_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                  <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                 <span class="p">):</span>
-
+                 <span class="n">k_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                 <span class="n">threshold_cleaning</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize object.&quot;&quot;&quot;</span>
         <span class="c1"># Initialize a random state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
 
         <span class="c1"># Initialize all objects as Nones: overriden when required by functions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_neighbors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold_cleaning</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
 
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;RandomUnderSampling&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_RandomUnderSampling</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;NearMiss&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init_NearMiss</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;NeigbourhoodCleaningRule&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init_NeigbourhoodCleaningRule</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_NearMiss</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;NeighbourhoodCleaningRule&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_NeighbourhoodCleaningRule</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span>
+                                                <span class="n">n_jobs</span><span class="p">,</span> <span class="n">threshold_cleaning</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;RandomOverSampling&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">init_RandomOverSampling</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;ADASYN&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init_ADASYN</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_ADASYN</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;BorderlineSMOTE&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init_BorderlineSMOTE</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_BorderlineSMOTE</span><span class="p">(</span><span class="n">k_neighbors</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;SMOTE&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_SMOTE</span><span class="p">(</span><span class="n">k_neighbors</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;SMOTEENN&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init_SMOTEENN</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_SMOTEENN</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;SMOTETomek&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">init_SMOTETomek</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_SMOTETomek</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s1"> is not a valid sampling method!&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ObjectSampler.init_RandomUnderSampling"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_RandomUnderSampling">[docs]</a>    <span class="k">def</span> <span class="nf">init_RandomUnderSampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creata a random under sampler object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">under_sampling</span><span class="o">.</span><span class="n">RandomUnderSampler</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">,</span>
                                                         <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="n">sampling_strategy</span></div>
 
-<div class="viewcode-block" id="ObjectSampler.init_NearMiss"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_NearMiss">[docs]</a>    <span class="k">def</span> <span class="nf">init_NearMiss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
+<div class="viewcode-block" id="ObjectSampler.init_NearMiss"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_NearMiss">[docs]</a>    <span class="k">def</span> <span class="nf">init_NearMiss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creata a near miss sampler object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">under_sampling</span><span class="o">.</span><span class="n">NearMiss</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">,</span>
-                                              <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
-                                              <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span>
                                               <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="n">sampling_strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span></div>
+
+<div class="viewcode-block" id="ObjectSampler.init_NeighbourhoodCleaningRule"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_NeighbourhoodCleaningRule">[docs]</a>    <span class="k">def</span> <span class="nf">init_NeighbourhoodCleaningRule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span>
+                                       <span class="n">n_jobs</span><span class="p">,</span> <span class="n">threshold_cleaning</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creata a NeighbourhoodCleaningRule sampler object.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span>\
+            <span class="n">under_sampling</span><span class="o">.</span><span class="n">NeighbourhoodCleaningRule</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">,</span>
+                                                     <span class="n">threshold_cleaning</span><span class="o">=</span><span class="n">threshold_cleaning</span><span class="p">,</span>
+                                                     <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="n">sampling_strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="n">n_neighbors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold_cleaning</span> <span class="o">=</span> <span class="n">threshold_cleaning</span></div>
+
+<div class="viewcode-block" id="ObjectSampler.init_RandomOverSampling"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_RandomOverSampling">[docs]</a>    <span class="k">def</span> <span class="nf">init_RandomOverSampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creata a random over sampler object.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">over_sampling</span><span class="o">.</span><span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">,</span>
+                                                      <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="n">sampling_strategy</span></div>
+
+<div class="viewcode-block" id="ObjectSampler.init_ADASYN"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_ADASYN">[docs]</a>    <span class="k">def</span> <span class="nf">init_ADASYN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creata a ADASYN sampler object.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">over_sampling</span><span class="o">.</span><span class="n">ADASYN</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">,</span>
+                                           <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                                           <span class="n">n_neighbors</span><span class="o">=</span><span class="n">n_neighbors</span><span class="p">,</span>
+                                           <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="n">sampling_strategy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="n">n_neighbors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span></div>
 
-<div class="viewcode-block" id="ObjectSampler.init_RandomOverSampling"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_RandomOverSampling">[docs]</a>    <span class="k">def</span> <span class="nf">init_RandomOverSampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">over_sampling</span><span class="o">.</span><span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">,</span>
-                                                      <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">)</span>
+<div class="viewcode-block" id="ObjectSampler.init_BorderlineSMOTE"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_BorderlineSMOTE">[docs]</a>    <span class="k">def</span> <span class="nf">init_BorderlineSMOTE</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k_neighbors</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creata a BorderlineSMOTE sampler object.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span>\
+            <span class="n">over_sampling</span><span class="o">.</span><span class="n">BorderlineSMOTE</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                                          <span class="n">k_neighbors</span><span class="o">=</span><span class="n">k_neighbors</span><span class="p">,</span>
+                                          <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_neighbors</span> <span class="o">=</span> <span class="n">k_neighbors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span></div>
+
+<div class="viewcode-block" id="ObjectSampler.init_SMOTE"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_SMOTE">[docs]</a>    <span class="k">def</span> <span class="nf">init_SMOTE</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k_neighbors</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creata a SMOTE sampler object.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span>\
+            <span class="n">over_sampling</span><span class="o">.</span><span class="n">SMOTE</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                                <span class="n">k_neighbors</span><span class="o">=</span><span class="n">k_neighbors</span><span class="p">,</span>
+                                <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">k_neighbors</span> <span class="o">=</span> <span class="n">k_neighbors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span></div>
+
+<div class="viewcode-block" id="ObjectSampler.init_SMOTEENN"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_SMOTEENN">[docs]</a>    <span class="k">def</span> <span class="nf">init_SMOTEENN</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creata a SMOTEEN sampler object.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span>\
+            <span class="n">combine</span><span class="o">.</span><span class="n">SMOTEENN</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                             <span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="n">sampling_strategy</span></div>
 
-<div class="viewcode-block" id="ObjectSampler.init_SMOTE"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_SMOTE">[docs]</a>    <span class="k">def</span> <span class="nf">init_SMOTE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">sm</span> <span class="o">=</span> <span class="n">SMOTE</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">ratio</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_ratio&#39;</span><span class="p">],</span>
-                   <span class="n">m_neighbors</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_neighbors&#39;</span><span class="p">],</span>
-                   <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;borderline1&#39;</span><span class="p">,</span>
-                   <span class="n">n_jobs</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_n_cores&#39;</span><span class="p">])</span>
+<div class="viewcode-block" id="ObjectSampler.init_SMOTETomek"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_SMOTETomek">[docs]</a>    <span class="k">def</span> <span class="nf">init_SMOTETomek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creata a SMOTE Tomek sampler object.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span>\
+            <span class="n">combine</span><span class="o">.</span><span class="n">SMOTETomek</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
+                               <span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">sm</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="n">sampling_strategy</span></div>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<div class="viewcode-block" id="ObjectSampler.fit"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit a sampler object.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="s1">&#39;fit_resample&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Sampler does have fit_resample construction: not fitting now.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Object has a fit-transform construction</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ObjectSampler.fit"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="ObjectSampler.transform"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.transform">[docs]</a>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Transform objects with a fitted sampler.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="s1">&#39;fit_resample&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Sampler does have fit_resample construction: fit and resampling.&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">message</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;The ObjectSampler could not &#39;</span> <span class="o">+</span>\
+                          <span class="s1">&#39;resample the objects with &#39;</span> <span class="o">+</span>\
+                          <span class="s1">&#39;the given parameters. &#39;</span> <span class="o">+</span>\
+                          <span class="s1">&#39;Probably your number of samples &#39;</span> <span class="o">+</span>\
+                          <span class="s1">&#39;is too small for the parameters &#39;</span> <span class="o">+</span>\
+                          <span class="s1">&#39;used. Original error: &#39;</span> <span class="o">+</span> <span class="n">message</span>
+                <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -276,11 +363,19 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -291,7 +386,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

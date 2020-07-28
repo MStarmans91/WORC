@@ -17,7 +17,7 @@
 
 from sklearn.utils import check_random_state
 import numpy as np
-from sklearn.externals import six
+import six
 from ghalton import Halton
 # from sobol_seq import i4_sobol_generate as Sobol
 import scipy

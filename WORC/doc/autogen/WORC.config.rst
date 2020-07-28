@@ -17,7 +17,7 @@ Imputation        :ref:`Imputation <config-Imputation>`
 Labels            :ref:`Labels <config-Labels>`                      
 Preprocessing     :ref:`Preprocessing <config-Preprocessing>`        
 PyRadiomics       :ref:`PyRadiomics <config-PyRadiomics>`            
-SampleProcessing  :ref:`SampleProcessing <config-SampleProcessing>`  
+Resampling        :ref:`Resampling <config-Resampling>`              
 Segmentix         :ref:`Segmentix <config-Segmentix>`                
 SelectFeatGroup   :ref:`SelectFeatGroup <config-SelectFeatGroup>`    
 ================= ===================================================

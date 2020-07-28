@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.IOparser.config_io_classifier &mdash; WORC 3.2.2 documentation</title>
+  <title>WORC.IOparser.config_io_classifier &mdash; WORC 3.3.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -49,9 +50,12 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> WORC
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> WORC
           
 
+          
+            
+            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -59,7 +63,7 @@
             
             
               <div class="version">
-                3.2.2
+                3.3.0
               </div>
             
           
@@ -76,6 +80,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -88,8 +93,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -101,6 +107,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -139,7 +146,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -183,17 +190,17 @@
 
 
 <div class="viewcode-block" id="load_config"><a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.config_io_classifier.load_config">[docs]</a><span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="n">config_file_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load the config ini, parse settings to WORC</span>
+    <span class="sd">&quot;&quot;&quot;Load the config ini, parse settings to WORC.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        config_file_path (String): path of the .ini config file</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        settings_dict (dict): dict with the loaded settings</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">config_file_path</span><span class="p">):</span>
-        <span class="n">e</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;File </span><span class="si">{config_file_path}</span><span class="s1"> does not exist!&#39;</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{</span><span class="n">config_file_path</span><span class="si">}</span><span class="s1"> does not exist!&#39;</span>
         <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
     <span class="n">settings</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
@@ -203,7 +210,7 @@
                      <span class="s1">&#39;Labels&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;HyperOptimization&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
                      <span class="s1">&#39;Classification&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
                      <span class="s1">&#39;Featsel&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;FeatureScaling&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
-                     <span class="s1">&#39;SampleProcessing&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;Imputation&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
+                     <span class="s1">&#39;Resampling&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;Imputation&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
                      <span class="s1">&#39;Ensemble&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;Bootstrap&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
                      <span class="s1">&#39;FeatPreProcess&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;Evaluation&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">()}</span>
 
@@ -219,6 +226,13 @@
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;tempsave&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;tempsave&#39;</span><span class="p">)</span>
 
+    <span class="c1"># Feature Scaling</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scale_features&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;scale_features&#39;</span><span class="p">)</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Feature selection</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;Variance&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Variance&#39;</span><span class="p">)</span>
 
@@ -290,6 +304,30 @@
         <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span>\
             <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
              <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="c1"># Settings for sample processing, i.e. oversampling, undersampling etc</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Use&#39;</span><span class="p">)</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;sampling_strategy&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;sampling_strategy&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;k_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;k_neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;threshold_cleaning&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;threshold_cleaning&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
     <span class="c1"># Classification options</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr&#39;</span><span class="p">]</span> <span class="o">=</span>\
@@ -418,28 +456,6 @@
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;ranking_score&#39;</span><span class="p">]</span> <span class="o">=</span> \
         <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;ranking_score&#39;</span><span class="p">])</span>
 
-    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scale_features&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;scale_features&#39;</span><span class="p">)</span>
-    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">])</span>
-
-    <span class="c1"># Settings for sample processing, i.e. oversampling, undersampling etc</span>
-    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
-         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
-
-    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_ratio&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
-         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_ratio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
-
-    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
-         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;SMOTE_neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
-
-    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;Oversampling&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
-         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SampleProcessing&#39;</span><span class="p">][</span><span class="s1">&#39;Oversampling&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
-
     <span class="c1"># Settings for ensembling</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Use&#39;</span><span class="p">)</span>
@@ -468,11 +484,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -483,7 +507,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

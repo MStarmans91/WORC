@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +15,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from WORC.plotting.plot_SVM import plot_SVM
+from WORC.plotting.plot_estimator_performance import plot_estimator_performance
 import argparse
 import json
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Plot the SVM Curve of an estimator')
+    parser = argparse.ArgumentParser(description='Plot the performance of an estimator')
     parser.add_argument('-prediction', '--prediction', metavar='prediction',
                         nargs='+', dest='prediction', type=str, required=True,
                         help='Prediction file (HDF)')
@@ -57,10 +57,11 @@ def main():
     #     args.label_type = ''.join(args.label_type)
 
     # Plot the statistics
-    stats = plot_SVM(prediction=args.prediction,
-                     label_data=args.pinfo,
-                     ensemble=args.ensemble,
-                     label_type=args.label_type)
+    stats =\
+        plot_estimator_performance(prediction=args.prediction,
+                                   label_data=args.pinfo,
+                                   ensemble=args.ensemble,
+                                   label_type=args.label_type)
 
     with open(args.output_json, 'w') as fp:
         json.dump(stats, fp, indent=4)

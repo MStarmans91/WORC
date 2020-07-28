@@ -4,6 +4,11 @@ dist: bionic
 python:
   - 3.7
 
+# blocklist
+branches:
+  except:
+  - optimization-development
+
 # ===== Build for each OS ======
 matrix:
   include:
@@ -23,8 +28,12 @@ matrix:
         - git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
       # 'python' points to Python 2.7 on macOS but points to Python 3.8 on Linux and Windows
       # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only.
-      script: 
+      script:
         - python WORCTutorial/WORCTutorialSimple.py
+        - fastr trace "C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks features_train_CT_0_predict --samples HN1331
+        - fastr trace "C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks classification --samples all
+        - fastr trace "C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks classification --samples all
+        - fastr trace "C:\Users\travis\AppData\Local\Temp\GS\DEBUG_0\tmp\__sink_data__.json" --sinks output --samples id_0__0__0
     - name: "Linux"
       before_install:
        - sudo apt-get -qq update
@@ -41,6 +50,7 @@ matrix:
         - python WORCTutorial/WORCTutorialSimple.py
         - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
         - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
+        - fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0__0
 
 notifications:
   slack:

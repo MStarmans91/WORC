@@ -26,7 +26,7 @@ from WORC.plotting.compute_CI import compute_confidence as CI
 import numpy as np
 from sklearn.metrics import roc_auc_score, auc
 import csv
-from WORC.plotting.plot_SVM import plot_SVM
+from WORC.plotting.plot_estimator_performance import plot_estimator_performance
 
 
 def plot_single_ROC(y_truth, y_score, verbose=False):
@@ -361,10 +361,11 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
 
     # Determine the predicted score per patient
     print('Determining score per patient.')
-    y_truths, y_scores, _, _ = plot_SVM(prediction, pinfo, [label_type],
-                                        show_plots=False,
-                                        alpha=0.95, ensemble=ensemble,
-                                        output='decision')
+    y_truths, y_scores, _, _ =\
+        plot_estimator_performance(prediction, pinfo, [label_type],
+                                   show_plots=False,
+                                   alpha=0.95, ensemble=ensemble,
+                                   output='decision')
 
     # Plot the ROC with confidence intervals
     print("Plotting the ROC with confidence intervals.")

@@ -361,7 +361,7 @@ def crossval(config, label_data, image_features,
                     n += 1
                     filename = os.path.join(tempfolder, 'tempsave_' + str(i + n) + '.hdf5')
 
-                panda_data.to_hdf(filename, 'SVMdata')
+                panda_data.to_hdf(filename, 'EstimatorData')
                 del panda_data, panda_data_temp
 
             # Print elapsed time

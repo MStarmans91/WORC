@@ -24,7 +24,7 @@
         <input id="format" name="format" datatype="String" prefix="--format" cardinality="1" repeat_prefix="false" required="false" />
      </inputs>
     <outputs>
-      <output id="features" name="Output feature files" datatype="CSVFile" cardinality="as:parameters" nospace="False" prefix="--out" required="false"/>
+      <output id="features" name="Output feature files" datatype="PyRadiomicsCSVFile" cardinality="as:parameters" nospace="False" prefix="--out" required="false"/>
     </outputs>
   </interface>
   <requirements />
