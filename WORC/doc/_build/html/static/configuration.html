@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,28 +11,30 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Radiomics Features" href="features.html" />
@@ -51,9 +52,12 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> WORC
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> WORC
           
 
+          
+            
+            <img src="../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -78,6 +82,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -130,6 +135,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -168,7 +174,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Configuration</li>
     
@@ -250,7 +256,7 @@ list can be created by using commas for separation, e.g.
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <p>The config object can be indexed as <code class="docutils literal notranslate"><span class="pre">config[key][subkey]</span> <span class="pre">=</span> <span class="pre">value</span></code>. The various keys, subkeys, and the values
 (description, defaults and options) can be found below.</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 75%" />
@@ -330,7 +336,7 @@ WORC on a cluster with nodes supporting only a single core to be used
 per node, e.g. the BIGR cluster, use only 1 core and threading as a
 backend.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 14%" />
 <col style="width: 86%" />
@@ -377,7 +383,7 @@ backend.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 15%" />
 <col style="width: 28%" />
@@ -444,7 +450,7 @@ label used for classification.</p>
 <p>This part is really important, as it should match your label file.
 Suppose your patientclass.txt file you supplied as source for labels
 looks like this:</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 38%" />
 <col style="width: 31%" />
@@ -480,7 +486,7 @@ want to use Label1 for classification, then set:</p>
 <p>If you want to first train a classifier on Label1 and then Label2,
 set: <code class="docutils literal notranslate"><span class="pre">config[Labels][label_names]</span> <span class="pre">=</span> <span class="pre">Label1,</span> <span class="pre">Label2</span></code></p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 11%" />
 <col style="width: 89%" />
@@ -506,7 +512,7 @@ set: <code class="docutils literal notranslate"><span class="pre">config[Labels]
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 23%" />
 <col style="width: 29%" />
@@ -545,7 +551,7 @@ Currently, only normalization is included. Additionally, scans with image
 type CT (see later in the tutorial) provided as DICOM are scaled to
 Hounsfield Units.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -577,7 +583,7 @@ Hounsfield Units.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 38%" />
 <col style="width: 20%" />
@@ -622,7 +628,7 @@ Hounsfield Units.</p>
 <p>These fields are only important if you specified using the segmentix
 tool in the general configuration.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 16%" />
 <col style="width: 84%" />
@@ -657,7 +663,7 @@ tool in the general configuration.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 43%" />
 <col style="width: 17%" />
@@ -707,7 +713,7 @@ tool in the general configuration.</p>
 feature computation here. Also, you can select if the certain features
 are computed or not.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 16%" />
 <col style="width: 84%" />
@@ -805,7 +811,7 @@ are computed or not.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 30%" />
 <col style="width: 30%" />
@@ -939,7 +945,7 @@ are computed or not.</p>
 feature computation here. For more information, see
 <a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.htm">https://pyradiomics.readthedocs.io/en/latest/customization.htm</a>.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -1013,7 +1019,7 @@ feature computation here. For more information, see
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 7%" />
@@ -1115,7 +1121,7 @@ feature computation here. For more information, see
 feature harmonization here. For more information, see
 <a class="reference external" href="https://github.com/Jfortin1/ComBatHarmonization">https://github.com/Jfortin1/ComBatHarmonization</a>.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 9%" />
 <col style="width: 91%" />
@@ -1153,7 +1159,7 @@ feature harmonization here. For more information, see
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 18%" />
 <col style="width: 48%" />
@@ -1206,7 +1212,7 @@ feature harmonization here. For more information, see
 <p>Before the features are given to the classification function, and thus the
 hyperoptimization, these can be preprocessed as following.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -1223,7 +1229,7 @@ hyperoptimization, these can be preprocessed as following.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 30%" />
 <col style="width: 35%" />
@@ -1252,7 +1258,7 @@ values per field, of which random samples will be drawn of which finally
 the best setting in combination with the other hyperparameters is
 selected.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 7%" />
 <col style="width: 93%" />
@@ -1275,7 +1281,7 @@ selected.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 44%" />
@@ -1307,7 +1313,7 @@ selected.</p>
 <span id="config-featurescaling"></span><h3>FeatureScaling<a class="headerlink" href="#featurescaling" title="Permalink to this headline">¶</a></h3>
 <p>Determines which method is applied to scale each feature.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 24%" />
 <col style="width: 76%" />
@@ -1327,7 +1333,7 @@ selected.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 23%" />
 <col style="width: 38%" />
@@ -1361,7 +1367,7 @@ which finally the best setting in combination with the other
 hyperparameters is selected. Again, these should be formatted as string
 containing the actual values, e.g. value1, value2.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 8%" />
 <col style="width: 92%" />
@@ -1414,7 +1420,7 @@ containing the actual values, e.g. value1, value2.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 29%" />
 <col style="width: 28%" />
@@ -1492,7 +1498,7 @@ value.</p>
 selecting all, none or a single group. This is still supported, but not
 recommended, and looks as follows:</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 29%" />
 <col style="width: 71%" />
@@ -1581,7 +1587,7 @@ recommended, and looks as follows:</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 24%" />
 <col style="width: 27%" />
@@ -1703,7 +1709,7 @@ recommended, and looks as follows:</p>
 techniques to resample (under-sampling, over-sampling, or both) the data.
 All methods are adopted from <a class="reference external" href="https://imbalanced-learn.readthedocs.io/">imbalanced learn</a>.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 8%" />
 <col style="width: 92%" />
@@ -1735,7 +1741,7 @@ All methods are adopted from <a class="reference external" href="https://imbalan
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 47%" />
@@ -1782,7 +1788,7 @@ following settings. Almost all of these are used in CASH. Most of the
 classifiers are implemented using sklearn; hence descriptions of the
 hyperparameters can also be found there.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 11%" />
 <col style="width: 89%" />
@@ -1868,7 +1874,7 @@ hyperparameters can also be found there.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 9%" />
 <col style="width: 19%" />
@@ -1985,7 +1991,7 @@ hyperparameters can also be found there.</p>
 <p>When using the PREDICT toolbox for classification and you specified
 using cross validation, specify the following settings.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 88%" />
@@ -2008,7 +2014,7 @@ using cross validation, specify the following settings.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 46%" />
 <col style="width: 27%" />
@@ -2041,7 +2047,7 @@ using cross validation, specify the following settings.</p>
 <p>When using the PREDICT toolbox for classification, you have to supply
 your hyperparameter optimization procedure here.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 9%" />
 <col style="width: 91%" />
@@ -2076,7 +2082,7 @@ your hyperparameter optimization procedure here.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 8%" />
@@ -2126,7 +2132,7 @@ your hyperparameter optimization procedure here.</p>
 radiomics, hence the default is to not use it and select only the best
 performing workflow.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 5%" />
 <col style="width: 95%" />
@@ -2143,7 +2149,7 @@ performing workflow.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 30%" />
 <col style="width: 35%" />
@@ -2167,7 +2173,7 @@ performing workflow.</p>
 <span id="config-evaluation"></span><h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
 <p>In the evaluation of the performance, several adjustments can be made.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -2184,7 +2190,7 @@ performing workflow.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 42%" />
 <col style="width: 23%" />
@@ -2208,7 +2214,7 @@ performing workflow.</p>
 <span id="config-bootstrap"></span><h3>Bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this headline">¶</a></h3>
 <p>Besides cross validation, WORC supports bootstrapping on the test set for performance evaluation.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 21%" />
 <col style="width: 79%" />
@@ -2228,7 +2234,7 @@ performing workflow.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 46%" />
 <col style="width: 27%" />
@@ -2275,11 +2281,19 @@ performing workflow.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -2290,7 +2304,6 @@ performing workflow.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -1,12 +1,16 @@
 *****
-WORC
+WORC: Workflow for Optimal Radiomics Classification
 *****
 
-Workflow for Optimal Radiomics Classification
+Welcome to the WORC documentation!
 ---------------------------------------------
 
 WORC is an open-source python package for the easy execution of end-to-end
-radiomics pipelines.
+radiomics pipelines. Using automatic algorithm optimization, WORC automatically determines the optimal combination
+from a wide variety of radiomics methods to develop a signature on your dataset. Thereby, performing
+a radiomics study is effectively reduced to a black box with a push button, where you simply have to input
+your data and WORC will adapt the workflow to your application. Thus, WORC is especially suitable
+for the fast development of signatures and thus probing datasets for new biomarkers.
 
 We aim to establish a general radiomics platform supporting easy
 integration of other tools. With our modular build and support of

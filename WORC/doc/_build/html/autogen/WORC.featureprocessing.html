@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,28 +11,30 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="plotting Package" href="WORC.plotting.html" />
@@ -51,9 +52,12 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> WORC
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> WORC
           
 
+          
+            
+            <img src="../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -78,6 +82,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -141,6 +146,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -179,7 +185,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="WORC.html">WORC Package</a> &raquo;</li>
         
@@ -209,39 +215,39 @@
 <span class="target" id="module-WORC.featureprocessing"></span></div>
 <div class="section" id="module-WORC.featureprocessing.ComBat">
 <span id="combat-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ComBat</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.ComBat" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.ComBat.ComBat">
-<code class="descclassname">WORC.featureprocessing.ComBat.</code><code class="descname">ComBat</code><span class="sig-paren">(</span><em>features_train_in</em>, <em>labels_train</em>, <em>config</em>, <em>features_train_out</em>, <em>features_test_in=None</em>, <em>labels_test=None</em>, <em>features_test_out=None</em>, <em>VarianceThreshold=True</em>, <em>scaler=False</em>, <em>logarithmic=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#ComBat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.ComBat" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.ComBat.</code><code class="sig-name descname">ComBat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features_train_in</span></em>, <em class="sig-param"><span class="n">labels_train</span></em>, <em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">features_train_out</span></em>, <em class="sig-param"><span class="n">features_test_in</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">labels_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">features_test_out</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">VarianceThreshold</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">scaler</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">logarithmic</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#ComBat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.ComBat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply ComBat feature harmonization.</p>
 <p>Based on: <a class="reference external" href="https://github.com/Jfortin1/ComBatHarmonization">https://github.com/Jfortin1/ComBatHarmonization</a></p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.ComBat.ComBatMatlab">
-<code class="descclassname">WORC.featureprocessing.ComBat.</code><code class="descname">ComBatMatlab</code><span class="sig-paren">(</span><em>dat</em>, <em>batch</em>, <em>command</em>, <em>mod=None</em>, <em>par=1</em>, <em>per_feature='true'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#ComBatMatlab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.ComBatMatlab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.ComBat.</code><code class="sig-name descname">ComBatMatlab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dat</span></em>, <em class="sig-param"><span class="n">batch</span></em>, <em class="sig-param"><span class="n">command</span></em>, <em class="sig-param"><span class="n">mod</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">par</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">per_feature</span><span class="o">=</span><span class="default_value">'true'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#ComBatMatlab"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.ComBatMatlab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the ComBat Function Matlab script.</p>
 <p>par = 0 is non-parametric.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.ComBat.ComBatPython">
-<code class="descclassname">WORC.featureprocessing.ComBat.</code><code class="descname">ComBatPython</code><span class="sig-paren">(</span><em>dat</em>, <em>batch</em>, <em>mod=None</em>, <em>par=1</em>, <em>eb=1</em>, <em>per_feature=False</em>, <em>plotting=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#ComBatPython"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.ComBatPython" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.ComBat.</code><code class="sig-name descname">ComBatPython</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dat</span></em>, <em class="sig-param"><span class="n">batch</span></em>, <em class="sig-param"><span class="n">mod</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">par</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">eb</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">per_feature</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">plotting</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#ComBatPython"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.ComBatPython" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the ComBat Function python script.</p>
 <p>par = 0 is non-parametric.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.ComBat.Synthetictest">
-<code class="descclassname">WORC.featureprocessing.ComBat.</code><code class="descname">Synthetictest</code><span class="sig-paren">(</span><em>n_patients=50</em>, <em>n_features=10</em>, <em>par=1</em>, <em>eb=1</em>, <em>per_feature=False</em>, <em>difscale=False</em>, <em>logarithmic=False</em>, <em>oddpatient=True</em>, <em>oddfeat=True</em>, <em>samefeat=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#Synthetictest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.Synthetictest" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.ComBat.</code><code class="sig-name descname">Synthetictest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_patients</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">n_features</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">par</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">eb</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">per_feature</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">difscale</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">logarithmic</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">oddpatient</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">oddfeat</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">samefeat</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ComBat.html#Synthetictest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ComBat.Synthetictest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test for ComBat with Synthetic data.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-WORC.featureprocessing.Decomposition">
 <span id="decomposition-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Decomposition</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.Decomposition" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.Decomposition.Decomposition">
-<code class="descclassname">WORC.featureprocessing.Decomposition.</code><code class="descname">Decomposition</code><span class="sig-paren">(</span><em>features</em>, <em>patientinfo</em>, <em>config</em>, <em>output</em>, <em>label_type=None</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Decomposition.html#Decomposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Decomposition.Decomposition" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.Decomposition.</code><code class="sig-name descname">Decomposition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span></em>, <em class="sig-param"><span class="n">patientinfo</span></em>, <em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">output</span></em>, <em class="sig-param"><span class="n">label_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Decomposition.html#Decomposition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Decomposition.Decomposition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform decompositions to two components of the feature space.</p>
 <p>Useage is similar to StatisticalTestFeatures.</p>
 <dl class="simple">
@@ -271,9 +277,9 @@ fields and their description.</p>
 </div>
 <div class="section" id="module-WORC.featureprocessing.FeatureConverter">
 <span id="featureconverter-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">FeatureConverter</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.FeatureConverter" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.FeatureConverter.FeatureConverter">
-<code class="descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="descname">FeatureConverter</code><span class="sig-paren">(</span><em>feat_in</em>, <em>toolbox</em>, <em>config</em>, <em>feat_out</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#FeatureConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.FeatureConverter" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="sig-name descname">FeatureConverter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">feat_in</span></em>, <em class="sig-param"><span class="n">toolbox</span></em>, <em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">feat_out</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#FeatureConverter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.FeatureConverter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert features as extracted by a third-party toolbox to WORC format.</p>
 <dl class="simple">
 <dt>feat_in: string</dt><dd><p>Path to input feature file as outputted by the feature extraction
@@ -288,33 +294,33 @@ toolbox.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.FeatureConverter.convert_PREDICT">
-<code class="descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="descname">convert_PREDICT</code><span class="sig-paren">(</span><em>features</em>, <em>feat_out</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_PREDICT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_PREDICT" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="sig-name descname">convert_PREDICT</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span></em>, <em class="sig-param"><span class="n">feat_out</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_PREDICT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_PREDICT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert features from PREDICT toolbox to WORC compatible format.</p>
 <p>As PREDICT is the WORC default toolbox, we only need to add the name of
 the toolbox.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.FeatureConverter.convert_pyradiomics">
-<code class="descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="descname">convert_pyradiomics</code><span class="sig-paren">(</span><em>features</em>, <em>feat_out=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_pyradiomics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_pyradiomics" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="sig-name descname">convert_pyradiomics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span></em>, <em class="sig-param"><span class="n">feat_out</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_pyradiomics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_pyradiomics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert features from PyRadiomics toolbox to WORC compatible format.</p>
 <p>Description:</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.FeatureConverter.convert_pyradiomics_featurevector">
-<code class="descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="descname">convert_pyradiomics_featurevector</code><span class="sig-paren">(</span><em>featureVector</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_pyradiomics_featurevector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_pyradiomics_featurevector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="sig-name descname">convert_pyradiomics_featurevector</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">featureVector</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_pyradiomics_featurevector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_pyradiomics_featurevector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a PyRadiomics feature vector to WORC compatible features.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-WORC.featureprocessing.ICCThreshold">
 <span id="iccthreshold-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ICCThreshold</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.ICCThreshold" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">ICCThreshold</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="sig-name descname">ICCThreshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ICCtype</span><span class="o">=</span><span class="default_value">'intra'</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.75</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on intra- or inter-class correlation
 coefficient as defined by</p>
@@ -328,14 +334,14 @@ literatue (<a class="reference external" href="https://www.tandfonline.com/doi/p
 we use ICC(3,1) anyway.</p>
 <p>The default threshold of 0.75 is also based on the literature metioned
 above.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold.__abstractmethods__">
-<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ICCtype</span><span class="o">=</span><span class="default_value">'intra'</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.75</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>ICCtype: string, default ‘intra’</dt><dd><p>Type of ICC used. intra results in ICC(3,1), inter in ICC(2,1)</p>
 </dd>
@@ -344,14 +350,14 @@ above.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.ICCThreshold'</em><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.featureprocessing.ICCThreshold'</em><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X_trains</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X_trains</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select only features specificed by the metric and threshold per patient.</p>
 <dl class="simple">
 <dt>X_trains: numpy array, mandatory</dt><dd><p>Array containing feature values used for model_selection.
@@ -362,9 +368,9 @@ Number of objects on first axis, features on second axis, observers on third axi
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>inputarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputarray</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the inputarray to select only the features based on the
 result from the fit function.</p>
 <dl class="simple">
@@ -376,9 +382,9 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold">
-<code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">convert_features_ICC_threshold</code><span class="sig-paren">(</span><em>features_in</em>, <em>csv_out=None</em>, <em>features_out=None</em>, <em>threshold=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#convert_features_ICC_threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="sig-name descname">convert_features_ICC_threshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features_in</span></em>, <em class="sig-param"><span class="n">csv_out</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">features_out</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.75</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#convert_features_ICC_threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>For features from multiple observers, compute ICC, return values,
 and optionally apply thresholding and save output.</p>
 <p>features_in: list, containing one list per observer.
@@ -389,19 +395,19 @@ features_out: list, containing file names of output features.</p>
 </div>
 <div class="section" id="module-WORC.featureprocessing.Imputer">
 <span id="imputer-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Imputer</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.Imputer" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="WORC.featureprocessing.Imputer.Imputer">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.Imputer.</code><code class="descname">Imputer</code><span class="sig-paren">(</span><em>missing_values='nan'</em>, <em>strategy='mean'</em>, <em>n_neighbors=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Imputer.html#Imputer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">WORC.featureprocessing.Imputer.</code><code class="sig-name descname">Imputer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">missing_values</span><span class="o">=</span><span class="default_value">'nan'</span></em>, <em class="sig-param"><span class="n">strategy</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">n_neighbors</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Imputer.html#Imputer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Module for feature imputation.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.Imputer.Imputer.__dict__">
-<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.featureprocessing.Imputer', '__doc__': 'Module for feature imputation.', '__init__': &lt;function Imputer.__init__&gt;, 'fit': &lt;function Imputer.fit&gt;, 'transform': &lt;function Imputer.transform&gt;, '__dict__': &lt;attribute '__dict__' of 'Imputer' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Imputer' objects&gt;})</em><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.__dict__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.featureprocessing.Imputer', '__doc__': 'Module for feature imputation.', '__init__': &lt;function Imputer.__init__&gt;, 'fit': &lt;function Imputer.fit&gt;, 'transform': &lt;function Imputer.transform&gt;, '__dict__': &lt;attribute '__dict__' of 'Imputer' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Imputer' objects&gt;})</em><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.__dict__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Imputer.Imputer.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>missing_values='nan'</em>, <em>strategy='mean'</em>, <em>n_neighbors=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Imputer.html#Imputer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">missing_values</span><span class="o">=</span><span class="default_value">'nan'</span></em>, <em class="sig-param"><span class="n">strategy</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">n_neighbors</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Imputer.html#Imputer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Imputation of feature values using either sklearn, missingpy or
 (WIP) fancyimpute approaches.</p>
 <dl>
@@ -435,25 +441,25 @@ is knn.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.Imputer.Imputer.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.Imputer'</em><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.featureprocessing.Imputer'</em><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.Imputer.Imputer.__weakref__">
-<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.__weakref__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.__weakref__" title="Permalink to this definition">¶</a></dt>
 <dd><p>list of weak references to the object (if defined)</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Imputer.Imputer.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Imputer.html#Imputer.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Imputer.html#Imputer.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Imputer.Imputer.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Imputer.html#Imputer.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Imputer.html#Imputer.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Imputer.Imputer.transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -461,43 +467,43 @@ is knn.</p>
 </div>
 <div class="section" id="module-WORC.featureprocessing.Preprocessor">
 <span id="preprocessor-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Preprocessor</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.Preprocessor" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.Preprocessor.</code><code class="descname">Preprocessor</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">WORC.featureprocessing.Preprocessor.</code><code class="sig-name descname">Preprocessor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Module for feature preprocessing.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.__dict__">
-<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.featureprocessing.Preprocessor', '__doc__': 'Module for feature preprocessing.', '__init__': &lt;function Preprocessor.__init__&gt;, 'fit': &lt;function Preprocessor.fit&gt;, 'transform': &lt;function Preprocessor.transform&gt;, '__dict__': &lt;attribute '__dict__' of 'Preprocessor' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Preprocessor' objects&gt;})</em><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__dict__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.featureprocessing.Preprocessor', '__doc__': 'Module for feature preprocessing.', '__init__': &lt;function Preprocessor.__init__&gt;, 'fit': &lt;function Preprocessor.fit&gt;, 'transform': &lt;function Preprocessor.transform&gt;, '__dict__': &lt;attribute '__dict__' of 'Preprocessor' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Preprocessor' objects&gt;})</em><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__dict__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preprocessing of features:
 - Remove features with &gt; 80% NaNs</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.Preprocessor'</em><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.featureprocessing.Preprocessor'</em><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.__weakref__">
-<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__weakref__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__weakref__" title="Permalink to this definition">¶</a></dt>
 <dd><p>list of weak references to the object (if defined)</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em>, <em>feature_labels=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">feature_labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select columns with to many missing values (&gt;80%)</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>inputarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputarray</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the inputarray to select only the features based on the
 result from the fit function.</p>
 <dl class="simple">
@@ -512,20 +518,20 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 </div>
 <div class="section" id="module-WORC.featureprocessing.Relief">
 <span id="relief-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Relief</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.Relief" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="WORC.featureprocessing.Relief.SelectMulticlassRelief">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.Relief.</code><code class="descname">SelectMulticlassRelief</code><span class="sig-paren">(</span><em>n_neighbours=3</em>, <em>sample_size=1</em>, <em>distance_p=2</em>, <em>numf=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">WORC.featureprocessing.Relief.</code><code class="sig-name descname">SelectMulticlassRelief</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_neighbours</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">sample_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">distance_p</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">numf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on the type group the feature belongs
 to. The label for the feature is used for this procedure.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.Relief.SelectMulticlassRelief.__abstractmethods__">
-<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Relief.SelectMulticlassRelief.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>n_neighbours=3</em>, <em>sample_size=1</em>, <em>distance_p=2</em>, <em>numf=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_neighbours</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">sample_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">distance_p</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">numf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>n_neightbors: integer</dt><dd><p>Number of nearest neighbours used.</p>
 </dd>
@@ -539,14 +545,14 @@ ranking. If None, all are used.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.Relief.SelectMulticlassRelief.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.Relief'</em><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.featureprocessing.Relief'</em><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Relief.SelectMulticlassRelief.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select only features specificed by parameters per patient.</p>
 <dl class="simple">
 <dt>feature_values: numpy array, mandatory</dt><dd><p>Array containing feature values used for model_selection.
@@ -558,19 +564,19 @@ list will be used in the transform funtion to select features.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Relief.SelectMulticlassRelief.multi_class_relief">
-<code class="descname">multi_class_relief</code><span class="sig-paren">(</span><em>feature_set</em>, <em>label_set</em>, <em>nb=3</em>, <em>sample_size=1</em>, <em>distance_p=2</em>, <em>numf=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.multi_class_relief"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.multi_class_relief" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">multi_class_relief</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">feature_set</span></em>, <em class="sig-param"><span class="n">label_set</span></em>, <em class="sig-param"><span class="n">nb</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">sample_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">distance_p</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">numf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.multi_class_relief"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.multi_class_relief" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Relief.SelectMulticlassRelief.single_class_relief">
-<code class="descname">single_class_relief</code><span class="sig-paren">(</span><em>feature_set</em>, <em>label_set</em>, <em>nb=3</em>, <em>sample_size=1</em>, <em>distance_p=2</em>, <em>numf=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.single_class_relief"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.single_class_relief" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">single_class_relief</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">feature_set</span></em>, <em class="sig-param"><span class="n">label_set</span></em>, <em class="sig-param"><span class="n">nb</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">sample_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">distance_p</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">numf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.single_class_relief"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.single_class_relief" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.Relief.SelectMulticlassRelief.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>inputarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputarray</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the inputarray to select only the features based on the
 result from the fit function.</p>
 <dl class="simple">
@@ -585,20 +591,20 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 </div>
 <div class="section" id="module-WORC.featureprocessing.SelectGroups">
 <span id="selectgroups-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">SelectGroups</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.SelectGroups" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="WORC.featureprocessing.SelectGroups.SelectGroups">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.SelectGroups.</code><code class="descname">SelectGroups</code><span class="sig-paren">(</span><em>parameters, toolboxes=['PREDICT']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectGroups.html#SelectGroups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">WORC.featureprocessing.SelectGroups.</code><code class="sig-name descname">SelectGroups</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">toolboxes</span><span class="o">=</span><span class="default_value">['PREDICT']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectGroups.html#SelectGroups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on the type group the feature belongs
 to. The label for the feature is used for this procedure.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.SelectGroups.SelectGroups.__abstractmethods__">
-<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.SelectGroups.SelectGroups.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>parameters, toolboxes=['PREDICT']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectGroups.html#SelectGroups.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">toolboxes</span><span class="o">=</span><span class="default_value">['PREDICT']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectGroups.html#SelectGroups.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl>
 <dt>parameters: dict, mandatory</dt><dd><p>Contains the settings for the groups to be selected. Should
 contain the settings for the following groups:
@@ -633,14 +639,14 @@ contain the settings for the following groups:
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.SelectGroups.SelectGroups.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.SelectGroups'</em><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.featureprocessing.SelectGroups'</em><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.SelectGroups.SelectGroups.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>feature_labels</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectGroups.html#SelectGroups.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">feature_labels</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectGroups.html#SelectGroups.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select only features specificed by parameters per patient.</p>
 <dl class="simple">
 <dt>feature_labels: list, optional</dt><dd><p>Contains the labels of all features used. The index in this
@@ -649,9 +655,9 @@ list will be used in the transform funtion to select features.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.SelectGroups.SelectGroups.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>inputarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectGroups.html#SelectGroups.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputarray</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectGroups.html#SelectGroups.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the inputarray to select only the features based on the
 result from the fit function.</p>
 <dl class="simple">
@@ -666,20 +672,20 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 </div>
 <div class="section" id="module-WORC.featureprocessing.SelectIndividuals">
 <span id="selectindividuals-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">SelectIndividuals</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.SelectIndividuals" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="WORC.featureprocessing.SelectIndividuals.SelectIndividuals">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.SelectIndividuals.</code><code class="descname">SelectIndividuals</code><span class="sig-paren">(</span><em>parameters=['hf_mean', 'sf_compactness']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectIndividuals.html#SelectIndividuals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">WORC.featureprocessing.SelectIndividuals.</code><code class="sig-name descname">SelectIndividuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">['hf_mean', 'sf_compactness']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectIndividuals.html#SelectIndividuals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on the type group the feature belongs
 to. The label for the feature is used for this procedure.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.SelectIndividuals.SelectIndividuals.__abstractmethods__">
-<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.SelectIndividuals.SelectIndividuals.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>parameters=['hf_mean', 'sf_compactness']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectIndividuals.html#SelectIndividuals.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span><span class="o">=</span><span class="default_value">['hf_mean', 'sf_compactness']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectIndividuals.html#SelectIndividuals.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>parameters: dict, mandatory</dt><dd><p>Contains the settings for the groups to be selected. Should
 contain the settings for the following groups:
@@ -697,14 +703,14 @@ contain the settings for the following groups:
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.SelectIndividuals.SelectIndividuals.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.SelectIndividuals'</em><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.featureprocessing.SelectIndividuals'</em><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.SelectIndividuals.SelectIndividuals.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>feature_labels</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectIndividuals.html#SelectIndividuals.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">feature_labels</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectIndividuals.html#SelectIndividuals.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select only features specificed by parameters per patient.</p>
 <dl class="simple">
 <dt>feature_labels: list, optional</dt><dd><p>Contains the labels of all features used. The index in this
@@ -713,9 +719,9 @@ list will be used in the transform funtion to select features.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.SelectIndividuals.SelectIndividuals.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>inputarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectIndividuals.html#SelectIndividuals.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputarray</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectIndividuals.html#SelectIndividuals.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the inputarray to select only the features based on the
 result from the fit function.</p>
 <dl class="simple">
@@ -730,9 +736,9 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 </div>
 <div class="section" id="module-WORC.featureprocessing.StatisticalTestFeatures">
 <span id="statisticaltestfeatures-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">StatisticalTestFeatures</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.StatisticalTestFeatures" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.StatisticalTestFeatures.StatisticalTestFeatures">
-<code class="descclassname">WORC.featureprocessing.StatisticalTestFeatures.</code><code class="descname">StatisticalTestFeatures</code><span class="sig-paren">(</span><em>features</em>, <em>patientinfo</em>, <em>config</em>, <em>output=None</em>, <em>verbose=True</em>, <em>label_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestFeatures.html#StatisticalTestFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestFeatures.StatisticalTestFeatures" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.StatisticalTestFeatures.</code><code class="sig-name descname">StatisticalTestFeatures</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">features</span></em>, <em class="sig-param"><span class="n">patientinfo</span></em>, <em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">label_type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestFeatures.html#StatisticalTestFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestFeatures.StatisticalTestFeatures" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform several statistical tests on features, such as a student t-test.
 Useage is similar to trainclassifier.</p>
 <dl class="simple">
@@ -762,19 +768,19 @@ fields and their description.</p>
 </div>
 <div class="section" id="module-WORC.featureprocessing.StatisticalTestThreshold">
 <span id="statisticaltestthreshold-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">StatisticalTestThreshold</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.StatisticalTestThreshold" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.StatisticalTestThreshold.</code><code class="descname">StatisticalTestThreshold</code><span class="sig-paren">(</span><em>metric='ttest'</em>, <em>threshold=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestThreshold.html#StatisticalTestThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">WORC.featureprocessing.StatisticalTestThreshold.</code><code class="sig-name descname">StatisticalTestThreshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metric</span><span class="o">=</span><span class="default_value">'ttest'</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestThreshold.html#StatisticalTestThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on statistical tests.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__abstractmethods__">
-<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>metric='ttest'</em>, <em>threshold=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestThreshold.html#StatisticalTestThreshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">metric</span><span class="o">=</span><span class="default_value">'ttest'</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestThreshold.html#StatisticalTestThreshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>metric: string, default ‘ttest’</dt><dd><p>Statistical test used for selection. Options are ttest,
 Welch, Wilcoxon, MannWhitneyU</p>
@@ -784,14 +790,14 @@ Welch, Wilcoxon, MannWhitneyU</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.StatisticalTestThreshold'</em><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.featureprocessing.StatisticalTestThreshold'</em><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X_train</em>, <em>Y_train</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestThreshold.html#StatisticalTestThreshold.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X_train</span></em>, <em class="sig-param"><span class="n">Y_train</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestThreshold.html#StatisticalTestThreshold.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select only features specificed by the metric and threshold per patient.</p>
 <dl class="simple">
 <dt>X_train: numpy array, mandatory</dt><dd><p>Array containing feature values used for model_selection.
@@ -802,9 +808,9 @@ Number of objects on first axis, features on second axis.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>inputarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestThreshold.html#StatisticalTestThreshold.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputarray</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestThreshold.html#StatisticalTestThreshold.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the inputarray to select only the features based on the
 result from the fit function.</p>
 <dl class="simple">
@@ -819,36 +825,36 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 </div>
 <div class="section" id="module-WORC.featureprocessing.VarianceThreshold">
 <span id="variancethreshold-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">VarianceThreshold</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.VarianceThreshold" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.VarianceThreshold.</code><code class="descname">VarianceThresholdMean</code><span class="sig-paren">(</span><em>threshold</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#VarianceThresholdMean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">WORC.featureprocessing.VarianceThreshold.</code><code class="sig-name descname">VarianceThresholdMean</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">threshold</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#VarianceThresholdMean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Select features based on variance among objects. Similar to VarianceThreshold
 from sklearn, but does take the mean of the feature into account.</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.__abstractmethods__">
-<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>threshold</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#VarianceThresholdMean.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">threshold</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#VarianceThresholdMean.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.VarianceThreshold'</em><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.featureprocessing.VarianceThreshold'</em><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>image_features</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#VarianceThresholdMean.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_features</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#VarianceThresholdMean.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.fit" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.transform">
-<code class="descname">transform</code><span class="sig-paren">(</span><em>inputarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#VarianceThresholdMean.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputarray</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#VarianceThresholdMean.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the inputarray to select only the features based on the
 result from the fit function.
 Parameters
@@ -862,9 +868,9 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.featureprocessing.VarianceThreshold.selfeat_variance">
-<code class="descclassname">WORC.featureprocessing.VarianceThreshold.</code><code class="descname">selfeat_variance</code><span class="sig-paren">(</span><em>image_features</em>, <em>labels=None</em>, <em>thresh=0.99</em>, <em>method='nomean'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#selfeat_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.selfeat_variance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">WORC.featureprocessing.VarianceThreshold.</code><code class="sig-name descname">selfeat_variance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_features</span></em>, <em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">thresh</span><span class="o">=</span><span class="default_value">0.99</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'nomean'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#selfeat_variance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.selfeat_variance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select features using a variance threshold.</p>
 <dl class="simple">
 <dt>image_features: numpy array, mandatory</dt><dd><p>Array containing the feature values to apply the variance threshold
@@ -915,11 +921,19 @@ contains a list of all label names kept.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -930,7 +944,6 @@ contains a list of all label names kept.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

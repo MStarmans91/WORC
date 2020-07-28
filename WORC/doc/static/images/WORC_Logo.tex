@@ -1,0 +1,36 @@
+\documentclass{standalone}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{positioning, fit}
+\usetikzlibrary{shapes.geometric, shapes.symbols,shadows}
+\newcommand*{\toolbox}{\fontfamily{pcr}\selectfont}
+
+\begin{document}
+
+% This file was created by matplotlib2tikz v0.7.4.
+\begin{tikzpicture}[
+button/.style={text=white,draw=#1!50!black,
+	preaction={drop shadow={shadow scale=1.05,shadow xshift=0pt,shadow yshift=-1pt}},
+	top color=#1!10,bottom color=#1!50!black,inner xsep=2ex,inner ysep=2ex,
+},
+plastic/.style={button=#1,shape=rectangle,rounded corners=1.6ex},
+oval/.style={button=#1,shape=circle,rounded corners=2.5ex,ball color=#1},
+rectangle/.style={button=#1,shape=rectangle,rounded corners=2.5ex,ball color=#1, inner xsep=10ex,inner ysep=10ex},
+any size/.style={button=#1,shape=ellipse,inner xsep=1ex, inner ysep=1ex},
+slick/.style={button=#1,shape=tape,tape bend height=1ex,inner sep=1ex},
+candy wrap/.style={button=#1,shape=rectangle,rounded corners=5ex},
+smooth/.style={button=#1,shape=rectangle,rounded corners=2ex,
+	top color=#1!50!black,shading angle=45,bottom color=#1!10}
+]
+
+\node[fit={(-1.0 , -1.25) (1.5, 1.25)},inner sep=0pt,draw=white, thick, rounded corners=15pt, fill=black, top color=black!70, bottom color=black, inner xsep=2ex,inner ysep=2ex, drop shadow](Box){};
+%\node[xshift=0.25cm, yshift=0cm, rectangle=black] {};
+\node[xshift=0cm, yshift=0cm, oval=red] {};
+\node[xshift=-0.75cm, yshift=0cm] {\textcolor{white}{\toolbox \Huge  \textbf{W}}};
+\node[xshift=1.0cm, yshift=0cm] {\textcolor{white}{\toolbox \Huge  \textbf{RC}}};
+
+\end{tikzpicture}
+
+\end{document}
