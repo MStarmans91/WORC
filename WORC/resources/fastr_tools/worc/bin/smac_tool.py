@@ -133,23 +133,22 @@ def main():
         smac_stats = json.load(statsfile)
 
     # Read in the history of the incumbents from the SMAC output
+    # and append some trajectory info to the stats
     traj_file_location = '/scratch/mdeen/SMAC_output/' + run_info['run_name'] + \
                          '/run_' + str(run_info['run_id']) + '/traj.json'
-    with open(traj_file_location, 'r') as trajfile:
-        smac_traj = json.load(trajfile)
-
-    # Append some trajectory info to the stats
     wallclock_times = []
     evaluations = []
     costs = []
-    for update in smac_traj:
-        wallclock_times.append(update['wallclock_time'])
-        evaluations.append(update['evaluations'])
-        costs.append(update['cost'])
+    with open(traj_file_location, 'r') as trajfile:
+        for line in trajfile:
+            incumbent_update_info = ast.literal_eval(line)
+            wallclock_times.append(incumbent_update_info['wallclock_time'])
+            evaluations.append(incumbent_update_info['evaluations'])
+            costs.append(incumbent_update_info['cost'])
 
-    smac_stats['inc_wallclock_times': wallclock_times]
-    smac_stats['inc_evaluations': evaluations]
-    smac_stats['inc_costs': costs]
+    smac_stats['inc_wallclock_times'] = wallclock_times
+    smac_stats['inc_evaluations'] = evaluations
+    smac_stats['inc_costs'] = costs
 
     # Update the result file of the optimization
     result_file = data['smac_result_file']
