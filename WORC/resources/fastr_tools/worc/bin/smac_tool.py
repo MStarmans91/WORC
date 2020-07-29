@@ -83,10 +83,12 @@ def main():
 
     def score_cfg(cfg):
         # Construct a new dictionary with parameters from the input configuration
+
+        # ! THIS POTENTIALLY HAS A BUG BUT PROBABLY NOT ACTUALLY ! #
         if cfg is not None:
             parameters = convert_cfg(cfg.get_dictionary())
         else:
-            return float(2147483647)
+            return float(15000000)
 
         # Read the data from the smac_tool
         nonlocal data
@@ -146,6 +148,10 @@ def main():
             evaluations.append(incumbent_update_info['evaluations'])
             costs.append(incumbent_update_info['cost'])
 
+    # Remove the first line, as it does not represent an improvement in the incumbent
+    del wallclock_times[0]
+    del evaluations[0]
+    del costs[0]
     smac_stats['inc_wallclock_times'] = wallclock_times
     smac_stats['inc_evaluations'] = evaluations
     smac_stats['inc_costs'] = costs
