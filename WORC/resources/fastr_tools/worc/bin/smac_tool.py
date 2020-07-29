@@ -126,12 +126,32 @@ def main():
                     tae_runner=score_cfg, run_id=run_info['run_id'])
     opt_config = smac.optimize()
 
-    # Gather some run statistics and save them
+    # Read in the stats from the SMAC output
     stats_file_location = '/scratch/mdeen/SMAC_output/' + run_info['run_name'] + \
                           '/run_' + str(run_info['run_id']) + '/stats.json'
     with open(stats_file_location, 'r') as statsfile:
         smac_stats = json.load(statsfile)
 
+    # Read in the history of the incumbents from the SMAC output
+    traj_file_location = '/scratch/mdeen/SMAC_output/' + run_info['run_name'] + \
+                         '/run_' + str(run_info['run_id']) + '/traj.json'
+    with open(traj_file_location, 'r') as trajfile:
+        smac_traj = json.load(trajfile)
+
+    # Append some trajectory info to the stats
+    wallclock_times = []
+    evaluations = []
+    costs = []
+    for update in smac_traj:
+        wallclock_times.append(update['wallclock_time'])
+        evaluations.append(update['evaluations'])
+        costs.append(update['cost'])
+
+    smac_stats['inc_wallclock_times': wallclock_times]
+    smac_stats['inc_evaluations': evaluations]
+    smac_stats['inc_costs': costs]
+
+    # Update the result file of the optimization
     result_file = data['smac_result_file']
     with open(result_file, 'a') as jsonfile:
         if os.stat(result_file).st_size == 0:
