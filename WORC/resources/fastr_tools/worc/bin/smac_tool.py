@@ -132,13 +132,14 @@ def main():
     with open(stats_file_location, 'r') as statsfile:
         smac_stats = json.load(statsfile)
 
-    print(smac_stats)
-
-    # Then find ta_runs, n_configs, wallclock time, ta time, inc_changed
-
     result_file = data['smac_result_file']
-    with open(result_file, 'r') as jsonfile:
+    with open(result_file, 'a') as jsonfile:
         smac_results = json.load(jsonfile)
+        run_nr = len(smac_results)
+        smac_results[str(run_nr)] = smac_stats
+
+
+
 
 
 
