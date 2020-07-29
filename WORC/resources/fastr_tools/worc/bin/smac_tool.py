@@ -23,6 +23,7 @@ from smac.facade.smac_hpo_facade import SMAC4HPO
 from smac.initial_design.initial_design import InitialDesign
 import ast
 import os
+import json
 
 
 def main():
@@ -124,9 +125,20 @@ def main():
     smac = SMAC4HPO(scenario=scenario, rng=run_info['run_rng'],
                     tae_runner=score_cfg, run_id=run_info['run_id'])
     opt_config = smac.optimize()
+
+    # Gather some run statistics and save them
+    stats_file_location = '/scratch/mdeen/tested_configs/' + run_info['run_name'] + \
+                          '/run_' + run_info['run_id'] + '/stats.json'
+    with open(stats_file_location, 'r') as statsfile:
+        smac_stats = json.load(statsfile)
+
+    print(smac_stats)
+
     result_file = data['smac_result_file']
-    with open(result_file, 'a') as file:
-        file.write('texttttttt' + '\n')
+    with open(result_file, 'r') as jsonfile:
+        smac_results = json.load(jsonfile)
+
+
 
     '''
     # Load in the runhistory data
