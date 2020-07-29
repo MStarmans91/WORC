@@ -127,16 +127,20 @@ def main():
     opt_config = smac.optimize()
 
     # Gather some run statistics and save them
-    stats_file_location = '/scratch/mdeen/tested_configs/' + run_info['run_name'] + \
+    stats_file_location = '/scratch/mdeen/SMAC_output/' + run_info['run_name'] + \
                           '/run_' + str(run_info['run_id']) + '/stats.json'
     with open(stats_file_location, 'r') as statsfile:
         smac_stats = json.load(statsfile)
 
     print(smac_stats)
 
+    # Then find ta_runs, n_configs, wallclock time, ta time, inc_changed
+
     result_file = data['smac_result_file']
     with open(result_file, 'r') as jsonfile:
         smac_results = json.load(jsonfile)
+
+
 
 
 
