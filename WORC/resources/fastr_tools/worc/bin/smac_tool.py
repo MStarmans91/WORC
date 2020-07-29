@@ -136,18 +136,12 @@ def main():
     with open(result_file, 'a') as jsonfile:
         if os.stat(result_file).st_size == 0:
             smac_results = {'0': smac_stats}
-            json.dump(smac_results, result_file)
+            json.dump(smac_results, jsonfile, indent=4)
         else:
             smac_results = json.load(jsonfile)
             run_nr = len(smac_results)
             smac_results[str(run_nr)] = smac_stats
-            json.dump(smac_results, result_file)
-
-
-
-
-
-
+            json.dump(smac_results, jsonfile, indent=4)
 
 
     '''
