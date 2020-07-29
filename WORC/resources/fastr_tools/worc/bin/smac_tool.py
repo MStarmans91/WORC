@@ -134,9 +134,14 @@ def main():
 
     result_file = data['smac_result_file']
     with open(result_file, 'a') as jsonfile:
-        smac_results = json.load(jsonfile)
-        run_nr = len(smac_results)
-        smac_results[str(run_nr)] = smac_stats
+        if os.stat(result_file).st_size == 0:
+            smac_results = {'0': smac_stats}
+            json.dump(smac_results, result_file)
+        else:
+            smac_results = json.load(jsonfile)
+            run_nr = len(smac_results)
+            smac_results[str(run_nr)] = smac_stats
+            json.dump(smac_results, result_file)
 
 
 
