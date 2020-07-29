@@ -128,7 +128,7 @@ def main():
 
     # Gather some run statistics and save them
     stats_file_location = '/scratch/mdeen/tested_configs/' + run_info['run_name'] + \
-                          '/run_' + run_info['run_id'] + '/stats.json'
+                          '/run_' + str(run_info['run_id']) + '/stats.json'
     with open(stats_file_location, 'r') as statsfile:
         smac_stats = json.load(statsfile)
 
