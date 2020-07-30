@@ -288,7 +288,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
         totals[metric_name] = []
 
     for instance in smac_result_dict:
-        nr_of_incumbent_updates = smac_result_dict['inc_changed']
+        nr_of_incumbent_updates = smac_result_dict[instance]['inc_changed']
         totals['wallclock_time_best'].append(
             smac_result_dict[instance]['inc_wallclock_times'][nr_of_incumbent_updates - 1])
         totals['evaluation_best'].append(
