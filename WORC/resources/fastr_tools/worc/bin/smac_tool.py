@@ -159,13 +159,12 @@ def main():
     # Update the result file of the optimization
     result_file = data['smac_result_file']
     print('THIS FILE LOCATION IS USED: ' + result_file)
-    if os.stat(result_file).st_size == 0:
-        with open(result_file, 'a') as jsonfile:
+    with open(result_file, 'a+') as jsonfile:
+        if os.stat(result_file).st_size == 0:
             print('THE FILE IS WRITTEN TO FOR THE FIRST TIME')
             smac_results = {'0': smac_stats}
             json.dump(smac_results, jsonfile, indent=4)
-    else:
-        with open(result_file, 'r+') as jsonfile:
+        else:
             print('THE FILE IS NOW READ IN AGAIN IN A NEW ITERATION')
             smac_results = json.load(jsonfile)
             run_nr = len(smac_results)
