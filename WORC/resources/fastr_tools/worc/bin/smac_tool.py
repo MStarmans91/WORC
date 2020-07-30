@@ -166,7 +166,7 @@ def main():
             run_nr = len(smac_results)
             smac_results[str(run_nr)] = smac_stats
             json.dump(smac_results, jsonfile, indent=4)
-    else
+    else:
         with open(result_file, 'a') as jsonfile:
             print('THE FILE IS WRITTEN TO FOR THE FIRST TIME')
             smac_results = {'0': smac_stats}
