@@ -76,7 +76,7 @@ def main():
                          "cs": data['search_space'],
                          "deterministic": "true",
                          "output_dir": "/scratch/mdeen/SMAC_output/" + run_info['run_name'],
-                         "shared_model": True,
+                         "shared_model": False,
                          "input_psmac_dirs": "/scratch/mdeen/SMAC_output/" + run_info['run_name'],
                          "abort_on_first_run_crash": "false"
                          })
