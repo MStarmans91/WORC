@@ -17,6 +17,7 @@
 
 import json
 import os
+import numpy as np
 from scipy.stats import uniform
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
@@ -273,6 +274,39 @@ def trainclassifier(feat_train, patientinfo_train, config,
     regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
     isclassifier =\
         not any(clf in regressors for clf in config['Classification']['classifiers'])
+
+    # Process the statistics of the SMAC optimization
+    # ! Perhaps move this to a better location in the future
+    with open(smac_result_file, 'r') as jsonfile:
+        smac_result_dict = json.load(jsonfile)
+
+    # Create a dictionary with the averages
+    totals = dict()
+    metric_names = ['ta_runs', 'n_configs', 'wallclock_time_used', 'ta_time_used',
+               'inc_changed', 'wallclock_time_best', 'evaluation_best', 'cost_best']
+    for metric_name in metric_names:
+        totals[metric_name] = []
+
+    for instance in smac_result_dict:
+        nr_of_incumbent_updates = smac_result_dict['inc_changed']
+        totals['wallclock_time_best'].append(
+            smac_result_dict[instance]['inc_wallclock_times'][nr_of_incumbent_updates - 1])
+        totals['evaluation_best'].append(
+            smac_result_dict[instance]['inc_evaluations'][nr_of_incumbent_updates - 1])
+        totals['cost_best'].append(
+            smac_result_dict[instance]['inc_costs'][nr_of_incumbent_updates - 1])
+        for metric in smac_result_dict[instance]:
+            if metric in metric_names:
+                totals[metric].append(smac_result_dict[instance][metric])
+
+    averages = dict()
+    for metric_name in totals:
+        averages[metric_name] = np.mean(totals[metric_name])
+
+    smac_result_dict['averages'] = averages
+
+    with open(smac_result_file, 'a') as jsonfile:
+        json.dump(smac_result_dict, jsonfile, indent=4)
 
     # Calculate statistics of performance
     overfit_scaler = config['Evaluation']['OverfitScaler']
