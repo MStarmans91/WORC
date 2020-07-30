@@ -4,8 +4,6 @@ fastr>=3.2.3
 ghalton>=0.6.1
 imbalanced-learn==0.7.0
 lifelines>=0.21.1
-matplotlib2tikz==0.7.4
-missingpy>=0.2.0
 natsort>=5.0.1
 neuroCombat>=0.2.3
 nose-parameterized>=0.5.0
@@ -23,6 +21,7 @@ SimpleITK>=1.2.0
 six>=1.10.0
 sphinx>=1.4
 tables>=3.5.1
+tikzplotlib>=0.9.3
 tqdm>=4.7.1
 xlrd>=1.2.0
 xnat>=0.2.2

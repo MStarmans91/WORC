@@ -15,8 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sklearn.impute import SimpleImputer
-from missingpy import KNNImputer
+from sklearn.impute import SimpleImputer, KNNImputer
 
 
 class Imputer(object):

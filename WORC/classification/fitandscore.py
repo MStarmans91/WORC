@@ -680,8 +680,8 @@ def fit_and_score(X, y, scoring,
                         print(message)
 
                     # Also reset train and test indices
-                    train = range(0, len(y_train))
-                    test = range(len(y_train), len(y_train) + len(y_test))
+                    train = np.arange(0, len(y_train))
+                    test = np.arange(len(y_train), len(y_train) + len(y_test))
 
         del para_estimator['Resampling_Use']
         del para_estimator['Resampling_Method']

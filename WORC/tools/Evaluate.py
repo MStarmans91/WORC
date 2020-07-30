@@ -434,38 +434,38 @@ class Evaluate(object):
             self.sink_data = self.parent.sink_data
 
         if 'ROC_PNG' not in sink_data.keys():
-            self.sink_data['ROC_PNG'] = ("vfs://output/{}/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['ROC_PNG'] = ("vfs://output/{}/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         if 'ROC_Tex' not in sink_data.keys():
-            self.sink_data['ROC_Tex'] = ("vfs://output/{}/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['ROC_Tex'] = ("vfs://output/{}/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         if 'ROC_CSV' not in sink_data.keys():
-            self.sink_data['ROC_CSV'] = ("vfs://output/{}/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['ROC_CSV'] = ("vfs://output/{}/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'Estimator_Json' not in sink_data.keys():
-            self.sink_data['Estimator_Json'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['Estimator_Json'] = ("vfs://output/{}/Evaluation/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'Barchart_PNG' not in sink_data.keys():
-            self.sink_data['Barchart_PNG'] = ("vfs://output/{}/Barchart_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['Barchart_PNG'] = ("vfs://output/{}/Evaluation/Barchart_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         if 'Barchart_Tex' not in sink_data.keys():
-            self.sink_data['Barchart_Tex'] = ("vfs://output/{}/Barchart_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['Barchart_Tex'] = ("vfs://output/{}/Evaluation/Barchart_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'StatisticalTestFeatures_CSV' not in sink_data.keys():
-            self.sink_data['StatisticalTestFeatures_CSV'] = ("vfs://output/{}/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['StatisticalTestFeatures_CSV'] = ("vfs://output/{}/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'Decomposition_PNG' not in sink_data.keys():
-            self.sink_data['Decomposition_PNG'] = ("vfs://output/{}/Decomposition_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['Decomposition_PNG'] = ("vfs://output/{}/Evaluation/Decomposition_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'RankedPercentages_Zip' not in sink_data.keys():
-            self.sink_data['RankedPercentages_Zip'] = ("vfs://output/{}/RankedPercentages_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['RankedPercentages_Zip'] = ("vfs://output/{}/Evaluation/RankedPercentages_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         if 'RankedPercentages_CSV' not in sink_data.keys():
-            self.sink_data['RankedPercentages_CSV'] = ("vfs://output/{}/RankedPercentages_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['RankedPercentages_CSV'] = ("vfs://output/{}/Evaluation/RankedPercentages_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'RankedPosteriors_Zip' not in sink_data.keys():
-            self.sink_data['RankedPosteriors_Zip'] = ("vfs://output/{}/RankedPosteriors_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['RankedPosteriors_Zip'] = ("vfs://output/{}/Evaluation/RankedPosteriors_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         if 'RankedPosteriors_CSV' not in sink_data.keys():
-            self.sink_data['RankedPosteriors_CSV'] = ("vfs://output/{}/RankedPosteriors_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['RankedPosteriors_CSV'] = ("vfs://output/{}/Evaluation/RankedPosteriors_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'BoxplotsFeatures_Zip' not in sink_data.keys():
-            self.sink_data['BoxplotsFeatures_Zip'] = ("vfs://output/{}/BoxplotsFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+            self.sink_data['BoxplotsFeatures_Zip'] = ("vfs://output/{}/Evaluation/BoxplotsFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
     def execute(self):
         """Execute the network through the fastr.network.execute command."""
