@@ -305,7 +305,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     smac_result_dict['averages'] = averages
 
-    with open(smac_result_file, 'a') as jsonfile:
+    with open(smac_result_file, 'w') as jsonfile:
         json.dump(smac_result_dict, jsonfile, indent=4)
 
     # Calculate statistics of performance
