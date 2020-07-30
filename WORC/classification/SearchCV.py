@@ -2713,7 +2713,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         sink_output = network.create_sink('HDF5', id='output')
 
         smac_node = network.create_node('worc/smac:1.0', tool_version='1.0', id='smac',
-                                          resources=ResourceLimit(memory='3.5G'))
+                                          resources=ResourceLimit(memory='4G'))
         #smac_node.inputs['estimatordata'].input_group = 'estimator'
         #fitandscore.inputs['traintest'].input_group = 'traintest'
         #fitandscore.inputs['parameters'].input_group = 'parameters'
