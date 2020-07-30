@@ -158,7 +158,7 @@ def main():
 
     # Update the result file of the optimization
     result_file = data['smac_result_file']
-    with open(result_file, 'r+') as jsonfile:
+    with open(result_file, 'a+') as jsonfile:
         if os.stat(result_file).st_size == 0:
             smac_results = {'0': smac_stats}
             json.dump(smac_results, jsonfile, indent=4)
