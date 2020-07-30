@@ -160,11 +160,12 @@ def main():
     result_file = data['smac_result_file']
     print('THIS FILE LOCATION IS USED: ' + result_file)
     if os.path.exists(result_file):
-        with open(result_file, 'r+') as jsonfile:
+        with open(result_file, 'r') as jsonfile:
             print('THE FILE IS NOW READ IN AGAIN IN A NEW ITERATION')
             smac_results = json.load(jsonfile)
-            run_nr = len(smac_results)
-            smac_results[str(run_nr)] = smac_stats
+        run_nr = len(smac_results)
+        smac_results[str(run_nr)] = smac_stats
+        with open(result_file, 'w') as jsonfile:
             json.dump(smac_results, jsonfile, indent=4)
     else:
         with open(result_file, 'a') as jsonfile:
