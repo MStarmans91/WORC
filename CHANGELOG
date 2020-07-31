@@ -6,6 +6,22 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.3.1 - 2020-07-31
+------------------
+
+Changed
+~~~~~~~
+- Updated to using tikzplotlib for conversion of figures to LaTeX instead
+  of deprecated matplotlib2tikz.
+- Output of evaluation pipeline now in separate subfolder.
+- KNNImputer now also in sklearn, missingpy deprecated, so switched to
+  sklearn KNNImputer.
+
+Fixed
+~~~~~
+- Bug in fixandscore when using resampling.
+
+
 3.3.0 - 2020-07-28
 ------------------
 

@@ -19,7 +19,7 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
-from matplotlib2tikz import save as tikz_save
+import tikzplotlib
 import pandas as pd
 import argparse
 from WORC.plotting.compute_CI import compute_confidence as CI
@@ -381,7 +381,7 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
         print(("ROC saved as {} !").format(output_png))
 
     if output_tex is not None:
-        tikz_save(output_tex)
+        tikzplotlib.save(output_tex)
         print(("ROC saved as {} !").format(output_tex))
 
     # Save ROC values as JSON
