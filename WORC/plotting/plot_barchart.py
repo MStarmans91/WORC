@@ -91,6 +91,8 @@ def plot_barchart(prediction, estimators=10, label_type=None, output_tex=None,
     # Make the barplot
     fig = plot_bars(counts, normalization_factor)
 
+    # Try making it fullscreen
+
     # Save the output
     if output_tex is not None:
         print(f'Saving barchart to {output_tex}.')
@@ -98,101 +100,67 @@ def plot_barchart(prediction, estimators=10, label_type=None, output_tex=None,
 
     if output_png is not None:
         print(f'Saving barchart to {output_png}.')
-        fig.savefig(output_png, bbox_inches='tight', pad_inches=0, dpi=50)
+        fig.savefig(output_png, bbox_inches='tight', pad_inches=0, dpi=500)
 
 
-def plot_bars(params, normalization_factor=None, figwidth=20, fontsize=20):
+def plot_bars(params, normalization_factor=None, figwidth=40, fontsize=30,
+              spacing=2):
 
     # Fixing random state for reproducibility
     np.random.seed(19680801)
 
     # Count how often feature groups are used
-    if 'texture_features' in params.keys():
-        # Old approach: one hyperparameter for all texture featues
-        groups_temp = ['histogram', 'shape', 'orientation', 'semantic',
-                       'patient', 'log', 'vessel', 'phase', 'coliage']
-    else:
-        groups_temp = ['histogram', 'shape', 'orientation', 'semantic',
-                       'patient', 'log', 'vessel', 'phase', 'coliage',
-                       "texture_gabor", "texture_glcm",
-                       "texture_glcmms", "texture_glrlm",
-                       "texture_glszm", "texture_ngtdm",
-                       "texture_lbp"]
     ntimes_groups = list()
     groups = list()
-    for key in groups_temp:
-        key += '_features'
-        if key in params.keys():
-            # only append if the parameter is actually used
+    for key in params.keys():
+        # Check if parameter is a boolean
+        if 'True' in params[key].keys() or 'False' in params[key].keys():
             if 'True' in params[key].keys():
                 ntimes_groups.append(params[key]['True'])
                 groups.append(key)
+            else:
+                # Only False
+                ntimes_groups.append(0)
+                groups.append(key)
 
-    # Count how often feature variance tresholding was used
-    if 'texture_features' in params.keys():
-        # Old approach: one hyperparameter for all texture featues
-        # For the texture features, we have more options than simply True and False
-        texture_temp = ['True', 'LBP', 'GLCM', 'GLRLM', 'GLSZM', 'Gabor', 'NGTDM']
-        texture = list()
-        ntimes_texture = list()
-        for key in texture_temp:
-            if key in params['texture_features'].keys():
-                texture.append(key)
-                ntimes_texture.append(params['texture_features'][key])
-
-        # BUG: We did not put a all in the keys but a True, so replace
-        texture[texture.index('True')] = 'All'
-
-    # # Normalize the values in order to not make figure to large
+    # Normalize the values in order to not make figure to large
     if normalization_factor is None:
-        normalization_factor = max(ntimes_groups + ntimes_texture)
+        normalization_factor = max(ntimes_groups)
     normalization_factor = float(normalization_factor)  # Needed for percentages
     ntimes_groups = [x / normalization_factor for x in ntimes_groups]
-    if 'texture_features' in params.keys():
-        ntimes_texture = [x / normalization_factor for x in ntimes_texture]
 
     # Create the figure for the barchart
     plt.rcdefaults()
     fig, ax = plt.subplots()
     fig.set_figwidth(figwidth)
-    fig.set_figheight(figwidth/2)
+    fig.set_figheight(figwidth)
     ax.set_xlim(0, 1)
 
     # Determine positions of all the labels
-    y_pos = np.arange(len(groups))
-    y_postick = np.arange(len(groups) + 1)
+    y_pos = np.arange(len(groups) * spacing)
+    ntimes_groups_plot = list()
+    groups_plot = list()
+    num = 0
+    for i in range(len(groups) * spacing):
+        if i % spacing == 0:
+            ntimes_groups_plot.append(ntimes_groups[num])
+            groups_plot.append(groups[num])
+            num += 1
+        else:
+            # empty entry to fill up spacing
+            ntimes_groups_plot.append(0.0)
+            groups_plot.append('')
 
     # Normal features
     colors = ['steelblue', 'lightskyblue']
-    ax.barh(y_pos, ntimes_groups, align='center',
+    ax.barh(y_pos, ntimes_groups_plot, align='center',
             color=colors[0], ecolor='black')
-    ax.set_yticks(y_postick)
-    if 'texture_features' in params.keys():
-        ax.set_yticklabels(groups + ['Texture'])
-    else:
-        ax.set_yticklabels(groups)
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(groups_plot)
 
     ax.tick_params(axis='both', labelsize=fontsize)
     ax.invert_yaxis()  # labels read top-to-bottom
     ax.set_xlabel('Percentage', fontsize=fontsize)
-
-    if 'texture_features' in params.keys():
-        # Texture features
-        left = 0
-        y_pos = np.max(y_pos) + 1
-
-        j = 0
-        for i in np.arange(len(texture)):
-            color = colors[j]
-            if j == 0:
-                j = 1
-            else:
-                j = 0
-            ax.barh(y_pos, ntimes_texture[i], align='center',
-                    color=color, ecolor='black', left=left)
-            ax.text(left + ntimes_texture[i]/2, y_pos,
-                    texture[i], ha='center', va='center', fontsize=fontsize - 2)
-            left += ntimes_texture[i]
 
     return fig
 
