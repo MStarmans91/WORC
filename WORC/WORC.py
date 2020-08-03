@@ -423,7 +423,7 @@ class WORC(object):
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
-        config['HyperOptimization']['N_iterations'] = '25000'
+        config['HyperOptimization']['N_iterations'] = '25000' # represents either wallclock time limit or nr of evaluations when using SMAC
         config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'

@@ -2616,6 +2616,8 @@ class BaseSearchCVSMAC(BaseSearchCV):
         cv_iter = list(cv.split(self.features, self.labels, groups))
 
         # Build the SMAC configuration
+        self.param_distributions['Other'] = dict()
+        self.param_distributions['Other']['random_seed'] = np.random.randint(1, 5000)
         cs = build_smac_config(self.param_distributions)
 
         # Run the optimization

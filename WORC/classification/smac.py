@@ -312,6 +312,12 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=smote_cores, parent=smote, values=['True']))
     '''
 
+    random_seed = Constant('random_seed', value=parameters['Other']['random_seed'])
+    cs.add_hyperparameter(random_seed)
+
+    max_iter = Constant('max_iter', value=cf['max_iter'])
+    cs.add_hyperparameter(max_iter)
+
     return cs
 
 

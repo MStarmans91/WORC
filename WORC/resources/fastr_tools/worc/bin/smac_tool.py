@@ -218,8 +218,6 @@ def main():
 
 def convert_cfg(cfg):
     parameters = cfg
-    # Add some parameters that are used for fitting, but are not part of the optimization
-    parameters['random_seed'] = 42
     parameters['max_iter'] = 10000
 
     # No featureScaling flag is accepted in fit_and_score,
