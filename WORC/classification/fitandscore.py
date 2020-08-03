@@ -32,7 +32,7 @@ from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.classification.metrics import check_multimetric_scoring
 from WORC.featureprocessing.Relief import SelectMulticlassRelief
-from WORC.featureprocessing.Imputer import Imputer
+#from WORC.featureprocessing.Imputer import Imputer
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
