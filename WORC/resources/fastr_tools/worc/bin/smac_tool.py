@@ -106,6 +106,8 @@ def main():
                                 error_score=data['error_score'],
                                 verbose=data['verbose'],
                                 return_all=False)
+            ret[0] = ret[0]['score']
+            ret[1] = ret[1]['score']
             all_scores.append(ret)
 
         # Process the results:
