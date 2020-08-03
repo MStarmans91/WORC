@@ -428,7 +428,7 @@ class WORC(object):
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['use_SMAC'] = 'True' # only working when using fastr in classification
-        config['HyperOptimization']['n_SMAC_cores'] = '10'
+        config['HyperOptimization']['n_SMAC_cores'] = '1'
 
         # Ensemble options
         config['Ensemble'] = dict()
