@@ -218,7 +218,6 @@ def main():
 
 def convert_cfg(cfg):
     parameters = cfg
-    parameters['max_iter'] = 10000
 
     # No featureScaling flag is accepted in fit_and_score,
     # so remove it

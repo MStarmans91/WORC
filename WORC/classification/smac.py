@@ -315,7 +315,7 @@ def build_smac_config(parameters):
     random_seed = Constant('random_seed', value=parameters['Other']['random_seed'])
     cs.add_hyperparameter(random_seed)
 
-    max_iter = Constant('max_iter', value=cf['max_iter'])
+    max_iter = Constant('max_iter', value=cf['max_iter'][0])
     cs.add_hyperparameter(max_iter)
 
     return cs
