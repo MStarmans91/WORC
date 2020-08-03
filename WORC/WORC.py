@@ -512,7 +512,6 @@ class WORC(object):
                 self.sink_classification = self.network.create_sink('HDF5', id='classification', step_id='general_sinks')
                 self.sink_performance = self.network.create_sink('JsonFile', id='performance', step_id='general_sinks')
                 self.sink_class_config = self.network.create_sink('ParameterFile', id='config_classification_sink', node_group='conf', step_id='general_sinks')
-                self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results', step_id='general_sinks')
 
                 # Links
                 self.sink_class_config.input = self.source_class_config.output
@@ -521,6 +520,12 @@ class WORC(object):
                 self.link_class_1.collapse = 'conf'
                 self.link_class_2.collapse = 'pctrain'
 
+                # Optional SMAC output
+                if  self.configs[0]['Hyperoptimization']['use_smac'] == 'True':
+                    self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results',
+                                                                      step_id='general_sinks')
+                    self.sink_smac_results.input = self.classify.outputs['smac_results']
+
                 if self.TrainTest:
                     # FIXME: the naming here is ugly
                     self.link_class_3 = self.network.create_link(self.source_patientclass_test.output, self.classify.inputs['patientclass_test'])
@@ -528,7 +533,6 @@ class WORC(object):
 
                 self.sink_classification.input = self.classify.outputs['classification']
                 self.sink_performance.input = self.classify.outputs['performance']
-                self.sink_smac_results.input = self.classify.outputs['smac_results']
 
                 if self.masks_normalize_train:
                     self.sources_masks_normalize_train = dict()
