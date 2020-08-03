@@ -29,7 +29,7 @@
     <outputs>
       <output id="classification" name="Radiomics classification" datatype="HDF5" cardinality="as:config" nospace="False" order="0" prefix="--class" required="true"/>
       <output id="performance" name="Radiomics classification performance" datatype="JsonFile" cardinality="as:config" nospace="False" order="0" prefix="--perf" required="true"/>
-      <output id="smac_results" name="SMAC statistics and results" datatype="JsonFile" cardinality="as:config" prefix="--smac" required="false"/>
+      <output id="smac_results" name="SMAC statistics and results" datatype="JsonFile" cardinality="1" prefix="--smac" required="false"/>
     </outputs>
   </interface>
   <requirements />
