@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.ObjectSampler &mdash; WORC 3.3.0 documentation</title>
+  <title>WORC.classification.ObjectSampler &mdash; WORC 3.3.1 documentation</title>
   
 
   
@@ -53,13 +53,16 @@
           
 
           
+            
+            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.3.0
+                3.3.1
               </div>
             
           
@@ -90,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -245,20 +249,18 @@
 <div class="viewcode-block" id="ObjectSampler.init_NearMiss"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_NearMiss">[docs]</a>    <span class="k">def</span> <span class="nf">init_NearMiss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creata a near miss sampler object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span> <span class="n">under_sampling</span><span class="o">.</span><span class="n">NearMiss</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">,</span>
-                                              <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
                                               <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="n">sampling_strategy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span></div>
 
 <div class="viewcode-block" id="ObjectSampler.init_NeighbourhoodCleaningRule"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.ObjectSampler.ObjectSampler.init_NeighbourhoodCleaningRule">[docs]</a>    <span class="k">def</span> <span class="nf">init_NeighbourhoodCleaningRule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling_strategy</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="p">,</span>
-                                      <span class="n">n_jobs</span><span class="p">,</span> <span class="n">threshold_cleaning</span><span class="p">):</span>
+                                       <span class="n">n_jobs</span><span class="p">,</span> <span class="n">threshold_cleaning</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creata a NeighbourhoodCleaningRule sampler object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span> <span class="o">=</span>\
             <span class="n">under_sampling</span><span class="o">.</span><span class="n">NeighbourhoodCleaningRule</span><span class="p">(</span><span class="n">sampling_strategy</span><span class="o">=</span><span class="n">sampling_strategy</span><span class="p">,</span>
-                                                    <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span>
-                                                    <span class="n">threshold_cleaning</span><span class="o">=</span><span class="n">threshold_cleaning</span><span class="p">,</span>
-                                                    <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
+                                                     <span class="n">threshold_cleaning</span><span class="o">=</span><span class="n">threshold_cleaning</span><span class="p">,</span>
+                                                     <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="n">sampling_strategy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_neighbors</span> <span class="o">=</span> <span class="n">n_neighbors</span>

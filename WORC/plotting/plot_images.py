@@ -39,9 +39,9 @@ def extract_boundary(contour, radius=2):
             contour_e = morphology.binary_erosion(contour[ind, :, :], disk)
             contour[ind, :, :] = np.bitwise_xor(contour_d, contour_e)
     else:
-            contour_d = morphology.binary_dilation(contour, disk)
-            contour_e = morphology.binary_erosion(contour, disk)
-            contour = np.bitwise_xor(contour_d, contour_e)
+        contour_d = morphology.binary_dilation(contour, disk)
+        contour_e = morphology.binary_erosion(contour, disk)
+        contour = np.bitwise_xor(contour_d, contour_e)
 
     contour = contour.astype(np.uint16)  # To be compatible with SimpleITK
     if returnitk:

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.featureprocessing.Imputer &mdash; WORC 3.3.0 documentation</title>
+  <title>WORC.featureprocessing.Imputer &mdash; WORC 3.3.1 documentation</title>
   
 
   
@@ -53,13 +53,16 @@
           
 
           
+            
+            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.3.0
+                3.3.1
               </div>
             
           
@@ -90,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -176,8 +180,7 @@
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="k">import</span> <span class="n">SimpleImputer</span>
-<span class="kn">from</span> <span class="nn">missingpy</span> <span class="k">import</span> <span class="n">KNNImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="k">import</span> <span class="n">SimpleImputer</span><span class="p">,</span> <span class="n">KNNImputer</span>
 
 
 <div class="viewcode-block" id="Imputer"><a class="viewcode-back" href="../../../autogen/WORC.featureprocessing.html#WORC.featureprocessing.Imputer.Imputer">[docs]</a><span class="k">class</span> <span class="nc">Imputer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>

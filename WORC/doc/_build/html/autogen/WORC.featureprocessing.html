@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>featureprocessing Package &mdash; WORC 3.3.0 documentation</title>
+  <title>featureprocessing Package &mdash; WORC 3.3.1 documentation</title>
   
 
   
@@ -55,13 +55,16 @@
           
 
           
+            
+            <img src="../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.3.0
+                3.3.1
               </div>
             
           
@@ -92,6 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
@@ -289,7 +293,7 @@ toolbox.</p>
 
 <dl class="function">
 <dt id="WORC.featureprocessing.FeatureConverter.convert_PREDICT">
-<code class="descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="descname">convert_PREDICT</code><span class="sig-paren">(</span><em>features</em>, <em>config</em>, <em>feat_out</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_PREDICT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_PREDICT" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="descname">convert_PREDICT</code><span class="sig-paren">(</span><em>features</em>, <em>feat_out</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_PREDICT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_PREDICT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert features from PREDICT toolbox to WORC compatible format.</p>
 <p>As PREDICT is the WORC default toolbox, we only need to add the name of
 the toolbox.</p>
@@ -297,7 +301,7 @@ the toolbox.</p>
 
 <dl class="function">
 <dt id="WORC.featureprocessing.FeatureConverter.convert_pyradiomics">
-<code class="descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="descname">convert_pyradiomics</code><span class="sig-paren">(</span><em>features</em>, <em>config</em>, <em>feat_out</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_pyradiomics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_pyradiomics" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.featureprocessing.FeatureConverter.</code><code class="descname">convert_pyradiomics</code><span class="sig-paren">(</span><em>features</em>, <em>feat_out=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/FeatureConverter.html#convert_pyradiomics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.FeatureConverter.convert_pyradiomics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert features from PyRadiomics toolbox to WORC compatible format.</p>
 <p>Description:</p>
 </dd></dl>
@@ -313,8 +317,8 @@ the toolbox.</p>
 <span id="iccthreshold-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ICCThreshold</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.ICCThreshold" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold">
-<em class="property">class </em><code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">ICCThreshold</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.8</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection.base.SelectorMixin</span></code></p>
+<em class="property">class </em><code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">ICCThreshold</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on intra- or inter-class correlation
 coefficient as defined by</p>
 <p>Shrout, Patrick E., and Joseph L. Fleiss. “Intraclass correlations: uses
@@ -325,7 +329,7 @@ ICC(2,1) according to definitions of the paper, but according to radiomics
 literatue (<a class="reference external" href="https://www.tandfonline.com/doi/pdf/10.1080/0284186X.2018.1445283?needAccess=true">https://www.tandfonline.com/doi/pdf/10.1080/0284186X.2018.1445283?needAccess=true</a>,
 <a class="reference external" href="https://www.tandfonline.com/doi/pdf/10.3109/0284186X.2013.812798?needAccess=true">https://www.tandfonline.com/doi/pdf/10.3109/0284186X.2013.812798?needAccess=true</a>),
 we use ICC(3,1) anyway.</p>
-<p>The default threshold of 0.80 is also based on the literature metioned
+<p>The default threshold of 0.75 is also based on the literature metioned
 above.</p>
 <dl class="attribute">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold.__abstractmethods__">
@@ -334,11 +338,11 @@ above.</p>
 
 <dl class="method">
 <dt id="WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.8</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>ICCtype='intra'</em>, <em>threshold=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#ICCThreshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.ICCThreshold.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>ICCtype: string, default ‘intra’</dt><dd><p>Type of ICC used. intra results in ICC(3,1), inter in ICC(2,1)</p>
 </dd>
-<dt>threshold: float, default 0.80</dt><dd><p>Threshold for ICC-value in order for feature to be selected</p>
+<dt>threshold: float, default 0.75</dt><dd><p>Threshold for ICC-value in order for feature to be selected</p>
 </dd>
 </dl>
 </dd></dl>
@@ -377,7 +381,7 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 
 <dl class="function">
 <dt id="WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold">
-<code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">convert_features_ICC_threshold</code><span class="sig-paren">(</span><em>features_in</em>, <em>csv_out=None</em>, <em>features_out=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#convert_features_ICC_threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.featureprocessing.ICCThreshold.</code><code class="descname">convert_features_ICC_threshold</code><span class="sig-paren">(</span><em>features_in</em>, <em>csv_out=None</em>, <em>features_out=None</em>, <em>threshold=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/ICCThreshold.html#convert_features_ICC_threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.ICCThreshold.convert_features_ICC_threshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>For features from multiple observers, compute ICC, return values,
 and optionally apply thresholding and save output.</p>
 <p>features_in: list, containing one list per observer.
@@ -514,7 +518,7 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 <dl class="class">
 <dt id="WORC.featureprocessing.Relief.SelectMulticlassRelief">
 <em class="property">class </em><code class="descclassname">WORC.featureprocessing.Relief.</code><code class="descname">SelectMulticlassRelief</code><span class="sig-paren">(</span><em>n_neighbours=3</em>, <em>sample_size=1</em>, <em>distance_p=2</em>, <em>numf=None</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Relief.html#SelectMulticlassRelief"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Relief.SelectMulticlassRelief" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection.base.SelectorMixin</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on the type group the feature belongs
 to. The label for the feature is used for this procedure.</p>
 <dl class="attribute">
@@ -587,7 +591,7 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 <dl class="class">
 <dt id="WORC.featureprocessing.SelectGroups.SelectGroups">
 <em class="property">class </em><code class="descclassname">WORC.featureprocessing.SelectGroups.</code><code class="descname">SelectGroups</code><span class="sig-paren">(</span><em>parameters, toolboxes=['PREDICT']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectGroups.html#SelectGroups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection.base.SelectorMixin</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on the type group the feature belongs
 to. The label for the feature is used for this procedure.</p>
 <dl class="attribute">
@@ -668,7 +672,7 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 <dl class="class">
 <dt id="WORC.featureprocessing.SelectIndividuals.SelectIndividuals">
 <em class="property">class </em><code class="descclassname">WORC.featureprocessing.SelectIndividuals.</code><code class="descname">SelectIndividuals</code><span class="sig-paren">(</span><em>parameters=['hf_mean', 'sf_compactness']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/SelectIndividuals.html#SelectIndividuals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.SelectIndividuals.SelectIndividuals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection.base.SelectorMixin</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on the type group the feature belongs
 to. The label for the feature is used for this procedure.</p>
 <dl class="attribute">
@@ -764,7 +768,7 @@ fields and their description.</p>
 <dl class="class">
 <dt id="WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold">
 <em class="property">class </em><code class="descclassname">WORC.featureprocessing.StatisticalTestThreshold.</code><code class="descname">StatisticalTestThreshold</code><span class="sig-paren">(</span><em>metric='ttest'</em>, <em>threshold=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestThreshold.html#StatisticalTestThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection.base.SelectorMixin</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on statistical tests.</p>
 <dl class="attribute">
 <dt id="WORC.featureprocessing.StatisticalTestThreshold.StatisticalTestThreshold.__abstractmethods__">
@@ -821,7 +825,7 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 <dl class="class">
 <dt id="WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean">
 <em class="property">class </em><code class="descclassname">WORC.featureprocessing.VarianceThreshold.</code><code class="descname">VarianceThresholdMean</code><span class="sig-paren">(</span><em>threshold</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/VarianceThreshold.html#VarianceThresholdMean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.VarianceThreshold.VarianceThresholdMean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection.base.SelectorMixin</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Select features based on variance among objects. Similar to VarianceThreshold
 from sklearn, but does take the mean of the feature into account.</p>
 <dl class="attribute">

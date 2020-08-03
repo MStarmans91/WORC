@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ROC &mdash; WORC 3.3.0 documentation</title>
+  <title>WORC.plotting.plot_ROC &mdash; WORC 3.3.1 documentation</title>
   
 
   
@@ -53,13 +53,16 @@
           
 
           
+            
+            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.3.0
+                3.3.1
               </div>
             
           
@@ -90,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -180,7 +184,7 @@
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;agg&#39;</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">matplotlib2tikz</span> <span class="k">import</span> <span class="n">save</span> <span class="k">as</span> <span class="n">tikz_save</span>
+<span class="kn">import</span> <span class="nn">tikzplotlib</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">from</span> <span class="nn">WORC.plotting.compute_CI</span> <span class="k">import</span> <span class="n">compute_confidence</span> <span class="k">as</span> <span class="n">CI</span>
@@ -542,7 +546,7 @@
         <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;ROC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_png</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">output_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">tikz_save</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span>
+        <span class="n">tikzplotlib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;ROC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_tex</span><span class="p">))</span>
 
     <span class="c1"># Save ROC values as JSON</span>

@@ -93,8 +93,7 @@ def random_search_parameters(features, labels, N_iter, test_size,
     print("Best found parameters:")
     for i in random_search.best_params_:
         print(f'{i}: {random_search.best_params_[i]}.')
-    print("\n Best score using best parameters:")
-    print(random_search.best_score_)
+    print(f"\n Best score using best parameters: {scoring_method} = {random_search.best_score_}")
 
     return random_search
 

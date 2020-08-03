@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.trainclassifier &mdash; WORC 3.3.0 documentation</title>
+  <title>WORC.classification.trainclassifier &mdash; WORC 3.3.1 documentation</title>
   
 
   
@@ -53,13 +53,16 @@
           
 
           
+            
+            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.3.0
+                3.3.1
               </div>
             
           
@@ -90,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -448,13 +452,13 @@
         <span class="k">if</span> <span class="n">patientinfo_test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">isclassifier</span><span class="p">:</span>
                 <span class="n">statistics</span> <span class="o">=</span>\
-                <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
-                                           <span class="n">label_data_test</span><span class="p">,</span>
-                                           <span class="n">label_type</span><span class="p">,</span>
-                                           <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                           <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
-                                           <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
-                                           <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
+                    <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
+                                               <span class="n">label_data_test</span><span class="p">,</span>
+                                               <span class="n">label_type</span><span class="p">,</span>
+                                               <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                               <span class="n">bootstrap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">],</span>
+                                               <span class="n">bootstrap_N</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">],</span>
+                                               <span class="n">overfit_scaler</span><span class="o">=</span><span class="n">overfit_scaler</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">statistics</span> <span class="o">=</span>\
                     <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span>
@@ -469,14 +473,12 @@
             <span class="n">statistics</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># Save output</span>
-    <span class="n">savedict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">savedict</span><span class="p">[</span><span class="s2">&quot;Statistics&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">statistics</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_json</span><span class="p">)):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_json</span><span class="p">))</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_json</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
-        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">savedict</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">statistics</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saved data!&quot;</span><span class="p">)</span></div>
 </pre></div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.metrics &mdash; WORC 3.3.0 documentation</title>
+  <title>WORC.classification.metrics &mdash; WORC 3.3.1 documentation</title>
   
 
   
@@ -53,13 +53,16 @@
           
 
           
+            
+            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.3.0
+                3.3.1
               </div>
             
           
@@ -90,6 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
@@ -420,6 +424,97 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">scorer</span> <span class="o">=</span> <span class="n">check_scoring_sklearn</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">scorer</span></div>
+
+
+<div class="viewcode-block" id="check_multimetric_scoring"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.check_multimetric_scoring">[docs]</a><span class="k">def</span> <span class="nf">check_multimetric_scoring</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrapper around sklearn function to enable more scoring options.</span>
+
+
+<span class="sd">    Check the scoring parameter in cases when multiple metrics are allowed</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    estimator : sklearn estimator instance</span>
+<span class="sd">        The estimator for which the scoring will be applied.</span>
+<span class="sd">    scoring : string, callable, list/tuple, dict or None, default: None</span>
+<span class="sd">        A single string (see :ref:`scoring_parameter`) or a callable</span>
+<span class="sd">        (see :ref:`scoring`) to evaluate the predictions on the test set.</span>
+<span class="sd">        For evaluating multiple metrics, either give a list of (unique) strings</span>
+<span class="sd">        or a dict with names as keys and callables as values.</span>
+<span class="sd">        NOTE that when using custom scorers, each scorer should return a single</span>
+<span class="sd">        value. Metric functions returning a list/array of values can be wrapped</span>
+<span class="sd">        into multiple scorers that return one value each.</span>
+<span class="sd">        See :ref:`multimetric_grid_search` for an example.</span>
+<span class="sd">        If None the estimator&#39;s score method is used.</span>
+<span class="sd">        The return value in that case will be ``{&#39;score&#39;: &lt;default_scorer&gt;}``.</span>
+<span class="sd">        If the estimator&#39;s score method is not available, a ``TypeError``</span>
+<span class="sd">        is raised.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    scorers_dict : dict</span>
+<span class="sd">        A dict mapping each scorer name to its validated scorer.</span>
+<span class="sd">    is_multimetric : bool</span>
+<span class="sd">        True if scorer is a list/tuple or dict of callables</span>
+<span class="sd">        False if scorer is None/str/callable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">scoring</span><span class="p">)</span> <span class="ow">or</span> <span class="n">scoring</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scoring</span><span class="p">,</span>
+                                                          <span class="nb">str</span><span class="p">):</span>
+        <span class="n">scorers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="n">check_scoring</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="n">scorers</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">err_msg_generic</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;scoring should either be a single string or &quot;</span>
+                           <span class="s2">&quot;callable for single metric evaluation or a &quot;</span>
+                           <span class="s2">&quot;list/tuple of strings or a dict of scorer name &quot;</span>
+                           <span class="s2">&quot;mapped to the callable for multiple metric &quot;</span>
+                           <span class="s2">&quot;evaluation. Got </span><span class="si">%s</span><span class="s2"> of type </span><span class="si">%s</span><span class="s2">&quot;</span>
+                           <span class="o">%</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">scoring</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">scoring</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scoring</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">)):</span>
+            <span class="n">err_msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;The list/tuple elements must be unique &quot;</span>
+                       <span class="s2">&quot;strings of predefined scorers. &quot;</span><span class="p">)</span>
+            <span class="n">invalid</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">scoring</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="n">invalid</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">invalid</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scoring</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span> <span class="o">+</span> <span class="s2">&quot;Duplicate elements were found in&quot;</span>
+                                 <span class="s2">&quot; the given list. </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">scoring</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">callable</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span> <span class="o">+</span>
+                                         <span class="s2">&quot;One or more of the elements were &quot;</span>
+                                         <span class="s2">&quot;callables. Use a dict of score name &quot;</span>
+                                         <span class="s2">&quot;mapped to the scorer callable. &quot;</span>
+                                         <span class="s2">&quot;Got </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">scoring</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span> <span class="o">+</span>
+                                         <span class="s2">&quot;Non-string types were found in &quot;</span>
+                                         <span class="s2">&quot;the given list. Got </span><span class="si">%r</span><span class="s2">&quot;</span>
+                                         <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">scoring</span><span class="p">))</span>
+                <span class="n">scorers</span> <span class="o">=</span> <span class="p">{</span><span class="n">scorer</span><span class="p">:</span> <span class="n">check_scoring</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scorer</span><span class="p">)</span>
+                           <span class="k">for</span> <span class="n">scorer</span> <span class="ow">in</span> <span class="n">scoring</span><span class="p">}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg</span> <span class="o">+</span>
+                                 <span class="s2">&quot;Empty list was given. </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">scoring</span><span class="p">))</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scoring</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">scoring</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Non-string types were found in the keys of &quot;</span>
+                                 <span class="s2">&quot;the given dict. scoring=</span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">scoring</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;An empty dict was passed. </span><span class="si">%r</span><span class="s2">&quot;</span>
+                                 <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">scoring</span><span class="p">))</span>
+            <span class="n">scorers</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">check_scoring</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scorer</span><span class="p">)</span>
+                       <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">scorer</span> <span class="ow">in</span> <span class="n">scoring</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_msg_generic</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">scorers</span><span class="p">,</span> <span class="kc">True</span></div>
 
 
 <div class="viewcode-block" id="ICC"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.metrics.ICC">[docs]</a><span class="k">def</span> <span class="nf">ICC</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">ICCtype</span><span class="o">=</span><span class="s1">&#39;inter&#39;</span><span class="p">):</span>

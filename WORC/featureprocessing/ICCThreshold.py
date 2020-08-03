@@ -38,17 +38,17 @@ class ICCThreshold(BaseEstimator, SelectorMixin):
     https://www.tandfonline.com/doi/pdf/10.3109/0284186X.2013.812798?needAccess=true),
     we use ICC(3,1) anyway.
 
-    The default threshold of 0.80 is also based on the literature metioned
+    The default threshold of 0.75 is also based on the literature metioned
     above.
 
     '''
-    def __init__(self, ICCtype='intra', threshold=0.80):
+    def __init__(self, ICCtype='intra', threshold=0.75):
         '''
         Parameters
         ----------
         ICCtype: string, default 'intra'
                 Type of ICC used. intra results in ICC(3,1), inter in ICC(2,1)
-        threshold: float, default 0.80
+        threshold: float, default 0.75
                 Threshold for ICC-value in order for feature to be selected
 
         '''
@@ -90,7 +90,7 @@ class ICCThreshold(BaseEstimator, SelectorMixin):
                 metric_value = 1
 
             self.metric_values.append(metric_value)
-            if metric_value < self.threshold:
+            if metric_value > self.threshold:
                 self.selectrows.append(i_feat)
 
     def transform(self, inputarray):
@@ -112,7 +112,7 @@ class ICCThreshold(BaseEstimator, SelectorMixin):
 
 
 def convert_features_ICC_threshold(features_in, csv_out=None,
-                                   features_out=None):
+                                   features_out=None, threshold=0.75):
     '''
     For features from multiple observers, compute ICC, return values,
     and optionally apply thresholding and save output.
@@ -143,7 +143,7 @@ def convert_features_ICC_threshold(features_in, csv_out=None,
 
     # Compute the ICC
     print('Computing ICC.')
-    ICCthresholder = ICCThreshold()
+    ICCthresholder = ICCThreshold(threshold=threshold)
     ICCthresholder.fit(all_features)
 
     # Extract the metric values and save to csv if required

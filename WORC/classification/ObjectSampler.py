@@ -84,20 +84,18 @@ class ObjectSampler(object):
     def init_NearMiss(self, sampling_strategy, n_jobs):
         """Creata a near miss sampler object."""
         self.object = under_sampling.NearMiss(sampling_strategy=sampling_strategy,
-                                              random_state=self.random_state,
                                               n_jobs=n_jobs)
 
         self.sampling_strategy = sampling_strategy
         self.n_jobs = n_jobs
 
     def init_NeighbourhoodCleaningRule(self, sampling_strategy, n_neighbors,
-                                      n_jobs, threshold_cleaning):
+                                       n_jobs, threshold_cleaning):
         """Creata a NeighbourhoodCleaningRule sampler object."""
         self.object =\
             under_sampling.NeighbourhoodCleaningRule(sampling_strategy=sampling_strategy,
-                                                    random_state=self.random_state,
-                                                    threshold_cleaning=threshold_cleaning,
-                                                    n_jobs=n_jobs)
+                                                     threshold_cleaning=threshold_cleaning,
+                                                     n_jobs=n_jobs)
 
         self.sampling_strategy = sampling_strategy
         self.n_neighbors = n_neighbors

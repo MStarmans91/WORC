@@ -24,7 +24,7 @@ from sklearn.utils.validation import indexable, check_is_fitted
 from WORC.classification.metrics import check_scoring
 from sklearn.model_selection._split import check_cv
 from scipy.stats import rankdata
-from sklearn.externals import six
+import six
 from sklearn.utils.fixes import MaskedArray
 
 from sklearn.model_selection._search import ParameterSampler
@@ -45,6 +45,11 @@ from fastr.api import ResourceLimit
 from joblib import Parallel, delayed
 from WORC.classification.fitandscore import fit_and_score, replacenan
 from WORC.classification.fitandscore import delete_nonestimator_parameters
+from sklearn.utils.validation import _check_fit_params
+from sklearn.utils.validation import _num_samples
+from sklearn.model_selection._validation import _aggregate_score_dicts
+from WORC.classification.metrics import check_multimetric_scoring
+from sklearn.metrics._scorer import _MultimetricScorer
 import WORC.addexceptions as WORCexceptions
 import pandas as pd
 import json
@@ -57,6 +62,7 @@ from sklearn.multiclass import OneVsRestClassifier
 from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.featureprocessing.Preprocessor import Preprocessor
+from WORC.detectors.detectors import DebugDetector
 
 # Imports used in the Bayesian optimization
 from WORC.classification.smac import build_smac_config
@@ -621,30 +627,27 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         return X, y
 
-    @property
-    def best_params_(self):
-        check_is_fitted(self, 'cv_results_')
-        return self.cv_results_['params_all'][self.best_index_]
-
-    @property
-    def best_score_(self):
-        check_is_fitted(self, 'cv_results_')
-        return self.cv_results_['mean_test_score'][self.best_index_]
-
-    def process_fit(self, n_splits, parameters_est, parameters_all,
-                    test_sample_counts, test_scores,
-                    train_scores, fit_time, score_time, cv_iter,
+    def process_fit(self, n_splits, parameters_all,
+                    test_sample_counts, test_score_dicts,
+                    train_score_dicts, fit_time, score_time, cv_iter,
                     X, y):
 
         """
         Process the outcomes of a SearchCV fit and find the best settings
         over all cross validations from all hyperparameters tested
 
+        Very similar to the _format_results function or the original SearchCV.
+
         """
+        # test_score_dicts and train_score dicts are lists of dictionaries and
+        # we make them into dict of lists
+        test_scores = _aggregate_score_dicts(test_score_dicts)
+        if self.return_train_score:
+            train_scores = _aggregate_score_dicts(train_score_dicts)
+
         # We take only one result per split, default by sklearn
-        candidate_params_est = list(parameters_est[::n_splits])
         candidate_params_all = list(parameters_all[::n_splits])
-        n_candidates = len(candidate_params_est)
+        n_candidates = len(candidate_params_all)
 
         # Computed the (weighted) mean and std for test scores alone
         # NOTE test_sample counts (weights) remain the same for all candidates
@@ -693,12 +696,36 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 results["rank_%s" % key_name] = np.asarray(
                     rankdata(-array_means, method='min'), dtype=np.int32)
 
-        _store('test_score', test_scores, splits=True, rank=True,
-               weights=test_sample_counts if self.iid else None)
-        if self.return_train_score:
-            _store('train_score', train_scores, splits=True)
         _store('fit_time', fit_time)
         _store('score_time', score_time)
+
+        # Store scores
+        # Check whether to do multimetric scoring
+        test_estimator = cc.construct_classifier(candidate_params_all[0])
+        scorers, self.multimetric_ = check_multimetric_scoring(
+            test_estimator, scoring=self.scoring)
+
+        # NOTE test_sample counts (weights) remain the same for all candidates
+        test_sample_counts = np.array(test_sample_counts[:n_splits],
+                                      dtype=np.int)
+
+        if self.iid != 'deprecated':
+            warnings.warn(
+                "The parameter 'iid' is deprecated in 0.22 and will be "
+                "removed in 0.24.", FutureWarning
+            )
+            iid = self.iid
+        else:
+            iid = False
+
+        for scorer_name in scorers.keys():
+            # Computed the (weighted) mean and std for test scores alone
+            _store('test_%s' % scorer_name, test_scores[scorer_name],
+                   splits=True, rank=True,
+                   weights=test_sample_counts if iid else None)
+            if self.return_train_score:
+                _store('train_%s' % scorer_name, train_scores[scorer_name],
+                       splits=True)
 
         # Compute the "Generalization" score
         difference_score = abs(results['mean_train_score'] - results['mean_test_score'])
@@ -706,6 +733,45 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         results['generalization_score'] = generalization_score
         results['rank_generalization_score'] = np.asarray(
             rankdata(-results['generalization_score'], method='min'), dtype=np.int32)
+
+        if self.multimetric_:
+            if self.refit is not False and (
+                    not isinstance(self.refit, str) or
+                    # This will work for both dict / list (tuple)
+                    self.refit not in scorers) and not callable(self.refit):
+                raise ValueError("For multi-metric scoring, the parameter "
+                                 "refit must be set to a scorer key or a "
+                                 "callable to refit an estimator with the "
+                                 "best parameter setting on the whole "
+                                 "data and make the best_* attributes "
+                                 "available for that metric. If this is "
+                                 "not needed, refit should be set to "
+                                 "False explicitly. %r was passed."
+                                 % self.refit)
+            else:
+                refit_metric = self.refit
+        else:
+            refit_metric = 'score'
+
+        # For multi-metric evaluation, store the best_index_, best_params_ and
+        # best_score_ iff refit is one of the scorer names
+        # In single metric evaluation, refit_metric is "score"
+        if self.refit or not self.multimetric_:
+            # If callable, refit is expected to return the index of the best
+            # parameter set.
+            if callable(self.refit):
+                self.best_index_ = self.refit(results)
+                if not isinstance(self.best_index_, numbers.Integral):
+                    raise TypeError('best_index_ returned is not an integer')
+                if (self.best_index_ < 0 or
+                   self.best_index_ >= len(results["params"])):
+                    raise IndexError('best_index_ index out of range')
+            else:
+                self.best_index_ = results["rank_test_%s"
+                                           % refit_metric].argmin()
+                self.best_score_ = results["mean_test_%s" % refit_metric][
+                                           self.best_index_]
+            self.best_params_ = candidate_params_all[self.best_index_]
 
         # Rank the indices of scores from all parameter settings
         ranked_test_scores = results["rank_" + self.ranking_score]
@@ -717,48 +783,35 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         maxlen = min(self.maxlen, n_candidates)
         bestindices = sortedindices[0:maxlen]
 
-        candidate_params_est = np.asarray(candidate_params_est)[bestindices].tolist()
         candidate_params_all = np.asarray(candidate_params_all)[bestindices].tolist()
         for k in results.keys():
             results[k] = results[k][bestindices]
-        n_candidates = len(candidate_params_est)
+        n_candidates = len(candidate_params_all)
+        results['params'] = candidate_params_all
 
         # Store the atributes of the best performing estimator
         best_index = np.flatnonzero(results["rank_" + self.ranking_score] == 1)[0]
-        best_parameters_est = candidate_params_est[best_index]
         best_parameters_all = candidate_params_all[best_index]
 
-        # Use one MaskedArray and mask all the places where the param is not
-        # applicable for that candidate. Use defaultdict as each candidate may
-        # not contain all the params
-        param_results = defaultdict(partial(MaskedArray,
-                                            np.empty(n_candidates,),
-                                            mask=True,
-                                            dtype=object))
-        for cand_i, params in enumerate(candidate_params_all):
-            for name, value in params.items():
-                # An all masked empty array gets created for the key
-                # `"param_%s" % name` at the first occurence of `name`.
-                # Setting the value at an index also unmasks that index
-                param_results["param_%s" % name][cand_i] = value
-
-        # Store a list of param dicts at the key 'params'
-        results['params'] = candidate_params_est
-        results['params_all'] = candidate_params_all
-
+        # Store several objects
         self.cv_results_ = results
-        self.best_index_ = best_index
         self.n_splits_ = n_splits
         self.cv_iter = cv_iter
+        self.best_index_ = best_index
+        self.best_params_ = results["params"][self.best_index_]
 
-        # Refit all objects with best settings on the full dataset
-        indices = range(0, len(y))
-        self.refit_and_score(X, y, best_parameters_all, best_parameters_est,
-                             train=indices, test=indices)
+        if self.refit:
+            # We always refit on the full dataset
+            indices = np.arange(0, len(y))
+            self.refit_and_score(X, y, best_parameters_all,
+                                 train=indices, test=indices)
+
+        # Store the only scorer not as a dict for single metric evaluation
+        self.scorer_ = scorers if self.multimetric_ else scorers['score']
 
         return self
 
-    def refit_and_score(self, X, y, parameters_all, parameters_est,
+    def refit_and_score(self, X, y, parameters_all,
                         train, test, verbose=None):
         """Refit the base estimator and attributes such as GroupSel
 
@@ -775,9 +828,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 Contains the settings used for the all preprocessing functions
                 and the fitting. TODO: Create a default object and show the
                 fields.
-
-        parameters_est: dictionary, mandatory
-                Contains the settings used for the base estimator
 
         train: list, mandatory
                 Indices of the objects to be used as training set.
@@ -810,12 +860,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             preprocessor = None
 
         # Refit all preprocessing functions
+        fit_params = _check_fit_params(X, self.fit_params)
         out = fit_and_score(X_fit, y, self.scoring,
                             train, test, parameters_all,
-                            fit_params=self.fit_params,
+                            fit_params=fit_params,
                             return_train_score=self.return_train_score,
                             return_n_test_samples=True,
-                            return_times=True, return_parameters=True,
+                            return_times=True, return_parameters=False,
+                            return_estimator=False,
                             error_score=self.error_score,
                             verbose=verbose,
                             return_all=True)
@@ -839,7 +891,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         X = [x[0] for x in X]
         X, y = self.preprocess(X, y, training=True)
 
-        parameters_est = delete_nonestimator_parameters(parameters_est)
         best_estimator = cc.construct_classifier(parameters_all)
 
         # NOTE: This just has to go to the construct classifier function,
@@ -917,9 +968,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             scoring = self.scoring
 
         # Get settings for best 100 estimators
-        parameters_est = self.cv_results_['params']
-        parameters_all = self.cv_results_['params_all']
-        n_classifiers = len(parameters_est)
+        parameters_all = self.cv_results_['params']
+        n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
         # Create a new base object for the ensemble components
@@ -958,16 +1008,16 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
                 # Loop over the 100 best estimators
-                for num, (p_est, p_all) in enumerate(zip(parameters_est, parameters_all)):
+                for num, p_all in enumerate(parameters_all):
                     # NOTE: Explicitly exclude validation set, elso refit and score
                     # somehow still seems to use it.
                     X_train_temp = [X_train[i] for i in train]
                     Y_train_temp = [Y_train[i] for i in train]
-                    train_temp = range(0, len(train))
+                    train_temp = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
                     base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
-                                                   p_est, train_temp, train_temp,
+                                                   train_temp, train_temp,
                                                    verbose=False)
 
                     # Predict and save scores
@@ -1072,11 +1122,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 print('Creating ensemble with Caruana method.')
 
             # BUG: kernel parameter is sometimes saved in unicode
-            for i in range(0, len(parameters_est)):
-                kernel = str(parameters_est[i][u'kernel'])
-                del parameters_est[i][u'kernel']
+            for i in range(0, len(parameters_all)):
+                kernel = str(parameters_all[i][u'kernel'])
                 del parameters_all[i][u'kernel']
-                parameters_est[i]['kernel'] = kernel
                 parameters_all[i]['kernel'] = kernel
 
             # In order to speed up the process, we precompute all scores of the possible
@@ -1094,16 +1142,16 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
                 # Loop over the 100 best estimators
-                for num, (p_est, p_all) in enumerate(zip(parameters_est, parameters_all)):
+                for num, p_all in enumerate(parameters_all):
                     # NOTE: Explicitly exclude validation set, elso refit and score
                     # somehow still seems to use it.
                     X_train_temp = [X_train[i] for i in train]
                     Y_train_temp = [Y_train[i] for i in train]
-                    train_temp = range(0, len(train))
+                    train_temp = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
                     base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
-                                                   p_est, train_temp, train_temp,
+                                                   train_temp, train_temp,
                                                    verbose=False)
 
                     # Predict and save scores
@@ -1269,12 +1317,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Create the ensemble --------------------------------------------------
         # Create the ensemble trained on the full training set
-        parameters_est = [parameters_est[i] for i in ensemble]
         parameters_all = [parameters_all[i] for i in ensemble]
         estimators = list()
-        train = range(0, len(X_train))
+        train = np.arange(0, len(X_train))
         nest = len(ensemble)
-        for enum, (p_est, p_all) in enumerate(zip(parameters_est, parameters_all)):
+        for enum, p_all in enumerate(parameters_all):
             # Refit a SearchCV object with the provided parameters
             print(f"Refitting estimator {enum+1} / {nest}.")
             base_estimator = clone(base_estimator)
@@ -1285,7 +1332,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             #     base_estimator = OneVsRestClassifier(base_estimator)
 
             base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                           p_est, train, train,
+                                           train, train,
                                            verbose=False)
 
             # Determine whether to overfit the feature scaling on the test set
@@ -1308,6 +1355,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         isclassifier =\
             not any(clf in regressors for clf in self.param_distributions['classifiers'])
 
+        # Check the cross-validation object and do the splitting
         cv = check_cv(self.cv, y, classifier=isclassifier)
 
         X, y, groups = indexable(X, y, groups)
@@ -1317,7 +1365,27 @@ class BaseSearchCVfastr(BaseSearchCV):
             print(f"Fitting {n_splits} folds for each of {n_candidates} candidates, totalling {n_candidates * n_splits} fits.")
 
         cv_iter = list(cv.split(X, y, groups))
-        name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+
+        # NOTE: We do not check the scoring here, as this can differ
+        # per estimator. Thus, this is done inside the fit and scoring
+
+        # Check fitting parameters
+        fit_params = _check_fit_params(X, self.fit_params)
+
+        # Create temporary directory for fastr
+        if DebugDetector().do_detection():
+            # Specific name for easy debugging
+            debugnum = 0
+            name = 'DEBUG_' + str(debugnum)
+            tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
+            while os.path.exists(tempfolder):
+                debugnum += 1
+                name = 'DEBUG_' + str(debugnum)
+                tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
+
+        else:
+            name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+
         tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
         if not os.path.exists(tempfolder):
             os.makedirs(tempfolder)
@@ -1410,12 +1478,20 @@ class BaseSearchCVfastr(BaseSearchCV):
                             'verbose', 'fit_params', 'return_train_score',
                             'return_n_test_samples',
                             'return_times', 'return_parameters',
+                            'return_estimator',
                             'error_score']
 
+        verbose = False
+        return_n_test_samples = True
+        return_times = True
+        return_parameters = False
+        return_estimator = False
         estimator_data = pd.Series([X, y, self.scoring,
-                                    False,
-                                    self.fit_params, self.return_train_score,
-                                    True, True, True,
+                                    verbose, fit_params,
+                                    self.return_train_score,
+                                    return_n_test_samples, return_times,
+                                    return_parameters,
+                                    return_estimator,
                                     self.error_score],
                                    index=estimator_labels,
                                    name='estimator Data')
@@ -1475,23 +1551,24 @@ class BaseSearchCVfastr(BaseSearchCV):
         # if one choose to see train score, "out" will contain train score info
         if self.return_train_score:
             (train_scores, test_scores, test_sample_counts,
-             fit_time, score_time, parameters_est, parameters_all) =\
+             fit_time, score_time, parameters_all) =\
               zip(*save_data)
         else:
             (test_scores, test_sample_counts,
-             fit_time, score_time, parameters_est, parameters_all) =\
+             fit_time, score_time, parameters_all) =\
               zip(*save_data)
 
         # Remove the temporary folder used
-        shutil.rmtree(tempfolder)
+        if name != 'DEBUG_0':
+            # Do delete if not debugging for first iteration
+            shutil.rmtree(tempfolder)
 
         # Process the results of the fitting procedure
         self.process_fit(n_splits=n_splits,
-                         parameters_est=parameters_est,
                          parameters_all=parameters_all,
                          test_sample_counts=test_sample_counts,
-                         test_scores=test_scores,
-                         train_scores=train_scores,
+                         test_score_dicts=test_scores,
+                         train_score_dicts=train_scores,
                          fit_time=fit_time,
                          score_time=score_time,
                          cv_iter=cv_iter,
@@ -1755,6 +1832,7 @@ class BaseSearchCVJoblib(BaseSearchCV):
         isclassifier =\
             not any(clf in regressors for clf in self.param_distributions['classifiers'])
 
+        # Check the cross-validation object and do the splitting
         cv = check_cv(self.cv, y, classifier=isclassifier)
 
         X, y, groups = indexable(X, y, groups)
@@ -1767,6 +1845,9 @@ class BaseSearchCVJoblib(BaseSearchCV):
 
         pre_dispatch = self.pre_dispatch
         cv_iter = list(cv.split(X, y, groups))
+
+        # Check fitting parameters
+        fit_params = _check_fit_params(X, self.fit_params)
 
         # Draw parameter sample
         for num, parameters in enumerate(parameter_iterable):
@@ -1790,10 +1871,11 @@ class BaseSearchCVJoblib(BaseSearchCV):
             pre_dispatch=pre_dispatch
         )(delayed(fit_and_score)(X, y, self.scoring,
                                  train, test, parameters,
-                                 fit_params=self.fit_params,
+                                 fit_params=fit_params,
                                  return_train_score=self.return_train_score,
                                  return_n_test_samples=True,
-                                 return_times=True, return_parameters=True,
+                                 return_times=True, return_parameters=False,
+                                 return_estimator=False,
                                  error_score=self.error_score,
                                  verbose=False,
                                  return_all=False)
@@ -1804,19 +1886,18 @@ class BaseSearchCVJoblib(BaseSearchCV):
         # if one choose to see train score, "out" will contain train score info
         if self.return_train_score:
             (train_scores, test_scores, test_sample_counts,
-             fit_time, score_time, parameters_est, parameters_all) =\
+             fit_time, score_time, parameters_all) =\
               save_data
         else:
             (test_scores, test_sample_counts,
-             fit_time, score_time, parameters_est, parameters_all) =\
+             fit_time, score_time, parameters_all) =\
               save_data
 
         self.process_fit(n_splits=n_splits,
-                         parameters_est=parameters_est,
                          parameters_all=parameters_all,
                          test_sample_counts=test_sample_counts,
-                         test_scores=test_scores,
-                         train_scores=train_scores,
+                         test_score_dicts=test_scores,
+                         train_score_dicts=train_scores,
                          fit_time=fit_time,
                          score_time=score_time,
                          cv_iter=cv_iter,
