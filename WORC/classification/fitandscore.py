@@ -616,8 +616,14 @@ def fit_and_score(X, y, scoring,
             if len(X_train_temp[0]) == 0:
                 if verbose:
                     print('[WORC WARNING]: No features are selected! Probably your statistical test feature selection was too strict. Skipping thresholding.')
-                StatisticalSel = None
-                parameters['StatisticalTestUse'] = 'False'
+                #StatisticalSel = None
+                #parameters['StatisticalTestUse'] = 'False'
+                # Temporary solution for debugging
+                if return_all:
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], \
+                           scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                else:
+                    return ret
             else:
                 X_train = StatisticalSel.transform(X_train)
                 feature_labels = StatisticalSel.transform(feature_labels)
