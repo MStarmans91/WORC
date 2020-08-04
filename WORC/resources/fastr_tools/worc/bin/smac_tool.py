@@ -17,6 +17,7 @@
 
 import argparse
 import pandas as pd
+import numpy as np
 from WORC.classification.fitandscore import fit_and_score
 from smac.scenario.scenario import Scenario
 from smac.facade.smac_hpo_facade import SMAC4HPO
@@ -106,8 +107,14 @@ def main():
                                 error_score=data['error_score'],
                                 verbose=data['verbose'],
                                 return_all=False)
-            ret[0] = ret[0]['score']
-            ret[1] = ret[1]['score']
+            # If the run failed because no features were left, report a score of 0
+            # (SMAC will use the max integer value internally to steer away from crashing runs)
+            if np.isnan(ret[0]['score']):
+                ret[0] = 0
+                ret[1] = 0
+            else:
+                ret[0] = ret[0]['score']
+                ret[1] = ret[1]['score']
             all_scores.append(ret)
 
         # Process the results:
