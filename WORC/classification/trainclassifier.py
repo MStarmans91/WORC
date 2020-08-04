@@ -292,7 +292,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
                         'std_inc_changed', 'wallclock_time_best',
                         'std_wallclock_time_best', 'evaluation_best',
                         'std_evaluation_best', 'cost_best', 'std_cost_best']
-        for metric_name in metric_names[1::2]:
+        for metric_name in metric_names[0::2]:
             totals[metric_name] = []
 
         for instance in smac_result_dict:
