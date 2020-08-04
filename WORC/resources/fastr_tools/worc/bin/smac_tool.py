@@ -208,7 +208,7 @@ def main():
     output = output_df.values.tolist()
     # Convert string to dict:
     for ret in output:
-        ret[5] = ast.literal_eval(ret[5])
+        ret[5] = {}
         ret[6] = ast.literal_eval(ret[6])
 
     source_data =\
