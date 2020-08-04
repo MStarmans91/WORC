@@ -150,20 +150,24 @@ def main():
     wallclock_times = []
     evaluations = []
     costs = []
+    configs = []
     with open(traj_file_location, 'r') as trajfile:
         for line in trajfile:
             incumbent_update_info = ast.literal_eval(line)
             wallclock_times.append(incumbent_update_info['wallclock_time'])
             evaluations.append(incumbent_update_info['evaluations'])
             costs.append(incumbent_update_info['cost'])
+            configs.append(incumbent_update_info['incumbent'])
 
     # Remove the first line, as it does not represent an improvement in the incumbent
     del wallclock_times[0]
     del evaluations[0]
     del costs[0]
+    del configs[0]
     smac_stats['inc_wallclock_times'] = wallclock_times
     smac_stats['inc_evaluations'] = evaluations
     smac_stats['inc_costs'] = costs
+    smac_stats['inc_configs'] = configs
 
     # Update the result file of the optimization
     result_file = data['smac_result_file']
