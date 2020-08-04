@@ -106,7 +106,7 @@ def main():
                                 return_parameters=data['return_parameters'],
                                 error_score=data['error_score'],
                                 verbose=data['verbose'],
-                                return_all=False)
+                                return_all=False, use_smac=True)
             # If the run failed because no features were left, report a score of 0
             # (SMAC will use the max integer value internally to steer away from crashing runs)
             if np.isnan(ret[0]['score']):
