@@ -286,13 +286,18 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
         # Create a dictionary with the averages
         totals = dict()
-        metric_names = ['ta_runs', 'n_configs', 'wallclock_time_used', 'ta_time_used',
-                   'inc_changed', 'wallclock_time_best', 'evaluation_best', 'cost_best']
-        for metric_name in metric_names:
+        metric_names = ['ta_runs', 'std_ta_runs', 'n_configs', 'std_n_configs',
+                        'wallclock_time_used', 'std_wallclock_time_used',
+                        'ta_time_used', 'std_ta_time_used', 'inc_changed',
+                        'std_inc_changed', 'wallclock_time_best',
+                        'std_wallclock_time_best', 'evaluation_best',
+                        'std_evaluation_best', 'cost_best', 'std_cost_best']
+        for metric_name in metric_names[1::2]:
             totals[metric_name] = []
 
         for instance in smac_result_dict:
             nr_of_incumbent_updates = smac_result_dict[instance]['inc_changed']
+            # Extract the details of the last (best) incumbent
             totals['wallclock_time_best'].append(
                 smac_result_dict[instance]['inc_wallclock_times'][nr_of_incumbent_updates - 1])
             totals['evaluation_best'].append(
@@ -304,8 +309,11 @@ def trainclassifier(feat_train, patientinfo_train, config,
                     totals[metric].append(smac_result_dict[instance][metric])
 
         averages = dict()
+        list_position_count = 1
         for metric_name in totals:
             averages[metric_name] = np.mean(totals[metric_name])
+            averages[metric_names[list_position_count]] = np.std(totals[metric_name])
+            list_position_count += 2
 
         smac_result_dict['averages'] = averages
 
