@@ -203,8 +203,10 @@ def main():
     output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' +
                             str(run_info['run_id']) + '.csv')
     output = output_df.values.tolist()
-    # Convert string to dict:
+    # Convert strings and floats to dict:
     for ret in output:
+        ret[0] = {'score': ret[0]}
+        ret[1] = {'score': ret[1]}
         ret[5] = {}
         ret[6] = ast.literal_eval(ret[6])
 

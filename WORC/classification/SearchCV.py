@@ -2852,11 +2852,10 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         # Process the results of the fitting procedure
         self.process_fit(n_splits=n_splits,
-                         parameters_est=parameters_est,
                          parameters_all=parameters_all,
                          test_sample_counts=test_sample_counts,
-                         test_scores=test_scores,
-                         train_scores=train_scores,
+                         test_score_dicts=test_scores,
+                         train_score_dicts=train_scores,
                          fit_time=fit_time,
                          score_time=score_time,
                          cv_iter=cv_iter,
