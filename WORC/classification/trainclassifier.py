@@ -148,17 +148,13 @@ def trainclassifier(feat_train, patientinfo_train, config,
     param_grid = cc.create_param_grid(config)
 
     # IF at least once groupwise search is turned on, add it to the param grid
-    if 'True'in config['Featsel']['GroupwiseSearch']:
+    if 'True' in config['Featsel']['GroupwiseSearch']:
         param_grid['SelectGroups'] = config['Featsel']['GroupwiseSearch']
         for group in config['SelectFeatGroup'].keys():
             param_grid[group] = config['SelectFeatGroup'][group]
 
-    # If scaling is to be applied, add to parameters
-    if config['FeatureScaling']['scale_features']:
-        if type(config['FeatureScaling']['scaling_method']) is not list:
-            param_grid['FeatureScaling'] = [config['FeatureScaling']['scaling_method']]
-        else:
-            param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
+    # Add feature scaling parameters
+    param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
 
     # Add parameters for oversampling methods
     param_grid['Resampling_Use'] =\

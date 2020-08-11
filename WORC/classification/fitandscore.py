@@ -364,24 +364,28 @@ def fit_and_score(X, y, scoring,
 
     # ------------------------------------------------------------------------
     # Feature scaling
-    if 'FeatureScaling' in para_estimator.keys():
-        if verbose:
-            print("Fitting scaler and transforming features.")
+    if verbose:
+        print(f'Fitting scaler and transforming features, method ' +
+              '{para_estimator['FeatureScaling']}.')
 
-        if para_estimator['FeatureScaling'] == 'z_score':
-            scaler = StandardScaler().fit(X_train)
-        elif para_estimator['FeatureScaling'] == 'robust':
-            scaler = RobustScaler().fit(X_train)
-        elif para_estimator['FeatureScaling'] == 'minmax':
-            scaler = MinMaxScaler().fit(X_train)
-        else:
-            scaler = None
+    if para_estimator['FeatureScaling'] == 'z_score':
+        scaler = StandardScaler().fit(X_train)
+    elif para_estimator['FeatureScaling'] == 'robust':
+        scaler = RobustScaler().fit(X_train)
+    elif para_estimator['FeatureScaling'] == 'minmax':
+        scaler = MinMaxScaler().fit(X_train)
+    elif para_estimator['FeatureScaling'] == 'None':
+        scaler = None
+    else:
+        raise WORCKeyError(f'{para_estimator['FeatureScaling']} is not a ' +
+                           'valid scaling method. Should be z_score, ' +
+                           'robust, minmax, or None.')
 
-        if scaler is not None:
-            X_train = scaler.transform(X_train)
-            X_test = scaler.transform(X_test)
+    if scaler is not None:
+        X_train = scaler.transform(X_train)
+        X_test = scaler.transform(X_test)
 
-        del para_estimator['FeatureScaling']
+    del para_estimator['FeatureScaling']
 
     # Delete the object if we do not need to return it
     if not return_all:

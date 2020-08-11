@@ -344,8 +344,7 @@ def generate_config_options():
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
-    config['FeatureScaling']['scale_features'] = 'Boolean(s)'
-    config['FeatureScaling']['scaling_method'] = 'z_score, minmax, robust'
+    config['FeatureScaling']['scaling_method'] = 'z_score, minmax, robust, None'
 
     # Ensemble options
     config['Ensemble'] = dict()
@@ -601,7 +600,6 @@ def generate_config_descriptions():
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
-    config['FeatureScaling']['scale_features'] = 'Determine whether to use feature scaling is.'
     config['FeatureScaling']['scaling_method'] = 'Determine the scaling method.'
 
     # Ensemble options
