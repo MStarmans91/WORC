@@ -366,7 +366,7 @@ def fit_and_score(X, y, scoring,
     # Feature scaling
     if verbose and para_estimator['FeatureScaling'] != 'None':
         print(f'Fitting scaler and transforming features, method ' +
-              '{para_estimator['FeatureScaling']}.')
+              f'{para_estimator['FeatureScaling']}.')
 
     if para_estimator['FeatureScaling'] == 'z_score':
         scaler = StandardScaler().fit(X_train)
