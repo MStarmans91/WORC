@@ -364,7 +364,7 @@ def fit_and_score(X, y, scoring,
 
     # ------------------------------------------------------------------------
     # Feature scaling
-    if verbose:
+    if verbose and para_estimator['FeatureScaling'] != 'None':
         print(f'Fitting scaler and transforming features, method ' +
               '{para_estimator['FeatureScaling']}.')
 
