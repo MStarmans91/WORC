@@ -158,8 +158,8 @@ def build_smac_config(parameters):
                                         choices=['True', 'False'])
     cs.add_hyperparameter(scaling)
 
-    scaling_method = CategoricalHyperparameter('FeatureScaling',
-                                               choices=parameters['FeatureScaling']['scaling_method'])
+    scaling_method = CategoricalHyperparameter('FeatureScaling', choices=['z_score', 'robust', 'minmax'])
+                                               #choices=parameters['FeatureScaling']['scaling_method'])
     cs.add_hyperparameter(scaling_method)
     cs.add_condition(InCondition(child=scaling_method, parent=scaling, values=['True']))
 
