@@ -57,7 +57,9 @@ def random_search_parameters(features, labels, N_iter, test_size,
         random_search: sklearn randomsearch object containing the results.
     """
     if random_seed is None:
-        random_seed = np.random.randint(1, 5000)
+        #random_seed = np.random.randint(1, 5000)
+        # Fix the random seed for testing
+        random_seed = 42
     random_state = check_random_state(random_seed)
 
     regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
@@ -135,7 +137,9 @@ def guided_search_parameters(features, labels, N_iter, test_size,
         guided_search: object containing the results
     """
     if random_seed is None:
-        random_seed = np.random.randint(1, 5000)
+        #random_seed = np.random.randint(1, 5000)
+        # Fix the random seed for testing
+        random_seed = 42
     random_state = check_random_state(random_seed)
 
     regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
