@@ -366,7 +366,7 @@ def fit_and_score(X, y, scoring,
     # Feature scaling
     if verbose and para_estimator['FeatureScaling'] != 'None':
         print(f'Fitting scaler and transforming features, method ' +
-              f'{para_estimator['FeatureScaling']}.')
+              f'{para_estimator["FeatureScaling"]}.')
 
     if para_estimator['FeatureScaling'] == 'z_score':
         scaler = StandardScaler().fit(X_train)
@@ -377,7 +377,7 @@ def fit_and_score(X, y, scoring,
     elif para_estimator['FeatureScaling'] == 'None':
         scaler = None
     else:
-        raise WORCKeyError(f'{para_estimator['FeatureScaling']} is not a ' +
+        raise WORCKeyError(f'{para_estimator["FeatureScaling"]} is not a ' +
                            'valid scaling method. Should be z_score, ' +
                            'robust, minmax, or None.')
 
