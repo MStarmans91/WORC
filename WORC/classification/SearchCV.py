@@ -2848,7 +2848,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                 zip(*save_data)
 
         # Remove the temporary folder used
-        shutil.rmtree(tempfolder)
+        #shutil.rmtree(tempfolder)
 
         # Process the results of the fitting procedure
         self.process_fit(n_splits=n_splits,
