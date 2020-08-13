@@ -663,6 +663,20 @@ def fit_and_score(X, y, scoring,
                 Sampler = None
                 parameters['Resampling_Use'] = 'False'
 
+            except RuntimeError as e:
+                if 'ADASYN is not suited for this specific dataset. Use SMOTE instead.' in str(e):
+                    # Seldomly occurs, therefore return performance dummy
+                    if verbose:
+                        print(f'[WARNING]: {e}. Returning dummies. Parameters: ')
+                        print(parameters)
+                    para_estimator = delete_nonestimator_parameters(para_estimator)
+
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    else:
+                        return ret
+                else:
+                    raise e
             else:
                 pos = int(np.sum(y_train_temp))
                 neg = int(len(y_train_temp) - pos)

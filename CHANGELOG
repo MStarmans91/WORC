@@ -13,7 +13,9 @@ Fixed
 ~~~~~
 - Bug in fit and score when using scaling: was incorrectly parsed as string
   and always set to None.
-  
+- Catch exception in ADASYN sampling.
+- Typo in configuration documentation.
+
 3.3.1 - 2020-07-31
 ------------------
 

@@ -338,7 +338,7 @@ class WORC(object):
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '0.75, 0.25'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
-        config['Featsel']['ReliefNumFeatures'] = '10, 50, 100'
+        config['Featsel']['ReliefNumFeatures'] = '10, 50'
 
         # Groupwise Featureselection options
         config['SelectFeatGroup'] = dict()
