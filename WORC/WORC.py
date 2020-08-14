@@ -206,6 +206,8 @@ class WORC(object):
         config['Preprocessing']['ROIdilate'] = 'False'
         config['Preprocessing']['ROIdilateradius'] = '10'
         config['Preprocessing']['Method'] = 'z_score'
+        config['Preprocessing']['Resampling'] = 'False'
+        config['Preprocessing']['Resampling_spacing'] = '1, 1, 1'
 
         # Segmentix
         config['Segmentix'] = dict()
@@ -776,6 +778,14 @@ class WORC(object):
                         # processor of WORC
                         if self.configs[nmod]['General']['Segmentix'] == 'True':
                             self.add_segmentix(label, nmod)
+                        elif self.configs[nmod]['Preprocessing']['Resampling'] == 'True':
+                            raise WORCValueError('If you use resampling, ' +
+                                                 'have to use segmentix to ' +
+                                                 ' make sure the mask is ' +
+                                                 'also resampled. Please ' +
+                                                 'set ' +
+                                                 'config["General"]["Segmentix"]' +
+                                                 'to "True".')
 
                         else:
                             # Provide source or elastix segmentations to

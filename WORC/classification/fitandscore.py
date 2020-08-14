@@ -338,10 +338,10 @@ def fit_and_score(X, y, scoring,
 
         # Transform all objectd accordingly
         X_train = GroupSel.transform(X_train)
+        X_test = GroupSel.transform(X_test)
         if verbose:
             print("\t New Length: " + str(len(X_train[0])))
         feature_labels = GroupSel.transform(feature_labels)
-        X_test = GroupSel.transform(X_test)
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -454,10 +454,12 @@ def fit_and_score(X, y, scoring,
 
             # Transform all objects accordingly
             X_train = ReliefSel.transform(X_train)
+            X_test = ReliefSel.transform(X_test)
+
             if verbose:
                 print("\t New Length: " + str(len(X_train[0])))
             feature_labels = ReliefSel.transform(feature_labels)
-            X_test = ReliefSel.transform(X_test)
+
 
         del para_estimator['ReliefUse']
         del para_estimator['ReliefNN']
@@ -502,10 +504,10 @@ def fit_and_score(X, y, scoring,
         if verbose:
             print("\t Original Length: " + str(len(X_train[0])))
         X_train = SelectModel.transform(X_train)
+        X_test = SelectModel.transform(X_test)
         if verbose:
             print("\t New Length: " + str(len(X_train[0])))
         feature_labels = SelectModel.transform(feature_labels)
-        X_test = SelectModel.transform(X_test)
 
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']
@@ -618,8 +620,8 @@ def fit_and_score(X, y, scoring,
                 parameters['StatisticalTestUse'] = 'False'
             else:
                 X_train = StatisticalSel.transform(X_train)
-                feature_labels = StatisticalSel.transform(feature_labels)
                 X_test = StatisticalSel.transform(X_test)
+                feature_labels = StatisticalSel.transform(feature_labels)
 
             if verbose:
                 print("\t New Length: " + str(len(X_train[0])))

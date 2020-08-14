@@ -65,4 +65,16 @@ def load_config(config_file_path):
     settings_dict['Segmentix']['AssumeSameImageAndMaskMetadata'] =\
         settings['General'].getboolean('AssumeSameImageAndMaskMetadata')
 
+    # Resampling
+    settings_dict['Preprocessing']['Resampling'] =\
+        settings['Preprocessing'].getboolean('Resampling')
+
+    settings_dict['Preprocessing']['Resampling_spacing'] =\
+        [float(item) for item in
+         settings['Preprocessing']['Resampling_spacing'].split(',')]
+
+    if len(settings_dict['Preprocessing']['Resampling_spacing']) != 3:
+        s = settings_dict['Preprocessing']['Resampling_spacing']
+        raise ae.WORCValueError(f'Resampling spacing should be three elements, got {s}')
+
     return settings_dict
