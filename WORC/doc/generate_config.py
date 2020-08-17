@@ -346,7 +346,7 @@ def generate_config_options():
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
-    config['FeatureScaling']['scaling_method'] = 'z_score, minmax, robust, None'
+    config['FeatureScaling']['scaling_method'] = 'robust_z_score. z_score, robust, minmax, None'
 
     # Ensemble options
     config['Ensemble'] = dict()

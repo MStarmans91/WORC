@@ -37,7 +37,7 @@ def load_config(config_file_path):
     settings = configparser.ConfigParser()
     settings.read(config_file_path)
 
-    settings_dict = {'Segmentix': dict()}
+    settings_dict = {'Segmentix': dict(), 'Preprocessing': dict()}
 
     # Segmentation settings
     settings_dict['Sementix'] = dict()

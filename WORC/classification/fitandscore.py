@@ -33,6 +33,7 @@ from WORC.classification import construct_classifier as cc
 from WORC.classification.metrics import check_multimetric_scoring
 from WORC.featureprocessing.Relief import SelectMulticlassRelief
 from WORC.featureprocessing.Imputer import Imputer
+from WORC.featureprocessing.Scalers import RobustStandardScaler
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
@@ -368,7 +369,9 @@ def fit_and_score(X, y, scoring,
         print(f'Fitting scaler and transforming features, method ' +
               f'{para_estimator["FeatureScaling"]}.')
 
-    if para_estimator['FeatureScaling'] == 'z_score':
+    if para_estimator['FeatureScaling'] == 'robust_z_score':
+        scaler = RobustStandardScaler().fit(X_train)
+    elif para_estimator['FeatureScaling'] == 'z_score':
         scaler = StandardScaler().fit(X_train)
     elif para_estimator['FeatureScaling'] == 'robust':
         scaler = RobustScaler().fit(X_train)

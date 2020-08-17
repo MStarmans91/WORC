@@ -320,7 +320,7 @@ class WORC(object):
 
         # Feature scaling options
         config['FeatureScaling'] = dict()
-        config['FeatureScaling']['scaling_method'] = 'z_score, robust, minmax'
+        config['FeatureScaling']['scaling_method'] = 'robust_z_score'
 
         # Feature preprocessing before all below takes place
         config['FeatPreProcess'] = dict()

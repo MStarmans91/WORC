@@ -16,6 +16,17 @@ Fixed
 - Catch exception in ADASYN sampling.
 - Typo in configuration documentation.
 
+Added
+~~~~~~~
+- New type of scaler (robust z-scoring)
+- Resampling of image and mask in preprocessing (preprocessing and segmentix
+  nodes)
+
+Changed
+~~~~~~~
+- Newly added scaler is now also the default to use, instead of the search
+  over the older included scalers.
+
 3.3.1 - 2020-07-31
 ------------------
 

@@ -211,7 +211,7 @@ def segmentix(parameters, image=None, segmentation=None,
         new_spacing = config['Preprocessing']['Resampling_spacing']
         print(f'[Segmentix] Apply resampling of image to spacing {new_spacing}.')
         contour = resample_image(image=contour, new_spacing=new_spacing,
-                                 interpolator=sitk.sitkNearestNeighbour)
+                                 interpolator=sitk.sitkNearestNeighbor)
     else:
         print('No resampling was applied.')
 
