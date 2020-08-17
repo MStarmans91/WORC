@@ -185,16 +185,6 @@ def fit_and_score(X, y, scoring,
 
 
     """
-
-    # TEMPORARY FILE WRITING FOR VALIDATING CORRECTNESS
-    if use_smac:
-        filename = '/scratch/mdeen/results/train-test-splits-smac.txt'
-    else:
-        filename = '/scratch/mdeen/results/train-test-splits-rs.txt'
-    with open(filename, 'a') as splitsfile:
-        splitsfile.write('train: ' + str(train) + '\n')
-        splitsfile.write('test: ' + str(test) + '\n')
-
     # We copy the parameter object so we can alter it and keep the original
     if verbose:
         print("\n")
