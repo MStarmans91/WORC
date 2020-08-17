@@ -61,8 +61,10 @@ def load_config(config_file_path):
     # Feature Scaling
     settings_dict['FeatureScaling']['scale_features'] =\
         settings['FeatureScaling'].getboolean('scale_features')
+
     settings_dict['FeatureScaling']['scaling_method'] =\
-        str(settings['FeatureScaling']['scaling_method'])
+        [str(item).strip() for item in
+         settings['FeatureScaling']['scaling_method'].split(',')]
 
     # Feature selection
     settings_dict['Featsel']['Variance'] =\
