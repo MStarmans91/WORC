@@ -136,10 +136,11 @@ def main():
 
         return score
 
-    initial_design = RandomConfigurations(init_budget=27)
+    #initial_design = RandomConfigurations(cs=data['search_space'], rng=run_info['run_rng'],
+    #,init_budget=27)
     smac = SMAC4HPO(scenario=scenario, rng=run_info['run_rng'],
                     tae_runner=score_cfg, run_id=run_info['run_id'],
-                    initial_design=initial_design)
+                    initial_design=RandomConfigurations)
     opt_config = smac.optimize()
 
     # Read in the stats from the SMAC output
