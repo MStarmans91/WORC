@@ -1508,7 +1508,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         parameter_data = network.create_source('JsonFile', id='parameters')
         sink_output = network.create_sink('HDF5', id='output')
 
-        fitandscore = network.create_node('worc/fitandscore:1.0', tool_version='1.0', id='fitandscore', resources=ResourceLimit(memory='2G'))
+        fitandscore = network.create_node('worc/fitandscore:1.0', tool_version='1.0', id='fitandscore', resources=ResourceLimit(memory='3G'))
         fitandscore.inputs['estimatordata'].input_group = 'estimator'
         fitandscore.inputs['traintest'].input_group = 'traintest'
         fitandscore.inputs['parameters'].input_group = 'parameters'
