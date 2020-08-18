@@ -329,19 +329,19 @@ def crossval(config, label_data, image_features,
             n_cores = config['General']['Joblib_ncores']
             if use_SMAC:
                 trained_classifier = guided_search_parameters(features=X_train,
-                                                          labels=Y_train,
-                                                          parameters=config,
-                                                          n_cores=n_cores,
-                                                          random_seed=random_seed,
-                                                          smac_result_file=smac_result_file,
-                                                          **config['HyperOptimization'])
+                                                              labels=Y_train,
+                                                              parameters=config,
+                                                              n_cores=n_cores,
+                                                              random_seed=random_seed,
+                                                              smac_result_file=smac_result_file,
+                                                              **config['HyperOptimization'])
             else:
                 trained_classifier = random_search_parameters(features=X_train,
-                                                          labels=Y_train,
-                                                          param_grid=param_grid,
-                                                          n_cores=n_cores,
-                                                          random_seed=random_seed,
-                                                          **config['HyperOptimization'])
+                                                              labels=Y_train,
+                                                              param_grid=param_grid,
+                                                              n_cores=n_cores,
+                                                              random_seed=random_seed,
+                                                              **config['HyperOptimization'])
 
             # Create an ensemble if required
             # trained_classifier.create_ensemble(X_train, Y_train, method=ensemble['Use'])

@@ -427,8 +427,15 @@ class WORC(object):
         config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
-        config['HyperOptimization']['use_SMAC'] = 'True' # only working when using fastr in classification
-        config['HyperOptimization']['n_SMAC_cores'] = '1'
+
+        # SMAC options
+        config['SMAC'] = dict()
+        config['SMAC']['use'] = 'False'
+        config['SMAC']['n_smac_cores'] = '1'
+        config['SMAC']['budget_type'] = 'time' # ['evals', 'time']
+        config['SMAC']['budget'] = '3600' # Nr of evals or time in seconds
+        config['SMAC']['init_method'] = 'sobol' # ['sobol', 'random']
+        config['SMAC']['init_budget'] = '300' # Nr of evals
 
         # Ensemble options
         config['Ensemble'] = dict()

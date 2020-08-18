@@ -18,11 +18,13 @@
 import argparse
 import pandas as pd
 import numpy as np
+import WORC.addexceptions as WORCexceptions
 from WORC.classification.fitandscore import fit_and_score
 from smac.scenario.scenario import Scenario
 from smac.facade.smac_hpo_facade import SMAC4HPO
 from smac.initial_design.initial_design import InitialDesign
 from smac.initial_design.random_configuration_design import RandomConfigurations
+from smac.initial_design.sobol_design import SobolDesign
 import ast
 import os
 import json
@@ -72,18 +74,28 @@ def main():
     #                            traj_logger=None,
     #                            ta_run_limit=100)
 
-    scenario = Scenario({"run_obj": "quality",  # optimize for solution quality
-                         #"runcount-limit": data['n_iter'],  # max. number of function evaluations;
-                         "wallclock-limit": data['n_iter'],
-                         "cs": data['search_space'],
-                         "deterministic": "true",
-                         "output_dir": "/scratch/mdeen/SMAC_output/" + run_info['run_name'],
-                         "shared_model": False,
-                         "input_psmac_dirs": "/scratch/mdeen/SMAC_output/" + run_info['run_name'],
-                         "abort_on_first_run_crash": "false",
-                         "intensification_percentage": 0,
-                         "maxR": 1
-                         })
+    scenario_settings = {'run_obj': 'quality',  # optimize for solution quality
+                         'cs': data['search_space'],
+                         'deterministic': 'true',
+                         'output_dir': '/scratch/mdeen/SMAC_output/' + run_info['run_name'],
+                         'shared_model': False,
+                         'input_psmac_dirs': '/scratch/mdeen/SMAC_output/' + run_info['run_name'],
+                         'abort_on_first_run_crash': 'false',
+                         }
+
+    # modify the budget of the optimization according to the settings
+    if data['budget_type'] == 'evals':
+        scenario_settings['runcount-limit'] = data['budget']
+    elif data['budget_type'] == 'time':
+        scenario_settings['wallclock-limit'] = data['budget']
+    else:
+        message = 'No valid smac budget_type specified'
+        raise WORCexceptions.WORCValueError(message)
+
+    scenario = Scenario(scenario_settings)
+
+    # "runcount-limit": data['n_iter'],  # max. number of function evaluations;
+    # "wallclock-limit": data['n_iter'],
 
     def score_cfg(cfg):
         # Construct a new dictionary with parameters from the input configuration
@@ -136,12 +148,19 @@ def main():
 
         return score
 
-    #initial_design = RandomConfigurations(cs=data['search_space'], rng=run_info['run_rng'],
-    #,init_budget=27)
-    initial_design_kwargs = {'init_budget': 27}
+    # Prepare the SMAC instance
+    if data['init_method'] == 'sobol':
+        initial_design = SobolDesign
+    elif data['init_method'] == 'random':
+        initial_design = RandomConfigurations
+    else:
+        message = 'No valid smac initialization method specified'
+        raise WORCexceptions.WORCValueError(message)
+    initial_design_kwargs = {'init_budget': data['init_budget']}
+
     smac = SMAC4HPO(scenario=scenario, rng=run_info['run_rng'],
                     tae_runner=score_cfg, run_id=run_info['run_id'],
-                    initial_design=RandomConfigurations,
+                    initial_design=initial_design,
                     initial_design_kwargs=initial_design_kwargs)
     opt_config = smac.optimize()
 

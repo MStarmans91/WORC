@@ -24,9 +24,9 @@ from WORC.classification.SearchCV import RandomizedSearchCVfastr, RandomizedSear
 def random_search_parameters(features, labels, N_iter, test_size,
                              param_grid, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
-                             use_SMAC=False, n_cores=1, fastr_plugin=None,
+                             n_cores=1, fastr_plugin=None,
                              maxlen=100, ranking_score='test_score',
-                             random_seed=None, n_SMAC_cores=10):
+                             random_seed=None):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
     randomized search.
@@ -47,11 +47,8 @@ def random_search_parameters(features, labels, N_iter, test_size,
                         single core when using the fastr randomized search.
         use_fastr: Boolean determining of either fastr or joblib should be used
                    for the opimization.
-        use_SMAC: Boolean determining whether the SMAC algorithm should be used
-                    for the hyperparameter optimization.
         fastr_plugin: determines which plugin is used for fastr executions.
                 When None, uses the default plugin from the fastr config.
-        n_SMAC_cores: determines the number of cores used to run smac in parallel.
 
     Returns:
         random_search: sklearn randomsearch object containing the results.
@@ -103,10 +100,9 @@ def random_search_parameters(features, labels, N_iter, test_size,
 def guided_search_parameters(features, labels, N_iter, test_size,
                              parameters, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
-                             use_SMAC=True, n_cores=1, fastr_plugin=None,
+                             n_cores=1, fastr_plugin=None,
                              maxlen=100, ranking_score='test_score',
-                             random_seed=None, n_SMAC_cores=10,
-                             smac_result_file=None):
+                             random_seed=None, smac_result_file=None):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
     Bayesian optimization approach.
@@ -127,11 +123,8 @@ def guided_search_parameters(features, labels, N_iter, test_size,
                         single core when using the fastr randomized search.
         use_fastr: Boolean determining of either fastr or joblib should be used
                    for the opimization.
-        use_SMAC: Boolean determining whether the smac algorithm should be used
-                    for the hyperparameter optimization.
         fastr_plugin: determines which plugin is used for fastr executions.
                 When None, uses the default plugin from the fastr config.
-        n_SMAC_cores: determines the number of cores used to run smac in parallel.
 
     Returns:
         guided_search: object containing the results

@@ -2735,13 +2735,18 @@ class BaseSearchCVSMAC(BaseSearchCV):
                             'verbose', 'fit_params', 'return_train_score',
                             'return_n_test_samples',
                             'return_times', 'return_parameters',
-                            'error_score', 'n_iter', 'smac_result_file']
+                            'error_score', 'budget_type', 'budget',
+                            'init_method', 'init_budget', 'smac_result_file']
 
         estimator_data = pd.Series([self.features, self.labels, cs,
                                     cv_iter, self.scoring, False,
                                     self.fit_params, self.return_train_score,
                                     True, True, True,
-                                    self.error_score, self.n_iter,
+                                    self.error_score,
+                                    self.param_distributions['SMAC']['budget_type'],
+                                    self.param_distributions['SMAC']['budget'],
+                                    self.param_distributions['SMAC']['init_method'],
+                                    self.param_distributions['SMAC']['init_budget'],
                                     self.smac_result_file],
                                    index=estimator_labels,
                                    name='estimator Data')
@@ -2774,7 +2779,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         random_id = random.randint(1000, 9999)
         run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S' + str(random_id))
         instance_files = dict()
-        for i in range(self.param_distributions['HyperOptimization']['n_SMAC_cores']):
+        for i in range(self.param_distributions['SMAC']['n_smac_cores']):
             instance_info = [i, random.randint(0, 2 ** 32 - 1), run_name]
             instance_data = pd.Series(instance_info,
                                       index=instance_labels,
