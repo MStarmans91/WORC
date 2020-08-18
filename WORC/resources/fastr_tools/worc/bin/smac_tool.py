@@ -22,6 +22,7 @@ from WORC.classification.fitandscore import fit_and_score
 from smac.scenario.scenario import Scenario
 from smac.facade.smac_hpo_facade import SMAC4HPO
 from smac.initial_design.initial_design import InitialDesign
+from smac.initial_design.random_configuration_design import RandomConfigurations
 import ast
 import os
 import json
@@ -135,8 +136,10 @@ def main():
 
         return score
 
+    initial_design = RandomConfigurations(init_budget=27)
     smac = SMAC4HPO(scenario=scenario, rng=run_info['run_rng'],
-                    tae_runner=score_cfg, run_id=run_info['run_id'])
+                    tae_runner=score_cfg, run_id=run_info['run_id'],
+                    initial_design=initial_design)
     opt_config = smac.optimize()
 
     # Read in the stats from the SMAC output
