@@ -528,7 +528,7 @@ class WORC(object):
                 self.link_class_2.collapse = 'pctrain'
 
                 # Optional SMAC output
-                if  self.configs[0]['HyperOptimization']['use_SMAC'] == 'True':
+                if  self.configs[0]['SMAC']['use'] == 'True':
                     self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results',
                                                                       step_id='general_sinks')
                     self.sink_smac_results.input = self.classify.outputs['smac_results']

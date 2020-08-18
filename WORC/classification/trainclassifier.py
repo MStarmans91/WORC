@@ -279,7 +279,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
     ## ----------------------------------------- ##
     # Process the statistics of the SMAC optimization
     # ! Perhaps move this to a better location in the future
-    if config['HyperOptimization']['use_SMAC']:
+    if config['SMAC']['use']:
 
         with open(smac_result_file, 'r') as jsonfile:
             smac_result_dict = json.load(jsonfile)
