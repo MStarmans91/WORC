@@ -507,6 +507,21 @@ class WORC(object):
                                                          resources=ResourceLimit(memory=memory),
                                                          step_id='WorkflowOptimization')
 
+                self.source_Ensemble =\
+                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Use']],
+                                                 id='Ensemble',
+                                                 step_id='Evaluation')
+                self.source_LabelType =\
+                    self.network.create_constant('String', [self.configs[0]['Labels']['label_names']],
+                                                 id='LabelType',
+                                                 step_id='Evaluation')
+
+                self.plot_estimator =\
+                    self.network.create_node('worc/PlotEstimator:1.0', tool_version='1.0',
+                                             id='plot_Estimator',
+                                             resources=ResourceLimit(memory='12G'),
+                                             step_id='Evaluation')
+
                 # Outputs
                 self.sink_classification = self.network.create_sink('HDF5', id='classification', step_id='general_sinks')
                 self.sink_performance = self.network.create_sink('JsonFile', id='performance', step_id='general_sinks')
@@ -519,13 +534,24 @@ class WORC(object):
                 self.link_class_1.collapse = 'conf'
                 self.link_class_2.collapse = 'pctrain'
 
+                self.plot_estimator.inputs['ensemble'] = self.source_Ensemble.output
+                self.plot_estimator.inputs['label_type'] = self.source_LabelType.output
+
+                if self.labels_test:
+                    pinfo = self.source_patientclass_test.output
+                else:
+                    pinfo = self.source_patientclass_train.output
+
+                self.plot_estimator.inputs['prediction'] = self.classify.outputs['classification']
+                self.plot_estimator.inputs['pinfo'] = pinfo
+
                 if self.TrainTest:
                     # FIXME: the naming here is ugly
                     self.link_class_3 = self.network.create_link(self.source_patientclass_test.output, self.classify.inputs['patientclass_test'])
                     self.link_class_3.collapse = 'pctest'
 
                 self.sink_classification.input = self.classify.outputs['classification']
-                self.sink_performance.input = self.classify.outputs['performance']
+                self.sink_performance.input = self.plot_estimator.outputs['output_json']
 
                 if self.masks_normalize_train:
                     self.sources_masks_normalize_train = dict()

@@ -15,12 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import json
 import os
 from scipy.stats import uniform
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
-from WORC.plotting.plot_estimator_performance import plot_estimator_performance
 from WORC.IOparser.file_io import load_features
 import WORC.IOparser.config_io_classifier as config_io
 from WORC.classification.AdvancedSampler import discrete_uniform, \
@@ -28,7 +26,7 @@ from WORC.classification.AdvancedSampler import discrete_uniform, \
 
 
 def trainclassifier(feat_train, patientinfo_train, config,
-                    output_hdf, output_json,
+                    output_hdf,
                     feat_test=None, patientinfo_test=None,
                     fixedsplits=None, verbose=True):
     """Train a classifier using machine learning from features.
@@ -60,11 +58,6 @@ def trainclassifier(feat_train, patientinfo_train, config,
     output_hdf: string, mandatory
             path refering to a .hdf5 file to which the final classifier and
             it's properties will be written to.
-
-    output_json: string, mandatory
-            path refering to a .json file to which the performance of the final
-            classifier will be written to. This file is generated through one of
-            the WORC plotting functions.
 
     feat_test: string, optional
             When this argument is supplied, the machine learning will not be
@@ -108,14 +101,6 @@ def trainclassifier(feat_train, patientinfo_train, config,
             # FIXME
             print('[WORC Warning] You provided multiple output hdf files: only the first one will be used!')
             output_hdf = output_hdf[0]
-
-    if type(output_json) is list:
-        if len(output_json) == 1:
-            output_json = ''.join(output_json)
-        else:
-            # FIXME
-            print('[WORC Warning] You provided multiple output json files: only the first one will be used!')
-            output_json = output_json[0]
 
     if type(fixedsplits) is list:
         fixedsplits = ''.join(fixedsplits)
@@ -252,63 +237,5 @@ def trainclassifier(feat_train, patientinfo_train, config,
         os.makedirs(os.path.dirname(output_hdf))
 
     trained_classifier.to_hdf(output_hdf, 'EstimatorData')
-
-    # Check whether we do regression or classification
-    regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
-    isclassifier =\
-        not any(clf in regressors for clf in config['Classification']['classifiers'])
-
-    # Calculate statistics of performance
-    overfit_scaler = config['Evaluation']['OverfitScaler']
-    if feat_test is None:
-        if not isclassifier:
-            statistics =\
-                plot_estimator_performance(trained_classifier,
-                                           label_data_train,
-                                           label_type,
-                                           ensemble=config['Ensemble']['Use'],
-                                           bootstrap=config['Bootstrap']['Use'],
-                                           bootstrap_N=config['Bootstrap']['N_iterations'],
-                                           overfit_scaler=overfit_scaler)
-        else:
-            statistics =\
-                plot_estimator_performance(trained_classifier,
-                                           label_data_train,
-                                           label_type, modus=modus,
-                                           ensemble=config['Ensemble']['Use'],
-                                           bootstrap=config['Bootstrap']['Use'],
-                                           bootstrap_N=config['Bootstrap']['N_iterations'],
-                                           overfit_scaler=overfit_scaler)
-    else:
-        if patientinfo_test is not None:
-            if not isclassifier:
-                statistics =\
-                    plot_estimator_performance(trained_classifier,
-                                               label_data_test,
-                                               label_type,
-                                               ensemble=config['Ensemble']['Use'],
-                                               bootstrap=config['Bootstrap']['Use'],
-                                               bootstrap_N=config['Bootstrap']['N_iterations'],
-                                               overfit_scaler=overfit_scaler)
-            else:
-                statistics =\
-                    plot_estimator_performance(trained_classifier,
-                                               label_data_test,
-                                               label_type,
-                                               modus=modus,
-                                               ensemble=config['Ensemble']['Use'],
-                                               bootstrap=config['Bootstrap']['Use'],
-                                               bootstrap_N=config['Bootstrap']['N_iterations'],
-                                               overfit_scaler=overfit_scaler)
-        else:
-            statistics = None
-
-    # Save output
-
-    if not os.path.exists(os.path.dirname(output_json)):
-        os.makedirs(os.path.dirname(output_json))
-
-    with open(output_json, 'w') as fp:
-        json.dump(statistics, fp, sort_keys=True, indent=4)
 
     print("Saved data!")

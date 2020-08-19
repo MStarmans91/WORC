@@ -70,11 +70,13 @@ class Evaluate(object):
                                      id='plot_ROC',
                                      resources=ResourceLimit(memory='12G'),
                                      step_id='Evaluation')
-        self.node_Estimator =\
-            self.network.create_node('worc/PlotEstimator:1.0', tool_version='1.0',
-                                     id='plot_Estimator',
-                                     resources=ResourceLimit(memory='12G'),
-                                     step_id='Evaluation')
+
+        if self.mode == 'StandAlone':
+            self.node_Estimator =\
+                self.network.create_node('worc/PlotEstimator:1.0', tool_version='1.0',
+                                         id='plot_Estimator',
+                                         resources=ResourceLimit(memory='12G'),
+                                         step_id='Evaluation')
         self.node_Barchart =\
             self.network.create_node('worc/PlotBarchart:1.0',
                                      tool_version='1.0', id='plot_Barchart',
@@ -124,9 +126,10 @@ class Evaluate(object):
             self.network.create_sink('CSVFile', id='ROC_CSV',
                                      step_id='general_sinks')
 
-        self.sink_Estimator_Json =\
-            self.network.create_sink('JsonFile', id='Estimator_Json',
-                                     step_id='general_sinks')
+        if self.mode == 'StandAlone':
+            self.sink_Estimator_Json =\
+                self.network.create_sink('JsonFile', id='Estimator_Json',
+                                         step_id='general_sinks')
 
         self.sink_Barchart_PNG =\
             self.network.create_sink('PNGFile', id='Barchart_PNG',
@@ -170,7 +173,8 @@ class Evaluate(object):
         self.sink_ROC_Tex.input = self.node_ROC.outputs['output_tex']
         self.sink_ROC_CSV.input = self.node_ROC.outputs['output_csv']
 
-        self.sink_Estimator_Json.input = self.node_Estimator.outputs['output_json']
+        if self.mode == 'StandAlone':
+            self.sink_Estimator_Json.input = self.node_Estimator.outputs['output_json']
 
         self.sink_Barchart_PNG.input = self.node_Barchart.outputs['output_png']
         self.sink_Barchart_Tex.input = self.node_Barchart.outputs['output_tex']
@@ -195,14 +199,15 @@ class Evaluate(object):
         self.node_Ranked_Percentages.inputs['scores'] = ['percentages']
         self.node_Ranked_Posteriors.inputs['scores'] = ['posteriors']
 
-        self.source_LabelType =\
-            self.network.create_constant('String', [self.label_type],
-                                         id='LabelType',
-                                         step_id='Evaluation')
-        self.source_Ensemble =\
-            self.network.create_constant('String', [self.ensemble],
-                                         id='Ensemble',
-                                         step_id='Evaluation')
+        if self.mode == 'StandAlone':
+            self.source_LabelType =\
+                self.network.create_constant('String', [self.label_type],
+                                             id='LabelType',
+                                             step_id='Evaluation')
+            self.source_Ensemble =\
+                self.network.create_constant('String', [self.ensemble],
+                                             id='Ensemble',
+                                             step_id='Evaluation')
 
         # Create sources if not supplied by a WORC network
         if self.mode == 'StandAlone':
@@ -225,26 +230,6 @@ class Evaluate(object):
                 label = 'Features_' + str(idx)
                 self.labels.append(label)
                 self.source_Features.append(self.network.create_source('HDF5', id=label, node_group='features'))
-
-        # Create links to sources that are not supplied by a WORC network
-        self.node_ROC.inputs['ensemble'] = self.source_Ensemble.output
-        self.node_ROC.inputs['label_type'] = self.source_LabelType.output
-
-        self.node_Estimator.inputs['ensemble'] = self.source_Ensemble.output
-        self.node_Estimator.inputs['label_type'] = self.source_LabelType.output
-
-        self.node_Barchart.inputs['estimators'] = self.source_Ensemble.output
-        self.node_Barchart.inputs['label_type'] = self.source_LabelType.output
-
-        self.node_Ranked_Percentages.inputs['ensemble'] =\
-            self.source_Ensemble.output
-        self.node_Ranked_Percentages.inputs['label_type'] =\
-            self.source_LabelType.output
-
-        self.node_Ranked_Posteriors.inputs['ensemble'] =\
-            self.source_Ensemble.output
-        self.node_Ranked_Posteriors.inputs['label_type'] =\
-            self.source_LabelType.output
 
         # Create links to the sources that could be in a WORC network
         if self.mode == 'StandAlone':
@@ -299,6 +284,25 @@ class Evaluate(object):
         self.link_segmentations_post = self.network.create_link(self.source_Segmentations.output, self.node_Ranked_Posteriors.inputs['segmentations'])
         self.link_segmentations_post.collapse = 'patients'
 
+        self.node_ROC.inputs['ensemble'] = self.source_Ensemble.output
+        self.node_ROC.inputs['label_type'] = self.source_LabelType.output
+
+        self.node_Estimator.inputs['ensemble'] = self.source_Ensemble.output
+        self.node_Estimator.inputs['label_type'] = self.source_LabelType.output
+
+        self.node_Barchart.inputs['estimators'] = self.source_Ensemble.output
+        self.node_Barchart.inputs['label_type'] = self.source_LabelType.output
+
+        self.node_Ranked_Percentages.inputs['ensemble'] =\
+            self.source_Ensemble.output
+        self.node_Ranked_Percentages.inputs['label_type'] =\
+            self.source_LabelType.output
+
+        self.node_Ranked_Posteriors.inputs['ensemble'] =\
+            self.source_Ensemble.output
+        self.node_Ranked_Posteriors.inputs['label_type'] =\
+            self.source_LabelType.output
+
     def create_links_Addon(self):
         """Create links in network between nodes when adding Evaluate to WORC."""
         # Sources from the WORC network are used
@@ -317,11 +321,24 @@ class Evaluate(object):
             segmentations =\
                 self.parent.sources_segmentations_train[label].output
 
+        self.node_ROC.inputs['ensemble'] = self.parent.source_Ensemble.output
+        self.node_ROC.inputs['label_type'] = self.parent.source_LabelType.output
+
+        self.node_Barchart.inputs['estimators'] = self.parent.source_Ensemble.output
+        self.node_Barchart.inputs['label_type'] = self.parent.source_LabelType.output
+
+        self.node_Ranked_Percentages.inputs['ensemble'] =\
+            self.parent.source_Ensemble.output
+        self.node_Ranked_Percentages.inputs['label_type'] =\
+            self.parent.source_LabelType.output
+
+        self.node_Ranked_Posteriors.inputs['ensemble'] =\
+            self.parent.source_Ensemble.output
+        self.node_Ranked_Posteriors.inputs['label_type'] =\
+            self.parent.source_LabelType.output
+
         self.node_ROC.inputs['prediction'] = prediction
         self.node_ROC.inputs['pinfo'] = pinfo
-
-        self.node_Estimator.inputs['prediction'] = prediction
-        self.node_Estimator.inputs['pinfo'] = pinfo
 
         self.node_Barchart.inputs['prediction'] = prediction
 

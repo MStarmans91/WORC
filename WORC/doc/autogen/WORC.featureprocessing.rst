@@ -73,6 +73,15 @@ featureprocessing Package
     :show-inheritance:
     :special-members:
 
+:mod:`Scalers` Module
+---------------------
+
+.. automodule:: WORC.featureprocessing.Scalers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`SelectGroups` Module
 --------------------------
 

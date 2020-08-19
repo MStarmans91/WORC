@@ -33,6 +33,7 @@ with open('test_requirements.txt', 'r') as fh:
 with open('requirements-setup.txt', 'r') as fp:
     setup_requirements = list(filter(bool, (line.strip() for line in fp)))
 
+
 def scan_dir(path, prefix=None):
     if prefix is None:
         prefix = path
