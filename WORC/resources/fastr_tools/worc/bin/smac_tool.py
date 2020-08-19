@@ -207,6 +207,9 @@ def main():
         cv_iteration = len(smac_results)
         last_instance_name = smac_results['cv-' + str(cv_iteration-1)]['0']['instance_name']
         if last_instance_name == run_info['run_name']:
+            with open('/scratch/mdeen/debug.txt', 'a') as debugfile:
+                debugfile.write('first if statement called')
+                debugfile.write('run_id: ' + run_info['run_id'])
             # This means we are still in the same outer cv
             smac_results['cv-' + str(cv_iteration-1)][run_info['run_id']] = smac_stats
         else:
@@ -215,6 +218,9 @@ def main():
             json.dump(smac_results, jsonfile, indent=4)
     else:
         with open(result_file, 'a') as jsonfile:
+            with open('/scratch/mdeen/debug.txt', 'a') as debugfile:
+                debugfile.write('outer else statement called')
+                debugfile.write('run_id: ' + run_info['run_id'])
             smac_results = {'cv-0': {run_info['run_id']: smac_stats}}
             json.dump(smac_results, jsonfile, indent=4)
 
