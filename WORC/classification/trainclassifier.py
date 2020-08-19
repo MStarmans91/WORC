@@ -299,7 +299,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
         for cv_iteration in smac_result_dict:
             all_val_scores = []
             for instance in cv_iteration:
-                all_val_scores.append(instance['inc_costs'][instance['inc_changed'] - 1])
+                nr_of_incumbent_updates = instance['inc_changed']
+                all_val_scores.append(instance['inc_costs'][nr_of_incumbent_updates - 1])
             best_score_index = all_val_scores.index(np.max(all_val_scores))
             best_instances.append(str(best_score_index))
 
