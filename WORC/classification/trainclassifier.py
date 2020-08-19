@@ -295,18 +295,31 @@ def trainclassifier(feat_train, patientinfo_train, config,
         for metric_name in metric_names[0::2]:
             totals[metric_name] = []
 
-        for instance in smac_result_dict:
-            nr_of_incumbent_updates = smac_result_dict[instance]['inc_changed']
+        best_instances = []
+        for cv_iteration in smac_result_dict:
+            all_val_scores = []
+            for instance in cv_iteration:
+                all_val_scores.append(instance['inc_costs'][instance['inc_changed'] - 1])
+            best_score_index = all_val_scores.index(np.max(all_val_scores))
+            best_instances.append(str(best_score_index))
+
+        instance_index_count = 0
+        for cv_iteration in smac_result_dict:
+            # Only run this code for the best instance in this cv
+            instance = cv_iteration[best_instances[instance_index_count]]
+
+            nr_of_incumbent_updates = instance['inc_changed']
             # Extract the details of the last (best) incumbent
             totals['wallclock_time_best'].append(
-                smac_result_dict[instance]['inc_wallclock_times'][nr_of_incumbent_updates - 1])
+                instance['inc_wallclock_times'][nr_of_incumbent_updates - 1])
             totals['evaluation_best'].append(
-                smac_result_dict[instance]['inc_evaluations'][nr_of_incumbent_updates - 1])
+                instance['inc_evaluations'][nr_of_incumbent_updates - 1])
             totals['cost_best'].append(
-                smac_result_dict[instance]['inc_costs'][nr_of_incumbent_updates - 1])
-            for metric in smac_result_dict[instance]:
+                instance['inc_costs'][nr_of_incumbent_updates - 1])
+            for metric in instance:
                 if metric in metric_names:
-                    totals[metric].append(smac_result_dict[instance][metric])
+                    totals[metric].append(instance[metric])
+            instance_index_count += 1
 
         averages = dict()
         list_position_count = 1
