@@ -195,7 +195,6 @@ def main():
     smac_stats['inc_evaluations'] = evaluations
     smac_stats['inc_costs'] = costs
     smac_stats['inc_configs'] = configs
-    smac_stats['instance_name'] = run_info['run_name']
 
     # Update the result file of the optimization
     # ! This is inaccurate for multiple instances
@@ -204,12 +203,25 @@ def main():
     if os.path.exists(result_file):
         with open(result_file, 'r') as jsonfile:
             smac_results = json.load(jsonfile)
+        smac_results[run_info['run_name']][run_info['run_id']] = smac_stats
+        with open(result_file, 'w') as jsonfile:
+            json.dump(smac_results, jsonfile, indent=4)
+    else:
+        with open(result_file, 'a') as jsonfile:
+            smac_results = {run_info['run_name']: {run_info['run_id']: smac_stats}}
+            json.dump(smac_results, jsonfile, indent=4)
+
+'''
+    if os.path.exists(result_file):
+        with open(result_file, 'r') as jsonfile:
+            smac_results = json.load(jsonfile)
         cv_iteration = len(smac_results)
         last_instance_name = smac_results['cv-' + str(cv_iteration-1)]['0']['instance_name']
+        with open('/scratch/mdeen/debug.txt', 'a') as debugfile:
+            debugfile.write('last instance name: ' + last_instance_name)
+            debugfile.write('run_id: ' + run_info['run_id'])
         if last_instance_name == run_info['run_name']:
-            with open('/scratch/mdeen/debug.txt', 'a') as debugfile:
-                debugfile.write('first if statement called')
-                debugfile.write('run_id: ' + run_info['run_id'])
+
             # This means we are still in the same outer cv
             smac_results['cv-' + str(cv_iteration-1)][run_info['run_id']] = smac_stats
         else:
@@ -223,7 +235,7 @@ def main():
                 debugfile.write('run_id: ' + run_info['run_id'])
             smac_results = {'cv-0': {run_info['run_id']: smac_stats}}
             json.dump(smac_results, jsonfile, indent=4)
-
+'''
     source_labels = ['RET']
 
     output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' +
