@@ -211,7 +211,7 @@ def main():
             smac_results = {run_info['run_name']: {run_info['run_id']: smac_stats}}
             json.dump(smac_results, jsonfile, indent=4)
 
-'''
+    '''
     if os.path.exists(result_file):
         with open(result_file, 'r') as jsonfile:
             smac_results = json.load(jsonfile)
@@ -235,7 +235,8 @@ def main():
                 debugfile.write('run_id: ' + run_info['run_id'])
             smac_results = {'cv-0': {run_info['run_id']: smac_stats}}
             json.dump(smac_results, jsonfile, indent=4)
-'''
+    '''
+
     source_labels = ['RET']
 
     output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' +
