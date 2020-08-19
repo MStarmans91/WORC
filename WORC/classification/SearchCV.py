@@ -2813,7 +2813,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         sink_output.input = smac_node.outputs['fittedestimator']
 
         source_data = {'estimator_source': estimatordata,
-                       'instance_source' : instance_files}
+                       'instance_source': instance_files}
 
         sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
 

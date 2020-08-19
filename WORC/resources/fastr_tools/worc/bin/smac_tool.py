@@ -210,32 +210,6 @@ def main():
             smac_results = {'0': smac_stats}
             json.dump(smac_results, jsonfile, indent=4)
 
-
-
-    '''
-    # Load in the runhistory data
-    runhistory_file = open('/scratch/mdeen/SMAC_output/' + run_name + '/run_' + str(run_id) +
-                           '/runhistory.json')
-    runhistory = json.load(runhistory_file)
-
-    best_configs = []
-    # Loop over all evaluated configurations
-    for i in range(len(runhistory['configs'])):
-        # We want the highest priority (low number) to be associated
-        # with the worst scores so take the inverse again
-        score = 1 - runhistory['data'][i][1][0]
-        config = runhistory['configs'][str(i + 1)]
-        parameters = convert_cfg(config)
-        # If the list is shorter than the maximum
-        # length, add the configuration
-        if len(best_configs) < self.maxlen:
-            heapq.heappush(best_configs, (score, i, parameters))
-        # Otherwise, check if this config outperforms the worst one in the list
-        # We use i to break ties between scores
-        elif best_configs[0][0] < score:
-            heapq.heapreplace(best_configs, (score, i, parameters))
-'''
-
     source_labels = ['RET']
 
     output_df = pd.read_csv('/scratch/mdeen/tested_configs/' + run_info['run_name'] + '/' +
