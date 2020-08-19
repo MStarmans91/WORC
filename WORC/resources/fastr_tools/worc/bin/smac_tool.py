@@ -197,17 +197,18 @@ def main():
     smac_stats['inc_configs'] = configs
 
     # Update the result file of the optimization
+    # ! This is inaccurate for multiple instances
     result_file = data['smac_result_file']
     if os.path.exists(result_file):
         with open(result_file, 'r') as jsonfile:
             smac_results = json.load(jsonfile)
-        run_nr = len(smac_results)
-        smac_results[str(run_nr)] = smac_stats
+        cv_iteration = len(smac_results)
+        smac_results['cv-' + str(cv_iteration)] = {run_info['run_id']: smac_stats}
         with open(result_file, 'w') as jsonfile:
             json.dump(smac_results, jsonfile, indent=4)
     else:
         with open(result_file, 'a') as jsonfile:
-            smac_results = {'0': smac_stats}
+            smac_results = {'cv-0': {run_info['run_id']: smac_stats}}
             json.dump(smac_results, jsonfile, indent=4)
 
     source_labels = ['RET']
