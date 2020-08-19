@@ -20,6 +20,7 @@ import pydicom
 import WORC.IOparser.config_preprocessing as config_io
 import os
 from WORC.processing.segmentix import dilate_contour
+from WORC.processing.helpers import resample_image
 import numpy as np
 
 
@@ -43,7 +44,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         image = image*metadata.RescaleSlope +\
             metadata.RescaleIntercept
 
-    # Apply the preprocessing
+    # Apply normalization
     if config['Preprocessing']['Normalize']:
         method = config['Preprocessing']['Method']
         normalize = config['Preprocessing']['Normalize_ROI']
@@ -60,7 +61,16 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                                 ROIDetermine=ROIDetermine,
                                 AssumeSameImageAndMaskMetadata=metadata)
     else:
-        print('No preprocessing was applied.')
+        print('No normalization was applied.')
+
+    # Apply preprocessing
+    if config['Preprocessing']['Resampling']:
+        new_spacing = config['Preprocessing']['Resampling_spacing']
+        print(f'Apply resampling of image to spacing {new_spacing}.')
+        image = resample_image(image=image, new_spacing=new_spacing,
+                               interpolator=sitk.sitkBSpline)
+    else:
+        print('No resampling was applied.')
 
     return image
 
@@ -89,6 +99,11 @@ def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',
         Whether mask is used as ROI or it is determined, e.g. through Otsu.
     AssumeSameImageAndMaskMetadata: boolean
         If True, copy metadata from image to mask.
+
+    Returns
+    -------
+    image : ITK Image
+        Output image.
 
     """
     if Normalize_ROI == 'Full':

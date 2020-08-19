@@ -27,7 +27,7 @@ In total, the defaults of WORC result in the following amount of features:
 ============================================ ===================================================
 Type                                          Number
 ============================================ ===================================================
-:ref:`Histogram <features-histogram>`         12
+:ref:`Histogram <features-histogram>`         13
 :ref:`Shape <features-shape>`                 35
 :ref:`Orientation <features-orientation>`     9
 :ref:`GLCM(MS) <features-GLCM>`               144
@@ -41,7 +41,7 @@ Type                                          Number
 :ref:`Local Binary Patterns <features-lbp>`   36
 :ref:`Local phase <features-phase>`            36
 -------------------------------------------- ---------------------------------------------------
-**Total**                                     **539**
+**Total**                                     **540**
 ============================================ ===================================================
 
 
@@ -59,18 +59,19 @@ first order or intensity features.
 Both PREDICT and PyRadiomics include similar first order features. We have therefore chosen to only use PREDICT
 by default to avoid redundant features. PREDICT extracts the following features using a histogram with 50 bins:
 
-1. Minimum
-2. Maximum
+1. Minimum (defined as the 2nd percentile for robustness)
+2. Maximum (defined as the 98nd percentile for robustness)
 3. Range
 4. Interquartile range
 5. Standard deviation
 6. Skewness
 7. Kurtosis
-8. Peak
-9. Energy
-10. Entropy
-11. Mean
-12. Median
+8. Peak value
+9. Peak position
+10. Energy
+11. Entropy
+12. Mean
+13. Median
 
 
 .. note:: The minimum, maximum, range and interquartile range are extracted from the raw data, as histogram creation may

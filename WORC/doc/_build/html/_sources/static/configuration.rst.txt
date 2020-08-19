@@ -375,7 +375,7 @@ using cross validation, specify the following settings.
 
 .. _config-HyperOptimization:
 
-Hyperoptimization
+HyperOptimization
 ~~~~~~~~~~~~~~~~~
 When using the PREDICT toolbox for classification, you have to supply
 your hyperparameter optimization procedure here.
