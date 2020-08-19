@@ -205,7 +205,7 @@ def main():
         with open(result_file, 'r') as jsonfile:
             smac_results = json.load(jsonfile)
         cv_iteration = len(smac_results)
-        last_instance_name = smac_results['cv-' + str(cv_iteration-1)]['instance_name']
+        last_instance_name = smac_results['cv-' + str(cv_iteration-1)]['1']['instance_name']
         if last_instance_name == run_info['run_name']:
             # This means we are still in the same outer cv
             smac_results['cv-' + str(cv_iteration-1)][run_info['run_id']] = smac_stats
