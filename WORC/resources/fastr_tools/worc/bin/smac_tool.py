@@ -203,8 +203,10 @@ def main():
     if os.path.exists(result_file):
         with open(result_file, 'r') as jsonfile:
             smac_results = json.load(jsonfile)
-        #if smac_results.has_key(run_info['run_name']):
-        smac_results[run_info['run_name']] = {run_info['run_id']: smac_stats}
+        if smac_results.has_key(run_info['run_name']):
+            smac_results[run_info['run_name']][run_info['run_id']] = smac_stats
+        else:
+            smac_results[run_info['run_name']] = {run_info['run_id']: smac_stats}
         with open(result_file, 'w') as jsonfile:
             json.dump(smac_results, jsonfile, indent=4)
     else:
