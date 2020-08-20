@@ -275,7 +275,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
     isclassifier =\
         not any(clf in regressors for clf in config['Classification']['classifiers'])
 
-
+    '''
     ## ----------------------------------------- ##
     # Process the statistics of the SMAC optimization
     # ! Perhaps move this to a better location in the future
@@ -333,7 +333,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
         with open(smac_result_file, 'w') as jsonfile:
             json.dump(smac_result_dict, jsonfile, indent=4)
-
+    '''
     ## --------------------------------------------- ##
 
 
