@@ -2858,6 +2858,10 @@ class BaseSearchCVSMAC(BaseSearchCV):
             '/scratch/mdeen/tested_configs/' + run_name + '/smac_stats_*.json')
         # Then create a combined dictionary with all
         # results of this cross-validation split
+
+        with open('/scratch/mdeen/debug.txt', 'a') as f:
+            f.write('smac_filenames: ' + str(smac_filenames))
+
         smac_results_for_this_cv = dict()
         smac_results_for_this_cv[run_name] = dict()
         for fn in smac_filenames:
@@ -2865,7 +2869,14 @@ class BaseSearchCVSMAC(BaseSearchCV):
                 smac_result = json.load(f)
                 smac_results_for_this_cv[run_name].update(smac_result)
 
+        with open('/scratch/mdeen/debug.txt', 'a') as f:
+            f.write('smac_results_for_this_cv: ' + str(smac_results_for_this_cv))
+
         result_file = self.smac_result_file
+
+        with open('/scratch/mdeen/debug.txt', 'a') as f:
+            f.write('result_file: ' + str(result_file))
+
         if os.path.exists(result_file):
             with open(result_file, 'r') as jsonfile:
                 results_so_far = json.load(jsonfile)
