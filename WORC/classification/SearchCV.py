@@ -2881,11 +2881,11 @@ class BaseSearchCVSMAC(BaseSearchCV):
                 results_so_far = json.load(jsonfile)
             with open('/scratch/mdeen/debug.txt', 'a') as f:
                 f.write('results_so_far: ' + str(results_so_far))
-            updated_results = results_so_far.update(smac_results_for_this_cv)
+            results_so_far.update(smac_results_for_this_cv)
             with open('/scratch/mdeen/debug.txt', 'a') as f:
-                f.write('updated_results: ' + str(updated_results))
+                f.write('updated_results: ' + str(results_so_far))
             with open(result_file, 'w') as jsonfile:
-                json.dump(updated_results, jsonfile, indent=4)
+                json.dump(results_so_far, jsonfile, indent=4)
         else:
             with open('/scratch/mdeen/debug.txt', 'a') as f:
                 f.write('path does not exist')
