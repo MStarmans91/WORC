@@ -2857,38 +2857,41 @@ class BaseSearchCVSMAC(BaseSearchCV):
         smac_filenames = glob.glob(
             '/scratch/mdeen/tested_configs/' + run_name + '/smac_stats_*.json')
         # Then create a combined dictionary with all
-        # results of this cross-validation split
-
-        with open('/scratch/mdeen/debug.txt', 'a') as f:
-            f.write('smac_filenames: ' + str(smac_filenames))
-
+        # results of this cross-validation split and
+        # a summary
         smac_results_for_this_cv = dict()
         smac_results_for_this_cv[run_name] = dict()
+        summary = dict()
+        all_costs = []
+        best_cost = 1
         for fn in smac_filenames:
             with open(fn, 'r') as f:
                 smac_result = json.load(f)
-                smac_results_for_this_cv[run_name].update(smac_result)
+            run_data = smac_result[list(smac_result.keys())[0]]
+            nr_of_inc_updates = run_data['inc_changed']
+            current_cost = run_data['inc_costs'][nr_of_inc_updates - 1]
+            all_costs.append(current_cost)
+            if current_cost < best_cost:
+                summary['best_score'] = current_cost
+                summary['best_inc_wallclock_time'] = run_data['inc_wallclock_times'][nr_of_inc_updates - 1]
+                summary['best_inc_evals'] = run_data['inc_evaluations'][nr_of_inc_updates - 1]
+                summary['best_inc_changed'] = run_data['inc_changed']
+                summary['best_config'] = run_data['inc_configs'][nr_of_inc_updates - 1]
+            smac_results_for_this_cv[run_name].update(smac_result)
+        summary['average_score'] = np.mean(all_costs)
+        summary['std_score'] = np.std(all_costs)
+        final_summary = {'cv-summary': summary}
+        smac_results_for_this_cv.update(final_summary)
 
         result_file = self.smac_result_file
 
-        with open('/scratch/mdeen/debug.txt', 'a') as f:
-            f.write('result_file: ' + str(result_file))
-
         if os.path.exists(result_file):
-            with open('/scratch/mdeen/debug.txt', 'a') as f:
-                f.write('path exists')
             with open(result_file, 'r') as jsonfile:
                 results_so_far = json.load(jsonfile)
-            with open('/scratch/mdeen/debug.txt', 'a') as f:
-                f.write('results_so_far: ' + str(results_so_far))
             results_so_far.update(smac_results_for_this_cv)
-            with open('/scratch/mdeen/debug.txt', 'a') as f:
-                f.write('updated_results: ' + str(results_so_far))
             with open(result_file, 'w') as jsonfile:
                 json.dump(results_so_far, jsonfile, indent=4)
         else:
-            with open('/scratch/mdeen/debug.txt', 'a') as f:
-                f.write('path does not exist')
             with open(result_file, 'a') as jsonfile:
                 json.dump(smac_results_for_this_cv, jsonfile, indent=4)
 
