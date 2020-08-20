@@ -2852,6 +2852,31 @@ class BaseSearchCVSMAC(BaseSearchCV):
              fit_time, score_time, parameters_est, parameters_all) = \
                 zip(*save_data)
 
+        # Process the smac_results data once finished
+        # First read in the results of all smac instance files
+        smac_filenames = glob.glob(
+            '/scratch/mdeen/tested_configs/' + run_name + '/smac_stats_*.json')
+        # Then create a combined dictionary with all
+        # results of this cross-validation split
+        smac_results_for_this_cv = dict()
+        smac_results_for_this_cv[run_name] = dict()
+        for fn in smac_filenames:
+            with open(fn, 'r') as f:
+                smac_result = json.load(f)
+                smac_results_for_this_cv[run_name].update(smac_result)
+
+        result_file = self.smac_result_file
+        if os.path.exists(result_file):
+            with open(result_file, 'r') as jsonfile:
+                results_so_far = json.load(jsonfile)
+            updated_results = results_so_far.update(smac_results_for_this_cv)
+            with open(result_file, 'w') as jsonfile:
+                json.dump(updated_results, jsonfile, indent=4)
+        else:
+            with open(result_file, 'a') as jsonfile:
+                json.dump(smac_results_for_this_cv, jsonfile, indent=4)
+
+
         # Remove the temporary folder used
         #shutil.rmtree(tempfolder)
 

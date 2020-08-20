@@ -200,6 +200,15 @@ def main():
     # ! This is inaccurate for multiple instances
     result_file = data['smac_result_file']
 
+    result_file_name = '/scratch/mdeen/tested_configs/' + run_info['run_name'] +\
+                       '/smac_stats_' + str(run_info['run_id']) + '.json'
+    if not os.path.exists(os.path.dirname(result_file_name)):
+        os.makedirs(os.path.dirname(result_file_name))
+    with open(result_file_name, 'a') as file:
+        smac_results = {run_info['run_id']: smac_stats}
+        json.dump(smac_results, file, indent=4)
+
+    '''
     if os.path.exists(result_file):
         with open(result_file, 'r') as jsonfile:
             smac_results = json.load(jsonfile)
@@ -214,7 +223,7 @@ def main():
             smac_results = {run_info['run_name']: {run_info['run_id']: smac_stats}}
             json.dump(smac_results, jsonfile, indent=4)
 
-    '''
+    
     if os.path.exists(result_file):
         with open(result_file, 'r') as jsonfile:
             smac_results = json.load(jsonfile)
