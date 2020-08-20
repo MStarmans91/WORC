@@ -2872,6 +2872,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
             current_cost = run_data['inc_costs'][nr_of_inc_updates - 1]
             all_costs.append(current_cost)
             if current_cost < best_cost:
+                best_cost = current_cost
                 summary['best_score'] = current_cost
                 summary['best_inc_wallclock_time'] = run_data['inc_wallclock_times'][nr_of_inc_updates - 1]
                 summary['best_inc_evals'] = run_data['inc_evaluations'][nr_of_inc_updates - 1]
@@ -2881,7 +2882,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         summary['average_score'] = np.mean(all_costs)
         summary['std_score'] = np.std(all_costs)
         final_summary = {'cv-summary': summary}
-        smac_results_for_this_cv.update(final_summary)
+        smac_results_for_this_cv[run_name].update(final_summary)
 
         result_file = self.smac_result_file
 
