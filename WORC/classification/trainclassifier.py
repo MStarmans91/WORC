@@ -275,6 +275,39 @@ def trainclassifier(feat_train, patientinfo_train, config,
     isclassifier =\
         not any(clf in regressors for clf in config['Classification']['classifiers'])
 
+
+    if config['SMAC']['use']:
+
+        with open(smac_result_file, 'r') as jsonfile:
+            smac_result_dict = json.load(jsonfile)
+
+        # Gather the statistics of all cross-validation summaries
+        all_best_scores = []
+        all_average_scores = []
+        all_inc_wallclock_times = []
+        all_inc_evaluations = []
+        all_inc_changed = []
+        for cv_iteration in smac_result_dict:
+            all_best_scores.append(cv_iteration['cv-summary']['best_score'])
+            all_average_scores.append(cv_iteration['cv-summary']['average_score'])
+            all_inc_wallclock_times.append(cv_iteration['cv-summary']['best_inc_wallclock_time'])
+            all_inc_evaluations.append(cv_iteration['cv-summary']['best_inc_evals'])
+            all_inc_changed.append(cv_iteration['cv-summary']['best_inc_changed'])
+        overall_results = {'overall results': {'avg_best_score': np.mean(all_best_scores),
+                                               'std_best_score': np.std(all_best_scores),
+                                               'avg_average_score': np.mean(all_average_scores),
+                                               'std_average_score': np.std(all_average_scores),
+                                               'avg_inc_wallclock_time': np.mean(all_inc_wallclock_times),
+                                               'std_inc_wallclock_time': np.std(all_inc_wallclock_times),
+                                               'avg_inc_evaluations': np.mean(all_inc_evaluations),
+                                               'std_inc_evaluations': np.std(all_inc_evaluations),
+                                               'avg_inc_changed': np.mean(all_inc_changed),
+                                               'std_inc_changed': np.std(all_inc_changed)}
+                           }
+        smac_result_dict.update(overall_results)
+        with open(smac_result_file, 'w') as jsonfile:
+            json.dump(smac_result_dict, jsonfile, indent=4)
+
     '''
     ## ----------------------------------------- ##
     # Process the statistics of the SMAC optimization
