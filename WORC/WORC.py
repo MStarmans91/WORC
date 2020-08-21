@@ -555,10 +555,10 @@ class WORC(object):
                 self.plot_estimator.inputs['pinfo'] = pinfo
 
                 # Optional SMAC output
-                if  self.configs[0]['SMAC']['use'] == 'True':
-                    self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results',
-                                                                      step_id='general_sinks')
-                    self.sink_smac_results.input = self.classify.outputs['smac_results']
+                if self.configs[0]['SMAC']['use'] == 'True':
+                   self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results',
+                                                                     step_id='general_sinks')
+                   self.sink_smac_results.input = self.classify.outputs['smac_results']
 
                 if self.TrainTest:
                     # FIXME: the naming here is ugly
