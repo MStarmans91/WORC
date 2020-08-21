@@ -142,6 +142,7 @@ def crossval(config, label_data, image_features,
         logging.root.removeHandler(handler)
 
     logging.basicConfig(filename=logfilename, level=logging.DEBUG)
+    type = config['CrossValidation']['Type']
     N_iterations = config['CrossValidation']['N_iterations']
     test_size = config['CrossValidation']['test_size']
     fixed_seed = config['CrossValidation']['fixed_seed']

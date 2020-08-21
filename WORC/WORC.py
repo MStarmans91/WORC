@@ -415,6 +415,7 @@ class WORC(object):
 
         # CrossValidation
         config['CrossValidation'] = dict()
+        config['CrossValidation']['Type'] = ' random_split'
         config['CrossValidation']['N_iterations'] = '100'
         config['CrossValidation']['test_size'] = '0.2'
         config['CrossValidation']['fixed_seed'] = 'False'

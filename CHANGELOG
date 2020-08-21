@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.3.3 - Unreleased
+------------------
+
+Added
+~~~~~~~
+- Leave-One-Out (LOO) cross-validation
+
 3.3.2 - 2020-08-19
 ------------------
 
