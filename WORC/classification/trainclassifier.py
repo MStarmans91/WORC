@@ -288,11 +288,11 @@ def trainclassifier(feat_train, patientinfo_train, config,
         all_inc_evaluations = []
         all_inc_changed = []
         for cv_iteration in smac_result_dict:
-            all_best_scores.append(cv_iteration['cv-summary']['best_score'])
-            all_average_scores.append(cv_iteration['cv-summary']['average_score'])
-            all_inc_wallclock_times.append(cv_iteration['cv-summary']['best_inc_wallclock_time'])
-            all_inc_evaluations.append(cv_iteration['cv-summary']['best_inc_evals'])
-            all_inc_changed.append(cv_iteration['cv-summary']['best_inc_changed'])
+            all_best_scores.append(smac_result_dict[cv_iteration]['cv-summary']['best_score'])
+            all_average_scores.append(smac_result_dict[cv_iteration]['cv-summary']['average_score'])
+            all_inc_wallclock_times.append(smac_result_dict[cv_iteration]['cv-summary']['best_inc_wallclock_time'])
+            all_inc_evaluations.append(smac_result_dict[cv_iteration]['cv-summary']['best_inc_evals'])
+            all_inc_changed.append(smac_result_dict[cv_iteration]['cv-summary']['best_inc_changed'])
         overall_results = {'overall results': {'avg_best_score': np.mean(all_best_scores),
                                                'std_best_score': np.std(all_best_scores),
                                                'avg_average_score': np.mean(all_average_scores),
