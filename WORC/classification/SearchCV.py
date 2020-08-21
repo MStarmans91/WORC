@@ -64,6 +64,10 @@ from WORC.classification import construct_classifier as cc
 from WORC.featureprocessing.Preprocessor import Preprocessor
 from WORC.detectors.detectors import DebugDetector
 
+# Imports used in the Bayesian optimization
+from WORC.classification.smac import build_smac_config
+from datetime import datetime
+
 
 def rms_score(truth, prediction):
     ''' Root-mean-square-error metric'''
@@ -973,6 +977,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             base_estimator = RandomizedSearchCVfastr()
         elif type(self) == RandomizedSearchCVJoblib:
             base_estimator = RandomizedSearchCVJoblib()
+        elif type(self) == GuidedSearchCVSMAC:
+            base_estimator = GuidedSearchCVSMAC()
 
         if type(method) is int:
             # Simply take the top50 best hyperparameters
@@ -1502,7 +1508,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         parameter_data = network.create_source('JsonFile', id='parameters')
         sink_output = network.create_sink('HDF5', id='output')
 
-        fitandscore = network.create_node('worc/fitandscore:1.0', tool_version='1.0', id='fitandscore', resources=ResourceLimit(memory='2G'))
+        fitandscore = network.create_node('worc/fitandscore:1.0', tool_version='1.0', id='fitandscore', resources=ResourceLimit(memory='3G'))
         fitandscore.inputs['estimatordata'].input_group = 'estimator'
         fitandscore.inputs['traintest'].input_group = 'traintest'
         fitandscore.inputs['parameters'].input_group = 'parameters'
@@ -2670,3 +2676,573 @@ class GridSearchCVJoblib(BaseSearchCVJoblib):
             train/test set.
         """
         return self._fit(X, y, groups, ParameterGrid(self.param_grid))
+
+
+class BaseSearchCVSMAC(BaseSearchCV):
+    """Base class for Bayesian hyper parameter search with cross-validation."""
+
+    def _fit(self, groups):
+        """Actual fitting,  performing the search over parameters."""
+
+        regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
+        isclassifier = \
+            not any(clf in regressors for clf in self.param_distributions['Classification']['classifiers'])
+
+        cv = check_cv(self.cv, self.labels, classifier=isclassifier)
+
+        self.features, self.labels, groups = indexable(self.features, self.labels, groups)
+        n_splits = cv.get_n_splits(self.features, self.labels, groups)
+
+        pre_dispatch = self.pre_dispatch
+        cv_iter = list(cv.split(self.features, self.labels, groups))
+
+        # Build the SMAC configuration
+        self.param_distributions['Other'] = dict()
+        self.param_distributions['Other']['random_seed'] = np.random.randint(1, 5000)
+        cs = build_smac_config(self.param_distributions)
+
+        # Run the optimization
+
+        # Here we will create and execute a fastr network
+        # Create test-train splits
+        name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
+        if not os.path.exists(tempfolder):
+            os.makedirs(tempfolder)
+        '''
+        traintest_files = dict()
+        num = 0
+        for train, test in cv_iter:
+            source_labels = ['train', 'test']
+
+            source_data = pd.Series([train, test],
+                                    index=source_labels,
+                                    name='Train-test data')
+
+            fname = f'traintest_{num}.hdf5'
+            sourcename = os.path.join(tempfolder, 'traintest', fname)
+            if not os.path.exists(os.path.dirname(sourcename)):
+                os.makedirs(os.path.dirname(sourcename))
+            traintest_files[str(num)] = f'vfs://tmp/GS/{name}/traintest/{fname}'
+
+            sourcelabel = f"Source Data Iteration {num}"
+            source_data.to_hdf(sourcename, sourcelabel)
+
+            num += 1
+        '''
+        # Create the files containing the estimator and settings
+        estimator_labels = ['X', 'y', 'search_space', 'cv_iter', 'scoring',
+                            'verbose', 'fit_params', 'return_train_score',
+                            'return_n_test_samples',
+                            'return_times', 'return_parameters',
+                            'error_score', 'budget_type', 'budget',
+                            'init_method', 'init_budget', 'smac_result_file']
+
+        estimator_data = pd.Series([self.features, self.labels, cs,
+                                    cv_iter, self.scoring, False,
+                                    self.fit_params, self.return_train_score,
+                                    True, True, True,
+                                    self.error_score,
+                                    self.param_distributions['SMAC']['budget_type'],
+                                    self.param_distributions['SMAC']['budget'],
+                                    self.param_distributions['SMAC']['init_method'],
+                                    self.param_distributions['SMAC']['init_budget'],
+                                    self.smac_result_file],
+                                   index=estimator_labels,
+                                   name='estimator Data')
+        fname = 'estimatordata.hdf5'
+        estimatorname = os.path.join(tempfolder, fname)
+        estimator_data.to_hdf(estimatorname, 'Estimator Data')
+
+        estimatordata = f"vfs://tmp/GS/{name}/{fname}"
+
+        # Create the files containing the instance data
+
+        # Attempt one
+        '''
+        instance_labels = ['run_info']
+        instance_info = []
+        for i in range(5): # update this later to a config value
+            instance_info.append([i, random.randint(0, 2 ** 32 - 1)])
+        instance_data = pd.Series([instance_info],
+                                  index=instance_labels,
+                                  name='instance data')
+        fname = 'instancedata.hdf5'
+        instancename = os.path.join(tempfolder, fname)
+        instance_data.to_hdf(instancename, 'Instance Data')
+        instancedata = f"vfs://tmp/GS/{name}/{fname}"
+        '''
+
+        # Attempt two
+        instance_labels = ['run_id', 'run_rng', 'run_name']
+        current_date_time = datetime.now()
+        random_id = random.randint(1000, 9999)
+        run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S' + str(random_id))
+        instance_files = dict()
+        for i in range(self.param_distributions['SMAC']['n_smac_cores']):
+            instance_info = [i, random.randint(0, 2 ** 32 - 1), run_name]
+            instance_data = pd.Series(instance_info,
+                                      index=instance_labels,
+                                      name=f'instance data {i}')
+            fname = f'instancedata_{i}.hdf5'
+            instancefolder = os.path.join(tempfolder, 'instances', fname)
+            if not os.path.exists(os.path.dirname(instancefolder)):
+                os.makedirs(os.path.dirname(instancefolder))
+            instance_data.to_hdf(instancefolder, 'Instance Data')
+            instancedata = f'vfs://tmp/GS/{name}/instances/{fname}'
+            instance_files[f'{i}'] = instancedata
+
+        # Create the fastr network
+        network = fastr.create_network('WORC_SMAC_' + name)
+        estimator_data = network.create_source('HDF5', id='estimator_source')
+        instance_data = network.create_source('HDF5', id='instance_source')
+        #traintest_data = network.create_source('HDF5', id='traintest')
+        #parameter_data = network.create_source('JsonFile', id='parameters')
+        sink_output = network.create_sink('HDF5', id='output')
+
+        smac_node = network.create_node('worc/smac:1.0', tool_version='1.0', id='smac',
+                                          resources=ResourceLimit(memory='4G'))
+        #smac_node.inputs['estimatordata'].input_group = 'estimator'
+        #fitandscore.inputs['traintest'].input_group = 'traintest'
+        #fitandscore.inputs['parameters'].input_group = 'parameters'
+
+        smac_node.inputs['estimatordata'] = estimator_data.output
+        smac_node.inputs['instancedata'] = instance_data.output
+        #fitandscore.inputs['traintest'] = traintest_data.output
+        #fitandscore.inputs['parameters'] = parameter_data.output
+        sink_output.input = smac_node.outputs['fittedestimator']
+
+        source_data = {'estimator_source': estimatordata,
+                       'instance_source': instance_files}
+
+        sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
+
+        network.execute(source_data, sink_data,
+                        tmpdir=os.path.join(tempfolder, 'tmp'),
+                        execution_plugin=self.fastr_plugin)
+
+        # Check whether all jobs have finished
+        expected_no_files = len(instance_files)
+        sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
+        if len(sink_files) != expected_no_files:
+            difference = expected_no_files - len(sink_files)
+            fname = os.path.join(tempfolder, 'tmp')
+            message = ('Fitting classifiers has failed for ' +
+                       f'{difference} / {expected_no_files} files. The temporary ' +
+                       f'results where not deleted and can be found in {tempfolder}. ' +
+                       'Probably your fitting and scoring failed: check out ' +
+                       'the tmp/smac folder within the tempfolder for ' +
+                       'the fastr job temporary results or run: fastr trace ' +
+                       f'"{fname}{os.path.sep}__sink_data__.json" --samples.')
+            raise WORCexceptions.WORCValueError(message)
+
+        # Read in the output data once finished
+        save_data = list()
+        for output in sink_files:
+            data = pd.read_hdf(output)
+            save_data.extend(list(data['RET']))
+
+        # if one choose to see train score, "out" will contain train score info
+        if self.return_train_score:
+            (train_scores, test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) = \
+                zip(*save_data)
+        else:
+            (test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) = \
+                zip(*save_data)
+
+        # Process the smac_results data once finished
+        # First read in the results of all smac instance files
+        smac_filenames = glob.glob(
+            '/scratch/mdeen/tested_configs/' + run_name + '/smac_stats_*.json')
+        # Then create a combined dictionary with all
+        # results of this cross-validation split and
+        # a summary
+        smac_results_for_this_cv = dict()
+        smac_results_for_this_cv[run_name] = dict()
+        summary = dict()
+        all_costs = []
+        best_cost = 1
+        for fn in smac_filenames:
+            with open(fn, 'r') as f:
+                smac_result = json.load(f)
+            run_data = smac_result[list(smac_result.keys())[0]]
+            nr_of_inc_updates = run_data['inc_changed']
+            current_cost = run_data['inc_costs'][nr_of_inc_updates - 1]
+            all_costs.append(current_cost)
+            if current_cost < best_cost:
+                best_cost = current_cost
+                summary['best_score'] = current_cost
+                summary['best_inc_wallclock_time'] = run_data['inc_wallclock_times'][nr_of_inc_updates - 1]
+                summary['best_inc_evals'] = run_data['inc_evaluations'][nr_of_inc_updates - 1]
+                summary['best_inc_changed'] = run_data['inc_changed']
+                summary['best_config'] = run_data['inc_configs'][nr_of_inc_updates - 1]
+            smac_results_for_this_cv[run_name].update(smac_result)
+        summary['average_score'] = np.mean(all_costs)
+        summary['std_score'] = np.std(all_costs)
+        final_summary = {'cv-summary': summary}
+        smac_results_for_this_cv[run_name].update(final_summary)
+
+        result_file = self.smac_result_file
+
+        if os.path.exists(result_file):
+            with open(result_file, 'r') as jsonfile:
+                results_so_far = json.load(jsonfile)
+            results_so_far.update(smac_results_for_this_cv)
+            with open(result_file, 'w') as jsonfile:
+                json.dump(results_so_far, jsonfile, indent=4)
+        else:
+            with open(result_file, 'a') as jsonfile:
+                json.dump(smac_results_for_this_cv, jsonfile, indent=4)
+
+
+        # Remove the temporary folder used
+        #shutil.rmtree(tempfolder)
+
+        # Process the results of the fitting procedure
+        self.process_fit(n_splits=n_splits,
+                         parameters_all=parameters_all,
+                         test_sample_counts=test_sample_counts,
+                         test_score_dicts=test_scores,
+                         train_score_dicts=train_scores,
+                         fit_time=fit_time,
+                         score_time=score_time,
+                         cv_iter=cv_iter,
+                         X=self.features, y=self.labels)
+        '''
+        # Skip the preprocessing for now, by setting FeatPreProcess
+        # always to False. This next section is not accurate at this point.
+        # Preprocess features if required
+        if 'FeatPreProcess' in best_parameters:
+            if best_parameters['FeatPreProcess'] == 'True':
+                print("Preprocessing features.")
+                feature_values = np.asarray([x[0] for x in X])
+                feature_labels = np.asarray([x[1] for x in X])
+                preprocessor = Preprocessor(verbose=False)
+                preprocessor.fit(feature_values, feature_labels=feature_labels[0, :])
+                feature_values = preprocessor.transform(feature_values)
+                feature_labels = preprocessor.transform(feature_labels)
+                X = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
+        
+        # Make a temporary artificial configuration
+        crashing_config = {'UsePCA': 'False',
+                           'classifiers': 'LR',
+                           'LRC': 0.4001607630812365,
+                           'LRpenalty': 'l1',
+                           'random_seed': self.random_state,
+                           'max_iter': self.param_distributions['Classification']['max_iter'][0],
+                           'FeatPreProcess': False,
+                           'Featsel_Variance': False
+                           }
+        best_configs = [(0, 0, crashing_config)]
+        
+        # Score the best found result and save the full results
+        out = Parallel(
+            n_jobs=1, verbose=self.verbose,
+            pre_dispatch=pre_dispatch
+        )(delayed(fit_and_score)(self.features, self.labels, self.scoring,
+                                 train, test, parameters,
+                                 fit_params=self.fit_params,
+                                 return_train_score=self.return_train_score,
+                                 return_n_test_samples=True,
+                                 return_times=True, return_parameters=True,
+                                 error_score=self.error_score,
+                                 verbose=False,
+                                 return_all=False)
+          for score, iter, parameters in best_configs
+          for train, test in cv_iter)
+        save_data = zip(*out)
+        
+        # if one choose to see train score, "out" will contain train score info
+        if self.return_train_score:
+            (train_scores, test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) = \
+                save_data
+        else:
+            (test_scores, test_sample_counts,
+             fit_time, score_time, parameters_est, parameters_all) = \
+                save_data
+
+        self.process_fit(n_splits=n_splits,
+                         parameters_est=parameters_est,
+                         parameters_all=parameters_all,
+                         test_sample_counts=test_sample_counts,
+                         test_scores=test_scores,
+                         train_scores=train_scores,
+                         fit_time=fit_time,
+                         score_time=score_time,
+                         cv_iter=cv_iter,
+                         X=self.features, y=self.labels)
+        '''
+        return self
+
+    def convert_cfg(self, cfg):
+        parameters = cfg
+        # Add some parameters that are used for fitting, but are not part of the optimization
+        parameters['random_seed'] = self.random_state
+        parameters['max_iter'] = self.param_distributions['Classification']['max_iter'][0]
+
+        # No featureScaling flag is accepted in fit_and_score,
+        # so remove it
+        parameters.pop('use_featureScaling')
+        # fit_and_score requires a flag but only if it is true
+        if parameters['Imputation'] == 'False':
+            parameters.pop('Imputation')
+        # Delete four more flags from the config if they are false
+        if parameters['StatisticalTestUse'] == 'False':
+            parameters.pop('StatisticalTestUse')
+        if parameters['SampleProcessing_SMOTE'] == 'False':
+            parameters.pop('SampleProcessing_SMOTE')
+        #if parameters['SampleProcessing_Oversampling'] == 'False':
+        #    parameters.pop('SampleProcessing_Oversampling')
+        #if parameters['ReliefUse'] == 'False':
+        #    parameters.pop('ReliefUse')
+        # 'PCAType' is either '95variance' or an int
+        if parameters['UsePCA'] == 'True' and \
+                parameters['PCAType'] == 'n_components':
+            parameters['PCAType'] = parameters.pop('n_components')
+
+        return parameters
+
+
+
+class GuidedSearchCVSMAC(BaseSearchCVSMAC):
+    """Guided search on hyperparameters.
+
+    GuidedSearchCV implements a "fit" and a "score" method.
+    It also implements "predict", "predict_proba", "decision_function",
+    "transform" and "inverse_transform" if they are implemented in the
+    estimator used.
+
+    The parameters of the estimator used to apply these methods are optimized
+    by cross-validated search over parameter settings.
+
+    The optimization is performed using the Sequential Model-based Algorithm
+    Configuration (SMAC) method. A probabilistic model of the objective function
+    is constructed and updated with each function evaluation.
+
+    If all parameters are presented as a list,
+    sampling without replacement is performed. If at least one parameter
+    is given as a distribution, sampling with replacement is used.
+    It is highly recommended to use continuous distributions for continuous
+    parameters.
+
+    Parameters
+    ----------
+    param_distributions : dict
+        Dictionary with parameter names (string) as keys and details of their
+        domains as values. From this dictionary the complete search space
+        will later be constructed.
+
+    n_iter : int, default=10
+        Number of function evaluations allowed in each optimization sequence
+        of SMAC.
+
+    scoring : string, callable or None, default=None
+        A string (see model evaluation documentation) or
+        a scorer callable object / function with signature
+        ``scorer(estimator, X, y)``.
+        If ``None``, the ``score`` method of the estimator is used.
+
+    fit_params : dict, optional
+        Parameters to pass to the fit method.
+
+    n_jobs : int, default=1
+        Number of jobs to run in parallel.
+
+    pre_dispatch : int, or string, optional
+        Controls the number of jobs that get dispatched during parallel
+        execution. Reducing this number can be useful to avoid an
+        explosion of memory consumption when more jobs get dispatched
+        than CPUs can process. This parameter can be:
+
+            - None, in which case all the jobs are immediately
+              created and spawned. Use this for lightweight and
+              fast-running jobs, to avoid delays due to on-demand
+              spawning of the jobs
+
+            - An int, giving the exact number of total jobs that are
+              spawned
+
+            - A string, giving an expression as a function of n_jobs,
+              as in '2*n_jobs'
+
+    iid : boolean, default=True
+        If True, the data is assumed to be identically distributed across
+        the folds, and the loss minimized is the total loss per sample,
+        and not the mean loss across the folds.
+
+    cv : int, cross-validation generator or an iterable, optional
+        Determines the cross-validation splitting strategy.
+        Possible inputs for cv are:
+          - None, to use the default 3-fold cross validation,
+          - integer, to specify the number of folds in a `(Stratified)KFold`,
+          - An object to be used as a cross-validation generator.
+          - An iterable yielding train, test splits.
+
+        For integer/None inputs, if the estimator is a classifier and ``y`` is
+        either binary or multiclass, :class:`StratifiedKFold` is used. In all
+        other cases, :class:`KFold` is used.
+
+        Refer :ref:`User Guide <cross_validation>` for the various
+        cross-validation strategies that can be used here.
+
+    refit : boolean, default=True
+        Refit the best estimator with the entire dataset.
+        If "False", it is impossible to make predictions using
+        this RandomizedSearchCV instance after fitting.
+
+    verbose : integer
+        Controls the verbosity: the higher, the more messages.
+
+    random_state : int or RandomState
+        Pseudo random number generator state used for random uniform sampling
+        from lists of possible values instead of scipy.stats distributions.
+
+    error_score : 'raise' (default) or numeric
+        Value to assign to the score if an error occurs in estimator fitting.
+        If set to 'raise', the error is raised. If a numeric value is given,
+        FitFailedWarning is raised. This parameter does not affect the refit
+        step, which will always raise the error.
+
+    return_train_score : boolean, default=True
+        If ``'False'``, the ``cv_results_`` attribute will not include training
+        scores.
+
+    Attributes
+    ----------
+    cv_results_ : dict of numpy (masked) ndarrays
+        A dict with keys as column headers and values as columns, that can be
+        imported into a pandas ``DataFrame``.
+
+        For instance the below given table
+
+        +--------------+-------------+-------------------+---+---------------+
+        | param_kernel | param_gamma | split0_test_score |...|rank_test_score|
+        +==============+=============+===================+===+===============+
+        |    'rbf'     |     0.1     |        0.8        |...|       2       |
+        +--------------+-------------+-------------------+---+---------------+
+        |    'rbf'     |     0.2     |        0.9        |...|       1       |
+        +--------------+-------------+-------------------+---+---------------+
+        |    'rbf'     |     0.3     |        0.7        |...|       1       |
+        +--------------+-------------+-------------------+---+---------------+
+
+        will be represented by a ``cv_results_`` dict of::
+
+            {
+            'param_kernel' : masked_array(data = ['rbf', 'rbf', 'rbf'],
+                                          mask = False),
+            'param_gamma'  : masked_array(data = [0.1 0.2 0.3], mask = False),
+            'split0_test_score'  : [0.8, 0.9, 0.7],
+            'split1_test_score'  : [0.82, 0.5, 0.7],
+            'mean_test_score'    : [0.81, 0.7, 0.7],
+            'std_test_score'     : [0.02, 0.2, 0.],
+            'rank_test_score'    : [3, 1, 1],
+            'split0_train_score' : [0.8, 0.9, 0.7],
+            'split1_train_score' : [0.82, 0.5, 0.7],
+            'mean_train_score'   : [0.81, 0.7, 0.7],
+            'std_train_score'    : [0.03, 0.03, 0.04],
+            'mean_fit_time'      : [0.73, 0.63, 0.43, 0.49],
+            'std_fit_time'       : [0.01, 0.02, 0.01, 0.01],
+            'mean_score_time'    : [0.007, 0.06, 0.04, 0.04],
+            'std_score_time'     : [0.001, 0.002, 0.003, 0.005],
+            'params' : [{'kernel' : 'rbf', 'gamma' : 0.1}, ...],
+            }
+
+        NOTE that the key ``'params'`` is used to store a list of parameter
+        settings dict for all the parameter candidates.
+
+        The ``mean_fit_time``, ``std_fit_time``, ``mean_score_time`` and
+        ``std_score_time`` are all in seconds.
+
+    best_estimator_ : estimator
+        Estimator that was chosen by the search, i.e. estimator
+        which gave highest score (or smallest loss if specified)
+        on the left out data. Not available if refit=False.
+
+    best_score_ : float
+        Score of best_estimator on the left out data.
+
+    best_params_ : dict
+        Parameter setting that gave the best results on the hold out data.
+
+    best_index_ : int
+        The index (of the ``cv_results_`` arrays) which corresponds to the best
+        candidate parameter setting.
+
+        The dict at ``search.cv_results_['params'][search.best_index_]`` gives
+        the parameter setting for the best model, that gives the highest
+        mean score (``search.best_score_``).
+
+    scorer_ : function
+        Scorer function used on the held out data to choose the best
+        parameters for the model.
+
+    n_splits_ : int
+        The number of cross-validation splits (folds/iterations).
+
+    Notes
+    -----
+    The parameters selected are those that maximize the score of the held-out
+    data, according to the scoring parameter.
+
+    If `n_jobs` was set to a value higher than one, the data is copied for each
+    parameter setting(and not `n_jobs` times). This is done for efficiency
+    reasons if individual jobs take very little time, but may raise errors if
+    the dataset is large and not enough memory is available.  A workaround in
+    this case is to set `pre_dispatch`. Then, the memory is copied only
+    `pre_dispatch` many times. A reasonable value for `pre_dispatch` is `2 *
+    n_jobs`.
+
+    See Also
+    --------
+    :class:`GridSearchCV`:
+        Does exhaustive search over a grid of parameters.
+
+    :class:`ParameterSampler`:
+        A generator over parameter settings, constructed from
+        param_distributions.
+
+    """
+
+    def __init__(self, param_distributions={}, n_iter=10, scoring=None,
+                 fit_params=None, n_jobs=1, iid=True, refit=True, cv=None,
+                 verbose=0, pre_dispatch='2*n_jobs', random_state=None,
+                 error_score='raise', return_train_score=True,
+                 n_jobspercore=100, fastr_plugin=None, maxlen=100,
+                 ranking_score='test_score', features=None, labels=None,
+                 smac_result_file=None):
+        super(GuidedSearchCVSMAC, self).__init__(
+             param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
+             n_iter=n_iter, random_state=random_state, n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
+             pre_dispatch=pre_dispatch, error_score=error_score,
+             return_train_score=return_train_score,
+             n_jobspercore=n_jobspercore, fastr_plugin=fastr_plugin,
+             maxlen=maxlen, ranking_score=ranking_score)
+        self.features = features
+        self.labels = labels
+        self.smac_result_file = smac_result_file
+
+    def fit(self, X, y=None, groups=None):
+        """Run fit on the estimator with randomly drawn parameters.
+
+        Parameters
+        ----------
+        X : array-like, shape = [n_samples, n_features]
+            Training vector, where n_samples in the number of samples and
+            n_features is the number of features.
+
+        y : array-like, shape = [n_samples] or [n_samples, n_output], optional
+            Target relative to X for classification or regression;
+            None for unsupervised learning.
+
+        groups : array-like, with shape (n_samples,), optional
+            Group labels for the samples used while splitting the dataset into
+            train/test set.
+        """
+        print("Fit: " + str(self.n_iter))
+        self.features = X
+        self.labels = y
+
+        return self._fit(groups)

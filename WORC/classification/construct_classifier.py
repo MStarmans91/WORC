@@ -160,9 +160,13 @@ def construct_SVM(config, regression=False):
 
     clf.kernel = str(config['SVMKernel'])
     clf.C = config['SVMC']
-    clf.degree = config['SVMdegree']
-    clf.coef0 = config['SVMcoef0']
-    clf.gamma = config['SVMgamma']
+    # Only add the following parameters if they are defined
+    if 'SVMdegree' in config:
+        clf.degree = config['SVMdegree']
+    if 'SVMcoef0' in config:
+        clf.coef0 = config['SVMcoef0']
+    if 'SVMgamma' in config:
+        clf.gamma = config['SVMgamma']
 
     # Check if we need to use a ranked SVM
     if config['classifiers'] == 'RankedSVM':

@@ -16,6 +16,7 @@
 # limitations under the License.
 
 import os
+import numpy as np
 from scipy.stats import uniform
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
@@ -28,7 +29,7 @@ from WORC.classification.AdvancedSampler import discrete_uniform, \
 def trainclassifier(feat_train, patientinfo_train, config,
                     output_hdf,
                     feat_test=None, patientinfo_test=None,
-                    fixedsplits=None, verbose=True):
+                    fixedsplits=None, output_smac=None, verbose=True):
     """Train a classifier using machine learning from features.
 
     By default, if no
@@ -104,6 +105,14 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     if type(fixedsplits) is list:
         fixedsplits = ''.join(fixedsplits)
+
+    if type(output_smac) is list:
+        if len(output_smac) == 1:
+            output_smac = ''.join(output_smac)
+        else:
+            # FIXME
+            print('[WORC Warning] You provided multiple output json files: only the first one will be used!')
+            output_smac = output_smac[0]
 
     # Load variables from the config file
     config = config_io.load_config(config)
@@ -211,16 +220,19 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
+    smac_result_file = output_smac
     if feat_test is None:
         trained_classifier = cv.crossval(config, label_data_train,
                                          image_features_train,
                                          param_grid,
                                          modus=modus,
                                          use_fastr=config['Classification']['fastr'],
+                                         use_SMAC=config['SMAC']['use'],
                                          fastr_plugin=config['Classification']['fastr_plugin'],
                                          fixedsplits=fixedsplits,
                                          ensemble=config['Ensemble'],
                                          outputfolder=outputfolder,
+                                         smac_result_file=smac_result_file,
                                          tempsave=config['General']['tempsave'])
     else:
         trained_classifier = cv.nocrossval(config, label_data_train,
@@ -230,6 +242,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
                                            param_grid,
                                            modus=modus,
                                            use_fastr=config['Classification']['fastr'],
+                                           use_SMAC=config['SMAC']['use'],
                                            fastr_plugin=config['Classification']['fastr_plugin'],
                                            ensemble=config['Ensemble'])
 
@@ -237,5 +250,159 @@ def trainclassifier(feat_train, patientinfo_train, config,
         os.makedirs(os.path.dirname(output_hdf))
 
     trained_classifier.to_hdf(output_hdf, 'EstimatorData')
+
+
+    # Check whether we do regression or classification
+    regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
+    isclassifier =\
+        not any(clf in regressors for clf in config['Classification']['classifiers'])
+
+
+    if config['SMAC']['use']:
+
+        with open(smac_result_file, 'r') as jsonfile:
+            smac_result_dict = json.load(jsonfile)
+
+        # Gather the statistics of all cross-validation summaries
+        all_best_scores = []
+        all_average_scores = []
+        all_inc_wallclock_times = []
+        all_inc_evaluations = []
+        all_inc_changed = []
+        for cv_iteration in smac_result_dict:
+            all_best_scores.append(smac_result_dict[cv_iteration]['cv-summary']['best_score'])
+            all_average_scores.append(smac_result_dict[cv_iteration]['cv-summary']['average_score'])
+            all_inc_wallclock_times.append(smac_result_dict[cv_iteration]['cv-summary']['best_inc_wallclock_time'])
+            all_inc_evaluations.append(smac_result_dict[cv_iteration]['cv-summary']['best_inc_evals'])
+            all_inc_changed.append(smac_result_dict[cv_iteration]['cv-summary']['best_inc_changed'])
+        overall_results = {'overall results': {'avg_best_score': np.mean(all_best_scores),
+                                               'std_best_score': np.std(all_best_scores),
+                                               'avg_average_score': np.mean(all_average_scores),
+                                               'std_average_score': np.std(all_average_scores),
+                                               'avg_inc_wallclock_time': np.mean(all_inc_wallclock_times),
+                                               'std_inc_wallclock_time': np.std(all_inc_wallclock_times),
+                                               'avg_inc_evaluations': np.mean(all_inc_evaluations),
+                                               'std_inc_evaluations': np.std(all_inc_evaluations),
+                                               'avg_inc_changed': np.mean(all_inc_changed),
+                                               'std_inc_changed': np.std(all_inc_changed)}
+                           }
+        smac_result_dict.update(overall_results)
+        with open(smac_result_file, 'w') as jsonfile:
+            json.dump(smac_result_dict, jsonfile, indent=4)
+
+    '''
+    ## ----------------------------------------- ##
+    # Process the statistics of the SMAC optimization
+    # ! Perhaps move this to a better location in the future
+    if config['SMAC']['use']:
+
+        with open(smac_result_file, 'r') as jsonfile:
+            smac_result_dict = json.load(jsonfile)
+
+        # Create a dictionary with the averages
+        totals = dict()
+        metric_names = ['ta_runs', 'std_ta_runs', 'n_configs', 'std_n_configs',
+                        'wallclock_time_used', 'std_wallclock_time_used',
+                        'ta_time_used', 'std_ta_time_used', 'inc_changed',
+                        'std_inc_changed', 'wallclock_time_best',
+                        'std_wallclock_time_best', 'evaluation_best',
+                        'std_evaluation_best', 'cost_best', 'std_cost_best']
+        for metric_name in metric_names[0::2]:
+            totals[metric_name] = []
+
+        best_instances = []
+        for cv_iteration in smac_result_dict:
+            all_val_scores = []
+            for instance in cv_iteration:
+                nr_of_incumbent_updates = instance['inc_changed']
+                all_val_scores.append(instance['inc_costs'][nr_of_incumbent_updates - 1])
+            best_score_index = all_val_scores.index(np.max(all_val_scores))
+            best_instances.append(str(best_score_index))
+
+        instance_index_count = 0
+        for cv_iteration in smac_result_dict:
+            # Only run this code for the best instance in this cv
+            instance = cv_iteration[best_instances[instance_index_count]]
+
+            nr_of_incumbent_updates = instance['inc_changed']
+            # Extract the details of the last (best) incumbent
+            totals['wallclock_time_best'].append(
+                instance['inc_wallclock_times'][nr_of_incumbent_updates - 1])
+            totals['evaluation_best'].append(
+                instance['inc_evaluations'][nr_of_incumbent_updates - 1])
+            totals['cost_best'].append(
+                instance['inc_costs'][nr_of_incumbent_updates - 1])
+            for metric in instance:
+                if metric in metric_names:
+                    totals[metric].append(instance[metric])
+            instance_index_count += 1
+
+        averages = dict()
+        list_position_count = 1
+        for metric_name in totals:
+            averages[metric_name] = np.mean(totals[metric_name])
+            averages[metric_names[list_position_count]] = np.std(totals[metric_name])
+            list_position_count += 2
+
+        smac_result_dict['averages'] = averages
+
+        with open(smac_result_file, 'w') as jsonfile:
+            json.dump(smac_result_dict, jsonfile, indent=4)
+    '''
+    ## --------------------------------------------- ##
+
+
+    # Calculate statistics of performance
+    overfit_scaler = config['Evaluation']['OverfitScaler']
+    if feat_test is None:
+        if not isclassifier:
+            statistics =\
+                plot_estimator_performance(trained_classifier,
+                                           label_data_train,
+                                           label_type,
+                                           ensemble=config['Ensemble']['Use'],
+                                           bootstrap=config['Bootstrap']['Use'],
+                                           bootstrap_N=config['Bootstrap']['N_iterations'],
+                                           overfit_scaler=overfit_scaler)
+        else:
+            statistics =\
+                plot_estimator_performance(trained_classifier,
+                                           label_data_train,
+                                           label_type, modus=modus,
+                                           ensemble=config['Ensemble']['Use'],
+                                           bootstrap=config['Bootstrap']['Use'],
+                                           bootstrap_N=config['Bootstrap']['N_iterations'],
+                                           overfit_scaler=overfit_scaler)
+    else:
+        if patientinfo_test is not None:
+            if not isclassifier:
+                statistics =\
+                    plot_estimator_performance(trained_classifier,
+                                               label_data_test,
+                                               label_type,
+                                               ensemble=config['Ensemble']['Use'],
+                                               bootstrap=config['Bootstrap']['Use'],
+                                               bootstrap_N=config['Bootstrap']['N_iterations'],
+                                               overfit_scaler=overfit_scaler)
+            else:
+                statistics =\
+                    plot_estimator_performance(trained_classifier,
+                                               label_data_test,
+                                               label_type,
+                                               modus=modus,
+                                               ensemble=config['Ensemble']['Use'],
+                                               bootstrap=config['Bootstrap']['Use'],
+                                               bootstrap_N=config['Bootstrap']['N_iterations'],
+                                               overfit_scaler=overfit_scaler)
+        else:
+            statistics = None
+
+    # Save output
+
+    if not os.path.exists(os.path.dirname(output_json)):
+        os.makedirs(os.path.dirname(output_json))
+
+    with open(output_json, 'w') as fp:
+        json.dump(statistics, fp, sort_keys=True, indent=4)
 
     print("Saved data!")

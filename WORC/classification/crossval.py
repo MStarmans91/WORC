@@ -22,7 +22,7 @@ import os
 import time
 from time import gmtime, strftime
 from sklearn.model_selection import train_test_split
-from .parameter_optimization import random_search_parameters
+from .parameter_optimization import random_search_parameters, guided_search_parameters
 import WORC.addexceptions as ae
 from WORC.classification.regressors import regressors
 import glob
@@ -30,9 +30,10 @@ import glob
 
 def crossval(config, label_data, image_features,
              param_grid=None, use_fastr=False,
-             fastr_plugin=None, tempsave=False,
-             fixedsplits=None, ensemble={'Use': False}, outputfolder=None,
-             modus='singlelabel'):
+             use_SMAC=False, fastr_plugin=None,
+             tempsave=False, fixedsplits=None,
+             ensemble={'Use': False}, outputfolder=None,
+             smac_result_file=None, modus='singlelabel'):
     """
     Constructs multiple individual classifiers based on the label settings
 
@@ -71,6 +72,10 @@ def crossval(config, label_data, image_features,
             If True, fastr is used to split the hyperparameter optimization in
             separate jobs. Parameters for the splitting can be specified in the
             config file. Especially suited for clusters.
+
+    use_SMAC: boolean, default False
+            If False, random search is used to optimize the hyperparameters.
+            If True, SMAC is used to optimize the hyperparameters.
 
     fastr_plugin: string, default None
             Determines which plugin is used for fastr executions.
@@ -322,12 +327,21 @@ def crossval(config, label_data, image_features,
             config['HyperOptimization']['use_fastr'] = use_fastr
             config['HyperOptimization']['fastr_plugin'] = fastr_plugin
             n_cores = config['General']['Joblib_ncores']
-            trained_classifier = random_search_parameters(features=X_train,
-                                                          labels=Y_train,
-                                                          param_grid=param_grid,
-                                                          n_cores=n_cores,
-                                                          random_seed=random_seed,
-                                                          **config['HyperOptimization'])
+            if use_SMAC:
+                trained_classifier = guided_search_parameters(features=X_train,
+                                                              labels=Y_train,
+                                                              parameters=config,
+                                                              n_cores=n_cores,
+                                                              random_seed=random_seed,
+                                                              smac_result_file=smac_result_file,
+                                                              **config['HyperOptimization'])
+            else:
+                trained_classifier = random_search_parameters(features=X_train,
+                                                              labels=Y_train,
+                                                              param_grid=param_grid,
+                                                              n_cores=n_cores,
+                                                              random_seed=random_seed,
+                                                              **config['HyperOptimization'])
 
             # Create an ensemble if required
             # trained_classifier.create_ensemble(X_train, Y_train, method=ensemble['Use'])

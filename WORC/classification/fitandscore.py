@@ -52,7 +52,8 @@ def fit_and_score(X, y, scoring,
                   return_times=True, return_parameters=False,
                   return_estimator=False,
                   error_score='raise', verbose=True,
-                  return_all=True):
+                  return_all=True,
+                  use_smac=False):
     """Fit an estimator to a dataset and score the performance.
 
     The following
@@ -259,7 +260,11 @@ def fit_and_score(X, y, scoring,
             imp_type = para_estimator['ImputationMethod']
             if verbose:
                 print(f'Imputing NaN with {imp_type}.')
-            imp_nn = para_estimator['ImputationNeighbours']
+            # Only used with KNN in SMAC, otherwise assign default
+            if 'ImputationNeighbours' in para_estimator.keys():
+                imp_nn = para_estimator['ImputationNeighbours']
+            else:
+                imp_nn = 8
 
             imputer = Imputer(missing_values=np.nan, strategy=imp_type,
                               n_neighbors=imp_nn)
@@ -269,7 +274,8 @@ def fit_and_score(X, y, scoring,
 
         del para_estimator['Imputation']
         del para_estimator['ImputationMethod']
-        del para_estimator['ImputationNeighbours']
+        if 'ImputationNeighbours' in para_estimator.keys():
+            del para_estimator['ImputationNeighbours']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -599,7 +605,8 @@ def fit_and_score(X, y, scoring,
 
     if 'UsePCA' in para_estimator.keys():
         del para_estimator['UsePCA']
-        del para_estimator['PCAType']
+        if 'PCAType' in para_estimator.keys():
+            del para_estimator['PCAType']
 
     # --------------------------------------------------------------------
     # Feature selection based on a statistical test
@@ -619,8 +626,17 @@ def fit_and_score(X, y, scoring,
             if len(X_train_temp[0]) == 0:
                 if verbose:
                     print('[WORC WARNING]: No features are selected! Probably your statistical test feature selection was too strict. Skipping thresholding.')
-                StatisticalSel = None
-                parameters['StatisticalTestUse'] = 'False'
+                if use_smac:
+                    para_estimator = delete_nonestimator_parameters(para_estimator)
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], \
+                               scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    else:
+                        return ret
+                else:
+                    StatisticalSel = None
+                    parameters['StatisticalTestUse'] = 'False'
+
             else:
                 X_train = StatisticalSel.transform(X_train)
                 X_test = StatisticalSel.transform(X_test)

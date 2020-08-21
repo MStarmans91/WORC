@@ -424,10 +424,19 @@ class WORC(object):
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
-        config['HyperOptimization']['N_iterations'] = '25000'
+        config['HyperOptimization']['N_iterations'] = '25000' # represents either wallclock time limit or nr of evaluations when using SMAC
         config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
+
+        # SMAC options
+        config['SMAC'] = dict()
+        config['SMAC']['use'] = 'False'
+        config['SMAC']['n_smac_cores'] = '1'
+        config['SMAC']['budget_type'] = 'time' # ['evals', 'time']
+        config['SMAC']['budget'] = '3600' # Nr of evals or time in seconds
+        config['SMAC']['init_method'] = 'sobol' # ['sobol', 'random']
+        config['SMAC']['init_budget'] = '300' # Nr of evals
 
         # Ensemble options
         config['Ensemble'] = dict()
@@ -544,6 +553,12 @@ class WORC(object):
 
                 self.plot_estimator.inputs['prediction'] = self.classify.outputs['classification']
                 self.plot_estimator.inputs['pinfo'] = pinfo
+
+                # Optional SMAC output
+                if  self.configs[0]['SMAC']['use'] == 'True':
+                    self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results',
+                                                                      step_id='general_sinks')
+                    self.sink_smac_results.input = self.classify.outputs['smac_results']
 
                 if self.TrainTest:
                     # FIXME: the naming here is ugly
@@ -1582,6 +1597,7 @@ class WORC(object):
 
         self.sink_data['classification'] = ("vfs://output/{}/estimator_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.sink_data['smac_results'] = ("vfs://output/{}/smac_results_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_test_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
