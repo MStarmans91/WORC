@@ -24,6 +24,7 @@ from WORC.IOparser.file_io import load_features
 import WORC.IOparser.config_io_classifier as config_io
 from WORC.classification.AdvancedSampler import discrete_uniform, \
     log_uniform, boolean_uniform
+import json
 
 
 def trainclassifier(feat_train, patientinfo_train, config,
@@ -251,13 +252,6 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     trained_classifier.to_hdf(output_hdf, 'EstimatorData')
 
-
-    # Check whether we do regression or classification
-    regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']
-    isclassifier =\
-        not any(clf in regressors for clf in config['Classification']['classifiers'])
-
-
     if config['SMAC']['use']:
 
         with open(smac_result_file, 'r') as jsonfile:
@@ -350,59 +344,5 @@ def trainclassifier(feat_train, patientinfo_train, config,
             json.dump(smac_result_dict, jsonfile, indent=4)
     '''
     ## --------------------------------------------- ##
-
-
-    # Calculate statistics of performance
-    overfit_scaler = config['Evaluation']['OverfitScaler']
-    if feat_test is None:
-        if not isclassifier:
-            statistics =\
-                plot_estimator_performance(trained_classifier,
-                                           label_data_train,
-                                           label_type,
-                                           ensemble=config['Ensemble']['Use'],
-                                           bootstrap=config['Bootstrap']['Use'],
-                                           bootstrap_N=config['Bootstrap']['N_iterations'],
-                                           overfit_scaler=overfit_scaler)
-        else:
-            statistics =\
-                plot_estimator_performance(trained_classifier,
-                                           label_data_train,
-                                           label_type, modus=modus,
-                                           ensemble=config['Ensemble']['Use'],
-                                           bootstrap=config['Bootstrap']['Use'],
-                                           bootstrap_N=config['Bootstrap']['N_iterations'],
-                                           overfit_scaler=overfit_scaler)
-    else:
-        if patientinfo_test is not None:
-            if not isclassifier:
-                statistics =\
-                    plot_estimator_performance(trained_classifier,
-                                               label_data_test,
-                                               label_type,
-                                               ensemble=config['Ensemble']['Use'],
-                                               bootstrap=config['Bootstrap']['Use'],
-                                               bootstrap_N=config['Bootstrap']['N_iterations'],
-                                               overfit_scaler=overfit_scaler)
-            else:
-                statistics =\
-                    plot_estimator_performance(trained_classifier,
-                                               label_data_test,
-                                               label_type,
-                                               modus=modus,
-                                               ensemble=config['Ensemble']['Use'],
-                                               bootstrap=config['Bootstrap']['Use'],
-                                               bootstrap_N=config['Bootstrap']['N_iterations'],
-                                               overfit_scaler=overfit_scaler)
-        else:
-            statistics = None
-
-    # Save output
-
-    if not os.path.exists(os.path.dirname(output_json)):
-        os.makedirs(os.path.dirname(output_json))
-
-    with open(output_json, 'w') as fp:
-        json.dump(statistics, fp, sort_keys=True, indent=4)
 
     print("Saved data!")
