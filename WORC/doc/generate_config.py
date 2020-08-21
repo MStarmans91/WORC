@@ -134,8 +134,6 @@ def generate_config_options():
     config['Preprocessing']['ROIdilate'] = 'True, False'
     config['Preprocessing']['ROIdilateradius'] = 'Integer > 0'
     config['Preprocessing']['Method'] = 'z_score, minmed'
-    config['Preprocessing']['Resampling'] = 'True, False'
-    config['Preprocessing']['Resampling_spacing'] = 'Float, Float, Float'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -346,7 +344,8 @@ def generate_config_options():
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
-    config['FeatureScaling']['scaling_method'] = 'robust_z_score. z_score, robust, minmax, None'
+    config['FeatureScaling']['scale_features'] = 'Boolean(s)'
+    config['FeatureScaling']['scaling_method'] = 'z_score, minmax, robust'
 
     # Ensemble options
     config['Ensemble'] = dict()
@@ -399,8 +398,6 @@ def generate_config_descriptions():
     config['Preprocessing']['ROIdilate'] = 'Determine whether the ROI has to be dilated with a disc element or not.'
     config['Preprocessing']['ROIdilateradius'] = 'Radius of disc element to be used in ROI dilation.'
     config['Preprocessing']['Method'] = 'Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.'
-    config['Preprocessing']['Resampling'] = 'Determine whether the image and mask will be resampled or not.'
-    config['Preprocessing']['Resampling_spacing'] = 'Spacing to resample image and mask to, if resampling is used.'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -604,6 +601,7 @@ def generate_config_descriptions():
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
+    config['FeatureScaling']['scale_features'] = 'Determine whether to use feature scaling is.'
     config['FeatureScaling']['scaling_method'] = 'Determine the scaling method.'
 
     # Ensemble options

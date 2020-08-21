@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>classification Package &mdash; WORC 3.3.2 documentation</title>
+  <title>classification Package &mdash; WORC 3.3.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.1
               </div>
             
           
@@ -2462,7 +2462,7 @@ param_grid: dictionary containing all possible hyperparameters and their</p>
 <span id="trainclassifier-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">trainclassifier</span></code> Module<a class="headerlink" href="#module-WORC.classification.trainclassifier" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.classification.trainclassifier.trainclassifier">
-<code class="descclassname">WORC.classification.trainclassifier.</code><code class="descname">trainclassifier</code><span class="sig-paren">(</span><em>feat_train</em>, <em>patientinfo_train</em>, <em>config</em>, <em>output_hdf</em>, <em>feat_test=None</em>, <em>patientinfo_test=None</em>, <em>fixedsplits=None</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/trainclassifier.html#trainclassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.trainclassifier.trainclassifier" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.classification.trainclassifier.</code><code class="descname">trainclassifier</code><span class="sig-paren">(</span><em>feat_train</em>, <em>patientinfo_train</em>, <em>config</em>, <em>output_hdf</em>, <em>output_json</em>, <em>feat_test=None</em>, <em>patientinfo_test=None</em>, <em>fixedsplits=None</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/trainclassifier.html#trainclassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.trainclassifier.trainclassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Train a classifier using machine learning from features.</p>
 <p>By default, if no
 split in training and test is supplied, a cross validation
@@ -2485,6 +2485,10 @@ fields and their description.</p>
 </dd>
 <dt>output_hdf: string, mandatory</dt><dd><p>path refering to a .hdf5 file to which the final classifier and
 it’s properties will be written to.</p>
+</dd>
+<dt>output_json: string, mandatory</dt><dd><p>path refering to a .json file to which the performance of the final
+classifier will be written to. This file is generated through one of
+the WORC plotting functions.</p>
 </dd>
 <dt>feat_test: string, optional</dt><dd><p>When this argument is supplied, the machine learning will not be
 trained using a cross validation, but rather using a fixed training

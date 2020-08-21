@@ -21,7 +21,6 @@ from skimage import morphology
 import scipy.ndimage as nd
 import numpy as np
 import WORC.IOparser.config_segmentix as config_io
-from WORC.processing.helpers import resample_image
 
 
 def get_ring(contour, radius=5):
@@ -198,22 +197,12 @@ def segmentix(parameters, image=None, segmentation=None,
     # Convert back to ITK Image with correct meta information
     contour = contour.astype(np.uint8)
     contour = sitk.GetImageFromArray(contour)
+    contour.CopyInformation(contour_original)
 
     if config['Segmentix']['AssumeSameImageAndMaskMetadata']:
         print('[Segmentix] Copy metadata information from image to mask.')
         image = sitk.ReadImage(image)
         contour.CopyInformation(image)
-    else:
-        contour.CopyInformation(contour_original)
-
-    # Apply resampling if required
-    if config['Preprocessing']['Resampling']:
-        new_spacing = config['Preprocessing']['Resampling_spacing']
-        print(f'[Segmentix] Apply resampling of image to spacing {new_spacing}.')
-        contour = resample_image(image=contour, new_spacing=new_spacing,
-                                 interpolator=sitk.sitkNearestNeighbor)
-    else:
-        print('No resampling was applied.')
 
     # If required, output contour
     if output is not None:

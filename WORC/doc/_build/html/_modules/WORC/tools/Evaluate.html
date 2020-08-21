@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.tools.Evaluate &mdash; WORC 3.3.2 documentation</title>
+  <title>WORC.tools.Evaluate &mdash; WORC 3.3.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.1
               </div>
             
           
@@ -235,13 +235,11 @@
                                      <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_ROC&#39;</span><span class="p">,</span>
                                      <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
                                      <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span> <span class="o">=</span>\
-                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotEstimator:1.0&#39;</span><span class="p">,</span> <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
-                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_Estimator&#39;</span><span class="p">,</span>
-                                         <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
-                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span> <span class="o">=</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotEstimator:1.0&#39;</span><span class="p">,</span> <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+                                     <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_Estimator&#39;</span><span class="p">,</span>
+                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
+                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotBarchart:1.0&#39;</span><span class="p">,</span>
                                      <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_Barchart&#39;</span><span class="p">,</span>
@@ -291,10 +289,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;CSVFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;ROC_CSV&#39;</span><span class="p">,</span>
                                      <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_Estimator_Json</span> <span class="o">=</span>\
-                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;JsonFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;Estimator_Json&#39;</span><span class="p">,</span>
-                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sink_Estimator_Json</span> <span class="o">=</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;JsonFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;Estimator_Json&#39;</span><span class="p">,</span>
+                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_Barchart_PNG</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;PNGFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;Barchart_PNG&#39;</span><span class="p">,</span>
@@ -338,8 +335,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_Tex</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_tex&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_CSV</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_csv&#39;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_Estimator_Json</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_json&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sink_Estimator_Json</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_json&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_Barchart_PNG</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_png&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_Barchart_Tex</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_tex&#39;</span><span class="p">]</span>
@@ -364,15 +360,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;percentages&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;posteriors&#39;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span> <span class="o">=</span>\
-                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_constant</span><span class="p">(</span><span class="s1">&#39;String&#39;</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">label_type</span><span class="p">],</span>
-                                             <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;LabelType&#39;</span><span class="p">,</span>
-                                             <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span> <span class="o">=</span>\
-                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_constant</span><span class="p">(</span><span class="s1">&#39;String&#39;</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">],</span>
-                                             <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">,</span>
-                                             <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span> <span class="o">=</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_constant</span><span class="p">(</span><span class="s1">&#39;String&#39;</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">label_type</span><span class="p">],</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;LabelType&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span> <span class="o">=</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_constant</span><span class="p">(</span><span class="s1">&#39;String&#39;</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span><span class="p">],</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
         <span class="c1"># Create sources if not supplied by a WORC network</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
@@ -395,6 +390,26 @@
                 <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Features_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">source_Features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;HDF5&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">node_group</span><span class="o">=</span><span class="s1">&#39;features&#39;</span><span class="p">))</span>
+
+        <span class="c1"># Create links to sources that are not supplied by a WORC network</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
 
         <span class="c1"># Create links to the sources that could be in a WORC network</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
@@ -447,26 +462,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">link_images_post</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_Images</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">link_images_post</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;patients&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_post</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_Segmentations</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_post</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;patients&#39;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_post</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;patients&#39;</span></div>
 
 <div class="viewcode-block" id="Evaluate.create_links_Addon"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate.create_links_Addon">[docs]</a>    <span class="k">def</span> <span class="nf">create_links_Addon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create links in network between nodes when adding Evaluate to WORC.&quot;&quot;&quot;</span>
@@ -486,24 +482,11 @@
             <span class="n">segmentations</span> <span class="o">=</span>\
                 <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sources_segmentations_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
 

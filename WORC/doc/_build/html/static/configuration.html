@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.3.2 documentation</title>
+  <title>Configuration &mdash; WORC 3.3.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.1
               </div>
             
           
@@ -111,7 +111,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#resampling">Resampling</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#classification">Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#crossvalidation">CrossValidation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hyperoptimization">HyperOptimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hyperoptimization">Hyperoptimization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ensemble">Ensemble</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bootstrap">Bootstrap</a></li>
@@ -550,8 +550,8 @@ Hounsfield Units.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 7%" />
-<col style="width: 93%" />
+<col style="width: 6%" />
+<col style="width: 94%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -577,20 +577,14 @@ Hounsfield Units.</p>
 <tr class="row-odd"><td><p>Method</p></td>
 <td><p>Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.</p></td>
 </tr>
-<tr class="row-even"><td><p>Resampling</p></td>
-<td><p>Determine whether the image and mask will be resampled or not.</p></td>
-</tr>
-<tr class="row-odd"><td><p>Resampling_spacing</p></td>
-<td><p>Spacing to resample image and mask to, if resampling is used.</p></td>
-</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 40%" />
-<col style="width: 18%" />
-<col style="width: 42%" />
+<col style="width: 38%" />
+<col style="width: 20%" />
+<col style="width: 43%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -622,14 +616,6 @@ Hounsfield Units.</p>
 <tr class="row-odd"><td><p>Method</p></td>
 <td><p>z_score</p></td>
 <td><p>z_score, minmed</p></td>
-</tr>
-<tr class="row-even"><td><p>Resampling</p></td>
-<td><p>False</p></td>
-<td><p>True, False</p></td>
-</tr>
-<tr class="row-odd"><td><p>Resampling_spacing</p></td>
-<td><p>1, 1, 1</p></td>
-<td><p>Float, Float, Float</p></td>
 </tr>
 </tbody>
 </table>
@@ -1326,8 +1312,8 @@ selected.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 33%" />
-<col style="width: 67%" />
+<col style="width: 24%" />
+<col style="width: 76%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -1335,7 +1321,10 @@ selected.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>scaling_method</p></td>
+<tr class="row-even"><td><p>scale_features</p></td>
+<td><p>Determine whether to use feature scaling is.</p></td>
+</tr>
+<tr class="row-odd"><td><p>scaling_method</p></td>
 <td><p>Determine the scaling method.</p></td>
 </tr>
 </tbody>
@@ -1343,9 +1332,9 @@ selected.</p>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 19%" />
-<col style="width: 19%" />
-<col style="width: 62%" />
+<col style="width: 23%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -1354,9 +1343,13 @@ selected.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>scaling_method</p></td>
-<td><p>robust_z_score</p></td>
-<td><p>robust_z_score. z_score, robust, minmax, None</p></td>
+<tr class="row-even"><td><p>scale_features</p></td>
+<td><p>True</p></td>
+<td><p>Boolean(s)</p></td>
+</tr>
+<tr class="row-odd"><td><p>scaling_method</p></td>
+<td><p>z_score, robust, minmax</p></td>
+<td><p>z_score, minmax, robust</p></td>
 </tr>
 </tbody>
 </table>
@@ -1486,7 +1479,7 @@ containing the actual values, e.g. value1, value2.</p>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 <tr class="row-even"><td><p>ReliefNumFeatures</p></td>
-<td><p>10, 50</p></td>
+<td><p>10, 50, 100</p></td>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 </tbody>
@@ -2047,7 +2040,7 @@ using cross validation, specify the following settings.</p>
 </table>
 </div>
 <div class="section" id="hyperoptimization">
-<span id="config-hyperoptimization"></span><h3>HyperOptimization<a class="headerlink" href="#hyperoptimization" title="Permalink to this headline">¶</a></h3>
+<span id="config-hyperoptimization"></span><h3>Hyperoptimization<a class="headerlink" href="#hyperoptimization" title="Permalink to this headline">¶</a></h3>
 <p>When using the PREDICT toolbox for classification, you have to supply
 your hyperparameter optimization procedure here.</p>
 <p><strong>Description:</strong></p>

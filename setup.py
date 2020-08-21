@@ -33,7 +33,6 @@ with open('test_requirements.txt', 'r') as fh:
 with open('requirements-setup.txt', 'r') as fp:
     setup_requirements = list(filter(bool, (line.strip() for line in fp)))
 
-
 def scan_dir(path, prefix=None):
     if prefix is None:
         prefix = path
@@ -93,7 +92,7 @@ class NoseTestCommand(TestCommand):
 
 setup(
     name='WORC',
-    version='3.3.2',
+    version='3.3.1',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',
