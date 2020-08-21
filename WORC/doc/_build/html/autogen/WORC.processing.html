@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>processing Package &mdash; WORC 3.3.1 documentation</title>
+  <title>processing Package &mdash; WORC 3.3.2 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.1
+                3.3.2
               </div>
             
           
@@ -117,6 +117,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">processing Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.ExtractNLargestBlobsn"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ExtractNLargestBlobsn</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.classes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classes</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">helpers</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.label_processing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">preprocessing</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.segmentix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">segmentix</span></code> Module</a></li>
@@ -262,6 +263,25 @@ numberToExtract: number of blobs to extract (integer).</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-WORC.processing.helpers">
+<span id="helpers-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">helpers</span></code> Module<a class="headerlink" href="#module-WORC.processing.helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.processing.helpers.resample_image">
+<code class="descclassname">WORC.processing.helpers.</code><code class="descname">resample_image</code><span class="sig-paren">(</span><em>image</em>, <em>new_spacing</em>, <em>interpolator=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#resample_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.resample_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample an image to another spacing.</p>
+<dl class="simple">
+<dt>image<span class="classifier">ITK Image</span></dt><dd><p>Input image.</p>
+</dd>
+<dt>new_spacing<span class="classifier">list</span></dt><dd><p>Spacing to resample image to</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>resampled_image<span class="classifier">ITK Image</span></dt><dd><p>Output image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 <div class="section" id="module-WORC.processing.label_processing">
 <span id="label-processing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module<a class="headerlink" href="#module-WORC.processing.label_processing" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -387,6 +407,10 @@ label_type (list): List of the names of the labels to load</p>
 <dt>ROIDetermine: string, default provided</dt><dd><p>Whether mask is used as ROI or it is determined, e.g. through Otsu.</p>
 </dd>
 <dt>AssumeSameImageAndMaskMetadata: boolean</dt><dd><p>If True, copy metadata from image to mask.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>image<span class="classifier">ITK Image</span></dt><dd><p>Output image.</p>
 </dd>
 </dl>
 </dd></dl>

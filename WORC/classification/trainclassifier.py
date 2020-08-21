@@ -15,13 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import json
 import os
 import numpy as np
 from scipy.stats import uniform
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
-from WORC.plotting.plot_estimator_performance import plot_estimator_performance
 from WORC.IOparser.file_io import load_features
 import WORC.IOparser.config_io_classifier as config_io
 from WORC.classification.AdvancedSampler import discrete_uniform, \
@@ -29,7 +27,7 @@ from WORC.classification.AdvancedSampler import discrete_uniform, \
 
 
 def trainclassifier(feat_train, patientinfo_train, config,
-                    output_hdf, output_json,
+                    output_hdf,
                     feat_test=None, patientinfo_test=None,
                     fixedsplits=None, output_smac=None, verbose=True):
     """Train a classifier using machine learning from features.
@@ -61,11 +59,6 @@ def trainclassifier(feat_train, patientinfo_train, config,
     output_hdf: string, mandatory
             path refering to a .hdf5 file to which the final classifier and
             it's properties will be written to.
-
-    output_json: string, mandatory
-            path refering to a .json file to which the performance of the final
-            classifier will be written to. This file is generated through one of
-            the WORC plotting functions.
 
     feat_test: string, optional
             When this argument is supplied, the machine learning will not be
@@ -110,14 +103,6 @@ def trainclassifier(feat_train, patientinfo_train, config,
             print('[WORC Warning] You provided multiple output hdf files: only the first one will be used!')
             output_hdf = output_hdf[0]
 
-    if type(output_json) is list:
-        if len(output_json) == 1:
-            output_json = ''.join(output_json)
-        else:
-            # FIXME
-            print('[WORC Warning] You provided multiple output json files: only the first one will be used!')
-            output_json = output_json[0]
-
     if type(fixedsplits) is list:
         fixedsplits = ''.join(fixedsplits)
 
@@ -157,17 +142,13 @@ def trainclassifier(feat_train, patientinfo_train, config,
     param_grid = cc.create_param_grid(config)
 
     # IF at least once groupwise search is turned on, add it to the param grid
-    if 'True'in config['Featsel']['GroupwiseSearch']:
+    if 'True' in config['Featsel']['GroupwiseSearch']:
         param_grid['SelectGroups'] = config['Featsel']['GroupwiseSearch']
         for group in config['SelectFeatGroup'].keys():
             param_grid[group] = config['SelectFeatGroup'][group]
 
-    # If scaling is to be applied, add to parameters
-    if config['FeatureScaling']['scale_features']:
-        if type(config['FeatureScaling']['scaling_method']) is not list:
-            param_grid['FeatureScaling'] = [config['FeatureScaling']['scaling_method']]
-        else:
-            param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
+    # Add feature scaling parameters
+    param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
 
     # Add parameters for oversampling methods
     param_grid['Resampling_Use'] =\
@@ -269,6 +250,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
         os.makedirs(os.path.dirname(output_hdf))
 
     trained_classifier.to_hdf(output_hdf, 'EstimatorData')
+
 
     # Check whether we do regression or classification
     regressors = ['SVR', 'RFR', 'SGDR', 'Lasso', 'ElasticNet']

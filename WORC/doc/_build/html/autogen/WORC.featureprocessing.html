@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>featureprocessing Package &mdash; WORC 3.3.1 documentation</title>
+  <title>featureprocessing Package &mdash; WORC 3.3.2 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.1
+                3.3.2
               </div>
             
           
@@ -121,6 +121,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Imputer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Imputer</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Preprocessor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Preprocessor</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Relief"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Relief</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Scalers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Scalers</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.SelectGroups"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SelectGroups</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.SelectIndividuals"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SelectIndividuals</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.StatisticalTestFeatures"><code class="xref py py-mod docutils literal notranslate"><span class="pre">StatisticalTestFeatures</span></code> Module</a></li>
@@ -584,6 +585,49 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 </dd></dl>
 
 </dd></dl>
+
+</div>
+<div class="section" id="module-WORC.featureprocessing.Scalers">
+<span id="scalers-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Scalers</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.Scalers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.featureprocessing.Scalers.RobustStandardScaler">
+<em class="property">class </em><code class="descclassname">WORC.featureprocessing.Scalers.</code><code class="descname">RobustStandardScaler</code><span class="sig-paren">(</span><em>*</em>, <em>copy=True</em>, <em>with_mean=True</em>, <em>with_std=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Scalers.html#RobustStandardScaler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Scalers.RobustStandardScaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.preprocessing._data.StandardScaler</span></code></p>
+<p>Scale features using statistics that are robust to outliers.</p>
+<p>This scaler removes outliers (&lt;5th and &gt;95th percentile) and
+afterwards uses z-scoring to scale the features.</p>
+<p>This scaler is thus a combination of the RobustScaler and StandardScaler
+from sklearn, hence please see those respective documentations for
+more information:</p>
+<p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.RobustScaler.html">https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.RobustScaler.html</a></p>
+<dl class="attribute">
+<dt id="WORC.featureprocessing.Scalers.RobustStandardScaler.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.Scalers'</em><a class="headerlink" href="#WORC.featureprocessing.Scalers.RobustStandardScaler.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.featureprocessing.Scalers.RobustStandardScaler.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Scalers.html#RobustStandardScaler.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Scalers.RobustStandardScaler.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the mean and std to be used for later scaling.
+Parameters
+———-
+X : {array-like, sparse matrix}, shape [n_samples, n_features]</p>
+<blockquote>
+<div><p>The data used to compute the mean and standard deviation
+used for later scaling along the features axis.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>y</dt><dd><p>Ignored</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.featureprocessing.Scalers.test">
+<code class="descclassname">WORC.featureprocessing.Scalers.</code><code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Scalers.html#test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Scalers.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-WORC.featureprocessing.SelectGroups">

@@ -206,6 +206,8 @@ class WORC(object):
         config['Preprocessing']['ROIdilate'] = 'False'
         config['Preprocessing']['ROIdilateradius'] = '10'
         config['Preprocessing']['Method'] = 'z_score'
+        config['Preprocessing']['Resampling'] = 'False'
+        config['Preprocessing']['Resampling_spacing'] = '1, 1, 1'
 
         # Segmentix
         config['Segmentix'] = dict()
@@ -318,8 +320,7 @@ class WORC(object):
 
         # Feature scaling options
         config['FeatureScaling'] = dict()
-        config['FeatureScaling']['scale_features'] = 'True'
-        config['FeatureScaling']['scaling_method'] = 'z_score, robust, minmax'
+        config['FeatureScaling']['scaling_method'] = 'robust_z_score'
 
         # Feature preprocessing before all below takes place
         config['FeatPreProcess'] = dict()
@@ -339,7 +340,7 @@ class WORC(object):
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '0.75, 0.25'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
-        config['Featsel']['ReliefNumFeatures'] = '10, 50, 100'
+        config['Featsel']['ReliefNumFeatures'] = '10, 50'
 
         # Groupwise Featureselection options
         config['SelectFeatGroup'] = dict()
@@ -515,6 +516,21 @@ class WORC(object):
                                                          resources=ResourceLimit(memory=memory),
                                                          step_id='WorkflowOptimization')
 
+                self.source_Ensemble =\
+                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Use']],
+                                                 id='Ensemble',
+                                                 step_id='Evaluation')
+                self.source_LabelType =\
+                    self.network.create_constant('String', [self.configs[0]['Labels']['label_names']],
+                                                 id='LabelType',
+                                                 step_id='Evaluation')
+
+                self.plot_estimator =\
+                    self.network.create_node('worc/PlotEstimator:1.0', tool_version='1.0',
+                                             id='plot_Estimator',
+                                             resources=ResourceLimit(memory='12G'),
+                                             step_id='Evaluation')
+
                 # Outputs
                 self.sink_classification = self.network.create_sink('HDF5', id='classification', step_id='general_sinks')
                 self.sink_performance = self.network.create_sink('JsonFile', id='performance', step_id='general_sinks')
@@ -526,6 +542,17 @@ class WORC(object):
                 self.link_class_2 = self.network.create_link(self.source_patientclass_train.output, self.classify.inputs['patientclass_train'])
                 self.link_class_1.collapse = 'conf'
                 self.link_class_2.collapse = 'pctrain'
+
+                self.plot_estimator.inputs['ensemble'] = self.source_Ensemble.output
+                self.plot_estimator.inputs['label_type'] = self.source_LabelType.output
+
+                if self.labels_test:
+                    pinfo = self.source_patientclass_test.output
+                else:
+                    pinfo = self.source_patientclass_train.output
+
+                self.plot_estimator.inputs['prediction'] = self.classify.outputs['classification']
+                self.plot_estimator.inputs['pinfo'] = pinfo
 
                 # Optional SMAC output
                 if  self.configs[0]['SMAC']['use'] == 'True':
@@ -539,7 +566,7 @@ class WORC(object):
                     self.link_class_3.collapse = 'pctest'
 
                 self.sink_classification.input = self.classify.outputs['classification']
-                self.sink_performance.input = self.classify.outputs['performance']
+                self.sink_performance.input = self.plot_estimator.outputs['output_json']
 
                 if self.masks_normalize_train:
                     self.sources_masks_normalize_train = dict()
@@ -792,6 +819,14 @@ class WORC(object):
                         # processor of WORC
                         if self.configs[nmod]['General']['Segmentix'] == 'True':
                             self.add_segmentix(label, nmod)
+                        elif self.configs[nmod]['Preprocessing']['Resampling'] == 'True':
+                            raise WORCValueError('If you use resampling, ' +
+                                                 'have to use segmentix to ' +
+                                                 ' make sure the mask is ' +
+                                                 'also resampled. Please ' +
+                                                 'set ' +
+                                                 'config["General"]["Segmentix"]' +
+                                                 'to "True".')
 
                         else:
                             # Provide source or elastix segmentations to

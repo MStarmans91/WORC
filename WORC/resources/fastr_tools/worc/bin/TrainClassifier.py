@@ -42,9 +42,6 @@ def main():
     parser.add_argument('-c', '--class', metavar='classification',
                         dest='hdf', type=str, required=True, nargs='+',
                         help='Classification (HDF)')
-    parser.add_argument('-perf', '--perf', metavar='performance',
-                        dest='perf', type=str, required=True, nargs='+',
-                        help='Performance (JSON)')
     parser.add_argument('-fs', '--fs', metavar='fixedsplits',
                         dest='fs', type=str, required=False, nargs='+',
                         help='File containing fixed splits for iterations (XLSX)')
@@ -56,7 +53,7 @@ def main():
     trainclassifier(feat_train=args.feat_train,
                     patientinfo_train=args.pc_train,
                     config=args.cf,
-                    output_hdf=args.hdf, output_json=args.perf,
+                    output_hdf=args.hdf,
                     feat_test=args.feat_test,
                     patientinfo_test=args.pc_test,
                     output_smac=args.smac_results,

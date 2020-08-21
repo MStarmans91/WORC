@@ -34,7 +34,7 @@
   </interface>
   <requirements />
   <tests />
-  <help> usage: TrainClassifier.py [-h] -feat_m1/m2/m3 FEATURES.hdf5 -pc PATIENTCLASS.txt-conf CONFIGURATION.ini -parameters PARAMETERS.ini -class CLASSIFICATION.hdf5 -perf PERFORMANCE.json
+  <help> usage: TrainClassifier.py [-h] -feat_m1/m2/m3 FEATURES.hdf5 -pc PATIENTCLASS.txt-conf CONFIGURATION.ini -parameters PARAMETERS.ini -class CLASSIFICATION.hdf5
     Perform a grid search over several features types to train multiple Support Vector Machine (SVM) classifiers.
 
     -feat_m1, ..m2, ..m3 FEATURES.HDF5 File containing the features for an object. Support up to three feature files for a single object.

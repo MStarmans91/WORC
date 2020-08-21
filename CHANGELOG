@@ -6,6 +6,28 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.3.2 - 2020-08-19
+------------------
+
+Fixed
+~~~~~
+- Bug in fit and score when using scaling: was incorrectly parsed as string
+  and always set to None.
+- Catch exception in ADASYN sampling.
+- Typo in configuration documentation.
+
+Added
+~~~~~~~
+- New type of scaler (robust z-scoring)
+- Resampling of image and mask in preprocessing (preprocessing and segmentix
+  nodes)
+
+Changed
+~~~~~~~
+- Newly added scaler is now also the default to use, instead of the search
+  over the older included scalers.
+- Evaluation of estimator is now separate from training it.
+
 3.3.1 - 2020-07-31
 ------------------
 

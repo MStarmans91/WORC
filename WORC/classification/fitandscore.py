@@ -33,6 +33,7 @@ from WORC.classification import construct_classifier as cc
 from WORC.classification.metrics import check_multimetric_scoring
 from WORC.featureprocessing.Relief import SelectMulticlassRelief
 from WORC.featureprocessing.Imputer import Imputer
+from WORC.featureprocessing.Scalers import RobustStandardScaler
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
@@ -344,10 +345,10 @@ def fit_and_score(X, y, scoring,
 
         # Transform all objectd accordingly
         X_train = GroupSel.transform(X_train)
+        X_test = GroupSel.transform(X_test)
         if verbose:
             print("\t New Length: " + str(len(X_train[0])))
         feature_labels = GroupSel.transform(feature_labels)
-        X_test = GroupSel.transform(X_test)
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -370,24 +371,30 @@ def fit_and_score(X, y, scoring,
 
     # ------------------------------------------------------------------------
     # Feature scaling
-    if 'FeatureScaling' in para_estimator.keys():
-        if verbose:
-            print("Fitting scaler and transforming features.")
+    if verbose and para_estimator['FeatureScaling'] != 'None':
+        print(f'Fitting scaler and transforming features, method ' +
+              f'{para_estimator["FeatureScaling"]}.')
 
-        if para_estimator['FeatureScaling'] == 'z_score':
-            scaler = StandardScaler().fit(X_train)
-        elif para_estimator['FeatureScaling'] == 'robust':
-            scaler = RobustScaler().fit(X_train)
-        elif para_estimator['FeatureScaling'] == 'minmax':
-            scaler = MinMaxScaler().fit(X_train)
-        else:
-            scaler = None
+    if para_estimator['FeatureScaling'] == 'robust_z_score':
+        scaler = RobustStandardScaler().fit(X_train)
+    elif para_estimator['FeatureScaling'] == 'z_score':
+        scaler = StandardScaler().fit(X_train)
+    elif para_estimator['FeatureScaling'] == 'robust':
+        scaler = RobustScaler().fit(X_train)
+    elif para_estimator['FeatureScaling'] == 'minmax':
+        scaler = MinMaxScaler().fit(X_train)
+    elif para_estimator['FeatureScaling'] == 'None':
+        scaler = None
+    else:
+        raise WORCKeyError(f'{para_estimator["FeatureScaling"]} is not a ' +
+                           'valid scaling method. Should be z_score, ' +
+                           'robust, minmax, or None.')
 
-        if scaler is not None:
-            X_train = scaler.transform(X_train)
-            X_test = scaler.transform(X_test)
+    if scaler is not None:
+        X_train = scaler.transform(X_train)
+        X_test = scaler.transform(X_test)
 
-        del para_estimator['FeatureScaling']
+    del para_estimator['FeatureScaling']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -456,10 +463,12 @@ def fit_and_score(X, y, scoring,
 
             # Transform all objects accordingly
             X_train = ReliefSel.transform(X_train)
+            X_test = ReliefSel.transform(X_test)
+
             if verbose:
                 print("\t New Length: " + str(len(X_train[0])))
             feature_labels = ReliefSel.transform(feature_labels)
-            X_test = ReliefSel.transform(X_test)
+
 
         del para_estimator['ReliefUse']
         del para_estimator['ReliefNN']
@@ -504,10 +513,10 @@ def fit_and_score(X, y, scoring,
         if verbose:
             print("\t Original Length: " + str(len(X_train[0])))
         X_train = SelectModel.transform(X_train)
+        X_test = SelectModel.transform(X_test)
         if verbose:
             print("\t New Length: " + str(len(X_train[0])))
         feature_labels = SelectModel.transform(feature_labels)
-        X_test = SelectModel.transform(X_test)
 
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']
@@ -630,8 +639,8 @@ def fit_and_score(X, y, scoring,
 
             else:
                 X_train = StatisticalSel.transform(X_train)
-                feature_labels = StatisticalSel.transform(feature_labels)
                 X_test = StatisticalSel.transform(X_test)
+                feature_labels = StatisticalSel.transform(feature_labels)
 
             if verbose:
                 print("\t New Length: " + str(len(X_train[0])))
@@ -675,6 +684,20 @@ def fit_and_score(X, y, scoring,
                 Sampler = None
                 parameters['Resampling_Use'] = 'False'
 
+            except RuntimeError as e:
+                if 'ADASYN is not suited for this specific dataset. Use SMOTE instead.' in str(e):
+                    # Seldomly occurs, therefore return performance dummy
+                    if verbose:
+                        print(f'[WARNING]: {e}. Returning dummies. Parameters: ')
+                        print(parameters)
+                    para_estimator = delete_nonestimator_parameters(para_estimator)
+
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    else:
+                        return ret
+                else:
+                    raise e
             else:
                 pos = int(np.sum(y_train_temp))
                 neg = int(len(y_train_temp) - pos)

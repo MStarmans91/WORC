@@ -19,6 +19,15 @@ processing Package
     :show-inheritance:
     :special-members:
 
+:mod:`helpers` Module
+---------------------
+
+.. automodule:: WORC.processing.helpers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`label_processing` Module
 ------------------------------
 
