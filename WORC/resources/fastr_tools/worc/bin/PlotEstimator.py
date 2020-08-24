@@ -61,7 +61,8 @@ def main():
         plot_estimator_performance(prediction=args.prediction,
                                    label_data=args.pinfo,
                                    ensemble=args.ensemble,
-                                   label_type=args.label_type)
+                                   label_type=args.label_type,
+                                   output='stats')
 
     with open(args.output_json, 'w') as fp:
         json.dump(stats, fp, indent=4)
