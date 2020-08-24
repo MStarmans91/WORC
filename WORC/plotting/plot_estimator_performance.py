@@ -689,9 +689,12 @@ def plot_estimator_performance(prediction, label_data, label_type,
                         alwayswrong[i_ID] = label
                         print(f"Always Wrong: {i_ID}, label {label}.")
 
+                    timesintestset[i_ID] = patient_classification_list[i_ID]['N_test']
+
                 rankings["Always right"] = alwaysright
                 rankings["Always wrong"] = alwayswrong
                 rankings['Percentages'] = percentages
+                rankings['timesintestset'] = timesintestset
 
                 output['Rankings'] = rankings
 
