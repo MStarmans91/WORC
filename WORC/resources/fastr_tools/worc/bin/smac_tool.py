@@ -271,9 +271,6 @@ def main():
 def convert_cfg(cfg):
     parameters = cfg
 
-    # No featureScaling flag is accepted in fit_and_score,
-    # so remove it
-    parameters.pop('use_featureScaling')
     # fit_and_score requires a flag but only if it is true
     if parameters['Imputation'] == 'False':
         parameters.pop('Imputation')

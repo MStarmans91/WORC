@@ -152,8 +152,13 @@ def build_smac_config(parameters):
     #   9. Oversampling
 
     # Feature scaling
+    # ! NO LONGER PART OF THE SEARCH!
     # 1 hyperparameter:
     #   1) scaling method
+    scaling = Constant('FeatureScaling', value=parameters['FeatureScaling']['scaling_method'])
+    cs.add_hyperparameter(scaling)
+
+    '''
     scaling = CategoricalHyperparameter('use_featureScaling',
                                         choices=['True', 'False'])
     cs.add_hyperparameter(scaling)
@@ -162,6 +167,7 @@ def build_smac_config(parameters):
                                                choices=parameters['FeatureScaling']['scaling_method'])
     cs.add_hyperparameter(scaling_method)
     cs.add_condition(InCondition(child=scaling_method, parent=scaling, values=['True']))
+    '''
 
     # Feature imputation
     # 2 hyperparameters:
