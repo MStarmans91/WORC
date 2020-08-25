@@ -670,6 +670,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 alwaysright = dict()
                 alwayswrong = dict()
                 percentages = dict()
+                timesintestset = dict()
                 for i_ID in patient_classification_list:
                     percentage_right = patient_classification_list[i_ID]['N_correct'] / float(patient_classification_list[i_ID]['N_test'])
 
@@ -700,7 +701,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
             else:
                 # Regression
-                stats['R2-score 95%: '] = f"{np.nanmean(r2_score)} {str(compute_confidence(r2score, N_1, N_2, alpha))}"
+                stats['R2-score 95%: '] = f"{np.nanmean(r2score)} {str(compute_confidence(r2score, N_1, N_2, alpha))}"
                 stats['MSE 95%: '] = f"{np.nanmean(MSE)} {str(compute_confidence(MSE, N_1, N_2, alpha))}"
                 stats['ICC 95%: '] = f"{np.nanmean(coefICC)} {str(compute_confidence(coefICC, N_1, N_2, alpha))}"
                 stats['PearsonC 95%: '] = f"{np.nanmean(PearsonC)} {str(compute_confidence(PearsonC, N_1, N_2, alpha))}"
