@@ -156,7 +156,7 @@ class WORC(object):
         # Memory settings for all fastr nodes
         self.fastr_memory_parameters = dict()
         self.fastr_memory_parameters['FeatureCalculator'] = '14G'
-        self.fastr_memory_parameters['Classification'] = '24G'
+        self.fastr_memory_parameters['Classification'] = '12G'
         self.fastr_memory_parameters['WORCCastConvert'] = '4G'
         self.fastr_memory_parameters['Preprocessing'] = '4G'
         self.fastr_memory_parameters['Elastix'] = '4G'
