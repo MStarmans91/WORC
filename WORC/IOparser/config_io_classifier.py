@@ -257,6 +257,9 @@ def load_config(config_file_path):
          settings['Classification']['CNB_alpha'].split(',')]
 
     # Cross validation settings
+    settings_dict['CrossValidation']['Type'] =\
+        str(settings['CrossValidation']['Type'])
+
     settings_dict['CrossValidation']['N_iterations'] =\
         settings['CrossValidation'].getint('N_iterations')
 

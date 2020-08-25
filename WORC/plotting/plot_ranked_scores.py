@@ -116,7 +116,6 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
         plot_estimator_performance(prediction,
                                    pinfo,
                                    [label_type],
-                                   show_plots=False,
                                    alpha=0.95,
                                    ensemble=ensemble,
                                    output='stats')
@@ -246,7 +245,6 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
         plot_estimator_performance(prediction,
                                    pinfo,
                                    [label_type],
-                                   show_plots=False,
                                    alpha=0.95,
                                    ensemble=ensemble,
                                    output='scores')
@@ -364,12 +362,19 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
                                    ensemble=ensemble,
                                    output_csv=output_csv)
     elif scores == 'percentages':
-        ranked_scores, ranked_truths, ranked_PIDs =\
-            plot_ranked_percentages(estimator=estimator,
-                                    pinfo=pinfo,
-                                    label_type=label_type,
-                                    ensemble=ensemble,
-                                    output_csv=output_csv)
+        if prediction[label_type].config['CrossValidation']['Type'] == 'LOO':
+            print('Cannot rank percentages for LOO, returning dummies.')
+            ranked_scores = ranked_truths = ranked_PIDs = []
+            with open(output_csv, 'w') as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerow(['LOO: Cannot rank percentages.'])
+        else:
+            ranked_scores, ranked_truths, ranked_PIDs =\
+                plot_ranked_percentages(estimator=estimator,
+                                        pinfo=pinfo,
+                                        label_type=label_type,
+                                        ensemble=ensemble,
+                                        output_csv=output_csv)
     else:
         message = ('{} is not a valid scoring method!').format(str(scores))
         raise WORCKeyError(message)

@@ -156,13 +156,14 @@ class WORC(object):
         # Memory settings for all fastr nodes
         self.fastr_memory_parameters = dict()
         self.fastr_memory_parameters['FeatureCalculator'] = '14G'
-        self.fastr_memory_parameters['Classification'] = '12G'
+        self.fastr_memory_parameters['Classification'] = '6G'
         self.fastr_memory_parameters['WORCCastConvert'] = '4G'
         self.fastr_memory_parameters['Preprocessing'] = '4G'
         self.fastr_memory_parameters['Elastix'] = '4G'
         self.fastr_memory_parameters['Transformix'] = '4G'
         self.fastr_memory_parameters['Segmentix'] = '6G'
         self.fastr_memory_parameters['ComBat'] = '12G'
+        self.fastr_memory_parameters['PlotEstimator'] = '12G'
 
         if DebugDetector().do_detection():
             print(fastr.config)
@@ -415,6 +416,7 @@ class WORC(object):
 
         # CrossValidation
         config['CrossValidation'] = dict()
+        config['CrossValidation']['Type'] = ' random_split'
         config['CrossValidation']['N_iterations'] = '100'
         config['CrossValidation']['test_size'] = '0.2'
         config['CrossValidation']['fixed_seed'] = 'False'
@@ -516,10 +518,11 @@ class WORC(object):
                                                  id='LabelType',
                                                  step_id='Evaluation')
 
+                memory = self.fastr_memory_parameters['PlotEstimator']
                 self.plot_estimator =\
                     self.network.create_node('worc/PlotEstimator:1.0', tool_version='1.0',
                                              id='plot_Estimator',
-                                             resources=ResourceLimit(memory='12G'),
+                                             resources=ResourceLimit(memory=memory),
                                              step_id='Evaluation')
 
                 # Outputs
