@@ -155,7 +155,7 @@ def build_smac_config(parameters):
     # ! NO LONGER PART OF THE SEARCH!
     # 1 hyperparameter:
     #   1) scaling method
-    scaling = Constant('FeatureScaling', value=parameters['FeatureScaling']['scaling_method'])
+    scaling = Constant('FeatureScaling', value=parameters['FeatureScaling']['scaling_method'][0])
     cs.add_hyperparameter(scaling)
 
     '''
