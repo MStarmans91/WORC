@@ -2779,8 +2779,10 @@ class BaseSearchCVSMAC(BaseSearchCV):
         random_id = random.randint(1000, 9999)
         run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S' + str(random_id))
         instance_files = dict()
+        fixed_instance_seeds = range(1000,5000)
         for i in range(self.param_distributions['SMAC']['n_smac_cores']):
-            instance_info = [i, random.randint(0, 2 ** 32 - 1), run_name]
+            # FIXED THE SMAC SEED NOW FOR TESTING (it was random.randint(0, 2 ** 32 - 1))
+            instance_info = [i, fixed_instance_seeds[i], run_name]
             instance_data = pd.Series(instance_info,
                                       index=instance_labels,
                                       name=f'instance data {i}')
