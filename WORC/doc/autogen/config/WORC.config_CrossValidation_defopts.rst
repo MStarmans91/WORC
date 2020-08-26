@@ -1,7 +1,8 @@
-============ ======= =======
-Subkey       Default Options
-============ ======= =======
-N_iterations 100     Integer
-test_size    0.2     Float  
-fixed_seed   False   Boolean
-============ ======= =======
+============ ============= =============
+Subkey       Default       Options      
+============ ============= =============
+Type          random_split  random_split
+N_iterations 100           Integer      
+test_size    0.2           Float        
+fixed_seed   False         Boolean      
+============ ============= =============

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.3.2 documentation</title>
+  <title>Configuration &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -2006,13 +2006,16 @@ using cross validation, specify the following settings.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>N_iterations</p></td>
+<tr class="row-even"><td><p>Type</p></td>
+<td><p>WIP</p></td>
+</tr>
+<tr class="row-odd"><td><p>N_iterations</p></td>
 <td><p>Number of times the data is split in training and test in the outer cross-validation.</p></td>
 </tr>
-<tr class="row-odd"><td><p>test_size</p></td>
+<tr class="row-even"><td><p>test_size</p></td>
 <td><p>The percentage of data to be used for testing.</p></td>
 </tr>
-<tr class="row-even"><td><p>fixed_seed</p></td>
+<tr class="row-odd"><td><p>fixed_seed</p></td>
 <td><p>If True, use a fixed seed for the cross-validation splits.</p></td>
 </tr>
 </tbody>
@@ -2020,9 +2023,9 @@ using cross validation, specify the following settings.</p>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 46%" />
-<col style="width: 27%" />
-<col style="width: 27%" />
+<col style="width: 32%" />
+<col style="width: 34%" />
+<col style="width: 34%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2031,15 +2034,19 @@ using cross validation, specify the following settings.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>N_iterations</p></td>
+<tr class="row-even"><td><p>Type</p></td>
+<td><p>random_split</p></td>
+<td><p>random_split</p></td>
+</tr>
+<tr class="row-odd"><td><p>N_iterations</p></td>
 <td><p>100</p></td>
 <td><p>Integer</p></td>
 </tr>
-<tr class="row-odd"><td><p>test_size</p></td>
+<tr class="row-even"><td><p>test_size</p></td>
 <td><p>0.2</p></td>
 <td><p>Float</p></td>
 </tr>
-<tr class="row-even"><td><p>fixed_seed</p></td>
+<tr class="row-odd"><td><p>fixed_seed</p></td>
 <td><p>False</p></td>
 <td><p>Boolean</p></td>
 </tr>

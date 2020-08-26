@@ -35,7 +35,7 @@ For more information regarding radiomics, we recommend the following book chapte
 
     `Martijn PA Starmans, Sebastian R van der Voort, Jose M Castillo Tovar, Jifke F Veenland, Stefan Klein, Wiro J Niessen. "Radiomics: Data mining using quantitative medical image features" Handbook of Medical Image Computing and Computer Assisted Intervention (MICCAI) 2020 <https://www.sciencedirect.com/science/article/pii/B9780128161760000235/>`_
 
-The article on WORC is currently in press. WORC has been presented in the following:
+The article on WORC is currently in preparation. WORC has been presented in the following:
 
     `M. P. A. Starmans, S. R. van der Voort, M. Vos, F. Incekara, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen and S. Klein. "Fully automatic construction of optimal radiomics workflows." European Conference of Radiology (ECR) 2019. <https://youtu.be/iDUCIxw0D4I/>`_
 

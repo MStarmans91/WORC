@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.WORC &mdash; WORC 3.3.2 documentation</title>
+  <title>WORC.WORC &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -321,13 +321,14 @@
         <span class="c1"># Memory settings for all fastr nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;FeatureCalculator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;14G&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;12G&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;6G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;WORCCastConvert&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Elastix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Transformix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;6G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;12G&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;PlotEstimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;12G&#39;</span>
 
         <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="p">)</span></div>
@@ -580,6 +581,7 @@
 
         <span class="c1"># CrossValidation</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; random_split&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;test_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;fixed_seed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
@@ -681,10 +683,11 @@
                                                  <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;LabelType&#39;</span><span class="p">,</span>
                                                  <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
+                <span class="n">memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;PlotEstimator&#39;</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">plot_estimator</span> <span class="o">=</span>\
                     <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotEstimator:1.0&#39;</span><span class="p">,</span> <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                              <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_Estimator&#39;</span><span class="p">,</span>
-                                             <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
+                                             <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">),</span>
                                              <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
                 <span class="c1"># Outputs</span>

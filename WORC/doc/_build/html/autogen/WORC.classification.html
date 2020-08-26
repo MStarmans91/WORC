@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>classification Package &mdash; WORC 3.3.2 documentation</title>
+  <title>classification Package &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -2018,6 +2018,13 @@ provided configuration.</p>
 <div class="section" id="module-WORC.classification.crossval">
 <span id="crossval-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">crossval</span></code> Module<a class="headerlink" href="#module-WORC.classification.crossval" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="WORC.classification.crossval.LOO_cross_validation">
+<code class="descclassname">WORC.classification.crossval.</code><code class="descname">LOO_cross_validation</code><span class="sig-paren">(</span><em>image_features</em>, <em>classes</em>, <em>patient_ids</em>, <em>param_grid</em>, <em>config</em>, <em>modus</em>, <em>test_size</em>, <em>start=0</em>, <em>save_data=None</em>, <em>tempsave=False</em>, <em>fixedsplits=None</em>, <em>fixed_seed=False</em>, <em>use_fastr=None</em>, <em>fastr_plugin=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/crossval.html#LOO_cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.crossval.LOO_cross_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cross-validation in which each sample is once used as the test set.</p>
+<p>Mostly based on the default sklearn object.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="WORC.classification.crossval.crossval">
 <code class="descclassname">WORC.classification.crossval.</code><code class="descname">crossval</code><span class="sig-paren">(</span><em>config</em>, <em>label_data</em>, <em>image_features</em>, <em>param_grid=None</em>, <em>use_fastr=False</em>, <em>fastr_plugin=None</em>, <em>tempsave=False</em>, <em>fixedsplits=None</em>, <em>ensemble={'Use': False}</em>, <em>outputfolder=None</em>, <em>modus='singlelabel'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/crossval.html#crossval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.crossval.crossval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs multiple individual classifiers based on the label settings</p>
@@ -2026,7 +2033,7 @@ provided configuration.</p>
 available fields and formatting.</p>
 </dd>
 <dt>label_data: dict, mandatory</dt><dd><p>Should contain the following:
-patient_IDs (list): IDs of the patients, used to keep track of test and</p>
+patient_ids (list): ids of the patients, used to keep track of test and</p>
 <blockquote>
 <div><p>training sets, and label data</p>
 </div></blockquote>
@@ -2057,13 +2064,13 @@ config file. Especially suited for clusters.</p>
 <dt>fastr_plugin: string, default None</dt><dd><p>Determines which plugin is used for fastr executions.
 When None, uses the default plugin from the fastr config.</p>
 </dd>
-<dt>tempsave: boolean, default False</dt><dd><p>If True, create a .hdf5 file after each cross validation containing
+<dt>tempsave: boolean, default False</dt><dd><p>If True, create a .hdf5 file after each Cross-validation containing
 the classifier and results from that that split. This is written to
 the GSOut folder in your fastr output mount. If False, only
-the result of all combined cross validations will be saved to a .hdf5
+the result of all combined Cross-validations will be saved to a .hdf5
 file. This will also be done if set to True.</p>
 </dd>
-<dt>fixedsplits: string, optional</dt><dd><p>By default, random split cross validation is used to train and
+<dt>fixedsplits: string, optional</dt><dd><p>By default, random split Cross-validation is used to train and
 evaluate the machine learning methods. Optionally, you can provide
 a .xlsx file containing fixed splits to be used. See the Github Wiki
 for the format.</p>
@@ -2088,7 +2095,7 @@ classification is performed (‘multilabel’).</p>
 <dl>
 <dt>Arguments:</dt><dd><p>config (Dict): Dictionary with config settings
 label_data (Dict): should contain:
-patient_IDs (list): IDs of the patients, used to keep track of test and</p>
+patient_ids (list): ids of the patients, used to keep track of test and</p>
 <blockquote>
 <div><p>training sets, and label data</p>
 </div></blockquote>
@@ -2111,6 +2118,15 @@ classification is performed (‘multilabel’).</p>
 <dt>Returns:</dt><dd><p>classifier_data (pandas dataframe)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.classification.crossval.random_split_cross_validation">
+<code class="descclassname">WORC.classification.crossval.</code><code class="descname">random_split_cross_validation</code><span class="sig-paren">(</span><em>image_features</em>, <em>classes</em>, <em>patient_ids</em>, <em>n_iterations</em>, <em>param_grid</em>, <em>config</em>, <em>modus</em>, <em>test_size</em>, <em>start=0</em>, <em>save_data=None</em>, <em>tempsave=False</em>, <em>fixedsplits=None</em>, <em>fixed_seed=False</em>, <em>use_fastr=None</em>, <em>fastr_plugin=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/crossval.html#random_split_cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.crossval.random_split_cross_validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cross-validation in which data is randomly split in each iteration.</p>
+<p>Due to options of doing single-label and multi-label classification,
+stratified splitting, and regression, we use a manual loop instead
+of the default scikit-learn object.</p>
 </dd></dl>
 
 </div>
