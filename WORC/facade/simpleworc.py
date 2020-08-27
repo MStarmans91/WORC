@@ -272,9 +272,9 @@ class SimpleWORC():
 
         # TODO: implement sanity check semantics file e.g. is it a semantics file and are there semantics available
         if is_training:
-            self._semantics_file_train = semantics_file.as_uri().replace('%20', ' ')
+            self._semantics_file_train = [semantics_file.as_uri().replace('%20', ' ')]
         else:
-            self._semantics_file_test = semantics_file.as_uri().replace('%20', ' ')
+            self._semantics_file_test = [semantics_file.as_uri().replace('%20', ' ')]
 
     def predict_labels(self, label_names: list):
         """Determine which label(s) to predict in your experiments.
@@ -429,6 +429,9 @@ class SimpleWORC():
 
         if self._labels_file_test:
             self._worc.labels_test = self._labels_file_test
+
+        if self._semantics_file_test:
+            self._worc.semantics_test = self._semantics_file_test
 
         # Set the labels to predict
         self._worc.label_names = ', '.join(self._label_names)

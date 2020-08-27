@@ -66,6 +66,10 @@ def load_config(config_file_path):
         [str(item).strip() for item in
          settings['FeatureScaling']['scaling_method'].split(',')]
 
+    settings_dict['FeatureScaling']['skip_features'] =\
+        [str(item).strip() for item in
+         settings['FeatureScaling']['skip_features'].split(',')]
+
     # Feature selection
     settings_dict['Featsel']['Variance'] =\
         settings['Featsel'].getfloat('Variance')

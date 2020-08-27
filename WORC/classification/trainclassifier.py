@@ -140,6 +140,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     # Add feature scaling parameters
     param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
+    param_grid['FeatureScaling_skip_features'] =\
+        [config['FeatureScaling']['skip_features']]
 
     # Add parameters for oversampling methods
     param_grid['Resampling_Use'] =\

@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
 from sklearn.model_selection._validation import _fit_and_score
 import numpy as np
 from sklearn.linear_model import Lasso
@@ -27,13 +26,12 @@ from sklearn.ensemble import RandomForestClassifier
 from WORC.classification.ObjectSampler import ObjectSampler
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils.validation import _num_samples
-from sklearn.metrics import make_scorer, average_precision_score
 from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.classification.metrics import check_multimetric_scoring
 from WORC.featureprocessing.Relief import SelectMulticlassRelief
 from WORC.featureprocessing.Imputer import Imputer
-from WORC.featureprocessing.Scalers import RobustStandardScaler
+from WORC.featureprocessing.Scalers import WORCScaler
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
@@ -353,7 +351,7 @@ def fit_and_score(X, y, scoring,
         # TODO: Make a specific WORC exception for this warning.
         if verbose:
             print('[WARNING]: No features are selected! Probably all feature groups were set to False. Parameters:')
-            print(para)
+            print(parameters)
 
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
@@ -369,20 +367,13 @@ def fit_and_score(X, y, scoring,
         print(f'Fitting scaler and transforming features, method ' +
               f'{para_estimator["FeatureScaling"]}.')
 
-    if para_estimator['FeatureScaling'] == 'robust_z_score':
-        scaler = RobustStandardScaler().fit(X_train)
-    elif para_estimator['FeatureScaling'] == 'z_score':
-        scaler = StandardScaler().fit(X_train)
-    elif para_estimator['FeatureScaling'] == 'robust':
-        scaler = RobustScaler().fit(X_train)
-    elif para_estimator['FeatureScaling'] == 'minmax':
-        scaler = MinMaxScaler().fit(X_train)
-    elif para_estimator['FeatureScaling'] == 'None':
+    scaling_method = para_estimator['FeatureScaling']
+    if scaling_method == 'None':
         scaler = None
     else:
-        raise WORCKeyError(f'{para_estimator["FeatureScaling"]} is not a ' +
-                           'valid scaling method. Should be z_score, ' +
-                           'robust, minmax, or None.')
+        skip_features = para_estimator['FeatureScaling_skip_features']
+        scaler = WORCScaler(method=scaling_method, skip_features=skip_features)
+        scaler.fit(X_train, feature_labels[0])
 
     if scaler is not None:
         X_train = scaler.transform(X_train)

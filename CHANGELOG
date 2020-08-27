@@ -9,9 +9,16 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_
 3.3.3 - Unreleased
 ------------------
 
+Changed
+~~~~~~~
+- By default, semantic features are skipped in scaling, as the robust scaler
+  cannot deal well with categorical variables.
+- Wrapped scalers in single WORC scaler object to allow above for all scalers.
+
 Added
 ~~~~~~~
-- Leave-One-Out (LOO) cross-validation
+- Leave-One-Out (LOO) cross-validation.
+- Option to skip features in scaling.
 
 3.3.2 - 2020-08-19
 ------------------
