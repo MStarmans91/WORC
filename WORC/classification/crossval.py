@@ -28,10 +28,12 @@ from WORC.classification.regressors import regressors
 import glob
 
 
-def random_split_cross_validation(image_features, classes, patient_ids,
+def random_split_cross_validation(image_features, feature_labels, classes,
+                                  patient_ids,
                                   n_iterations, param_grid, config,
                                   modus, test_size, start=0, save_data=None,
-                                  tempsave=False, fixedsplits=None,
+                                  tempsave=False, tempfolder=None,
+                                  fixedsplits=None,
                                   fixed_seed=False, use_fastr=None,
                                   fastr_plugin=None):
     """Cross-validation in which data is randomly split in each iteration.
@@ -245,10 +247,10 @@ def random_split_cross_validation(image_features, classes, patient_ids,
     return save_data
 
 
-def LOO_cross_validation(image_features, classes, patient_ids,
+def LOO_cross_validation(image_features, feature_labels, classes, patient_ids,
                          param_grid, config,
                          modus, test_size, start=0, save_data=None,
-                         tempsave=False, fixedsplits=None,
+                         tempsave=False, tempfolder=None, fixedsplits=None,
                          fixed_seed=False, use_fastr=None,
                          fastr_plugin=None):
     """Cross-validation in which each sample is once used as the test set.
@@ -372,8 +374,7 @@ def crossval(config, label_data, image_features,
              fastr_plugin=None, tempsave=False,
              fixedsplits=None, ensemble={'Use': False}, outputfolder=None,
              modus='singlelabel'):
-    """
-    Constructs multiple individual classifiers based on the label settings
+    """Constructs multiple individual classifiers based on the label settings.
 
     Parameters
     ----------
@@ -518,6 +519,7 @@ def crossval(config, label_data, image_features,
             logging.debug('Performing random-split cross-validations.')
             save_data =\
                 random_split_cross_validation(image_features=image_features,
+                                              feature_labels=feature_labels,
                                               classes=i_class,
                                               patient_ids=patient_ids,
                                               n_iterations=n_iterations,
@@ -528,6 +530,7 @@ def crossval(config, label_data, image_features,
                                               start=start,
                                               save_data=save_data,
                                               tempsave=tempsave,
+                                              tempfolder=tempfolder,
                                               fixedsplits=fixedsplits,
                                               fixed_seed=fixed_seed,
                                               use_fastr=use_fastr,
@@ -537,6 +540,7 @@ def crossval(config, label_data, image_features,
             logging.debug('Performing leave-one-out cross-validations.')
             save_data =\
                 LOO_cross_validation(image_features=image_features,
+                                     feature_labels=feature_labels,
                                      classes=i_class,
                                      patient_ids=patient_ids,
                                      param_grid=param_grid,
@@ -594,8 +598,7 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
                image_features_test, param_grid=None, use_fastr=False,
                fastr_plugin=None, ensemble={'Use': False},
                modus='singlelabel'):
-    """
-    Constructs multiple individual classifiers based on the label settings
+    """Constructs multiple individual classifiers based on the label settings.
 
     Arguments:
         config (Dict): Dictionary with config settings
