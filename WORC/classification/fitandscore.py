@@ -372,8 +372,15 @@ def fit_and_score(X, y, scoring,
         scaler = None
     else:
         skip_features = para_estimator['FeatureScaling_skip_features']
-        scaler = WORCScaler(method=scaling_method, skip_features=skip_features)
-        scaler.fit(X_train, feature_labels[0])
+        n_skip_feat = len([i for i in feature_labels[0] if any(e in i for e in skip_features)])
+        if n_skip_feat == len(X_train[0]):
+            # Don't need to scale any features
+            if verbose:
+                print('[WORC Warning] Skipping scaling, only skip features selected.')
+            scaler = None
+        else:
+            scaler = WORCScaler(method=scaling_method, skip_features=skip_features)
+            scaler.fit(X_train, feature_labels[0])
 
     if scaler is not None:
         X_train = scaler.transform(X_train)
