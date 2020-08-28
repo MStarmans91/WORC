@@ -477,6 +477,8 @@ def crossval(config, label_data, image_features,
                                   t.patient_ID_test, t.random_seed)
 
                 save_data.append(temp_save_data)
+    else:
+        tempfolder = None
 
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
