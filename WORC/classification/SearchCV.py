@@ -2864,6 +2864,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         summary = dict()
         all_costs = []
         best_cost = 1
+        all_runtimes = []
         for fn in smac_filenames:
             with open(fn, 'r') as f:
                 smac_result = json.load(f)
@@ -2871,6 +2872,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
             nr_of_inc_updates = run_data['inc_changed']
             current_cost = run_data['inc_costs'][nr_of_inc_updates - 1]
             all_costs.append(current_cost)
+            all_runtimes.append(run_data['wallclock_time_used'])
             if current_cost < best_cost:
                 best_cost = current_cost
                 summary['best_score'] = current_cost
@@ -2881,6 +2883,9 @@ class BaseSearchCVSMAC(BaseSearchCV):
             smac_results_for_this_cv[run_name].update(smac_result)
         summary['average_score'] = np.mean(all_costs)
         summary['std_score'] = np.std(all_costs)
+        summary['shortest_runtime'] = np.min(all_runtimes)
+        summary['longest_runtime'] = np.max(all_runtimes)
+        summary['average_runtime'] = np.mean(all_runtimes)
         final_summary = {'cv-summary': summary}
         smac_results_for_this_cv[run_name].update(final_summary)
 
