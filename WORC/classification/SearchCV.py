@@ -1570,7 +1570,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         # Remove the temporary folder used
         if name != 'DEBUG_0':
             # Do delete if not debugging for first iteration
-            shutil.rmtree(tempfolder)
+            #shutil.rmtree(tempfolder)
 
         # Process the results of the fitting procedure
         self.process_fit(n_splits=n_splits,
@@ -2826,9 +2826,17 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
 
+        # Report on the runtime of executing the smac network for this cv
+        start_time = time.time()
+
         network.execute(source_data, sink_data,
                         tmpdir=os.path.join(tempfolder, 'tmp'),
                         execution_plugin=self.fastr_plugin)
+
+        end_time = time.time()
+        runtime = end_time - start_time
+        with open(os.path.join(fastr.config.mounts['tmp'], 'GS', name, '/runtime.txt'), 'a') as runtimefile:
+            runtimefile.write(str(runtime) + 'seconds' + '\n')
 
         # Check whether all jobs have finished
         expected_no_files = len(instance_files)
