@@ -196,10 +196,6 @@ def main():
     smac_stats['inc_costs'] = costs
     smac_stats['inc_configs'] = configs
 
-    # Update the result file of the optimization
-    # ! This is inaccurate for multiple instances
-    result_file = data['smac_result_file']
-
     result_file_name = '/scratch/mdeen/tested_configs/' + run_info['run_name'] +\
                        '/smac_stats_' + str(run_info['run_id']) + '.json'
     if not os.path.exists(os.path.dirname(result_file_name)):
@@ -207,47 +203,6 @@ def main():
     with open(result_file_name, 'a') as file:
         smac_results = {run_info['run_id']: smac_stats}
         json.dump(smac_results, file, indent=4)
-
-    '''
-    if os.path.exists(result_file):
-        with open(result_file, 'r') as jsonfile:
-            smac_results = json.load(jsonfile)
-        if smac_results.has_key(run_info['run_name']):
-            smac_results[run_info['run_name']][run_info['run_id']] = smac_stats
-        else:
-            smac_results[run_info['run_name']] = {run_info['run_id']: smac_stats}
-        with open(result_file, 'w') as jsonfile:
-            json.dump(smac_results, jsonfile, indent=4)
-    else:
-        with open(result_file, 'a') as jsonfile:
-            smac_results = {run_info['run_name']: {run_info['run_id']: smac_stats}}
-            json.dump(smac_results, jsonfile, indent=4)
-
-    
-    if os.path.exists(result_file):
-        with open(result_file, 'r') as jsonfile:
-            smac_results = json.load(jsonfile)
-        cv_iteration = len(smac_results)
-        last_instance_name = smac_results['cv-' + str(cv_iteration-1)]['0']['instance_name']
-        with open('/scratch/mdeen/debug.txt', 'a') as debugfile:
-            debugfile.write('last instance name: ' + last_instance_name)
-            debugfile.write('run_id: ' + run_info['run_id'])
-        if last_instance_name == run_info['run_name']:
-
-            # This means we are still in the same outer cv
-            smac_results['cv-' + str(cv_iteration-1)][run_info['run_id']] = smac_stats
-        else:
-            smac_results['cv-' + str(cv_iteration)][run_info['run_id']] = smac_stats
-        with open(result_file, 'w') as jsonfile:
-            json.dump(smac_results, jsonfile, indent=4)
-    else:
-        with open(result_file, 'a') as jsonfile:
-            with open('/scratch/mdeen/debug.txt', 'a') as debugfile:
-                debugfile.write('outer else statement called')
-                debugfile.write('run_id: ' + run_info['run_id'])
-            smac_results = {'cv-0': {run_info['run_id']: smac_stats}}
-            json.dump(smac_results, jsonfile, indent=4)
-    '''
 
     source_labels = ['RET']
 
