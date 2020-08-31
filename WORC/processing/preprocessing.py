@@ -47,7 +47,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
     # Apply bias correction
     if config['Preprocessing']['BiasCorrection']:
         usemask = config['Preprocessing']['BiasCorrection_Mask']
-        image = bias_correct_image(image=image, usemask=usemask)
+        image = bias_correct_image(img=image, usemask=usemask)
     else:
         print('No bias correction was applied.')
 
