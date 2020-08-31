@@ -67,6 +67,7 @@ from WORC.detectors.detectors import DebugDetector
 # Imports used in the Bayesian optimization
 from WORC.classification.smac import build_smac_config
 from datetime import datetime
+import time
 
 
 def rms_score(truth, prediction):
@@ -1523,9 +1524,17 @@ class BaseSearchCVfastr(BaseSearchCV):
                        'parameters': parameter_files}
         sink_data = {'output': f"vfs://tmp/GS/{name}/output_{{sample_id}}_{{cardinality}}{{ext}}"}
 
+        # Report on the runtime of executing the fitandscore network for this cv
+        start_time = time.time()
+
         network.execute(source_data, sink_data,
                         tmpdir=os.path.join(tempfolder, 'tmp'),
                         execution_plugin=self.fastr_plugin)
+
+        end_time = time.time()
+        runtime = end_time - start_time
+        with open(os.path.join(fastr.config.mounts['tmp'], 'GS', name, '/runtime.txt'), 'a') as runtimefile:
+            runtimefile.write(str(runtime) + 'seconds' + '\n')
 
         # Check whether all jobs have finished
         expected_no_files = len(traintest_files) * len(parameter_files)
