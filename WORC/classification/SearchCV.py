@@ -1533,7 +1533,7 @@ class BaseSearchCVfastr(BaseSearchCV):
 
         end_time = time.time()
         runtime = end_time - start_time
-        with open(os.path.join('scratch/mdeen/runtime/RS-runtime/', name, '/runtime.txt'), 'a') as runtimefile:
+        with open(os.path.join('/scratch/mdeen/runtime/RS-runtime/', name, '/runtime.txt'), 'a') as runtimefile:
             runtimefile.write(str(runtime) + 'seconds' + '\n')
 
         # Check whether all jobs have finished
@@ -2835,7 +2835,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         end_time = time.time()
         runtime = end_time - start_time
-        with open(os.path.join('scratch/mdeen/runtime/SMAC-runtime/', name, '/runtime.txt'), 'a') as runtimefile:
+        with open(os.path.join('/scratch/mdeen/runtime/SMAC-runtime/', name, '/runtime.txt'), 'a') as runtimefile:
             runtimefile.write(str(runtime) + 'seconds' + '\n')
 
         # Check whether all jobs have finished
