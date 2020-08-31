@@ -1568,7 +1568,7 @@ class BaseSearchCVfastr(BaseSearchCV):
               zip(*save_data)
 
         # Remove the temporary folder used
-        if name != 'DEBUG_0':
+        #if name != 'DEBUG_0':
             # Do delete if not debugging for first iteration
             #shutil.rmtree(tempfolder)
 
