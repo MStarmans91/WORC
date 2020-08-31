@@ -67,6 +67,13 @@ def load_config(config_file_path):
     settings_dict['Preprocessing']['Method'] =\
         str(settings['Preprocessing']['Method'])
 
+    # Bias Correction
+    settings_dict['Preprocessing']['BiasCorrection'] =\
+        settings['Preprocessing'].getboolean('BiasCorrection')
+
+    settings_dict['Preprocessing']['BiasCorrection_Mask'] =\
+        settings['Preprocessing'].getboolean('BiasCorrection_Mask')
+
     # Resampling
     settings_dict['Preprocessing']['Resampling'] =\
         settings['Preprocessing'].getboolean('Resampling')

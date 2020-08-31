@@ -19,6 +19,7 @@ Added
 ~~~~~~~
 - Leave-One-Out (LOO) cross-validation.
 - Option to skip features in scaling.
+- Bias correction in preprocessing.
 
 3.3.2 - 2020-08-19
 ------------------

@@ -136,6 +136,8 @@ def generate_config_options():
     config['Preprocessing']['Method'] = 'z_score, minmed'
     config['Preprocessing']['Resampling'] = 'True, False'
     config['Preprocessing']['Resampling_spacing'] = 'Float, Float, Float'
+    config['Preprocessing']['BiasCorrection'] = 'True, False'
+    config['Preprocessing']['BiasCorrection_Mask'] = 'Float, Float, Float'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -401,6 +403,8 @@ def generate_config_descriptions():
     config['Preprocessing']['Method'] = 'Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.'
     config['Preprocessing']['Resampling'] = 'Determine whether the image and mask will be resampled or not.'
     config['Preprocessing']['Resampling_spacing'] = 'Spacing to resample image and mask to, if resampling is used.'
+    config['Preprocessing']['BiasCorrection'] = 'Determine whether N4 Bias correction will be applied or not.'
+    config['Preprocessing']['BiasCorrection_Mask'] = 'Whether withing bias correction, a mask generated through Otsu thresholding is used or not.'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated

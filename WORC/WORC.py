@@ -209,6 +209,8 @@ class WORC(object):
         config['Preprocessing']['Method'] = 'z_score'
         config['Preprocessing']['Resampling'] = 'False'
         config['Preprocessing']['Resampling_spacing'] = '1, 1, 1'
+        config['Preprocessing']['BiasCorrection'] = 'False'
+        config['Preprocessing']['BiasCorrection_Mask'] = 'False'
 
         # Segmentix
         config['Segmentix'] = dict()

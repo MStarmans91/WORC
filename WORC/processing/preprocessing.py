@@ -44,6 +44,13 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         image = image*metadata.RescaleSlope +\
             metadata.RescaleIntercept
 
+    # Apply bias correction
+    if config['Preprocessing']['BiasCorrection']:
+        usemask = config['Preprocessing']['BiasCorrection_Mask']
+        image = bias_correct_image(image=image, usemask=usemask)
+    else:
+        print('No bias correction was applied.')
+
     # Apply normalization
     if config['Preprocessing']['Normalize']:
         method = config['Preprocessing']['Method']
@@ -63,7 +70,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
     else:
         print('No normalization was applied.')
 
-    # Apply preprocessing
+    # Apply resampling
     if config['Preprocessing']['Resampling']:
         new_spacing = config['Preprocessing']['Resampling_spacing']
         print(f'Apply resampling of image to spacing {new_spacing}.')
@@ -73,6 +80,62 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         print('No resampling was applied.')
 
     return image
+
+
+def bias_correct_image(img, usemask=False):
+    # print('working on N4')
+    initial_img = img
+    img_size = initial_img.GetSize()
+    img_spacing = initial_img.GetSpacing()
+    img_pixel_ID = img.GetPixelID()
+
+    # Cast to float to enable bias correction to be used
+    image = sitk.Cast(img, sitk.sitkFloat64)
+
+    # Set zeroes to a small number to prevent division by zero
+    image = sitk.GetArrayFromImage(image)
+    image[image == 0] = np.finfo(float).eps
+    image = sitk.GetImageFromArray(image)
+    image.CopyInformation(initial_img)
+
+    # Calculating a shrink factor that will be used to reduce image size and increase N4BC speed
+    shrink_factor = [(img_size[0] // 64 if img_size[0] % 128 is not img_size[0] else 1),
+                     (img_size[1] // 64 if img_size[1] % 128 is not img_size[1] else 1),
+                     (img_size[2] // 64 if img_size[2] % 128 is not img_size[2] else 1)]
+
+    # shrink the image and the otsu masked filter
+    shrink_filter = sitk.ShrinkImageFilter()
+    image_shr = shrink_filter.Execute(image, shrink_factor)
+
+    if usemask:
+        maskImage = sitk.OtsuThreshold(image, 0, 1)
+        maskImage_shr = shrink_filter.Execute(maskImage, shrink_factor)
+
+    # apply image bias correction using N4 bias correction
+    corrector = sitk.N4BiasFieldCorrectionImageFilter()
+    if usemask:
+        corrected_image_shr = corrector.Execute(image_shr, maskImage_shr)
+    else:
+        corrected_image_shr = corrector.Execute(image_shr)
+
+    # extract the bias field by dividing the shrunk image by the corrected shrunk image
+    exp_logBiasField = image_shr / corrected_image_shr
+
+    # resample the bias field to match original image
+    reference_image2 = sitk.Image(img_size, exp_logBiasField.GetPixelIDValue())
+    reference_image2.SetOrigin(initial_img.GetOrigin())
+    reference_image2.SetDirection(initial_img.GetDirection())
+    reference_image2.SetSpacing(img_spacing)
+    resampled_exp_logBiasField = sitk.Resample(exp_logBiasField, reference_image2)
+
+    # extract the corrected image by dividing the initial image by the resampled bias field that was calculated earlier
+    divide_filter2 = sitk.DivideImageFilter()
+    corrected_image = divide_filter2.Execute(image, resampled_exp_logBiasField)
+
+    # cast back to initial type to allow for further processing
+    corrected_image = sitk.Cast(corrected_image, img_pixel_ID)
+
+    return corrected_image
 
 
 def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',
