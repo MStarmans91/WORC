@@ -46,6 +46,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
 
     # Apply bias correction
     if config['Preprocessing']['BiasCorrection']:
+        print('Apply bias correction.')
         usemask = config['Preprocessing']['BiasCorrection_Mask']
         image = bias_correct_image(img=image, usemask=usemask)
     else:
@@ -98,42 +99,15 @@ def bias_correct_image(img, usemask=False):
     image = sitk.GetImageFromArray(image)
     image.CopyInformation(initial_img)
 
-    # Calculating a shrink factor that will be used to reduce image size and increase N4BC speed
-    shrink_factor = [(img_size[0] // 64 if img_size[0] % 128 is not img_size[0] else 1),
-                     (img_size[1] // 64 if img_size[1] % 128 is not img_size[1] else 1),
-                     (img_size[2] // 64 if img_size[2] % 128 is not img_size[2] else 1)]
-
-    # shrink the image and the otsu masked filter
-    shrink_filter = sitk.ShrinkImageFilter()
-    image_shr = shrink_filter.Execute(image, shrink_factor)
-
     if usemask:
         maskImage = sitk.OtsuThreshold(image, 0, 1)
-        maskImage_shr = shrink_filter.Execute(maskImage, shrink_factor)
 
     # apply image bias correction using N4 bias correction
     corrector = sitk.N4BiasFieldCorrectionImageFilter()
     if usemask:
-        corrected_image_shr = corrector.Execute(image_shr, maskImage_shr)
+        corrected_image = corrector.Execute(image, maskImage)
     else:
-        corrected_image_shr = corrector.Execute(image_shr)
-
-    # extract the bias field by dividing the shrunk image by the corrected shrunk image
-    exp_logBiasField = image_shr / corrected_image_shr
-
-    # resample the bias field to match original image
-    reference_image2 = sitk.Image(img_size, exp_logBiasField.GetPixelIDValue())
-    reference_image2.SetOrigin(initial_img.GetOrigin())
-    reference_image2.SetDirection(initial_img.GetDirection())
-    reference_image2.SetSpacing(img_spacing)
-    resampled_exp_logBiasField = sitk.Resample(exp_logBiasField, reference_image2)
-
-    # extract the corrected image by dividing the initial image by the resampled bias field that was calculated earlier
-    divide_filter2 = sitk.DivideImageFilter()
-    corrected_image = divide_filter2.Execute(image, resampled_exp_logBiasField)
-
-    # cast back to initial type to allow for further processing
-    corrected_image = sitk.Cast(corrected_image, img_pixel_ID)
+        corrected_image = corrector.Execute(image)
 
     return corrected_image
 
