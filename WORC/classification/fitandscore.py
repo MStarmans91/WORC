@@ -799,7 +799,7 @@ def fit_and_score(X, y, scoring,
 
     # End the timing and store the fit_time
     end_time = time.time()
-    runtime = 45 #end_time - start_time
+    runtime = end_time - start_time
     if return_train_score:
         ret[3] = runtime
     else:
