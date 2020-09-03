@@ -264,7 +264,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
         all_inc_evaluations = []
         all_inc_changed = []
         all_average_runtimes = []
-        all_longest_runtimes = []
+        all_total_runtimes = []
         for cv_iteration in smac_result_dict:
             all_best_scores.append(smac_result_dict[cv_iteration]['cv-summary']['best_score'])
             all_average_scores.append(smac_result_dict[cv_iteration]['cv-summary']['average_score'])
@@ -272,7 +272,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
             all_inc_evaluations.append(smac_result_dict[cv_iteration]['cv-summary']['best_inc_evals'])
             all_inc_changed.append(smac_result_dict[cv_iteration]['cv-summary']['best_inc_changed'])
             all_average_runtimes.append(smac_result_dict[cv_iteration]['cv-summary']['average_runtime'])
-            all_longest_runtimes.append(smac_result_dict[cv_iteration]['cv-summary']['longest_runtime'])
+            all_total_runtimes.append(smac_result_dict[cv_iteration]['cv-summary']['total_runtime'])
         overall_results = {'overall results': {'avg_best_score': np.mean(all_best_scores),
                                                'std_best_score': np.std(all_best_scores),
                                                'avg_average_score': np.mean(all_average_scores),
@@ -284,7 +284,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
                                                'avg_inc_changed': np.mean(all_inc_changed),
                                                'std_inc_changed': np.std(all_inc_changed),
                                                'avg_runtime': np.mean(all_average_runtimes),
-                                               'total_runtime': np.sum(all_longest_runtimes)}
+                                               'total_runtime': np.sum(all_total_runtimes)}
                            }
         smac_result_dict.update(overall_results)
         with open(smac_result_file, 'w') as jsonfile:

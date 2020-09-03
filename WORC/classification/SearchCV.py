@@ -2890,6 +2890,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         summary['shortest_runtime'] = np.min(all_runtimes)
         summary['longest_runtime'] = np.max(all_runtimes)
         summary['average_runtime'] = np.mean(all_runtimes)
+        summary['total_runtime'] = np.sum(all_runtimes)
         final_summary = {'cv-summary': summary}
         smac_results_for_this_cv[run_name].update(final_summary)
 
