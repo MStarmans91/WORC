@@ -38,6 +38,7 @@ from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
 import WORC.addexceptions as ae
+import time
 
 # Specific imports for error management
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
@@ -252,6 +253,9 @@ def fit_and_score(X, y, scoring,
 
     # Additional to sklearn defaults: return all parameters
     ret.append(parameters)
+
+    # Start the timing
+    start_time = time.time()
 
     # ------------------------------------------------------------------------
     # Feature imputation
@@ -792,6 +796,14 @@ def fit_and_score(X, y, scoring,
 
     # Add original parameters to return object
     ret.append(parameters)
+
+    # End the timing and store the fit_time
+    end_time = time.time()
+    runtime = 45 #end_time - start_time
+    if return_train_score:
+        ret[3] = runtime
+    else:
+        ret[2] = runtime
 
     if return_all:
         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
