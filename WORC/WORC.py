@@ -812,7 +812,7 @@ class WORC(object):
                         if self.configs[nmod]['General']['Segmentix'] == 'True':
                             self.add_segmentix(label, nmod)
                         elif self.configs[nmod]['Preprocessing']['Resampling'] == 'True':
-                            raise WORCValueError('If you use resampling, ' +
+                            raise WORCexceptions.WORCValueError('If you use resampling, ' +
                                                  'have to use segmentix to ' +
                                                  ' make sure the mask is ' +
                                                  'also resampled. Please ' +
@@ -1498,7 +1498,7 @@ class WORC(object):
 
         # Input the metadata
         if self.metadata_train and len(self.metadata_train) >= nmod + 1:
-            self.preprocessing_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
+            self.nodes_segmentix_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
 
         # Input the segmentation
         if hasattr(self, 'transformix_seg_nodes_train'):
@@ -1540,7 +1540,7 @@ class WORC(object):
 
             # Input the metadata
             if self.metadata_test and len(self.metadata_test) >= nmod + 1:
-                self.preprocessing_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
+                self.nodes_segmentix_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
 
             if hasattr(self, 'transformix_seg_nodes_test'):
                 if label in self.transformix_seg_nodes_test.keys():
