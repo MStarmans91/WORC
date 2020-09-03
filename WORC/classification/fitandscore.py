@@ -368,6 +368,14 @@ def fit_and_score(X, y, scoring,
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
@@ -435,6 +443,14 @@ def fit_and_score(X, y, scoring,
             print(parameters)
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
@@ -492,6 +508,14 @@ def fit_and_score(X, y, scoring,
             print(parameters)
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
@@ -537,6 +561,14 @@ def fit_and_score(X, y, scoring,
             print(parameters)
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
@@ -558,6 +590,14 @@ def fit_and_score(X, y, scoring,
                 if verbose:
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
+                # Update the runtime
+                end_time = time.time()
+                runtime = end_time - start_time
+                if return_train_score:
+                    ret[3] = runtime
+                else:
+                    ret[2] = runtime
+
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
@@ -577,6 +617,14 @@ def fit_and_score(X, y, scoring,
             except (ValueError, LinAlgError) as e:
                 if verbose:
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+
+                # Update the runtime
+                end_time = time.time()
+                runtime = end_time - start_time
+                if return_train_score:
+                    ret[3] = runtime
+                else:
+                    ret[2] = runtime
 
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
@@ -632,6 +680,13 @@ def fit_and_score(X, y, scoring,
                     print('[WORC WARNING]: No features are selected! Probably your statistical test feature selection was too strict. Skipping thresholding.')
                 if use_smac:
                     para_estimator = delete_nonestimator_parameters(para_estimator)
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
                     if return_all:
                         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], \
                                scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
@@ -695,6 +750,14 @@ def fit_and_score(X, y, scoring,
                         print(f'[WARNING]: {e}. Returning dummies. Parameters: ')
                         print(parameters)
                     para_estimator = delete_nonestimator_parameters(para_estimator)
+
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
 
                     if return_all:
                         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
@@ -786,6 +849,14 @@ def fit_and_score(X, y, scoring,
         if type(estimator) == LDA:
             if verbose:
                 print(f'[WARNING]: skipping this setting due to LDA Error: {e}.')
+
+            # Update the runtime
+            end_time = time.time()
+            runtime = end_time - start_time
+            if return_train_score:
+                ret[3] = runtime
+            else:
+                ret[2] = runtime
 
             if return_all:
                 return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
