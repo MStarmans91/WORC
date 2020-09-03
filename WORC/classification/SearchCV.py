@@ -700,9 +700,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         _store('fit_time', fit_time)
         _store('score_time', score_time)
 
-        # Calculate and store the total_fit_time of this train/test CV
-        results['total_fit_time'] = np.sum(fit_time)
-
         # Store scores
         # Check whether to do multimetric scoring
         test_estimator = cc.construct_classifier(candidate_params_all[0])
@@ -792,6 +789,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             results[k] = results[k][bestindices]
         n_candidates = len(candidate_params_all)
         results['params'] = candidate_params_all
+
+        # Calculate and store the total_fit_time of this train/test CV
+        results['total_fit_time'] = np.sum(fit_time)
 
         # Store the atributes of the best performing estimator
         best_index = np.flatnonzero(results["rank_" + self.ranking_score] == 1)[0]
