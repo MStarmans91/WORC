@@ -201,6 +201,7 @@ class WORC(object):
 
         # Preprocessing
         config['Preprocessing'] = dict()
+        config['Preprocessing']['CheckSpacing'] = 'False'
         config['Preprocessing']['Normalize'] = 'True'
         config['Preprocessing']['Normalize_ROI'] = 'Full'
         config['Preprocessing']['ROIDetermine'] = 'Provided'
@@ -1495,6 +1496,10 @@ class WORC(object):
         self.nodes_segmentix_train[label].inputs['image'] =\
             self.converters_im_train[label].outputs['image']
 
+        # Input the metadata
+        if self.metadata_train and len(self.metadata_train) >= nmod + 1:
+            self.preprocessing_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
+
         # Input the segmentation
         if hasattr(self, 'transformix_seg_nodes_train'):
             if label in self.transformix_seg_nodes_train.keys():
@@ -1529,8 +1534,13 @@ class WORC(object):
                                          resources=ResourceLimit(memory=memory),
                                          step_id='Preprocessing')
 
+            # Input the image
             self.nodes_segmentix_test[label].inputs['image'] =\
                 self.converters_im_test[label].outputs['image']
+
+            # Input the metadata
+            if self.metadata_test and len(self.metadata_test) >= nmod + 1:
+                self.preprocessing_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
 
             if hasattr(self, 'transformix_seg_nodes_test'):
                 if label in self.transformix_seg_nodes_test.keys():

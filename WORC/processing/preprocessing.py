@@ -52,6 +52,17 @@ def preprocess(imagefile, config, metadata=None, mask=None):
     else:
         print('No bias correction was applied.')
 
+    # Detect incorrect spacings
+    if config['Preprocessing']['CheckSpacing']:
+        if image.GetSpacing() == (1, 1, 1):
+            print('Detected 1x1x1 spacing, overwriting with DICOM metadata.')
+            slice_thickness = metadata[0x18, 0x50].value
+            pixel_spacing = metadata[0x28, 0x30].value
+            spacing = (float(pixel_spacing[0]),
+                       float(pixel_spacing[1]),
+                       float(slice_thickness))
+            image.SetSpacing(spacing)
+
     # Apply normalization
     if config['Preprocessing']['Normalize']:
         method = config['Preprocessing']['Method']
@@ -59,7 +70,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         dilate = config['Preprocessing']['ROIdilate']
         radius = config['Preprocessing']['ROIdilateradius']
         ROIDetermine = config['Preprocessing']['ROIDetermine']
-        metadata = config['General']['AssumeSameImageAndMaskMetadata']
+        samemetadata = config['General']['AssumeSameImageAndMaskMetadata']
         image = normalize_image(image=image,
                                 mask=mask,
                                 method=method,
@@ -67,7 +78,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                                 Dilate_ROI=dilate,
                                 ROI_dilate_radius=radius,
                                 ROIDetermine=ROIDetermine,
-                                AssumeSameImageAndMaskMetadata=metadata)
+                                AssumeSameImageAndMaskMetadata=samemetadata)
     else:
         print('No normalization was applied.')
 
