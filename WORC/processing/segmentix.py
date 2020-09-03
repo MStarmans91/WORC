@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ import numpy as np
 import WORC.IOparser.config_segmentix as config_io
 from WORC.processing.helpers import resample_image
 import pydicom
+import WORC.addexceptions as ae
 
 
 def get_ring(contour, radius=5):
@@ -207,8 +208,12 @@ def segmentix(parameters, image=None, segmentation=None,
         contour.CopyInformation(contour_original)
 
     # Detect incorrect spacings
-    metadata = pydicom.read_file(metadata_file)
     if config['Preprocessing']['CheckSpacing']:
+        if metadata_file is not None:
+            metadata = pydicom.read_file(metadata_file)
+        else:
+            raise ae.WORCValueError('When correcting for spacing, you need to input metadata.')
+
         if image.GetSpacing() == (1, 1, 1):
             print('Detected 1x1x1 spacing, overwriting with DICOM metadata.')
             slice_thickness = metadata[0x18, 0x50].value

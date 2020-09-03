@@ -22,6 +22,7 @@ import os
 from WORC.processing.segmentix import dilate_contour
 from WORC.processing.helpers import resample_image
 import numpy as np
+import WORC.addexceptions as ae
 
 
 def preprocess(imagefile, config, metadata=None, mask=None):
@@ -54,6 +55,9 @@ def preprocess(imagefile, config, metadata=None, mask=None):
 
     # Detect incorrect spacings
     if config['Preprocessing']['CheckSpacing']:
+        if metadata is None:
+            raise ae.WORCValueError('When correcting for spacing, you need to input metadata.')
+
         if image.GetSpacing() == (1, 1, 1):
             print('Detected 1x1x1 spacing, overwriting with DICOM metadata.')
             slice_thickness = metadata[0x18, 0x50].value
