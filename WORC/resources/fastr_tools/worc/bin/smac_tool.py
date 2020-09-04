@@ -81,7 +81,6 @@ def main():
                          'shared_model': False,
                          'input_psmac_dirs': '/scratch/mdeen/SMAC_output/' + run_info['run_name'],
                          'abort_on_first_run_crash': 'false',
-                         'rand_prob': 0
                          }
 
     # modify the budget of the optimization according to the settings
