@@ -65,6 +65,10 @@ def load_config(config_file_path):
     settings_dict['Segmentix']['AssumeSameImageAndMaskMetadata'] =\
         settings['General'].getboolean('AssumeSameImageAndMaskMetadata')
 
+    # Check spacing
+    settings_dict['Preprocessing']['CheckSpacing'] =\
+        settings['Preprocessing'].getboolean('CheckSpacing')
+
     # Resampling
     settings_dict['Preprocessing']['Resampling'] =\
         settings['Preprocessing'].getboolean('Resampling')

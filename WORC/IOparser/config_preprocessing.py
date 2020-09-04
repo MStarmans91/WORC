@@ -48,6 +48,10 @@ def load_config(config_file_path):
     settings_dict['General']['AssumeSameImageAndMaskMetadata'] =\
         settings['General'].getboolean('AssumeSameImageAndMaskMetadata')
 
+    # Detect incorrect spacing
+    settings_dict['Preprocessing']['CheckSpacing'] =\
+        settings['Preprocessing'].getboolean('CheckSpacing')
+
     # Normalization
     settings_dict['Preprocessing']['Normalize'] =\
         settings['Preprocessing'].getboolean('Normalize')
