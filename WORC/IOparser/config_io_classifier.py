@@ -221,6 +221,12 @@ def load_config(config_file_path):
     settings_dict['Classification']['LRC'] =\
         [float(str(item).strip()) for item in
          settings['Classification']['LRC'].split(',')]
+    settings_dict['Classification']['LR_solver'] =\
+        [str(item).strip() for item in
+         settings['Classification']['LR_solver'].split(',')]
+    settings_dict['Classification']['LR_l1_ratio'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['LR_l1_ratio'].split(',')]
 
     # Specific LDA/QDA options
     settings_dict['Classification']['LDA_solver'] =\

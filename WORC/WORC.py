@@ -407,6 +407,8 @@ class WORC(object):
         config['Classification']['RFmax_depth'] = '5, 5'
         config['Classification']['LRpenalty'] = 'l2'
         config['Classification']['LRC'] = '0.01, 1.0'
+        config['Classification']['LR_solver'] = 'lbfgs'
+        config['Classification']['LR_l1_ratio'] = '0, 1'
         config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
         config['Classification']['LDA_shrinkage'] = '-5, 5'
         config['Classification']['QDA_reg_param'] = '-5, 5'
