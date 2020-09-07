@@ -104,10 +104,11 @@ def construct_classifier(config):
 
     elif config['classifiers'] == 'LR':
         # Logistic Regression
-        if config['LRpenalty'] == 'elasticnet':
+        if config['LRpenalty'] == 'elasticnet' or config['LRpenalty'] == 'l1':
             # saga solver required for elasticnet
             if config['LR_solver'] != 'saga':
-                print(f"[WORC Warning] elasticnet penalty requires saga " +\
+                p = config['LRpenalty']
+                print(f"[WORC Warning] {p} penalty requires saga " +\
                       f"solver, got {config['LR_solver']}. Changing solver.")
                 config['LR_solver'] = 'saga'
 
