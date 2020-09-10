@@ -17,6 +17,7 @@
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
+from sklearn.utils.validation import check_is_fitted
 import numpy as np
 import WORC.addexceptions as ae
 
@@ -70,7 +71,7 @@ class WORCScaler(TransformerMixin, BaseEstimator):
             # Skip part of features in scaling
             if self.verbose:
                 print(f'\t Excluding features containing: {self.skip_features}')
-                
+
             # Determine indices of excluded features
             included_feature_indices = []
             excluded_feature_indices = []
@@ -104,6 +105,9 @@ class WORCScaler(TransformerMixin, BaseEstimator):
 
     def transform(self, X_test):
         """Transform feature values with fitted scaler."""
+        # Check if fit has been applied first
+        check_is_fitted(self.scaler)
+
         # First exclude features which should be skipped
         if self.excluded_feature_indices:
             incl = self.included_feature_indices
@@ -119,6 +123,9 @@ class WORCScaler(TransformerMixin, BaseEstimator):
 
         if self.excluded_feature_indices:
             # Recombine in same order as original
+            if isinstance(X_test, list):
+                X_test = np.asarray(X_test)
+
             X_test_out = np.zeros(X_test.shape)
             for inum, i in enumerate(incl):
                 X_test_out[:, i] = X_test_scaling[:, inum]
@@ -148,6 +155,10 @@ class RobustStandardScaler(StandardScaler):
     def fit(self, X, y=None):
         """Compute the mean and std to be used for later scaling.
 
+        Note: if over 80% of the features are excluded in robustness,
+        we switch to the standardscaler, as otherwise all numbers will be NaN
+        after scaling.
+
         Parameters
         ----------
         X : {array-like, sparse matrix}, shape [n_samples, n_features]
@@ -166,17 +177,25 @@ class RobustStandardScaler(StandardScaler):
 
         self.percentile_ = percentiles
 
+        X_original = np.copy(X)
         X_selected = np.copy(X)
+        total_patients = X_selected.shape[0]
         for n_feature in range(X_selected.shape[1]):
-            X_selected[:, n_feature] =\
-                np.where(X_selected[:, n_feature] > percentiles[0][n_feature],
-                         X_selected[:, n_feature],
-                         np.NaN)
+            if percentiles[0][n_feature] != percentiles[1][n_feature]:
+                X_selected[:, n_feature] =\
+                    np.where(X_selected[:, n_feature] > percentiles[0][n_feature],
+                             X_selected[:, n_feature],
+                             np.NaN)
 
-            X_selected[:, n_feature] =\
-                np.where(X_selected[:, n_feature] < percentiles[1][n_feature],
-                         X_selected[:, n_feature],
-                         np.NaN)
+                X_selected[:, n_feature] =\
+                    np.where(X_selected[:, n_feature] < percentiles[1][n_feature],
+                             X_selected[:, n_feature],
+                             np.NaN)
+
+                if total_patients - np.sum(np.isnan(X_selected[:, n_feature])) < 2:
+                    # Keep original, as from zero or one value we cannot scale
+                    # If that was originally so, than we let the scaler handle this
+                    X_selected[:, n_feature] = X_original[:, n_feature]
 
         return self.partial_fit(X_selected, y)
 
@@ -213,6 +232,16 @@ def test():
     print(s2.var_)
     print('Output:')
     print(s2.transform(a))
+
+    # See if we're robust to NaN's
+    nanmatrix = np.squeeze([[[np.nan]*400] * 10])
+    print(nanmatrix.shape)
+    nanmatrix[1, :] = 1
+    nanmatrix[2, :] = 2
+    s = WORCScaler()
+    s.fit(nanmatrix)
+    print(s.transform(nanmatrix))
+    print(np.sum(np.isnan(s.transform(nanmatrix))))
 
 
 if __name__ == "__main__":
