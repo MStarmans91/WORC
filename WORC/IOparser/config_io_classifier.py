@@ -66,6 +66,10 @@ def load_config(config_file_path):
         [str(item).strip() for item in
          settings['FeatureScaling']['scaling_method'].split(',')]
 
+    settings_dict['FeatureScaling']['skip_features'] =\
+        [str(item).strip() for item in
+         settings['FeatureScaling']['skip_features'].split(',')]
+
     # Feature selection
     settings_dict['Featsel']['Variance'] =\
         settings['Featsel'].getfloat('Variance')
@@ -217,6 +221,12 @@ def load_config(config_file_path):
     settings_dict['Classification']['LRC'] =\
         [float(str(item).strip()) for item in
          settings['Classification']['LRC'].split(',')]
+    settings_dict['Classification']['LR_solver'] =\
+        [str(item).strip() for item in
+         settings['Classification']['LR_solver'].split(',')]
+    settings_dict['Classification']['LR_l1_ratio'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['LR_l1_ratio'].split(',')]
 
     # Specific LDA/QDA options
     settings_dict['Classification']['LDA_solver'] =\
@@ -257,6 +267,9 @@ def load_config(config_file_path):
          settings['Classification']['CNB_alpha'].split(',')]
 
     # Cross validation settings
+    settings_dict['CrossValidation']['Type'] =\
+        str(settings['CrossValidation']['Type'])
+
     settings_dict['CrossValidation']['N_iterations'] =\
         settings['CrossValidation'].getint('N_iterations')
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.3.2 documentation</title>
+  <title>Configuration &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -559,38 +559,47 @@ Hounsfield Units.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Normalize</p></td>
+<tr class="row-even"><td><p>CheckSpacing</p></td>
+<td><p>Determine whether to check the spacing or not. If True, and the spacing of the image is [1x1x1], we assume the spacing is incorrect, and overwrite it using the DICOM metadata.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Normalize</p></td>
 <td><p>Determine whether to use normalization in preprocessing of image or not.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Normalize_ROI</p></td>
+<tr class="row-even"><td><p>Normalize_ROI</p></td>
 <td><p>If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.</p></td>
 </tr>
-<tr class="row-even"><td><p>ROIDetermine</p></td>
+<tr class="row-odd"><td><p>ROIDetermine</p></td>
 <td><p>Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.</p></td>
 </tr>
-<tr class="row-odd"><td><p>ROIdilate</p></td>
+<tr class="row-even"><td><p>ROIdilate</p></td>
 <td><p>Determine whether the ROI has to be dilated with a disc element or not.</p></td>
 </tr>
-<tr class="row-even"><td><p>ROIdilateradius</p></td>
+<tr class="row-odd"><td><p>ROIdilateradius</p></td>
 <td><p>Radius of disc element to be used in ROI dilation.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Method</p></td>
+<tr class="row-even"><td><p>Method</p></td>
 <td><p>Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.</p></td>
 </tr>
-<tr class="row-even"><td><p>Resampling</p></td>
+<tr class="row-odd"><td><p>Resampling</p></td>
 <td><p>Determine whether the image and mask will be resampled or not.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Resampling_spacing</p></td>
+<tr class="row-even"><td><p>Resampling_spacing</p></td>
 <td><p>Spacing to resample image and mask to, if resampling is used.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BiasCorrection</p></td>
+<td><p>Determine whether N4 Bias correction will be applied or not.</p></td>
+</tr>
+<tr class="row-even"><td><p>BiasCorrection_Mask</p></td>
+<td><p>Whether withing bias correction, a mask generated through Otsu thresholding is used or not.</p></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 40%" />
-<col style="width: 18%" />
-<col style="width: 42%" />
+<col style="width: 41%" />
+<col style="width: 17%" />
+<col style="width: 41%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -599,36 +608,48 @@ Hounsfield Units.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Normalize</p></td>
+<tr class="row-even"><td><p>CheckSpacing</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>Normalize</p></td>
 <td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
-<tr class="row-odd"><td><p>Normalize_ROI</p></td>
+<tr class="row-even"><td><p>Normalize_ROI</p></td>
 <td><p>Full</p></td>
 <td><p>True, False, Full</p></td>
 </tr>
-<tr class="row-even"><td><p>ROIDetermine</p></td>
+<tr class="row-odd"><td><p>ROIDetermine</p></td>
 <td><p>Provided</p></td>
 <td><p>Provided, Otsu</p></td>
 </tr>
-<tr class="row-odd"><td><p>ROIdilate</p></td>
+<tr class="row-even"><td><p>ROIdilate</p></td>
 <td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
-<tr class="row-even"><td><p>ROIdilateradius</p></td>
+<tr class="row-odd"><td><p>ROIdilateradius</p></td>
 <td><p>10</p></td>
 <td><p>Integer &gt; 0</p></td>
 </tr>
-<tr class="row-odd"><td><p>Method</p></td>
+<tr class="row-even"><td><p>Method</p></td>
 <td><p>z_score</p></td>
 <td><p>z_score, minmed</p></td>
 </tr>
-<tr class="row-even"><td><p>Resampling</p></td>
+<tr class="row-odd"><td><p>Resampling</p></td>
 <td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
-<tr class="row-odd"><td><p>Resampling_spacing</p></td>
+<tr class="row-even"><td><p>Resampling_spacing</p></td>
 <td><p>1, 1, 1</p></td>
+<td><p>Float, Float, Float</p></td>
+</tr>
+<tr class="row-odd"><td><p>BiasCorrection</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>BiasCorrection_Mask</p></td>
+<td><p>False</p></td>
 <td><p>Float, Float, Float</p></td>
 </tr>
 </tbody>
@@ -1326,8 +1347,8 @@ selected.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 33%" />
-<col style="width: 67%" />
+<col style="width: 7%" />
+<col style="width: 93%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -1337,6 +1358,9 @@ selected.</p>
 <tbody>
 <tr class="row-even"><td><p>scaling_method</p></td>
 <td><p>Determine the scaling method.</p></td>
+</tr>
+<tr class="row-odd"><td><p>skip_features</p></td>
+<td><p>Determine which features should be skipped. This field should contain a comma separated list of substrings: when one or more of these are in a feature name, the feature is skipped.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1357,6 +1381,10 @@ selected.</p>
 <tr class="row-even"><td><p>scaling_method</p></td>
 <td><p>robust_z_score</p></td>
 <td><p>robust_z_score. z_score, robust, minmax, None</p></td>
+</tr>
+<tr class="row-odd"><td><p>skip_features</p></td>
+<td><p><a href="#id11"><span class="problematic" id="id12">semf_</span></a>, <a href="#id13"><span class="problematic" id="id14">pf_</span></a></p></td>
+<td><p>Comma separated list of strings</p></td>
 </tr>
 </tbody>
 </table>
@@ -1794,8 +1822,8 @@ hyperparameters can also be found there.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 11%" />
-<col style="width: 89%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -1844,6 +1872,12 @@ hyperparameters can also be found there.</p>
 </tr>
 <tr class="row-odd"><td><p>LRC</p></td>
 <td><p>Range of regularization strength in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).</p></td>
+</tr>
+<tr class="row-even"><td><p>LR_solver</p></td>
+<td><p>Solver used in LR.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LR_l1_ratio</p></td>
+<td><p>Ratio between l1 and l2 penalty when using elasticnet penalty, see <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</a>.</p></td>
 </tr>
 <tr class="row-even"><td><p>LDA_solver</p></td>
 <td><p>Solver used in LDA.</p></td>
@@ -1940,12 +1974,20 @@ hyperparameters can also be found there.</p>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 <tr class="row-even"><td><p>LRpenalty</p></td>
-<td><p>l2</p></td>
+<td><p>l1, l2, elasticnet</p></td>
 <td><p>none, l2, l1</p></td>
 </tr>
 <tr class="row-odd"><td><p>LRC</p></td>
 <td><p>0.01, 1.0</p></td>
 <td><p>Two Integers: loc and scale</p></td>
+</tr>
+<tr class="row-even"><td><p>LR_solver</p></td>
+<td><p>lbfgs, saga</p></td>
+<td><p>Comma separated list of strings, for the options see <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>LR_l1_ratio</p></td>
+<td><p>0, 1</p></td>
+<td><p>Float between 0.0 and 1.0.</p></td>
 </tr>
 <tr class="row-even"><td><p>LDA_solver</p></td>
 <td><p>svd, lsqr, eigen</p></td>
@@ -1997,8 +2039,8 @@ using cross validation, specify the following settings.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 12%" />
-<col style="width: 88%" />
+<col style="width: 8%" />
+<col style="width: 92%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2006,23 +2048,26 @@ using cross validation, specify the following settings.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>N_iterations</p></td>
-<td><p>Number of times the data is split in training and test in the outer cross-validation.</p></td>
+<tr class="row-even"><td><p>Type</p></td>
+<td><p>If performing a cross-validationm, type of cross-validation used. Currently random-splitting and leave-one-out (LOO) are supported.</p></td>
 </tr>
-<tr class="row-odd"><td><p>test_size</p></td>
-<td><p>The percentage of data to be used for testing.</p></td>
+<tr class="row-odd"><td><p>N_iterations</p></td>
+<td><p>Number of times the data is split in training and test in the outer cross-validation when using random-splitting.</p></td>
 </tr>
-<tr class="row-even"><td><p>fixed_seed</p></td>
-<td><p>If True, use a fixed seed for the cross-validation splits.</p></td>
+<tr class="row-even"><td><p>test_size</p></td>
+<td><p>The percentage of data to be used for testing when using random-splitting.</p></td>
+</tr>
+<tr class="row-odd"><td><p>fixed_seed</p></td>
+<td><p>If True, use a fixed seed for the cross-validation splits when using random-splitting.</p></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 46%" />
-<col style="width: 27%" />
-<col style="width: 27%" />
+<col style="width: 29%" />
+<col style="width: 29%" />
+<col style="width: 41%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2031,15 +2076,19 @@ using cross validation, specify the following settings.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>N_iterations</p></td>
+<tr class="row-even"><td><p>Type</p></td>
+<td><p>random_split</p></td>
+<td><p>random_split, LOO</p></td>
+</tr>
+<tr class="row-odd"><td><p>N_iterations</p></td>
 <td><p>100</p></td>
 <td><p>Integer</p></td>
 </tr>
-<tr class="row-odd"><td><p>test_size</p></td>
+<tr class="row-even"><td><p>test_size</p></td>
 <td><p>0.2</p></td>
 <td><p>Float</p></td>
 </tr>
-<tr class="row-even"><td><p>fixed_seed</p></td>
+<tr class="row-odd"><td><p>fixed_seed</p></td>
 <td><p>False</p></td>
 <td><p>Boolean</p></td>
 </tr>

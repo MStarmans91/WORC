@@ -53,3 +53,27 @@ for the NGTDM:
 
 See also my fork of PyRadiomics, which you can also install to fix the issue:
 https://github.com/MStarmans91/pyradiomics.
+
+I am working on the BIGR cluster and would like some jobs to be submitted to different queues
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Unfortunately, fastr does not support giving a queue argument per job. In
+general, we assume you would like all your jobs to be run on the day queue,
+which you can set as the default, and only the classify job on the week queue.
+The only solution we currently have is to manually hack this into fastr:
+
+1. Go to the installation of the fastr package in your (virtual) environment.
+2. Open the fastr/resources/plugins/executionplugins/drmaaplugin.py script.
+3. Search for the line ``if queue is None:`` and replace that if loop
+  with the following:
+
+.. code-block:: python
+
+  if queue is None:
+      if 'classify' in command:
+          fastr.log.info('Detected classify in command: submitting to week queue')
+          queue = 'week'
+      elif any('classify' in a for a in arguments):
+          fastr.log.info('Detected classify in arguments: submitting to week queue')
+          queue = 'week'
+      else:
+          queue = self.default_queue

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.construct_classifier &mdash; WORC 3.3.2 documentation</title>
+  <title>WORC.classification.construct_classifier &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -269,9 +269,18 @@
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
         <span class="c1"># Logistic Regression</span>
+        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;elasticnet&#39;</span> <span class="ow">or</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;l1&#39;</span><span class="p">:</span>
+            <span class="c1"># saga solver required for elasticnet</span>
+            <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;saga&#39;</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;[WORC Warning] </span><span class="si">{p}</span><span class="s2"> penalty requires saga &quot;</span> <span class="o">+</span>\
+                      <span class="n">f</span><span class="s2">&quot;solver, got </span><span class="si">{config[&#39;LR_solver&#39;]}</span><span class="s2">. Changing solver.&quot;</span><span class="p">)</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;saga&#39;</span>
+
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
                                         <span class="n">penalty</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">],</span>
-                                        <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;lbfgs&#39;</span><span class="p">,</span>
+                                        <span class="n">solver</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">],</span>
+                                        <span class="n">l1_ratio</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">],</span>
                                         <span class="n">C</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">],</span>
                                         <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;GaussianNB&#39;</span><span class="p">:</span>
@@ -378,6 +387,10 @@
 
     <span class="c1"># Logistic Regression parameters</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
                                             <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 

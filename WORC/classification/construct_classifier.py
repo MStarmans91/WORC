@@ -104,9 +104,18 @@ def construct_classifier(config):
 
     elif config['classifiers'] == 'LR':
         # Logistic Regression
+        if config['LRpenalty'] == 'elasticnet' or config['LRpenalty'] == 'l1':
+            # saga solver required for elasticnet
+            if config['LR_solver'] != 'saga':
+                p = config['LRpenalty']
+                print(f"[WORC Warning] {p} penalty requires saga " +\
+                      f"solver, got {config['LR_solver']}. Changing solver.")
+                config['LR_solver'] = 'saga'
+
         classifier = LogisticRegression(max_iter=max_iter,
                                         penalty=config['LRpenalty'],
-                                        solver='lbfgs',
+                                        solver=config['LR_solver'],
+                                        l1_ratio=config['LR_l1_ratio'],
                                         C=config['LRC'],
                                         random_state=config['random_seed'])
     elif config['classifiers'] == 'GaussianNB':
@@ -213,6 +222,10 @@ def create_param_grid(config):
 
     # Logistic Regression parameters
     param_grid['LRpenalty'] = config['LRpenalty']
+    param_grid['LR_solver'] = config['LR_solver']
+    param_grid['LR_l1_ratio'] =\
+        scipy.stats.uniform(loc=config['LR_l1_ratio'][0],
+                            scale=config['LR_l1_ratio'][1])
     param_grid['LRC'] = scipy.stats.uniform(loc=config['LRC'][0],
                                             scale=config['LRC'][1])
 

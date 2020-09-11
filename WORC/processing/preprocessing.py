@@ -22,6 +22,7 @@ import os
 from WORC.processing.segmentix import dilate_contour
 from WORC.processing.helpers import resample_image
 import numpy as np
+import WORC.addexceptions as ae
 
 
 def preprocess(imagefile, config, metadata=None, mask=None):
@@ -44,6 +45,28 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         image = image*metadata.RescaleSlope +\
             metadata.RescaleIntercept
 
+    # Apply bias correction
+    if config['Preprocessing']['BiasCorrection']:
+        print('Apply bias correction.')
+        usemask = config['Preprocessing']['BiasCorrection_Mask']
+        image = bias_correct_image(img=image, usemask=usemask)
+    else:
+        print('No bias correction was applied.')
+
+    # Detect incorrect spacings
+    if config['Preprocessing']['CheckSpacing']:
+        if metadata is None:
+            raise ae.WORCValueError('When correcting for spacing, you need to input metadata.')
+
+        if image.GetSpacing() == (1, 1, 1):
+            print('Detected 1x1x1 spacing, overwriting with DICOM metadata.')
+            slice_thickness = metadata[0x18, 0x50].value
+            pixel_spacing = metadata[0x28, 0x30].value
+            spacing = (float(pixel_spacing[0]),
+                       float(pixel_spacing[1]),
+                       float(slice_thickness))
+            image.SetSpacing(spacing)
+
     # Apply normalization
     if config['Preprocessing']['Normalize']:
         method = config['Preprocessing']['Method']
@@ -51,7 +74,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         dilate = config['Preprocessing']['ROIdilate']
         radius = config['Preprocessing']['ROIdilateradius']
         ROIDetermine = config['Preprocessing']['ROIDetermine']
-        metadata = config['General']['AssumeSameImageAndMaskMetadata']
+        samemetadata = config['General']['AssumeSameImageAndMaskMetadata']
         image = normalize_image(image=image,
                                 mask=mask,
                                 method=method,
@@ -59,11 +82,11 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                                 Dilate_ROI=dilate,
                                 ROI_dilate_radius=radius,
                                 ROIDetermine=ROIDetermine,
-                                AssumeSameImageAndMaskMetadata=metadata)
+                                AssumeSameImageAndMaskMetadata=samemetadata)
     else:
         print('No normalization was applied.')
 
-    # Apply preprocessing
+    # Apply resampling
     if config['Preprocessing']['Resampling']:
         new_spacing = config['Preprocessing']['Resampling_spacing']
         print(f'Apply resampling of image to spacing {new_spacing}.')
@@ -73,6 +96,35 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         print('No resampling was applied.')
 
     return image
+
+
+def bias_correct_image(img, usemask=False):
+    # print('working on N4')
+    initial_img = img
+    img_size = initial_img.GetSize()
+    img_spacing = initial_img.GetSpacing()
+    img_pixel_ID = img.GetPixelID()
+
+    # Cast to float to enable bias correction to be used
+    image = sitk.Cast(img, sitk.sitkFloat64)
+
+    # Set zeroes to a small number to prevent division by zero
+    image = sitk.GetArrayFromImage(image)
+    image[image == 0] = np.finfo(float).eps
+    image = sitk.GetImageFromArray(image)
+    image.CopyInformation(initial_img)
+
+    if usemask:
+        maskImage = sitk.OtsuThreshold(image, 0, 1)
+
+    # apply image bias correction using N4 bias correction
+    corrector = sitk.N4BiasFieldCorrectionImageFilter()
+    if usemask:
+        corrected_image = corrector.Execute(image, maskImage)
+    else:
+        corrected_image = corrector.Execute(image)
+
+    return corrected_image
 
 
 def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',

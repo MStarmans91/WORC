@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>featureprocessing Package &mdash; WORC 3.3.2 documentation</title>
+  <title>featureprocessing Package &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -608,15 +608,14 @@ more information:</p>
 <dl class="method">
 <dt id="WORC.featureprocessing.Scalers.RobustStandardScaler.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Scalers.html#RobustStandardScaler.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Scalers.RobustStandardScaler.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the mean and std to be used for later scaling.
-Parameters
-———-
-X : {array-like, sparse matrix}, shape [n_samples, n_features]</p>
-<blockquote>
-<div><p>The data used to compute the mean and standard deviation
-used for later scaling along the features axis.</p>
-</div></blockquote>
+<dd><p>Compute the mean and std to be used for later scaling.</p>
+<p>Note: if over 80% of the features are excluded in robustness,
+we switch to the standardscaler, as otherwise all numbers will be NaN
+after scaling.</p>
 <dl class="simple">
+<dt>X<span class="classifier">{array-like, sparse matrix}, shape [n_samples, n_features]</span></dt><dd><p>The data used to compute the mean and standard deviation
+used for later scaling along the features axis.</p>
+</dd>
 <dt>y</dt><dd><p>Ignored</p>
 </dd>
 </dl>
@@ -624,10 +623,50 @@ used for later scaling along the features axis.</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="WORC.featureprocessing.Scalers.WORCScaler">
+<em class="property">class </em><code class="descclassname">WORC.featureprocessing.Scalers.</code><code class="descname">WORCScaler</code><span class="sig-paren">(</span><em>method='robust_z_score'</em>, <em>skip_features=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Scalers.html#WORCScaler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Scalers.WORCScaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code></p>
+<p>Scale features using an sklearn scaler.</p>
+<p>Additionally, several features can be excluded. Mostly useful when using
+also categorical features such as patient sex.</p>
+<dl class="method">
+<dt id="WORC.featureprocessing.Scalers.WORCScaler.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>method='robust_z_score'</em>, <em>skip_features=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Scalers.html#WORCScaler.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Scalers.WORCScaler.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize object.</p>
+<dl class="simple">
+<dt>method: string</dt><dd><p>Name of scaler used: robust_z_score, z_score, robust, or minmax</p>
+</dd>
+<dt>skip_features: list of strings</dt><dd><p>If any of these elements occur as substring in a feature label,
+this feature is excluded.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.featureprocessing.Scalers.WORCScaler.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.Scalers'</em><a class="headerlink" href="#WORC.featureprocessing.Scalers.WORCScaler.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.featureprocessing.Scalers.WORCScaler.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X_train</em>, <em>feature_labels=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Scalers.html#WORCScaler.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Scalers.WORCScaler.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the scaler.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.featureprocessing.Scalers.WORCScaler.transform">
+<code class="descname">transform</code><span class="sig-paren">(</span><em>X_test</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Scalers.html#WORCScaler.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Scalers.WORCScaler.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform feature values with fitted scaler.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="WORC.featureprocessing.Scalers.test">
 <code class="descclassname">WORC.featureprocessing.Scalers.</code><code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Scalers.html#test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Scalers.test" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Test RobustStandardScaler.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-WORC.featureprocessing.SelectGroups">

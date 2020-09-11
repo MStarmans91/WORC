@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.trainclassifier &mdash; WORC 3.3.2 documentation</title>
+  <title>WORC.classification.trainclassifier &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -305,6 +305,8 @@
 
     <span class="c1"># Add feature scaling parameters</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;FeatureScaling_skip_features&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;skip_features&#39;</span><span class="p">]]</span>
 
     <span class="c1"># Add parameters for oversampling methods</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Resampling_Use&#39;</span><span class="p">]</span> <span class="o">=</span>\

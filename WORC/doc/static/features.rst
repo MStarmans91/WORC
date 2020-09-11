@@ -35,13 +35,13 @@ Type                                          Number
 :ref:`GLSZM <features-GLSZM>`                 16
 :ref:`NGTDM <features-NGTDM>`                 5
 :ref:`GLDM <features-GLDM>`                   14
-:ref:`Gabor filter <features-Gabor>`          144
-:ref:`LoG filter <features-LoG>`              36
-:ref:`Vessel filter <features-vessel>`        36
-:ref:`Local Binary Patterns <features-lbp>`   36
-:ref:`Local phase <features-phase>`            36
+:ref:`Gabor filter <features-Gabor>`          156
+:ref:`LoG filter <features-LoG>`              39
+:ref:`Vessel filter <features-vessel>`        39
+:ref:`Local Binary Patterns <features-lbp>`   39
+:ref:`Local phase <features-phase>`           39
 -------------------------------------------- ---------------------------------------------------
-**Total**                                     **540**
+**Total**                                     **564**
 ============================================ ===================================================
 
 

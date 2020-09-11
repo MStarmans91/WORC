@@ -170,9 +170,13 @@ def count_parameters(parameters):
     output = dict()
     for setting, values in parameters.items():
         output[setting] = dict()
-        c = Counter(values)
-        for k, v in zip(c.keys(), c.values()):
-            output[setting][k] = v
+        try:
+            c = Counter(values)
+            for k, v in zip(c.keys(), c.values()):
+                output[setting][k] = v
+        except TypeError:
+            # Not possible to count parameters, remove
+            del output[setting]
 
     return output
 

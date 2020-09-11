@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.fitandscore &mdash; WORC 3.3.2 documentation</title>
+  <title>WORC.classification.fitandscore &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -180,7 +180,6 @@
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">RobustScaler</span><span class="p">,</span> <span class="n">MinMaxScaler</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection._validation</span> <span class="k">import</span> <span class="n">_fit_and_score</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">Lasso</span>
@@ -192,13 +191,12 @@
 <span class="kn">from</span> <span class="nn">WORC.classification.ObjectSampler</span> <span class="k">import</span> <span class="n">ObjectSampler</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="k">import</span> <span class="n">_safe_split</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">_num_samples</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">make_scorer</span><span class="p">,</span> <span class="n">average_precision_score</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.estimators</span> <span class="k">import</span> <span class="n">RankedSVM</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.metrics</span> <span class="k">import</span> <span class="n">check_multimetric_scoring</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.Relief</span> <span class="k">import</span> <span class="n">SelectMulticlassRelief</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.Imputer</span> <span class="k">import</span> <span class="n">Imputer</span>
-<span class="kn">from</span> <span class="nn">WORC.featureprocessing.Scalers</span> <span class="k">import</span> <span class="n">RobustStandardScaler</span>
+<span class="kn">from</span> <span class="nn">WORC.featureprocessing.Scalers</span> <span class="k">import</span> <span class="n">WORCScaler</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.VarianceThreshold</span> <span class="k">import</span> <span class="n">selfeat_variance</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.StatisticalTestThreshold</span> <span class="k">import</span> <span class="n">StatisticalTestThreshold</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.SelectGroups</span> <span class="k">import</span> <span class="n">SelectGroups</span>
@@ -518,7 +516,7 @@
         <span class="c1"># TODO: Make a specific WORC exception for this warning.</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WARNING]: No features are selected! Probably all feature groups were set to False. Parameters:&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">para</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
 
         <span class="c1"># Delete the non-used fields</span>
         <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
@@ -534,20 +532,20 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Fitting scaler and transforming features, method &#39;</span> <span class="o">+</span>
               <span class="n">f</span><span class="s1">&#39;</span><span class="si">{para_estimator[&quot;FeatureScaling&quot;]}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;robust_z_score&#39;</span><span class="p">:</span>
-        <span class="n">scaler</span> <span class="o">=</span> <span class="n">RobustStandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;z_score&#39;</span><span class="p">:</span>
-        <span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;robust&#39;</span><span class="p">:</span>
-        <span class="n">scaler</span> <span class="o">=</span> <span class="n">RobustScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;minmax&#39;</span><span class="p">:</span>
-        <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+    <span class="n">scaling_method</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">scaling_method</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
         <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">WORCKeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{para_estimator[&quot;FeatureScaling&quot;]}</span><span class="s1"> is not a &#39;</span> <span class="o">+</span>
-                           <span class="s1">&#39;valid scaling method. Should be z_score, &#39;</span> <span class="o">+</span>
-                           <span class="s1">&#39;robust, minmax, or None.&#39;</span><span class="p">)</span>
+        <span class="n">skip_features</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling_skip_features&#39;</span><span class="p">]</span>
+        <span class="n">n_skip_feat</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">e</span> <span class="ow">in</span> <span class="n">i</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">skip_features</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">n_skip_feat</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="c1"># Don&#39;t need to scale any features</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] Skipping scaling, only skip features selected.&#39;</span><span class="p">)</span>
+            <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">scaler</span> <span class="o">=</span> <span class="n">WORCScaler</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">scaling_method</span><span class="p">,</span> <span class="n">skip_features</span><span class="o">=</span><span class="n">skip_features</span><span class="p">)</span>
+            <span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">X_train</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>

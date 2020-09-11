@@ -156,13 +156,14 @@ class WORC(object):
         # Memory settings for all fastr nodes
         self.fastr_memory_parameters = dict()
         self.fastr_memory_parameters['FeatureCalculator'] = '14G'
-        self.fastr_memory_parameters['Classification'] = '12G'
+        self.fastr_memory_parameters['Classification'] = '6G'
         self.fastr_memory_parameters['WORCCastConvert'] = '4G'
         self.fastr_memory_parameters['Preprocessing'] = '4G'
         self.fastr_memory_parameters['Elastix'] = '4G'
         self.fastr_memory_parameters['Transformix'] = '4G'
         self.fastr_memory_parameters['Segmentix'] = '6G'
         self.fastr_memory_parameters['ComBat'] = '12G'
+        self.fastr_memory_parameters['PlotEstimator'] = '12G'
 
         if DebugDetector().do_detection():
             print(fastr.config)
@@ -200,6 +201,7 @@ class WORC(object):
 
         # Preprocessing
         config['Preprocessing'] = dict()
+        config['Preprocessing']['CheckSpacing'] = 'False'
         config['Preprocessing']['Normalize'] = 'True'
         config['Preprocessing']['Normalize_ROI'] = 'Full'
         config['Preprocessing']['ROIDetermine'] = 'Provided'
@@ -208,6 +210,8 @@ class WORC(object):
         config['Preprocessing']['Method'] = 'z_score'
         config['Preprocessing']['Resampling'] = 'False'
         config['Preprocessing']['Resampling_spacing'] = '1, 1, 1'
+        config['Preprocessing']['BiasCorrection'] = 'False'
+        config['Preprocessing']['BiasCorrection_Mask'] = 'False'
 
         # Segmentix
         config['Segmentix'] = dict()
@@ -321,6 +325,7 @@ class WORC(object):
         # Feature scaling options
         config['FeatureScaling'] = dict()
         config['FeatureScaling']['scaling_method'] = 'robust_z_score'
+        config['FeatureScaling']['skip_features'] = 'semf_, pf_'
 
         # Feature preprocessing before all below takes place
         config['FeatPreProcess'] = dict()
@@ -400,8 +405,10 @@ class WORC(object):
         config['Classification']['RFn_estimators'] = '10, 90'
         config['Classification']['RFmin_samples_split'] = '2, 3'
         config['Classification']['RFmax_depth'] = '5, 5'
-        config['Classification']['LRpenalty'] = 'l2'
+        config['Classification']['LRpenalty'] = 'l1, l2, elasticnet'
         config['Classification']['LRC'] = '0.01, 1.0'
+        config['Classification']['LR_solver'] = 'lbfgs, saga'
+        config['Classification']['LR_l1_ratio'] = '0, 1'
         config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
         config['Classification']['LDA_shrinkage'] = '-5, 5'
         config['Classification']['QDA_reg_param'] = '-5, 5'
@@ -415,6 +422,7 @@ class WORC(object):
 
         # CrossValidation
         config['CrossValidation'] = dict()
+        config['CrossValidation']['Type'] = 'random_split'
         config['CrossValidation']['N_iterations'] = '100'
         config['CrossValidation']['test_size'] = '0.2'
         config['CrossValidation']['fixed_seed'] = 'False'
@@ -516,10 +524,11 @@ class WORC(object):
                                                  id='LabelType',
                                                  step_id='Evaluation')
 
+                memory = self.fastr_memory_parameters['PlotEstimator']
                 self.plot_estimator =\
                     self.network.create_node('worc/PlotEstimator:1.0', tool_version='1.0',
                                              id='plot_Estimator',
-                                             resources=ResourceLimit(memory='12G'),
+                                             resources=ResourceLimit(memory=memory),
                                              step_id='Evaluation')
 
                 # Outputs
@@ -805,7 +814,7 @@ class WORC(object):
                         if self.configs[nmod]['General']['Segmentix'] == 'True':
                             self.add_segmentix(label, nmod)
                         elif self.configs[nmod]['Preprocessing']['Resampling'] == 'True':
-                            raise WORCValueError('If you use resampling, ' +
+                            raise WORCexceptions.WORCValueError('If you use resampling, ' +
                                                  'have to use segmentix to ' +
                                                  ' make sure the mask is ' +
                                                  'also resampled. Please ' +
@@ -1489,6 +1498,10 @@ class WORC(object):
         self.nodes_segmentix_train[label].inputs['image'] =\
             self.converters_im_train[label].outputs['image']
 
+        # Input the metadata
+        if self.metadata_train and len(self.metadata_train) >= nmod + 1:
+            self.nodes_segmentix_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
+
         # Input the segmentation
         if hasattr(self, 'transformix_seg_nodes_train'):
             if label in self.transformix_seg_nodes_train.keys():
@@ -1523,8 +1536,13 @@ class WORC(object):
                                          resources=ResourceLimit(memory=memory),
                                          step_id='Preprocessing')
 
+            # Input the image
             self.nodes_segmentix_test[label].inputs['image'] =\
                 self.converters_im_test[label].outputs['image']
+
+            # Input the metadata
+            if self.metadata_test and len(self.metadata_test) >= nmod + 1:
+                self.nodes_segmentix_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
 
             if hasattr(self, 'transformix_seg_nodes_test'):
                 if label in self.transformix_seg_nodes_test.keys():

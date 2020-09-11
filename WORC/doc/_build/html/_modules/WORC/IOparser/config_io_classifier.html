@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.IOparser.config_io_classifier &mdash; WORC 3.3.2 documentation</title>
+  <title>WORC.IOparser.config_io_classifier &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -231,6 +231,10 @@
         <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
          <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;skip_features&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;skip_features&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
     <span class="c1"># Feature selection</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;Variance&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="s1">&#39;Variance&#39;</span><span class="p">)</span>
@@ -382,6 +386,12 @@
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRC&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
          <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRC&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
     <span class="c1"># Specific LDA/QDA options</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LDA_solver&#39;</span><span class="p">]</span> <span class="o">=</span>\
@@ -422,6 +432,9 @@
          <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;CNB_alpha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
     <span class="c1"># Cross validation settings</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">])</span>
+
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">)</span>
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>plotting Package &mdash; WORC 3.3.2 documentation</title>
+  <title>plotting Package &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -285,7 +285,7 @@ estimator.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_ROC.plot_single_ROC">
-<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">plot_single_ROC</code><span class="sig-paren">(</span><em>y_truth</em>, <em>y_score</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_single_ROC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_single_ROC" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">plot_single_ROC</code><span class="sig-paren">(</span><em>y_truth</em>, <em>y_score</em>, <em>verbose=False</em>, <em>returnplot=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_single_ROC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_single_ROC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the False Positive Ratio (FPR) and True Positive Ratio (TPR)
 for the ground truth and score of a single estimator. These ratios
 can be used to plot a Receiver Operator Characteristic (ROC) curve.</p>
@@ -389,6 +389,12 @@ Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="WORC.plotting.plot_estimator_performance.compute_statistics">
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">compute_statistics</code><span class="sig-paren">(</span><em>y_truth</em>, <em>y_score</em>, <em>y_prediction</em>, <em>modus</em>, <em>regression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#compute_statistics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.compute_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute statistics on predictions.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="WORC.plotting.plot_estimator_performance.fit_thresholds">
 <code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">fit_thresholds</code><span class="sig-paren">(</span><em>thresholds</em>, <em>estimator</em>, <em>X_train</em>, <em>Y_train</em>, <em>ensemble</em>, <em>ensemble_scoring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#fit_thresholds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.fit_thresholds" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -400,7 +406,7 @@ Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_estimator_performance.plot_estimator_performance">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">plot_estimator_performance</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_data</em>, <em>label_type</em>, <em>show_plots=False</em>, <em>alpha=0.95</em>, <em>ensemble=False</em>, <em>verbose=True</em>, <em>ensemble_scoring=None</em>, <em>output='stats'</em>, <em>modus='singlelabel'</em>, <em>thresholds=None</em>, <em>survival=False</em>, <em>generalization=False</em>, <em>shuffle_estimators=False</em>, <em>bootstrap=False</em>, <em>bootstrap_N=1000</em>, <em>overfit_scaler=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#plot_estimator_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.plot_estimator_performance" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">plot_estimator_performance</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_data</em>, <em>label_type</em>, <em>crossval_type=None</em>, <em>alpha=0.95</em>, <em>ensemble=None</em>, <em>verbose=True</em>, <em>ensemble_scoring=None</em>, <em>output=None</em>, <em>modus=None</em>, <em>thresholds=None</em>, <em>survival=False</em>, <em>generalization=False</em>, <em>shuffle_estimators=False</em>, <em>bootstrap=None</em>, <em>bootstrap_N=None</em>, <em>overfit_scaler=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#plot_estimator_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.plot_estimator_performance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the output of a single estimator, e.g. a SVM.</p>
 <dl class="simple">
 <dt>prediction: pandas dataframe or string, mandatory</dt><dd><p>output of trainclassifier function, either a pandas dataframe
@@ -412,8 +418,6 @@ the Github Wiki for the format.</p>
 </dd>
 <dt>label_type: string, mandatory</dt><dd><p>Name of the label to extract from the label data to test the
 estimator on.</p>
-</dd>
-<dt>show_plots: Boolean, default False</dt><dd><p>Determine whether matplotlib performance plots are made.</p>
 </dd>
 <dt>alpha: float, default 0.95</dt><dd><p>Significance of confidence intervals.</p>
 </dd>

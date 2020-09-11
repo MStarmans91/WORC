@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.WORC &mdash; WORC 3.3.2 documentation</title>
+  <title>WORC.WORC &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -321,13 +321,14 @@
         <span class="c1"># Memory settings for all fastr nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;FeatureCalculator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;14G&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;12G&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;6G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;WORCCastConvert&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Elastix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Transformix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;6G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;12G&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;PlotEstimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;12G&#39;</span>
 
         <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="p">)</span></div>
@@ -365,6 +366,7 @@
 
         <span class="c1"># Preprocessing</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;CheckSpacing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Normalize_ROI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Full&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;ROIDetermine&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Provided&#39;</span>
@@ -373,6 +375,8 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;z_score&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Resampling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Resampling_spacing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1, 1, 1&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;BiasCorrection&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;BiasCorrection_Mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
 
         <span class="c1"># Segmentix</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -486,6 +490,7 @@
         <span class="c1"># Feature scaling options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;robust_z_score&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;skip_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;semf_, pf_&#39;</span>
 
         <span class="c1"># Feature preprocessing before all below takes place</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatPreProcess&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -565,8 +570,10 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFn_estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;10, 90&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFmin_samples_split&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2, 3&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFmax_depth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5, 5&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;l2&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;l1, l2, elasticnet&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.01, 1.0&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;lbfgs, saga&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0, 1&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LDA_solver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;svd, lsqr, eigen&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LDA_shrinkage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;-5, 5&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;QDA_reg_param&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;-5, 5&#39;</span>
@@ -580,6 +587,7 @@
 
         <span class="c1"># CrossValidation</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;random_split&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;test_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;fixed_seed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
@@ -681,10 +689,11 @@
                                                  <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;LabelType&#39;</span><span class="p">,</span>
                                                  <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
+                <span class="n">memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;PlotEstimator&#39;</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">plot_estimator</span> <span class="o">=</span>\
                     <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotEstimator:1.0&#39;</span><span class="p">,</span> <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                              <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_Estimator&#39;</span><span class="p">,</span>
-                                             <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
+                                             <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">),</span>
                                              <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
                 <span class="c1"># Outputs</span>
@@ -970,7 +979,7 @@
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">nmod</span><span class="p">][</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">add_segmentix</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">nmod</span><span class="p">)</span>
                         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">nmod</span><span class="p">][</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Resampling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
-                            <span class="k">raise</span> <span class="n">WORCValueError</span><span class="p">(</span><span class="s1">&#39;If you use resampling, &#39;</span> <span class="o">+</span>
+                            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="s1">&#39;If you use resampling, &#39;</span> <span class="o">+</span>
                                                  <span class="s1">&#39;have to use segmentix to &#39;</span> <span class="o">+</span>
                                                  <span class="s1">&#39; make sure the mask is &#39;</span> <span class="o">+</span>
                                                  <span class="s1">&#39;also resampled. Please &#39;</span> <span class="o">+</span>
@@ -1654,6 +1663,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes_segmentix_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">converters_im_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span>
 
+        <span class="c1"># Input the metadata</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_train</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_train</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">nmod</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes_segmentix_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources_metadata_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
+
         <span class="c1"># Input the segmentation</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;transformix_seg_nodes_train&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformix_seg_nodes_train</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1688,8 +1701,13 @@
                                          <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">),</span>
                                          <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">)</span>
 
+            <span class="c1"># Input the image</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nodes_segmentix_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span>\
                 <span class="bp">self</span><span class="o">.</span><span class="n">converters_im_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Input the metadata</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_test</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_test</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">nmod</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nodes_segmentix_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources_metadata_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
 
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;transformix_seg_nodes_test&#39;</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformix_seg_nodes_test</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>

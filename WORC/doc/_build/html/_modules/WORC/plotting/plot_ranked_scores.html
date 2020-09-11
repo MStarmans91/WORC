@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.3.2 documentation</title>
+  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.3.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.3.3
               </div>
             
           
@@ -281,7 +281,6 @@
         <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
                                    <span class="n">pinfo</span><span class="p">,</span>
                                    <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
-                                   <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
                                    <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
                                    <span class="n">output</span><span class="o">=</span><span class="s1">&#39;stats&#39;</span><span class="p">)</span>
@@ -411,7 +410,6 @@
         <span class="n">plot_estimator_performance</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span>
                                    <span class="n">pinfo</span><span class="p">,</span>
                                    <span class="p">[</span><span class="n">label_type</span><span class="p">],</span>
-                                   <span class="n">show_plots</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
                                    <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
                                    <span class="n">output</span><span class="o">=</span><span class="s1">&#39;scores&#39;</span><span class="p">)</span>
@@ -529,12 +527,19 @@
                                    <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
                                    <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">scores</span> <span class="o">==</span> <span class="s1">&#39;percentages&#39;</span><span class="p">:</span>
-        <span class="n">ranked_scores</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_PIDs</span> <span class="o">=</span>\
-            <span class="n">plot_ranked_percentages</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
-                                    <span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
-                                    <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
-                                    <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
-                                    <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prediction</span><span class="p">[</span><span class="n">label_type</span><span class="p">]</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;LOO&#39;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cannot rank percentages for LOO, returning dummies.&#39;</span><span class="p">)</span>
+            <span class="n">ranked_scores</span> <span class="o">=</span> <span class="n">ranked_truths</span> <span class="o">=</span> <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+                <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;LOO: Cannot rank percentages.&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ranked_scores</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_PIDs</span> <span class="o">=</span>\
+                <span class="n">plot_ranked_percentages</span><span class="p">(</span><span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">,</span>
+                                        <span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
+                                        <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
+                                        <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
+                                        <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid scoring method!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
         <span class="k">raise</span> <span class="n">WORCKeyError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
