@@ -37,15 +37,15 @@ For more information regarding radiomics, we recommend the following book chapte
 
 The article on WORC is currently in preparation. WORC has been presented in the following:
 
-    `M. P. A. Starmans. "Multicentre studies for more robust radiomics signatures." European Conference of Radiology (ECR) 2020: E3 420-4 Radiomics: principles and applications. <https://youtu.be/iDUCIxw0D4I/>`_
+    `M. P. A. Starmans. "Multicentre studies for more robust radiomics signatures." European Conference of Radiology (ECR) 2020: E3 420-4 Radiomics: principles and applications. <https://connect.myesr.org/course/radiomics-principles-and-applications/>`_
 
-    `M. P. A. Starmans, S. R. van der Voort, M. Vos, F. Incekara, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen and S. Klein. "Fully automatic construction of optimal radiomics workflows." European Conference of Radiology (ECR) 2019. <https://connect.myesr.org/course/radiomics-principles-and-applications/>`_
+    `M. P. A. Starmans, S. R. van der Voort, M. Vos, F. Incekara, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen and S. Klein. "Fully automatic construction of optimal radiomics workflows." European Conference of Radiology (ECR) 2019. <https://youtu.be/iDUCIxw0D4I/>`_
 
     `Martijn P. A. Starmans, Sebastian R. van der Voort, Razvan L. Miclea, Melissa Vos, Fatih Incekara, Milea J.M. Timbergen, Maarten M.J. Wijnenga, Guillaume A. Padmos, G.H.J. van Leenders, George Kapsas, Martin J. van den Bent, Arnaud J.P.E. Vincent, Dirk J. Grünhagen, Cornelis Verhoef, Stefan Sleijfer, Jacob J. Visser, Marion Smits, Maarten, G. Thomeer, Wiro J. Niessen, and Stefan Klein. "Harmonizing radiomics among applications through adaptive workflow optimization." European Society of Medical Imaging Informatics (EuSoMII) Annual Meeting 2019. <https://www.eusomii.org/events/eusomii-annual-meeting-2018/>`_
 
 WORC has been used in the following studies:
 
-    `Milea JM Timbergen*, Martijn PA Starmans*, Melissa Vos, Guillaume A Padmos, Dirk J Grünhagen, Geert JLH van Leenders, David Hanff, Cornelis Verhoef, Wiro J Niessen, Stefan Sleijfer, Stefan Klein, Jacob J Visser. "Differential diagnosis and mutation stratification of desmoid-type fibromatosis on MRI using radiomics." European Journal of Radiology 2020, https://doi.org/10.1016/j.ejrad.2020.109266 <https://doi.org/10.1016/j.ejrad.2020.109266/>`_
+    `Milea JM Timbergen*, Martijn PA Starmans*, Melissa Vos, Guillaume A Padmos, Dirk J Grünhagen, Geert JLH van Leenders, David Hanff, Cornelis Verhoef, Wiro J Niessen, Stefan Sleijfer, Stefan Klein, Jacob J Visser. "Differential diagnosis and mutation stratification of desmoid-type fibromatosis on MRI using radiomics." European Journal of Radiology 2020, https://doi.org/10.1016/j.ejrad.2020.109266 <https://doi.org/10.1016/j.ejrad.2020.109266>`_
 
     `M. P. A. Starmans, C. J. Els, F. Fiduzi, W. J. Niessen, S.Klein, R. S. Dwarkasing. "Radiomics model to predict hepatocellular carcinoma on liver MRI of high-risk patients in surveillance: a proof-of-concept study." European Conference of Radiology (ECR) 2020 <https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/>`_
 
