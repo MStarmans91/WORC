@@ -6,8 +6,13 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-3.3.3 - Unreleased
+3.3.3 - 2020-09-11
 ------------------
+
+Fixed
+~~~~~
+- In the RobustStandardScaler, if less than two values for a feature are left,
+  use the original set inset of the ``robust'' reduced set.
 
 Changed
 ~~~~~~~

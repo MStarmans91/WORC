@@ -37,13 +37,29 @@ For more information regarding radiomics, we recommend the following book chapte
 
 The article on WORC is currently in preparation. WORC has been presented in the following:
 
-    `M. P. A. Starmans, S. R. van der Voort, M. Vos, F. Incekara, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen and S. Klein. "Fully automatic construction of optimal radiomics workflows." European Conference of Radiology (ECR) 2019. <https://youtu.be/iDUCIxw0D4I/>`_
+    `M. P. A. Starmans. "Multicentre studies for more robust radiomics signatures." European Conference of Radiology (ECR) 2020: E3 420-4 Radiomics: principles and applications. <https://youtu.be/iDUCIxw0D4I/>`_
+
+    `M. P. A. Starmans, S. R. van der Voort, M. Vos, F. Incekara, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen and S. Klein. "Fully automatic construction of optimal radiomics workflows." European Conference of Radiology (ECR) 2019. <https://connect.myesr.org/course/radiomics-principles-and-applications/>`_
 
     `Martijn P. A. Starmans, Sebastian R. van der Voort, Razvan L. Miclea, Melissa Vos, Fatih Incekara, Milea J.M. Timbergen, Maarten M.J. Wijnenga, Guillaume A. Padmos, G.H.J. van Leenders, George Kapsas, Martin J. van den Bent, Arnaud J.P.E. Vincent, Dirk J. Grünhagen, Cornelis Verhoef, Stefan Sleijfer, Jacob J. Visser, Marion Smits, Maarten, G. Thomeer, Wiro J. Niessen, and Stefan Klein. "Harmonizing radiomics among applications through adaptive workflow optimization." European Society of Medical Imaging Informatics (EuSoMII) Annual Meeting 2019. <https://www.eusomii.org/events/eusomii-annual-meeting-2018/>`_
 
 WORC has been used in the following studies:
 
-    `Milea Timbergen*, Martijn PA Starmans*, Melissa Vos, Michel Renckens, Dirk J Grünhagen, Geert JLH van Leenders, Wiro J Niessen, Cornelis Verhoef, Stefan Sleijfer, Stefan Klein, Jacob J Visser. "Radiomics of Gastrointestinal Stromal Tumors; Risk Classification Based on Computed Tomography Images–A Pilot Study." European Journal of Surgical Oncology 2020 <https://www.sciencedirect.com/science/article/pii/S0748798319309345/>`_
+    `Milea JM Timbergen*, Martijn PA Starmans*, Melissa Vos, Guillaume A Padmos, Dirk J Grünhagen, Geert JLH van Leenders, David Hanff, Cornelis Verhoef, Wiro J Niessen, Stefan Sleijfer, Stefan Klein, Jacob J Visser. "Differential diagnosis and mutation stratification of desmoid-type fibromatosis on MRI using radiomics." European Journal of Radiology 2020, https://doi.org/10.1016/j.ejrad.2020.109266 <https://doi.org/10.1016/j.ejrad.2020.109266/>`_
+
+    `M. P. A. Starmans, C. J. Els, F. Fiduzi, W. J. Niessen, S.Klein, R. S. Dwarkasing. "Radiomics model to predict hepatocellular carcinoma on liver MRI of high-risk patients in surveillance: a proof-of-concept study." European Conference of Radiology (ECR) 2020 <https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/>`_
+
+    `M. P. A. Starmans, M. Vos, M. J. M. Timbergen, S. R. van der Voort, D. J. Grünhagen, S. Sleijfer, C. Verhoef, J.J. Visser, S.Klein. "Distinguishing well-differentiated liposarcomas from lipomas on MR images using a radiomics approach." European Conference of Radiology (ECR) 2020 <https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/>`_
+
+    `M. P. A. Starmans, M. J. M. Timbergen, G. A. Padmos, D. J. Grünhagen, G. J. van Leenders, D. Hanff, S. Sleijfer, J.J. Visser, S.Klein. "Distinguishing desmoid-type fibromatosis from soft tissue sarcoma on MRI using a radiomics approach." European Conference of Radiology (ECR) 2020 <https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/>`_
+
+    `M. P. A. Starmans, M. J. M. Timbergen, M. Renckens, D. J. Grünhagen, G. J. van Leenders,S. Sleijfer, J.J. Visser, S.Klein. "Differential diagnosis and mutation stratification of gastrointestinal stromal tumours on CT images using a radiomics approach." European Conference of Radiology (ECR) 2020 <https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/>`_
+
+    `M. P. A. Starmans, F. E. Buisman, S. R. van der Voort, D. J. Grünhagen, P. B. Vermeulen, C. Verhoef, S.Klein, J.J. Visser. "Prediction of histopathological growth patterns by radiomics and CT-imaging in patients with operable colorectal liver metastases: a proof-of-concept study." European Conference of Radiology (ECR) 2020 <https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/>`_
+
+    `J. M. Castillo, M. P. A. Starmans, M. Arif, W. J. Niessen, S.Klein, I. G. Schoots, J. Veenland. "A multicentre-multivendor study to evaluate the generalisability of a radiomics model for classifying prostate cancer." European Conference of Radiology (ECR) 2020 <https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/>`_
+
+    `Milea JM Timbergen*, Martijn PA Starmans*, Melissa Vos, Michel Renckens, Dirk J Grünhagen, Geert JLH van Leenders, Wiro J Niessen, Cornelis Verhoef, Stefan Sleijfer, Stefan Klein, Jacob J Visser. "Radiomics of Gastrointestinal Stromal Tumors; Risk Classification Based on Computed Tomography Images–A Pilot Study." European Journal of Surgical Oncology 2020 <https://www.sciencedirect.com/science/article/pii/S0748798319309345/>`_
 
     `Melissa Vos*, MPA Starmans*, MJM Timbergen, SR van der Voort, GA Padmos, W Kessels, WJ Niessen, GJLH van Leenders, DJ Grünhagen, Stefan Sleijfer, C Verhoef, Stefan Klein, Jacob Johannes Visser. "Radiomics approach to distinguish between well differentiated liposarcomas and lipomas on MRI" British Journal of Surgery 2019 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6899528/>`_
 

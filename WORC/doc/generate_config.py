@@ -128,6 +128,7 @@ def generate_config_options():
 
     # Preprocessing
     config['Preprocessing'] = dict()
+    config['Preprocessing']['CheckSpacing'] = 'True, False'
     config['Preprocessing']['Normalize'] = 'True, False'
     config['Preprocessing']['Normalize_ROI'] = 'True, False, Full'
     config['Preprocessing']['ROIDetermine'] = 'Provided, Otsu'
@@ -314,6 +315,8 @@ def generate_config_options():
     config['Classification']['RFmax_depth'] = 'Two Integers: loc and scale'
     config['Classification']['LRpenalty'] = 'none, l2, l1'
     config['Classification']['LRC'] = 'Two Integers: loc and scale'
+    config['Classification']['LR_solver'] = 'Comma separated list of strings, for the options see https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html'
+    config['Classification']['LR_l1_ratio'] = 'Float between 0.0 and 1.0.'
     config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
     config['Classification']['LDA_shrinkage'] = 'Two Integers: loc and scale'
     config['Classification']['QDA_reg_param'] = 'Two Integers: loc and scale'
@@ -327,6 +330,7 @@ def generate_config_options():
 
     # CrossValidation
     config['CrossValidation'] = dict()
+    config['CrossValidation']['Type'] = 'random_split, LOO'
     config['CrossValidation']['N_iterations'] = 'Integer'
     config['CrossValidation']['test_size'] = 'Float'
     config['CrossValidation']['fixed_seed'] = 'Boolean'
@@ -348,6 +352,7 @@ def generate_config_options():
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
+    config['FeatureScaling']['skip_features'] = 'Comma separated list of strings'
     config['FeatureScaling']['scaling_method'] = 'robust_z_score. z_score, robust, minmax, None'
 
     # Ensemble options
@@ -395,6 +400,7 @@ def generate_config_descriptions():
 
     # Preprocessing
     config['Preprocessing'] = dict()
+    config['Preprocessing']['CheckSpacing'] = 'Determine whether to check the spacing or not. If True, and the spacing of the image is [1x1x1], we assume the spacing is incorrect, and overwrite it using the DICOM metadata.'
     config['Preprocessing']['Normalize'] = 'Determine whether to use normalization in preprocessing of image or not.'
     config['Preprocessing']['Normalize_ROI'] = 'If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.'
     config['Preprocessing']['ROIDetermine'] = 'Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.'
@@ -574,6 +580,8 @@ def generate_config_descriptions():
     config['Classification']['RFmax_depth'] = 'Range of maximum depth of a RF. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
     config['Classification']['LRpenalty'] = 'Penalty term used in LR.'
     config['Classification']['LRC'] = 'Range of regularization strength in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['Classification']['LR_solver'] = 'Solver used in LR.'
+    config['Classification']['LR_l1_ratio'] = 'Ratio between l1 and l2 penalty when using elasticnet penalty, see https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html.'
     config['Classification']['LDA_solver'] = 'Solver used in LDA.'
     config['Classification']['LDA_shrinkage'] = 'Range of the LDA shrinkage parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
     config['Classification']['QDA_reg_param'] = 'Range of the QDA regularization parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale). '
@@ -587,9 +595,10 @@ def generate_config_descriptions():
 
     # CrossValidation
     config['CrossValidation'] = dict()
-    config['CrossValidation']['N_iterations'] = 'Number of times the data is split in training and test in the outer cross-validation.'
-    config['CrossValidation']['test_size'] = 'The percentage of data to be used for testing.'
-    config['CrossValidation']['fixed_seed'] = 'If True, use a fixed seed for the cross-validation splits.'
+    config['CrossValidation']['Type'] = 'If performing a cross-validationm, type of cross-validation used. Currently random-splitting and leave-one-out (LOO) are supported.'
+    config['CrossValidation']['N_iterations'] = 'Number of times the data is split in training and test in the outer cross-validation when using random-splitting.'
+    config['CrossValidation']['test_size'] = 'The percentage of data to be used for testing when using random-splitting.'
+    config['CrossValidation']['fixed_seed'] = 'If True, use a fixed seed for the cross-validation splits when using random-splitting.'
 
     # Options for the object/patient labels that are used
     config['Labels'] = dict()
@@ -608,6 +617,7 @@ def generate_config_descriptions():
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
+    config['FeatureScaling']['skip_features'] = 'Determine which features should be skipped. This field should contain a comma separated list of substrings: when one or more of these are in a feature name, the feature is skipped.'
     config['FeatureScaling']['scaling_method'] = 'Determine the scaling method.'
 
     # Ensemble options
