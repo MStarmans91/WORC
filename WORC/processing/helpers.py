@@ -117,6 +117,10 @@ def transpose_image(image, primary_axis='axial'):
     # Also Transform metadata
     new_image.SetSpacing([image.GetSpacing()[t] for t in transform])
     new_image.SetOrigin([image.GetOrigin()[t] for t in transform])
-    new_image.SetDirection([image.GetDirection()[d] for d in direction_of_cosines])
+    try:
+        new_image.SetDirection([image.GetDirection()[d] for d in direction_of_cosines])
+    except RuntimeError:
+        # Bad determinant, just assume we have the correct direction already
+        pass
 
     return new_image
