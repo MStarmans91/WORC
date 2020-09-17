@@ -21,7 +21,7 @@ from skimage import morphology
 import scipy.ndimage as nd
 import numpy as np
 import WORC.IOparser.config_segmentix as config_io
-from WORC.processing.helpers import resample_image
+from WORC.processing import helpers as h
 import pydicom
 import WORC.addexceptions as ae
 
@@ -223,12 +223,20 @@ def segmentix(parameters, image=None, segmentation=None,
                        float(slice_thickness))
             image.SetSpacing(spacing)
 
+    # Apply re-orientation of the image
+    if config['Preprocessing']['CheckOrientation']:
+        primary_axis = config['Preprocessing']['OrientationPrimaryAxis']
+        print(f'Apply re-orientation of image to {primary_axis} if required.')
+        contour = h.transpose_image(image=contour, primary_axis=primary_axis)
+    else:
+        print('No re-orientation was applied.')
+
     # Apply resampling if required
     if config['Preprocessing']['Resampling']:
         new_spacing = config['Preprocessing']['Resampling_spacing']
         print(f'[Segmentix] Apply resampling of image to spacing {new_spacing}.')
-        contour = resample_image(image=contour, new_spacing=new_spacing,
-                                 interpolator=sitk.sitkNearestNeighbor)
+        contour = h.resample_image(image=contour, new_spacing=new_spacing,
+                                   interpolator=sitk.sitkNearestNeighbor)
     else:
         print('No resampling was applied.')
 

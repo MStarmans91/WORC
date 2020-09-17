@@ -475,8 +475,15 @@ def plot_estimator_performance(prediction, label_data, label_type,
             else:
                 raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
 
+        # If all scores are NaN, the classifier cannot do probabilities, thus
+        # use hard predictions
+        if np.sum(np.isnan(y_score)) == len(y_prediction):
+            print('[WORC Warning] All scores NaN, replacing with prediction.')
+            y_score = y_prediction
+
         print("Truth: " + str(y_truth))
         print("Prediction: " + str(y_prediction))
+        print("Score: " + str(y_score))
 
         if output == 'stats' and crossval_type != 'LOO':
             # Add if patient was classified correctly or not to counting

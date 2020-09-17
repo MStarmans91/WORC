@@ -111,7 +111,7 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
         try:
             auc = roc_auc_score(y_truth, y_score)
         except ValueError as e:
-            print('[WORC Warning] ' + e.message + '. Setting AUC to NaN.')
+            print('[WORC Warning] ' + str(e) + '. Setting AUC to NaN.')
             auc = np.NaN
 
         f1_score_out = f1_score(y_truth, y_prediction, average='weighted')

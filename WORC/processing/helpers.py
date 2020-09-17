@@ -16,6 +16,7 @@
 # limitations under the License.
 
 import SimpleITK as sitk
+import numpy as np
 
 
 def resample_image(image, new_spacing, interpolator=sitk.sitkBSpline):
@@ -59,3 +60,63 @@ def resample_image(image, new_spacing, interpolator=sitk.sitkBSpline):
     ResampleFilter.SetTransform(sitk.Transform())
     resampled_image = ResampleFilter.Execute(image)
     return resampled_image
+
+
+def check_image_orientation(image):
+    """Check the orientation of an ITK image."""
+    direction_of_cosines = image.GetDirection()
+
+    X_vector = np.abs(np.array(direction_of_cosines[0:3]))
+    Y_vector = np.abs(np.array(direction_of_cosines[3:6]))
+
+    X_index = np.argmax(X_vector)
+    Y_index = np.argmax(Y_vector)
+
+    if X_index == 0 and Y_index == 1:
+        # Axial
+        orientation = 1
+    elif X_index == 0 and Y_index == 2:
+        # Coronal
+        orientation = 2
+    elif X_index == 1 and Y_index == 2:
+        # Sagital
+        orientation = 3
+    else:
+        # Don't know what this is
+        orientation = 4
+
+    return orientation
+
+
+def transpose_image(image, primary_axis='axial'):
+    """Transpose an ITK image, while keeping the metadata."""
+    orientation = check_image_orientation(image)
+
+    if primary_axis == 'axial':
+        if orientation == 1:
+            print('Already in axial orientation, skipping.')
+            return image
+
+        elif orientation == 2:
+            # From coronal to axial
+            transform = (1, 0, 2)
+            flip = (False, True, False)
+            direction_of_cosines = [0, 1, 2, 3, 5, 4, 6, 7, 8]
+
+        else:
+            raise ValueError(f'Orientation {orientation} not supported for {primary_axis}.')
+    else:
+        raise ValueError(f'Primary axis {primary_axis} not supported.')
+
+    # Transform image
+    array = sitk.GetArrayFromImage(image)
+    array = np.transpose(array, transform)
+    new_image = sitk.GetImageFromArray(array)
+    new_image = sitk.Flip(new_image, flip)
+
+    # Also Transform metadata
+    new_image.SetSpacing([image.GetSpacing()[t] for t in transform])
+    new_image.SetOrigin([image.GetOrigin()[t] for t in transform])
+    new_image.SetDirection([image.GetDirection()[d] for d in direction_of_cosines])
+
+    return new_image

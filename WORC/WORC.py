@@ -212,6 +212,8 @@ class WORC(object):
         config['Preprocessing']['Resampling_spacing'] = '1, 1, 1'
         config['Preprocessing']['BiasCorrection'] = 'False'
         config['Preprocessing']['BiasCorrection_Mask'] = 'False'
+        config['Preprocessing']['CheckOrientation'] = 'False'
+        config['Preprocessing']['OrientationPrimaryAxis'] = 'axial'
 
         # Segmentix
         config['Segmentix'] = dict()

@@ -6,6 +6,19 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.3.4 - Unreleased
+------------------
+
+Fixed
+~~~~~
+- Bugfixes in some error messages.
+- If a classifier cannot give a score, use the prediction instead.
+
+Added
+~~~~~~~
+- Option to transpose all images and segmentations to a default orientation.
+  Currently only supports axial.
+
 3.3.3 - 2020-09-11
 ------------------
 

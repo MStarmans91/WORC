@@ -20,7 +20,7 @@ import pydicom
 import WORC.IOparser.config_preprocessing as config_io
 import os
 from WORC.processing.segmentix import dilate_contour
-from WORC.processing.helpers import resample_image
+from WORC.processing import helpers as h
 import numpy as np
 import WORC.addexceptions as ae
 
@@ -86,12 +86,20 @@ def preprocess(imagefile, config, metadata=None, mask=None):
     else:
         print('No normalization was applied.')
 
+    # Apply re-orientation of the image
+    if config['Preprocessing']['CheckOrientation']:
+        primary_axis = config['Preprocessing']['OrientationPrimaryAxis']
+        print(f'Apply re-orientation of image to {primary_axis} if required.')
+        image = h.transpose_image(image=image, primary_axis=primary_axis)
+    else:
+        print('No re-orientation was applied.')
+
     # Apply resampling
     if config['Preprocessing']['Resampling']:
         new_spacing = config['Preprocessing']['Resampling_spacing']
         print(f'Apply resampling of image to spacing {new_spacing}.')
-        image = resample_image(image=image, new_spacing=new_spacing,
-                               interpolator=sitk.sitkBSpline)
+        image = h.resample_image(image=image, new_spacing=new_spacing,
+                                 interpolator=sitk.sitkBSpline)
     else:
         print('No resampling was applied.')
 
@@ -101,9 +109,6 @@ def preprocess(imagefile, config, metadata=None, mask=None):
 def bias_correct_image(img, usemask=False):
     # print('working on N4')
     initial_img = img
-    img_size = initial_img.GetSize()
-    img_spacing = initial_img.GetSpacing()
-    img_pixel_ID = img.GetPixelID()
 
     # Cast to float to enable bias correction to be used
     image = sitk.Cast(img, sitk.sitkFloat64)
