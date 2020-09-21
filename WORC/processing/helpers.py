@@ -58,7 +58,17 @@ def resample_image(image, new_spacing, interpolator=sitk.sitkBSpline):
     ResampleFilter.SetOutputOrigin(image.GetOrigin())
     ResampleFilter.SetOutputPixelType(image.GetPixelID())
     ResampleFilter.SetTransform(sitk.Transform())
-    resampled_image = ResampleFilter.Execute(image)
+    try:
+        resampled_image = ResampleFilter.Execute(image)
+    except RuntimeError:
+        # Assume the error is due to the direction determinant being 0
+        # Crude solution: simply set a correct direction
+        print('[Segmentix Warning] Bad output direction in resampling, resetting direction.')
+        direction = (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+        ResampleFilter.SetOutputDirection(direction)
+        image.SetDirection(direction)
+        resampled_image = ResampleFilter.Execute(image)
+
     return resampled_image
 
 
