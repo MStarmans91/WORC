@@ -276,6 +276,10 @@ class WORC(object):
         # Vessel features radius for erosion to determine boudnary
         config['ImageFeatures']['vessel_radius'] = '5'
 
+        # Tags from which to extract features, and how to name them
+        config['ImageFeatures']['patient_feature_tags'] = '0x10 0x1010, 0x10 0x40'
+        config['ImageFeatures']['patient_feature_labels'] = 'age, sex'
+
         # PyRadiomics - Feature calculation
         # Addition to the above, specifically for PyRadiomics
         # Mostly based on specific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml

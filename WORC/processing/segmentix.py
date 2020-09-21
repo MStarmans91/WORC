@@ -221,7 +221,7 @@ def segmentix(parameters, image=None, segmentation=None,
             spacing = (float(pixel_spacing[0]),
                        float(pixel_spacing[1]),
                        float(slice_thickness))
-            image.SetSpacing(spacing)
+            contour.SetSpacing(spacing)
 
     # Apply re-orientation of the image
     if config['Preprocessing']['CheckOrientation']:
