@@ -268,13 +268,13 @@ def plot_estimator_performance(prediction, label_data, label_type,
         crossval_type = config['CrossValidation']['Type']
 
     if bootstrap is None:
-        bootstrap = config['Bootstrap']['Use'] == 'True'
+        bootstrap = config['Bootstrap']['Use']
 
     if bootstrap_N is None:
         bootstrap_N = int(config['Bootstrap']['N_iterations'])
 
     if overfit_scaler is None:
-        overfit_scaler = config['Evaluation']['OverfitScaler'] == 'True'
+        overfit_scaler = config['Evaluation']['OverfitScaler']
 
     # Create lists for performance measures
     if not regression:

@@ -13,11 +13,13 @@ Fixed
 ~~~~~
 - Bugfixes in some error messages.
 - If a classifier cannot give a score, use the prediction instead.
+- Bugfix in bootstrapping.
 
 Changed
 ~~~~~~~
 - There are no longer ''patient_features'' in PREDICT: these are extracted
   from the DICOM tags and are thus now called ''dicom_features.
+- As bootstrapping is now more efficient, increase default to 1000 iterations.
 
 Added
 ~~~~~~~
