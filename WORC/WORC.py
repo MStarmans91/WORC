@@ -277,8 +277,8 @@ class WORC(object):
         config['ImageFeatures']['vessel_radius'] = '5'
 
         # Tags from which to extract features, and how to name them
-        config['ImageFeatures']['patient_feature_tags'] = '0x10 0x1010, 0x10 0x40'
-        config['ImageFeatures']['patient_feature_labels'] = 'age, sex'
+        config['ImageFeatures']['dicom_feature_tags'] = '0010 1010, 0010 0040'
+        config['ImageFeatures']['dicom_feature_labels'] = 'age, sex'
 
         # PyRadiomics - Feature calculation
         # Addition to the above, specifically for PyRadiomics
@@ -368,7 +368,7 @@ class WORC(object):
         config['SelectFeatGroup']['texture_NGTDM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_NGLDM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_LBP_features'] = 'True, False'
-        config['SelectFeatGroup']['patient_features'] = 'False'
+        config['SelectFeatGroup']['dicom_features'] = 'False'
         config['SelectFeatGroup']['semantic_features'] = 'False'
         config['SelectFeatGroup']['coliage_features'] = 'False'
         config['SelectFeatGroup']['vessel_features'] = 'True, False'

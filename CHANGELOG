@@ -14,10 +14,16 @@ Fixed
 - Bugfixes in some error messages.
 - If a classifier cannot give a score, use the prediction instead.
 
+Changed
+~~~~~~~
+- There are no longer ''patient_features'' in PREDICT: these are extracted
+  from the DICOM tags and are thus now called ''dicom_features.
+
 Added
 ~~~~~~~
 - Option to transpose all images and segmentations to a default orientation.
   Currently only supports axial.
+- Support for PREDICT DICOM features.
 
 3.3.3 - 2020-09-11
 ------------------

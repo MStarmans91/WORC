@@ -392,15 +392,46 @@ Again, for all parameter combinations, the images are filtered per 2-D slice and
 as :ref:`discussed earlier <features-histogram>` are extracted from the filtered images. This is done for
 the local phase, phase congruency, and phase symmetry.
 
-.. _features-patient:
+.. _features-dicom:
 
-Patient features
+DICOM features
 ----------------
 In PREDICT, several features may be extracted from DICOM headers, which can be provided in the metadata source.
-These include:
+By default, these include:
 
-- ``[0x10, 0x1010]``: Patient age
-- ``[0x10, 0x40]``: Patient sex
+- ``(0010, 1010)``: Patient age
+- ``(0010, 0040)``: Patient sex
+
+You can define which tags you want to extract and how to name these features
+by altering the following in the config:
+
+.. code-block:: python
+
+  config['ImageFeatures']['dicom_feature_tags'] = '0010 1010, 0010 0040'
+  config['ImageFeatures']['dicom_feature_labels'] = 'age, sex'
+
+Note that the value will be converted to a float. If that's not possible, or
+the tag is not present, ``numpy.NaN`` will be used instead.
+
+Other features may you want to include:
+
+- ``(0018, 0022)``: Scan options, see below
+- ``(0018, 0050)``: Slice thickness
+- ``(0018, 0080)``: Repetition time (MRI)
+- ``(0018, 0081)``: Echo time (MRI)
+- ``(0018, 0087)``: Magnetic field strength (MRI)
+- ``(0018, 1314)``: Flip angle (MRI)
+- ``(0028, 0030)``: Pixel spacing
+
+Several routines for converting values to floats has been defined for the
+following features:
+
+- ``(0018, 0022)`` (Scan options): if name is 'FatSat', determine whether a
+  a scan has been made with fat saturation or not from the scan options.
+- ``(0010, 0040)`` (Patient Sex): M = 0, F = 1
+- ``(0018, 0087)`` (Magnetic field strength): 5000 = 0.5, 10000 = 1.0,
+  15000 = 1.5, 30000 = 3.0. If not convertible to float, use ``numpy.NaN``
+- ``(0028, 0030)`` (Pixel spacing): Use first value and convert to float
 
 .. _features-semantic:
 
@@ -418,7 +449,7 @@ Filtering on ROI or full image.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 For all filter based features, the images are first filtered using the full image, after which the features
 are extracted from the region of interests (ROI). Only filtering the ROI with the filters would result in
-edge artefactss. A drawback could be that now the ROI surroundings influence the feature, but this
+edge artefacts. A drawback could be that now the ROI surroundings influence the feature, but this
 can also be a benefit as a comparison between the ROI and it's surrounding could give relevant information.
 
 Feature extraction parameter selection
