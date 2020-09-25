@@ -26,6 +26,7 @@ Added
 - Option to transpose all images and segmentations to a default orientation.
   Currently only supports axial.
 - Support for PREDICT DICOM features.
+- Memory of single optimization job to general config.
 
 3.3.3 - 2020-09-11
 ------------------

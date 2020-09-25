@@ -349,6 +349,7 @@ def generate_config_options():
     config['HyperOptimization']['n_splits'] = 'Integer'
     config['HyperOptimization']['maxlen'] = 'Integer'
     config['HyperOptimization']['ranking_score'] = 'String'
+    config['HyperOptimization']['memory'] = 'String consisting of integer + "G"'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
@@ -614,6 +615,7 @@ def generate_config_descriptions():
     config['HyperOptimization']['n_splits'] = 'Number of iterations in train-validation cross-validation used for model optimization.'
     config['HyperOptimization']['maxlen'] = 'Number of estimators for which the fitted outcomes and parameters are saved. Increasing this number will increase the memory usage.'
     config['HyperOptimization']['ranking_score'] = 'Score used for ranking the performance of the evaluated workflows.'
+    config['HyperOptimization']['memory'] = 'When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + "G".'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()

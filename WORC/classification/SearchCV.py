@@ -363,8 +363,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
     def __init__(self, param_distributions={}, n_iter=10, scoring=None,
                  fit_params=None, n_jobs=1, iid=True,
                  refit=True, cv=None, verbose=0, pre_dispatch='2*n_jobs',
-                 random_state=None, error_score='raise', return_train_score=True,
-                 n_jobspercore=100, maxlen=100, fastr_plugin=None,
+                 random_state=None, error_score='raise',
+                 return_train_score=True,
+                 n_jobspercore=100, maxlen=100, fastr_plugin=None, memory='2G',
                  ranking_score='test_score'):
 
         # Added for fastr and joblib executions
@@ -374,6 +375,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.random_state = random_state
         self.ensemble = list()
         self.fastr_plugin = fastr_plugin
+        self.memory = memory
 
         # Below are the defaults from sklearn
         self.scoring = scoring
@@ -1502,7 +1504,12 @@ class BaseSearchCVfastr(BaseSearchCV):
         parameter_data = network.create_source('JsonFile', id='parameters')
         sink_output = network.create_sink('HDF5', id='output')
 
-        fitandscore = network.create_node('worc/fitandscore:1.0', tool_version='1.0', id='fitandscore', resources=ResourceLimit(memory='2G'))
+        fitandscore =\
+            network.create_node('worc/fitandscore:1.0',
+                                tool_version='1.0',
+                                id='fitandscore',
+                                resources=ResourceLimit(memory=self.memory))
+
         fitandscore.inputs['estimatordata'].input_group = 'estimator'
         fitandscore.inputs['traintest'].input_group = 'traintest'
         fitandscore.inputs['parameters'].input_group = 'parameters'
@@ -1782,7 +1789,7 @@ class RandomizedSearchCVfastr(BaseSearchCVfastr):
                  fit_params=None, n_jobs=1, iid=True, refit=True, cv=None,
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
                  error_score='raise', return_train_score=True,
-                 n_jobspercore=100, fastr_plugin=None, maxlen=100,
+                 n_jobspercore=100, fastr_plugin=None, memory='2G', maxlen=100,
                  ranking_score='test_score'):
         super(RandomizedSearchCVfastr, self).__init__(
              param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
@@ -1790,7 +1797,7 @@ class RandomizedSearchCVfastr(BaseSearchCVfastr):
              pre_dispatch=pre_dispatch, error_score=error_score,
              return_train_score=return_train_score,
              n_jobspercore=n_jobspercore, fastr_plugin=fastr_plugin,
-             maxlen=maxlen, ranking_score=ranking_score)
+             memory=memory, maxlen=maxlen, ranking_score=ranking_score)
 
     def fit(self, X, y=None, groups=None):
         """Run fit on the estimator with randomly drawn parameters.
@@ -2138,7 +2145,8 @@ class GridSearchCVfastr(BaseSearchCVfastr):
             scoring=scoring, fit_params=fit_params,
             n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
             pre_dispatch=pre_dispatch, error_score=error_score,
-            return_train_score=return_train_score, fastr_plugin=None)
+            return_train_score=return_train_score, fastr_plugin=None,
+            memory='2G')
         self.param_grid = param_grid
         _check_param_grid(param_grid)
 
