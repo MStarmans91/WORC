@@ -1179,6 +1179,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                 Y_valid_score.append(Y_valid_score_it)
 
+            with open('/scratch/mdeen/testfiles/debug.txt', 'a') as debugfile:
+                debugfile.write('Y_valid_score: ' + str(Y_valid_score) + '\n')
+                debugfile.write('Y_valid_truth: ' + str(Y_valid_truth) + '\n')
+
+
             # Sorted Ensemble Initialization -------------------------------------
             # Go on adding to the ensemble untill we find the optimal performance
             # Initialize variables
@@ -1249,6 +1254,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 ensemble = ensemble[0:N_models]
                 best_performance = new_performance
 
+                with open('/scratch/mdeen/testfiles/debug.txt', 'a') as debugfile:
+                    debugfile.write('N_models: ' + str(N_models) + '\n')
+
                 # Print the performance gain
                 print(f"Ensembling best {scoring}: {best_performance}.")
                 print(f"Single estimator best {scoring}: {single_estimator_performance}.")
@@ -1308,6 +1316,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                 # Check which ensemble should be in the ensemble to maximally improve
                 new_performance = max(performances_temp)
+                with open('/scratch/mdeen/testfiles/debug.txt', 'a') as debugfile:
+                    debugfile.write('new score by greedily adding a classifier: ' + str(new_performance))
                 best_index = performances_temp.index(new_performance)
                 iteration += 1
 
