@@ -548,7 +548,8 @@ class WORC(object):
                 self.link_class_1.collapse = 'conf'
                 self.link_class_2.collapse = 'pctrain'
 
-                self.plot_estimator.inputs['ensemble'] = self.source_Ensemble.output
+                self.plot_estimator.inputs['ensemble_method'] = self.source_ensemble_method.output
+                self.plot_estimator.inputs['ensemble_size'] = self.source_ensemble_size.output
                 self.plot_estimator.inputs['label_type'] = self.source_LabelType.output
 
                 if self.labels_test:
