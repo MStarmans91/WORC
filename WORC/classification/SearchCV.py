@@ -947,7 +947,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Define a function for scoring the performance of a classifier
         def compute_performance(scoring, Y_valid_truth, Y_valid_score):
-            if scoring == 'f1_weighted':
+            if scoring == 'f1_weighted' or scoring == 'f1':
                 # Convert score to binaries first
                 for num in range(0, len(Y_valid_score)):
                     if Y_valid_score[num] >= 0.5:
