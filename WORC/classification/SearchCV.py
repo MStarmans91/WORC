@@ -1124,13 +1124,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Use the method from Caruana
             if verbose:
                 print('Creating ensemble with Caruana method.')
-
+            '''
             # BUG: kernel parameter is sometimes saved in unicode
             for i in range(0, len(parameters_all)):
-                kernel = str(parameters_all[i][u'SVMkernel'])
-                del parameters_all[i][u'SVMkernel']
-                parameters_all[i]['SVMkernel'] = kernel
-
+                kernel = str(parameters_all[i][u'kernel'])
+                del parameters_all[i][u'kernel']
+                parameters_all[i]['kernel'] = kernel
+            '''
             # In order to speed up the process, we precompute all scores of the possible
             # classifiers in all cross validation estimatons
 
