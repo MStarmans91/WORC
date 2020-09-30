@@ -1149,8 +1149,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 for num, p_all in enumerate(parameters_all):
                     # NOTE: Explicitly exclude validation set, elso refit and score
                     # somehow still seems to use it.
-                    X_train_temp = np.asarray([X_train[i] for i in train])
-                    Y_train_temp = np.asarray([Y_train[i] for i in train])
+                    X_train_temp = [X_train[i] for i in train]
+                    Y_train_temp = [Y_train[i] for i in train]
                     train_temp = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
@@ -1344,6 +1344,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # if Y_train.shape[1] > 1 and type(base_estimator) != RankedSVM:
             #     # Multiclass, hence employ a multiclass classifier for SVM
             #     base_estimator = OneVsRestClassifier(base_estimator)
+
+            with open('/scratch/mdeen/testfiles/x_train.txt', 'a') as debugf:
+                debugf.write('X_train' + str(enum) + ': ' + str(X_train) + '\n')
 
             base_estimator.refit_and_score(X_train, Y_train, p_all,
                                            train, train,
