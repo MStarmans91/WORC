@@ -306,8 +306,10 @@ def load_config(config_file_path):
         int(settings['SMAC']['init_budget'])
 
     # Settings for ensembling
-    settings_dict['Ensemble']['Use'] =\
-        str(settings['Ensemble']['Use'])
+    settings_dict['Ensemble']['Method'] =\
+        str(settings['Ensemble']['Method'])
+    settings_dict['Ensemble']['Size'] =\
+        int(settings['Ensemble']['Size'])
         #settings['Ensemble'].getint('Use')
 
     # Settings for bootstrapping

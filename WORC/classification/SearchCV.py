@@ -920,7 +920,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         return self
 
     def create_ensemble(self, X_train, Y_train, verbose=None, initialize=True,
-                        scoring=None, method=50, overfit_scaler=False):
+                        scoring=None, method='top_N', size=50, overfit_scaler=False):
         '''
 
         Create an (optimal) ensemble of a combination of hyperparameter settings
@@ -984,15 +984,15 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         elif type(self) == GuidedSearchCVSMAC:
             base_estimator = GuidedSearchCVSMAC()
 
-        if type(method) is int:
+        if method == 'top_N':
             # Simply take the top50 best hyperparameters
             if verbose:
-                print(f'Creating ensemble using top {str(method)} individual classifiers.')
-            if method == 1:
+                print(f'Creating ensemble using top {str(size)} individual classifiers.')
+            if size == 1:
                 # Next functions expect list
                 ensemble = [0]
             else:
-                ensemble = range(0, method)
+                ensemble = range(0, size)
 
         elif method == 'FitNumber':
             # Use optimum number of models

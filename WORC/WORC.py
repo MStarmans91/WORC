@@ -440,7 +440,8 @@ class WORC(object):
 
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Use'] = '50'
+        config['Ensemble']['Method'] = 'top_N' # ['top_N', 'Caruana']
+        config['Ensemble']['Size'] = '50'
 
         # Evaluation options
         config['Evaluation'] = dict()
@@ -516,9 +517,13 @@ class WORC(object):
                                                          resources=ResourceLimit(memory=memory),
                                                          step_id='WorkflowOptimization')
 
-                self.source_Ensemble =\
-                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Use']],
-                                                 id='Ensemble',
+                self.source_ensemble_method =\
+                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Method']],
+                                                 id='ensemble_method',
+                                                 step_id='Evaluation')
+                self.source_ensemble_size =\
+                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Size']],
+                                                 id='ensemble_size',
                                                  step_id='Evaluation')
                 self.source_LabelType =\
                     self.network.create_constant('String', [self.configs[0]['Labels']['label_names']],

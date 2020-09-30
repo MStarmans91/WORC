@@ -31,7 +31,7 @@ from collections import OrderedDict
 from sklearn.utils import resample
 
 
-def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_scoring):
+def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble_method, ensemble_size, ensemble_scoring):
     print('Fitting thresholds on validation set')
     if not hasattr(estimator, 'cv_iter'):
         cv_iter = list(estimator.cv.split(X_train, Y_train))
@@ -53,8 +53,8 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_s
         # Refit a SearchCV object with the provided parameters
         if ensemble:
             estimator.create_ensemble(X_train_temp, Y_train_temp,
-                                      method=ensemble, verbose=False,
-                                      scoring=ensemble_scoring)
+                                      method=ensemble_method, size=ensemble_size,
+                                      verbose=False, scoring=ensemble_scoring)
         else:
             estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
                                       train_temp, train_temp,
@@ -78,8 +78,8 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_s
 
 
 def plot_estimator_performance(prediction, label_data, label_type,
-                               show_plots=False, alpha=0.95, ensemble=False,
-                               verbose=True, ensemble_scoring=None,
+                               show_plots=False, alpha=0.95, ensemble_method='top_N',
+                               ensemble_size=50, verbose=True, ensemble_scoring=None,
                                output='stats', modus='singlelabel',
                                thresholds=None, survival=False,
                                generalization=False, shuffle_estimators=False,
@@ -109,12 +109,12 @@ def plot_estimator_performance(prediction, label_data, label_type,
     alpha: float, default 0.95
         Significance of confidence intervals.
 
-    ensemble: False, integer or 'Caruana'
-        Determine whether an ensemble will be created. If so,
-        either provide an integer to determine how many of the
-        top performing classifiers should be in the ensemble, or use
-        the string "Caruana" to use smart ensembling based on
-        Caruana et al. 2004.
+    ensemble_method: string, default 'top_N'
+        Determine which method to use for creating the ensemble.
+        Choices: top_N or Caruana
+
+    ensemble_size: int, default 50
+        Determine the size of the ensemble. Only relevant for top_N
 
     verbose: boolean, default True
         Plot intermedate messages.
@@ -345,8 +345,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
             # Create the ensemble
             X_train_temp = [(x, feature_labels) for x in X_train_temp]
             fitted_model.create_ensemble(X_train_temp, Y_train_temp,
-                                         method=ensemble, verbose=verbose,
-                                         scoring=ensemble_scoring,
+                                         method=ensemble_method, size=ensemble_size,
+                                         verbose=verbose, scoring=ensemble_scoring,
                                          overfit_scaler=overfit_scaler)
 
         # Create prediction
@@ -371,8 +371,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 y_truth_temp = list()
                 test_patient_IDs_temp = list()
 
-                thresholds_val = fit_thresholds(thresholds, fitted_model, X_train_temp, Y_train_temp, ensemble,
-                                                ensemble_scoring)
+                thresholds_val = fit_thresholds(thresholds, fitted_model, X_train_temp, Y_train_temp,
+                                                ensemble_method, ensemble_size, ensemble_scoring)
                 for pnum in range(len(y_score)):
                     if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
                         y_score_temp.append(y_score[pnum])
