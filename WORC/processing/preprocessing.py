@@ -66,6 +66,18 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                        float(pixel_spacing[1]),
                        float(slice_thickness))
             image.SetSpacing(spacing)
+    else:
+        print('No spacing checking was applied.')
+
+    # Apply clipping
+    if config['Preprocessing']['Clipping']:
+        range = config['Preprocessing']['Clipping_Range']
+        print(f'Apply clipping to range {range}.')
+        image = clip_image(image=image,
+                           lowerbound=range[0],
+                           upperbound=range[1])
+    else:
+        print('No clipping was applied.')
 
     # Apply normalization
     if config['Preprocessing']['Normalize']:
@@ -130,6 +142,33 @@ def bias_correct_image(img, usemask=False):
         corrected_image = corrector.Execute(image)
 
     return corrected_image
+
+
+def clip_image(image, lowerbound=-1000.0, upperbound=3000.0):
+    """Clip intensity range of an image.
+
+    Parameters
+    image: ITK Image
+        Image to normalize
+    lowerbound: float, default -1000.0
+        lower bound of clipping range
+    upperbound: float, default 3000.0
+        lower bound of clipping range
+
+    Returns
+    -------
+    image : ITK Image
+        Output image.
+    """
+    # Create clamping filter for clipping and set variables
+    filter = sitk.ClampImageFilter()
+    filter.SetLowerBound(lowerbound)
+    filter.SetUpperBound(upperbound)
+
+    # Execute
+    clipped_image = filter.Execute(image)
+
+    return clipped_image
 
 
 def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',

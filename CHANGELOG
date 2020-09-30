@@ -14,6 +14,7 @@ Fixed
 - Bugfixes in some error messages.
 - If a classifier cannot give a score, use the prediction instead.
 - Bugfix in bootstrapping.
+- Bugfix: use f1-weighted score in SimpleWORC binary classification.
 
 Changed
 ~~~~~~~
@@ -27,6 +28,8 @@ Added
   Currently only supports axial.
 - Support for PREDICT DICOM features.
 - Memory of single optimization job to general config.
+- Catch when imputation completely removes a feature.
+- Clipping as preprocessing option
 
 3.3.3 - 2020-09-11
 ------------------

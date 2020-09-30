@@ -415,6 +415,7 @@ the tag is not present, ``numpy.NaN`` will be used instead.
 
 Other features may you want to include:
 
+- ``(0008, 0070)``: Scanner manufacturer
 - ``(0018, 0022)``: Scan options, see below
 - ``(0018, 0050)``: Slice thickness
 - ``(0018, 0080)``: Repetition time (MRI)
@@ -426,6 +427,8 @@ Other features may you want to include:
 Several routines for converting values to floats has been defined for the
 following features:
 
+- ``(0008, 0070)`` (Scanner manufacturer): 0 = Siemens, 1 = Philips,
+  2 = General Electric, 3 = Toshiba. If not one of these, ``numpy.NaN`` is used.
 - ``(0018, 0022)`` (Scan options): if name is 'FatSat', determine whether a
   a scan has been made with fat saturation or not from the scan options.
 - ``(0010, 0040)`` (Patient Sex): M = 0, F = 1

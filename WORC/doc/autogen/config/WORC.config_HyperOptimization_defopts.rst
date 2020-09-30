@@ -8,4 +8,5 @@ N_iterations   25000       Integer
 n_jobspercore  1000        Integer                                                                                                              
 maxlen         100         Integer                                                                                                              
 ranking_score  test_score  String                                                                                                               
+memory         2G          String consisting of integer + "G"                                                                                   
 ============== =========== =====================================================================================================================

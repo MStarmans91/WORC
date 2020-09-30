@@ -456,7 +456,9 @@ class SimpleWORC():
         self._worc.set()
         self._worc.execute()
 
-    def binary_classification(self, estimators=None, scoring_method='f1', coarse=True):
+    def binary_classification(self, estimators=None,
+                              scoring_method='f1_weighted',
+                              coarse=True):
         """Tell WORC do to a binary classification experiment.
 
         Parameters

@@ -950,6 +950,15 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         Y_valid_score[num] = 0
 
                 perf = f1_score(Y_valid_truth, Y_valid_score, average='weighted')
+            elif scoring == 'f1':
+                # Convert score to binaries first
+                for num in range(0, len(Y_valid_score)):
+                    if Y_valid_score[num] >= 0.5:
+                        Y_valid_score[num] = 1
+                    else:
+                        Y_valid_score[num] = 0
+
+                perf = f1_score(Y_valid_truth, Y_valid_score, average='macro')
             elif scoring == 'auc':
                 perf = roc_auc_score(Y_valid_truth, Y_valid_score)
             elif scoring == 'sar':
@@ -1116,12 +1125,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Use the method from Caruana
             if verbose:
                 print('Creating ensemble with Caruana method.')
-
-            # BUG: kernel parameter is sometimes saved in unicode
-            for i in range(0, len(parameters_all)):
-                kernel = str(parameters_all[i][u'kernel'])
-                del parameters_all[i][u'kernel']
-                parameters_all[i]['kernel'] = kernel
 
             # In order to speed up the process, we precompute all scores of the possible
             # classifiers in all cross validation estimatons

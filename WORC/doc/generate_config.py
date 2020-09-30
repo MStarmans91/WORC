@@ -129,6 +129,8 @@ def generate_config_options():
     # Preprocessing
     config['Preprocessing'] = dict()
     config['Preprocessing']['CheckSpacing'] = 'True, False'
+    config['Preprocessing']['Clipping'] = 'True, False'
+    config['Preprocessing']['Clipping_Range'] = 'Float, Float'
     config['Preprocessing']['Normalize'] = 'True, False'
     config['Preprocessing']['Normalize_ROI'] = 'True, False, Full'
     config['Preprocessing']['ROIDetermine'] = 'Provided, Otsu'
@@ -139,6 +141,8 @@ def generate_config_options():
     config['Preprocessing']['Resampling_spacing'] = 'Float, Float, Float'
     config['Preprocessing']['BiasCorrection'] = 'True, False'
     config['Preprocessing']['BiasCorrection_Mask'] = 'Float, Float, Float'
+    config['Preprocessing']['CheckOrientation'] = 'True, False'
+    config['Preprocessing']['OrientationPrimaryAxis'] = 'axial'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -191,15 +195,21 @@ def generate_config_options():
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Integer > 0'
 
+    # Tags from which to extract features, and how to name them
+    config['ImageFeatures']['dicom_feature_tags'] = "DICOM tag keys, e.g. 0010 0010, separated by comma's"
+    config['ImageFeatures']['dicom_feature_labels'] = 'List of strings'
+
     # Pyradiomics - feature calculation
     config['PyRadiomics'] = dict()
     config['PyRadiomics']['geometryTolerance'] = 'Float'
     config['PyRadiomics']['Preprocessing'] = 'True, False'
     config['PyRadiomics']['normalize'] = 'Boolean'
     config['PyRadiomics']['normalizeScale'] = 'Integer'
+    config['PyRadiomics']['resampledPixelSpacing'] = 'Float, Float, Float'
     config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
     config['PyRadiomics']['preCrop'] = 'True, False'
-    config['PyRadiomics']['binCount'] = 'Integer' # BinWidth to sensitive for normalization, thus use binCount
+    config['PyRadiomics']['binCount'] = 'Integer or None' # BinWidth to sensitive for normalization, thus use binCount
+    config['PyRadiomics']['binWidth'] = 'Integer or None'
     config['PyRadiomics']['force2D'] = 'True, False'
     config['PyRadiomics']['force2Ddimension'] = '0 = axial, 1 = coronal, 2 = sagital'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
     config['PyRadiomics']['voxelArrayShift'] = 'Integer'
@@ -268,7 +278,7 @@ def generate_config_options():
     config['SelectFeatGroup']['texture_NGLDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_NGTDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_LBP_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['patient_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['dicom_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['semantic_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['coliage_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['log_features'] = 'Boolean(s)'
@@ -401,6 +411,8 @@ def generate_config_descriptions():
 
     # Preprocessing
     config['Preprocessing'] = dict()
+    config['Preprocessing']['Clipping'] = 'Determine whether to use intensity clipping in preprocessing of image or not.'
+    config['Preprocessing']['Clipping_Range'] = 'Lower- and upperbound of intensities to be used in clipping.'
     config['Preprocessing']['CheckSpacing'] = 'Determine whether to check the spacing or not. If True, and the spacing of the image is [1x1x1], we assume the spacing is incorrect, and overwrite it using the DICOM metadata.'
     config['Preprocessing']['Normalize'] = 'Determine whether to use normalization in preprocessing of image or not.'
     config['Preprocessing']['Normalize_ROI'] = 'If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.'
@@ -412,6 +424,8 @@ def generate_config_descriptions():
     config['Preprocessing']['Resampling_spacing'] = 'Spacing to resample image and mask to, if resampling is used.'
     config['Preprocessing']['BiasCorrection'] = 'Determine whether N4 Bias correction will be applied or not.'
     config['Preprocessing']['BiasCorrection_Mask'] = 'Whether withing bias correction, a mask generated through Otsu thresholding is used or not.'
+    config['Preprocessing']['CheckOrientation'] = 'Determine whether to check the image orientation or not. If checked, if the orientation is not equal to the OrientationPrimaryAxis, the image is rotated.'
+    config['Preprocessing']['OrientationPrimaryAxis'] = 'If CheckOrientation is True, if primary axis is not this one, rotate image such that it is. Currently, only "axial" is supported.'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -465,15 +479,21 @@ def generate_config_descriptions():
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Radius to determine boundary of between inner part and edge in Frangi vessel filter.'
 
+    # Tags from which to extract features, and how to name them
+    config['ImageFeatures']['dicom_feature_tags'] = "DICOM tags to be extracted as features. See https://worc.readthedocs.io/en/latest/static/features.html."
+    config['ImageFeatures']['dicom_feature_labels'] = "For each of the DICOM tag values extracted, name that should be assigned to the feature. See https://worc.readthedocs.io/en/latest/static/features.html."
+
     # Pyradiomics - feature calculation
     config['PyRadiomics'] = dict()
     config['PyRadiomics']['geometryTolerance'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['Preprocessing'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['normalize'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['normalizeScale'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['resampledPixelSpacing'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
     config['PyRadiomics']['preCrop'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['binCount'] = 'We advice to use a fixed bin count instead of a fixed bin width, as on imaging modalities such as MRI, the scale of the values varies a lot, which is incompatible with a fixed bin width. See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['binWidth'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['force2D'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['force2Ddimension'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['voxelArrayShift'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
@@ -537,7 +557,7 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['texture_NGTDM_features'] = 'If True, use NGTDM texture features in model.'
     config['SelectFeatGroup']['texture_NGLDM_features'] = 'If True, use NGLDM texture features in model.'
     config['SelectFeatGroup']['texture_LBP_features'] = 'If True, use LBP texture features in model.'
-    config['SelectFeatGroup']['patient_features'] = 'If True, use patient features in model.'
+    config['SelectFeatGroup']['dicom_features'] = 'If True, use DICOM features in model.'
     config['SelectFeatGroup']['semantic_features'] = 'If True, use semantic features in model.'
     config['SelectFeatGroup']['coliage_features'] = 'If True, use coliage features in model.'
     config['SelectFeatGroup']['log_features'] = 'If True, use log features in model.'

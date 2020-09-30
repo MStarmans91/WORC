@@ -202,6 +202,8 @@ class WORC(object):
         # Preprocessing
         config['Preprocessing'] = dict()
         config['Preprocessing']['CheckSpacing'] = 'False'
+        config['Preprocessing']['Clipping'] = 'False'
+        config['Preprocessing']['Clipping_Range'] = '-1000.0, 3000.0'
         config['Preprocessing']['Normalize'] = 'True'
         config['Preprocessing']['Normalize_ROI'] = 'Full'
         config['Preprocessing']['ROIDetermine'] = 'Provided'
@@ -287,9 +289,11 @@ class WORC(object):
         config['PyRadiomics']['geometryTolerance'] = '0.0001'
         config['PyRadiomics']['normalize'] = 'False'
         config['PyRadiomics']['normalizeScale'] = '100'
+        config['PyRadiomics']['resampledPixelSpacing'] = 'None'
         config['PyRadiomics']['interpolator'] = 'sitkBSpline'
         config['PyRadiomics']['preCrop'] = 'True'
         config['PyRadiomics']['binCount'] = config['ImageFeatures']['GLCM_levels'] # BinWidth to sensitive for normalization, thus use binCount
+        config['PyRadiomics']['binWidth'] = 'None'
         config['PyRadiomics']['force2D'] = 'False'
         config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
         config['PyRadiomics']['voxelArrayShift'] = '300'
