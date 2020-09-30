@@ -344,8 +344,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
             # Create the ensemble
             X_train_temp = [(x, feature_labels) for x in X_train_temp]
-            with open('/scratch/mdeen/testfiles/call_check.txt', 'a') as debugf:
-                debugf.write('The same create ensemble function got called')
             fitted_model.create_ensemble(X_train_temp, Y_train_temp,
                                          method=ensemble_method, size=ensemble_size,
                                          verbose=verbose, scoring=ensemble_scoring,
