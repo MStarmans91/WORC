@@ -1348,9 +1348,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             #     # Multiclass, hence employ a multiclass classifier for SVM
             #     base_estimator = OneVsRestClassifier(base_estimator)
 
-            with open('/scratch/mdeen/testfiles/x_train.txt', 'a') as debugf:
-                debugf.write('X_train' + str(enum) + ': ' + str(X_train) + '\n')
-
             base_estimator.refit_and_score(X_train, Y_train, p_all,
                                            train, train,
                                            verbose=False)
