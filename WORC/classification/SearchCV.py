@@ -1153,9 +1153,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     Y_train_temp = [Y_train[i] for i in train]
                     train_temp = np.arange(0, len(train))
 
-                    if it == 1 and num == 1:
-                        with open('/scratch/mdeen/testfiles/x_train_temp.txt', 'a') as debugf:
-                            debugf.write('X_train' + str(num) + ': ' + str(X_train_temp) + '\n')
+                    with open('/scratch/mdeen/testfiles/x_train_temp.txt', 'a') as debugf:
+                        debugf.write('X_train' + str(num) + ': ' + str(X_train_temp) + '\n')
 
                     # Refit a SearchCV object with the provided parameters
                     base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
