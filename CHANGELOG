@@ -30,6 +30,7 @@ Added
 - Memory of single optimization job to general config.
 - Catch when imputation completely removes a feature.
 - Clipping as preprocessing option
+- Function to show which hyperparameters were used in the best workflows.
 
 3.3.3 - 2020-09-11
 ------------------
