@@ -1254,9 +1254,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 ensemble = ensemble[0:N_models]
                 best_performance = new_performance
 
-                with open('/scratch/mdeen/testfiles/debug.txt', 'a') as debugfile:
-                    debugfile.write('N_models: ' + str(N_models) + '\n')
-
                 # Print the performance gain
                 print(f"Ensembling best {scoring}: {best_performance}.")
                 print(f"Single estimator best {scoring}: {single_estimator_performance}.")
