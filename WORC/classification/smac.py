@@ -169,12 +169,12 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=scaling_method, parent=scaling, values=['True']))
     '''
 
-    # Feature imputation
+    # Feature imputation --> always on in RS
     # 2 hyperparameters:
     #   1) strategy
     #   2) n_neighbors          | Conditional on strategy: knn
     imputation = CategoricalHyperparameter('Imputation',
-                                           choices=['True', 'False'])
+                                           choices=['True'])
     cs.add_hyperparameter(imputation)
 
     imputation_strategy = CategoricalHyperparameter('ImputationMethod',
