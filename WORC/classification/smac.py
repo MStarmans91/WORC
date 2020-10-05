@@ -326,6 +326,8 @@ def build_smac_config(parameters):
         group_parameter = CategoricalHyperparameter(group,
                                                     choices=parameters['SelectFeatGroup'][group])
         cs.add_hyperparameter(group_parameter)
+        cs.add_condition(InCondition(child=group_parameter, parent=groupwise_search,
+                                     values=['True']))
 
     random_seed = Constant('random_seed', value=parameters['Other']['random_seed'])
     cs.add_hyperparameter(random_seed)
