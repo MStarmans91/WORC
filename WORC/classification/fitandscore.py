@@ -52,7 +52,7 @@ def fit_and_score(X, y, scoring,
                   return_n_test_samples=True,
                   return_times=True, return_parameters=False,
                   return_estimator=False,
-                  error_score='raise', verbose=True,
+                  error_score='raise', verbose=False,
                   return_all=True,
                   use_smac=False):
     """Fit an estimator to a dataset and score the performance.
