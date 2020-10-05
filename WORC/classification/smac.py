@@ -174,7 +174,7 @@ def build_smac_config(parameters):
     #   1) strategy
     #   2) n_neighbors          | Conditional on strategy: knn
     imputation = CategoricalHyperparameter('Imputation',
-                                           choices=['True'])
+                                           choices=parameters['Imputation']['use'])
     cs.add_hyperparameter(imputation)
 
     imputation_strategy = CategoricalHyperparameter('ImputationMethod',
