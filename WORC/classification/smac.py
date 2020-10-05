@@ -280,43 +280,52 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=statistical_test_threshold, parent=statistical_test,
                                  values=['True']))
 
-    # Oversampling --> turned off in RS
-    # 0 hyperparameters
-    #oversampling = CategoricalHyperparameter('SampleProcessing_Oversampling', choices=['True', 'False'])
-    #cs.add_hyperparameter(oversampling)
 
-    # ! change this to new implementation later
-    # SMOTE oversampling
-    # 2 hyperparameters:
-    #   1) ratio
-    #   2) neighbors
-    '''
-    smote = CategoricalHyperparameter('SampleProcessing_SMOTE', choices=['True', 'False'])
-    cs.add_hyperparameter(smote)
+    # Resampling
+    # 5 hyperparameters:
+    #   1) Method
+    #   2) Sampling strategy
+    #   3) n_neighbors
+    #   4) k_neighbors
+    #   5) threshold cleaning
+    resampling = CategoricalHyperparameter('Resampling_Use', choices=['True', 'False'])
+    cs.add_hyperparameter(resampling)
 
-    '''
-    #Currently smote_ratio seems to be a constant with value 1,
-    #so this implementation is not working right now
-    #smote_ratio = UniformFloatHyperparameter('SampleProcessing_SMOTE_ratio',
-    #                                         lower=parameters['SampleProcessing']['SMOTE_ratio'][0],
-    #                                         upper=parameters['SampleProcessing']['SMOTE_ratio'][0] +
-    #                                               parameters['SampleProcessing']['SMOTE_ratio'][1])
-    '''
-    smote_ratio = Constant('SampleProcessing_SMOTE_ratio', value=1)
-    cs.add_hyperparameter(smote_ratio)
-    cs.add_condition(InCondition(child=smote_ratio, parent=smote, values=['True']))
+    resampling_method = CategoricalHyperparameter('Resampling_Method',
+                                                  choices=parameters['Resampling']['Method'])
+    cs.add_hyperparameter(resampling_method)
 
-    smote_neighbors = UniformIntegerHyperparameter('SampleProcessing_SMOTE_neighbors',
-                                                   lower=parameters['SampleProcessing']['SMOTE_neighbors'][0],
-                                                   upper=parameters['SampleProcessing']['SMOTE_neighbors'][0] +
-                                                         parameters['SampleProcessing']['SMOTE_neighbors'][1])
-    cs.add_hyperparameter(smote_neighbors)
-    cs.add_condition(InCondition(child=smote_neighbors, parent=smote, values=['True']))
+    resampling_sampling_strategy = CategoricalHyperparameter('Resampling_sampling_strategy',
+                                                             choices=parameters['Resampling']['sampling_strategy'])
+    cs.add_hyperparameter(resampling_sampling_strategy)
 
-    smote_cores = Constant('SampleProcessing_SMOTE_n_cores', value=parameters['General']['Joblib_ncores'])
-    cs.add_hyperparameter(smote_cores)
-    cs.add_condition(InCondition(child=smote_cores, parent=smote, values=['True']))
-    '''
+    resampling_n_neighbors = UniformIntegerHyperparameter('Resampling_n_neighbors',
+                                                          lower=parameters['Resampling']['n_neighbors'][0],
+                                                          upper=parameters['Resampling']['n_neighbors'][0] +
+                                                                parameters['Resampling']['n_neighbors'][1])
+    cs.add_hyperparameter(resampling_n_neighbors)
+
+    resampling_k_neighbors = UniformIntegerHyperparameter('Resampling_k_neighbors',
+                                                          lower=parameters['Resampling']['k_neighbors'][0],
+                                                          upper=parameters['Resampling']['k_neighbors'][0] +
+                                                                parameters['Resampling']['k_neighbors'][1])
+    cs.add_hyperparameter(resampling_k_neighbors)
+
+    resampling_threshold_cleaning = UniformFloatHyperparameter('Resampling_threshold_cleaning',
+                                                               lower=parameters['Resampling']['threshold_cleaning'][0],
+                                                               upper=parameters['Resampling']['threshold_cleaning'][0] +
+                                                                     parameters['Resampling']['threshold_cleaning'][1])
+    cs.add_hyperparameter(resampling_threshold_cleaning)
+
+
+    # Groupwise feature selection
+    groupwise_search = CategoricalHyperparameter('SelectGroups', choices=parameters['Featsel']['GroupwiseSearch'])
+    cs.add_hyperparameter(groupwise_search)
+
+    for group in parameters['SelectFeatGroup'].keys():
+        group_parameter = CategoricalHyperparameter(group,
+                                                    choices=parameters['SelectFeatGroup'][group])
+        cs.add_hyperparameter(group_parameter)
 
     random_seed = Constant('random_seed', value=parameters['Other']['random_seed'])
     cs.add_hyperparameter(random_seed)
