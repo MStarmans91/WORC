@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>processing Package &mdash; WORC 3.3.3 documentation</title>
+  <title>processing Package &mdash; WORC 3.3.4 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.3
+                3.3.4
               </div>
             
           
@@ -266,6 +266,12 @@ numberToExtract: number of blobs to extract (integer).</p>
 <div class="section" id="module-WORC.processing.helpers">
 <span id="helpers-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">helpers</span></code> Module<a class="headerlink" href="#module-WORC.processing.helpers" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="WORC.processing.helpers.check_image_orientation">
+<code class="descclassname">WORC.processing.helpers.</code><code class="descname">check_image_orientation</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#check_image_orientation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.check_image_orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the orientation of an ITK image.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="WORC.processing.helpers.resample_image">
 <code class="descclassname">WORC.processing.helpers.</code><code class="descname">resample_image</code><span class="sig-paren">(</span><em>image</em>, <em>new_spacing</em>, <em>interpolator=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#resample_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.resample_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resample an image to another spacing.</p>
@@ -279,6 +285,12 @@ numberToExtract: number of blobs to extract (integer).</p>
 <dt>resampled_image<span class="classifier">ITK Image</span></dt><dd><p>Output image.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.helpers.transpose_image">
+<code class="descclassname">WORC.processing.helpers.</code><code class="descname">transpose_image</code><span class="sig-paren">(</span><em>image</em>, <em>primary_axis='axial'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#transpose_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.transpose_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transpose an ITK image, while keeping the metadata.</p>
 </dd></dl>
 
 </div>
@@ -391,6 +403,27 @@ label_type (list): List of the names of the labels to load</p>
 <dt id="WORC.processing.preprocessing.bias_correct_image">
 <code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">bias_correct_image</code><span class="sig-paren">(</span><em>img</em>, <em>usemask=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#bias_correct_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.bias_correct_image" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.preprocessing.clip_image">
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">clip_image</code><span class="sig-paren">(</span><em>image</em>, <em>lowerbound=-1000.0</em>, <em>upperbound=3000.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#clip_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.clip_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clip intensity range of an image.</p>
+<p>Parameters
+image: ITK Image</p>
+<blockquote>
+<div><p>Image to normalize</p>
+</div></blockquote>
+<dl class="simple">
+<dt>lowerbound: float, default -1000.0</dt><dd><p>lower bound of clipping range</p>
+</dd>
+<dt>upperbound: float, default 3000.0</dt><dd><p>lower bound of clipping range</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>image<span class="classifier">ITK Image</span></dt><dd><p>Output image.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="WORC.processing.preprocessing.normalize_image">

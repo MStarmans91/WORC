@@ -363,8 +363,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
     def __init__(self, param_distributions={}, n_iter=10, scoring=None,
                  fit_params=None, n_jobs=1, iid=True,
                  refit=True, cv=None, verbose=0, pre_dispatch='2*n_jobs',
-                 random_state=None, error_score='raise', return_train_score=True,
-                 n_jobspercore=100, maxlen=100, fastr_plugin=None,
+                 random_state=None, error_score='raise',
+                 return_train_score=True,
+                 n_jobspercore=100, maxlen=100, fastr_plugin=None, memory='2G',
                  ranking_score='test_score'):
 
         # Added for fastr and joblib executions
@@ -374,6 +375,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.random_state = random_state
         self.ensemble = list()
         self.fastr_plugin = fastr_plugin
+        self.memory = memory
 
         # Below are the defaults from sklearn
         self.scoring = scoring
@@ -948,6 +950,15 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         Y_valid_score[num] = 0
 
                 perf = f1_score(Y_valid_truth, Y_valid_score, average='weighted')
+            elif scoring == 'f1':
+                # Convert score to binaries first
+                for num in range(0, len(Y_valid_score)):
+                    if Y_valid_score[num] >= 0.5:
+                        Y_valid_score[num] = 1
+                    else:
+                        Y_valid_score[num] = 0
+
+                perf = f1_score(Y_valid_truth, Y_valid_score, average='macro')
             elif scoring == 'auc':
                 perf = roc_auc_score(Y_valid_truth, Y_valid_score)
             elif scoring == 'sar':
@@ -1114,12 +1125,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Use the method from Caruana
             if verbose:
                 print('Creating ensemble with Caruana method.')
-
-            # BUG: kernel parameter is sometimes saved in unicode
-            for i in range(0, len(parameters_all)):
-                kernel = str(parameters_all[i][u'kernel'])
-                del parameters_all[i][u'kernel']
-                parameters_all[i]['kernel'] = kernel
 
             # In order to speed up the process, we precompute all scores of the possible
             # classifiers in all cross validation estimatons
@@ -1502,7 +1507,12 @@ class BaseSearchCVfastr(BaseSearchCV):
         parameter_data = network.create_source('JsonFile', id='parameters')
         sink_output = network.create_sink('HDF5', id='output')
 
-        fitandscore = network.create_node('worc/fitandscore:1.0', tool_version='1.0', id='fitandscore', resources=ResourceLimit(memory='2G'))
+        fitandscore =\
+            network.create_node('worc/fitandscore:1.0',
+                                tool_version='1.0',
+                                id='fitandscore',
+                                resources=ResourceLimit(memory=self.memory))
+
         fitandscore.inputs['estimatordata'].input_group = 'estimator'
         fitandscore.inputs['traintest'].input_group = 'traintest'
         fitandscore.inputs['parameters'].input_group = 'parameters'
@@ -1782,7 +1792,7 @@ class RandomizedSearchCVfastr(BaseSearchCVfastr):
                  fit_params=None, n_jobs=1, iid=True, refit=True, cv=None,
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
                  error_score='raise', return_train_score=True,
-                 n_jobspercore=100, fastr_plugin=None, maxlen=100,
+                 n_jobspercore=100, fastr_plugin=None, memory='2G', maxlen=100,
                  ranking_score='test_score'):
         super(RandomizedSearchCVfastr, self).__init__(
              param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
@@ -1790,7 +1800,7 @@ class RandomizedSearchCVfastr(BaseSearchCVfastr):
              pre_dispatch=pre_dispatch, error_score=error_score,
              return_train_score=return_train_score,
              n_jobspercore=n_jobspercore, fastr_plugin=fastr_plugin,
-             maxlen=maxlen, ranking_score=ranking_score)
+             memory=memory, maxlen=maxlen, ranking_score=ranking_score)
 
     def fit(self, X, y=None, groups=None):
         """Run fit on the estimator with randomly drawn parameters.
@@ -2138,7 +2148,8 @@ class GridSearchCVfastr(BaseSearchCVfastr):
             scoring=scoring, fit_params=fit_params,
             n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
             pre_dispatch=pre_dispatch, error_score=error_score,
-            return_train_score=return_train_score, fastr_plugin=None)
+            return_train_score=return_train_score, fastr_plugin=None,
+            memory='2G')
         self.param_grid = param_grid
         _check_param_grid(param_grid)
 

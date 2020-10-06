@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>plotting Package &mdash; WORC 3.3.3 documentation</title>
+  <title>plotting Package &mdash; WORC 3.3.4 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.3
+                3.3.4
               </div>
             
           
@@ -122,6 +122,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_boxplot_features"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot_features</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_boxplot_performance"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot_performance</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_estimator_performance"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_estimator_performance</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_hyperparameters"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_hyperparameters</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_images"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plotminmaxresponse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
@@ -459,6 +460,30 @@ y_truths: list</p>
 <dt>y_predictions: list</dt><dd><p>Contains the predicted label for each object.</p>
 </dd>
 <dt>pids: list</dt><dd><p>Contains the patient ID/name for each object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.plotting.plot_hyperparameters">
+<span id="plot-hyperparameters-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_hyperparameters</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_hyperparameters" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.plotting.plot_hyperparameters.plot_hyperparameters">
+<code class="descclassname">WORC.plotting.plot_hyperparameters.</code><code class="descname">plot_hyperparameters</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_type=None</em>, <em>estsize=50</em>, <em>output=None</em>, <em>removeconstants=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_hyperparameters.html#plot_hyperparameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_hyperparameters.plot_hyperparameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather which hyperparameters have been used in the best workflows.</p>
+<dl class="simple">
+<dt>prediction: pandas dataframe or string, mandatory</dt><dd><p>output of trainclassifier function, either a pandas dataframe
+or a HDF5 file</p>
+</dd>
+<dt>estsize: integer, default 50</dt><dd><p>Number of estimators that should be taken into account.</p>
+</dd>
+<dt>output: filename of csv, default None</dt><dd><p>Output file to write to. If None, not output is written, but just
+returned as a variable.</p>
+</dd>
+<dt>removeconstants: boolean, default False</dt><dd><p>Determine whether to remove any hyperparameters which have the same
+value in all workflows.</p>
+</dd>
+<dt>verbose: boolean, default False</dt><dd><p>Whether to show print messages or not.</p>
 </dd>
 </dl>
 </dd></dl>

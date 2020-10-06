@@ -262,8 +262,15 @@ def fit_and_score(X, y, scoring,
             imputer = Imputer(missing_values=np.nan, strategy=imp_type,
                               n_neighbors=imp_nn)
             imputer.fit(X_train)
+
+            original_shape = X_train.shape
             X_train = imputer.transform(X_train)
+            imputed_shape = X_train.shape
             X_test = imputer.transform(X_test)
+
+            if original_shape != imputed_shape:
+                removed_features = original_shape[1] - imputed_shape[1]
+                raise ae.WORCValueError(f'Several features ({removed_features}) were np.NaN for all objects. Hence, imputation was not possible. Either make sure this is correct and turn of imputation, or correct the feature.')
 
         del para_estimator['Imputation']
         del para_estimator['ImputationMethod']
@@ -297,7 +304,7 @@ def fit_and_score(X, y, scoring,
                           'texture_ngtdm_features',
                           'texture_ngldm_features',
                           'texture_lbp_features',
-                          'patient_features',
+                          'dicom_features',
                           'semantic_features',
                           'coliage_features',
                           'vessel_features',

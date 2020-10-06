@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.IOparser.config_preprocessing &mdash; WORC 3.3.3 documentation</title>
+  <title>WORC.IOparser.config_preprocessing &mdash; WORC 3.3.4 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.3
+                3.3.4
               </div>
             
           
@@ -217,6 +217,17 @@
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;CheckSpacing&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;CheckSpacing&#39;</span><span class="p">)</span>
 
+    <span class="c1"># Clipping</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Clipping&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Clipping&#39;</span><span class="p">)</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Clipping_Range&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Clipping_Range&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Clipping_Range&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Clipping range should be two floats split by a comma, got </span><span class="si">{settings[&#39;Preprocessing&#39;][&#39;Clipping_Range&#39;]}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
     <span class="c1"># Normalization</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Normalize&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Normalize&#39;</span><span class="p">)</span>
@@ -242,6 +253,13 @@
 
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;BiasCorrection_Mask&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;BiasCorrection_Mask&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Re-orientation</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;CheckOrientation&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;CheckOrientation&#39;</span><span class="p">)</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;OrientationPrimaryAxis&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;OrientationPrimaryAxis&#39;</span><span class="p">])</span>
 
     <span class="c1"># Resampling</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Resampling&#39;</span><span class="p">]</span> <span class="o">=</span>\

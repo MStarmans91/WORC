@@ -52,6 +52,17 @@ def load_config(config_file_path):
     settings_dict['Preprocessing']['CheckSpacing'] =\
         settings['Preprocessing'].getboolean('CheckSpacing')
 
+    # Clipping
+    settings_dict['Preprocessing']['Clipping'] =\
+        settings['Preprocessing'].getboolean('Clipping')
+
+    settings_dict['Preprocessing']['Clipping_Range'] =\
+        [float(item) for item in
+         settings['Preprocessing']['Clipping_Range'].split(',')]
+
+    if len(settings_dict['Preprocessing']['Clipping_Range']) != 2:
+        raise ae.WORCValueError(f"Clipping range should be two floats split by a comma, got {settings['Preprocessing']['Clipping_Range']}.")
+
     # Normalization
     settings_dict['Preprocessing']['Normalize'] =\
         settings['Preprocessing'].getboolean('Normalize')
@@ -77,6 +88,13 @@ def load_config(config_file_path):
 
     settings_dict['Preprocessing']['BiasCorrection_Mask'] =\
         settings['Preprocessing'].getboolean('BiasCorrection_Mask')
+
+    # Re-orientation
+    settings_dict['Preprocessing']['CheckOrientation'] =\
+        settings['Preprocessing'].getboolean('CheckOrientation')
+
+    settings_dict['Preprocessing']['OrientationPrimaryAxis'] =\
+        str(settings['Preprocessing']['OrientationPrimaryAxis'])
 
     # Resampling
     settings_dict['Preprocessing']['Resampling'] =\

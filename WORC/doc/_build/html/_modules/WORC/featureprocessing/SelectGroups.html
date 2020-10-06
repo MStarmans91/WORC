@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.featureprocessing.SelectGroups &mdash; WORC 3.3.3 documentation</title>
+  <title>WORC.featureprocessing.SelectGroups &mdash; WORC 3.3.4 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.3
+                3.3.4
               </div>
             
           
@@ -201,7 +201,7 @@
 <span class="sd">                - shape_features</span>
 <span class="sd">                - orientation_features</span>
 <span class="sd">                - semantic_features</span>
-<span class="sd">                - patient_features</span>
+<span class="sd">                - dicom_features</span>
 <span class="sd">                - coliage_features</span>
 <span class="sd">                - phase_features</span>
 <span class="sd">                - vessel_features</span>
@@ -236,8 +236,8 @@
             <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;of_&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;semantic_features&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
             <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;semf_&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;patient_features&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
-            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;pf_&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;dicom_features&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;df_&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;coliage_features&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
             <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;cf_&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;phase_features&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>

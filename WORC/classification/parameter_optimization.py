@@ -24,7 +24,8 @@ from WORC.classification.SearchCV import RandomizedSearchCVfastr, RandomizedSear
 def random_search_parameters(features, labels, N_iter, test_size,
                              param_grid, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
-                             n_cores=1, fastr_plugin=None, maxlen=100,
+                             n_cores=1, fastr_plugin=None, memory='2G',
+                             maxlen=100,
                              ranking_score='test_score', random_seed=None):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
@@ -74,6 +75,7 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                                 maxlen=maxlen,
                                                 verbose=1, cv=cv,
                                                 fastr_plugin=fastr_plugin,
+                                                memory=memory,
                                                 ranking_score=ranking_score)
     else:
         random_search = RandomizedSearchCVJoblib(param_distributions=param_grid,
@@ -84,6 +86,7 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                                  maxlen=maxlen,
                                                  verbose=1, cv=cv,
                                                  fastr_plugin=fastr_plugin,
+                                                 memory=memory,
                                                  ranking_score=ranking_score)
     random_search.fit(features, labels)
     print("Best found parameters:")

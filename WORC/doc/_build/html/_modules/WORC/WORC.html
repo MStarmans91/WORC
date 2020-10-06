@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.WORC &mdash; WORC 3.3.3 documentation</title>
+  <title>WORC.WORC &mdash; WORC 3.3.4 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.3
+                3.3.4
               </div>
             
           
@@ -367,6 +367,8 @@
         <span class="c1"># Preprocessing</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;CheckSpacing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Clipping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Clipping_Range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;-1000.0, 3000.0&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Normalize_ROI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Full&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;ROIDetermine&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Provided&#39;</span>
@@ -377,6 +379,8 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Resampling_spacing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1, 1, 1&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;BiasCorrection&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;BiasCorrection_Mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;CheckOrientation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;OrientationPrimaryAxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;axial&#39;</span>
 
         <span class="c1"># Segmentix</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -439,6 +443,10 @@
         <span class="c1"># Vessel features radius for erosion to determine boudnary</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;vessel_radius&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5&#39;</span>
 
+        <span class="c1"># Tags from which to extract features, and how to name them</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;dicom_feature_tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0010 1010, 0010 0040&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;dicom_feature_labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;age, sex&#39;</span>
+
         <span class="c1"># PyRadiomics - Feature calculation</span>
         <span class="c1"># Addition to the above, specifically for PyRadiomics</span>
         <span class="c1"># Mostly based on specific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml</span>
@@ -446,9 +454,11 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;geometryTolerance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.0001&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalizeScale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;resampledPixelSpacing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;interpolator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sitkBSpline&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;binCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;GLCM_levels&#39;</span><span class="p">]</span> <span class="c1"># BinWidth to sensitive for normalization, thus use binCount</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;binWidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2Ddimension&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>  <span class="c1"># axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;voxelArrayShift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;300&#39;</span>
@@ -527,7 +537,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;texture_NGTDM_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True, False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;texture_NGLDM_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True, False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;texture_LBP_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True, False&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;patient_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;dicom_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;semantic_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;coliage_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;vessel_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True, False&#39;</span>
@@ -601,6 +611,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;n_jobspercore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1000&#39;</span>  <span class="c1"># only relevant when using fastr in classification</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;maxlen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;ranking_score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;test_score&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;memory&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2G&#39;</span>
 
         <span class="c1"># Ensemble options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -613,7 +624,7 @@
         <span class="c1"># Bootstrap options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1000&#39;</span>
 
         <span class="k">return</span> <span class="n">config</span></div>
 

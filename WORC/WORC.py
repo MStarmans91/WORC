@@ -202,6 +202,8 @@ class WORC(object):
         # Preprocessing
         config['Preprocessing'] = dict()
         config['Preprocessing']['CheckSpacing'] = 'False'
+        config['Preprocessing']['Clipping'] = 'False'
+        config['Preprocessing']['Clipping_Range'] = '-1000.0, 3000.0'
         config['Preprocessing']['Normalize'] = 'True'
         config['Preprocessing']['Normalize_ROI'] = 'Full'
         config['Preprocessing']['ROIDetermine'] = 'Provided'
@@ -212,6 +214,8 @@ class WORC(object):
         config['Preprocessing']['Resampling_spacing'] = '1, 1, 1'
         config['Preprocessing']['BiasCorrection'] = 'False'
         config['Preprocessing']['BiasCorrection_Mask'] = 'False'
+        config['Preprocessing']['CheckOrientation'] = 'False'
+        config['Preprocessing']['OrientationPrimaryAxis'] = 'axial'
 
         # Segmentix
         config['Segmentix'] = dict()
@@ -274,6 +278,10 @@ class WORC(object):
         # Vessel features radius for erosion to determine boudnary
         config['ImageFeatures']['vessel_radius'] = '5'
 
+        # Tags from which to extract features, and how to name them
+        config['ImageFeatures']['dicom_feature_tags'] = '0010 1010, 0010 0040'
+        config['ImageFeatures']['dicom_feature_labels'] = 'age, sex'
+
         # PyRadiomics - Feature calculation
         # Addition to the above, specifically for PyRadiomics
         # Mostly based on specific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml
@@ -281,9 +289,11 @@ class WORC(object):
         config['PyRadiomics']['geometryTolerance'] = '0.0001'
         config['PyRadiomics']['normalize'] = 'False'
         config['PyRadiomics']['normalizeScale'] = '100'
+        config['PyRadiomics']['resampledPixelSpacing'] = 'None'
         config['PyRadiomics']['interpolator'] = 'sitkBSpline'
         config['PyRadiomics']['preCrop'] = 'True'
         config['PyRadiomics']['binCount'] = config['ImageFeatures']['GLCM_levels'] # BinWidth to sensitive for normalization, thus use binCount
+        config['PyRadiomics']['binWidth'] = 'None'
         config['PyRadiomics']['force2D'] = 'False'
         config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
         config['PyRadiomics']['voxelArrayShift'] = '300'
@@ -362,7 +372,7 @@ class WORC(object):
         config['SelectFeatGroup']['texture_NGTDM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_NGLDM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_LBP_features'] = 'True, False'
-        config['SelectFeatGroup']['patient_features'] = 'False'
+        config['SelectFeatGroup']['dicom_features'] = 'False'
         config['SelectFeatGroup']['semantic_features'] = 'False'
         config['SelectFeatGroup']['coliage_features'] = 'False'
         config['SelectFeatGroup']['vessel_features'] = 'True, False'
@@ -436,6 +446,7 @@ class WORC(object):
         config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
+        config['HyperOptimization']['memory'] = '2G'
 
         # Ensemble options
         config['Ensemble'] = dict()
@@ -448,7 +459,7 @@ class WORC(object):
         # Bootstrap options
         config['Bootstrap'] = dict()
         config['Bootstrap']['Use'] = 'False'
-        config['Bootstrap']['N_iterations'] = '100'
+        config['Bootstrap']['N_iterations'] = '1000'
 
         return config
 

@@ -1,4 +1,4 @@
-# WORC v3.3.3
+# WORC v3.3.4
 ## Workflow for Optimal Radiomics Classification
 
 ## Information
@@ -87,7 +87,11 @@ Besides a Jupyter notebook with instructions, we provide there also an example s
 ## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
 
-When using WORC, please cite this repository using the following DOI: [![][DOI]][DOI-lnk].
+When using WORC, please cite this repository as following:
+
+``Martijn P.A. Starmans, Sebastian R. van der Voort, Thomas Phil and Stefan Klein. Workflow for Optimal Radiomics Classification (WORC). Zenodo (2018). Available from:  https://github.com/MStarmans91/WORC. DOI: http://doi.org/10.5281/zenodo.3840534.``
+
+For the DOI, visit [![][DOI]][DOI-lnk].
 
 ## Contact
 We are happy to help you with any questions. Please sent us a mail or place an issue on the Github.

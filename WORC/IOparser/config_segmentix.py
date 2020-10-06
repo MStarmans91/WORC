@@ -69,6 +69,13 @@ def load_config(config_file_path):
     settings_dict['Preprocessing']['CheckSpacing'] =\
         settings['Preprocessing'].getboolean('CheckSpacing')
 
+    # Re-orientation
+    settings_dict['Preprocessing']['CheckOrientation'] =\
+        settings['Preprocessing'].getboolean('CheckOrientation')
+
+    settings_dict['Preprocessing']['OrientationPrimaryAxis'] =\
+        str(settings['Preprocessing']['OrientationPrimaryAxis'])
+        
     # Resampling
     settings_dict['Preprocessing']['Resampling'] =\
         settings['Preprocessing'].getboolean('Resampling')

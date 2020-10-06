@@ -6,6 +6,32 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.3.4 - 2020-10-06
+------------------
+
+Fixed
+~~~~~
+- Bugfixes in some error messages.
+- If a classifier cannot give a score, use the prediction instead.
+- Bugfix in bootstrapping.
+- Bugfix: use f1-weighted score in SimpleWORC binary classification.
+
+Changed
+~~~~~~~
+- There are no longer ''patient_features'' in PREDICT: these are extracted
+  from the DICOM tags and are thus now called ''dicom_features.
+- As bootstrapping is now more efficient, increase default to 1000 iterations.
+
+Added
+~~~~~~~
+- Option to transpose all images and segmentations to a default orientation.
+  Currently only supports axial.
+- Support for PREDICT DICOM features.
+- Memory of single optimization job to general config.
+- Catch when imputation completely removes a feature.
+- Clipping as preprocessing option
+- Function to show which hyperparameters were used in the best workflows.
+
 3.3.3 - 2020-09-11
 ------------------
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.fitandscore &mdash; WORC 3.3.3 documentation</title>
+  <title>WORC.classification.fitandscore &mdash; WORC 3.3.4 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.3
+                3.3.4
               </div>
             
           
@@ -427,8 +427,15 @@
             <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputer</span><span class="p">(</span><span class="n">missing_values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">imp_type</span><span class="p">,</span>
                               <span class="n">n_neighbors</span><span class="o">=</span><span class="n">imp_nn</span><span class="p">)</span>
             <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+
+            <span class="n">original_shape</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
             <span class="n">X_train</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="n">imputed_shape</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
             <span class="n">X_test</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">original_shape</span> <span class="o">!=</span> <span class="n">imputed_shape</span><span class="p">:</span>
+                <span class="n">removed_features</span> <span class="o">=</span> <span class="n">original_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">imputed_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Several features (</span><span class="si">{removed_features}</span><span class="s1">) were np.NaN for all objects. Hence, imputation was not possible. Either make sure this is correct and turn of imputation, or correct the feature.&#39;</span><span class="p">)</span>
 
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ImputationMethod&#39;</span><span class="p">]</span>
@@ -462,7 +469,7 @@
                           <span class="s1">&#39;texture_ngtdm_features&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;texture_ngldm_features&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;texture_lbp_features&#39;</span><span class="p">,</span>
-                          <span class="s1">&#39;patient_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;dicom_features&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;semantic_features&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;coliage_features&#39;</span><span class="p">,</span>
                           <span class="s1">&#39;vessel_features&#39;</span><span class="p">,</span>

@@ -20,7 +20,7 @@ import pydicom
 import WORC.IOparser.config_preprocessing as config_io
 import os
 from WORC.processing.segmentix import dilate_contour
-from WORC.processing.helpers import resample_image
+from WORC.processing import helpers as h
 import numpy as np
 import WORC.addexceptions as ae
 
@@ -66,6 +66,18 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                        float(pixel_spacing[1]),
                        float(slice_thickness))
             image.SetSpacing(spacing)
+    else:
+        print('No spacing checking was applied.')
+
+    # Apply clipping
+    if config['Preprocessing']['Clipping']:
+        range = config['Preprocessing']['Clipping_Range']
+        print(f'Apply clipping to range {range}.')
+        image = clip_image(image=image,
+                           lowerbound=range[0],
+                           upperbound=range[1])
+    else:
+        print('No clipping was applied.')
 
     # Apply normalization
     if config['Preprocessing']['Normalize']:
@@ -86,12 +98,20 @@ def preprocess(imagefile, config, metadata=None, mask=None):
     else:
         print('No normalization was applied.')
 
+    # Apply re-orientation of the image
+    if config['Preprocessing']['CheckOrientation']:
+        primary_axis = config['Preprocessing']['OrientationPrimaryAxis']
+        print(f'Apply re-orientation of image to {primary_axis} if required.')
+        image = h.transpose_image(image=image, primary_axis=primary_axis)
+    else:
+        print('No re-orientation was applied.')
+
     # Apply resampling
     if config['Preprocessing']['Resampling']:
         new_spacing = config['Preprocessing']['Resampling_spacing']
         print(f'Apply resampling of image to spacing {new_spacing}.')
-        image = resample_image(image=image, new_spacing=new_spacing,
-                               interpolator=sitk.sitkBSpline)
+        image = h.resample_image(image=image, new_spacing=new_spacing,
+                                 interpolator=sitk.sitkBSpline)
     else:
         print('No resampling was applied.')
 
@@ -101,9 +121,6 @@ def preprocess(imagefile, config, metadata=None, mask=None):
 def bias_correct_image(img, usemask=False):
     # print('working on N4')
     initial_img = img
-    img_size = initial_img.GetSize()
-    img_spacing = initial_img.GetSpacing()
-    img_pixel_ID = img.GetPixelID()
 
     # Cast to float to enable bias correction to be used
     image = sitk.Cast(img, sitk.sitkFloat64)
@@ -125,6 +142,33 @@ def bias_correct_image(img, usemask=False):
         corrected_image = corrector.Execute(image)
 
     return corrected_image
+
+
+def clip_image(image, lowerbound=-1000.0, upperbound=3000.0):
+    """Clip intensity range of an image.
+
+    Parameters
+    image: ITK Image
+        Image to normalize
+    lowerbound: float, default -1000.0
+        lower bound of clipping range
+    upperbound: float, default 3000.0
+        lower bound of clipping range
+
+    Returns
+    -------
+    image : ITK Image
+        Output image.
+    """
+    # Create clamping filter for clipping and set variables
+    filter = sitk.ClampImageFilter()
+    filter.SetLowerBound(lowerbound)
+    filter.SetUpperBound(upperbound)
+
+    # Execute
+    clipped_image = filter.Execute(image)
+
+    return clipped_image
 
 
 def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',
