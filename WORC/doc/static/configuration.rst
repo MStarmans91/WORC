@@ -244,6 +244,22 @@ hyperoptimization, these can be preprocessed as following.
 
 .. include:: ../autogen/config/WORC.config_FeatPreProcess_defopts.rst
 
+.. _config-OneHotEncoding:
+
+OneHotEncoding
+~~~~~~~~~~~~~~~~
+Optionally, you can use OneHotEncoding on specific features. For more
+information on why and how this is done, see https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html.
+By default, this is not done, as WORC does not know for which
+specific features you would like to do this.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_OneHotEncoding_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_OneHotEncoding_defopts.rst
 
 .. _config-Imputation:
 
@@ -304,14 +320,9 @@ containing the actual values, e.g. value1, value2.
 
 SelectFeatGroup
 ~~~~~~~~~~~~~~~
-If the PREDICT feature computation and classification tools are used,
+If the PREDICT and/or PyRadiomics feature computation tools are used,
 then you can do a gridsearch among the various feature groups for the
-optimal combination. If you do not want this, set all fields to a single
-value.
-
-Previously, there was a single parameter for the texture features,
-selecting all, none or a single group. This is still supported, but not
-recommended, and looks as follows:
+optimal combination. Here, you determine which groups can be selected.
 
 **Description:**
 

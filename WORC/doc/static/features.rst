@@ -8,7 +8,11 @@ However, feature extraction is generally part of the workflow. Users can add the
 used feature toolboxes are `PREDICT <https://github.com/Svdvoort/PREDICTFastr/>`_ and
 `PyRadiomics <https://github.com/Svdvoort/https://github.com/Radiomics/pyradiomics/>`_ . The options for feature extraction
 using these toolboxes within WORC and their defaults are described in this chapter, organized per
-feature group. For details on the settings for the feature extraction, please see the :ref:`Config chapter <config-chapter>`.
+feature group.
+
+Here, we provide an overview of all features and an explantion of what they
+quantify. For a comprehensive overview of all functions and parameters, please look at
+:ref:`the config chapter <config-chapter>`.
 
 For all features, the feature labels reflect the descriptions named here. When parameters have to be set,
 the values of these parameters are included in the feature label.

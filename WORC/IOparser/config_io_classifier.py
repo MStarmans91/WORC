@@ -44,7 +44,8 @@ def load_config(config_file_path):
                      'Featsel': dict(), 'FeatureScaling': dict(),
                      'Resampling': dict(), 'Imputation': dict(),
                      'Ensemble': dict(), 'Bootstrap': dict(),
-                     'FeatPreProcess': dict(), 'Evaluation': dict()}
+                     'FeatPreProcess': dict(), 'Evaluation': dict(),
+                     'OneHotEncoding': dict()}
 
     settings_dict['General']['cross_validation'] =\
         settings['General'].getboolean('cross_validation')
@@ -121,6 +122,7 @@ def load_config(config_file_path):
     settings_dict['FeatPreProcess']['Use'] =\
         [str(settings['FeatPreProcess']['Use'])]
 
+    # Imputation
     settings_dict['Imputation']['use'] =\
         [str(item).strip() for item in
          settings['Imputation']['use'].split(',')]
@@ -133,6 +135,16 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Imputation']['n_neighbors'].split(',')]
 
+    # OneHotEncoding
+    settings_dict['OneHotEncoding']['Use'] =\
+        [str(item).strip() for item in
+         settings['Imputation']['use'].split(',')]
+
+    settings_dict['OneHotEncoding']['feature_labels_tofit'] =\
+        [str(item).strip() for item in
+         settings['OneHotEncoding']['feature_labels_tofit'].split(',')]
+
+    # General
     settings_dict['General']['FeatureCalculators'] =\
         [str(item).strip() for item in
          settings['General']['FeatureCalculators'].split(',')]

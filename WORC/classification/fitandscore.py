@@ -35,6 +35,7 @@ from WORC.featureprocessing.Scalers import WORCScaler
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
+from WORC.featureprocessing.OneHotEncoderWrapper import OneHotEncoderWrapper
 import WORC.addexceptions as ae
 
 # Specific imports for error management
@@ -56,6 +57,7 @@ def fit_and_score(X, y, scoring,
     The following
     methods can currently be applied as preprocessing before fitting, in
     this order:
+    0. Apply OneHotEncoder
     1. Apply feature imputation
     2. Select features based on feature type group (e.g. shape, histogram).
     3. Scale features with e.g. z-scoring.
@@ -139,7 +141,7 @@ def fit_and_score(X, y, scoring,
 
     ret: list
         Contains optionally the train_scores and the test_scores,
-        test_sample_counts, fit_time, score_time, parameters_est
+        fit_time, score_time, parameters_est
         and parameters_all.
 
     GroupSel: WORC GroupSel Object
@@ -160,6 +162,10 @@ def fit_and_score(X, y, scoring,
 
     scaler: scaler object
         Either None if feature scaling is not used, or
+        the fitted object.
+
+    encoder: WORC Encoder Object
+        Either None if feature OneHotEncoding is not used, or
         the fitted object.
 
     imputer: WORC Imputater Object
@@ -211,10 +217,10 @@ def fit_and_score(X, y, scoring,
     test = np.arange(len(y_train), len(y_train) + len(y_test))
 
     # Set some defaults for if a part fails and we return a dummy
-    test_sample_counts = len(test)
     fit_time = np.inf
     score_time = np.inf
     Sampler = None
+    encoder = None
     imputer = None
     scaler = None
     GroupSel = None
@@ -235,9 +241,6 @@ def fit_and_score(X, y, scoring,
     # Initiate dummy return object for when fit and scoring failes: sklearn defaults
     ret = [train_scores, test_scores] if return_train_score else [test_scores]
 
-    # ret = [train_scores, test_scores, test_sample_counts,
-    #        fit_time, score_time, para_estimator, para]
-
     if return_n_test_samples:
         ret.append(_num_samples(X_test))
     if return_times:
@@ -249,6 +252,35 @@ def fit_and_score(X, y, scoring,
 
     # Additional to sklearn defaults: return all parameters
     ret.append(parameters)
+
+    # ------------------------------------------------------------------------
+    # OneHotEncoder
+    if 'OneHotEncoding' in para_estimator.keys():
+        if para_estimator['OneHotEncoding'] == 'True':
+            if verbose:
+                print(f'Applying OneHotEncoding, will ignore unknowns.')
+            feature_labels_tofit =\
+                para_estimator['OneHotEncoding_feature_labels_tofit']
+            print(feature_labels_tofit)
+            print(feature_labels)
+            encoder =\
+                OneHotEncoderWrapper(handle_unknown='ignore',
+                                     feature_labels_tofit=feature_labels_tofit,
+                                     verbose=verbose)
+            encoder.fit(X_train, feature_labels)
+
+            if encoder.encoder is not None:
+                # Encoder is fitted
+                feature_labels = encoder.encoder.encoded_feature_labels
+                X_train = encoder.transform(X_train)
+                X_test = encoder.transform(X_test)
+
+        del para_estimator['OneHotEncoding']
+        del para_estimator['OneHotEncoding_feature_labels_tofit']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del encoder
 
     # ------------------------------------------------------------------------
     # Feature imputation
@@ -364,7 +396,7 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
 
@@ -431,7 +463,7 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
 
@@ -488,7 +520,7 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
 
@@ -533,7 +565,7 @@ def fit_and_score(X, y, scoring,
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
 
@@ -554,7 +586,7 @@ def fit_and_score(X, y, scoring,
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
                 if return_all:
-                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
                     return ret
 
@@ -574,7 +606,7 @@ def fit_and_score(X, y, scoring,
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
                 if return_all:
-                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
                     return ret
 
@@ -682,7 +714,7 @@ def fit_and_score(X, y, scoring,
                     para_estimator = delete_nonestimator_parameters(para_estimator)
 
                     if return_all:
-                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                     else:
                         return ret
                 else:
@@ -773,7 +805,7 @@ def fit_and_score(X, y, scoring,
                 print(f'[WARNING]: skipping this setting due to LDA Error: {e}.')
 
             if return_all:
-                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
             else:
                 return ret
         else:
@@ -783,7 +815,7 @@ def fit_and_score(X, y, scoring,
     ret.append(parameters)
 
     if return_all:
-        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
     else:
         return ret
 
@@ -806,6 +838,10 @@ def delete_nonestimator_parameters(parameters):
         del parameters['ReliefSampleSize']
         del parameters['ReliefDistanceP']
         del parameters['ReliefNumFeatures']
+
+    if 'OneHotEncoding' in parameters.keys():
+        del parameters['OneHotEncoding']
+        del parameters['OneHotEncoding_feature_labels_tofit']
 
     if 'Imputation' in parameters.keys():
         del parameters['Imputation']

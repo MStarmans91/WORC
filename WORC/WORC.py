@@ -105,6 +105,7 @@ class WORC(object):
             when using elastix, copy metadata from image to segmentation or not
 
     """
+
     def __init__(self, name='test'):
         """Initialize WORC object.
 
@@ -325,6 +326,11 @@ class WORC(object):
         config['ComBat']['per_feature'] = '0'
         config['ComBat']['excluded_features'] = 'sf_, of_, semf_, pf_'
         config['ComBat']['matlab'] = 'C:\\Program Files\\MATLAB\\R2015b\\bin\\matlab.exe'
+
+        # Feature OneHotEncoding
+        config['OneHotEncoding'] = dict()
+        config['OneHotEncoding']['Use'] = 'False'
+        config['OneHotEncoding']['feature_labels_tofit'] = ''
 
         # Feature imputation
         config['Imputation'] = dict()

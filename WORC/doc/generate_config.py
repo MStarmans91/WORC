@@ -291,6 +291,11 @@ def generate_config_options():
     config['SelectFeatGroup']['original_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['toolbox'] = 'All, or name of toolbox (PREDICT, PyRadiomics)'
 
+    # Feature OneHotEncoding
+    config['OneHotEncoding'] = dict()
+    config['OneHotEncoding']['Use'] = 'Boolean(s)'
+    config['OneHotEncoding']['feature_labels_tofit'] = 'List of strings'
+
     # Feature imputation
     config['Imputation'] = dict()
     config['Imputation']['use'] = 'Boolean(s)'
@@ -569,6 +574,11 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['wavelet_features'] = 'If True, use wavelet features in model.'
     config['SelectFeatGroup']['original_features'] = 'If True, use original features in model.'
     config['SelectFeatGroup']['toolbox'] = 'List of names of toolboxes to be used, or All'
+
+    # Feature OneHotEncoding
+    config['OneHotEncoding'] = dict()
+    config['OneHotEncoding']['Use'] = 'If True, use OneHotEncoding for specific features as determined by the field below.'
+    config['OneHotEncoding']['feature_labels_tofit'] = 'Labels of features for which to use OneHotEncoding. WORC will check whether any of the values specified in this field is a substring of a feature name. For example, if you give gclm, all features for which glcm is in the feature label will be one hot encoded.'
 
     # Feature imputation
     config['Imputation'] = dict()

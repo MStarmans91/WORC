@@ -8,6 +8,26 @@ already benefit from the main functionality of WORC, i.e. the automatic algorith
 optimization. However, several additional functionalities are provided, which are discussed in
 this chapter.
 
+For a description of the radiomics features, please see
+:ref:`the radiomics features chapter <features-chapter>`. For a description of
+the data mining components, see
+:ref:`the data mining chapter <datamining-chapter>`. All other components
+are discussed here.
+
+For a comprehensive overview of all functions and parameters, please look at
+:ref:`the config chapter <config-chapter>`.
+
+
+Preprocessing
+--------------
+
+Documentation WIP.
+
+Image Registration
+-------------------
+
+Documentation WIP.
+
 ComBat
 --------
 
@@ -30,22 +50,6 @@ When using ComBat, the following configurations should be done:
     straight after the feature extraction, thus before the actual hyperoptimization.
     Hence, to avoid serious overfitting, we advice to **NEVER** use the variable
     you are trying to predict as the moderation variable.
-
-Elastix
----------
-Documentation WIP.
-
-Regression
-------------
-Documentation WIP.
-
-Survival
-----------
-Documentation WIP.
-
-Segmentix
-----------
-Documentation WIP.
 
 ICC
 ----

@@ -132,6 +132,43 @@ def trainclassifier(feat_train, patientinfo_train, config,
     # Construct the required classifier grid
     param_grid = cc.create_param_grid(config)
 
+    # Add non-classifier parameters
+    param_grid = add_parameters_to_grid(param_grid, config)
+
+    # For N_iter, perform k-fold crossvalidation
+    outputfolder = os.path.dirname(output_hdf)
+    if feat_test is None:
+        trained_classifier = cv.crossval(config, label_data_train,
+                                         image_features_train,
+                                         param_grid,
+                                         modus=modus,
+                                         use_fastr=config['Classification']['fastr'],
+                                         fastr_plugin=config['Classification']['fastr_plugin'],
+                                         fixedsplits=fixedsplits,
+                                         ensemble=config['Ensemble'],
+                                         outputfolder=outputfolder,
+                                         tempsave=config['General']['tempsave'])
+    else:
+        trained_classifier = cv.nocrossval(config, label_data_train,
+                                           label_data_test,
+                                           image_features_train,
+                                           image_features_test,
+                                           param_grid,
+                                           modus=modus,
+                                           use_fastr=config['Classification']['fastr'],
+                                           fastr_plugin=config['Classification']['fastr_plugin'],
+                                           ensemble=config['Ensemble'])
+
+    if not os.path.exists(os.path.dirname(output_hdf)):
+        os.makedirs(os.path.dirname(output_hdf))
+
+    trained_classifier.to_hdf(output_hdf, 'EstimatorData')
+
+    print("Saved data!")
+
+
+def add_parameters_to_grid(param_grid, config):
+    """Add non-classifier parameters from config  to param grid."""
     # IF at least once groupwise search is turned on, add it to the param grid
     if 'True' in config['Featsel']['GroupwiseSearch']:
         param_grid['SelectGroups'] = config['Featsel']['GroupwiseSearch']
@@ -165,6 +202,10 @@ def trainclassifier(feat_train, patientinfo_train, config,
     param_grid['FeatPreProcess'] = config['FeatPreProcess']['Use']
     param_grid['Featsel_Variance'] =\
         boolean_uniform(threshold=config['Featsel']['Variance'])
+
+    param_grid['OneHotEncoding'] = config['OneHotEncoding']['Use']
+    param_grid['OneHotEncoding_feature_labels_tofit'] =\
+        [config['OneHotEncoding']['feature_labels_tofit']]
 
     param_grid['Imputation'] = config['Imputation']['use']
     param_grid['ImputationMethod'] = config['Imputation']['strategy']
@@ -211,33 +252,4 @@ def trainclassifier(feat_train, patientinfo_train, config,
     param_grid['random_seed'] =\
         discrete_uniform(loc=0, scale=2**32 - 1)
 
-    # For N_iter, perform k-fold crossvalidation
-    outputfolder = os.path.dirname(output_hdf)
-    if feat_test is None:
-        trained_classifier = cv.crossval(config, label_data_train,
-                                         image_features_train,
-                                         param_grid,
-                                         modus=modus,
-                                         use_fastr=config['Classification']['fastr'],
-                                         fastr_plugin=config['Classification']['fastr_plugin'],
-                                         fixedsplits=fixedsplits,
-                                         ensemble=config['Ensemble'],
-                                         outputfolder=outputfolder,
-                                         tempsave=config['General']['tempsave'])
-    else:
-        trained_classifier = cv.nocrossval(config, label_data_train,
-                                           label_data_test,
-                                           image_features_train,
-                                           image_features_test,
-                                           param_grid,
-                                           modus=modus,
-                                           use_fastr=config['Classification']['fastr'],
-                                           fastr_plugin=config['Classification']['fastr_plugin'],
-                                           ensemble=config['Ensemble'])
-
-    if not os.path.exists(os.path.dirname(output_hdf)):
-        os.makedirs(os.path.dirname(output_hdf))
-
-    trained_classifier.to_hdf(output_hdf, 'EstimatorData')
-
-    print("Saved data!")
+    return param_grid

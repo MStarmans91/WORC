@@ -6,6 +6,22 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.3.5 - Unreleased
+------------------
+
+Fixed
+~~~~~
+- Some function cleaning: removing redundant parts / variables.
+
+Changed
+~~~~~~~
+- Part of developper documentation for addinf methods to hyperoptimization.
+
+Added
+~~~~~~~
+- OneHotEncoder to workflows / HyperOptimization.
+- Documentation updates.
+
 3.3.4 - 2020-10-06
 ------------------
 
