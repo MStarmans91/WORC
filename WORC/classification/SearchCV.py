@@ -1065,7 +1065,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 performances = np.mean(performances, axis=0)
                 sortedindices = np.argsort(performances)[::-1]
                 with open('/scratch/mdeen/testfiles/sortedindices.txt', 'a') as sortingtest:
-                    sortingtest.write(str(performances))
+                    sortingtest.write('performances: ' + str(performances))
+                    sortingtest.write('sortedindices: ' + str(sortedindices))
                 performances_n_class = list()
 
                 if verbose:
@@ -1107,6 +1108,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     # Check which ensemble should be in the ensemble to maximally improve
                     new_performance = np.mean(performances_temp)
+                    if iteration == 1:
+                        with open('/scratch/mdeen/testfiles/sortedindices.txt', 'a') as sortingtest:
+                            sortingtest.write('best score, start of ensemble: ' + str(new_performance))
                     performances_n_class.append(new_performance)
                     best_index = sortedindices[iteration]
                     iteration += 1
