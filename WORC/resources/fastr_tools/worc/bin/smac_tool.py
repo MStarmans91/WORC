@@ -150,7 +150,7 @@ def main():
 
     # Prepare the SMAC instance
     if data['init_method'] == 'sobol':
-        initial_design = SobolDesign
+        initial_design = SobolDesign # Apparently does not work for more than 40 dimensions
     elif data['init_method'] == 'random':
         initial_design = RandomConfigurations
     else:
