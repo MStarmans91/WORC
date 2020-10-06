@@ -97,7 +97,8 @@ def plot_hyperparameters(prediction, label_type=None, estsize=50,
             # Count unique values, and if only one, delete
             n_unique = len(list(set(tempdata)))
             if n_unique == 1:
-                print(f'\t Removing parameter {k}.')
+                if verbose:
+                    print(f'\t Removing parameter {k}.')
                 del data[k]
 
     # Write to csv if output name is provided
