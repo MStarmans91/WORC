@@ -73,6 +73,15 @@ plotting Package
     :show-inheritance:
     :special-members:
 
+:mod:`plot_hyperparameters` Module
+----------------------------------
+
+.. automodule:: WORC.plotting.plot_hyperparameters
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`plot_images` Module
 -------------------------
 

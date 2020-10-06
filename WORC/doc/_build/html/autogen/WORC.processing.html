@@ -1,7 +1,8 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
@@ -11,30 +12,28 @@
   
 
   
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-
-  
   
   
   
 
   
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="resources Package" href="WORC.resources.html" />
@@ -52,7 +51,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> WORC
+            <a href="../index.html" class="icon icon-home"> WORC
           
 
           
@@ -82,7 +81,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -139,7 +137,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -178,7 +175,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="../index.html">Docs</a> &raquo;</li>
         
           <li><a href="WORC.html">WORC Package</a> &raquo;</li>
         
@@ -205,9 +202,9 @@
 <h1>processing Package<a class="headerlink" href="#processing-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WORC.processing.ExtractNLargestBlobsn">
 <span id="extractnlargestblobsn-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">ExtractNLargestBlobsn</span></code> Module<a class="headerlink" href="#module-WORC.processing.ExtractNLargestBlobsn" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.ExtractNLargestBlobsn.ExtractNLargestBlobsn">
-<code class="sig-prename descclassname">WORC.processing.ExtractNLargestBlobsn.</code><code class="sig-name descname">ExtractNLargestBlobsn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">binaryImage</span></em>, <em class="sig-param"><span class="n">numberToExtract</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/ExtractNLargestBlobsn.html#ExtractNLargestBlobsn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.ExtractNLargestBlobsn.ExtractNLargestBlobsn" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.ExtractNLargestBlobsn.</code><code class="descname">ExtractNLargestBlobsn</code><span class="sig-paren">(</span><em>binaryImage</em>, <em>numberToExtract=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/ExtractNLargestBlobsn.html#ExtractNLargestBlobsn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.ExtractNLargestBlobsn.ExtractNLargestBlobsn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract N largest blobs from binary image.</p>
 <dl class="simple">
 <dt>Arguments:</dt><dd><p>binaryImage: boolean numpy array one or several contours.
@@ -224,42 +221,42 @@ numberToExtract: number of blobs to extract (integer).</p>
 </div>
 <div class="section" id="module-WORC.processing.classes">
 <span id="classes-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">classes</span></code> Module<a class="headerlink" href="#module-WORC.processing.classes" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
+<dl class="class">
 <dt id="WORC.processing.classes.switch">
-<em class="property">class </em><code class="sig-prename descclassname">WORC.processing.classes.</code><code class="sig-name descname">switch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.processing.classes.</code><code class="descname">switch</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Object to mimic the MATLAB switch - case statement.</p>
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="WORC.processing.classes.switch.__dict__">
-<code class="sig-name descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.processing.classes', '__doc__': ' Object to mimic the MATLAB switch - case statement.', '__init__': &lt;function switch.__init__&gt;, '__iter__': &lt;function switch.__iter__&gt;, 'match': &lt;function switch.match&gt;, '__dict__': &lt;attribute '__dict__' of 'switch' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'switch' objects&gt;})</em><a class="headerlink" href="#WORC.processing.classes.switch.__dict__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.processing.classes', '__doc__': ' Object to mimic the MATLAB switch - case statement.', '__init__': &lt;function switch.__init__&gt;, '__iter__': &lt;function switch.__iter__&gt;, 'match': &lt;function switch.match&gt;, '__dict__': &lt;attribute '__dict__' of 'switch' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'switch' objects&gt;})</em><a class="headerlink" href="#WORC.processing.classes.switch.__dict__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="WORC.processing.classes.switch.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="WORC.processing.classes.switch.__iter__">
-<code class="sig-name descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.__iter__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.__iter__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the match method once, then stop</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="WORC.processing.classes.switch.__module__">
-<code class="sig-name descname">__module__</code><em class="property"> = 'WORC.processing.classes'</em><a class="headerlink" href="#WORC.processing.classes.switch.__module__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__module__</code><em class="property"> = 'WORC.processing.classes'</em><a class="headerlink" href="#WORC.processing.classes.switch.__module__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt id="WORC.processing.classes.switch.__weakref__">
-<code class="sig-name descname">__weakref__</code><a class="headerlink" href="#WORC.processing.classes.switch.__weakref__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.processing.classes.switch.__weakref__" title="Permalink to this definition">¶</a></dt>
 <dd><p>list of weak references to the object (if defined)</p>
 </dd></dl>
 
-<dl class="py method">
+<dl class="method">
 <dt id="WORC.processing.classes.switch.match">
-<code class="sig-name descname">match</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.match" title="Permalink to this definition">¶</a></dt>
+<code class="descname">match</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/classes.html#switch.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.classes.switch.match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indicate whether or not to enter a case suite</p>
 </dd></dl>
 
@@ -268,15 +265,15 @@ numberToExtract: number of blobs to extract (integer).</p>
 </div>
 <div class="section" id="module-WORC.processing.helpers">
 <span id="helpers-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">helpers</span></code> Module<a class="headerlink" href="#module-WORC.processing.helpers" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.helpers.check_image_orientation">
-<code class="sig-prename descclassname">WORC.processing.helpers.</code><code class="sig-name descname">check_image_orientation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#check_image_orientation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.check_image_orientation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.helpers.</code><code class="descname">check_image_orientation</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#check_image_orientation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.check_image_orientation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the orientation of an ITK image.</p>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.helpers.resample_image">
-<code class="sig-prename descclassname">WORC.processing.helpers.</code><code class="sig-name descname">resample_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">new_spacing</span></em>, <em class="sig-param"><span class="n">interpolator</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#resample_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.resample_image" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.helpers.</code><code class="descname">resample_image</code><span class="sig-paren">(</span><em>image</em>, <em>new_spacing</em>, <em>interpolator=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#resample_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.resample_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resample an image to another spacing.</p>
 <dl class="simple">
 <dt>image<span class="classifier">ITK Image</span></dt><dd><p>Input image.</p>
@@ -290,18 +287,18 @@ numberToExtract: number of blobs to extract (integer).</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.helpers.transpose_image">
-<code class="sig-prename descclassname">WORC.processing.helpers.</code><code class="sig-name descname">transpose_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">primary_axis</span><span class="o">=</span><span class="default_value">'axial'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#transpose_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.transpose_image" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.helpers.</code><code class="descname">transpose_image</code><span class="sig-paren">(</span><em>image</em>, <em>primary_axis='axial'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#transpose_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.transpose_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transpose an ITK image, while keeping the metadata.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-WORC.processing.label_processing">
 <span id="label-processing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module<a class="headerlink" href="#module-WORC.processing.label_processing" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.label_processing.findlabeldata">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">findlabeldata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">patientinfo</span></em>, <em class="sig-param"><span class="n">label_type</span></em>, <em class="sig-param"><span class="n">filenames</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">objects</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pids</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#findlabeldata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.findlabeldata" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">findlabeldata</code><span class="sig-paren">(</span><em>patientinfo</em>, <em>label_type</em>, <em>filenames=None</em>, <em>objects=None</em>, <em>pids=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#findlabeldata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.findlabeldata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the label data and match to the unage features.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>patientinfo (string): file with patient label data
@@ -314,15 +311,15 @@ objects (np.array or list): array of objects you want to order as well</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.label_processing.load_config_XNAT">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_config_XNAT</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_config_XNAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_config_XNAT" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_config_XNAT</code><span class="sig-paren">(</span><em>config_file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_config_XNAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_config_XNAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Configparser for retreiving patient data from XNAT.</p>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.label_processing.load_label_XNAT">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_label_XNAT</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label_info</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_XNAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_XNAT" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_label_XNAT</code><span class="sig-paren">(</span><em>label_info</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_XNAT"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_XNAT" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the patient IDs and label data from XNAT, Only works if you have a
 file /resources/GENETICS/files/genetics.json for each patient containing
 a single dictionary of all labels.</p>
@@ -343,9 +340,9 @@ patient_ID (numpy array): IDs of patients for which label data is</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.label_processing.load_label_csv">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_label_csv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_file</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_csv" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_label_csv</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_csv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the patient IDs and label data from the label file</p>
 <dl>
 <dt>Args:</dt><dd><p>input_file (string): Path of the label file</p>
@@ -363,9 +360,9 @@ patient_ID (numpy array): IDs of patients for which label data is</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.label_processing.load_label_txt">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_label_txt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_file</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_txt" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_label_txt</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_label_txt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_label_txt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the patient IDs and label data from the label file</p>
 <dl>
 <dt>Args:</dt><dd><p>input_file (string): Path of the label file</p>
@@ -383,9 +380,9 @@ patient_ID (numpy array): IDs of patients for which label data is</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.label_processing.load_labels">
-<code class="sig-prename descclassname">WORC.processing.label_processing.</code><code class="sig-name descname">load_labels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label_file</span></em>, <em class="sig-param"><span class="n">label_type</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_labels" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">load_labels</code><span class="sig-paren">(</span><em>label_file</em>, <em>label_type</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#load_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.load_labels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the label data from a label file</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>label_file (string): The path to the label file
@@ -402,14 +399,14 @@ label_type (list): List of the names of the labels to load</p>
 </div>
 <div class="section" id="module-WORC.processing.preprocessing">
 <span id="preprocessing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">preprocessing</span></code> Module<a class="headerlink" href="#module-WORC.processing.preprocessing" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.preprocessing.bias_correct_image">
-<code class="sig-prename descclassname">WORC.processing.preprocessing.</code><code class="sig-name descname">bias_correct_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img</span></em>, <em class="sig-param"><span class="n">usemask</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#bias_correct_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.bias_correct_image" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">bias_correct_image</code><span class="sig-paren">(</span><em>img</em>, <em>usemask=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#bias_correct_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.bias_correct_image" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.preprocessing.clip_image">
-<code class="sig-prename descclassname">WORC.processing.preprocessing.</code><code class="sig-name descname">clip_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">lowerbound</span><span class="o">=</span><span class="default_value">- 1000.0</span></em>, <em class="sig-param"><span class="n">upperbound</span><span class="o">=</span><span class="default_value">3000.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#clip_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.clip_image" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">clip_image</code><span class="sig-paren">(</span><em>image</em>, <em>lowerbound=-1000.0</em>, <em>upperbound=3000.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#clip_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.clip_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clip intensity range of an image.</p>
 <p>Parameters
 image: ITK Image</p>
@@ -428,9 +425,9 @@ image: ITK Image</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.preprocessing.normalize_image">
-<code class="sig-prename descclassname">WORC.processing.preprocessing.</code><code class="sig-name descname">normalize_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'z_score'</span></em>, <em class="sig-param"><span class="n">Normalize_ROI</span><span class="o">=</span><span class="default_value">'Full'</span></em>, <em class="sig-param"><span class="n">Dilate_ROI</span><span class="o">=</span><span class="default_value">'True'</span></em>, <em class="sig-param"><span class="n">ROI_dilate_radius</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">ROIDetermine</span><span class="o">=</span><span class="default_value">'Provided'</span></em>, <em class="sig-param"><span class="n">AssumeSameImageAndMaskMetadata</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#normalize_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.normalize_image" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">normalize_image</code><span class="sig-paren">(</span><em>image</em>, <em>mask=None</em>, <em>method='z_score'</em>, <em>Normalize_ROI='Full'</em>, <em>Dilate_ROI='True'</em>, <em>ROI_dilate_radius=5</em>, <em>ROIDetermine='Provided'</em>, <em>AssumeSameImageAndMaskMetadata=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#normalize_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.normalize_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply normalization to an image.</p>
 <dl class="simple">
 <dt>image: ITK Image</dt><dd><p>Image to normalize</p>
@@ -456,18 +453,18 @@ image: ITK Image</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.preprocessing.preprocess">
-<code class="sig-prename descclassname">WORC.processing.preprocessing.</code><code class="sig-name descname">preprocess</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">imagefile</span></em>, <em class="sig-param"><span class="n">config</span></em>, <em class="sig-param"><span class="n">metadata</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#preprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.preprocess" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">preprocess</code><span class="sig-paren">(</span><em>imagefile</em>, <em>config</em>, <em>metadata=None</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#preprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.preprocess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply preprocessing to an image to prepare it for feture extration.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-WORC.processing.segmentix">
 <span id="segmentix-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">segmentix</span></code> Module<a class="headerlink" href="#module-WORC.processing.segmentix" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.segmentix.dilate_contour">
-<code class="sig-prename descclassname">WORC.processing.segmentix.</code><code class="sig-name descname">dilate_contour</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">contour</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#dilate_contour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.dilate_contour" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">dilate_contour</code><span class="sig-paren">(</span><em>contour</em>, <em>radius=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#dilate_contour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.dilate_contour" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dilate the contour.</p>
 <dl class="simple">
 <dt>contour: numpy array</dt><dd><p>Array containing the contour</p>
@@ -477,9 +474,9 @@ image: ITK Image</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.segmentix.get_ring">
-<code class="sig-prename descclassname">WORC.processing.segmentix.</code><code class="sig-name descname">get_ring</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">contour</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#get_ring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.get_ring" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">get_ring</code><span class="sig-paren">(</span><em>contour</em>, <em>radius=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#get_ring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.get_ring" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a ring on the boundary of the contour.</p>
 <dl class="simple">
 <dt>contour: numpy array</dt><dd><p>Array containing the contour</p>
@@ -489,9 +486,9 @@ image: ITK Image</p>
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.segmentix.mask_contour">
-<code class="sig-prename descclassname">WORC.processing.segmentix.</code><code class="sig-name descname">mask_contour</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">contour</span></em>, <em class="sig-param"><span class="n">mask</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'multiply'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#mask_contour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.mask_contour" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">mask_contour</code><span class="sig-paren">(</span><em>contour</em>, <em>mask</em>, <em>method='multiply'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#mask_contour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.mask_contour" title="Permalink to this definition">¶</a></dt>
 <dd><p>Apply a mask to a contour.</p>
 <dl class="simple">
 <dt>contour: numpy array</dt><dd><p>Array containing the contour</p>
@@ -505,9 +502,9 @@ Should be a format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
 </dl>
 </dd></dl>
 
-<dl class="py function">
+<dl class="function">
 <dt id="WORC.processing.segmentix.segmentix">
-<code class="sig-prename descclassname">WORC.processing.segmentix.</code><code class="sig-name descname">segmentix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parameters</span></em>, <em class="sig-param"><span class="n">image</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">segmentation</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#segmentix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.segmentix" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">segmentix</code><span class="sig-paren">(</span><em>parameters</em>, <em>image=None</em>, <em>segmentation=None</em>, <em>output=None</em>, <em>metadata_file=None</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#segmentix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.segmentix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alter a segmentation.</p>
 <p>Segmentix is a mixture of processing methods that can be applied to
 agument a segmentation. Examples include selecting only the largest blob
@@ -560,19 +557,11 @@ Should be a format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -583,6 +572,7 @@ Should be a format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {
