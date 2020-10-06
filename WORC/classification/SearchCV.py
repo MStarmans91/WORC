@@ -1067,6 +1067,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 with open('/scratch/mdeen/testfiles/sortedindices.txt', 'a') as sortingtest:
                     sortingtest.write('performances: ' + str(performances))
                     sortingtest.write('sortedindices: ' + str(sortedindices))
+                    sortingtest.write('nr 1 parameters: ' + str(parameters_all[0]))
                 performances_n_class = list()
 
                 if verbose:
