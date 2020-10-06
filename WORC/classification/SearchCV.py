@@ -1016,7 +1016,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     # NOTE: Explicitly exclude validation set, elso refit and score
                     # somehow still seems to use it.
                     X_train_temp = [X_train[i] for i in train]
-                    Y_train_temp = [Y_train[i] for i in train]
+                    Y_train_temp = np.asarray([Y_train[i] for i in train])
                     train_temp = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
