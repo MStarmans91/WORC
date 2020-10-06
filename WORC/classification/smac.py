@@ -327,7 +327,7 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=resampling_threshold_cleaning, parent=resampling,
                                  values=['True']))
 
-    resampling_n_cores = Constant('Resampling_n_cores', value=[parameters['General']['Joblib_ncores']])
+    resampling_n_cores = Constant('Resampling_n_cores', value=parameters['General']['Joblib_ncores'])
     cs.add_hyperparameter(resampling_n_cores)
     cs.add_condition(InCondition(child=resampling_n_cores, parent=resampling,
                                  values=['True']))
