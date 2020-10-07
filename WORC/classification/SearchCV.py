@@ -1047,7 +1047,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     pipeline_score = performances[it, num]
                     with open('/scratch/mdeen/testfiles/testscores.txt', 'a') as testscores:
                         testscores.write(str(it) + ', ' + str(num) + ' (' + str(pipeline_classifier) + '): '
-                                         + str(pipeline_score) + + ' with probabilities: ' +
+                                         + str(pipeline_score) + ' with probabilities: ' +
                                          str(Y_valid_score_temp) + ' and truth ' + str(Y_train[valid]) + '\n')
 
                 Y_valid_score.append(Y_valid_score_it)
