@@ -1015,21 +1015,21 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 for num, p_all in enumerate(parameters_all):
                     # NOTE: Explicitly exclude validation set, elso refit and score
                     # somehow still seems to use it.
-                    #X_train_temp = [X_train[i] for i in train]
-                    #Y_train_temp = np.asarray([Y_train[i] for i in train])
-                    #train_temp = np.arange(0, len(train))
+                    X_train_temp = [X_train[i] for i in train]
+                    Y_train_temp = np.asarray([Y_train[i] for i in train])
+                    train_temp = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
-                    #base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
-                    #                               train_temp, train_temp,
-                    #                               verbose=False)
-
-                    base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train=train, test=valid)
+                    base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
+                                                   train_temp, train_temp,
+                                                   verbose=False)
 
                     # DEBUGGING
-                    #pipeline_params = base_estimator.cv_results_['params']
-                    #pipeline_score = base_estimator.cv_results_['mean_test_score']
+                    pipeline_classifier = base_estimator.cv_results_['params']['classifiers']
+                    pipeline_score = base_estimator.cv_results_['mean_test_score']
+                    with open('/scratch/mdeen/testfiles/testscores.txt', 'a') as testscores:
+                        testscores.write(str(it) + ', ' + str(num) + ' (' + str(pipeline_classifier) + '): '
+                                         + str(pipeline_score) + '\n')
 
                     # Predict and save scores
                     X_train_values = [x[0] for x in X_train] # Throw away labels
