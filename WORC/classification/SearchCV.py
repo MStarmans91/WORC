@@ -1024,13 +1024,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                    train_temp, train_temp,
                                                    verbose=False)
 
-                    # DEBUGGING
-                    pipeline_classifier = base_estimator.cv_results_['params']['classifiers']
-                    pipeline_score = base_estimator.cv_results_['mean_test_score']
-                    with open('/scratch/mdeen/testfiles/testscores.txt', 'a') as testscores:
-                        testscores.write(str(it) + ', ' + str(num) + ' (' + str(pipeline_classifier) + '): '
-                                         + str(pipeline_score) + '\n')
-
                     # Predict and save scores
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
@@ -1049,6 +1042,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     performances[it, num] = compute_performance(scoring,
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
+
+                    pipeline_classifier = p_all['classifiers']
+                    pipeline_score = performances[it, num]
+                    with open('/scratch/mdeen/testfiles/testscores.txt', 'a') as testscores:
+                        testscores.write(str(it) + ', ' + str(num) + ' (' + str(pipeline_classifier) + '): '
+                                         + str(pipeline_score) + + ' with probabilities: ' +
+                                         str(Y_valid_score_temp) + ' and truth ' + str(Y_train[valid]) + '\n')
 
                 Y_valid_score.append(Y_valid_score_it)
 
