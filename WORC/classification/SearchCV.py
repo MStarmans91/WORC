@@ -876,6 +876,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             verbose=verbose,
                             return_all=True)
 
+        with open('/scratch/mdeen/testfiles/ret.txt', 'a') as ret:
+            ret.write('Ret: ' + str(out))
+
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
             Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
@@ -1043,13 +1046,15 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
 
+                    base_estimator.fit
+                    '''
                     pipeline_classifier = p_all['classifiers']
                     pipeline_score = performances[it, num]
                     with open('/scratch/mdeen/testfiles/testscores.txt', 'a') as testscores:
                         testscores.write(str(it) + ', ' + str(num) + ' (' + str(pipeline_classifier) + '): '
                                          + str(pipeline_score) + ' with probabilities: ' +
                                          str(Y_valid_score_temp) + ' and truth ' + str(Y_train[valid]) + '\n')
-
+                    '''
                 Y_valid_score.append(Y_valid_score_it)
 
             # Sorted Ensemble Initialization -------------------------------------
