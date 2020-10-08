@@ -195,9 +195,6 @@ def fit_and_score(X, y, scoring,
     para_estimator = parameters.copy()
     estimator = cc.construct_classifier(para_estimator)
 
-    with open('/scratch/mdeen/testfiles/labels_check.txt', 'a') as fileth:
-        fileth.write('Truth: ' + str(y[test]))
-
     # Check the scorer
     scorers, __ = check_multimetric_scoring(estimator, scoring=scoring)
 

@@ -1030,15 +1030,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
                     Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
+                    Y_valid_score_original = self.predict_proba(X_train_values_valid)
 
-                    with open('/scratch/mdeen/testfiles/y_valid_score.txt', 'a') as yfile:
-                        yfile.write(str(Y_valid_score_temp) + '\n')
+                    with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
+                        fih.write('new fit: ' + str(Y_valid_score_temp) + '\n')
+                        fih.write('old fit: ' + str(Y_valid_score_original) + '\n')
 
                     # Only take the probabilities for the second class
                     Y_valid_score_temp = Y_valid_score_temp[:, 1]
-
-                    with open('/scratch/mdeen/testfiles/y_valid_score.txt', 'a') as yfile:
-                        yfile.write(str(Y_valid_score_temp) + '\n')
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = Y_valid_score_temp
@@ -1047,13 +1046,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Also store the validation ground truths
                         Y_valid_truth.append(Y_train[valid])
 
-                    with open('/scratch/mdeen/testfiles/scoring.txt', 'a') as scoringfile:
-                        scoringfile.write(str(scoring))
-
                     performances[it, num] = compute_performance(scoring,
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
-
 
                     pipeline_classifier = p_all['classifiers']
                     pipeline_score = performances[it, num]
