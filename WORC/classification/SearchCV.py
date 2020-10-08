@@ -825,6 +825,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         for train, test in cv_iter:
             X_train_values = [x[0] for x in X]
+            self.refit_and_score(X_train_values, y[test], self.best_params_,
+                                 train, test)
             predictions = self.predict_proba([X_train_values[i] for i in test])
             predictions = predictions[:, 1]
             perf = compute_performance('f1_weighted',
