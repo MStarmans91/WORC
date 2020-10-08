@@ -1038,6 +1038,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     # Only take the probabilities for the second class
                     Y_valid_score_temp = Y_valid_score_temp[:, 1]
+                    Y_valid_score_original = Y_valid_score_original[:, 1]
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = Y_valid_score_temp
@@ -1049,6 +1050,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     performances[it, num] = compute_performance(scoring,
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
+                    test_performance = compute_performance(scoring,
+                                                           Y_train[valid],
+                                                           Y_valid_score_original)
+
+                    with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
+                        fih.write('new score: ' + str(performances[it, num]) + '\n')
+                        fih.write('old score: ' + str(test_performance) + '\n')
 
                     pipeline_classifier = p_all['classifiers']
                     pipeline_score = performances[it, num]
