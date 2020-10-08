@@ -1031,8 +1031,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     X_train_values_valid = [X_train_values[i] for i in valid]
                     Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
 
+                    with open('/scratch/mdeen/testfiles/y_valid_score.txt', 'a') as yfile:
+                        yfile.write(str(Y_valid_score_temp) + '\n')
+
                     # Only take the probabilities for the second class
                     Y_valid_score_temp = Y_valid_score_temp[:, 1]
+
+                    with open('/scratch/mdeen/testfiles/y_valid_score.txt', 'a') as yfile:
+                        yfile.write(str(Y_valid_score_temp) + '\n')
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = Y_valid_score_temp
