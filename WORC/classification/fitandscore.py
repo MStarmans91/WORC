@@ -197,7 +197,7 @@ def fit_and_score(X, y, scoring,
 
     with open('/scratch/mdeen/testfiles/fitandscore_arguments.txt', 'a') as args:
         args.write('X: ' + str(X) + '\n')
-        args.write('Y: ' + str(Y) + '\n')
+        args.write('Y: ' + str(y) + '\n')
         args.write('scoring: ' + str(scoring) + '\n')
         args.write('train: ' + str(train) + '\n')
         args.write('test: ' + str(test) + '\n')
