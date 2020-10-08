@@ -1022,10 +1022,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     # somehow still seems to use it.
                     X_train_temp = [X_train[i] for i in train]
                     Y_train_temp = np.asarray([Y_train[i] for i in train])
-                    train_temp = np.arange(0, len(train))
+                    train_temp = np.arange(0, len(X_train))
 
                     # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
+                    base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                    train_temp, train_temp,
                                                    verbose=False)
 
