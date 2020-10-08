@@ -911,6 +911,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             verbose=verbose,
                             return_all=True)
 
+        with open('/scratch/mdeen/testfiles/output_fit_and_score_in_refit.txt', 'a') as outfit:
+            outfit.write(str(out[0]))
+
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
             Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
@@ -928,7 +931,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Fit the estimator using the preprocessed features
         X = [x[0] for x in X]
-        #X, y = self.preprocess(X, y, training=True)
+        X, y = self.preprocess(X, y, training=True)
 
         best_estimator = cc.construct_classifier(parameters_all)
 
