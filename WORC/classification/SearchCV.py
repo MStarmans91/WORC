@@ -1041,7 +1041,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Also store the validation ground truths
                         Y_valid_truth.append(Y_train[valid])
 
-                    performances[it, num] = compute_performance('f1_weighted',
+                    performances[it, num] = compute_performance(scoring,
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
 
@@ -1120,9 +1120,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     # Check which ensemble should be in the ensemble to maximally improve
                     new_performance = np.mean(performances_temp)
-                    #if iteration == 1:
-                    #    with open('/scratch/mdeen/testfiles/sortedindices.txt', 'a') as sortingtest:
-                    #        sortingtest.write('best score, start of ensemble: ' + str(new_performance))
                     performances_n_class.append(new_performance)
                     best_index = sortedindices[iteration]
                     iteration += 1
