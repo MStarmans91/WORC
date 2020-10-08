@@ -973,8 +973,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Get settings for best 100 estimators
         parameters_all = self.cv_results_['params']
-        with open('/scratch/mdeen/testfiles/ret_in_create_ensemble.txt', 'a') as retfile:
-            retfile.write(str(parameters_all) + '\n')
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
@@ -1035,6 +1033,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
                         fih.write('new fit: ' + str(Y_valid_score_temp) + '\n')
                         fih.write('old fit: ' + str(Y_valid_score_original) + '\n')
+                        fih.write('old score: ' + str(self.cv_results_['mean_test_score']))
 
                     # Only take the probabilities for the second class
                     Y_valid_score_temp = Y_valid_score_temp[:, 1]
