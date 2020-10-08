@@ -1041,6 +1041,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Also store the validation ground truths
                         Y_valid_truth.append(Y_train[valid])
 
+                    with open('/scratch/mdeen/testfiles/scoring.txt', 'a') as scoringfile:
+                        scoringfile.write(str(scoring))
+
                     performances[it, num] = compute_performance(scoring,
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
