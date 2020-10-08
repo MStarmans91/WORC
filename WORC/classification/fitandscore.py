@@ -195,6 +195,15 @@ def fit_and_score(X, y, scoring,
     para_estimator = parameters.copy()
     estimator = cc.construct_classifier(para_estimator)
 
+    with open('/scratch/mdeen/testfiles/fitandscore_arguments.txt', 'a') as args:
+        args.write('X: ' + str(X) + '\n')
+        args.write('Y: ' + str(Y) + '\n')
+        args.write('scoring: ' + str(scoring) + '\n')
+        args.write('train: ' + str(train) + '\n')
+        args.write('test: ' + str(test) + '\n')
+        args.write('parameters: ' + str(parameters) + '\n')
+        args.write('end of this call.' + '\n')
+
     # Check the scorer
     scorers, __ = check_multimetric_scoring(estimator, scoring=scoring)
 
