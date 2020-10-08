@@ -1028,7 +1028,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                         train, valid, p_all)
 
                     with open('/scratch/mdeen/testfiles/ret_in_create_ensemble.txt', 'a') as retfile:
-                        retfile.write(str(ret[1]) + '\n')
+                        retfile.write(str(ret[0]) + '\n')
 
                     # Predict and save scores
                     X_train_values = [x[0] for x in X_train] # Throw away labels
