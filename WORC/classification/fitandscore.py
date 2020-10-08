@@ -195,7 +195,7 @@ def fit_and_score(X, y, scoring,
     para_estimator = parameters.copy()
     estimator = cc.construct_classifier(para_estimator)
 
-    with open('/scratch/mdeen/testfiles/fitandscore_arguments.txt', 'a') as args:
+    with open('/scratch/mdeen/testfiles/fitandscore_arguments_ens.txt', 'a') as args:
         args.write('X: ' + str(X) + '\n')
         args.write('Y: ' + str(y) + '\n')
         args.write('scoring: ' + str(scoring) + '\n')
