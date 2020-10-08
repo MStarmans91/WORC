@@ -1029,7 +1029,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                    train_temp, train_temp,
                                                    verbose=False)
 
-                    ret = fit_and_score(X_train, Y_train, 'f1',
+                    ret = fit_and_score(X_train, Y_train, 'f1_weighted',
                                         train, valid, p_all)
 
                     with open('/scratch/mdeen/testfiles/ret_in_create_ensemble.txt', 'a') as retfile:
