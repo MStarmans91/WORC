@@ -973,6 +973,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Get settings for best 100 estimators
         parameters_all = self.cv_results_['params']
+        with open('/scratch/mdeen/testfiles/ret_in_create_ensemble.txt', 'a') as retfile:
+            retfile.write(str(parameters_all) + '\n')
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
