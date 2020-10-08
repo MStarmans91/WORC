@@ -876,9 +876,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             verbose=verbose,
                             return_all=True)
 
-        with open('/scratch/mdeen/testfiles/refit_output.txt', 'a') as filething:
-            filething.write(str(out[0]) + '\n')
-
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
             Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
@@ -1029,12 +1026,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                    train_temp, train_temp,
                                                    verbose=False)
 
-                    ret = fit_and_score(X_train, Y_train, 'f1_weighted',
-                                        train, valid, p_all)
-
-                    with open('/scratch/mdeen/testfiles/ret_in_create_ensemble.txt', 'a') as retfile:
-                        retfile.write(str(ret[0]) + '\n')
-
                     # Predict and save scores
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
@@ -1054,14 +1045,15 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
 
-                    '''
-                    pipeline_classifier = p_all['classifiers']
+
+                    #pipeline_classifier = p_all['classifiers']
                     pipeline_score = performances[it, num]
                     with open('/scratch/mdeen/testfiles/testscores.txt', 'a') as testscores:
-                        testscores.write(str(it) + ', ' + str(num) + ' (' + str(pipeline_classifier) + '): '
-                                         + str(pipeline_score) + ' with probabilities: ' +
-                                         str(Y_valid_score_temp) + ' and truth ' + str(Y_train[valid]) + '\n')
-                    '''
+                        testscores.write('performance[it,num]: ' + str(pipeline_score))
+                        #testscores.write(str(it) + ', ' + str(num) + ' (' + str(pipeline_classifier) + '): '
+                        #                 + str(pipeline_score) + ' with probabilities: ' +
+                        #                 str(Y_valid_score_temp) + ' and truth ' + str(Y_train[valid]) + '\n')
+
                 Y_valid_score.append(Y_valid_score_it)
 
             # Sorted Ensemble Initialization -------------------------------------
