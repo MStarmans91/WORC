@@ -1059,10 +1059,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                    train_temp, train_temp,
                                                    verbose=False)
 
-                    self.refit_and_score(X_train_temp, Y_train_temp, p_all,
-                                                   train_temp, train_temp,
-                                                   verbose=False)
-
                     # Predict and save scores
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
