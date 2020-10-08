@@ -1024,6 +1024,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                    train_temp, train_temp,
                                                    verbose=False)
 
+                    ret = fit_and_score(X_train, Y_train, scoring,
+                                        train, valid, p_all)
+
+                    with open('/scratch/mdeen/testfiles/ret_in_create_ensemble.txt', 'a') as retfile:
+                        retfile.write(str(ret[1]) + '\n')
+
                     # Predict and save scores
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
