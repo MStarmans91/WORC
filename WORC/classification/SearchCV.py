@@ -876,6 +876,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             verbose=verbose,
                             return_all=True)
 
+        with open('/scratch/mdeen/testfiles/refit_output.txt', 'a') as filething:
+            filething.write(str(out[0]) + '\n')
+
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
             Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
