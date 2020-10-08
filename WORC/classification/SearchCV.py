@@ -1050,7 +1050,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Also store the validation ground truths
                         Y_valid_truth.append(Y_train[valid])
 
-                    performances[it, num] = compute_performance(scoring,
+                    performances[it, num] = compute_performance('f1_weighted',
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
 
