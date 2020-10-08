@@ -1024,6 +1024,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                    train_temp, train_temp,
                                                    verbose=False)
 
+                    self.refit_and_score(X_train_temp, Y_train_temp, p_all,
+                                                   train_temp, train_temp,
+                                                   verbose=False)
+
                     # Predict and save scores
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
@@ -1033,7 +1037,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
                         fih.write('new fit: ' + str(Y_valid_score_temp) + '\n')
                         fih.write('old fit: ' + str(Y_valid_score_original) + '\n')
-                        fih.write('old score: ' + str(self.cv_results_['mean_test_score']))
 
                     # Only take the probabilities for the second class
                     Y_valid_score_temp = Y_valid_score_temp[:, 1]
@@ -1056,6 +1059,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
                         fih.write('new score: ' + str(performances[it, num]) + '\n')
                         fih.write('old score: ' + str(test_performance) + '\n')
+                        fih.write('old old score: ' + str(self.cv_results_['mean_test_score']))
 
                     pipeline_classifier = p_all['classifiers']
                     pipeline_score = performances[it, num]
