@@ -837,7 +837,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 tf.write('test indices: ' + str(test) + '\n')
                 tf.write('y[test]: ' + str(y[test]) + '\n')
                 tf.write('perf using proba: ' + str(perf) + '\n')
-                tf.write('perf that was stored: ' + self.cv_results_['mean_test_score'] + '\n')
+                tf.write('perf that was stored: ' + str(self.cv_results_['mean_test_score']) + '\n')
 
         if self.refit:
             # We always refit on the full dataset
