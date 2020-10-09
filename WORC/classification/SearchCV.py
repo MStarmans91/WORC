@@ -1102,8 +1102,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
 
+                    new_performance = compute_performance(scoring,
+                                                          Y_train[valid],
+                                                          predictions)
+
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
                         fih.write('new score: ' + str(performances[it, num]) + '\n')
+                        fih.write('new performance: ' + str(new_performance))
                         fih.write('old old score: ' + str(self.cv_results_['mean_test_score']))
 
                     pipeline_classifier = p_all['classifiers']
