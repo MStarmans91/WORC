@@ -816,7 +816,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         return self
 
     def refit_and_score(self, X, y, parameters_all,
-                        train, test, scoring, verbose=None):
+                        train, test, verbose=None):
         """Refit the base estimator and attributes such as GroupSel
 
         Parameters
