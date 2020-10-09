@@ -912,7 +912,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             return_all=True)
 
         with open('/scratch/mdeen/testfiles/output_fit_and_score_in_refit.txt', 'a') as outfit:
-            outfit.write(str(out[0]))
+            outfit.write(str(out[0]) + '\n')
+            outfit.write(str(fit_params))
 
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
