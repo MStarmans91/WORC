@@ -1036,8 +1036,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                    train, valid)
 
-                    new_score_I_found = base_estimator.best_score_
-
                     with open('/scratch/mdeen/testfiles/fit_and_score_in_create_ensemble.txt', 'a') as retfile:
                         retfile.write('Scoring of this particular pipeline: ' + str(ret[0]) + '\n')
                         retfile.write('New score I found in the base_estimator: ' + str(new_score_I_found))
@@ -1046,11 +1044,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
                     Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
+                    Y_another_one = base_estimator.best_estimator_.predict(X_train_values_valid)
                     Y_valid_score_original = self.predict_proba(X_train_values_valid)
 
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
                         fih.write('new fit: ' + str(Y_valid_score_temp) + '\n')
                         fih.write('old fit: ' + str(Y_valid_score_original) + '\n')
+                        fih.write('another one: ' + str(Y_another_one))
 
                     # Only take the probabilities for the second class
                     Y_valid_score_temp = Y_valid_score_temp[:, 1]
