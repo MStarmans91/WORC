@@ -1058,14 +1058,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     train_temp = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
-                                                   train_temp, train_temp,
-                                                   verbose=False)
+                    #base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
+                    #                               train_temp, train_temp,
+                    #                               verbose=False)
 
                     ret = fit_and_score(X_train, Y_train, scoring,
                                         train, valid, p_all)
 
-                    with open('/scratch/mdeen/testfiles/fit_and_score.txt', 'a') as retfile:
+                    with open('/scratch/mdeen/testfiles/fit_and_score_in_create_ensemble.txt', 'a') as retfile:
                         retfile.write('Scoring of this particular pipeline: ' + str(ret[0]))
 
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
