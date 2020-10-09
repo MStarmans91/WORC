@@ -917,6 +917,25 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Multiclass, hence employ a multiclass classifier for e.g. SVM, RF
             best_estimator = OneVsRestClassifier(best_estimator)
 
+        def compute_performance(scoring, Y_valid_truth, Y_valid_score):
+            if scoring == 'f1_weighted' or scoring == 'f1':
+                # Convert score to binaries first
+                for num in range(0, len(Y_valid_score)):
+                    if Y_valid_score[num] >= 0.5:
+                        Y_valid_score[num] = 1
+                    else:
+                        Y_valid_score[num] = 0
+
+                perf = f1_score(Y_valid_truth, Y_valid_score, average='weighted')
+            elif scoring == 'auc':
+                perf = roc_auc_score(Y_valid_truth, Y_valid_score)
+            elif scoring == 'sar':
+                perf = sar_score(Y_valid_truth, Y_valid_score)
+            else:
+                raise KeyError('[WORC Warning] No valid score method given in ensembling: ' + str(scoring))
+
+            return perf
+
         if y is not None:
             best_estimator.fit(X, y, **self.fit_params)
             predict_proba_predictions = best_estimator.predict_proba(X[test])
@@ -928,10 +947,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             best_estimator.fit(X[train], y[train], **self.fit_params)
             predict_proba_predictions = best_estimator.predict_proba(X[test])
             predict_direct_predictions = best_estimator.predict(X[test])
+            final_score = compute_performance('f1_weighted', y[test], predict_direct_predictions)
             with open('/scratch/mdeen/testfiles/inside_refit_and_score.txt', 'a') as inside:
                 inside.write('Fit on train X' + '\n')
                 inside.write('Predict proba predictions: ' + str(predict_proba_predictions) + '\n')
                 inside.write('Predict direct predictions: ' + str(predict_direct_predictions) + '\n')
+                inside.write('Final score using this: ' + str(final_score) + '\n')
 
         else:
             best_estimator.fit(X, **self.fit_params)
@@ -1057,14 +1078,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
                     Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
-                    X_train_no_labels = [x[0] for x in X_train]
-                    processed_X, processed_Y = base_estimator.preprocess(X_train_no_labels, Y_train, training=True)
-                    new_fit = base_estimator.fit(processed_X[train], processed_Y[train], {})
-                    predictions = new_fit.predict(X_train[valid])
+                    #X_train_no_labels = [x[0] for x in X_train]
+                    #processed_X, processed_Y = base_estimator.preprocess(X_train_no_labels, Y_train, training=True)
+                    #new_fit = base_estimator.fit(processed_X[train], processed_Y[train], {})
+                    #predictions = new_fit.predict(X_train[valid])
 
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
                         fih.write('new fit: ' + str(Y_valid_score_temp) + '\n')
-                        fih.write('predictions using new method: ' + str(predictions))
+                        #fih.write('predictions using new method: ' + str(predictions))
                         #fih.write('another one (self): ' + str(Y_another_one))
 
                     # Only take the probabilities for the second class
