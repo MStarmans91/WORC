@@ -804,41 +804,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.best_index_ = best_index
         self.best_params_ = results["params"][self.best_index_]
 
-        def compute_performance(scoring, Y_valid_truth, Y_valid_score):
-            if scoring == 'f1_weighted' or scoring == 'f1':
-                # Convert score to binaries first
-                for num in range(0, len(Y_valid_score)):
-                    if Y_valid_score[num] >= 0.5:
-                        Y_valid_score[num] = 1
-                    else:
-                        Y_valid_score[num] = 0
-
-                perf = f1_score(Y_valid_truth, Y_valid_score, average='weighted')
-            elif scoring == 'auc':
-                perf = roc_auc_score(Y_valid_truth, Y_valid_score)
-            elif scoring == 'sar':
-                perf = sar_score(Y_valid_truth, Y_valid_score)
-            else:
-                raise KeyError('[WORC Warning] No valid score method given in ensembling: ' + str(scoring))
-
-            return perf
-
-        for train, test in cv_iter:
-            X_train_values = [x[0] for x in X]
-            self.refit_and_score(X, y, self.best_params_,
-                                 train, test)
-            predictions = self.predict_proba([X_train_values[i] for i in test])
-            predictions = predictions[:, 1]
-            perf = compute_performance('f1_weighted',
-                                       y[test],
-                                       predictions)
-
-            with open('/scratch/mdeen/testfiles/proba_compute_test.txt', 'a') as tf:
-                tf.write('test indices: ' + str(test) + '\n')
-                tf.write('y[test]: ' + str(y[test]) + '\n')
-                tf.write('perf using proba: ' + str(perf) + '\n')
-                tf.write('perf that was stored: ' + str(self.cv_results_['mean_test_score']) + '\n')
-
         if self.refit:
             # We always refit on the full dataset
             indices = np.arange(0, len(y))
@@ -916,7 +881,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         with open('/scratch/mdeen/testfiles/output_fit_and_score_in_refit.txt', 'a') as outfit:
             outfit.write(str(out[0]) + '\n')
-            outfit.write(str(fit_params))
+            outfit.write(str(fit_params) + '\n')
+            outfit.write(str(self.scoring))
 
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
