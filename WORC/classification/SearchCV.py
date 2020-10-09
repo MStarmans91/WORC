@@ -1059,7 +1059,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
                     X_train_no_labels = [x[0] for x in X_train]
                     processed_X, processed_Y = base_estimator.preprocess(X_train_no_labels, Y_train, training=True)
-                    new_fit = base_estimator.fit(processed_X[train], processed_Y[train])
+                    new_fit = base_estimator.fit(processed_X[train], processed_Y[train], {})
                     predictions = new_fit.predict(X_train[valid])
 
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
