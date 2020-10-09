@@ -1078,19 +1078,18 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
                     Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
-                    #X_train_no_labels = [x[0] for x in X_train]
-                    #processed_X, processed_Y = base_estimator.preprocess(X_train_no_labels, Y_train, training=True)
-                    #new_fit = base_estimator.fit(processed_X[train], processed_Y[train], {})
-                    #predictions = new_fit.predict(X_train[valid])
+                    X_train_no_labels = [x[0] for x in X_train]
+                    processed_X, processed_Y = base_estimator.preprocess(X_train_no_labels, Y_train, training=True)
+                    new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_Y[train], {})
+                    predictions = new_fit.predict(X_train[valid])
 
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
                         fih.write('new fit: ' + str(Y_valid_score_temp) + '\n')
-                        #fih.write('predictions using new method: ' + str(predictions))
+                        fih.write('predictions using new method: ' + str(predictions))
                         #fih.write('another one (self): ' + str(Y_another_one))
 
                     # Only take the probabilities for the second class
                     Y_valid_score_temp = Y_valid_score_temp[:, 1]
-                    Y_valid_score_original = Y_valid_score_original[:, 1]
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = Y_valid_score_temp
@@ -1102,13 +1101,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     performances[it, num] = compute_performance(scoring,
                                                                 Y_train[valid],
                                                                 Y_valid_score_temp)
-                    test_performance = compute_performance(scoring,
-                                                           Y_train[valid],
-                                                           Y_valid_score_original)
 
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
                         fih.write('new score: ' + str(performances[it, num]) + '\n')
-                        fih.write('old score: ' + str(test_performance) + '\n')
                         fih.write('old old score: ' + str(self.cv_results_['mean_test_score']))
 
                     pipeline_classifier = p_all['classifiers']
