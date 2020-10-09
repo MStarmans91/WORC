@@ -1081,7 +1081,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     X_train_no_labels = [x[0] for x in X_train]
                     processed_X, processed_Y = base_estimator.preprocess(X_train_no_labels, Y_train, training=True)
                     new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_Y[train])
-                    predictions = new_fit.predict(X_train[valid])
+                    predictions = new_fit.predict(processed_X[valid])
 
                     with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
                         fih.write('new fit: ' + str(Y_valid_score_temp) + '\n')
