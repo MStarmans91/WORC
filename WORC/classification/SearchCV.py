@@ -851,7 +851,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         return self
 
     def refit_and_score(self, X, y, parameters_all,
-                        train, test, verbose=None):
+                        train, test, scoring, verbose=None):
         """Refit the base estimator and attributes such as GroupSel
 
         Parameters
@@ -900,6 +900,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Refit all preprocessing functions
         fit_params = _check_fit_params(X, self.fit_params)
+        out = fit_and_score(X, y, scoring, train, test, parameters_all)
+        '''
         out = fit_and_score(X_fit, y, self.scoring,
                             train, test, parameters_all,
                             fit_params=fit_params,
@@ -910,6 +912,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             error_score=self.error_score,
                             verbose=verbose,
                             return_all=True)
+        '''
 
         with open('/scratch/mdeen/testfiles/output_fit_and_score_in_refit.txt', 'a') as outfit:
             outfit.write(str(out[0]) + '\n')
@@ -1070,7 +1073,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         retfile.write('Scoring of this particular pipeline: ' + str(ret[0]))
 
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid)
+                                                   train, valid, scoring)
 
                     # Predict and save scores
                     X_train_values = [x[0] for x in X_train] # Throw away labels
