@@ -1057,7 +1057,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
                     Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
-                    processed_X, processed_Y = base_estimator.preprocess(X_train, Y_train, training=True)
+                    X_train_no_labels = [x[0] for x in X_train]
+                    processed_X, processed_Y = base_estimator.preprocess(X_train_no_labels, Y_train, training=True)
                     new_fit = base_estimator.fit(processed_X[train], processed_Y[train])
                     predictions = new_fit.predict(X_train[valid])
 
