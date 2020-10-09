@@ -1033,11 +1033,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     ret = fit_and_score(X_train, Y_train, scoring,
                                         train, valid, p_all)
 
-                    with open('/scratch/mdeen/testfiles/fit_and_score_in_create_ensemble.txt', 'a') as retfile:
-                        retfile.write('Scoring of this particular pipeline: ' + str(ret[0]))
-
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                    train, valid)
+
+                    new_score_I_found = base_estimator.best_score_
+
+                    with open('/scratch/mdeen/testfiles/fit_and_score_in_create_ensemble.txt', 'a') as retfile:
+                        retfile.write('Scoring of this particular pipeline: ' + str(ret[0]) + '\n')
+                        retfile.write('New score I found in the base_estimator: ' + str(new_score_I_found))
 
                     # Predict and save scores
                     X_train_values = [x[0] for x in X_train] # Throw away labels
