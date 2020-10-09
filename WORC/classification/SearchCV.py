@@ -919,6 +919,20 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         if y is not None:
             best_estimator.fit(X, y, **self.fit_params)
+            predict_proba_predictions = best_estimator.predict_proba(X[test])
+            predict_direct_predictions = best_estimator.predict(X[test])
+            with open('/scratch/mdeen/testfiles/inside_refit_and_score.txt', 'a') as inside:
+                inside.write('Fit on full X' + '\n')
+                inside.write('Predict proba predictions: ' + str(predict_proba_predictions) + '\n')
+                inside.write('Predict direct predictions: ' + str(predict_direct_predictions) + '\n')
+            best_estimator.fit(X[train], y[train], **self.fit_params)
+            predict_proba_predictions = best_estimator.predict_proba(X[test])
+            predict_direct_predictions = best_estimator.predict(X[test])
+            with open('/scratch/mdeen/testfiles/inside_refit_and_score.txt', 'a') as inside:
+                inside.write('Fit on train X' + '\n')
+                inside.write('Predict proba predictions: ' + str(predict_proba_predictions) + '\n')
+                inside.write('Predict direct predictions: ' + str(predict_direct_predictions) + '\n')
+
         else:
             best_estimator.fit(X, **self.fit_params)
         self.best_estimator_ = best_estimator
