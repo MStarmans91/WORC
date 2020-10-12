@@ -932,7 +932,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             return perf
 
         if y is not None:
-            best_estimator.fit(X, y, **self.fit_params)
+            #best_estimator.fit(X, y, **self.fit_params)
+            best_estimator.fit(X[train], y[train], **self.fit_params)
         else:
             best_estimator.fit(X, **self.fit_params)
         self.best_estimator_ = best_estimator
