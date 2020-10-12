@@ -1045,7 +1045,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     # Prepare data
                     X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
-                    validation_set = [X_train_values[i] for i in valid]
+                    # Preprocess data
+                    processed_X, processed_Y = base_estimator.preprocess(X_train_values, Y_train,
+                                                                         training=True)
+                    validation_set = [processed_X[i] for i in valid]
                     # Create the predictions on the validation set
                     predictions = base_estimator.predict(validation_set)
 
@@ -1071,7 +1074,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         Y_valid_truth.append(Y_train[valid])
 
                     performances[it, num] = compute_performance(scoring,
-                                                                Y_train[valid],
+                                                                processed_Y[valid],
                                                                 predictions)
 
                 Y_valid_score.append(Y_valid_score_it)
