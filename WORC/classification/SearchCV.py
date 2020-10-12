@@ -1040,13 +1040,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     # Prepare data
                     X_train_values = [x[0] for x in X_train] # Throw away labels
-                    X_train_values_valid = [X_train_values[i] for i in valid]
-                    # Apply the preprocessing to the features
-                    processed_X, processed_Y = base_estimator.preprocess(X_train_values, Y_train, training=True)
+                    # Apply the preprocessing to the features before training
+                    processed_X_train = base_estimator.preprocess(X_train_values[train], Y_train[train], training=True)
                     # Refit the estimator on the processed training data
-                    new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_Y[train])
+                    new_fit = base_estimator.best_estimator_.fit(processed_X_train, Y_train[train])
+                    # Apply preprocessing to the features in the validation set
+                    processed_X_valid = base_estimator.preprocess(X_train_values[valid], Y_train[valid], training=True)
                     # Create the predictions on the validation set
-                    predictions = new_fit.predict(processed_X[valid])
+                    predictions = new_fit.predict(processed_X_valid)
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = predictions
