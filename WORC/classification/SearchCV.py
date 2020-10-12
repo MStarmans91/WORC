@@ -1039,7 +1039,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                    train, valid)
 
                     # Prepare data
-                    X_train_values = [x[0] for x in X_train] # Throw away labels
+                    X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
                     print(train)
                     # Apply the preprocessing to the features before training
                     processed_X_train, processed_Y_train = base_estimator.preprocess(X_train_values[train],
