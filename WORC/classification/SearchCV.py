@@ -1033,45 +1033,23 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                 # Loop over the 100 best estimators
                 for num, p_all in enumerate(parameters_all):
-                    # NOTE: Explicitly exclude validation set, elso refit and score
-                    # somehow still seems to use it.
-                    X_train_temp = [X_train[i] for i in train]
-                    Y_train_temp = np.asarray([Y_train[i] for i in train])
-                    train_temp = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
-                    #base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
-                    #                               train_temp, train_temp,
-                    #                               verbose=False)
-
-                    ret = fit_and_score(X_train, Y_train, scoring,
-                                        train, valid, p_all)
-
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                    train, valid)
 
-                    with open('/scratch/mdeen/testfiles/fit_and_score_in_create_ensemble.txt', 'a') as retfile:
-                        retfile.write('Scoring of this particular pipeline: ' + str(ret[0]) + '\n')
-
-                    # Predict and save scores
+                    # Prepare data
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     X_train_values_valid = [X_train_values[i] for i in valid]
-                    Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
-                    X_train_no_labels = [x[0] for x in X_train]
-                    processed_X, processed_Y = base_estimator.preprocess(X_train_no_labels, Y_train, training=True)
+                    # Apply the preprocessing to the features
+                    processed_X, processed_Y = base_estimator.preprocess(X_train_values, Y_train, training=True)
+                    # Refit the estimator on the processed training data
                     new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_Y[train])
+                    # Create the predictions on the validation set
                     predictions = new_fit.predict(processed_X[valid])
 
-                    with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
-                        fih.write('new fit: ' + str(Y_valid_score_temp) + '\n')
-                        fih.write('predictions using new method: ' + str(predictions))
-                        #fih.write('another one (self): ' + str(Y_another_one))
-
-                    # Only take the probabilities for the second class
-                    Y_valid_score_temp = Y_valid_score_temp[:, 1]
-
                     # Append to array for all classifiers on this validation set
-                    Y_valid_score_it[num, :] = Y_valid_score_temp
+                    Y_valid_score_it[num, :] = predictions
 
                     if num == 0:
                         # Also store the validation ground truths
@@ -1079,24 +1057,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     performances[it, num] = compute_performance(scoring,
                                                                 Y_train[valid],
-                                                                Y_valid_score_temp)
-
-                    new_performance = compute_performance(scoring,
-                                                          Y_train[valid],
-                                                          predictions)
-
-                    with open('/scratch/mdeen/testfiles/predict_proba_comparison.txt', 'a') as fih:
-                        fih.write('new score: ' + str(performances[it, num]) + '\n')
-                        fih.write('new performance: ' + str(new_performance))
-                        fih.write('old old score: ' + str(self.cv_results_['mean_test_score']))
-
-                    pipeline_classifier = p_all['classifiers']
-                    pipeline_score = performances[it, num]
-                    with open('/scratch/mdeen/testfiles/testscores.txt', 'a') as testscores:
-                        #testscores.write('performance[it,num]: ' + str(pipeline_score))
-                        testscores.write(str(it) + ', ' + str(num) + ' (' + str(pipeline_classifier) + '): '
-                                         + str(pipeline_score) + ' with probabilities: ' +
-                                         str(Y_valid_score_temp) + ' and truth ' + str(Y_train[valid]) + '\n')
+                                                                predictions)
 
                 Y_valid_score.append(Y_valid_score_it)
 
@@ -1121,7 +1082,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 sortedindices = np.argsort(performances)[::-1]
                 with open('/scratch/mdeen/testfiles/sortedindices.txt', 'a') as sortingtest:
                     sortingtest.write('performances: ' + str(performances))
-                #    sortingtest.write('sortedindices: ' + str(sortedindices))
+                    sortingtest.write('sortedindices: ' + str(sortedindices))
                 #    sortingtest.write('nr 1 parameters: ' + str(parameters_all[0]))
                 performances_n_class = list()
 
