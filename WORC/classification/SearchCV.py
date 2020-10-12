@@ -894,7 +894,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Fit the estimator using the preprocessed features
         X = [x[0] for x in X]
+        print('X before: ' + str(len(X)))
+        print('train: ' + str(len(train)))
         X, y = self.preprocess(X, y, training=True)
+        print('X after: ' + str(len(X)))
 
         best_estimator = cc.construct_classifier(parameters_all)
 
