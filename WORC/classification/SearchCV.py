@@ -1041,11 +1041,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     # Prepare data
                     X_train_values = [x[0] for x in X_train] # Throw away labels
                     # Apply the preprocessing to the features before training
-                    processed_X_train = base_estimator.preprocess(X_train_values[train], Y_train[train], training=True)
+                    processed_X_train, processed_Y_train = base_estimator.preprocess(X_train_values[train], Y_train[train], training=True)
                     # Refit the estimator on the processed training data
-                    new_fit = base_estimator.best_estimator_.fit(processed_X_train, Y_train[train])
+                    new_fit = base_estimator.best_estimator_.fit(processed_X_train, processed_Y_train)
                     # Apply preprocessing to the features in the validation set
-                    processed_X_valid = base_estimator.preprocess(X_train_values[valid], Y_train[valid], training=True)
+                    processed_X_valid, processed_Y_valid = base_estimator.preprocess(X_train_values[valid], Y_train[valid], training=True)
                     # Create the predictions on the validation set
                     predictions = new_fit.predict(processed_X_valid)
 
