@@ -1034,13 +1034,22 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 # Loop over the 100 best estimators
                 for num, p_all in enumerate(parameters_all):
 
+                    # Prepare data
+                    training_set = [X_train[i] for i in train]
+                    training_labels = np.asarray([Y_train[i] for i in train])
+                    all_indices = np.arange(0, len(train))
+
                     # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid)
+                    base_estimator.refit_and_score(training_set, training_labels,
+                                                   p_all, all_indices, all_indices)
 
                     # Prepare data
                     X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
-                    print(train)
+                    validation_set = [X_train_values[i] for i in valid]
+                    # Create the predictions on the validation set
+                    predictions = base_estimator.predict(validation_set)
+
+                    '''
                     # Apply the preprocessing to the features before training
                     processed_X_train, processed_Y_train = base_estimator.preprocess(X_train_values[train],
                                                                                      Y_train[train], training=True)
@@ -1051,6 +1060,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                                               Y_train[valid], training=True)
                     # Create the predictions on the validation set
                     predictions = new_fit.predict(processed_X_valid)
+                    '''
+
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = predictions
