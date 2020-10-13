@@ -1046,13 +1046,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     all_indices = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
-                    #base_estimator.refit_and_score(training_set, training_labels,
-                    #                               p_all, all_indices, all_indices)
-                    print(len(X_train))
-                    print(len(train))
-                    print(train)
-                    base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid)
+                    base_estimator.refit_and_score(training_set, training_labels,
+                                                   p_all, all_indices, all_indices)
+                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
+                    #                               train, valid)
 
 
                     # Prepare data
