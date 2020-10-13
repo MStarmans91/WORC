@@ -900,6 +900,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         X, y = self.preprocess(X, y, training=True)
         print('X after: ' + str(len(X)))
         print(np.shape(X))
+        print(parameters_all)
 
         best_estimator = cc.construct_classifier(parameters_all)
 
