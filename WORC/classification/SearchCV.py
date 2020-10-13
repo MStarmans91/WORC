@@ -455,7 +455,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if self.ensemble:
             return self.ensemble.predict(X)
         else:
-            X, _ = self.preprocess(X)
+            X, _ = self.preprocess(X, training=True)
             return self.best_estimator_.predict(X)
 
     @if_delegate_has_method(delegate=('best_estimator_', 'estimator'))
@@ -1058,7 +1058,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
                     validation_set = [X_train_values[i] for i in valid]
                     # Create the predictions on the validation set
-                    predictions = base_estimator.best_estimator_.predict(validation_set)
+                    predictions = base_estimator.predict(validation_set)
 
                     '''
                     # Apply the preprocessing to the features before training
