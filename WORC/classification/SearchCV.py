@@ -894,13 +894,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Fit the estimator using the preprocessed features
         X = [x[0] for x in X]
-        print('X before: ' + str(len(X)))
-        print('train: ' + str(len(train)))
-        print(np.shape(X))
         X, y = self.preprocess(X, y, training=True)
-        print('X after: ' + str(len(X)))
-        print(np.shape(X))
-        print(parameters_all)
 
         best_estimator = cc.construct_classifier(parameters_all)
 
@@ -938,7 +932,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             return perf
 
         if y is not None:
-            best_estimator.fit(X, y, **self.fit_params)
+            # Test 1
+            X_train = [X[i] for i in train]
+            X_valid = [X[i] for i in test]
+            best_estimator.fit(X_train, y[train], **self.fit_params)
+            prediction = best_estimator.predict(X_valid)
+            score = compute_performance(self.scoring, y[test], prediction)
+            print('score of this pipeline in refit: ' + str(score) + '\n')
+
         else:
             best_estimator.fit(X, **self.fit_params)
         self.best_estimator_ = best_estimator
@@ -999,6 +1000,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Get settings for best 100 estimators
         parameters_all = self.cv_results_['params']
+        print('Score of the best pipeline: ' + str(self.cv_results_['mean_test_score'][0]))
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
@@ -1046,11 +1048,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     all_indices = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(training_set, training_labels,
-                                                   p_all, all_indices, all_indices)
-                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
-                    #                               train, valid)
-
+                    #base_estimator.refit_and_score(training_set, training_labels,
+                    #                               p_all, all_indices, all_indices)
+                    base_estimator.refit_and_score(X_train, Y_train, p_all,
+                                                   train, valid)
 
                     # Prepare data
                     X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
