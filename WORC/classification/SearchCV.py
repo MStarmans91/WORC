@@ -935,11 +935,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Test 1
             #X_train = [X[i] for i in train]
             #X_valid = [X[i] for i in test]
-            best_estimator.fit(X[train], y[train], **self.fit_params)
-            prediction = best_estimator.predict(X[test])
-            score = compute_performance(self.scoring, y[test], prediction)
-            print('score of this pipeline in refit: ' + str(score) + '\n')
-
+            #best_estimator.fit(X[train], y[train], **self.fit_params)
+            #prediction = best_estimator.predict(X[test])
+            #score = compute_performance(self.scoring, y[test], prediction)
+            #print('score of this pipeline in refit: ' + str(score) + '\n')
+            # Test 2 --> base_estimator.best_estimator.predict()
+            best_estimator.fit(X, y **self.fit_params)
         else:
             best_estimator.fit(X, **self.fit_params)
         self.best_estimator_ = best_estimator
@@ -1048,16 +1049,16 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     all_indices = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
-                    #base_estimator.refit_and_score(training_set, training_labels,
-                    #                               p_all, all_indices, all_indices)
-                    base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid)
+                    base_estimator.refit_and_score(training_set, training_labels,
+                                                   p_all, all_indices, all_indices)
+                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
+                    #                               train, valid)
 
                     # Prepare data
                     X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
                     validation_set = [X_train_values[i] for i in valid]
                     # Create the predictions on the validation set
-                    predictions = base_estimator.predict(validation_set)
+                    predictions = base_estimator.best_estimator_.predict(validation_set)
 
                     '''
                     # Apply the preprocessing to the features before training
