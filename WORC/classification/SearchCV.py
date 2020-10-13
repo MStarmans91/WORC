@@ -455,7 +455,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if self.ensemble:
             return self.ensemble.predict(X)
         else:
-            X, _ = self.preprocess(X, training=True)
+            X, _ = self.preprocess(X)
             return self.best_estimator_.predict(X)
 
     @if_delegate_has_method(delegate=('best_estimator_', 'estimator'))
