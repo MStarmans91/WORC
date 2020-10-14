@@ -1090,6 +1090,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     performances[it, num] = compute_performance(scoring,
                                                                 processed_y[valid],
                                                                 predictions)
+                    print(performances[it, num])
 
                 Y_valid_score.append(Y_valid_score_it)
 
