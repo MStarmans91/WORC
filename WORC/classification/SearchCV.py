@@ -1053,7 +1053,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #                               p_all, all_indices, all_indices)
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                    train, valid)
-                    print(p_all['Resampling_Use'])
+                    print(p_all)
                     X_train_values = [x[0] for x in X_train]
                     processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
                     new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
