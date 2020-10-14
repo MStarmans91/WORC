@@ -1055,7 +1055,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                    train, valid)
 
                     ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
-                    print('fit_and_score result: ' + str(ret[0]))
+                    print('fit_and_score result: ' + str(ret[0][1]))
 
                     #print(p_all)
                     X_train_values = np.asarray([x[0] for x in X_train])
@@ -1070,6 +1070,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     # Create the predictions on the validation set
                     #predictions = base_estimator.predict(validation_set)
 
+                    '''
                     print('X_train: ' + str(np.shape(np.asarray(X_train))) + '\n')
                     print('Y_train: ' + str(np.shape(Y_train)) + '\n')
                     print('train: ' + str(train) + '\n')
@@ -1079,7 +1080,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print('processed_X[train]: ' + str(np.shape(processed_X[train])) + '\n')
                     print('processed_X[valid]: ' + str(np.shape(processed_X[valid])) + '\n')
                     print('predictions: ' + str(predictions) + '\n')
-
+                    '''
                     '''
                     # Apply the preprocessing to the features before training
                     processed_X_train, processed_Y_train = base_estimator.preprocess(X_train_values[train],
