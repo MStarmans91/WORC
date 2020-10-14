@@ -1049,16 +1049,16 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     all_indices = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
-                    #base_estimator.refit_and_score(training_set, training_labels,
-                    #                               p_all, all_indices, all_indices)
-                    base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid)
-                    print(p_all)
+                    base_estimator.refit_and_score(training_set, training_labels,
+                                                   p_all, all_indices, all_indices)
+                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
+                    #                               train, valid)
+                    #print(p_all)
                     X_train_values = [x[0] for x in X_train]
-                    processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
-                    new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
-                    predictions = new_fit.predict(processed_X[valid])
-
+                    #processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
+                    #new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
+                    #predictions = new_fit.predict(processed_X[valid])
+                    predictions = base_estimator.predict(X_train_values[valid])
 
                     # Prepare data
                     #X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
@@ -1088,7 +1088,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         Y_valid_truth.append(Y_train[valid])
 
                     performances[it, num] = compute_performance(scoring,
-                                                                processed_y[valid],
+                                                                Y_train[valid],
                                                                 predictions)
                     print(performances[it, num])
 
