@@ -1054,7 +1054,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                    train, valid)
 
-                    ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
+                    ret = fit_and_score(X_train, Y_train, 'f1_weighted', train, valid, p_all)
                     print('fit_and_score result: ' + str(ret[0][1]))
 
                     #print(p_all)
