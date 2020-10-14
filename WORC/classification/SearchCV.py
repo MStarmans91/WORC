@@ -1054,6 +1054,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #base_estimator.refit_and_score(X_train, Y_train, p_all,
                     #                               train, valid)
 
+                    print(p_all)
+
                     # Prepare data
                     X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
                     validation_set = [X_train_values[i] for i in valid]
