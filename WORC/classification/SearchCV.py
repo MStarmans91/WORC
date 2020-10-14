@@ -1002,6 +1002,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Get settings for best 100 estimators
         parameters_all = self.cv_results_['params']
         print('Score of the best pipeline: ' + str(self.cv_results_['mean_test_score'][0]))
+        print(self.cv_results_)
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
