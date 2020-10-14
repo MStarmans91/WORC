@@ -1002,7 +1002,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Get settings for best 100 estimators
         parameters_all = self.cv_results_['params']
         print('Score of the best pipeline: ' + str(self.cv_results_['mean_test_score'][0]))
-        print(self.cv_results_)
+        #print(self.cv_results_)
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
@@ -1052,10 +1052,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     # Refit a SearchCV object with the provided parameters
                     #base_estimator.refit_and_score(training_set, training_labels,
                     #                               p_all, all_indices, all_indices)
+                    print('before refit: ' + str(p_all['StatisticalTestUse']) + '\n')
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                    train, valid)
+                    print('after refit: ' + str(p_all['StatisticalTestUse']) + '\n')
 
                     ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
+                    print('after fitandscore: ' + str(p_all['StatisticalTestUse']) + '\n')
                     print('fit_and_score result: ' + str(ret[0][1]))
 
                     #print(p_all)
