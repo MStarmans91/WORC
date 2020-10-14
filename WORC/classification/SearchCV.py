@@ -1049,18 +1049,21 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     all_indices = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(training_set, training_labels,
-                                                   p_all, all_indices, all_indices)
-                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
-                    #                               train, valid)
+                    #base_estimator.refit_and_score(training_set, training_labels,
+                    #                               p_all, all_indices, all_indices)
+                    base_estimator.refit_and_score(X_train, Y_train, p_all,
+                                                   train, valid)
 
-                    print(p_all)
+                    processed_X, processed_y = base_estimator.preprocess(X_train, Y_train, training=True)
+                    new_fit = base_estimator.fit(processed_X[train], processed_y[train])
+                    predictions = new_fit.predict(processed_X[valid])
+
 
                     # Prepare data
-                    X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
-                    validation_set = [X_train_values[i] for i in valid]
+                    #X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
+                    #validation_set = [X_train_values[i] for i in valid]
                     # Create the predictions on the validation set
-                    predictions = base_estimator.predict(validation_set)
+                    #predictions = base_estimator.predict(validation_set)
 
                     '''
                     # Apply the preprocessing to the features before training
@@ -1084,7 +1087,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         Y_valid_truth.append(Y_train[valid])
 
                     performances[it, num] = compute_performance(scoring,
-                                                                Y_train[valid],
+                                                                processed_y[valid],
                                                                 predictions)
 
                 Y_valid_score.append(Y_valid_score_it)
