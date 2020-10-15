@@ -17,7 +17,7 @@
 
 from sklearn.model_selection._validation import _fit_and_score
 import numpy as np
-from sklearn.linear_model import Lasso
+from sklearn.linear_model import Lasso, LogisticRegression
 from sklearn.feature_selection import SelectFromModel
 import scipy
 from sklearn.decomposition import PCA
@@ -261,8 +261,6 @@ def fit_and_score(X, y, scoring,
                 print(f'Applying OneHotEncoding, will ignore unknowns.')
             feature_labels_tofit =\
                 para_estimator['OneHotEncoding_feature_labels_tofit']
-            print(feature_labels_tofit)
-            print(feature_labels)
             encoder =\
                 OneHotEncoderWrapper(handle_unknown='ignore',
                                      feature_labels_tofit=feature_labels_tofit,
@@ -500,7 +498,6 @@ def fit_and_score(X, y, scoring,
                 print("\t New Length: " + str(len(X_train[0])))
             feature_labels = ReliefSel.transform(feature_labels)
 
-
         del para_estimator['ReliefUse']
         del para_estimator['ReliefNN']
         del para_estimator['ReliefSampleSize']
@@ -526,31 +523,49 @@ def fit_and_score(X, y, scoring,
 
     # ------------------------------------------------------------------------
     # Perform feature selection using a model
+    para_estimator['SelectFromModel'] = 'True'
     if 'SelectFromModel' in para_estimator.keys() and para_estimator['SelectFromModel'] == 'True':
+        model = para_estimator['SelectFromModel_estimator']
         if verbose:
-            print("Selecting features using lasso model.")
-        # Use lasso model for feature selection
+            print(f"Selecting features using model {model}.")
 
-        # First, draw a random value for alpha and the penalty ratio
-        alpha = scipy.stats.uniform(loc=0.0, scale=1.5).rvs()
-        # l1_ratio = scipy.stats.uniform(loc=0.5, scale=0.4).rvs()
+        if model == 'Lasso':
+            # Use lasso model for feature selection
+            alpha = para_estimator['SelectFromModel_lasso_alpha']
+            selectestimator = Lasso(alpha=alpha)
 
-        # Create and fit lasso model
-        lassomodel = Lasso(alpha=alpha)
-        lassomodel.fit(X_train, y)
+        elif model == 'LR':
+            # Use logistic regression model for feature selection
+            selectestimator = LogisticRegression()
+
+        elif model == 'RF':
+            # Use random forest model for feature selection
+            n_estimators = para_estimator['SelectFromModel_n_trees']
+            selectestimator = RandomForestClassifier(n_estimators=n_estimators)
+        else:
+            raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
+
+        # Prefit model
+        selectestimator.fit(X_train, y_train)
 
         # Use fit to select optimal features
-        SelectModel = SelectFromModel(lassomodel, prefit=True)
+        SelectModel = SelectFromModel(selectestimator, prefit=True)
         if verbose:
             print("\t Original Length: " + str(len(X_train[0])))
+
         X_train = SelectModel.transform(X_train)
         X_test = SelectModel.transform(X_test)
+
         if verbose:
             print("\t New Length: " + str(len(X_train[0])))
+
         feature_labels = SelectModel.transform(feature_labels)
 
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']
+        del para_estimator['SelectFromModel_lasso_alpha']
+        del para_estimator['SelectFromModel_estimator']
+        del para_estimator['SelectFromModel_n_trees']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -665,6 +680,7 @@ def fit_and_score(X, y, scoring,
 
             if verbose:
                 print("\t New Length: " + str(len(X_train[0])))
+
         del para_estimator['StatisticalTestUse']
         del para_estimator['StatisticalTestMetric']
         del para_estimator['StatisticalTestThreshold']
@@ -781,7 +797,7 @@ def fit_and_score(X, y, scoring,
         estimator = OneVsRestClassifier(estimator)
 
     if verbose:
-        print("Fitting ML.")
+        print(f"Fitting ML method: {parameters['classifiers']}.")
 
     # Recombine feature values and label for train and test set
     feature_values = np.concatenate((X_train, X_test), axis=0)
@@ -821,10 +837,11 @@ def fit_and_score(X, y, scoring,
 
 
 def delete_nonestimator_parameters(parameters):
-    '''
+    """Delete non-estimator parameters.
+
     Delete all parameters in a parameter dictionary that are not used for the
     actual estimator.
-    '''
+    """
     if 'Number' in parameters.keys():
         del parameters['Number']
 
@@ -850,6 +867,9 @@ def delete_nonestimator_parameters(parameters):
 
     if 'SelectFromModel' in parameters.keys():
         del parameters['SelectFromModel']
+        del parameters['SelectFromModel_lasso_alpha']
+        del parameters['SelectFromModel_estimator']
+        del parameters['SelectFromModel_n_trees']
 
     if 'Featsel_Variance' in parameters.keys():
         del parameters['Featsel_Variance']

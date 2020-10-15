@@ -78,6 +78,18 @@ def load_config(config_file_path):
     settings_dict['Featsel']['SelectFromModel'] =\
         settings['Featsel'].getfloat('SelectFromModel')
 
+    settings_dict['Featsel']['SelectFromModel_lasso_alpha'] =\
+        [float(str(item).strip()) for item in
+         settings['Featsel']['SelectFromModel_lasso_alpha'].split(',')]
+
+    settings_dict['Featsel']['SelectFromModel_estimator'] =\
+        [str(item).strip() for item in
+         settings['Featsel']['SelectFromModel_estimator'].split(',')]
+
+    settings_dict['Featsel']['SelectFromModel_n_trees'] =\
+        [int(str(item).strip()) for item in
+         settings['Featsel']['SelectFromModel_n_trees'].split(',')]
+
     settings_dict['Featsel']['GroupwiseSearch'] =\
         [str(item).strip() for item in
          settings['Featsel']['GroupwiseSearch'].split(',')]

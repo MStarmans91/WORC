@@ -186,7 +186,7 @@ def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',
     method: string, default z_score
         Method to be used for normalization.
     Normalize_ROI: string, default Full
-        ROI to use for normalization
+        ROI to use for normalization, Can be Full or True
     Dilate_ROI: string, default True
         Whether to dilate the ROI or not
     ROI_dilate_radius: int, default 5

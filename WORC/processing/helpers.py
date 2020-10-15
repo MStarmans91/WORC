@@ -111,7 +111,7 @@ def transpose_image(image, primary_axis='axial'):
             # From coronal to axial
             transform = (1, 0, 2)
             flip = (False, True, False)
-            direction_of_cosines = [0, 1, 2, 3, 5, 4, 6, 7, 8]
+            direction_of_cosines = (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
 
         else:
             raise ValueError(f'Orientation {orientation} not supported for {primary_axis}.')

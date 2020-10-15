@@ -216,6 +216,17 @@ def add_parameters_to_grid(param_grid, config):
     param_grid['SelectFromModel'] =\
         boolean_uniform(threshold=config['Featsel']['SelectFromModel'])
 
+    param_grid['SelectFromModel_lasso_alpha'] =\
+        uniform(loc=config['Featsel']['SelectFromModel_lasso_alpha'][0],
+                scale=config['Featsel']['SelectFromModel_lasso_alpha'][1])
+
+    param_grid['SelectFromModel_estimator'] =\
+        config['Featsel']['SelectFromModel_estimator']
+
+    param_grid['SelectFromModel_n_trees'] =\
+        discrete_uniform(loc=config['Featsel']['SelectFromModel_n_trees'][0],
+                         scale=config['Featsel']['SelectFromModel_n_trees'][1])
+
     param_grid['UsePCA'] =\
         boolean_uniform(threshold=config['Featsel']['UsePCA'])
     param_grid['PCAType'] = config['Featsel']['PCAType']

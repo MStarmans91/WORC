@@ -45,11 +45,11 @@ class OneHotEncoderWrapper(object):
                 self.skipcolumns.append(num)
 
         if self.verbose:
-            print(f'Fitting one-hot-encoder for features {self.selectlabels}.')
+            print(f'\t Fitting one-hot-encoder for features {self.selectlabels}.')
 
         if len(self.selectcolumns) == 0:
             if self.verbose:
-                print('No features selected, skip one-hot-encoding')
+                print('\t No features selected, skip one-hot-encoding')
             self.encoder = None
             return
 
@@ -71,7 +71,7 @@ class OneHotEncoderWrapper(object):
                 self.encoded_feature_labels.append(fl + f'_{c}')
 
         if self.verbose:
-            print(f'Encoded feature labels: {self.encoded_feature_labels}.')
+            print(f'\t Encoded feature labels: {self.encoded_feature_labels}.')
 
     def transform(self, inputarray):
         """Transform feature array.
