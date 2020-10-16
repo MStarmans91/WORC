@@ -67,7 +67,7 @@ from WORC.detectors.detectors import DebugDetector
 # Imports used in the Bayesian optimization
 from WORC.classification.smac import build_smac_config
 from datetime import datetime
-import time
+import copy
 
 
 def rms_score(truth, prediction):
@@ -1042,9 +1042,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print(f' - iteration {it + 1} / {n_iter}.')
                 Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
-                parameters_all[0]['StatisticalTestUse'] = 'True'
+                input_parameters = copy.deepcopy(parameters_all)
                 # Loop over the 100 best estimators
-                for num, p_all in enumerate(parameters_all):
+                for num, p_all in enumerate(input_parameters):
 
                     # Prepare data
                     training_set = [X_train[i] for i in train]
