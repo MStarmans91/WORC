@@ -19,7 +19,6 @@ from sklearn.model_selection._validation import _fit_and_score
 import numpy as np
 from sklearn.linear_model import Lasso, LogisticRegression
 from sklearn.feature_selection import SelectFromModel
-import scipy
 from sklearn.decomposition import PCA
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -553,13 +552,19 @@ def fit_and_score(X, y, scoring,
         if verbose:
             print("\t Original Length: " + str(len(X_train[0])))
 
-        X_train = SelectModel.transform(X_train)
-        X_test = SelectModel.transform(X_test)
+        X_train_temp = SelectModel.transform(X_train)
+        if len(X_train_temp[0]) == 0:
+            if verbose:
+                print('[WORC WARNING]: No features are selected! Probably your data is too noisy or the selection too strict. Skipping SelectFromModel.')
+            SelectModel = None
+            parameters['SelectFromModel'] = 'False'
+        else:
+            X_train = SelectModel.transform(X_train)
+            X_test = SelectModel.transform(X_test)
+            feature_labels = SelectModel.transform(feature_labels)
 
-        if verbose:
-            print("\t New Length: " + str(len(X_train[0])))
-
-        feature_labels = SelectModel.transform(feature_labels)
+            if verbose:
+                print("\t New Length: " + str(len(X_train[0])))
 
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']

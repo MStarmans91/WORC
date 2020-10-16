@@ -351,7 +351,7 @@ class WORC(object):
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = '1.0'
         config['Featsel']['GroupwiseSearch'] = 'True'
-        config['Featsel']['SelectFromModel'] = '0.2'
+        config['Featsel']['SelectFromModel'] = '0.0'
         config['Featsel']['SelectFromModel_estimator'] = 'Lasso'
         config['Featsel']['SelectFromModel_lasso_alpha'] = '0.1, 1.4'
         config['Featsel']['SelectFromModel_n_trees'] = '10, 90'
