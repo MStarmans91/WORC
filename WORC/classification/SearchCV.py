@@ -1041,7 +1041,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print(f' - iteration {it + 1} / {n_iter}.')
                 Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
-                input_parameters = copy.deepcopy(parameters_all)
+                input_parameters = copy.copy(parameters_all)
                 # Loop over the 100 best estimators
                 for num, p_all in enumerate(input_parameters):
 
