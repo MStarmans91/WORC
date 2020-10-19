@@ -1041,9 +1041,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print(f' - iteration {it + 1} / {n_iter}.')
                 Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
-                input_parameters = copy.deepcopy(parameters_all)
+                #input_parameters = copy.deepcopy(parameters_all)
                 # Loop over the 100 best estimators
-                for num, p_all in enumerate(input_parameters):
+                for num, p_all in enumerate(parameters_all):
 
                     # Prepare data
                     training_set = [X_train[i] for i in train]
@@ -1063,11 +1063,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print('ret score: ' + str(ret[0][1]) + '\n')
 
                     X_train_values = np.asarray([x[0] for x in X_train])
-                    #processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
-                    #new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
-                    #predictions = new_fit.predict(processed_X[valid])
+                    processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
+                    new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
+                    predictions = new_fit.predict(processed_X[valid])
 
-                    predictions = base_estimator.predict(X_train_values[valid])
+                    #predictions = base_estimator.predict(X_train_values[valid])
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = predictions
