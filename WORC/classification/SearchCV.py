@@ -1043,7 +1043,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                 #input_parameters = copy.deepcopy(parameters_all)
                 # Loop over the 100 best estimators
-                for num, p_all in enumerate(input_parameters):
+                for num, p_all in enumerate(parameters_all):
 
                     # Prepare data
                     training_set = [X_train[i] for i in train]
