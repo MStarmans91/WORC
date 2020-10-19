@@ -149,9 +149,10 @@ set: ``config[Labels][label_names] = Label1, Label2``
 Preprocessing
 ~~~~~~~~~~~~~
 The preprocessing node acts before the feature extraction on the image.
-Currently, only normalization is included. Additionally, scans with image
-type CT (see later in the tutorial) provided as DICOM are scaled to
-Hounsfield Units.
+Additionally, scans with imagetype CT (see later in the tutorial) provided
+as DICOM are scaled to Hounsfield Units. For more details on the preprocessing
+options, please see
+:ref:`the additional functionality chapter <additonalfunctionality-chapter>`.
 
 **Description:**
 

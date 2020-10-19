@@ -119,6 +119,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
 
 
 def bias_correct_image(img, usemask=False):
+    """Apply N4 Bias Correction."""
     # print('working on N4')
     initial_img = img
 
@@ -159,6 +160,7 @@ def clip_image(image, lowerbound=-1000.0, upperbound=3000.0):
     -------
     image : ITK Image
         Output image.
+
     """
     # Create clamping filter for clipping and set variables
     filter = sitk.ClampImageFilter()

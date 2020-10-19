@@ -21,7 +21,8 @@ object and provides several more advances functions. The specific functionalitie
 For documentation on ``SimpleWORC`` and ``BasicWORC``, please look at the documentation
 within those modules: :py:mod:`WORC.facade.simpleworc` and :py:mod:`WORC.facade.basicworc`. Many of the functions are actually wrappers to interact with the WORC
 object, and therefore use the functionality described below. For basic usage, only using
-``SimpleWORC`` and it's respective documentation should be sufficient.
+``SimpleWORC``, it's respective documentation and the
+`WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_ should be sufficient.
 
 Additionally, we advice you to take a look at the :ref:`configuration chapter <config-chapter>`
 for all the settings that can be adjusted in ``WORC``.
