@@ -1052,53 +1052,20 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print('p_all: ' + str(p_all) + '\n')
 
                     # Refit a SearchCV object with the provided parameters
-                    #base_estimator.refit_and_score(training_set, training_labels,
-                    #                               p_all, all_indices, all_indices)
+                    base_estimator.refit_and_score(training_set, training_labels,
+                                                   p_all, all_indices, all_indices)
                     #ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
                     #print('ret score: ' + str(ret[0][1]) + '\n')
 
-                    base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid)
+                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
+                    #                               train, valid)
 
-
-
-                    #print(p_all)
                     X_train_values = np.asarray([x[0] for x in X_train])
-                    processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
-                    new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
-                    predictions = new_fit.predict(processed_X[valid])
-                    #predictions = base_estimator.predict(X_train_values[valid])
+                    #processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
+                    #new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
+                    #predictions = new_fit.predict(processed_X[valid])
 
-                    # Prepare data
-                    #X_train_values = np.asarray([x[0] for x in X_train]) # Throw away labels
-                    #validation_set = [X_train_values[i] for i in valid]
-                    # Create the predictions on the validation set
-                    #predictions = base_estimator.predict(validation_set)
-
-                    '''
-                    print('X_train: ' + str(np.shape(np.asarray(X_train))) + '\n')
-                    print('Y_train: ' + str(np.shape(Y_train)) + '\n')
-                    print('train: ' + str(train) + '\n')
-                    print('valid: ' + str(valid) + '\n')
-                    print('processed_X: ' + str(np.shape(processed_X)) + '\n')
-                    print('processed_y: ' + str(processed_y) + '\n')
-                    print('processed_X[train]: ' + str(np.shape(processed_X[train])) + '\n')
-                    print('processed_X[valid]: ' + str(np.shape(processed_X[valid])) + '\n')
-                    print('predictions: ' + str(predictions) + '\n')
-                    '''
-                    '''
-                    # Apply the preprocessing to the features before training
-                    processed_X_train, processed_Y_train = base_estimator.preprocess(X_train_values[train],
-                                                                                     Y_train[train], training=True)
-                    # Refit the estimator on the processed training data
-                    new_fit = base_estimator.best_estimator_.fit(processed_X_train, processed_Y_train)
-                    # Apply preprocessing to the features in the validation set
-                    processed_X_valid, processed_Y_valid = new_fit.preprocess(X_train_values[valid],
-                                                                              Y_train[valid], training=True)
-                    # Create the predictions on the validation set
-                    predictions = new_fit.predict(processed_X_valid)
-                    '''
-
+                    predictions = base_estimator.predict(X_train_values[valid])
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = predictions
@@ -1108,7 +1075,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         Y_valid_truth.append(Y_train[valid])
 
                     performances[it, num] = compute_performance(scoring,
-                                                                processed_y[valid],
+                                                                Y_train[valid],
                                                                 predictions)
 
                     print('Computed performance: ' + str(performances[it, num]) + '\n')
