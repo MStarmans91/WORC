@@ -933,14 +933,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         if y is not None:
             # Test 1
-            #X_train = [X[i] for i in train]
-            #X_valid = [X[i] for i in test]
-            #best_estimator.fit(X[train], y[train], **self.fit_params)
-            #prediction = best_estimator.predict(X[test])
-            #score = compute_performance(self.scoring, y[test], prediction)
-            #print('score of this pipeline in refit: ' + str(score) + '\n')
+            X_train = [X[i] for i in train]
+            X_valid = [X[i] for i in test]
+            best_estimator.fit(X_train, y[train], **self.fit_params)
+            prediction = best_estimator.predict(X_valid)
+            score = compute_performance(self.scoring, y[test], prediction)
+            print('score of this pipeline in refit: ' + str(score) + '\n')
             # Test 2 --> base_estimator.best_estimator.predict()
-            best_estimator.fit(X, y, **self.fit_params)
+            #best_estimator.fit(X, y, **self.fit_params)
         else:
             best_estimator.fit(X, **self.fit_params)
         self.best_estimator_ = best_estimator
