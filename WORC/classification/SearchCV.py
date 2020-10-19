@@ -1001,6 +1001,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Get settings for best 100 estimators
         parameters_all = self.cv_results_['params']
+        print('Best score average: ' + str(self.cv_results_['mean_test_score'][0]) + '\n')
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
@@ -1055,6 +1056,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                    train, valid)
 
                     ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
+                    print('ret score: ' + str(ret[0][1]) + '\n')
 
                     #print(p_all)
                     X_train_values = np.asarray([x[0] for x in X_train])
@@ -1104,6 +1106,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     performances[it, num] = compute_performance(scoring,
                                                                 processed_y[valid],
                                                                 predictions)
+
+                    print('Computed performance: ' + str(performances[it, num]) + '\n')
 
                 Y_valid_score.append(Y_valid_score_it)
 
