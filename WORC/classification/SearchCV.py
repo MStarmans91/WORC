@@ -1065,7 +1065,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
                     predictions = new_fit.predict(processed_X[valid])
 
-                    predictions = base_estimator.predict(X_train_values[valid])
+                    #predictions = base_estimator.predict(X_train_values[valid])
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = predictions
