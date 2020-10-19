@@ -1049,6 +1049,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     training_set = [X_train[i] for i in train]
                     training_labels = np.asarray([Y_train[i] for i in train])
                     all_indices = np.arange(0, len(train))
+                    print('p_all: ' + str(p_all) + '\n')
 
                     # Refit a SearchCV object with the provided parameters
                     #base_estimator.refit_and_score(training_set, training_labels,
