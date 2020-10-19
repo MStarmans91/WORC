@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.trainclassifier &mdash; WORC 3.3.4 documentation</title>
+  <title>WORC.classification.trainclassifier &mdash; WORC 3.3.5 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -49,7 +50,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> WORC
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> WORC
           
 
           
@@ -62,7 +63,7 @@
             
             
               <div class="version">
-                3.3.4
+                3.3.5
               </div>
             
           
@@ -79,6 +80,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -105,6 +107,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -143,7 +146,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -181,12 +184,12 @@
 <span class="c1"># limitations under the License.</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">uniform</span>
-<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
-<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
-<span class="kn">from</span> <span class="nn">WORC.IOparser.file_io</span> <span class="k">import</span> <span class="n">load_features</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">uniform</span>
+<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="kn">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
+<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="kn">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
+<span class="kn">from</span> <span class="nn">WORC.IOparser.file_io</span> <span class="kn">import</span> <span class="n">load_features</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.config_io_classifier</span> <span class="k">as</span> <span class="nn">config_io</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> \
+<span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="kn">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> \
     <span class="n">log_uniform</span><span class="p">,</span> <span class="n">boolean_uniform</span>
 
 
@@ -297,6 +300,43 @@
     <span class="c1"># Construct the required classifier grid</span>
     <span class="n">param_grid</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">create_param_grid</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
+    <span class="c1"># Add non-classifier parameters</span>
+    <span class="n">param_grid</span> <span class="o">=</span> <span class="n">add_parameters_to_grid</span><span class="p">(</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+    <span class="c1"># For N_iter, perform k-fold crossvalidation</span>
+    <span class="n">outputfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">feat_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">crossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
+                                         <span class="n">image_features_train</span><span class="p">,</span>
+                                         <span class="n">param_grid</span><span class="p">,</span>
+                                         <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
+                                         <span class="n">use_fastr</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr&#39;</span><span class="p">],</span>
+                                         <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">],</span>
+                                         <span class="n">fixedsplits</span><span class="o">=</span><span class="n">fixedsplits</span><span class="p">,</span>
+                                         <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">],</span>
+                                         <span class="n">outputfolder</span><span class="o">=</span><span class="n">outputfolder</span><span class="p">,</span>
+                                         <span class="n">tempsave</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;tempsave&#39;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">nocrossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
+                                           <span class="n">label_data_test</span><span class="p">,</span>
+                                           <span class="n">image_features_train</span><span class="p">,</span>
+                                           <span class="n">image_features_test</span><span class="p">,</span>
+                                           <span class="n">param_grid</span><span class="p">,</span>
+                                           <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
+                                           <span class="n">use_fastr</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr&#39;</span><span class="p">],</span>
+                                           <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">],</span>
+                                           <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">))</span>
+
+    <span class="n">trained_classifier</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">,</span> <span class="s1">&#39;EstimatorData&#39;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saved data!&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="add_parameters_to_grid"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.trainclassifier.add_parameters_to_grid">[docs]</a><span class="k">def</span> <span class="nf">add_parameters_to_grid</span><span class="p">(</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add non-classifier parameters from config  to param grid.&quot;&quot;&quot;</span>
     <span class="c1"># IF at least once groupwise search is turned on, add it to the param grid</span>
     <span class="k">if</span> <span class="s1">&#39;True&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;GroupwiseSearch&#39;</span><span class="p">]:</span>
         <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SelectGroups&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;GroupwiseSearch&#39;</span><span class="p">]</span>
@@ -331,6 +371,10 @@
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Featsel_Variance&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">boolean_uniform</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;Variance&#39;</span><span class="p">])</span>
 
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding_feature_labels_tofit&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">][</span><span class="s1">&#39;feature_labels_tofit&#39;</span><span class="p">]]</span>
+
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ImputationMethod&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ImputationNeighbours&#39;</span><span class="p">]</span> <span class="o">=</span>\
@@ -339,6 +383,17 @@
 
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">boolean_uniform</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_estimator&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_estimator&#39;</span><span class="p">]</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">boolean_uniform</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">])</span>
@@ -376,36 +431,7 @@
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="c1"># For N_iter, perform k-fold crossvalidation</span>
-    <span class="n">outputfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">feat_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">crossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
-                                         <span class="n">image_features_train</span><span class="p">,</span>
-                                         <span class="n">param_grid</span><span class="p">,</span>
-                                         <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
-                                         <span class="n">use_fastr</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr&#39;</span><span class="p">],</span>
-                                         <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">],</span>
-                                         <span class="n">fixedsplits</span><span class="o">=</span><span class="n">fixedsplits</span><span class="p">,</span>
-                                         <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">],</span>
-                                         <span class="n">outputfolder</span><span class="o">=</span><span class="n">outputfolder</span><span class="p">,</span>
-                                         <span class="n">tempsave</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;tempsave&#39;</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">nocrossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
-                                           <span class="n">label_data_test</span><span class="p">,</span>
-                                           <span class="n">image_features_train</span><span class="p">,</span>
-                                           <span class="n">image_features_test</span><span class="p">,</span>
-                                           <span class="n">param_grid</span><span class="p">,</span>
-                                           <span class="n">modus</span><span class="o">=</span><span class="n">modus</span><span class="p">,</span>
-                                           <span class="n">use_fastr</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr&#39;</span><span class="p">],</span>
-                                           <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">],</span>
-                                           <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">])</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">))</span>
-
-    <span class="n">trained_classifier</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">,</span> <span class="s1">&#39;EstimatorData&#39;</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saved data!&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">param_grid</span></div>
 </pre></div>
 
            </div>
@@ -418,11 +444,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -433,7 +467,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

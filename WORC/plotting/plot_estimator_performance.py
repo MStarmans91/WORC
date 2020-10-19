@@ -435,7 +435,9 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
         # If bootstrap, generate a bootstrapped sample
         if bootstrap and i > 0:
-            y_truth, y_prediction, y_score = resample(y_truth_all, y_prediction_all, y_score_all)
+            y_truth, y_prediction, y_score, test_patient_IDs =\
+                resample(y_truth_all, y_prediction_all,
+                         y_score_all, test_patient_IDs_or)
         else:
             # Create prediction
             y_prediction = fitted_model.predict(X_test_temp)

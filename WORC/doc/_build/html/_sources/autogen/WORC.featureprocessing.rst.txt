@@ -55,6 +55,15 @@ featureprocessing Package
     :show-inheritance:
     :special-members:
 
+:mod:`OneHotEncoderWrapper` Module
+----------------------------------
+
+.. automodule:: WORC.featureprocessing.OneHotEncoderWrapper
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`Preprocessor` Module
 --------------------------
 
