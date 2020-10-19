@@ -1063,11 +1063,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print('ret score: ' + str(ret[0][1]) + '\n')
 
                     X_train_values = np.asarray([x[0] for x in X_train])
-                    processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
-                    new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
-                    predictions = new_fit.predict(processed_X[valid])
+                    #processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
+                    #new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
+                    #predictions = new_fit.predict(processed_X[valid])
 
-                    #predictions = base_estimator.predict(X_train_values[valid])
+                    predictions = base_estimator.predict(X_train_values[valid])
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = predictions
