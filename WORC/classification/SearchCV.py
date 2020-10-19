@@ -1041,7 +1041,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print(f' - iteration {it + 1} / {n_iter}.')
                 Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
-                input_parameters = copy.copy(parameters_all)
+                input_parameters = copy.deepcopy(parameters_all)
                 # Loop over the 100 best estimators
                 for num, p_all in enumerate(input_parameters):
 
@@ -1053,8 +1053,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     # Refit a SearchCV object with the provided parameters
                     #base_estimator.refit_and_score(training_set, training_labels,
                     #                               p_all, all_indices, all_indices)
-                    ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
-                    print('ret score: ' + str(ret[0][1]) + '\n')
+                    #ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
+                    #print('ret score: ' + str(ret[0][1]) + '\n')
 
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                    train, valid)
@@ -1111,6 +1111,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                                 predictions)
 
                     print('Computed performance: ' + str(performances[it, num]) + '\n')
+                    print('Performances: ' + str(performances) + '\n')
 
                 Y_valid_score.append(Y_valid_score_it)
 
