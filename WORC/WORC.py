@@ -414,7 +414,15 @@ class WORC(object):
         config['Classification'] = dict()
         config['Classification']['fastr'] = 'True'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
-        config['Classification']['classifiers'] = 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'
+        config['Classification']['classifiers'] =\
+            'SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, ' +\
+            'RF, RF, RF, ' +\
+            'LR, LR, LR, ' +\
+            'LDA, LDA, LDA, ' +\
+            'QDA, QDA, QDA, ' +\
+            'GaussianNB, GaussianNB, GaussianNB, ' +\
+            'AdaBoostClassifier, ' +\
+            'XGBClassifier'
         config['Classification']['max_iter'] = '100000'
         config['Classification']['SVMKernel'] = 'poly, rbf, linear'
         config['Classification']['SVMC'] = '0, 6'
@@ -438,6 +446,17 @@ class WORC(object):
         config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
         config['Classification']['SGD_penalty'] = 'none, l2, l1'
         config['Classification']['CNB_alpha'] = '0, 1'
+        config['Classification']['AdaBoost_n_estimators'] = config['Classification']['RFn_estimators']
+        config['Classification']['AdaBoost_learning_rate'] = '0.01, 0.99'
+
+        # Based on https://towardsdatascience.com/doing-xgboost-hyper-parameter-tuning-the-smart-way-part-1-of-2-f6d255a45dde
+        # and https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/
+        config['Classification']['XGB_boosting_rounds'] = config['Classification']['RFn_estimators']
+        config['Classification']['XGB_max_depth'] = '3, 12'
+        config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
+        config['Classification']['XGB_gamma'] = '0.01, 0.99'
+        config['Classification']['XGB_min_child_weight'] = '1, 6'
+        config['Classification']['XGB_colsample_bytree'] = '0.3, 0.7'
 
         # CrossValidation
         config['CrossValidation'] = dict()

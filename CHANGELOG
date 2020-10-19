@@ -24,6 +24,9 @@ Added
 - OneHotEncoder to workflows / HyperOptimization.
 - Documentation updates.
 - SelectFromModel expanded and properly integrated in workflow.
+- AdaBoost as classifier and regressor.
+- XGDBoost as classifier and regressor.
+- Plotting of hyperparameters of best workflows in Evaluate network.
 
 3.3.4 - 2020-10-06
 ------------------

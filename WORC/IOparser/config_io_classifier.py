@@ -290,6 +290,40 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Classification']['CNB_alpha'].split(',')]
 
+    # AdaBoost
+    settings_dict['Classification']['AdaBoost_n_estimators'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['AdaBoost_n_estimators'].split(',')]
+
+    settings_dict['Classification']['AdaBoost_learning_rate'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['AdaBoost_learning_rate'].split(',')]
+
+    # XGD Boost
+    settings_dict['Classification']['XGB_boosting_rounds'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['XGB_boosting_rounds'].split(',')]
+
+    settings_dict['Classification']['XGB_max_depth'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['XGB_max_depth'].split(',')]
+
+    settings_dict['Classification']['XGB_learning_rate'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['XGB_learning_rate'].split(',')]
+
+    settings_dict['Classification']['XGB_gamma'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['XGB_gamma'].split(',')]
+
+    settings_dict['Classification']['XGB_min_child_weight'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['XGB_min_child_weight'].split(',')]
+
+    settings_dict['Classification']['XGB_colsample_bytree'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['XGB_colsample_bytree'].split(',')]
+
     # Cross validation settings
     settings_dict['CrossValidation']['Type'] =\
         str(settings['CrossValidation']['Type'])

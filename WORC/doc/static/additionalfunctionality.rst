@@ -84,3 +84,9 @@ When using ComBat, the following configurations should be done:
 ICC
 ----
 Documentation WIP.
+
+Additional classifiers
+-----------------------
+When using the XGDBoost classifiers or regressors, install ``xgdboost``,
+which can be done using ``pip``, see https://xgboost.readthedocs.io/en/latest/python/python_intro.html.
+``WORC`` makes use of the scikit-learn API.

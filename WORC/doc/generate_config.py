@@ -332,7 +332,7 @@ def generate_config_options():
     config['Classification']['RFmin_samples_split'] = 'Two Integers: loc and scale'
     config['Classification']['RFmax_depth'] = 'Two Integers: loc and scale'
     config['Classification']['LRpenalty'] = 'none, l2, l1'
-    config['Classification']['LRC'] = 'Two Integers: loc and scale'
+    config['Classification']['LRC'] = 'Two Floats: loc and scale'
     config['Classification']['LR_solver'] = 'Comma separated list of strings, for the options see https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html'
     config['Classification']['LR_l1_ratio'] = 'Float between 0.0 and 1.0.'
     config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
@@ -345,6 +345,14 @@ def generate_config_options():
     config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
     config['Classification']['SGD_penalty'] = 'none, l2, l1'
     config['Classification']['CNB_alpha'] = 'Two Integers: loc and scale'
+    config['Classification']['AdaBoost_n_estimators'] = 'Two Integers: loc and scale'
+    config['Classification']['AdaBoost_learning_rate'] = 'Two Floats: loc and scale'
+    config['Classification']['XGB_boosting_rounds'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_max_depth'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
+    config['Classification']['XGB_gamma'] = 'Two Floats: loc and scale'
+    config['Classification']['XGB_min_child_weight'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_colsample_bytree'] = 'Two Floats: loc and scale'
 
     # CrossValidation
     config['CrossValidation'] = dict()
@@ -626,9 +634,17 @@ def generate_config_descriptions():
     config['Classification']['ElasticNet_l1_ratio'] = 'Range of l1 ratio in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
     config['Classification']['SGD_alpha'] = 'Range of the SGD penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
     config['Classification']['SGD_l1_ratio'] = 'Range of l1 ratio in SGD. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
-    config['Classification']['SGD_loss'] = 'hinge, Loss function of SG'
+    config['Classification']['SGD_loss'] = 'Loss function of SGD.'
     config['Classification']['SGD_penalty'] = 'Penalty term in SGD.'
     config['Classification']['CNB_alpha'] = 'Regularization strenght in ComplementNB. We sample on a uniform scale: the parameters specify the range (loc, loc + scale)'
+    config['Classification']['AdaBoost_n_estimators'] = "Number of estimators used in AdaBoost. Default is equal to config['Classification']['RFn_estimators']."
+    config['Classification']['AdaBoost_learning_rate'] = 'Learning rate in AdaBoost.'
+    config['Classification']['XGB_boosting_rounds'] = "Number of estimators / boosting rounds used in XGB. Default is equal to config['Classification']['RFn_estimators']."
+    config['Classification']['XGB_max_depth'] = 'Maximum depth of XGB.'
+    config['Classification']['XGB_learning_rate'] = "Learning rate in AdaBoost. Default is equal to config['Classification']['AdaBoost_learning_rate']."
+    config['Classification']['XGB_gamma'] = 'Gamma of XGB.'
+    config['Classification']['XGB_min_child_weight'] = 'Minimum child weights in XGB.'
+    config['Classification']['XGB_colsample_bytree'] = 'Col sample by tree in XGB.'
 
     # CrossValidation
     config['CrossValidation'] = dict()

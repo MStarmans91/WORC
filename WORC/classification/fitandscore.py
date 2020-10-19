@@ -947,7 +947,15 @@ def delete_cc_para(para):
                   'SGD_l1_ratio',
                   'SGD_loss',
                   'SGD_penalty',
-                  'CNB_alpha']
+                  'CNB_alpha',
+                  'AdaBoost_learning_rate',
+                  'AdaBoost_n_estimators',
+                  'XGB_boosting_rounds',
+                  'XGB_max_depth',
+                  'XGB_learning_rate',
+                  'XGB_gamma',
+                  'XGB_min_child_weight',
+                  'XGB_colsample_bytree']
 
     for k in deletekeys:
         if k in para.keys():

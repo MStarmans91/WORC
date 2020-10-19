@@ -1,5 +1,5 @@
 <tool id="PlotBarchart" name="PlotBarchart" version="1.0">
-    <description>A wrapper around PREDICT's Barchart Plotting Function.</description>
+    <description>A wrapper around WORC's Barchart Plotting Function.</description>
     <authors>
       <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
     </authors>
@@ -18,7 +18,7 @@
   <repository />
   <interface>
     <inputs>
-        <input id="prediction" name="Radiomics estimator object from PREDICT Trainclassifier function" datatype="HDF5" prefix="--prediction" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="prediction" name="Radiomics estimator object from WORC Trainclassifier function" datatype="HDF5" prefix="--prediction" cardinality="1" repeat_prefix="false" required="true" />
         <input id="estimators" name="Number of estimators for which to evaluate hyperparameters" datatype="String" prefix="--estimators" cardinality="1" repeat_prefix="false" required="false" />
         <input id="label_type" name="Name of label predicted by the estimator to plot barchart for." datatype="String" prefix="--label_type" cardinality="1" repeat_prefix="false" required="false" />
      </inputs>

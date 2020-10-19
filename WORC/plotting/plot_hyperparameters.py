@@ -119,7 +119,8 @@ def plot_hyperparameters(prediction, label_type=None, estsize=50,
     # Display some information
     if verbose:
         print(f'Number of hyperparameters: {n_parameters}.')
-        n_parameters_unique = len(list(data.keys()))
-        print(f'Number of hyperparameters with unique values: {n_parameters_unique}.')
+        if removeconstants:
+            n_parameters_unique = len(list(data.keys()))
+            print(f'Number of hyperparameters with unique values: {n_parameters_unique}.')
 
     return data
