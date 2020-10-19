@@ -1049,21 +1049,21 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     training_set = [X_train[i] for i in train]
                     training_labels = np.asarray([Y_train[i] for i in train])
                     all_indices = np.arange(0, len(train))
-                    print('p_all: ' + str(p_all) + '\n')
+                    #print('p_all: ' + str(p_all) + '\n')
 
                     # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(training_set, training_labels,
-                                                   p_all, all_indices, all_indices)
+                    #base_estimator.refit_and_score(training_set, training_labels,
+                    #                               p_all, all_indices, all_indices)
                     #ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
                     #print('ret score: ' + str(ret[0][1]) + '\n')
 
-                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
-                    #                               train, valid)
+                    base_estimator.refit_and_score(X_train, Y_train, p_all,
+                                                   train, valid)
 
                     X_train_values = np.asarray([x[0] for x in X_train])
-                    #processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
-                    #new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
-                    #predictions = new_fit.predict(processed_X[valid])
+                    processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
+                    new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
+                    predictions = new_fit.predict(processed_X[valid])
 
                     predictions = base_estimator.predict(X_train_values[valid])
 
@@ -1072,10 +1072,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     if num == 0:
                         # Also store the validation ground truths
-                        Y_valid_truth.append(Y_train[valid])
+                        Y_valid_truth.append(processed_y[valid])
 
                     performances[it, num] = compute_performance(scoring,
-                                                                Y_train[valid],
+                                                                processed_y[valid],
                                                                 predictions)
 
                     print('Computed performance: ' + str(performances[it, num]) + '\n')
