@@ -15,19 +15,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-import numpy as np
-import sys
-from WORC.plotting.compute_CI import compute_confidence
-from WORC.plotting.compute_CI import compute_confidence_bootstrap
-import pandas as pd
 import os
-import WORC.processing.label_processing as lp
-from WORC.classification import metrics
-import WORC.addexceptions as ae
+import sys
+import numpy as np
+import pandas as pd
+from random import shuffle
 from sklearn.base import is_regressor
 from collections import OrderedDict
 from sklearn.utils import resample
+import WORC.addexceptions as ae
+from WORC.classification import metrics
+import WORC.processing.label_processing as lp
+from WORC.plotting.compute_CI import compute_confidence
+from WORC.plotting.compute_CI import compute_confidence_bootstrap
 
 
 def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_scoring):
@@ -148,7 +148,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
                                verbose=True, ensemble_scoring=None,
                                output=None, modus=None,
                                thresholds=None, survival=False,
-                               generalization=False, shuffle_estimators=False,
+                               shuffle_estimators=False,
                                bootstrap=None, bootstrap_N=None,
                                overfit_scaler=None):
     """Plot the output of a single estimator, e.g. a SVM.
@@ -273,6 +273,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
     if overfit_scaler is None:
         overfit_scaler = config['Evaluation']['OverfitScaler']
 
+    ensemble_metric = config['Ensemble']['Metric']
+
     # Create lists for performance measures
     if not regression:
         sensitivity = list()
@@ -305,9 +307,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
         PearsonP = list()
         SpearmanC = list()
         SpearmanP = list()
-        cindex = list()
-        coxcoef = list()
-        coxp = list()
 
     patient_classification_list = dict()
     percentages_selected = list()
@@ -401,7 +400,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
         # If required, shuffle estimators for "Random" ensembling
         if shuffle_estimators:
-            # Compute generalization score
+            # Randomly shuffle the estimators
             print('Shuffling estimators for random ensembling.')
             shuffle(fitted_model.cv_results_['params'])
 
@@ -411,15 +410,12 @@ def plot_estimator_performance(prediction, label_data, label_type,
             pass
         elif not fitted_model.ensemble:
             # If required, rank according to generalization score instead of mean_validation_score
-            if generalization:
-                # Compute generalization score
+            if ensemble_metric == 'generalization':
                 print('Using generalization score for estimator ranking.')
-                difference_score = abs(fitted_model.cv_results_['mean_train_score'] - fitted_model.cv_results_['mean_test_score'])
-                generalization_score = fitted_model.cv_results_['mean_test_score'] - difference_score
-
-                # Rerank based on score
-                indices = np.argsort(generalization_score)
+                indices = fitted_model.cv_results_['rank_generalization_score']
                 fitted_model.cv_results_['params'] = [fitted_model.cv_results_['params'][i] for i in indices[::-1]]
+            elif ensemble_metric != 'Default':
+                raise ae.WORCKeyError(f'Metric {ensemble_metric} is not known: use Default or generalization.')
 
             # NOTE: Added for backwards compatability
             if not hasattr(fitted_model, 'cv_iter'):

@@ -155,6 +155,11 @@ class Evaluate(object):
                                      id='StatisticalTestFeatures_CSV',
                                      step_id='general_sinks')
 
+        self.sink_STest_PNG =\
+            self.network.create_sink('PNGFile',
+                                     id='StatisticalTestFeatures_PNG',
+                                     step_id='general_sinks')
+
         self.sink_decomposition_PNG =\
             self.network.create_sink('PNGFile', id='Decomposition_PNG',
                                      step_id='general_sinks')
@@ -192,7 +197,8 @@ class Evaluate(object):
 
         self.sink_Hyperparameters_CSV.input = self.node_Hyperparameters.outputs['output_csv']
 
-        self.sink_STest_CSV.input = self.node_STest.outputs['performance']
+        self.sink_STest_CSV.input = self.node_STest.outputs['output_csv']
+        self.sink_STest_PNG.input = self.node_STest.outputs['output_png']
         self.sink_decomposition_PNG.input = self.node_decomposition.outputs['output']
 
         self.sink_Ranked_Percentages_Zip.input =\
@@ -493,6 +499,10 @@ class Evaluate(object):
 
         if 'StatisticalTestFeatures_CSV' not in sink_data.keys():
             self.sink_data['StatisticalTestFeatures_CSV'] = ("vfs://output/{}/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
+        if 'StatisticalTestFeatures_PNG' not in sink_data.keys():
+            self.sink_data['StatisticalTestFeatures_PNG'] = ("vfs://output/{}/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
 
         if 'Decomposition_PNG' not in sink_data.keys():
             self.sink_data['Decomposition_PNG'] = ("vfs://output/{}/Evaluation/Decomposition_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)

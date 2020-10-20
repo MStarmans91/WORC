@@ -31,9 +31,12 @@ def main():
     parser.add_argument('-cf', '--conf', metavar='config', nargs='+',
                         dest='cf', type=str, required=True,
                         help='Configuration')
-    parser.add_argument('-perf', '--perf', metavar='performance',
-                        dest='perf', type=str, required=True, nargs='+',
-                        help='Performance (JSON)')
+    parser.add_argument('-output_csv', '--output_csv', metavar='output_csv',
+                        dest='output_csv', type=str, required=True, nargs='+',
+                        help='P-values of statistical tests (CSV)')
+    parser.add_argument('-output_png', '--output_png', metavar='output_png',
+                        dest='output_png', type=str, required=True, nargs='+',
+                        help='P-values of statistical tests (PNG)')
     args = parser.parse_args()
 
     if type(args.pc) is list:
@@ -41,11 +44,12 @@ def main():
 
     if type(args.cf) is list:
         args.cf = ''.join(args.cf)
-        
+
     StatisticalTestFeatures(features=args.feat,
                             patientinfo=args.pc,
                             config=args.cf,
-                            output=args.perf,
+                            output_csv=args.output_csv,
+                            output_png=args.output_png,
                             verbose=False)
 
 

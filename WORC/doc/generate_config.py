@@ -380,11 +380,12 @@ def generate_config_options():
     # Feature scaling options
     config['FeatureScaling'] = dict()
     config['FeatureScaling']['skip_features'] = 'Comma separated list of strings'
-    config['FeatureScaling']['scaling_method'] = 'robust_z_score. z_score, robust, minmax, None'
+    config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, None'
 
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Integer'
+    config['Ensemble']['Metric'] = 'Default, generalization'
 
     # Evaluation options
     config['Evaluation'] = dict()
@@ -677,6 +678,7 @@ def generate_config_descriptions():
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.'
+    config['Ensemble']['Metric'] = 'Metric used to determine ranking of estimators in ensemble. When using default, the metric that is used in the hyperoptimization is used.'
 
     # Evaluation options
     config['Evaluation'] = dict()

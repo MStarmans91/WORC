@@ -15,19 +15,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
+
 import os
 import csv
 import numpy as np
 from scipy.stats import ttest_ind, ranksums, mannwhitneyu, chi2_contingency
 import WORC.IOparser.config_io_classifier as config_io
 from WORC.IOparser.file_io import load_features
+from WORC.detectors.detectors import DebugDetector
 
 
-def StatisticalTestFeatures(features, patientinfo, config, output=None,
-                            verbose=True, label_type=None):
-    '''
-    Perform several statistical tests on features, such as a student t-test.
-    Useage is similar to trainclassifier.
+def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
+                            output_png=None, plot_test='MWU', Bonferonni=True,
+                            fontsize='small', yspacing=1,
+                            threshold=0.05, verbose=True, label_type=None):
+    """Perform several statistical tests on features, such as a student t-test.
 
     Parameters
     ----------
@@ -54,7 +59,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
     verbose: boolean, default True
             print final feature values and labels to command line or not.
 
-    '''
+    """
     # Load variables from the config file
     config = config_io.load_config(config)
 
@@ -64,12 +69,15 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
     if type(config) is list:
         config = ''.join(config)
 
-    if type(output) is list:
-        output = ''.join(output)
+    if type(output_csv) is list:
+        output_csv = ''.join(output_csv)
+
+    if type(output_png) is list:
+        output_png = ''.join(output_png)
 
     # Create output folder if required
-    if not os.path.exists(os.path.dirname(output)):
-        os.makedirs(os.path.dirname(output))
+    if not os.path.exists(os.path.dirname(output_csv)):
+        os.makedirs(os.path.dirname(output_csv))
 
     if label_type is None:
         label_type = config['Labels']['label_names']
@@ -109,9 +117,9 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
         subheader.append('Chi2')
         subheader.append('')
 
-    # Open the output file
-    if output is not None:
-        myfile = open(output, 'w')
+    # Open the output_csv file
+    if output_csv is not None:
+        myfile = open(output_csv, 'w')
         wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
         wr.writerow(header)
         wr.writerow(subheader)
@@ -178,7 +186,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
         savedict[i_name[0]]['chi2'] = pvalueschi2
         savedict[i_name[0]]['labels'] = feature_labels_o
 
-    if output is not None:
+    if output_csv is not None:
         for num in range(0, len(savedict[i_name[0]]['ttest'])):
             writelist = list()
             for i_name in savedict.keys():
@@ -193,6 +201,96 @@ def StatisticalTestFeatures(features, patientinfo, config, output=None,
 
             wr.writerow(writelist)
 
-        print("Saved data!")
+        print("Saved data to CSV!")
+
+    if output_png is not None:
+        # Initialize objects
+        objects_temp = labeldict['labels']
+        if plot_test == 'MWU':
+            p_values_temp = labeldict['mw']
+
+        # remove the nan
+        objects_nonan = list()
+        p_values_nonan = list()
+        for o, p in zip(objects_temp, p_values_temp):
+            if not np.isnan(p):
+                objects_nonan.append(o)
+                p_values_nonan.append(p)
+
+        # Debug defaults
+        if DebugDetector().do_detection():
+            # No correction
+            Bonferonni = False
+
+            # Just select ~10 features
+            sorted_p = p_values_nonan[:]
+            sorted_p.sort()
+            threshold = sorted_p[10]
+
+        if Bonferonni:
+            p_values_nonan = [p * len(p_values_nonan) for p in p_values_nonan]
+
+        # Threshold
+        objects = list()
+        p_values = list()
+        for o, p in zip(objects_nonan, p_values_nonan):
+            if p < threshold:
+                objects.append(o)
+                p_values.append(p)
+
+        # Replace several labels
+        objects = [o.replace('CalcFeatures_', '') for o in objects]
+        objects = [o.replace('featureconverter_', '') for o in objects]
+        objects = [o.replace('PREDICT_', '') for o in objects]
+        objects = [o.replace('PyRadiomics_', '') for o in objects]
+        objects = [o.replace('original_', '') for o in objects]
+        objects = [o.replace('train_', '') for o in objects]
+        objects = [o.replace('test_', '') for o in objects]
+        objects = [o.replace('1_0_', '') for o in objects]
+
+        # Create positions
+        y_pos = np.arange(len(objects)) * yspacing
+        y_pos = y_pos[::-1]
+
+        # Create colors
+        colors = list()
+        for o in objects:
+            if 'tf_' in o or 'vf_' in o or 'pf_' in o:
+                colors.append('darkblue')
+            elif 'hf_' in o:
+                colors.append('magenta')
+            elif 'sf_' in o:
+                colors.append('cyan')
+            elif 'of_' in o:
+                colors.append('gray')
+            elif 'semf_' in o:
+                colors.append('black')
+            else:
+                raise KeyError(o)
+
+        # Plotting
+        # fig = plt.figure(figsize=(20, 5))
+        plt.barh(y_pos, p_values, align='center', alpha=0.5, color=colors)
+        plt.yticks(y_pos, objects, rotation=00, fontsize=fontsize)
+        plt.xscale('log')
+        plt.xticks(fontsize=fontsize)
+        plt.xticks([1E-3, 1E-2, 1E-1], ['10-3', '10-2', '10-1'])
+
+        # Tweak spacing to prevent clipping of tick-labels
+        plt.subplots_adjust(bottom=0.30)
+
+        plt.xlabel('Mann-Whitney-U Corrected P-value', fontsize=fontsize)
+
+        # Adjust such that labels fit in figure
+        plt.gcf().subplots_adjust(left=0.35)
+        plt.gcf().subplots_adjust(right=0.98)
+        plt.gcf().subplots_adjust(top=0.99)
+        plt.gcf().subplots_adjust(bottom=0.1)
+
+        # Make figure fullscreen and save
+        fig = plt.gcf()
+        fig.set_size_inches((15, 11), forward=False)
+        fig.savefig(output_png, dpi=600)
+        print("Saved data to PNG!")
 
     return savedict

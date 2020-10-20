@@ -479,6 +479,7 @@ class WORC(object):
         # Ensemble options
         config['Ensemble'] = dict()
         config['Ensemble']['Use'] = '50'
+        config['Ensemble']['Metric'] = 'Default'
 
         # Evaluation options
         config['Evaluation'] = dict()

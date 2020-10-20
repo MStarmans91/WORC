@@ -68,10 +68,31 @@ def plot_hyperparameters(prediction, label_type=None, estsize=50,
         if len(parameters) > estsize:
             parameters = parameters[0:estsize]
 
-        # Add which (cross-validation) iteration is used and the rank
+        # Additional information besides the parameters
         for i in range(0, estsize):
+            # Add which (cross-validation) iteration is used and the rank
             parameters[i]['Iteration'] = cnum + 1
             parameters[i]['Rank'] = i + 1
+
+            # Add some statistics
+            parameters[i]['Metric'] = cls.scoring
+            parameters[i]['mean_train_score'] =\
+                cls.cv_results_['mean_train_score'][i]
+            parameters[i]['mean_fit_time'] =\
+                cls.cv_results_['mean_fit_time'][i]
+            parameters[i]['std_train_score'] =\
+                cls.cv_results_['std_train_score'][i]
+            parameters[i]['generalization_score'] =\
+                cls.cv_results_['generalization_score'][i]
+            parameters[i]['rank_generalization_score'] =\
+                cls.cv_results_['rank_generalization_score'][i]
+
+            # NOTE: while this is called test score, it is the score on the
+            # validation dataset(s)
+            parameters[i]['mean_validation_score'] =\
+                cls.cv_results_['mean_test_score'][i]
+            parameters[i]['std_validation_score'] =\
+                cls.cv_results_['std_test_score'][i]
 
         # Intialize data object if this is the first iteration
         if cnum == 0:
@@ -108,9 +129,11 @@ def plot_hyperparameters(prediction, label_type=None, estsize=50,
 
         # First, specify order of columns for easy reading
         columns = list(data.keys())
-        columns.remove('Iteration')
-        columns.remove('Rank')
-        columns = ['Iteration', 'Rank'] + columns
+        starters = ['Iteration', 'Rank', 'Metric', 'mean_validation_score',
+                    'mean_train_score', 'mean_fit_time']
+        for key in starters:
+            columns.remove(key)
+        columns = starters + columns
 
         # Write to dataframe
         df = pd.DataFrame(data)

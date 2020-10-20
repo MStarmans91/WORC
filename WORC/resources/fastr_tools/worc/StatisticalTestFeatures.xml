@@ -22,7 +22,8 @@
         <input id="config" name="config" datatype="ParameterFile" prefix="--conf" cardinality="1-*" repeat_prefix="false" required="true" />
      </inputs>
     <outputs>
-      <output id="performance" name="Radiomics classification performance" datatype="CSVFile" cardinality="as:config" nospace="False" order="0" prefix="--perf" required="true"/>
+      <output id="output_csv" name="P-values of statistical tests on features in CSV" datatype="CSVFile" cardinality="as:config" nospace="False" order="0" prefix="--output_csv" required="true"/>
+      <output id="output_png" name="P-values of statistical tests on features plotted in a barchart" datatype="PNGFile" cardinality="as:config" nospace="False" order="0" prefix="--output_png" required="false"/>
     </outputs>
   </interface>
   <requirements />

@@ -367,6 +367,9 @@ def load_config(config_file_path):
     settings_dict['Ensemble']['Use'] =\
         settings['Ensemble'].getint('Use')
 
+    settings_dict['Ensemble']['Metric'] =\
+        settings['Ensemble']['Metric']
+
     # Settings for bootstrapping
     settings_dict['Bootstrap']['Use'] =\
         settings['Bootstrap'].getboolean('Use')
