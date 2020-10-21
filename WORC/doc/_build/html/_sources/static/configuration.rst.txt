@@ -103,11 +103,9 @@ backend.
 
 Labels
 ~~~~~~~~
-When using the PREDICT toolbox for classification, you have to set the
-label used for classification.
+Set the label used for classification.
 
-
-This part is really important, as it should match your label file.
+This part is quite important, as it should match your label file.
 Suppose your patientclass.txt file you supplied as source for labels
 looks like this:
 
@@ -149,9 +147,10 @@ set: ``config[Labels][label_names] = Label1, Label2``
 Preprocessing
 ~~~~~~~~~~~~~
 The preprocessing node acts before the feature extraction on the image.
-Currently, only normalization is included. Additionally, scans with image
-type CT (see later in the tutorial) provided as DICOM are scaled to
-Hounsfield Units.
+Additionally, scans with imagetype CT (see later in the tutorial) provided
+as DICOM are scaled to Hounsfield Units. For more details on the preprocessing
+options, please see
+:ref:`the additional functionality chapter <additonalfunctionality-chapter>`.
 
 **Description:**
 
@@ -182,7 +181,8 @@ tool in the general configuration.
 
 ImageFeatures
 ~~~~~~~~~~~~~
-If using the PREDICT toolbox, you can specify some settings for the
+If using the PREDICT toolbox for feature extraction, you can specify some
+settings for the
 feature computation here. Also, you can select if the certain features
 are computed or not.
 
@@ -265,8 +265,8 @@ specific features you would like to do this.
 
 Imputation
 ~~~~~~~~~~~~~~~~
-When using the PREDICT toolbox for classification, these settings are
-used for feature imputation.Note that these settings are actually used
+These settings are used for feature imputation. Note that these settings
+are actually used
 in the hyperparameter optimization. Hence you can provide multiple
 values per field, of which random samples will be drawn of which finally
 the best setting in combination with the other hyperparameters is
@@ -300,8 +300,7 @@ Determines which method is applied to scale each feature.
 
 Featsel
 ~~~~~~~
-When using the PREDICT toolbox for classification, these settings can be
-used for feature selection methods. Note that these settings are
+Define feature selection methods. Note that these settings are
 actually used in the hyperparameter optimization. Hence you can provide
 multiple values per field, of which random samples will be drawn of
 which finally the best setting in combination with the other
@@ -354,10 +353,16 @@ All methods are adopted from `imbalanced learn <https://imbalanced-learn.readthe
 
 Classification
 ~~~~~~~~~~~~~~
-When using the PREDICT toolbox for classification, you can specify the
-following settings. Almost all of these are used in CASH. Most of the
+Determine settings for the classification in the hyperoptimization. Most of the
 classifiers are implemented using sklearn; hence descriptions of the
 hyperparameters can also be found there.
+
+Defaults for XGB are based on
+https://towardsdatascience.com/doing-xgboost-hyper-parameter-tuning-the-smart-way-part-1-of-2-f6d255a45dde
+and https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/
+
+Note, as XGB and AdaBoost take significantly longer to fit (3x), they
+are picked less often by default.
 
 **Description:**
 
@@ -372,8 +377,7 @@ hyperparameters can also be found there.
 
 CrossValidation
 ~~~~~~~~~~~~~~~
-When using the PREDICT toolbox for classification and you specified
-using cross validation, specify the following settings.
+When using cross validation, specify the following settings.
 
 **Description:**
 
@@ -388,8 +392,7 @@ using cross validation, specify the following settings.
 
 HyperOptimization
 ~~~~~~~~~~~~~~~~~
-When using the PREDICT toolbox for classification, you have to supply
-your hyperparameter optimization procedure here.
+Specify the hyperparameter optimization procedure here.
 
 **Description:**
 

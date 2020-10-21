@@ -1,7 +1,8 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
@@ -11,30 +12,28 @@
   
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-
-  
   
   
   
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Introduction" href="static/introduction.html" /> 
@@ -51,7 +50,7 @@
           
 
           
-            <a href="#" class="icon icon-home" alt="Documentation Home"> WORC
+            <a href="#" class="icon icon-home"> WORC
           
 
           
@@ -81,7 +80,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -108,7 +106,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -147,7 +144,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="#">Docs</a> &raquo;</li>
         
       <li>WORC: Workflow for Optimal Radiomics Classification</li>
     
@@ -331,10 +328,11 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/additionalfunctionality.html">Additional functionality</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#preprocessing">Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#image-preprocessing">Image Preprocessing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#image-registration">Image Registration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#combat">ComBat</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#icc">ICC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#additional-classifiers">Additional classifiers</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/faq.html">FAQ</a><ul>
@@ -572,6 +570,7 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_estimator_performance"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_estimator_performance</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_hyperparameters"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_hyperparameters</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_images"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_pvalues_features"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_pvalues_features</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plotminmaxresponse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.scatterplot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scatterplot</span></code> Module</a></li>
@@ -598,7 +597,7 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_combat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_combat</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_helpers</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_iccthreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_iccthreshold</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#test-validators-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_validators</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_validators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_validators</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.tools.html">tools Package</a><ul>
@@ -650,19 +649,11 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -673,6 +664,7 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {
