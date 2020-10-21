@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,10 +26,12 @@ from scipy.stats import ttest_ind, ranksums, mannwhitneyu, chi2_contingency
 import WORC.IOparser.config_io_classifier as config_io
 from WORC.IOparser.file_io import load_features
 from WORC.detectors.detectors import DebugDetector
+from WORC.plotting.plot_pvalues_features import manhattan_importance
 
 
 def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
-                            output_png=None, plot_test='MWU', Bonferonni=True,
+                            output_png=None, output_tex=None, plot_test='MWU',
+                            Bonferonni=True,
                             fontsize='small', yspacing=1,
                             threshold=0.05, verbose=True, label_type=None):
     """Perform several statistical tests on features, such as a student t-test.
@@ -75,6 +77,10 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
     if type(output_png) is list:
         output_png = ''.join(output_png)
 
+    if type(output_tex) is list:
+        output_tex = ''.join(output_tex)
+
+    print(output_png, output_tex)
     # Create output folder if required
     if not os.path.exists(os.path.dirname(output_csv)):
         os.makedirs(os.path.dirname(output_csv))
@@ -203,19 +209,19 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
 
         print("Saved data to CSV!")
 
-    if output_png is not None:
+    if output_png is not None or output_tex is not None:
         # Initialize objects
         objects_temp = labeldict['labels']
         if plot_test == 'MWU':
             p_values_temp = labeldict['mw']
 
         # remove the nan
-        objects_nonan = list()
-        p_values_nonan = list()
+        objects = list()
+        p_values = list()
         for o, p in zip(objects_temp, p_values_temp):
             if not np.isnan(p):
-                objects_nonan.append(o)
-                p_values_nonan.append(p)
+                objects.append(o)
+                p_values.append(p)
 
         # Debug defaults
         if DebugDetector().do_detection():
@@ -223,74 +229,112 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
             Bonferonni = False
 
             # Just select ~10 features
-            sorted_p = p_values_nonan[:]
+            sorted_p = p_values[:]
             sorted_p.sort()
             threshold = sorted_p[10]
 
         if Bonferonni:
-            p_values_nonan = [p * len(p_values_nonan) for p in p_values_nonan]
+            # Apply Bonferonni correction for multiple testing
+            threshold = threshold / len(p_values)
 
-        # Threshold
-        objects = list()
-        p_values = list()
-        for o, p in zip(objects_nonan, p_values_nonan):
-            if p < threshold:
-                objects.append(o)
-                p_values.append(p)
+        # Create labels
+        labels = list()
+        mapping = {0: 'Histogram',
+                   1: 'Shape',
+                   2: 'Orientation',
+                   3: 'GLCM',
+                   4: 'GLRLM',
+                   5: 'GLSZM',
+                   6: 'GLDM',
+                   7: 'NGTDM',
+                   8: 'Gabor',
+                   9: 'Semantic',
+                   10: 'DICOM',
+                   11: 'LoG',
+                   12: 'Vessel',
+                   13: 'LBP',
+                   14: 'Phase'
+                   }
+        for o in objects:
+            if 'hf_' in o:
+                labels.append(0)
+            elif 'sf_' in o:
+                labels.append(1)
+            elif 'of_' in o:
+                labels.append(2)
+            elif 'GLCM_' in o or 'GLCMMS_' in o:
+                labels.append(3)
+            elif 'GLRLM_' in o:
+                labels.append(4)
+            elif 'GLSZM_' in o:
+                labels.append(5)
+            elif 'GLDM_' in o:
+                labels.append(6)
+            elif 'NGTDM_' in o:
+                labels.append(7)
+            elif 'Gabor_' in o:
+                labels.append(8)
+            elif 'semf_' in o:
+                labels.append(9)
+            elif 'dicomf_' in o:
+                labels.append(10)
+            elif 'LoG_' in o:
+                labels.append(11)
+            elif 'vf_' in o:
+                labels.append(12)
+            elif 'LBP_' in o:
+                labels.append(13)
+            elif 'phasef_' in o:
+                labels.append(14)
+            else:
+                raise KeyError(o)
 
         # Replace several labels
         objects = [o.replace('CalcFeatures_', '') for o in objects]
         objects = [o.replace('featureconverter_', '') for o in objects]
         objects = [o.replace('PREDICT_', '') for o in objects]
         objects = [o.replace('PyRadiomics_', '') for o in objects]
+        objects = [o.replace('Pyradiomics_', '') for o in objects]
+        objects = [o.replace('predict_', '') for o in objects]
+        objects = [o.replace('pyradiomics_', '') for o in objects]
         objects = [o.replace('original_', '') for o in objects]
         objects = [o.replace('train_', '') for o in objects]
         objects = [o.replace('test_', '') for o in objects]
         objects = [o.replace('1_0_', '') for o in objects]
+        objects = [o.replace('hf_', '') for o in objects]
+        objects = [o.replace('sf_', '') for o in objects]
+        objects = [o.replace('of_', '') for o in objects]
+        objects = [o.replace('GLCM_', '') for o in objects]
+        objects = [o.replace('GLCMMS_', '') for o in objects]
+        objects = [o.replace('GLRLM_', '') for o in objects]
+        objects = [o.replace('GLSZM_', '') for o in objects]
+        objects = [o.replace('GLDM_', '') for o in objects]
+        objects = [o.replace('NGTDM_', '') for o in objects]
+        objects = [o.replace('Gabor_', '') for o in objects]
+        objects = [o.replace('semf_', '') for o in objects]
+        objects = [o.replace('dicomf_', '') for o in objects]
+        objects = [o.replace('LoG_', '') for o in objects]
+        objects = [o.replace('vf_', '') for o in objects]
+        objects = [o.replace('LBP_', '') for o in objects]
+        objects = [o.replace('phasef_', '') for o in objects]
+        objects = [o.replace('tf_', '') for o in objects]
+        objects = [o.replace('_CT_0', '') for o in objects]
+        objects = [o.replace('_MR_0', '') for o in objects]
+        objects = [o.replace('CT_0', '') for o in objects]
+        objects = [o.replace('MR_0', '') for o in objects]
 
-        # Create positions
-        y_pos = np.arange(len(objects)) * yspacing
-        y_pos = y_pos[::-1]
+        # Sort based on labels
+        sort_indices = np.argsort(np.asarray(labels))
+        p_values = [p_values[i] for i in sort_indices]
+        labels = [labels[i] for i in sort_indices]
 
-        # Create colors
-        colors = list()
-        for o in objects:
-            if 'tf_' in o or 'vf_' in o or 'pf_' in o:
-                colors.append('darkblue')
-            elif 'hf_' in o:
-                colors.append('magenta')
-            elif 'sf_' in o:
-                colors.append('cyan')
-            elif 'of_' in o:
-                colors.append('gray')
-            elif 'semf_' in o:
-                colors.append('black')
-            else:
-                raise KeyError(o)
-
-        # Plotting
-        # fig = plt.figure(figsize=(20, 5))
-        plt.barh(y_pos, p_values, align='center', alpha=0.5, color=colors)
-        plt.yticks(y_pos, objects, rotation=00, fontsize=fontsize)
-        plt.xscale('log')
-        plt.xticks(fontsize=fontsize)
-        plt.xticks([1E-3, 1E-2, 1E-1], ['10-3', '10-2', '10-1'])
-
-        # Tweak spacing to prevent clipping of tick-labels
-        plt.subplots_adjust(bottom=0.30)
-
-        plt.xlabel('Mann-Whitney-U Corrected P-value', fontsize=fontsize)
-
-        # Adjust such that labels fit in figure
-        plt.gcf().subplots_adjust(left=0.35)
-        plt.gcf().subplots_adjust(right=0.98)
-        plt.gcf().subplots_adjust(top=0.99)
-        plt.gcf().subplots_adjust(bottom=0.1)
-
-        # Make figure fullscreen and save
-        fig = plt.gcf()
-        fig.set_size_inches((15, 11), forward=False)
-        fig.savefig(output_png, dpi=600)
-        print("Saved data to PNG!")
+        # Make manhattan plot
+        manhattan_importance(values=p_values,
+                             labels=labels,
+                             output_png=output_png,
+                             feature_labels=objects,
+                             threshold_annotated=threshold,
+                             mapping=mapping,
+                             output_tex=output_tex)
 
     return savedict

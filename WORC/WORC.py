@@ -474,7 +474,7 @@ class WORC(object):
         config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
-        config['HyperOptimization']['memory'] = '2G'
+        config['HyperOptimization']['memory'] = '3G'
 
         # Ensemble options
         config['Ensemble'] = dict()
