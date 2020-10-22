@@ -1146,14 +1146,15 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     # Check which ensemble should be in the ensemble to maximally improve
                     new_performance = np.mean(performances_temp)
-                    print('new_performance: ' + str(new_performance) + '\n')
                     performances_n_class.append(new_performance)
                     best_index = sortedindices[iteration]
                     iteration += 1
 
                 # Select N_models for initialization
                 new_performance = max(performances_n_class)
+                print('new_performance: ' + str(new_performance) + '\n')
                 N_models = performances_n_class.index(new_performance) + 1  # +1 due to python indexing
+                print('N_models: ' + str(N_models) + '\n')
                 ensemble = ensemble[0:N_models]
                 best_performance = new_performance
 
