@@ -1146,6 +1146,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     # Check which ensemble should be in the ensemble to maximally improve
                     new_performance = np.mean(performances_temp)
+                    print('new_performance: ' + str(new_performance) + '\n')
                     performances_n_class.append(new_performance)
                     best_index = sortedindices[iteration]
                     iteration += 1
