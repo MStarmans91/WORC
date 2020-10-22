@@ -1092,7 +1092,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             best_performance = 0
             new_performance = 0.001
             iteration = 0
-            ensemble = list()
+            ensemble = [0]
             y_score = [None]*n_iter
             best_index = 0
             single_estimator_performance = new_performance
