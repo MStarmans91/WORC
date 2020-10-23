@@ -816,8 +816,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         return self
 
     def refit_and_score(self, X, y, parameters_all,
-                        train, test, verbose=None,
-                        ensemble_time=False):
+                        train, test, verbose=None):
         """Refit the base estimator and attributes such as GroupSel
 
         Parameters
@@ -867,7 +866,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Refit all preprocessing functions
         fit_params = _check_fit_params(X, self.fit_params)
         self.scoring = 'f1_weighted'
-        out = fit_and_score(X, y, self.scoring,
+        out = fit_and_score(X_fit, y, self.scoring,
                             train, test, parameters_all,
                             fit_params=fit_params,
                             return_train_score=self.return_train_score,
@@ -1062,7 +1061,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #                               p_all, all_indices, all_indices)
 
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid, ensemble_time=True)
+                                                   train, valid)
 
                     ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
                     print('ret score: ' + str(ret[0][1]) + '\n')
