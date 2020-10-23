@@ -816,7 +816,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         return self
 
     def refit_and_score(self, X, y, parameters_all,
-                        train, test, verbose=None):
+                        train, test, verbose=None,
+                        ensemble_time=False):
         """Refit the base estimator and attributes such as GroupSel
 
         Parameters
@@ -941,6 +942,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             #print('score of this pipeline in refit: ' + str(score) + '\n')
             # Test 2 --> base_estimator.best_estimator.predict()
             best_estimator.fit(X, y, **self.fit_params)
+            if ensemble_time:
+                best_estimator.fit(X[train], y[train], **self.fit_params)
         else:
             best_estimator.fit(X, **self.fit_params)
         self.best_estimator_ = best_estimator
@@ -1051,11 +1054,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     all_indices = np.arange(0, len(train))
 
                     # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(training_set, training_labels,
-                                                   p_all, all_indices, all_indices)
+                    #base_estimator.refit_and_score(training_set, training_labels,
+                    #                               p_all, all_indices, all_indices)
 
-                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
-                    #                               train, valid)
+                    base_estimator.refit_and_score(X_train, Y_train, p_all,
+                                                   train, valid)
 
                     ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
                     print('ret score: ' + str(ret[0][1]) + '\n')
