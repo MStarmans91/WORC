@@ -915,37 +915,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Multiclass, hence employ a multiclass classifier for e.g. SVM, RF
             best_estimator = OneVsRestClassifier(best_estimator)
 
-        def compute_performance(scoring, Y_valid_truth, Y_valid_score):
-            if scoring == 'f1_weighted' or scoring == 'f1':
-                # Convert score to binaries first
-                for num in range(0, len(Y_valid_score)):
-                    if Y_valid_score[num] >= 0.5:
-                        Y_valid_score[num] = 1
-                    else:
-                        Y_valid_score[num] = 0
-
-                perf = f1_score(Y_valid_truth, Y_valid_score, average='weighted')
-            elif scoring == 'auc':
-                perf = roc_auc_score(Y_valid_truth, Y_valid_score)
-            elif scoring == 'sar':
-                perf = sar_score(Y_valid_truth, Y_valid_score)
-            else:
-                raise KeyError('[WORC Warning] No valid score method given in ensembling: ' + str(scoring))
-
-            return perf
-
         if y is not None:
-            # Test 1
-            #X_train = [X[i] for i in train]
-            #X_valid = [X[i] for i in test]
-            #best_estimator.fit(X_train, y[train], **self.fit_params)
-            #prediction = best_estimator.predict(X_valid)
-            #score = compute_performance(self.scoring, y[test], prediction)
-            #print('score of this pipeline in refit: ' + str(score) + '\n')
-            # Test 2 --> base_estimator.best_estimator.predict()
-            #if ensemble_time:
-            #    best_estimator.fit(X[train], y[train], **self.fit_params)
-            #else:
             best_estimator.fit(X, y, **self.fit_params)
         else:
             best_estimator.fit(X, **self.fit_params)
