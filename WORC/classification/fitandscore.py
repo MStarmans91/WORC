@@ -876,7 +876,7 @@ def fit_and_score(X, y, scoring,
     else:
         ret[2] = runtime
 
-    with open('/scratch/mdeen/testfiles/fit_training_time.txt', 'a') as fitprintfile:
+    with open('/scratch/mdeen/testfiles/fit_ensemble_time.txt', 'a') as fitprintfile:
         fitprintfile.write('X size: ' + str(len(X)) + '\n')
         fitprintfile.write('y: ' + str(y) + '\n')
         fitprintfile.write('scoring: ' + str(scoring) + '\n')
