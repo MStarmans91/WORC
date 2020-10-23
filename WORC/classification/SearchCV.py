@@ -941,9 +941,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             #score = compute_performance(self.scoring, y[test], prediction)
             #print('score of this pipeline in refit: ' + str(score) + '\n')
             # Test 2 --> base_estimator.best_estimator.predict()
-            best_estimator.fit(X, y, **self.fit_params)
             if ensemble_time:
                 best_estimator.fit(X[train], y[train], **self.fit_params)
+            else:
+                best_estimator.fit(X, y, **self.fit_params)
         else:
             best_estimator.fit(X, **self.fit_params)
         self.best_estimator_ = best_estimator
