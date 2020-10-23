@@ -895,7 +895,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Fit the estimator using the preprocessed features
         X = [x[0] for x in X]
-        X, y = self.preprocess(X, y, training=True)
+        X, y = self.preprocess(X[train], y[train], training=True)
 
         best_estimator = cc.construct_classifier(parameters_all)
 
@@ -941,10 +941,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             #score = compute_performance(self.scoring, y[test], prediction)
             #print('score of this pipeline in refit: ' + str(score) + '\n')
             # Test 2 --> base_estimator.best_estimator.predict()
-            if ensemble_time:
-                best_estimator.fit(X[train], y[train], **self.fit_params)
-            else:
-                best_estimator.fit(X, y, **self.fit_params)
+            #if ensemble_time:
+            #    best_estimator.fit(X[train], y[train], **self.fit_params)
+            #else:
+            best_estimator.fit(X, y, **self.fit_params)
         else:
             best_estimator.fit(X, **self.fit_params)
         self.best_estimator_ = best_estimator
@@ -1047,7 +1047,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                 input_parameters = copy.deepcopy(parameters_all)
                 # Loop over the 100 best estimators
-                for num, p_all in enumerate(parameters_all):
+                for num, p_all in enumerate(input_parameters):
 
                     # Prepare data
                     training_set = [X_train[i] for i in train]
