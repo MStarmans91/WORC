@@ -876,6 +876,16 @@ def fit_and_score(X, y, scoring,
     else:
         ret[2] = runtime
 
+    with open('/scratch/mdeen/testfiles/fit_training_time.txt', 'a') as fitprintfile:
+        fitprintfile.write('X size: ' + str(len(X)) + '\n')
+        fitprintfile.write('y: ' + str(y) + '\n')
+        fitprintfile.write('scoring: ' + str(scoring) + '\n')
+        fitprintfile.write('train: ' + str(train) + '\n')
+        fitprintfile.write('test: ' + str(test) + '\n')
+        fitprintfile.write('parameters: ' + str(parameters) + '\n')
+        fitprintfile.write('output: ' + str(ret) + '\n')
+        fitprintfile.write('----------' + '\n')
+
     if return_all:
         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
     else:
