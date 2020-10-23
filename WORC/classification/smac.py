@@ -262,7 +262,7 @@ def build_smac_config(parameters):
     # 2 hyperparameters:
     #   1) Metric
     #   2) Threshold
-    statistical_test = CategoricalHyperparameter('StatisticalTestUse', choices=['True', 'False'])
+    statistical_test = CategoricalHyperparameter('StatisticalTestUse', choices=['False', 'True'])
     cs.add_hyperparameter(statistical_test)
 
     statistical_test_metric = CategoricalHyperparameter('StatisticalTestMetric',
