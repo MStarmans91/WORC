@@ -188,14 +188,6 @@ def fit_and_score(X, y, scoring,
 
     """
     # We copy the parameter object so we can alter it and keep the original
-    with open('/scratch/mdeen/testfiles/fit_ensemble_time.txt', 'a') as fitprintfile:
-        fitprintfile.write('X size: ' + str(len(X)) + '\n')
-        fitprintfile.write('y: ' + str(y) + '\n')
-        fitprintfile.write('scoring: ' + str(scoring) + '\n')
-        fitprintfile.write('train: ' + str(train) + '\n')
-        fitprintfile.write('test: ' + str(test) + '\n')
-        fitprintfile.write('parameters: ' + str(parameters) + '\n')
-
     if verbose:
         print("\n")
         print('#######################################')
@@ -879,10 +871,6 @@ def fit_and_score(X, y, scoring,
         ret[3] = runtime
     else:
         ret[2] = runtime
-
-    with open('/scratch/mdeen/testfiles/fit_ensemble_time.txt', 'a') as fitprintfile:
-        fitprintfile.write('output: ' + str(ret) + '\n')
-        fitprintfile.write('----------' + '\n')
 
     if return_all:
         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
