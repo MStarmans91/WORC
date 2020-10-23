@@ -1059,7 +1059,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #                               p_all, all_indices, all_indices)
 
                     base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid)
+                                                   train, valid, ensemble_time=True)
 
                     ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
                     print('ret score: ' + str(ret[0][1]) + '\n')
