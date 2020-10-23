@@ -867,7 +867,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Refit all preprocessing functions
         fit_params = _check_fit_params(X, self.fit_params)
         self.scoring = 'f1_weighted'
-        out = fit_and_score(X_fit, y, self.scoring,
+        out = fit_and_score(X, y, self.scoring,
                             train, test, parameters_all,
                             fit_params=fit_params,
                             return_train_score=self.return_train_score,
