@@ -8,5 +8,5 @@ python:
   version: 3.7
   install:
     - method: pip
-    - requirements: WORC/doc/requirements.txt
     - requirements: requirements.txt
+    - requirements: WORC/doc/requirements.txt
