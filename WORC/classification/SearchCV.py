@@ -1034,7 +1034,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #                               train, valid)
 
                     ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
-                    ret_score = ret[0][1]
+                    ret_score = ret[0][1]['score']
                     print('ret score: ' + str(ret[0][1]) + '\n')
 
                     X_train_values = np.asarray([x[0] for x in X_train])
