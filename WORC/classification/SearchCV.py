@@ -1017,17 +1017,17 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print(f' - iteration {it + 1} / {n_iter}.')
                 Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
-                input_parameters = copy.deepcopy(parameters_all)
+                #input_parameters = copy.deepcopy(parameters_all)
                 # Loop over the 100 best estimators
-                for num, p_all in enumerate(input_parameters):
+                for num, p_all in enumerate(parameters_all):
 
                     # Prepare data
                     training_set = [X_train[i] for i in train]
                     training_labels = np.asarray([Y_train[i] for i in train])
                     all_indices = np.arange(0, len(train))
 
-                    out = fit_and_score(training_set, training_labels, scoring,
-                                        all_indices, all_indices, p_all)
+                    out = fit_and_score(X_train, Y_train, scoring,
+                                        train, valid, p_all)
                     ret_score = out[0][1]['score']
                     (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers, \
                      Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
