@@ -3,6 +3,11 @@
 build:
   image: latest
 
+
 python:
   version: 3.7
-  pip_install: true
+  install:
+    - method: pip
+      path: .
+    - requirements: requirements.txt
+    - requirements: WORC/doc/requirements.txt
