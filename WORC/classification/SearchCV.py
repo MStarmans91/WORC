@@ -1034,14 +1034,17 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #                               train, valid)
 
                     ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
+                    ret_score = ret[0][1]
                     print('ret score: ' + str(ret[0][1]) + '\n')
 
                     X_train_values = np.asarray([x[0] for x in X_train])
-                    processed_X_train, processed_y_train = base_estimator.preprocess(X_train_values[train], Y_train[train], training=True)
-                    new_fit = base_estimator.best_estimator_.fit(processed_X_train, processed_y_train)
-                    predictions = new_fit.predict(X_train_values[valid])
 
-                    #predictions = base_estimator.predict(X_train_values[valid])
+
+                    #processed_X_train, processed_y_train = base_estimator.preprocess(X_train_values[train], Y_train[train], training=True)
+                    #new_fit = base_estimator.best_estimator_.fit(processed_X_train, processed_y_train)
+                    #predictions = new_fit.predict(X_train_values[valid])
+
+                    predictions = base_estimator.predict(X_train_values[valid])
 
                     # Append to array for all classifiers on this validation set
                     Y_valid_score_it[num, :] = predictions
@@ -1050,9 +1053,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Also store the validation ground truths
                         Y_valid_truth.append(Y_train[valid])
 
-                    performances[it, num] = compute_performance(scoring,
-                                                                Y_train[valid],
-                                                                predictions)
+                    #performances[it, num] = compute_performance(scoring,
+                    #                                            Y_train[valid],
+                    #                                            predictions)
+
+                    performances[it, num] = ret_score
 
                     print('Computed performance: ' + str(performances[it, num]) + '\n')
 
