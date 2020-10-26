@@ -1026,8 +1026,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     training_labels = np.asarray([Y_train[i] for i in train])
                     all_indices = np.arange(0, len(train))
 
-                    out = fit_and_score(X_train, Y_train, scoring,
-                                        train, valid, p_all)
+                    out = fit_and_score(training_set, training_labels, scoring,
+                                        all_indices, all_indices, p_all)
                     ret_score = out[0][1]['score']
                     (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers, \
                      Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
