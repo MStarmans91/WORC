@@ -1020,6 +1020,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 input_parameters = copy.deepcopy(parameters_all)
                 # Loop over the 100 best estimators
                 for num, p_all in enumerate(input_parameters):
+                    ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
+                    ret_score = ret[0][1]['score']
 
                     # Prepare data
                     training_set = [X_train[i] for i in train]
@@ -1033,8 +1035,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #base_estimator.refit_and_score(X_train, Y_train, p_all,
                     #                               train, valid)
 
-                    ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
-                    ret_score = ret[0][1]['score']
+
                     print('ret score: ' + str(ret[0][1]) + '\n')
 
                     X_train_values = np.asarray([x[0] for x in X_train])
