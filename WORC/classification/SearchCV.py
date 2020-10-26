@@ -1055,7 +1055,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     best_estimator = cc.construct_classifier(p_all)
 
                     X_train_values = np.asarray([x[0] for x in X_train])
-                    processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=False)
+                    processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
                     new_fit = best_estimator.fit(processed_X[train], processed_y[train])
                     predictions = new_fit.predict(processed_X[valid])
 
