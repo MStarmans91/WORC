@@ -1020,8 +1020,20 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 input_parameters = copy.deepcopy(parameters_all)
                 # Loop over the 100 best estimators
                 for num, p_all in enumerate(input_parameters):
-                    ret = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
-                    ret_score = ret[0][1]['score']
+                    out = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
+                    ret_score = out[0][1]['score']
+                    (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
+                        Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
+                    base_estimator.best_groupsel = GroupSel
+                    base_estimator.best_scaler = scalers
+                    base_estimator.best_varsel = VarSel
+                    base_estimator.best_modelsel = SelectModel
+                    base_estimator.best_imputer = Imputers
+                    base_estimator.best_pca = PCAs
+                    base_estimator.best_featlab = feature_labels
+                    base_estimator.best_statisticalsel = StatisticalSel
+                    base_estimator.best_reliefsel = ReliefSel
+                    base_estimator.best_Sampler = Sampler
 
                     # Prepare data
                     training_set = [X_train[i] for i in train]
@@ -1032,16 +1044,21 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #base_estimator.refit_and_score(training_set, training_labels,
                     #                               p_all, all_indices, all_indices)
 
-                    base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid)
+                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
+                    #                               train, valid)
 
-                    print('ret score: ' + str(ret[0][1]) + '\n')
+                    print('ret score: ' + str(out[0][1]) + '\n')
+
+                    best_estimator = cc.construct_classifier(p_all)
 
                     X_train_values = np.asarray([x[0] for x in X_train])
+                    processed_X, processed_y = base_estimator.preprocess(X_train_values[train], Y_train[train], training=False)
+                    new_fit = best_estimator.fit(processed_X, processed_y)
+                    predictions = new_fit.predict(X_train_values[valid])
 
-                    processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
-                    new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
-                    predictions = new_fit.predict(processed_X[valid])
+                    #processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
+                    #new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
+                    #predictions = new_fit.predict(processed_X[valid])
 
                     #predictions = base_estimator.predict(X_train_values[valid])
 
