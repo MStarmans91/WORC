@@ -1021,6 +1021,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 # Loop over the 100 best estimators
                 for num, p_all in enumerate(input_parameters):
 
+                    if num == 0:
+                        print('p_all: ' + str(p_all) + '\n')
+
                     # Prepare data
                     training_set = [X_train[i] for i in train]
                     training_labels = np.asarray([Y_train[i] for i in train])
