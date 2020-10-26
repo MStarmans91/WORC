@@ -1020,10 +1020,17 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 input_parameters = copy.deepcopy(parameters_all)
                 # Loop over the 100 best estimators
                 for num, p_all in enumerate(input_parameters):
-                    out = fit_and_score(X_train, Y_train, scoring, train, valid, p_all)
+
+                    # Prepare data
+                    training_set = [X_train[i] for i in train]
+                    training_labels = np.asarray([Y_train[i] for i in train])
+                    all_indices = np.arange(0, len(train))
+
+                    out = fit_and_score(training_set, training_labels, scoring,
+                                        all_indices, all_indices, p_all)
                     ret_score = out[0][1]['score']
-                    (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
-                        Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
+                    (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers, \
+                     Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
                     base_estimator.best_groupsel = GroupSel
                     base_estimator.best_scaler = scalers
                     base_estimator.best_varsel = VarSel
@@ -1036,11 +1043,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     base_estimator.best_reliefsel = ReliefSel
                     base_estimator.best_Sampler = Sampler
 
-                    # Prepare data
-                    training_set = [X_train[i] for i in train]
-                    training_labels = np.asarray([Y_train[i] for i in train])
-                    all_indices = np.arange(0, len(train))
-
                     # Refit a SearchCV object with the provided parameters
                     #base_estimator.refit_and_score(training_set, training_labels,
                     #                               p_all, all_indices, all_indices)
@@ -1048,7 +1050,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #base_estimator.refit_and_score(X_train, Y_train, p_all,
                     #                               train, valid)
 
-                    print('ret score: ' + str(out[0][1]) + '\n')
+                    print('ret score: ' + str(ret_score) + '\n')
 
                     best_estimator = cc.construct_classifier(p_all)
 
