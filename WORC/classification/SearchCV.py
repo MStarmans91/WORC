@@ -1028,6 +1028,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     base_estimator.best_scaler = scalers
                     base_estimator.best_varsel = VarSel
                     base_estimator.best_modelsel = SelectModel
+                    base_estimator.best_preprocessor = None
                     base_estimator.best_imputer = Imputers
                     base_estimator.best_pca = PCAs
                     base_estimator.best_featlab = feature_labels
