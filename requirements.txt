@@ -26,3 +26,5 @@ tqdm>=4.7.1
 xgboost>=1.2.1
 xlrd>=1.2.0
 xnat>=0.2.2
+pillow>=6.2.0
+matplotlib>=3.3.2
