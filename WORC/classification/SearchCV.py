@@ -674,8 +674,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         def _store(key_name, array, weights=None, splits=False, rank=False):
             """A small helper to store the scores/times to the cv_results_"""
-            array = np.array(array, dtype=np.float64).reshape(n_candidates,
-                                                              n_splits)
+            array = np.transpose(np.array(array, dtype=np.float64).reshape(n_splits,
+                                                              n_candidates))
 
             with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
                 testwrite.write('array: ' + str(array) + '\n')
