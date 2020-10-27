@@ -883,7 +883,7 @@ def fit_and_score(X, y, scoring,
         ret[2] = runtime
 
     with open('/scratch/mdeen/testfiles/fitandscore.txt', 'a') as fitandscoreprint:
-        fitandscoreprint.write('score: ' + str(ret[1]) + '\n')
+        fitandscoreprint.write('score (' + str(parameters['CNB_alpha']) + '): ' + str(ret[1]) + '\n')
 
     if return_all:
         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
