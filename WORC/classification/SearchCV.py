@@ -978,7 +978,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Get settings for best 100 estimators
         parameters_all = self.cv_results_['params']
         print('Best score average: ' + str(self.cv_results_['mean_test_score'][0]) + '\n')
-        #print('All cv_results: ' + str(self.cv_results_) + '\n')
+        print('All cv_results: ' + str(self.cv_results_) + '\n')
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
