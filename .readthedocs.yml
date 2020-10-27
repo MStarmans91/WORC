@@ -8,5 +8,4 @@ sphinx:
 python:
   version: 3.7
   install:
-    - requirements: WORC/doc/doc_requirements.txt
     - requirements: requirements.txt
