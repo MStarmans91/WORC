@@ -187,6 +187,16 @@ def fit_and_score(X, y, scoring,
 
 
     """
+    npX = np.asarray(X)
+    npy = np.asarray(y)
+    with open('/scratch/mdeen/testfiles/fitandscore.txt', 'a') as fitandscoreprint:
+        fitandscoreprint.write('Input X: ' + str(np.shape(npX)) + '\n')
+        fitandscoreprint.write('Input y: ' + str(np.shape(npy)) + '\n')
+        fitandscoreprint.write('scoring: ' + str(scoring) + '\n')
+        fitandscoreprint.write('train: ' + str(train) + '\n')
+        fitandscoreprint.write('test: ' + str(test) + '\n')
+        fitandscoreprint.write('parameters: ' + str(parameters) + '\n')
+
     # We copy the parameter object so we can alter it and keep the original
     if verbose:
         print("\n")
