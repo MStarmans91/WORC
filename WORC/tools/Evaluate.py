@@ -82,6 +82,13 @@ class Evaluate(object):
                                      tool_version='1.0', id='plot_Barchart',
                                      resources=ResourceLimit(memory='12G'),
                                      step_id='Evaluation')
+
+        self.node_Hyperparameters =\
+            self.network.create_node('worc/PlotHyperparameters:1.0',
+                                     tool_version='1.0', id='plot_Hyperparameters',
+                                     resources=ResourceLimit(memory='6G'),
+                                     step_id='Evaluation')
+
         self.node_STest =\
             self.network.create_node('worc/StatisticalTestFeatures:1.0',
                                      tool_version='1.0',
@@ -139,9 +146,23 @@ class Evaluate(object):
                                      id='Barchart_Tex',
                                      step_id='general_sinks')
 
+        self.sink_Hyperparameters_CSV =\
+            self.network.create_sink('CSVFile', id='Hyperparameters_CSV',
+                                     step_id='general_sinks')
+
         self.sink_STest_CSV =\
             self.network.create_sink('CSVFile',
                                      id='StatisticalTestFeatures_CSV',
+                                     step_id='general_sinks')
+
+        self.sink_STest_PNG =\
+            self.network.create_sink('PNGFile',
+                                     id='StatisticalTestFeatures_PNG',
+                                     step_id='general_sinks')
+
+        self.sink_STest_Tex =\
+            self.network.create_sink('TexFile',
+                                     id='StatisticalTestFeatures_Tex',
                                      step_id='general_sinks')
 
         self.sink_decomposition_PNG =\
@@ -179,7 +200,11 @@ class Evaluate(object):
         self.sink_Barchart_PNG.input = self.node_Barchart.outputs['output_png']
         self.sink_Barchart_Tex.input = self.node_Barchart.outputs['output_tex']
 
-        self.sink_STest_CSV.input = self.node_STest.outputs['performance']
+        self.sink_Hyperparameters_CSV.input = self.node_Hyperparameters.outputs['output_csv']
+
+        self.sink_STest_CSV.input = self.node_STest.outputs['output_csv']
+        self.sink_STest_PNG.input = self.node_STest.outputs['output_png']
+        self.sink_STest_Tex.input = self.node_STest.outputs['output_tex']
         self.sink_decomposition_PNG.input = self.node_decomposition.outputs['output']
 
         self.sink_Ranked_Percentages_Zip.input =\
@@ -248,6 +273,8 @@ class Evaluate(object):
 
         self.node_Barchart.inputs['prediction'] = self.source_Estimator.output
 
+        self.node_Hyperparameters.inputs['prediction'] = self.source_Estimator.output
+
         self.links_STest_Features = list()
         self.links_decomposition_Features = list()
         self.links_Boxplots_Features = list()
@@ -293,6 +320,9 @@ class Evaluate(object):
         self.node_Barchart.inputs['estimators'] = self.source_Ensemble.output
         self.node_Barchart.inputs['label_type'] = self.source_LabelType.output
 
+        self.node_Hyperparameters.inputs['estimators'] = self.source_Ensemble.output
+        self.node_Hyperparameters.inputs['label_type'] = self.source_LabelType.output
+
         self.node_Ranked_Percentages.inputs['ensemble'] =\
             self.source_Ensemble.output
         self.node_Ranked_Percentages.inputs['label_type'] =\
@@ -327,6 +357,9 @@ class Evaluate(object):
         self.node_Barchart.inputs['estimators'] = self.parent.source_Ensemble.output
         self.node_Barchart.inputs['label_type'] = self.parent.source_LabelType.output
 
+        self.node_Hyperparameters.inputs['estimators'] = self.parent.source_Ensemble.output
+        self.node_Hyperparameters.inputs['label_type'] = self.parent.source_LabelType.output
+
         self.node_Ranked_Percentages.inputs['ensemble'] =\
             self.parent.source_Ensemble.output
         self.node_Ranked_Percentages.inputs['label_type'] =\
@@ -341,6 +374,8 @@ class Evaluate(object):
         self.node_ROC.inputs['pinfo'] = pinfo
 
         self.node_Barchart.inputs['prediction'] = prediction
+
+        self.node_Hyperparameters.inputs['prediction'] = prediction
 
         self.links_STest_Features = dict()
         self.links_decomposition_Features = dict()
@@ -465,8 +500,17 @@ class Evaluate(object):
         if 'Barchart_Tex' not in sink_data.keys():
             self.sink_data['Barchart_Tex'] = ("vfs://output/{}/Evaluation/Barchart_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
+        if 'Hyperparameters_CSV' not in sink_data.keys():
+            self.sink_data['Hyperparameters_CSV'] = ("vfs://output/{}/Evaluation/Hyperparameters_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
         if 'StatisticalTestFeatures_CSV' not in sink_data.keys():
             self.sink_data['StatisticalTestFeatures_CSV'] = ("vfs://output/{}/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
+        if 'StatisticalTestFeatures_PNG' not in sink_data.keys():
+            self.sink_data['StatisticalTestFeatures_PNG'] = ("vfs://output/{}/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
+        if 'StatisticalTestFeatures_Tex' not in sink_data.keys():
+            self.sink_data['StatisticalTestFeatures_Tex'] = ("vfs://output/{}/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'Decomposition_PNG' not in sink_data.keys():
             self.sink_data['Decomposition_PNG'] = ("vfs://output/{}/Evaluation/Decomposition_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)

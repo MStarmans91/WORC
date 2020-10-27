@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.fitandscore &mdash; WORC 3.3.4 documentation</title>
+  <title>WORC.classification.fitandscore &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.3.4
+                3.3.5
               </div>
             
           
@@ -182,9 +182,8 @@
 
 <span class="kn">from</span> <span class="nn">sklearn.model_selection._validation</span> <span class="k">import</span> <span class="n">_fit_and_score</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">Lasso</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">Lasso</span><span class="p">,</span> <span class="n">LogisticRegression</span>
 <span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="k">import</span> <span class="n">SelectFromModel</span>
-<span class="kn">import</span> <span class="nn">scipy</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="k">import</span> <span class="n">PCA</span>
 <span class="kn">from</span> <span class="nn">sklearn.multiclass</span> <span class="k">import</span> <span class="n">OneVsRestClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
@@ -200,6 +199,7 @@
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.VarianceThreshold</span> <span class="k">import</span> <span class="n">selfeat_variance</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.StatisticalTestThreshold</span> <span class="k">import</span> <span class="n">StatisticalTestThreshold</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.SelectGroups</span> <span class="k">import</span> <span class="n">SelectGroups</span>
+<span class="kn">from</span> <span class="nn">WORC.featureprocessing.OneHotEncoderWrapper</span> <span class="k">import</span> <span class="n">OneHotEncoderWrapper</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
 
 <span class="c1"># Specific imports for error management</span>
@@ -221,6 +221,7 @@
 <span class="sd">    The following</span>
 <span class="sd">    methods can currently be applied as preprocessing before fitting, in</span>
 <span class="sd">    this order:</span>
+<span class="sd">    0. Apply OneHotEncoder</span>
 <span class="sd">    1. Apply feature imputation</span>
 <span class="sd">    2. Select features based on feature type group (e.g. shape, histogram).</span>
 <span class="sd">    3. Scale features with e.g. z-scoring.</span>
@@ -304,7 +305,7 @@
 
 <span class="sd">    ret: list</span>
 <span class="sd">        Contains optionally the train_scores and the test_scores,</span>
-<span class="sd">        test_sample_counts, fit_time, score_time, parameters_est</span>
+<span class="sd">        fit_time, score_time, parameters_est</span>
 <span class="sd">        and parameters_all.</span>
 
 <span class="sd">    GroupSel: WORC GroupSel Object</span>
@@ -325,6 +326,10 @@
 
 <span class="sd">    scaler: scaler object</span>
 <span class="sd">        Either None if feature scaling is not used, or</span>
+<span class="sd">        the fitted object.</span>
+
+<span class="sd">    encoder: WORC Encoder Object</span>
+<span class="sd">        Either None if feature OneHotEncoding is not used, or</span>
 <span class="sd">        the fitted object.</span>
 
 <span class="sd">    imputer: WORC Imputater Object</span>
@@ -376,10 +381,10 @@
     <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
 
     <span class="c1"># Set some defaults for if a part fails and we return a dummy</span>
-    <span class="n">test_sample_counts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
     <span class="n">fit_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
     <span class="n">score_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
     <span class="n">Sampler</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">imputer</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">GroupSel</span> <span class="o">=</span> <span class="kc">None</span>
@@ -400,9 +405,6 @@
     <span class="c1"># Initiate dummy return object for when fit and scoring failes: sklearn defaults</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">]</span> <span class="k">if</span> <span class="n">return_train_score</span> <span class="k">else</span> <span class="p">[</span><span class="n">test_scores</span><span class="p">]</span>
 
-    <span class="c1"># ret = [train_scores, test_scores, test_sample_counts,</span>
-    <span class="c1">#        fit_time, score_time, para_estimator, para]</span>
-
     <span class="k">if</span> <span class="n">return_n_test_samples</span><span class="p">:</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_num_samples</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">return_times</span><span class="p">:</span>
@@ -414,6 +416,33 @@
 
     <span class="c1"># Additional to sklearn defaults: return all parameters</span>
     <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------------</span>
+    <span class="c1"># OneHotEncoder</span>
+    <span class="k">if</span> <span class="s1">&#39;OneHotEncoding&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Applying OneHotEncoding, will ignore unknowns.&#39;</span><span class="p">)</span>
+            <span class="n">feature_labels_tofit</span> <span class="o">=</span>\
+                <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding_feature_labels_tofit&#39;</span><span class="p">]</span>
+            <span class="n">encoder</span> <span class="o">=</span>\
+                <span class="n">OneHotEncoderWrapper</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span>
+                                     <span class="n">feature_labels_tofit</span><span class="o">=</span><span class="n">feature_labels_tofit</span><span class="p">,</span>
+                                     <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encoder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Encoder is fitted</span>
+                <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">encoded_feature_labels</span>
+                <span class="n">X_train</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+                <span class="n">X_test</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding_feature_labels_tofit&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Delete the object if we do not need to return it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">encoder</span>
 
     <span class="c1"># ------------------------------------------------------------------------</span>
     <span class="c1"># Feature imputation</span>
@@ -529,7 +558,7 @@
         <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ret</span>
 
@@ -596,7 +625,7 @@
         <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ret</span>
 
@@ -633,7 +662,6 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
             <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">ReliefSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
 
-
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefNN&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefSampleSize&#39;</span><span class="p">]</span>
@@ -653,37 +681,61 @@
         <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ret</span>
 
     <span class="c1"># ------------------------------------------------------------------------</span>
     <span class="c1"># Perform feature selection using a model</span>
+    <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
     <span class="k">if</span> <span class="s1">&#39;SelectFromModel&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_estimator&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Selecting features using lasso model.&quot;</span><span class="p">)</span>
-        <span class="c1"># Use lasso model for feature selection</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Selecting features using model </span><span class="si">{model}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># First, draw a random value for alpha and the penalty ratio</span>
-        <span class="n">alpha</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span><span class="o">.</span><span class="n">rvs</span><span class="p">()</span>
-        <span class="c1"># l1_ratio = scipy.stats.uniform(loc=0.5, scale=0.4).rvs()</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;Lasso&#39;</span><span class="p">:</span>
+            <span class="c1"># Use lasso model for feature selection</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">]</span>
+            <span class="n">selectestimator</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
 
-        <span class="c1"># Create and fit lasso model</span>
-        <span class="n">lassomodel</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
-        <span class="n">lassomodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
+            <span class="c1"># Use logistic regression model for feature selection</span>
+            <span class="n">selectestimator</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;RF&#39;</span><span class="p">:</span>
+            <span class="c1"># Use random forest model for feature selection</span>
+            <span class="n">n_estimators</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">]</span>
+            <span class="n">selectestimator</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Model </span><span class="si">{model}</span><span class="s1"> is not known for SelectFromModel. Use Lasso, LR, or RF.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Prefit model</span>
+        <span class="n">selectestimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
         <span class="c1"># Use fit to select optimal features</span>
-        <span class="n">SelectModel</span> <span class="o">=</span> <span class="n">SelectFromModel</span><span class="p">(</span><span class="n">lassomodel</span><span class="p">,</span> <span class="n">prefit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">SelectModel</span> <span class="o">=</span> <span class="n">SelectFromModel</span><span class="p">(</span><span class="n">selectestimator</span><span class="p">,</span> <span class="n">prefit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-        <span class="n">X_train</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-        <span class="n">X_test</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-        <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
+
+        <span class="n">X_train_temp</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING]: No features are selected! Probably your data is too noisy or the selection too strict. Skipping SelectFromModel.&#39;</span><span class="p">)</span>
+            <span class="n">SelectModel</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X_train</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="n">X_test</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+            <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
 
     <span class="k">if</span> <span class="s1">&#39;SelectFromModel&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_estimator&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">]</span>
 
     <span class="c1"># Delete the object if we do not need to return it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
@@ -698,7 +750,7 @@
         <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ret</span>
 
@@ -719,7 +771,7 @@
                     <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WARNING]: skipping this setting due to PCA Error: </span><span class="si">{e}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+                    <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">ret</span>
 
@@ -739,7 +791,7 @@
                     <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WARNING]: skipping this setting due to PCA Error: </span><span class="si">{e}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+                    <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">ret</span>
 
@@ -798,6 +850,7 @@
 
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;StatisticalTestUse&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">]</span>
@@ -847,7 +900,7 @@
                     <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-                        <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+                        <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">return</span> <span class="n">ret</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -914,7 +967,7 @@
         <span class="n">estimator</span> <span class="o">=</span> <span class="n">OneVsRestClassifier</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitting ML.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Fitting ML method: </span><span class="si">{parameters[&#39;classifiers&#39;]}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Recombine feature values and label for train and test set</span>
     <span class="n">feature_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -938,7 +991,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WARNING]: skipping this setting due to LDA Error: </span><span class="si">{e}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+                <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">ret</span>
         <span class="k">else</span><span class="p">:</span>
@@ -948,16 +1001,17 @@
     <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
 
 <div class="viewcode-block" id="delete_nonestimator_parameters"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.fitandscore.delete_nonestimator_parameters">[docs]</a><span class="k">def</span> <span class="nf">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;Delete non-estimator parameters.</span>
+
 <span class="sd">    Delete all parameters in a parameter dictionary that are not used for the</span>
 <span class="sd">    actual estimator.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s1">&#39;Number&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Number&#39;</span><span class="p">]</span>
 
@@ -972,6 +1026,10 @@
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;ReliefDistanceP&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">]</span>
 
+    <span class="k">if</span> <span class="s1">&#39;OneHotEncoding&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding_feature_labels_tofit&#39;</span><span class="p">]</span>
+
     <span class="k">if</span> <span class="s1">&#39;Imputation&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;ImputationMethod&#39;</span><span class="p">]</span>
@@ -979,6 +1037,9 @@
 
     <span class="k">if</span> <span class="s1">&#39;SelectFromModel&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_estimator&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="s1">&#39;Featsel_Variance&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Featsel_Variance&#39;</span><span class="p">]</span>
@@ -1051,7 +1112,15 @@
                   <span class="s1">&#39;SGD_l1_ratio&#39;</span><span class="p">,</span>
                   <span class="s1">&#39;SGD_loss&#39;</span><span class="p">,</span>
                   <span class="s1">&#39;SGD_penalty&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;CNB_alpha&#39;</span><span class="p">]</span>
+                  <span class="s1">&#39;CNB_alpha&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;AdaBoost_learning_rate&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;AdaBoost_n_estimators&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_boosting_rounds&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_max_depth&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_learning_rate&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_gamma&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_min_child_weight&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">deletekeys</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">para</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>

@@ -70,7 +70,11 @@ def _error_bulldozer(func):
 
 @_for_all_methods(_error_bulldozer)
 class SimpleWORC():
-    """Facade around the main WORC object for simple interaction."""
+    """Facade around the main WORC object for simple interaction.
+
+    Please also see the `WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_.
+    """
+
     def __init__(self, name='WORC'):
         """Initialize SimpleWORC object.
 
@@ -78,6 +82,7 @@ class SimpleWORC():
         -----------
         name: string, default WORC
             String to identify name of experiments. Will be used in the temporary files and outputs.
+
         """
         # Set some config values
         self._worc = WORC(name)

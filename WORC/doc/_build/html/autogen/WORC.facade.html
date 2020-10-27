@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>facade Package &mdash; WORC 3.3.4 documentation</title>
+  <title>facade Package &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.4
+                3.3.5
               </div>
             
           
@@ -207,6 +207,13 @@
 <dt id="WORC.facade.basicworc.BasicWORC">
 <em class="property">class </em><code class="descclassname">WORC.facade.basicworc.</code><code class="descname">BasicWORC</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC" title="WORC.facade.simpleworc.SimpleWORC"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.facade.simpleworc.SimpleWORC</span></code></a></p>
+<p>Facade around the main WORC object for simple interaction.</p>
+<p>Based upon the SimpleWORC object, but with additional functionality:
+- Sources of WORC (e.g. images_train, segmentations_train, …)</p>
+<blockquote>
+<div><p>can be directly assessed.</p>
+</div></blockquote>
+<p>Please also see the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.</p>
 <dl class="method">
 <dt id="WORC.facade.basicworc.BasicWORC.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.__init__" title="Permalink to this definition">¶</a></dt>
@@ -241,9 +248,10 @@ made error are caught before running the experiment.</p>
 <em class="property">class </em><code class="descclassname">WORC.facade.simpleworc.</code><code class="descname">SimpleWORC</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Facade around the main WORC object for simple interaction.</p>
+<p>Please also see the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.</p>
 <dl class="attribute">
 <dt id="WORC.facade.simpleworc.SimpleWORC.__dict__">
-<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.facade.simpleworc', '__doc__': 'Facade around the main WORC object for simple interaction.', '__init__': &lt;function SimpleWORC.__init__&gt;, 'features_from_this_directory': &lt;function SimpleWORC.features_from_this_directory&gt;, 'images_from_this_directory': &lt;function SimpleWORC.images_from_this_directory&gt;, 'segmentations_from_this_directory': &lt;function SimpleWORC.segmentations_from_this_directory&gt;, 'labels_from_this_file': &lt;function SimpleWORC.labels_from_this_file&gt;, 'semantics_from_this_file': &lt;function SimpleWORC.semantics_from_this_file&gt;, 'predict_labels': &lt;function SimpleWORC.predict_labels&gt;, '_set_and_validate_estimators': &lt;function SimpleWORC._set_and_validate_estimators&gt;, 'count_num_subjects': &lt;function SimpleWORC.count_num_subjects&gt;, '_validate': &lt;function SimpleWORC._validate&gt;, 'execute': &lt;function SimpleWORC.execute&gt;, 'binary_classification': &lt;function SimpleWORC.binary_classification&gt;, 'regression': &lt;function SimpleWORC.regression&gt;, 'survival': &lt;function SimpleWORC.survival&gt;, 'add_config_overrides': &lt;function SimpleWORC.add_config_overrides&gt;, 'add_evaluation': &lt;function SimpleWORC.add_evaluation&gt;, 'set_tmpdir': &lt;function SimpleWORC.set_tmpdir&gt;, 'set_multicore_execution': &lt;function SimpleWORC.set_multicore_execution&gt;, 'features_from_radiomix_xlsx': &lt;function SimpleWORC.features_from_radiomix_xlsx&gt;, '__dict__': &lt;attribute '__dict__' of 'SimpleWORC' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'SimpleWORC' objects&gt;})</em><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__dict__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.facade.simpleworc', '__doc__': 'Facade around the main WORC object for simple interaction.\n\n    Please also see the `WORCTutorial Github &lt;https://github.com/MStarmans91/WORCTutorial/&gt;`_.\n    ', '__init__': &lt;function SimpleWORC.__init__&gt;, 'features_from_this_directory': &lt;function SimpleWORC.features_from_this_directory&gt;, 'images_from_this_directory': &lt;function SimpleWORC.images_from_this_directory&gt;, 'segmentations_from_this_directory': &lt;function SimpleWORC.segmentations_from_this_directory&gt;, 'labels_from_this_file': &lt;function SimpleWORC.labels_from_this_file&gt;, 'semantics_from_this_file': &lt;function SimpleWORC.semantics_from_this_file&gt;, 'predict_labels': &lt;function SimpleWORC.predict_labels&gt;, '_set_and_validate_estimators': &lt;function SimpleWORC._set_and_validate_estimators&gt;, 'count_num_subjects': &lt;function SimpleWORC.count_num_subjects&gt;, '_validate': &lt;function SimpleWORC._validate&gt;, 'execute': &lt;function SimpleWORC.execute&gt;, 'binary_classification': &lt;function SimpleWORC.binary_classification&gt;, 'regression': &lt;function SimpleWORC.regression&gt;, 'survival': &lt;function SimpleWORC.survival&gt;, 'add_config_overrides': &lt;function SimpleWORC.add_config_overrides&gt;, 'add_evaluation': &lt;function SimpleWORC.add_evaluation&gt;, 'set_tmpdir': &lt;function SimpleWORC.set_tmpdir&gt;, 'set_multicore_execution': &lt;function SimpleWORC.set_multicore_execution&gt;, 'features_from_radiomix_xlsx': &lt;function SimpleWORC.features_from_radiomix_xlsx&gt;, '__dict__': &lt;attribute '__dict__' of 'SimpleWORC' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'SimpleWORC' objects&gt;})</em><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__dict__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -352,7 +360,7 @@ features_from_this_directory will include all features.hdf5 files from all subfo
 </dd>
 <dt>feature_file_name: string, default features.hdf5</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
 </dd>
-<dt>glob: string, default <a href="#id2"><span class="problematic" id="id3">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+<dt>glob: string, default <a href="#id3"><span class="problematic" id="id4">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
 </dd>
 <dt>is_training: Boolean, default True</dt><dd><p>Identify whether these features should be used in the training or test dataset.</p>
 </dd>
@@ -373,7 +381,7 @@ images_from_this_directory will include all image.nii.gz files from all subfolde
 </dd>
 <dt>image_file_name: string, default image.nii.gz</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
 </dd>
-<dt>glob: string, default <a href="#id4"><span class="problematic" id="id5">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+<dt>glob: string, default <a href="#id5"><span class="problematic" id="id6">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
 </dd>
 <dt>is_training: Boolean, default True</dt><dd><p>Identify whether these images should be used in the training or test dataset.</p>
 </dd>
@@ -445,7 +453,7 @@ segmentations_from_this_directory will include all segmentation.nii.gz files fro
 </dd>
 <dt>segmentation_file_name: string, default segmentation.nii.gz</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
 </dd>
-<dt>glob: string, default <a href="#id6"><span class="problematic" id="id7">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+<dt>glob: string, default <a href="#id7"><span class="problematic" id="id8">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
 </dd>
 <dt>is_training: Boolean, default True</dt><dd><p>Identify whether these segmentations should be used in the training or test dataset.</p>
 </dd>

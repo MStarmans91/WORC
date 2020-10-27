@@ -105,6 +105,7 @@ class WORC(object):
             when using elastix, copy metadata from image to segmentation or not
 
     """
+
     def __init__(self, name='test'):
         """Initialize WORC object.
 
@@ -326,6 +327,11 @@ class WORC(object):
         config['ComBat']['excluded_features'] = 'sf_, of_, semf_, pf_'
         config['ComBat']['matlab'] = 'C:\\Program Files\\MATLAB\\R2015b\\bin\\matlab.exe'
 
+        # Feature OneHotEncoding
+        config['OneHotEncoding'] = dict()
+        config['OneHotEncoding']['Use'] = 'False'
+        config['OneHotEncoding']['feature_labels_tofit'] = ''
+
         # Feature imputation
         config['Imputation'] = dict()
         config['Imputation']['use'] = 'True'
@@ -345,15 +351,18 @@ class WORC(object):
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = '1.0'
         config['Featsel']['GroupwiseSearch'] = 'True'
-        config['Featsel']['SelectFromModel'] = '0.0'
-        config['Featsel']['UsePCA'] = '0.25'
+        config['Featsel']['SelectFromModel'] = '0.2'
+        config['Featsel']['SelectFromModel_estimator'] = 'Lasso'
+        config['Featsel']['SelectFromModel_lasso_alpha'] = '0.1, 1.4'
+        config['Featsel']['SelectFromModel_n_trees'] = '10, 90'
+        config['Featsel']['UsePCA'] = '0.2'
         config['Featsel']['PCAType'] = '95variance, 10, 50, 100'
-        config['Featsel']['StatisticalTestUse'] = '0.25'
+        config['Featsel']['StatisticalTestUse'] = '0.2'
         config['Featsel']['StatisticalTestMetric'] = 'MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '-3, 2.5'
-        config['Featsel']['ReliefUse'] = '0.25'
+        config['Featsel']['ReliefUse'] = '0.2'
         config['Featsel']['ReliefNN'] = '2, 4'
-        config['Featsel']['ReliefSampleSize'] = '0.75, 0.25'
+        config['Featsel']['ReliefSampleSize'] = '0.75, 0.2'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
         config['Featsel']['ReliefNumFeatures'] = '10, 50'
 
@@ -405,7 +414,15 @@ class WORC(object):
         config['Classification'] = dict()
         config['Classification']['fastr'] = 'True'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
-        config['Classification']['classifiers'] = 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'
+        config['Classification']['classifiers'] =\
+            'SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, ' +\
+            'RF, RF, RF, ' +\
+            'LR, LR, LR, ' +\
+            'LDA, LDA, LDA, ' +\
+            'QDA, QDA, QDA, ' +\
+            'GaussianNB, GaussianNB, GaussianNB, ' +\
+            'AdaBoostClassifier, ' +\
+            'XGBClassifier'
         config['Classification']['max_iter'] = '100000'
         config['Classification']['SVMKernel'] = 'poly, rbf, linear'
         config['Classification']['SVMC'] = '0, 6'
@@ -429,6 +446,17 @@ class WORC(object):
         config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
         config['Classification']['SGD_penalty'] = 'none, l2, l1'
         config['Classification']['CNB_alpha'] = '0, 1'
+        config['Classification']['AdaBoost_n_estimators'] = config['Classification']['RFn_estimators']
+        config['Classification']['AdaBoost_learning_rate'] = '0.01, 0.99'
+
+        # Based on https://towardsdatascience.com/doing-xgboost-hyper-parameter-tuning-the-smart-way-part-1-of-2-f6d255a45dde
+        # and https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/
+        config['Classification']['XGB_boosting_rounds'] = config['Classification']['RFn_estimators']
+        config['Classification']['XGB_max_depth'] = '3, 12'
+        config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
+        config['Classification']['XGB_gamma'] = '0.01, 0.99'
+        config['Classification']['XGB_min_child_weight'] = '1, 6'
+        config['Classification']['XGB_colsample_bytree'] = '0.3, 0.7'
 
         # CrossValidation
         config['CrossValidation'] = dict()
@@ -446,11 +474,12 @@ class WORC(object):
         config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
-        config['HyperOptimization']['memory'] = '2G'
+        config['HyperOptimization']['memory'] = '3G'
 
         # Ensemble options
         config['Ensemble'] = dict()
         config['Ensemble']['Use'] = '50'
+        config['Ensemble']['Metric'] = 'Default'
 
         # Evaluation options
         config['Evaluation'] = dict()

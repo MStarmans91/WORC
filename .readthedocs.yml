@@ -1,0 +1,12 @@
+# .readthedocs.yml
+
+version: 2
+
+sphinx:
+  configuration: WORC/doc/conf.py
+
+python:
+  version: 3.7
+  install:
+    - requirements: WORC/doc/doc_requirements.txt
+    - requirements: requirements.txt

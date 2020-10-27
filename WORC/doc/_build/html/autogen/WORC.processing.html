@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>processing Package &mdash; WORC 3.3.4 documentation</title>
+  <title>processing Package &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.4
+                3.3.5
               </div>
             
           
@@ -402,7 +402,8 @@ label_type (list): List of the names of the labels to load</p>
 <dl class="function">
 <dt id="WORC.processing.preprocessing.bias_correct_image">
 <code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">bias_correct_image</code><span class="sig-paren">(</span><em>img</em>, <em>usemask=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#bias_correct_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.bias_correct_image" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Apply N4 Bias Correction.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="WORC.processing.preprocessing.clip_image">
@@ -436,7 +437,7 @@ image: ITK Image</p>
 </dd>
 <dt>method: string, default z_score</dt><dd><p>Method to be used for normalization.</p>
 </dd>
-<dt>Normalize_ROI: string, default Full</dt><dd><p>ROI to use for normalization</p>
+<dt>Normalize_ROI: string, default Full</dt><dd><p>ROI to use for normalization, Can be Full or True</p>
 </dd>
 <dt>Dilate_ROI: string, default True</dt><dd><p>Whether to dilate the ROI or not</p>
 </dd>

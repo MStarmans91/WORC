@@ -1,0 +1,36 @@
+<tool id="PlotHyperparameters" name="PlotHyperparameters" version="1.0">
+    <description>A wrapper around WORC's Hyperparameter Plotting Function.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="PlotHyperparameters.py" />
+    </targets>
+    <description>
+       PlotHyperparameters.py prediction estimators label_type output_csv
+       output = output_png output_tex
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="prediction" name="Radiomics estimator object from WORC's Trainclassifier function" datatype="HDF5" prefix="--prediction" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="estimators" name="Number of estimators for which to evaluate hyperparameters" datatype="String" prefix="--estimators" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="label_type" name="Name of label predicted by the estimator to plot hyperparameters for." datatype="String" prefix="--label_type" cardinality="1" repeat_prefix="false" required="false" />
+     </inputs>
+    <outputs>
+      <output id="output_csv" name="Output CSV File." datatype="CSVFile" prefix="--output_csv" cardinality="1" nospace="False" order="0" required="false" />
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: to write
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

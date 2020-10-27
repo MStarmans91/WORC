@@ -251,8 +251,11 @@ def generate_config_options():
     config['Featsel']['Variance'] = 'Float'
     config['Featsel']['GroupwiseSearch'] = 'Boolean(s)'
     config['Featsel']['SelectFromModel'] = 'Float'
+    config['Featsel']['SelectFromModel_estimator'] = 'Lasso, LR, RF'
+    config['Featsel']['SelectFromModel_lasso_alpha'] = 'Two Floats: loc and scale'
+    config['Featsel']['SelectFromModel_n_trees'] = 'Two Integers: loc and scale'
     config['Featsel']['UsePCA'] = 'Float'
-    config['Featsel']['PCAType'] = 'Inteteger(s), 95variance'
+    config['Featsel']['PCAType'] = 'Integer(s), 95variance'
     config['Featsel']['StatisticalTestUse'] = 'Float'
     config['Featsel']['StatisticalTestMetric'] = 'ttest, Welch, Wilcoxon, MannWhitneyU'
     config['Featsel']['StatisticalTestThreshold'] = 'Two Integers: loc and scale'
@@ -291,6 +294,11 @@ def generate_config_options():
     config['SelectFeatGroup']['original_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['toolbox'] = 'All, or name of toolbox (PREDICT, PyRadiomics)'
 
+    # Feature OneHotEncoding
+    config['OneHotEncoding'] = dict()
+    config['OneHotEncoding']['Use'] = 'Boolean(s)'
+    config['OneHotEncoding']['feature_labels_tofit'] = 'List of strings'
+
     # Feature imputation
     config['Imputation'] = dict()
     config['Imputation']['use'] = 'Boolean(s)'
@@ -324,7 +332,7 @@ def generate_config_options():
     config['Classification']['RFmin_samples_split'] = 'Two Integers: loc and scale'
     config['Classification']['RFmax_depth'] = 'Two Integers: loc and scale'
     config['Classification']['LRpenalty'] = 'none, l2, l1'
-    config['Classification']['LRC'] = 'Two Integers: loc and scale'
+    config['Classification']['LRC'] = 'Two Floats: loc and scale'
     config['Classification']['LR_solver'] = 'Comma separated list of strings, for the options see https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html'
     config['Classification']['LR_l1_ratio'] = 'Float between 0.0 and 1.0.'
     config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
@@ -337,6 +345,14 @@ def generate_config_options():
     config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
     config['Classification']['SGD_penalty'] = 'none, l2, l1'
     config['Classification']['CNB_alpha'] = 'Two Integers: loc and scale'
+    config['Classification']['AdaBoost_n_estimators'] = 'Two Integers: loc and scale'
+    config['Classification']['AdaBoost_learning_rate'] = 'Two Floats: loc and scale'
+    config['Classification']['XGB_boosting_rounds'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_max_depth'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
+    config['Classification']['XGB_gamma'] = 'Two Floats: loc and scale'
+    config['Classification']['XGB_min_child_weight'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_colsample_bytree'] = 'Two Floats: loc and scale'
 
     # CrossValidation
     config['CrossValidation'] = dict()
@@ -364,11 +380,12 @@ def generate_config_options():
     # Feature scaling options
     config['FeatureScaling'] = dict()
     config['FeatureScaling']['skip_features'] = 'Comma separated list of strings'
-    config['FeatureScaling']['scaling_method'] = 'robust_z_score. z_score, robust, minmax, None'
+    config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, None'
 
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Integer'
+    config['Ensemble']['Metric'] = 'Default, generalization'
 
     # Evaluation options
     config['Evaluation'] = dict()
@@ -530,7 +547,10 @@ def generate_config_descriptions():
     config['Featsel'] = dict()
     config['Featsel']['Variance'] = 'Percentage of times features which have a variance < 0.01 are excluded. Based on ` sklearn"s VarianceThreshold <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/>`_.'
     config['Featsel']['GroupwiseSearch'] = 'Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.'
-    config['Featsel']['SelectFromModel'] = 'Percentage of times features are selected by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also `sklearn"s SelectFromModel <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/>`_.'
+    config['Featsel']['SelectFromModel'] = 'Percentage of times features are selected by first training a machine learning model which can rank the features with an ``importance''. See also `sklearn"s SelectFromModel <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/>`_.'
+    config['Featsel']['SelectFromModel_estimator'] = 'Machine learning model / estimator used: can be LASSO, LogisticRegression, or a Random Forest'
+    config['Featsel']['SelectFromModel_lasso_alpha'] = "When using LASSO, search space of weigth of L1 term, see also `sklearn <https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html/>`."
+    config['Featsel']['SelectFromModel_n_trees'] = 'When using a random forest, search space of number of trees used.'
     config['Featsel']['UsePCA'] = 'Percentage of times Principle Component Analysis (PCA) is used to select features.'
     config['Featsel']['PCAType'] = 'Method to select number of components using PCA: Either the number of components that explains 95% of the variance, or use a fixed number of components.95variance'
     config['Featsel']['StatisticalTestUse'] = 'Percentage of times a statistical test is used to select features.'
@@ -569,6 +589,11 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['wavelet_features'] = 'If True, use wavelet features in model.'
     config['SelectFeatGroup']['original_features'] = 'If True, use original features in model.'
     config['SelectFeatGroup']['toolbox'] = 'List of names of toolboxes to be used, or All'
+
+    # Feature OneHotEncoding
+    config['OneHotEncoding'] = dict()
+    config['OneHotEncoding']['Use'] = 'If True, use OneHotEncoding for specific features as determined by the field below.'
+    config['OneHotEncoding']['feature_labels_tofit'] = 'Labels of features for which to use OneHotEncoding. WORC will check whether any of the values specified in this field is a substring of a feature name. For example, if you give gclm, all features for which glcm is in the feature label will be one hot encoded.'
 
     # Feature imputation
     config['Imputation'] = dict()
@@ -610,9 +635,17 @@ def generate_config_descriptions():
     config['Classification']['ElasticNet_l1_ratio'] = 'Range of l1 ratio in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
     config['Classification']['SGD_alpha'] = 'Range of the SGD penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
     config['Classification']['SGD_l1_ratio'] = 'Range of l1 ratio in SGD. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
-    config['Classification']['SGD_loss'] = 'hinge, Loss function of SG'
+    config['Classification']['SGD_loss'] = 'Loss function of SGD.'
     config['Classification']['SGD_penalty'] = 'Penalty term in SGD.'
     config['Classification']['CNB_alpha'] = 'Regularization strenght in ComplementNB. We sample on a uniform scale: the parameters specify the range (loc, loc + scale)'
+    config['Classification']['AdaBoost_n_estimators'] = "Number of estimators used in AdaBoost. Default is equal to config['Classification']['RFn_estimators']."
+    config['Classification']['AdaBoost_learning_rate'] = 'Learning rate in AdaBoost.'
+    config['Classification']['XGB_boosting_rounds'] = "Number of estimators / boosting rounds used in XGB. Default is equal to config['Classification']['RFn_estimators']."
+    config['Classification']['XGB_max_depth'] = 'Maximum depth of XGB.'
+    config['Classification']['XGB_learning_rate'] = "Learning rate in AdaBoost. Default is equal to config['Classification']['AdaBoost_learning_rate']."
+    config['Classification']['XGB_gamma'] = 'Gamma of XGB.'
+    config['Classification']['XGB_min_child_weight'] = 'Minimum child weights in XGB.'
+    config['Classification']['XGB_colsample_bytree'] = 'Col sample by tree in XGB.'
 
     # CrossValidation
     config['CrossValidation'] = dict()
@@ -645,6 +678,7 @@ def generate_config_descriptions():
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.'
+    config['Ensemble']['Metric'] = 'Metric used to determine ranking of estimators in ensemble. When using default, the metric that is used in the hyperoptimization is used.'
 
     # Evaluation options
     config['Evaluation'] = dict()

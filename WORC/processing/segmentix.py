@@ -216,8 +216,19 @@ def segmentix(parameters, image=None, segmentation=None,
 
         if image.GetSpacing() == (1, 1, 1):
             print('Detected 1x1x1 spacing, overwriting with DICOM metadata.')
-            slice_thickness = metadata[0x18, 0x50].value
-            pixel_spacing = metadata[0x28, 0x30].value
+            if [0x18, 0x50] in list(metadata.keys()):
+                slice_thickness = metadata[0x18, 0x50].value
+            elif [0x18, 0x88] in list(metadata.keys()):
+                # Take spacing between slices
+                slice_thickness = metadata[0x18, 0x88].value
+            else:
+                slice_thickness = 1.0
+
+            if [0x28, 0x30] in list(metadata.keys()):
+                pixel_spacing = metadata[0x28, 0x30].value
+            else:
+                pixel_spacing = [1.0, 1.0]
+                
             spacing = (float(pixel_spacing[0]),
                        float(pixel_spacing[1]),
                        float(slice_thickness))

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>featureprocessing Package &mdash; WORC 3.3.4 documentation</title>
+  <title>featureprocessing Package &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.4
+                3.3.5
               </div>
             
           
@@ -119,6 +119,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.FeatureConverter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">FeatureConverter</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.ICCThreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ICCThreshold</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Imputer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Imputer</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.OneHotEncoderWrapper"><code class="xref py py-mod docutils literal notranslate"><span class="pre">OneHotEncoderWrapper</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Preprocessor"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Preprocessor</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Relief"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Relief</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.featureprocessing.Scalers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Scalers</span></code> Module</a></li>
@@ -463,6 +464,63 @@ is knn.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-WORC.featureprocessing.OneHotEncoderWrapper">
+<span id="onehotencoderwrapper-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">OneHotEncoderWrapper</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.OneHotEncoderWrapper" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper">
+<em class="property">class </em><code class="descclassname">WORC.featureprocessing.OneHotEncoderWrapper.</code><code class="descname">OneHotEncoderWrapper</code><span class="sig-paren">(</span><em>feature_labels_tofit</em>, <em>handle_unknown='ignore'</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/OneHotEncoderWrapper.html#OneHotEncoderWrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Module for OneHotEncoding features.</p>
+<dl class="attribute">
+<dt id="WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.featureprocessing.OneHotEncoderWrapper', '__doc__': 'Module for OneHotEncoding features.', '__init__': &lt;function OneHotEncoderWrapper.__init__&gt;, 'fit': &lt;function OneHotEncoderWrapper.fit&gt;, 'transform': &lt;function OneHotEncoderWrapper.transform&gt;, '__dict__': &lt;attribute '__dict__' of 'OneHotEncoderWrapper' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'OneHotEncoderWrapper' objects&gt;})</em><a class="headerlink" href="#WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>feature_labels_tofit</em>, <em>handle_unknown='ignore'</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/OneHotEncoderWrapper.html#OneHotEncoderWrapper.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init preprocessor of features.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.featureprocessing.OneHotEncoderWrapper'</em><a class="headerlink" href="#WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>feature_labels</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/OneHotEncoderWrapper.html#OneHotEncoderWrapper.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit OneHotEncoder for labels in feature_labels.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.transform">
+<code class="descname">transform</code><span class="sig-paren">(</span><em>inputarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/OneHotEncoderWrapper.html#OneHotEncoderWrapper.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.OneHotEncoderWrapper.OneHotEncoderWrapper.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform feature array.</p>
+<p>Transform the inputarray to select only the features based on the
+result from the fit function.</p>
+<dl class="simple">
+<dt>inputarray: numpy array, mandatory</dt><dd><p>Array containing the items to use selection on. The type of
+item in this list does not matter, e.g. floats, strings etc.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.featureprocessing.OneHotEncoderWrapper.test">
+<code class="descclassname">WORC.featureprocessing.OneHotEncoderWrapper.</code><code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/OneHotEncoderWrapper.html#test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.OneHotEncoderWrapper.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test OneHotEncoderWrapper object.</p>
+</dd></dl>
+
+</div>
 <div class="section" id="module-WORC.featureprocessing.Preprocessor">
 <span id="preprocessor-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Preprocessor</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.Preprocessor" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -470,16 +528,21 @@ is knn.</p>
 <em class="property">class </em><code class="descclassname">WORC.featureprocessing.Preprocessor.</code><code class="descname">Preprocessor</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Module for feature preprocessing.</p>
+<dl class="simple">
+<dt>Currently implemented:</dt><dd><ul class="simple">
+<li><p>Remove features with &gt; 80% NaNs</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="attribute">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.__dict__">
-<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.featureprocessing.Preprocessor', '__doc__': 'Module for feature preprocessing.', '__init__': &lt;function Preprocessor.__init__&gt;, 'fit': &lt;function Preprocessor.fit&gt;, 'transform': &lt;function Preprocessor.transform&gt;, '__dict__': &lt;attribute '__dict__' of 'Preprocessor' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Preprocessor' objects&gt;})</em><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__dict__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.featureprocessing.Preprocessor', '__doc__': 'Module for feature preprocessing.\n\n    Currently implemented:\n        - Remove features with &gt; 80% NaNs\n    ', '__init__': &lt;function Preprocessor.__init__&gt;, 'fit': &lt;function Preprocessor.fit&gt;, 'transform': &lt;function Preprocessor.transform&gt;, '__dict__': &lt;attribute '__dict__' of 'Preprocessor' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Preprocessor' objects&gt;})</em><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__dict__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preprocessing of features:
-- Remove features with &gt; 80% NaNs</p>
+<dd><p>Init preprocessor of features.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -496,13 +559,14 @@ is knn.</p>
 <dl class="method">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em>, <em>feature_labels=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Select columns with to many missing values (&gt;80%)</p>
+<dd><p>Select columns with to many missing values (&gt;80%).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WORC.featureprocessing.Preprocessor.Preprocessor.transform">
 <code class="descname">transform</code><span class="sig-paren">(</span><em>inputarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/Preprocessor.html#Preprocessor.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.Preprocessor.Preprocessor.transform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform the inputarray to select only the features based on the
+<dd><p>Transform feature array.</p>
+<p>Transform the inputarray to select only the features based on the
 result from the fit function.</p>
 <dl class="simple">
 <dt>inputarray: numpy array, mandatory</dt><dd><p>Array containing the items to use selection on. The type of
@@ -818,9 +882,8 @@ item in this list does not matter, e.g. floats, strings etc.</p>
 <span id="statisticaltestfeatures-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">StatisticalTestFeatures</span></code> Module<a class="headerlink" href="#module-WORC.featureprocessing.StatisticalTestFeatures" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.featureprocessing.StatisticalTestFeatures.StatisticalTestFeatures">
-<code class="descclassname">WORC.featureprocessing.StatisticalTestFeatures.</code><code class="descname">StatisticalTestFeatures</code><span class="sig-paren">(</span><em>features</em>, <em>patientinfo</em>, <em>config</em>, <em>output=None</em>, <em>verbose=True</em>, <em>label_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestFeatures.html#StatisticalTestFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestFeatures.StatisticalTestFeatures" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform several statistical tests on features, such as a student t-test.
-Useage is similar to trainclassifier.</p>
+<code class="descclassname">WORC.featureprocessing.StatisticalTestFeatures.</code><code class="descname">StatisticalTestFeatures</code><span class="sig-paren">(</span><em>features</em>, <em>patientinfo</em>, <em>config</em>, <em>output_csv=None</em>, <em>output_png=None</em>, <em>output_tex=None</em>, <em>plot_test='MWU'</em>, <em>Bonferonni=True</em>, <em>fontsize='small'</em>, <em>yspacing=1</em>, <em>threshold=0.05</em>, <em>verbose=True</em>, <em>label_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/featureprocessing/StatisticalTestFeatures.html#StatisticalTestFeatures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.featureprocessing.StatisticalTestFeatures.StatisticalTestFeatures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform several statistical tests on features, such as a student t-test.</p>
 <dl class="simple">
 <dt>features: string, mandatory</dt><dd><p>contains the paths to all .hdf5 feature files used.
 modalityname1=file1,file2,file3,… modalityname2=file1,…

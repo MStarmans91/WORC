@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>plotting Package &mdash; WORC 3.3.4 documentation</title>
+  <title>plotting Package &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.4
+                3.3.5
               </div>
             
           
@@ -124,6 +124,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_estimator_performance"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_estimator_performance</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_hyperparameters"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_hyperparameters</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_images"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_pvalues_features"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_pvalues_features</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plotminmaxresponse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.scatterplot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scatterplot</span></code> Module</a></li>
@@ -407,7 +408,7 @@ Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_estimator_performance.plot_estimator_performance">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">plot_estimator_performance</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_data</em>, <em>label_type</em>, <em>crossval_type=None</em>, <em>alpha=0.95</em>, <em>ensemble=None</em>, <em>verbose=True</em>, <em>ensemble_scoring=None</em>, <em>output=None</em>, <em>modus=None</em>, <em>thresholds=None</em>, <em>survival=False</em>, <em>generalization=False</em>, <em>shuffle_estimators=False</em>, <em>bootstrap=None</em>, <em>bootstrap_N=None</em>, <em>overfit_scaler=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#plot_estimator_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.plot_estimator_performance" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">plot_estimator_performance</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_data</em>, <em>label_type</em>, <em>crossval_type=None</em>, <em>alpha=0.95</em>, <em>ensemble=None</em>, <em>verbose=True</em>, <em>ensemble_scoring=None</em>, <em>output=None</em>, <em>modus=None</em>, <em>thresholds=None</em>, <em>survival=False</em>, <em>shuffle_estimators=False</em>, <em>bootstrap=None</em>, <em>bootstrap_N=None</em>, <em>overfit_scaler=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#plot_estimator_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.plot_estimator_performance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the output of a single estimator, e.g. a SVM.</p>
 <dl class="simple">
 <dt>prediction: pandas dataframe or string, mandatory</dt><dd><p>output of trainclassifier function, either a pandas dataframe
@@ -512,6 +513,14 @@ value in all workflows.</p>
 <code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">slicer</code><span class="sig-paren">(</span><em>image, mask=None, output_name=None, output_name_zoom=None, thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False, expand=False, boundary=False, square=False, flip=True, alpha=0.4, index=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#slicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.slicer" title="Permalink to this definition">¶</a></dt>
 <dd><p>image and mask should both be arrays</p>
 </dd></dl>
+
+</div>
+<div class="section" id="module-WORC.plotting.plot_pvalues_features">
+<span id="plot-pvalues-features-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_pvalues_features</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_pvalues_features" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.plotting.plot_pvalues_features.manhattan_importance">
+<code class="descclassname">WORC.plotting.plot_pvalues_features.</code><code class="descname">manhattan_importance</code><span class="sig-paren">(</span><em>values</em>, <em>labels</em>, <em>feature_labels</em>, <em>output_png=None</em>, <em>output_tex=None</em>, <em>mapping=None</em>, <em>threshold_annotated=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_pvalues_features.html#manhattan_importance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_pvalues_features.manhattan_importance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 <div class="section" id="module-WORC.plotting.plot_ranked_scores">

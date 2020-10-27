@@ -91,6 +91,15 @@ plotting Package
     :show-inheritance:
     :special-members:
 
+:mod:`plot_pvalues_features` Module
+-----------------------------------
+
+.. automodule:: WORC.plotting.plot_pvalues_features
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`plot_ranked_scores` Module
 --------------------------------
 

@@ -6,6 +6,29 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.3.5 - 2020-10-21
+------------------
+
+Fixed
+~~~~~
+- Some function cleaning: removing redundant parts / variables.
+
+Changed
+~~~~~~~
+- Part of developper documentation for addinf methods to hyperoptimization.
+- Default config: SelectFromModel incorporated, so now also use
+  that in feature selection step.
+
+Added
+~~~~~~~
+- OneHotEncoder to workflows / HyperOptimization.
+- Documentation updates.
+- SelectFromModel expanded and properly integrated in workflow.
+- AdaBoost as classifier and regressor.
+- XGDBoost as classifier and regressor.
+- Plotting of hyperparameters of best workflows in Evaluate network.
+- Plotting of p-values of features.
+
 3.3.4 - 2020-10-06
 ------------------
 

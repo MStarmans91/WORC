@@ -175,6 +175,10 @@ class ConfigBuilder():
                     'vessel_features': 'False',
                     'phase_features': 'False'
                     },
+                'OneHotEncoding': {
+                    'Use': 'True',
+                    'feature_labels_tofit': 'NGTDM'
+                    },
                 'Resampling': {
                     'Use': '0.5',
                     },

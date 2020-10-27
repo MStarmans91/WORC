@@ -19,48 +19,49 @@ import numpy as np
 
 
 class Preprocessor(object):
-        """Module for feature preprocessing."""
+    """Module for feature preprocessing.
 
-        def __init__(self, verbose=True):
-            '''
-            Preprocessing of features:
-            - Remove features with > 80% NaNs
+    Currently implemented:
+        - Remove features with > 80% NaNs
+    """
 
-            '''
+    def __init__(self, verbose=True):
+        """Init preprocessor of features."""
+        # initiate varables
+        self.selectcolumns = list()
+        self.verbose = verbose
 
-            # initiate varables
-            self.selectcolumns = list()
-            self.verbose = verbose
-
-        def fit(self, X, y=None, feature_labels=None):
-            ''' Select columns with to many missing values (>80%)'''
-            self.selectcolumns = list()
-            nrows = float(X.shape[0])
-            for column in range(0, X.shape[1]):
-                nans = np.count_nonzero(np.isnan(X[:, column]))
-                missing_percentage = float(nans) / nrows
-                if missing_percentage > 0.80:
-                    if feature_labels is not None:
-                        name = feature_labels[column]
-                    else:
-                        name = column
-
-                    if self.verbose:
-                        print(f'\t [WORC WARNING] More than 80% ({missing_percentage * 100.0}%) is missing for feature # {name}: removing.')
-
-                    continue
+    def fit(self, X, y=None, feature_labels=None):
+        """Select columns with to many missing values (>80%)."""
+        self.selectcolumns = list()
+        nrows = float(X.shape[0])
+        for column in range(0, X.shape[1]):
+            nans = np.count_nonzero(np.isnan(X[:, column]))
+            missing_percentage = float(nans) / nrows
+            if missing_percentage > 0.80:
+                if feature_labels is not None:
+                    name = feature_labels[column]
                 else:
-                    self.selectcolumns.append(column)
+                    name = column
 
-        def transform(self, inputarray):
-            '''
-            Transform the inputarray to select only the features based on the
-            result from the fit function.
+                if self.verbose:
+                    print(f'\t [WORC WARNING] More than 80% ({missing_percentage * 100.0}%) is missing for feature # {name}: removing.')
 
-            Parameters
-            ----------
-            inputarray: numpy array, mandatory
-                    Array containing the items to use selection on. The type of
-                    item in this list does not matter, e.g. floats, strings etc.
-            '''
-            return np.asarray([np.asarray(x)[self.selectcolumns].tolist() for x in inputarray])
+                continue
+            else:
+                self.selectcolumns.append(column)
+
+    def transform(self, inputarray):
+        """Transform feature array.
+
+        Transform the inputarray to select only the features based on the
+        result from the fit function.
+
+        Parameters
+        ----------
+        inputarray: numpy array, mandatory
+                Array containing the items to use selection on. The type of
+                item in this list does not matter, e.g. floats, strings etc.
+
+        """
+        return np.asarray([np.asarray(x)[self.selectcolumns].tolist() for x in inputarray])

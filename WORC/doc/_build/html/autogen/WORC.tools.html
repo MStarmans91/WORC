@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>tools Package &mdash; WORC 3.3.4 documentation</title>
+  <title>tools Package &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.3.4
+                3.3.5
               </div>
             
           
@@ -121,6 +121,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">tools Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Elastix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Elastix</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Evaluate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Evaluate</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Inference"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Inference</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Slicer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Slicer</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Transformix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Transformix</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.createfixedsplits"><code class="xref py py-mod docutils literal notranslate"><span class="pre">createfixedsplits</span></code> Module</a></li>
@@ -319,6 +320,49 @@ to the existing network.</p>
 <dt id="WORC.tools.Evaluate.Evaluate.set">
 <code class="descname">set</code><span class="sig-paren">(</span><em>estimator=None</em>, <em>pinfo=None</em>, <em>images=None</em>, <em>segmentations=None</em>, <em>config=None</em>, <em>features=None</em>, <em>sink_data={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the sources and sinks based on the provided attributes.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.tools.Inference">
+<span id="inference-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Inference</span></code> Module<a class="headerlink" href="#module-WORC.tools.Inference" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.tools.Inference.Inference">
+<em class="property">class </em><code class="descclassname">WORC.tools.Inference.</code><code class="descname">Inference</code><span class="sig-paren">(</span><em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Inference.html#Inference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Inference.Inference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Build a network that can use an existing model for inference.</p>
+<dl class="attribute">
+<dt id="WORC.tools.Inference.Inference.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.tools.Inference', '__doc__': 'Build a network that can use an existing model for inference.', '__init__': &lt;function Inference.__init__&gt;, 'create_network': &lt;function Inference.create_network&gt;, '__dict__': &lt;attribute '__dict__' of 'Inference' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Inference' objects&gt;})</em><a class="headerlink" href="#WORC.tools.Inference.Inference.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Inference.Inference.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Inference.html#Inference.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Inference.Inference.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize object.</p>
+<dl class="simple">
+<dt>network: fastr network, default None</dt><dd><p>If you input a network, the evaluate network is added
+to the existing network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Inference.Inference.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.tools.Inference'</em><a class="headerlink" href="#WORC.tools.Inference.Inference.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.Inference.Inference.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.tools.Inference.Inference.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.Inference.Inference.create_network">
+<code class="descname">create_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Inference.html#Inference.create_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Inference.Inference.create_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add evaluate components to network.</p>
 </dd></dl>
 
 </dd></dl>

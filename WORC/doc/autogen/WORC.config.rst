@@ -15,6 +15,7 @@ HyperOptimization :ref:`HyperOptimization <config-HyperOptimization>`
 ImageFeatures     :ref:`ImageFeatures <config-ImageFeatures>`        
 Imputation        :ref:`Imputation <config-Imputation>`              
 Labels            :ref:`Labels <config-Labels>`                      
+OneHotEncoding    :ref:`OneHotEncoding <config-OneHotEncoding>`      
 Preprocessing     :ref:`Preprocessing <config-Preprocessing>`        
 PyRadiomics       :ref:`PyRadiomics <config-PyRadiomics>`            
 Resampling        :ref:`Resampling <config-Resampling>`              

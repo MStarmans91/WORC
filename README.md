@@ -1,4 +1,4 @@
-# WORC v3.3.4
+# WORC v3.3.5
 ## Workflow for Optimal Radiomics Classification
 
 ## Information
@@ -67,11 +67,13 @@ NOTE: The version of PyRadiomics which WORC currently uses requires numpy to be 
 
 ## 3rd-party packages used in WORC:
 
- - [fastr (Workflow design and building)](http://fastr.readthedocs.io)
- - xnat (Collecting data from XNAT)
  - SimpleITK (Image loading and preprocessing)
  - [Pyradiomics](https://github.com/radiomics/pyradiomics)
  - [PREDICT](https://github.com/Svdvoort/PREDICTFastr)
+ - scikit-learn
+ - imbalanced-learn
+ - xgboost
+ - [fastr (Workflow design and building)](http://fastr.readthedocs.io)
  - [ComBat](https://github.com/Jfortin1/ComBatHarmonization) (optional)
 
 See for other python packages the [requirements file](requirements.txt).

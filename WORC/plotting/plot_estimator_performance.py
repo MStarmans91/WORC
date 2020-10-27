@@ -15,20 +15,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-import numpy as np
-import sys
-from WORC.plotting.compute_CI import compute_confidence
-from WORC.plotting.compute_CI import compute_confidence_bootstrap
-import pandas as pd
 import os
-import lifelines as ll
-import WORC.processing.label_processing as lp
-from WORC.classification import metrics
-import WORC.addexceptions as ae
+import sys
+import numpy as np
+import pandas as pd
+from random import shuffle
 from sklearn.base import is_regressor
 from collections import OrderedDict
 from sklearn.utils import resample
+import WORC.addexceptions as ae
+from WORC.classification import metrics
+import WORC.processing.label_processing as lp
+from WORC.plotting.compute_CI import compute_confidence
+from WORC.plotting.compute_CI import compute_confidence_bootstrap
 
 
 def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_scoring):
@@ -149,11 +148,10 @@ def plot_estimator_performance(prediction, label_data, label_type,
                                verbose=True, ensemble_scoring=None,
                                output=None, modus=None,
                                thresholds=None, survival=False,
-                               generalization=False, shuffle_estimators=False,
+                               shuffle_estimators=False,
                                bootstrap=None, bootstrap_N=None,
                                overfit_scaler=None):
-    '''
-    Plot the output of a single estimator, e.g. a SVM.
+    """Plot the output of a single estimator, e.g. a SVM.
 
     Parameters
     ----------
@@ -218,8 +216,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
     pids: list
         Contains the patient ID/name for each object.
-    '''
 
+    """
     # Load the prediction object if it's a hdf5 file
     if type(prediction) is not pd.core.frame.DataFrame:
         if os.path.isfile(prediction):
@@ -249,7 +247,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
     if type(label_type) is list:
         # FIXME: Support for multiple label types not supported yet.
         print('[WORC Warning] Support for multiple label types not supported yet. Taking first label for plot_estimator_performance.')
-        original_label_type = label_type[:]
         label_type = keys[0]
 
     # Extract the estimators, features and labels
@@ -275,6 +272,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
     if overfit_scaler is None:
         overfit_scaler = config['Evaluation']['OverfitScaler']
+
+    ensemble_metric = config['Ensemble']['Metric']
 
     # Create lists for performance measures
     if not regression:
@@ -308,9 +307,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
         PearsonP = list()
         SpearmanC = list()
         SpearmanP = list()
-        cindex = list()
-        coxcoef = list()
-        coxp = list()
 
     patient_classification_list = dict()
     percentages_selected = list()
@@ -355,13 +351,19 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
         # When bootstrapping, there is only a single train/test set.
         if bootstrap:
-            X_test_temp = prediction[label_type]['X_test'][0]
-            X_train_temp = prediction[label_type]['X_train'][0]
-            Y_train_temp = prediction[label_type]['Y_train'][0]
-            Y_test_temp = prediction[label_type]['Y_test'][0]
-            test_patient_IDs = prediction[label_type]['patient_ID_test'][0]
-            train_patient_IDs = prediction[label_type]['patient_ID_train'][0]
-            fitted_model = prediction[label_type]['classifiers'][0]
+            if i == 0:
+                X_test_temp_or = prediction[label_type]['X_test'][0]
+                X_train_temp = prediction[label_type]['X_train'][0]
+                Y_train_temp = prediction[label_type]['Y_train'][0]
+                Y_test_temp_or = prediction[label_type]['Y_test'][0]
+                test_patient_IDs_or = prediction[label_type]['patient_ID_test'][0]
+                train_patient_IDs = prediction[label_type]['patient_ID_train'][0]
+                fitted_model = prediction[label_type]['classifiers'][0]
+
+                # Objects required for first iteration
+                test_patient_IDs = test_patient_IDs_or[:]
+                X_test_temp = X_test_temp_or[:]
+                Y_test_temp = Y_test_temp_or[:]
         else:
             X_test_temp = prediction[label_type]['X_test'][i]
             X_train_temp = prediction[label_type]['X_train'][i]
@@ -370,10 +372,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
             test_patient_IDs = prediction[label_type]['patient_ID_test'][i]
             train_patient_IDs = prediction[label_type]['patient_ID_train'][i]
             fitted_model = prediction[label_type]['classifiers'][i]
-
-        # If bootstrap, generate a bootstrapped sample
-        if bootstrap:
-            X_test_temp, Y_test_temp, test_patient_IDs = resample(X_test_temp, Y_test_temp, test_patient_IDs)
 
         # Check which patients are in the test set.
         if output == 'stats' and crossval_type != 'LOO':
@@ -402,26 +400,23 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
         # If required, shuffle estimators for "Random" ensembling
         if shuffle_estimators:
-            # Compute generalization score
+            # Randomly shuffle the estimators
             print('Shuffling estimators for random ensembling.')
             shuffle(fitted_model.cv_results_['params'])
-
-        # If required, rank according to generalization score instead of mean_validation_score
-        if generalization:
-            # Compute generalization score
-            print('Using generalization score for estimator ranking.')
-            difference_score = abs(fitted_model.cv_results_['mean_train_score'] - fitted_model.cv_results_['mean_test_score'])
-            generalization_score = fitted_model.cv_results_['mean_test_score'] - difference_score
-
-            # Rerank based on score
-            indices = np.argsort(generalization_score)
-            fitted_model.cv_results_['params'] = [fitted_model.cv_results_['params'][i] for i in indices[::-1]]
 
         # If requested, first let the SearchCV object create an ensemble
         if bootstrap and i > 0:
             # For bootstrapping, only do this at the first iteration
             pass
         elif not fitted_model.ensemble:
+            # If required, rank according to generalization score instead of mean_validation_score
+            if ensemble_metric == 'generalization':
+                print('Using generalization score for estimator ranking.')
+                indices = fitted_model.cv_results_['rank_generalization_score']
+                fitted_model.cv_results_['params'] = [fitted_model.cv_results_['params'][i] for i in indices[::-1]]
+            elif ensemble_metric != 'Default':
+                raise ae.WORCKeyError(f'Metric {ensemble_metric} is not known: use Default or generalization.')
+
             # NOTE: Added for backwards compatability
             if not hasattr(fitted_model, 'cv_iter'):
                 cv_iter = list(fitted_model.cv.split(X_train_temp, Y_train_temp))
@@ -434,52 +429,64 @@ def plot_estimator_performance(prediction, label_data, label_type,
                                          scoring=ensemble_scoring,
                                          overfit_scaler=overfit_scaler)
 
-        # Create prediction
-        y_prediction = fitted_model.predict(X_test_temp)
-
-        if regression:
-            y_score = y_prediction
-        elif modus == 'multilabel':
-            y_score = fitted_model.predict_proba(X_test_temp)
+        # If bootstrap, generate a bootstrapped sample
+        if bootstrap and i > 0:
+            y_truth, y_prediction, y_score, test_patient_IDs =\
+                resample(y_truth_all, y_prediction_all,
+                         y_score_all, test_patient_IDs_or)
         else:
-            y_score = fitted_model.predict_proba(X_test_temp)[:, 1]
+            # Create prediction
+            y_prediction = fitted_model.predict(X_test_temp)
 
-        # Create a new binary score based on the thresholds if given
-        if thresholds is not None:
-            if len(thresholds) == 1:
-                y_prediction = y_score >= thresholds[0]
-            elif len(thresholds) == 2:
-                # X_train_temp = [x[0] for x in X_train_temp]
-
-                y_score_temp = list()
-                y_prediction_temp = list()
-                y_truth_temp = list()
-                test_patient_IDs_temp = list()
-
-                thresholds_val = fit_thresholds(thresholds, fitted_model, X_train_temp, Y_train_temp, ensemble,
-                                                ensemble_scoring)
-                for pnum in range(len(y_score)):
-                    if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
-                        y_score_temp.append(y_score[pnum])
-                        y_prediction_temp.append(y_prediction[pnum])
-                        y_truth_temp.append(y_truth[pnum])
-                        test_patient_IDs_temp.append(test_patient_IDs[pnum])
-
-                perc = float(len(y_prediction_temp))/float(len(y_prediction))
-                percentages_selected.append(perc)
-                print(f"Selected {len(y_prediction_temp)} from {len(y_prediction)} ({perc}%) patients using two thresholds.")
-                y_score = y_score_temp
-                y_prediction = y_prediction_temp
-                y_truth = y_truth_temp
-                test_patient_IDs = test_patient_IDs_temp
+            if regression:
+                y_score = y_prediction
+            elif modus == 'multilabel':
+                y_score = fitted_model.predict_proba(X_test_temp)
             else:
-                raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
+                y_score = fitted_model.predict_proba(X_test_temp)[:, 1]
 
-        # If all scores are NaN, the classifier cannot do probabilities, thus
-        # use hard predictions
-        if np.sum(np.isnan(y_score)) == len(y_prediction):
-            print('[WORC Warning] All scores NaN, replacing with prediction.')
-            y_score = y_prediction
+            # Create a new binary score based on the thresholds if given
+            if thresholds is not None:
+                if len(thresholds) == 1:
+                    y_prediction = y_score >= thresholds[0]
+                elif len(thresholds) == 2:
+                    # X_train_temp = [x[0] for x in X_train_temp]
+
+                    y_score_temp = list()
+                    y_prediction_temp = list()
+                    y_truth_temp = list()
+                    test_patient_IDs_temp = list()
+
+                    thresholds_val = fit_thresholds(thresholds, fitted_model, X_train_temp, Y_train_temp, ensemble,
+                                                    ensemble_scoring)
+                    for pnum in range(len(y_score)):
+                        if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
+                            y_score_temp.append(y_score[pnum])
+                            y_prediction_temp.append(y_prediction[pnum])
+                            y_truth_temp.append(y_truth[pnum])
+                            test_patient_IDs_temp.append(test_patient_IDs[pnum])
+
+                    perc = float(len(y_prediction_temp))/float(len(y_prediction))
+                    percentages_selected.append(perc)
+                    print(f"Selected {len(y_prediction_temp)} from {len(y_prediction)} ({perc}%) patients using two thresholds.")
+                    y_score = y_score_temp
+                    y_prediction = y_prediction_temp
+                    y_truth = y_truth_temp
+                    test_patient_IDs = test_patient_IDs_temp
+                else:
+                    raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
+
+            # If all scores are NaN, the classifier cannot do probabilities, thus
+            # use hard predictions
+            if np.sum(np.isnan(y_score)) == len(y_prediction):
+                print('[WORC Warning] All scores NaN, replacing with prediction.')
+                y_score = y_prediction
+
+        if bootstrap and i == 0:
+            # Save objects for re-use
+            y_truth_all = y_truth[:]
+            y_prediction_all = y_prediction[:]
+            y_score_all = y_score[:]
 
         print("Truth: " + str(y_truth))
         print("Prediction: " + str(y_prediction))
