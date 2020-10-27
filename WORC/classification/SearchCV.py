@@ -647,8 +647,20 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             train_scores = _aggregate_score_dicts(train_score_dicts)
 
         # We take only one result per split, default by sklearn
+        pipelines_per_split = len(parameters_all) / n_splits
+        new_candidate_params_all = list(parameters_all[:pipelines_per_split])
+        new_n_candidates = len(new_candidate_params_all)
+
+        # OLD APPROACH
         candidate_params_all = list(parameters_all[::n_splits])
         n_candidates = len(candidate_params_all)
+
+        # DEBUG PRINTING
+        with open('/scratch/mdeen/testfiles/splitting.txt', 'a') as splitfile:
+            splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
+            splitfile.write('Pipelines per split: ' + str(pipelines_per_split) + '\n')
+            splitfile.write('Old candidate_params_all: ' + str(candidate_params_all) + '\n')
+            splitfile.write('New candidate_params_all: ' + str(new_candidate_params_all) + '\n')
 
         # Computed the (weighted) mean and std for test scores alone
         # NOTE test_sample counts (weights) remain the same for all candidates
