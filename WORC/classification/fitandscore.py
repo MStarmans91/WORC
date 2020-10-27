@@ -198,6 +198,7 @@ def fit_and_score(X, y, scoring,
         fitandscoreprint.write('test: ' + str(test) + '\n')
         fitandscoreprint.write('parameters: ' + str(parameters) + '\n')
     '''
+    splitnr = train[0]
 
     # We copy the parameter object so we can alter it and keep the original
     if verbose:
@@ -885,7 +886,7 @@ def fit_and_score(X, y, scoring,
         ret[2] = runtime
 
     with open('/scratch/mdeen/testfiles/fitandscore.txt', 'a') as fitandscoreprint:
-        fitandscoreprint.write('score (' + str(parameters['CNB_alpha']) + ') on split ' + str(train[0]) + ': ' + str(ret[1]) + '\n')
+        fitandscoreprint.write('score (' + str(parameters['CNB_alpha']) + ') on split ' + str(splitnr) + ': ' + str(ret[1]) + '\n')
 
     if return_all:
         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
