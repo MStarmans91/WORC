@@ -5,13 +5,8 @@ version: 2
 sphinx:
   configuration: WORC/doc/conf.py
 
-build:
-  image: latest
-
 python:
   version: 3.7
   install:
-    - method: pip
-      path: .
     - requirements: requirements.txt
     - requirements: WORC/doc/requirements.txt
