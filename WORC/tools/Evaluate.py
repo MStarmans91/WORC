@@ -449,7 +449,25 @@ class Evaluate(object):
         self.node_Ranked_Posteriors.inputs['estimator'] = prediction
         self.node_Ranked_Posteriors.inputs['pinfo'] = pinfo
 
-        if self.parent.sources_images_train:
+        if self.parent.sources_images_test:
+            images = self.parent.sources_images_test[label].output
+            segmentations =\
+                self.parent.sources_segmentations_test[label].output
+            self.link_images_perc =\
+                self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
+            self.link_images_perc.collapse = 'test'
+            self.link_segmentations_perc =\
+                self.network.create_link(segmentations, self.node_Ranked_Percentages.inputs['segmentations'])
+            self.link_segmentations_perc.collapse = 'test'
+
+            self.link_images_post =\
+                self.network.create_link(images, self.node_Ranked_Posteriors.inputs['images'])
+            self.link_images_post.collapse = 'test'
+            self.link_segmentations_post =\
+                self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
+            self.link_segmentations_post.collapse = 'test'
+
+        elif self.parent.sources_images_train:
             self.link_images_perc =\
                 self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
             self.link_images_perc.collapse = 'train'
