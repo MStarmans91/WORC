@@ -280,7 +280,7 @@ else:
 # experiment.add_config_overrides({'Resampling': {'Use': '0.0'}})
 
 # Use a fixed seed for the train/test split
-experiment.add_config_overrides({'CrossValidation': {'fixed_seed': 'True'}})
+#experiment.add_config_overrides({'CrossValidation': {'fixed_seed': 'True'}})
 
 # Set the ensemble method to Caruana
 #experiment.add_config_overrides({'Ensemble': {'Method': 'top_N'}})
