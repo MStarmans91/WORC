@@ -649,20 +649,20 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             train_scores = _aggregate_score_dicts(train_score_dicts)
 
         # We take only one result per split, default by sklearn
-        pipelines_per_split = int(len(parameters_all) / n_splits)
-        candidate_params_all = list(parameters_all[:pipelines_per_split])
-        n_candidates = len(candidate_params_all)
+        #pipelines_per_split = int(len(parameters_all) / n_splits)
+        #candidate_params_all = list(parameters_all[:pipelines_per_split])
+        #n_candidates = len(candidate_params_all)
 
         # OLD APPROACH
-        old_candidate_params_all = list(parameters_all[::n_splits])
-        old_n_candidates = len(old_candidate_params_all)
+        candidate_params_all = list(parameters_all[::n_splits])
+        n_candidates = len(candidate_params_all)
 
         # DEBUG PRINTING
-        with open('/scratch/mdeen/testfiles/splitting.txt', 'a') as splitfile:
-            splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
-            splitfile.write('Pipelines per split: ' + str(pipelines_per_split) + '\n')
-            splitfile.write('Old candidate_params_all: ' + str(old_candidate_params_all) + '\n')
-            splitfile.write('New candidate_params_all: ' + str(candidate_params_all) + '\n')
+        #with open('/scratch/mdeen/testfiles/splitting.txt', 'a') as splitfile:
+        #    splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
+        #    splitfile.write('Pipelines per split: ' + str(pipelines_per_split) + '\n')
+        #    splitfile.write('Old candidate_params_all: ' + str(old_candidate_params_all) + '\n')
+        #    splitfile.write('New candidate_params_all: ' + str(candidate_params_all) + '\n')
 
         # Computed the (weighted) mean and std for test scores alone
         # NOTE test_sample counts (weights) remain the same for all candidates
@@ -674,12 +674,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         def _store(key_name, array, weights=None, splits=False, rank=False):
             """A small helper to store the scores/times to the cv_results_"""
-            array = np.transpose(np.array(array, dtype=np.float64).reshape(n_splits,
-                                                              n_candidates))
+            array = np.transpose(np.array(array, dtype=np.float64).reshape(n_candidates,
+                                                              n_splits))
 
-            with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
-                testwrite.write('array: ' + str(array) + '\n')
-                testwrite.write('key_name: ' + str(key_name) + '\n')
+            #with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
+            #    testwrite.write('array: ' + str(array) + '\n')
+            #    testwrite.write('key_name: ' + str(key_name) + '\n')
             if splits:
                 for split_i in range(n_splits):
                     results["split%d_%s"
