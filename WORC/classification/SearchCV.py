@@ -643,8 +643,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # test_score_dicts and train_score dicts are lists of dictionaries and
         # we make them into dict of lists
         test_scores = _aggregate_score_dicts(test_score_dicts)
-        with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
-            testwrite.write('test_scores: ' + str(test_scores) + '\n')
         if self.return_train_score:
             train_scores = _aggregate_score_dicts(train_score_dicts)
 
@@ -676,7 +674,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             """A small helper to store the scores/times to the cv_results_"""
             #array = np.transpose(np.array(array, dtype=np.float64).reshape(n_splits,
             #                                                  n_candidates))
-            array = np.array(array, dtype=np.float64).reshape(n_splits, n_candidates)
+            array = np.array(array, dtype=np.float64).reshape(n_candidates, n_splits)
 
             #with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
             #    testwrite.write('array: ' + str(array) + '\n')
