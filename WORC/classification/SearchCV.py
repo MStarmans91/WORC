@@ -658,8 +658,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         #n_candidates = len(candidate_params_all)
 
         # DEBUG PRINTING
-        #with open('/scratch/mdeen/testfiles/splitting.txt', 'a') as splitfile:
-        #    splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
+        with open('/scratch/mdeen/testfiles/parameters_all.txt', 'a') as splitfile:
+            splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
+            splitfile.write('Candidate params: ' + str(candidate_params_all) + '\n')
         #    splitfile.write('Pipelines per split: ' + str(pipelines_per_split) + '\n')
         #    splitfile.write('Old candidate_params_all: ' + str(old_candidate_params_all) + '\n')
         #    splitfile.write('New candidate_params_all: ' + str(candidate_params_all) + '\n')
