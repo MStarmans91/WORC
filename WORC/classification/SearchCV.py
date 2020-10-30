@@ -679,9 +679,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             #                                                  n_candidates))
             array = np.array(array, dtype=np.float64).reshape(n_candidates, n_splits)
 
-            #with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
-            #    testwrite.write('array: ' + str(array) + '\n')
-            #    testwrite.write('key_name: ' + str(key_name) + '\n')
+            with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
+                testwrite.write('key_name: ' + str(key_name) + '\n')
+                testwrite.write('array: ' + str(array) + '\n')
+
             if splits:
                 for split_i in range(n_splits):
                     results["split%d_%s"
