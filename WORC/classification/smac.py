@@ -262,7 +262,7 @@ def build_smac_config(parameters):
     # 2 hyperparameters:
     #   1) Metric
     #   2) Threshold
-    statistical_test = CategoricalHyperparameter('StatisticalTestUse', choices=['False', 'True'])
+    statistical_test = CategoricalHyperparameter('StatisticalTestUse', choices=['False'])
     cs.add_hyperparameter(statistical_test)
 
     statistical_test_metric = CategoricalHyperparameter('StatisticalTestMetric',
@@ -288,7 +288,7 @@ def build_smac_config(parameters):
     #   3) n_neighbors
     #   4) k_neighbors
     #   5) threshold cleaning
-    resampling = CategoricalHyperparameter('Resampling_Use', choices=['True', 'False'])
+    resampling = CategoricalHyperparameter('Resampling_Use', choices=['False'])
     cs.add_hyperparameter(resampling)
 
     resampling_method = CategoricalHyperparameter('Resampling_Method',
