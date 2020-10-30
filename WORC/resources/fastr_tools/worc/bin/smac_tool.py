@@ -230,8 +230,8 @@ def convert_cfg(cfg):
     if parameters['Imputation'] == 'False':
         parameters.pop('Imputation')
     # Delete four more flags from the config if they are false
-    if parameters['StatisticalTestUse'] == 'False':
-        parameters.pop('StatisticalTestUse')
+    #if parameters['StatisticalTestUse'] == 'False':
+    #    parameters.pop('StatisticalTestUse')
     #if parameters['SampleProcessing_SMOTE'] == 'False':
     #    parameters.pop('SampleProcessing_SMOTE')
     #if parameters['SampleProcessing_Oversampling'] == 'False':
