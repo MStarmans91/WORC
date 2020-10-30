@@ -643,26 +643,24 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # test_score_dicts and train_score dicts are lists of dictionaries and
         # we make them into dict of lists
         test_scores = _aggregate_score_dicts(test_score_dicts)
-        with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
-                testwrite.write('testscores coming into process_fit: ' + str(test_scores) + '\n')
+        #with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
+        #    testwrite.write('testscores coming into process_fit: ' + str(test_scores) + '\n')
         if self.return_train_score:
             train_scores = _aggregate_score_dicts(train_score_dicts)
 
         # We take only one result per split, default by sklearn
-        # NEW APPROACH --> use this for random search
         pipelines_per_split = int(len(parameters_all) / n_splits)
-        candidate_params_all = list(parameters_all[:pipelines_per_split])
-        n_candidates = len(candidate_params_all)
-
-        # OLD APPROACH --> use this for SMAC
+        # Change the list of parameters based on the shape of the input
         if use_smac:
             candidate_params_all = list(parameters_all[::n_splits])
-            n_candidates = len(candidate_params_all)
+        else:
+            candidate_params_all = list(parameters_all[:pipelines_per_split])
+        n_candidates = len(candidate_params_all)
 
         # DEBUG PRINTING
-        with open('/scratch/mdeen/testfiles/parameters_all.txt', 'a') as splitfile:
-            splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
-            splitfile.write('Candidate params: ' + str(candidate_params_all) + '\n')
+        #with open('/scratch/mdeen/testfiles/parameters_all.txt', 'a') as splitfile:
+        #    splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
+        #    splitfile.write('Candidate params: ' + str(candidate_params_all) + '\n')
         #    splitfile.write('Pipelines per split: ' + str(pipelines_per_split) + '\n')
         #    splitfile.write('Old candidate_params_all: ' + str(old_candidate_params_all) + '\n')
         #    splitfile.write('New candidate_params_all: ' + str(candidate_params_all) + '\n')
@@ -677,15 +675,16 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         def _store(key_name, array, weights=None, splits=False, rank=False):
             """A small helper to store the scores/times to the cv_results_"""
+            # Change processing based on the shape of the input
             if use_smac:
                 array = np.array(array, dtype=np.float64).reshape(n_candidates, n_splits)
             else:
                 array = np.transpose(np.array(array, dtype=np.float64).reshape(n_splits,
                                                                                n_candidates))
 
-            with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
-                testwrite.write('key_name: ' + str(key_name) + '\n')
-                testwrite.write('array: ' + str(array) + '\n')
+            #with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
+            #    testwrite.write('key_name: ' + str(key_name) + '\n')
+            #    testwrite.write('array: ' + str(array) + '\n')
 
             if splits:
                 for split_i in range(n_splits):
