@@ -682,7 +682,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             else:
                 array = np.transpose(np.array(array, dtype=np.float64).reshape(n_splits,
                                                                                n_candidates))
-            
+
             with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
                 testwrite.write('key_name: ' + str(key_name) + '\n')
                 testwrite.write('array: ' + str(array) + '\n')
@@ -1116,7 +1116,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             best_performance = 0
             new_performance = 0.001
             iteration = 0
-            ensemble = [0]
+            if n_classifiers == 1:
+                ensemble = [0]
+            else:
+                ensemble = list()
             y_score = [None]*n_iter
             best_index = 0
             single_estimator_performance = new_performance
