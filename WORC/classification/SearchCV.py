@@ -1173,6 +1173,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             y_valid_score_new = Y_valid_score[n_crossval][sortedindices[iteration], :]
                         else:
                             # Stack scores of added model on top of previous scores and average
+                            print('vstack: ' + str(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :]))) + '\n')
                             y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :])), axis=0)
 
                         perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
