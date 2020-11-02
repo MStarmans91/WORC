@@ -700,6 +700,7 @@ def fit_and_score(X, y, scoring,
                 else:
                     ret[2] = runtime
                 if return_all:
+                    StatisticalSel = None
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], \
                            scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
