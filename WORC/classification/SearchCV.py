@@ -1112,6 +1112,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 for num in range(n_classifiers):
                     Y_valid_score[iter][num] = all_predictions[num][iter]
 
+            print('Y_valid_score: ' + str(Y_valid_score) + '\n')
+
             '''
             for it, (train, valid) in enumerate(self.cv_iter):
                 if verbose:
@@ -1210,9 +1212,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
             if initialize:
                 # Rank the models based on scoring on the validation set
-                performances = np.mean(performances, axis=0)
+                #performances = np.mean(performances, axis=0)
                 sortedindices = np.argsort(performances)[::-1]
-                print(performances)
+                print('performances: ' + str(performances))
                 #    sortingtest.write('nr 1 parameters: ' + str(parameters_all[0]))
                 performances_n_class = list()
 
