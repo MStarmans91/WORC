@@ -1035,9 +1035,83 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Create the training and validation set scores
             if verbose:
                 print('Precomputing scores on training and validation set.')
-            Y_valid_score = list()
             Y_valid_truth = list()
-            performances = np.zeros((n_iter, n_classifiers))
+            performances = list()
+            predictions = list()
+            ensemble_configurations = list()
+            for num, p_all in enumerate(parameters_all):
+                performances_iter = list()
+                predictions_iter = list() # Later append this with lists of predictions
+
+                for it, (train, valid) in enumerate(self.cv_iter):
+                    # Start with storing the ground truth
+                    if num == 0:
+                        Y_valid_truth.append(Y_train[valid])
+                        prediction_length = len(Y_train[valid])
+
+                    # Fit the preprocessors of the pipeline
+                    out = fit_and_score(X_train, Y_train, scoring,
+                                        train, valid, p_all,
+                                        return_all=True)
+                    (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
+                     Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
+                    base_estimator.best_groupsel = GroupSel
+                    base_estimator.best_scaler = scalers
+                    base_estimator.best_varsel = VarSel
+                    base_estimator.best_modelsel = SelectModel
+                    base_estimator.best_preprocessor = None
+                    base_estimator.best_imputer = Imputers
+                    base_estimator.best_pca = PCAs
+                    base_estimator.best_featlab = feature_labels
+                    base_estimator.best_statisticalsel = StatisticalSel
+                    base_estimator.best_reliefsel = ReliefSel
+                    base_estimator.best_Sampler = Sampler
+
+                    # Use the fitted preprocessors to preprocess the features
+                    X_train_values = np.asarray([x[0] for x in X_train])
+                    processed_X, processed_y = base_estimator.preprocess(X_train_values[train],
+                                                                         Y_train[train],
+                                                                         training=True)
+                    # Check if there are features left
+                    (patients, features_left) = np.shape(processed_X)
+                    if features_left == 0:
+                        # No features are left; do not consider this pipeline for the ensemble
+                        break
+                    else:
+                        # Construct and fit the classifier
+                        best_estimator = cc.construct_classifier(p_all)
+                        best_estimator.fit(processed_X, processed_y)
+                        base_estimator.best_estimator_ = best_estimator
+                        predictions = base_estimator.predict(X_train_values[valid])
+
+                        # Store the predictions on this split
+                        predictions_iter.append(predictions)
+
+                        # Compute and store the performance on this split
+                        performances_iter.append(compute_performance(scoring,
+                                                                     Y_train[valid],
+                                                                     predictions))
+
+                        # At the end of the last iteration, store the results of this pipeline
+                        if it == (n_iter - 1):
+                            # Add the pipeline to the list
+                            ensemble_configurations.append(p_all)
+                            # Store the predictions
+                            predictions.append(predictions_iter)
+                            # Store the performance
+                            performances.append(np.mean(performances_iter))
+
+            # Update the parameters
+            parameters_all = ensemble_configurations
+            n_classifiers = len(ensemble_configurations)
+            print('len of n_classifiers: ' + str(n_classifiers) + '\n')
+            # Construct the array of final predictions
+            Y_valid_score = np.zeros((n_iter, n_classifiers, prediction_length))
+            for iter in range(n_iter):
+                for num in range(n_classifiers):
+                    Y_valid_score[iter][num] = predictions[num][iter]
+
+            '''
             for it, (train, valid) in enumerate(self.cv_iter):
                 if verbose:
                     print(f' - iteration {it + 1} / {n_iter}.')
@@ -1114,7 +1188,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print('Computed performance: ' + str(performances[it, num]) + '\n')
 
                 Y_valid_score.append(Y_valid_score_it)
-
+            '''
             # Sorted Ensemble Initialization -------------------------------------
             # Go on adding to the ensemble untill we find the optimal performance
             # Initialize variables
