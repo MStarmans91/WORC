@@ -1051,9 +1051,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     all_indices = np.arange(0, len(train))
 
                     out = fit_and_score(X_train, Y_train, scoring,
-                                        train, valid, p_all)
+                                        train, valid, p_all,
+                                        return_all=True)
                     ret_score = out[0][1]['score']
-                    (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers, \
+                    (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
                      Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
                     base_estimator.best_groupsel = GroupSel
                     base_estimator.best_scaler = scalers
@@ -1068,8 +1069,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     base_estimator.best_Sampler = Sampler
 
                     # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(training_set, training_labels,
-                                                   p_all, all_indices, all_indices)
+                    #base_estimator.refit_and_score(training_set, training_labels,
+                    #                               p_all, all_indices, all_indices)
 
                     #base_estimator.refit_and_score(X_train, Y_train, p_all,
                     #                               train, valid)
