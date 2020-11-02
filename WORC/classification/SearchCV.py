@@ -1092,6 +1092,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         performances_iter.append(compute_performance(scoring,
                                                                      Y_train[valid],
                                                                      predictions))
+                        print('ret: ' + str(out[0][1]['score']) + '\n')
+                        print('perf: ' + str(compute_performance(scoring, Y_train[valid], predictions)) + '\n')
 
                         # At the end of the last iteration, store the results of this pipeline
                         if it == (n_iter - 1):
