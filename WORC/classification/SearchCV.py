@@ -1137,9 +1137,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 # Rank the models based on scoring on the validation set
                 performances = np.mean(performances, axis=0)
                 sortedindices = np.argsort(performances)[::-1]
-                with open('/scratch/mdeen/testfiles/sortedindices.txt', 'a') as sortingtest:
-                    sortingtest.write('performances: ' + str(performances))
-                    sortingtest.write('sortedindices: ' + str(sortedindices))
+                print(performances)
                 #    sortingtest.write('nr 1 parameters: ' + str(parameters_all[0]))
                 performances_n_class = list()
 
