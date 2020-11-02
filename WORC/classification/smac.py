@@ -257,12 +257,12 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(pca_n_components)
     cs.add_condition(InCondition(child=pca_n_components, parent=pca_type,
                                  values=['n_components']))
-    '''
+
     # Statistical test
     # 2 hyperparameters:
     #   1) Metric
     #   2) Threshold
-    statistical_test = CategoricalHyperparameter('StatisticalTestUse', choices=['False', 'True'])
+    statistical_test = CategoricalHyperparameter('StatisticalTestUse', choices=['True'])
     cs.add_hyperparameter(statistical_test)
 
     statistical_test_metric = CategoricalHyperparameter('StatisticalTestMetric',
@@ -288,7 +288,7 @@ def build_smac_config(parameters):
     #   3) n_neighbors
     #   4) k_neighbors
     #   5) threshold cleaning
-    resampling = CategoricalHyperparameter('Resampling_Use', choices=['False', 'True'])
+    resampling = CategoricalHyperparameter('Resampling_Use', choices=['True'])
     cs.add_hyperparameter(resampling)
 
     resampling_method = CategoricalHyperparameter('Resampling_Method',
@@ -332,7 +332,7 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=resampling_n_cores, parent=resampling,
                                  values=['True']))
 
-    '''
+
     # Groupwise feature selection
     groupwise_search = CategoricalHyperparameter('SelectGroups', choices=parameters['Featsel']['GroupwiseSearch'])
     cs.add_hyperparameter(groupwise_search)
