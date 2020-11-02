@@ -1085,7 +1085,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         predictions = base_estimator.predict(X_train_values[valid])
 
                         # Store the predictions on this split
-                        predictions_iter.append(predictions)
+                        predictions_iter.append([predictions])
+                        print('predictions_iter: ' + str(predictions_iter) + '\n')
 
                         # Compute and store the performance on this split
                         performances_iter.append(compute_performance(scoring,
