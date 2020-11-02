@@ -1068,8 +1068,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     base_estimator.best_Sampler = Sampler
 
                     # Refit a SearchCV object with the provided parameters
-                    #base_estimator.refit_and_score(training_set, training_labels,
-                    #                               p_all, all_indices, all_indices)
+                    base_estimator.refit_and_score(training_set, training_labels,
+                                                   p_all, all_indices, all_indices)
 
                     #base_estimator.refit_and_score(X_train, Y_train, p_all,
                     #                               train, valid)
