@@ -1037,7 +1037,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 print('Precomputing scores on training and validation set.')
             Y_valid_truth = list()
             performances = list()
-            predictions = list()
+            all_predictions = list()
             ensemble_configurations = list()
             for num, p_all in enumerate(parameters_all):
                 performances_iter = list()
@@ -1085,7 +1085,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         predictions = base_estimator.predict(X_train_values[valid])
 
                         # Store the predictions on this split
-                        predictions_iter.append([predictions])
+                        predictions_iter.append(predictions)
                         print('predictions_iter: ' + str(predictions_iter) + '\n')
 
                         # Compute and store the performance on this split
@@ -1098,7 +1098,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             # Add the pipeline to the list
                             ensemble_configurations.append(p_all)
                             # Store the predictions
-                            predictions.append(predictions_iter)
+                            all_predictions.append(predictions_iter)
                             # Store the performance
                             performances.append(np.mean(performances_iter))
 
@@ -1110,7 +1110,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             Y_valid_score = np.zeros((n_iter, n_classifiers, prediction_length))
             for iter in range(n_iter):
                 for num in range(n_classifiers):
-                    Y_valid_score[iter][num] = predictions[num][iter]
+                    Y_valid_score[iter][num] = all_predictions[num][iter]
 
             '''
             for it, (train, valid) in enumerate(self.cv_iter):
