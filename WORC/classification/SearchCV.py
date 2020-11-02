@@ -975,7 +975,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Define a function for scoring the performance of a classifier
         def compute_performance(scoring, Y_valid_truth, Y_valid_score):
-            if scoring == 'f1_weighted' or scoring == 'f1':
+            if Y_valid_score is None:
+                return 0
+            elif scoring == 'f1_weighted' or scoring == 'f1':
                 # Convert score to binaries first
                 for num in range(0, len(Y_valid_score)):
                     if Y_valid_score[num] >= 0.5:
@@ -1080,10 +1082,17 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     best_estimator = cc.construct_classifier(p_all)
 
                     X_train_values = np.asarray([x[0] for x in X_train])
-                    processed_X, processed_y = base_estimator.preprocess(X_train_values[train], Y_train[train], training=True)
-                    best_estimator.fit(processed_X, processed_y)
-                    base_estimator.best_estimator_ = best_estimator
-                    predictions = base_estimator.predict(X_train_values[valid])
+                    processed_X, processed_y = base_estimator.preprocess(X_train_values[train],
+                                                                         Y_train[train],
+                                                                         training=True)
+                    # Check if there are features left
+                    (patients, features_left) = np.shape(processed_X)
+                    if features_left == 0:
+                        predictions = None
+                    else:
+                        best_estimator.fit(processed_X, processed_y)
+                        base_estimator.best_estimator_ = best_estimator
+                        predictions = base_estimator.predict(X_train_values[valid])
 
                     #processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
                     #new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
