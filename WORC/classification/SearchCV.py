@@ -1027,11 +1027,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 ensemble = range(0, size)
 
         elif method == 'FitNumber':
+            '''
             # Use optimum number of models
 
             # In order to speed up the process, we precompute all scores of the possible
             # classifiers in all cross validation estimatons
-
+            
             # Create the training and validation set scores
             if verbose:
                 print('Precomputing scores on training and validation set.')
@@ -1117,6 +1118,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             print('Y_valid_score: ' + str(Y_valid_score) + '\n')
 
             '''
+            if verbose:
+                print('Precomputing scores on training and validation set.')
+            Y_valid_score = list()
+            Y_valid_truth = list()
+            performances = np.zeros((n_iter, n_classifiers))
             for it, (train, valid) in enumerate(self.cv_iter):
                 if verbose:
                     print(f' - iteration {it + 1} / {n_iter}.')
@@ -1193,7 +1199,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print('Computed performance: ' + str(performances[it, num]) + '\n')
 
                 Y_valid_score.append(Y_valid_score_it)
-            '''
+
             # Sorted Ensemble Initialization -------------------------------------
             # Go on adding to the ensemble untill we find the optimal performance
             # Initialize variables
@@ -1214,7 +1220,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
             if initialize:
                 # Rank the models based on scoring on the validation set
-                #performances = np.mean(performances, axis=0)
+                performances = np.mean(performances, axis=0)
                 sortedindices = np.argsort(performances)[::-1]
                 print('performances: ' + str(performances))
                 #    sortingtest.write('nr 1 parameters: ' + str(parameters_all[0]))
