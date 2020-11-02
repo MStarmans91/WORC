@@ -1155,7 +1155,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # N_models += 1
                         for num in range(0, n_iter):
                             y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
-                            print('y_score[num]: (is this None or not): ' + str(y_score[num]) + '\n')
 
                     elif iteration == 1:
                         # Create y_score object for second iteration
@@ -1177,6 +1176,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :])), axis=0)
 
                         perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
+                        print('perf (' + str(dummy) + ', ' + str(n_crossval) + '): ' + str(perf) + '\n')
                         performances_temp[n_crossval] = perf
 
                     # Check which ensemble should be in the ensemble to maximally improve
