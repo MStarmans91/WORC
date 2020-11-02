@@ -280,7 +280,7 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=statistical_test_threshold, parent=statistical_test,
                                  values=['True']))
 
-
+    '''
     # Resampling
     # 5 hyperparameters:
     #   1) Method
@@ -331,7 +331,7 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(resampling_n_cores)
     cs.add_condition(InCondition(child=resampling_n_cores, parent=resampling,
                                  values=['True']))
-
+    '''
 
     # Groupwise feature selection
     groupwise_search = CategoricalHyperparameter('SelectGroups', choices=parameters['Featsel']['GroupwiseSearch'])
