@@ -1112,6 +1112,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             for iter in range(n_iter):
                 for num in range(n_classifiers):
                     Y_valid_score[iter][num] = all_predictions[num][iter]
+                    if self.cv_results_['mean_test_score'][num] != performances[num]:
+                        print('Inconsistency! (' + str(self.cv_results_['mean_test_score'][num]) +
+                              ', ' + str(performances[num]) + ') with settings: '
+                              + str(parameters_all[num]) + '\n')
 
             print('Y_valid_score: ' + str(Y_valid_score) + '\n')
 
