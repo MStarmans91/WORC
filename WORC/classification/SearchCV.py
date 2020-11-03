@@ -1003,6 +1003,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         parameters_all = self.cv_results_['params']
         print('Best score average: ' + str(self.cv_results_['mean_test_score'][0]) + '\n')
         print('All cv_results: ' + str(self.cv_results_) + '\n')
+        with open('/scratch/mdeen/testfiles/verification.txt', 'a') as verificationfile:
+            verificationfile.write('cv_res: ' + str(self.cv_results_['mean_test_score']) + '\n')
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
@@ -1125,7 +1127,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     #performances = np.mean(performances, axis=0)
                     sortedindices = np.argsort(performances)[::-1]
                     print('performances: ' + str(performances))
-                    #    sortingtest.write('nr 1 parameters: ' + str(parameters_all[0]))
+                    with open('/scratch/mdeen/testfiles/verification.txt', 'a') as verificationfile:
+                        verificationfile.write('perfs: ' + str(performances) + '\n')
                     performances_n_class = list()
 
                     if verbose:
