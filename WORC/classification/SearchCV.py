@@ -1321,11 +1321,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     ensemble = ensemble[0:optimal_N_models]
                     best_performance = optimal_ensemble_performance
 
-                    with open('/scratch/mdeen/testfiles/caruana_check.txt', 'a') as caruana_debug:
-                        caruana_debug.write('Base ensemble size: ' + str(nr_of_base_classifiers) + '\n')
-                        caruana_debug.write('Optimal N models: ' + str(optimal_N_models) + '\n')
-                        caruana_debug.write('Final ensemble: ' + str(ensemble) + '\n')
-
                     # Print the performance gain
                     print(f"Ensembling best {scoring}: {best_performance}.")
                     print(f"Single estimator best {scoring}: {single_estimator_performance}.")
