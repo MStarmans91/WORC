@@ -1186,7 +1186,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print(f"Single estimator best {scoring}: {single_estimator_performance}.")
                     print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
 
-                if method == 'ForwardSelection':
+                elif method == 'ForwardSelection':
                     # Use the method from Caruana
                     if verbose:
                         print('Creating ensemble with Caruana method.')
@@ -1253,7 +1253,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print(f"Single estimator best {scoring}: {single_estimator_performance}.")
                     print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
 
-                if method == 'Caruana':
+                elif method == 'Caruana':
                     # Greedy selection  -----------------------------------------------
                     # Initialize variables
                     best_performance -= 1e-10
