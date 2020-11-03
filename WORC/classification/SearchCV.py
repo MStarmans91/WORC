@@ -1023,15 +1023,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 ensemble = [0]
             else:
                 ensemble = range(0, size)
-
-        elif method == 'FitNumber':
-
-            # Use optimum number of models
-
-            # In order to speed up the process, we precompute all scores of the possible
-            # classifiers in all cross validation estimatons
-            
-            # Create the training and validation set scores
+        else:
+            # Refit the models and compute the predictions on the validation sets
             if verbose:
                 print('Precomputing scores on training and validation set.')
             Y_valid_truth = list()
@@ -1085,14 +1078,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                         # Store the predictions on this split
                         predictions_iter.append(predictions)
-                        print('predictions_iter: ' + str(predictions_iter) + '\n')
 
                         # Compute and store the performance on this split
                         performances_iter.append(compute_performance(scoring,
                                                                      Y_train[valid],
                                                                      predictions))
-                        print('ret: ' + str(out[0][1]['score']) + '\n')
-                        print('perf: ' + str(compute_performance(scoring, Y_train[valid], predictions)) + '\n')
 
                         # At the end of the last iteration, store the results of this pipeline
                         if it == (n_iter - 1):
@@ -1106,601 +1096,379 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Update the parameters
             parameters_all = ensemble_configurations
             n_classifiers = len(ensemble_configurations)
-            print('len of n_classifiers: ' + str(n_classifiers) + '\n')
             # Construct the array of final predictions
             Y_valid_score = np.zeros((n_iter, n_classifiers, prediction_length))
-            nr = str(np.random.randint(1000))
             for iter in range(n_iter):
                 for num in range(n_classifiers):
                     Y_valid_score[iter][num] = all_predictions[num][iter]
-                    if self.cv_results_['mean_test_score'][num] != performances[num]:
-                        fn = '/scratch/mdeen/testfiles/' + nr + '.txt'
-                        with open(fn, 'a') as fh:
-                            fh.write('Inconsistency! (' + str(self.cv_results_['mean_test_score'][num]) +
-                                     ', ' + str(performances[num]) + ') with settings: '
-                                     + str(parameters_all[num]) + '\n')
 
-            print('Y_valid_score: ' + str(Y_valid_score) + '\n')
+            if method == 'FitNumber' or method == 'ForwardSelection':
+                # Sorted Ensemble Initialization -------------------------------------
+                # Go on adding to the ensemble untill we find the optimal performance
 
-            '''
-            if verbose:
-                print('Precomputing scores on training and validation set.')
-            Y_valid_score = list()
-            Y_valid_truth = list()
-            performances = np.zeros((n_iter, n_classifiers))
-            for it, (train, valid) in enumerate(self.cv_iter):
+                # Note: doing this in a greedy way doesnt work. We compute the
+                # performances for the ensembles of lengt [1, n_classifiers] and
+                # select the optimum
+                best_performance = 0
+                new_performance = 0.001
+                iteration = 0
+                if n_classifiers == 1:
+                    ensemble = [0]
+                else:
+                    ensemble = list()
+                y_score = [None]*n_iter
+                best_index = 0
+                single_estimator_performance = new_performance
+
+                if initialize:
+                    # Rank the models based on scoring on the validation set
+                    #performances = np.mean(performances, axis=0)
+                    sortedindices = np.argsort(performances)[::-1]
+                    print('performances: ' + str(performances))
+                    #    sortingtest.write('nr 1 parameters: ' + str(parameters_all[0]))
+                    performances_n_class = list()
+
+                    if verbose:
+                        print("\n")
+                        print('Sorted Ensemble Initialization.')
+                    # while new_performance > best_performance:
+                    for dummy in range(0, n_classifiers):
+                        # Score is better, so expand ensemble and replace new best score
+                        best_performance = new_performance
+
+                        if iteration > 1:
+                            # Stack scores: not needed for first iteration
+                            ensemble.append(best_index)
+                            # N_models += 1
+                            for num in range(0, n_iter):
+                                y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
+
+                        elif iteration == 1:
+                            # Create y_score object for second iteration
+                            single_estimator_performance = new_performance
+                            ensemble.append(best_index)
+                            # N_models += 1
+                            for num in range(0, n_iter):
+                                y_score[num] = Y_valid_score[num][ensemble[-1], :]
+
+                        # Perform n-fold cross validation to estimate performance of next best classifier
+                        performances_temp = np.zeros((n_iter))
+                        for n_crossval in range(0, n_iter):
+                            # For each estimator, add the score to the ensemble and new ensemble performance
+                            if iteration == 0:
+                                # No y_score yet, so we need to build it instead of stacking
+                                y_valid_score_new = Y_valid_score[n_crossval][sortedindices[iteration], :]
+                            else:
+                                # Stack scores of added model on top of previous scores and average
+                                print('vstack: ' + str(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :]))) + '\n')
+                                y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :])), axis=0)
+
+                            perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
+                            print('perf (' + str(dummy) + ', ' + str(n_crossval) + '): ' + str(perf) + '\n')
+                            performances_temp[n_crossval] = perf
+
+                        # Check which ensemble should be in the ensemble to maximally improve
+                        new_performance = np.mean(performances_temp)
+                        performances_n_class.append(new_performance)
+                        best_index = sortedindices[iteration]
+                        iteration += 1
+
+                    # Select N_models for initialization
+                    new_performance = max(performances_n_class)
+                    print('new_performance: ' + str(new_performance) + '\n')
+                    N_models = performances_n_class.index(new_performance) + 1  # +1 due to python indexing
+                    print('N_models: ' + str(N_models) + '\n')
+                    ensemble = ensemble[0:N_models]
+                    best_performance = new_performance
+
+                if method == 'FitNumber':
+                    # Print the performance gain
+                    print(f"Ensembling best {scoring}: {best_performance}.")
+                    print(f"Single estimator best {scoring}: {single_estimator_performance}.")
+                    print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
+
+                if method == 'ForwardSelection':
+                    # Use the method from Caruana
+                    if verbose:
+                        print('Creating ensemble with Caruana method.')
+
+                    # Greedy selection  -----------------------------------------------
+                    # Initialize variables
+                    best_performance -= 1e-10
+                    iteration = 0
+
+                    # Go on adding to the ensemble untill we find the optimal performance
+                    if verbose:
+                        print("\n")
+                        print('Greedy selection.')
+                    while new_performance > best_performance:
+                        # Score is better, so expand ensemble and replace new best score
+                        if verbose:
+                            print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
+                        best_performance = new_performance
+
+                        if iteration > 1:
+                            # Stack scores: not needed for first iteration
+                            ensemble.append(best_index)
+                            for num in range(0, n_iter):
+                                y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
+
+                        elif iteration == 1:
+                            if not initialize:
+                                # Create y_score object for second iteration
+                                single_estimator_performance = new_performance
+                                ensemble.append(best_index)
+                                for num in range(0, n_iter):
+                                    y_score[num] = Y_valid_score[num][ensemble[-1], :]
+                            else:
+                                # Stack scores: not needed when ensemble initialization is already used
+                                ensemble.append(best_index)
+                                for num in range(0, n_iter):
+                                    y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
+
+                        # Perform n-fold cross validation to estimate performance of each possible addition to ensemble
+                        performances_temp = np.zeros((n_iter, n_classifiers))
+                        for n_crossval in range(0, n_iter):
+                            # For each estimator, add the score to the ensemble and new ensemble performance
+                            for n_estimator in range(0, n_classifiers):
+                                if iteration == 0:
+                                    # No y_score yet, so we need to build it instead of stacking
+                                    y_valid_score_new = Y_valid_score[n_crossval][n_estimator, :]
+                                else:
+                                    # Stack scores of added model on top of previous scores and average
+                                    y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][n_estimator, :])), axis=0)
+
+                                perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
+                                performances_temp[n_crossval, n_estimator] = perf
+
+                        # Average performances over crossval
+                        performances_temp = list(np.mean(performances_temp, axis=0))
+
+                        # Check which ensemble should be in the ensemble to maximally improve
+                        new_performance = max(performances_temp)
+                        best_index = performances_temp.index(new_performance)
+                        iteration += 1
+
+                    # Print the performance gain
+                    print(f"Ensembling best {scoring}: {best_performance}.")
+                    print(f"Single estimator best {scoring}: {single_estimator_performance}.")
+                    print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
+
+            elif method == 'Caruana':
+                # Use the method from Caruana
                 if verbose:
-                    print(f' - iteration {it + 1} / {n_iter}.')
-                Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
+                    print('Creating ensemble with Caruana method.')
+                '''
+                # BUG: kernel parameter is sometimes saved in unicode
+                for i in range(0, len(parameters_all)):
+                    kernel = str(parameters_all[i][u'kernel'])
+                    del parameters_all[i][u'kernel']
+                    parameters_all[i]['kernel'] = kernel
+                '''
+                # In order to speed up the process, we precompute all scores of the possible
+                # classifiers in all cross validation estimatons
 
-                input_parameters = copy.deepcopy(parameters_all)
-                # Loop over the 100 best estimators
-                for num, p_all in enumerate(input_parameters):
+                # Create the training and validation set scores
+                if verbose:
+                    print('Precomputing scores on training and validation set.')
+                Y_valid_score = list()
+                Y_valid_truth = list()
+                performances = np.zeros((n_iter, n_classifiers))
+                for it, (train, valid) in enumerate(self.cv_iter):
+                    if verbose:
+                        print(f' - iteration {it + 1} / {n_iter}.')
+                    Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
 
-                    # Prepare data
-                    training_set = [X_train[i] for i in train]
-                    training_labels = np.asarray([Y_train[i] for i in train])
-                    all_indices = np.arange(0, len(train))
+                    # Loop over the 100 best estimators
+                    for num, p_all in enumerate(parameters_all):
+                        # NOTE: Explicitly exclude validation set, elso refit and score
+                        # somehow still seems to use it.
+                        X_train_temp = [X_train[i] for i in train]
+                        Y_train_temp = np.asarray([Y_train[i] for i in train])
+                        train_temp = np.arange(0, len(train))
 
-                    out = fit_and_score(X_train, Y_train, scoring,
-                                        train, valid, p_all,
-                                        return_all=True)
-                    ret_score = out[0][1]['score']
-                    (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
-                     Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
-                    base_estimator.best_groupsel = GroupSel
-                    base_estimator.best_scaler = scalers
-                    base_estimator.best_varsel = VarSel
-                    base_estimator.best_modelsel = SelectModel
-                    base_estimator.best_preprocessor = None
-                    base_estimator.best_imputer = Imputers
-                    base_estimator.best_pca = PCAs
-                    base_estimator.best_featlab = feature_labels
-                    base_estimator.best_statisticalsel = StatisticalSel
-                    base_estimator.best_reliefsel = ReliefSel
-                    base_estimator.best_Sampler = Sampler
+                        # Refit a SearchCV object with the provided parameters
+                        base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
+                                                       train_temp, train_temp,
+                                                       verbose=True)
 
-                    # Refit a SearchCV object with the provided parameters
-                    #base_estimator.refit_and_score(training_set, training_labels,
-                    #                               p_all, all_indices, all_indices)
+                        # Predict and save scores
+                        X_train_values = [x[0] for x in X_train] # Throw away labels
+                        X_train_values_valid = [X_train_values[i] for i in valid]
+                        Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
 
-                    #base_estimator.refit_and_score(X_train, Y_train, p_all,
-                    #                               train, valid)
+                        # Only take the probabilities for the second class
+                        Y_valid_score_temp = Y_valid_score_temp[:, 1]
 
-                    print('ret score: ' + str(ret_score) + '\n')
+                        # Append to array for all classifiers on this validation set
+                        Y_valid_score_it[num, :] = Y_valid_score_temp
 
-                    best_estimator = cc.construct_classifier(p_all)
+                        if num == 0:
+                            # Also store the validation ground truths
+                            Y_valid_truth.append(Y_train[valid])
 
-                    X_train_values = np.asarray([x[0] for x in X_train])
-                    processed_X, processed_y = base_estimator.preprocess(X_train_values[train],
-                                                                         Y_train[train],
-                                                                         training=True)
-                    # Check if there are features left
-                    #(patients, features_left) = np.shape(processed_X)
-                    #if features_left == 0:
-                    #    predictions = None
-                    #else:
-                    best_estimator.fit(processed_X, processed_y)
-                    base_estimator.best_estimator_ = best_estimator
-                    predictions = base_estimator.predict(X_train_values[valid])
+                        performances[it, num] = compute_performance(scoring,
+                                                                    Y_train[valid],
+                                                                    Y_valid_score_temp)
 
-                    #processed_X, processed_y = base_estimator.preprocess(X_train_values, Y_train, training=True)
-                    #new_fit = base_estimator.best_estimator_.fit(processed_X[train], processed_y[train])
-                    #predictions = new_fit.predict(processed_X[valid])
+                    Y_valid_score.append(Y_valid_score_it)
 
-                    #predictions = base_estimator.predict(X_train_values[valid])
 
-                    # Append to array for all classifiers on this validation set
-                    Y_valid_score_it[num, :] = predictions
+                # Sorted Ensemble Initialization -------------------------------------
+                # Go on adding to the ensemble untill we find the optimal performance
+                # Initialize variables
 
-                    if num == 0:
-                        # Also store the validation ground truths
-                        Y_valid_truth.append(Y_train[valid])
-
-                    performances[it, num] = compute_performance(scoring,
-                                                                Y_train[valid],
-                                                                predictions)
-
-                    print('Computed performance: ' + str(performances[it, num]) + '\n')
-
-                Y_valid_score.append(Y_valid_score_it)
-            '''
-            # Sorted Ensemble Initialization -------------------------------------
-            # Go on adding to the ensemble untill we find the optimal performance
-            # Initialize variables
-
-            # Note: doing this in a greedy way doesnt work. We compute the
-            # performances for the ensembles of lengt [1, n_classifiers] and
-            # select the optimum
-            best_performance = 0
-            new_performance = 0.001
-            iteration = 0
-            if n_classifiers == 1:
-                ensemble = [0]
-            else:
+                # Note: doing this in a greedy way doesnt work. We compute the
+                # performances for the ensembles of lengt [1, n_classifiers] and
+                # select the optimum
+                best_performance = 0
+                new_performance = 0.001
+                iteration = 0
                 ensemble = list()
-            y_score = [None]*n_iter
-            best_index = 0
-            single_estimator_performance = new_performance
+                y_score = [None]*n_iter
+                best_index = 0
+                single_estimator_performance = new_performance
 
-            if initialize:
-                # Rank the models based on scoring on the validation set
-                #performances = np.mean(performances, axis=0)
-                sortedindices = np.argsort(performances)[::-1]
-                print('performances: ' + str(performances))
-                #    sortingtest.write('nr 1 parameters: ' + str(parameters_all[0]))
-                performances_n_class = list()
+                if initialize:
+                    # Rank the models based on scoring on the validation set
+                    performances = np.mean(performances, axis=0)
+                    sortedindices = np.argsort(performances)[::-1]
+                    performances_n_class = list()
 
+                    if verbose:
+                        print("\n")
+                        print('Sorted Ensemble Initialization.')
+                    # while new_performance > best_performance:
+                    for dummy in range(0, n_classifiers):
+                        # Score is better, so expand ensemble and replace new best score
+                        best_performance = new_performance
+
+                        if iteration > 1:
+                            # Stack scores: not needed for first iteration
+                            ensemble.append(best_index)
+                            # N_models += 1
+                            for num in range(0, n_iter):
+                                y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
+
+                        elif iteration == 1:
+                            # Create y_score object for second iteration
+                            single_estimator_performance = new_performance
+                            ensemble.append(best_index)
+                            # N_models += 1
+                            for num in range(0, n_iter):
+                                y_score[num] = Y_valid_score[num][ensemble[-1], :]
+
+                        # Perform n-fold cross validation to estimate performance of next best classifier
+                        performances_temp = np.zeros((n_iter))
+                        for n_crossval in range(0, n_iter):
+                            # For each estimator, add the score to the ensemble and new ensemble performance
+                            if iteration == 0:
+                                # No y_score yet, so we need to build it instead of stacking
+                                y_valid_score_new = Y_valid_score[n_crossval][sortedindices[iteration], :]
+                            else:
+                                # Stack scores of added model on top of previous scores and average
+                                y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :])), axis=0)
+
+                            perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
+                            performances_temp[n_crossval] = perf
+
+                        # Check which ensemble should be in the ensemble to maximally improve
+                        new_performance = np.mean(performances_temp)
+                        performances_n_class.append(new_performance)
+                        best_index = sortedindices[iteration]
+                        iteration += 1
+
+                    # Select N_models for initialization
+                    new_performance = max(performances_n_class)
+                    N_models = performances_n_class.index(new_performance) + 1  # +1 due to python indexing
+                    ensemble = ensemble[0:N_models]
+                    best_performance = new_performance
+
+                    # Print the performance gain
+                    print(f"Ensembling best {scoring}: {best_performance}.")
+                    print(f"Single estimator best {scoring}: {single_estimator_performance}.")
+                    print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
+
+                # Greedy selection  -----------------------------------------------
+                # Initialize variables
+                best_performance -= 1e-10
+                iteration = 0
+                best_ensemble_scores = list()
+                nr_of_base_classifiers = len(ensemble)
+
+                # Go on adding to the ensemble untill we find the optimal performance
                 if verbose:
                     print("\n")
-                    print('Sorted Ensemble Initialization.')
-                # while new_performance > best_performance:
-                for dummy in range(0, n_classifiers):
+                    print('Greedy selection.')
+                while iteration < 100:
                     # Score is better, so expand ensemble and replace new best score
+                    if verbose:
+                        print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
                     best_performance = new_performance
 
                     if iteration > 1:
                         # Stack scores: not needed for first iteration
                         ensemble.append(best_index)
-                        # N_models += 1
                         for num in range(0, n_iter):
                             y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
 
                     elif iteration == 1:
-                        # Create y_score object for second iteration
-                        single_estimator_performance = new_performance
-                        ensemble.append(best_index)
-                        # N_models += 1
-                        for num in range(0, n_iter):
-                            y_score[num] = Y_valid_score[num][ensemble[-1], :]
+                        if not initialize:
+                            # Create y_score object for second iteration
+                            single_estimator_performance = new_performance
+                            ensemble.append(best_index)
+                            for num in range(0, n_iter):
+                                y_score[num] = Y_valid_score[num][ensemble[-1], :]
+                        else:
+                            # Stack scores: not needed when ensemble initialization is already used
+                            ensemble.append(best_index)
+                            for num in range(0, n_iter):
+                                y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
 
-                    # Perform n-fold cross validation to estimate performance of next best classifier
-                    performances_temp = np.zeros((n_iter))
+                    # Perform n-fold cross validation to estimate performance of each possible addition to ensemble
+                    performances_temp = np.zeros((n_iter, n_classifiers))
                     for n_crossval in range(0, n_iter):
                         # For each estimator, add the score to the ensemble and new ensemble performance
-                        if iteration == 0:
-                            # No y_score yet, so we need to build it instead of stacking
-                            y_valid_score_new = Y_valid_score[n_crossval][sortedindices[iteration], :]
-                        else:
-                            # Stack scores of added model on top of previous scores and average
-                            print('vstack: ' + str(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :]))) + '\n')
-                            y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :])), axis=0)
+                        for n_estimator in range(0, n_classifiers):
+                            if iteration == 0:
+                                # No y_score yet, so we need to build it instead of stacking
+                                y_valid_score_new = Y_valid_score[n_crossval][n_estimator, :]
+                            else:
+                                # Stack scores of added model on top of previous scores and average
+                                y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][n_estimator, :])), axis=0)
 
-                        perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
-                        print('perf (' + str(dummy) + ', ' + str(n_crossval) + '): ' + str(perf) + '\n')
-                        performances_temp[n_crossval] = perf
+                            perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
+                            performances_temp[n_crossval, n_estimator] = perf
+
+                    # Average performances over crossval
+                    performances_temp = list(np.mean(performances_temp, axis=0))
 
                     # Check which ensemble should be in the ensemble to maximally improve
-                    new_performance = np.mean(performances_temp)
-                    performances_n_class.append(new_performance)
-                    best_index = sortedindices[iteration]
+                    new_performance = max(performances_temp)
+                    best_ensemble_scores.append(new_performance)
+                    best_index = performances_temp.index(new_performance)
                     iteration += 1
 
-                # Select N_models for initialization
-                new_performance = max(performances_n_class)
-                print('new_performance: ' + str(new_performance) + '\n')
-                N_models = performances_n_class.index(new_performance) + 1  # +1 due to python indexing
-                print('N_models: ' + str(N_models) + '\n')
-                ensemble = ensemble[0:N_models]
-                best_performance = new_performance
+                # Select the optimal ensemble size
+                optimal_ensemble_performance = max(best_ensemble_scores)
+                optimal_N_models = best_ensemble_scores.index(optimal_ensemble_performance) + \
+                                   nr_of_base_classifiers  # +1 due to python indexing
+                ensemble = ensemble[0:optimal_N_models]
+                best_performance = optimal_ensemble_performance
+
+                with open('/scratch/mdeen/testfiles/caruana_check.txt', 'a') as caruana_debug:
+                    caruana_debug.write('Base ensemble size: ' + str(nr_of_base_classifiers) + '\n')
+                    caruana_debug.write('Optimal N models: ' + str(optimal_N_models) + '\n')
+                    caruana_debug.write('Final ensemble: ' + str(ensemble) + '\n')
 
                 # Print the performance gain
                 print(f"Ensembling best {scoring}: {best_performance}.")
                 print(f"Single estimator best {scoring}: {single_estimator_performance}.")
                 print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
 
-        elif method == 'ForwardSelection':
-            # Use the method from Caruana
-            if verbose:
-                print('Creating ensemble with Caruana method.')
-            '''
-            # BUG: kernel parameter is sometimes saved in unicode
-            for i in range(0, len(parameters_all)):
-                kernel = str(parameters_all[i][u'kernel'])
-                del parameters_all[i][u'kernel']
-                parameters_all[i]['kernel'] = kernel
-            '''
-            # In order to speed up the process, we precompute all scores of the possible
-            # classifiers in all cross validation estimatons
-
-            # Create the training and validation set scores
-            if verbose:
-                print('Precomputing scores on training and validation set.')
-            Y_valid_score = list()
-            Y_valid_truth = list()
-            performances = np.zeros((n_iter, n_classifiers))
-            for it, (train, valid) in enumerate(self.cv_iter):
-                if verbose:
-                    print(f' - iteration {it + 1} / {n_iter}.')
-                Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
-
-                # Loop over the 100 best estimators
-                for num, p_all in enumerate(parameters_all):
-                    # NOTE: Explicitly exclude validation set, elso refit and score
-                    # somehow still seems to use it.
-                    X_train_temp = [X_train[i] for i in train]
-                    Y_train_temp = np.asarray([Y_train[i] for i in train])
-                    train_temp = np.arange(0, len(train))
-
-                    # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
-                                                   train_temp, train_temp,
-                                                   verbose=True)
-
-                    # Predict and save scores
-                    X_train_values = [x[0] for x in X_train] # Throw away labels
-                    X_train_values_valid = [X_train_values[i] for i in valid]
-                    Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
-
-                    # Only take the probabilities for the second class
-                    Y_valid_score_temp = Y_valid_score_temp[:, 1]
-
-                    # Append to array for all classifiers on this validation set
-                    Y_valid_score_it[num, :] = Y_valid_score_temp
-
-                    if num == 0:
-                        # Also store the validation ground truths
-                        Y_valid_truth.append(Y_train[valid])
-
-                    performances[it, num] = compute_performance(scoring,
-                                                                Y_train[valid],
-                                                                Y_valid_score_temp)
-
-                Y_valid_score.append(Y_valid_score_it)
-
-
-            # Sorted Ensemble Initialization -------------------------------------
-            # Go on adding to the ensemble untill we find the optimal performance
-            # Initialize variables
-
-            # Note: doing this in a greedy way doesnt work. We compute the
-            # performances for the ensembles of lengt [1, n_classifiers] and
-            # select the optimum
-            best_performance = 0
-            new_performance = 0.001
-            iteration = 0
-            ensemble = list()
-            y_score = [None]*n_iter
-            best_index = 0
-            single_estimator_performance = new_performance
-
-            if initialize:
-                # Rank the models based on scoring on the validation set
-                performances = np.mean(performances, axis=0)
-                sortedindices = np.argsort(performances)[::-1]
-                performances_n_class = list()
-
-                if verbose:
-                    print("\n")
-                    print('Sorted Ensemble Initialization.')
-                # while new_performance > best_performance:
-                for dummy in range(0, n_classifiers):
-                    # Score is better, so expand ensemble and replace new best score
-                    best_performance = new_performance
-
-                    if iteration > 1:
-                        # Stack scores: not needed for first iteration
-                        ensemble.append(best_index)
-                        # N_models += 1
-                        for num in range(0, n_iter):
-                            y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
-
-                    elif iteration == 1:
-                        # Create y_score object for second iteration
-                        single_estimator_performance = new_performance
-                        ensemble.append(best_index)
-                        # N_models += 1
-                        for num in range(0, n_iter):
-                            y_score[num] = Y_valid_score[num][ensemble[-1], :]
-
-                    # Perform n-fold cross validation to estimate performance of next best classifier
-                    performances_temp = np.zeros((n_iter))
-                    for n_crossval in range(0, n_iter):
-                        # For each estimator, add the score to the ensemble and new ensemble performance
-                        if iteration == 0:
-                            # No y_score yet, so we need to build it instead of stacking
-                            y_valid_score_new = Y_valid_score[n_crossval][sortedindices[iteration], :]
-                        else:
-                            # Stack scores of added model on top of previous scores and average
-                            y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :])), axis=0)
-
-                        perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
-                        performances_temp[n_crossval] = perf
-
-                    # Check which ensemble should be in the ensemble to maximally improve
-                    new_performance = np.mean(performances_temp)
-                    performances_n_class.append(new_performance)
-                    best_index = sortedindices[iteration]
-                    iteration += 1
-
-                # Select N_models for initialization
-                new_performance = max(performances_n_class)
-                N_models = performances_n_class.index(new_performance) + 1  # +1 due to python indexing
-                ensemble = ensemble[0:N_models]
-                best_performance = new_performance
-
-                # Print the performance gain
-                print(f"Ensembling best {scoring}: {best_performance}.")
-                print(f"Single estimator best {scoring}: {single_estimator_performance}.")
-                print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
-
-            # Greedy selection  -----------------------------------------------
-            # Initialize variables
-            best_performance -= 1e-10
-            iteration = 0
-
-            # Go on adding to the ensemble untill we find the optimal performance
-            if verbose:
-                print("\n")
-                print('Greedy selection.')
-            while new_performance > best_performance:
-                # Score is better, so expand ensemble and replace new best score
-                if verbose:
-                    print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
-                best_performance = new_performance
-
-                if iteration > 1:
-                    # Stack scores: not needed for first iteration
-                    ensemble.append(best_index)
-                    for num in range(0, n_iter):
-                        y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
-
-                elif iteration == 1:
-                    if not initialize:
-                        # Create y_score object for second iteration
-                        single_estimator_performance = new_performance
-                        ensemble.append(best_index)
-                        for num in range(0, n_iter):
-                            y_score[num] = Y_valid_score[num][ensemble[-1], :]
-                    else:
-                        # Stack scores: not needed when ensemble initialization is already used
-                        ensemble.append(best_index)
-                        for num in range(0, n_iter):
-                            y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
-
-                # Perform n-fold cross validation to estimate performance of each possible addition to ensemble
-                performances_temp = np.zeros((n_iter, n_classifiers))
-                for n_crossval in range(0, n_iter):
-                    # For each estimator, add the score to the ensemble and new ensemble performance
-                    for n_estimator in range(0, n_classifiers):
-                        if iteration == 0:
-                            # No y_score yet, so we need to build it instead of stacking
-                            y_valid_score_new = Y_valid_score[n_crossval][n_estimator, :]
-                        else:
-                            # Stack scores of added model on top of previous scores and average
-                            y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][n_estimator, :])), axis=0)
-
-                        perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
-                        performances_temp[n_crossval, n_estimator] = perf
-
-                # Average performances over crossval
-                performances_temp = list(np.mean(performances_temp, axis=0))
-
-                # Check which ensemble should be in the ensemble to maximally improve
-                new_performance = max(performances_temp)
-                best_index = performances_temp.index(new_performance)
-                iteration += 1
-
-            # Print the performance gain
-            print(f"Ensembling best {scoring}: {best_performance}.")
-            print(f"Single estimator best {scoring}: {single_estimator_performance}.")
-            print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
-
-        elif method == 'Caruana':
-            # Use the method from Caruana
-            if verbose:
-                print('Creating ensemble with Caruana method.')
-            '''
-            # BUG: kernel parameter is sometimes saved in unicode
-            for i in range(0, len(parameters_all)):
-                kernel = str(parameters_all[i][u'kernel'])
-                del parameters_all[i][u'kernel']
-                parameters_all[i]['kernel'] = kernel
-            '''
-            # In order to speed up the process, we precompute all scores of the possible
-            # classifiers in all cross validation estimatons
-
-            # Create the training and validation set scores
-            if verbose:
-                print('Precomputing scores on training and validation set.')
-            Y_valid_score = list()
-            Y_valid_truth = list()
-            performances = np.zeros((n_iter, n_classifiers))
-            for it, (train, valid) in enumerate(self.cv_iter):
-                if verbose:
-                    print(f' - iteration {it + 1} / {n_iter}.')
-                Y_valid_score_it = np.zeros((n_classifiers, len(valid)))
-
-                # Loop over the 100 best estimators
-                for num, p_all in enumerate(parameters_all):
-                    # NOTE: Explicitly exclude validation set, elso refit and score
-                    # somehow still seems to use it.
-                    X_train_temp = [X_train[i] for i in train]
-                    Y_train_temp = np.asarray([Y_train[i] for i in train])
-                    train_temp = np.arange(0, len(train))
-
-                    # Refit a SearchCV object with the provided parameters
-                    base_estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
-                                                   train_temp, train_temp,
-                                                   verbose=True)
-
-                    # Predict and save scores
-                    X_train_values = [x[0] for x in X_train] # Throw away labels
-                    X_train_values_valid = [X_train_values[i] for i in valid]
-                    Y_valid_score_temp = base_estimator.predict_proba(X_train_values_valid)
-
-                    # Only take the probabilities for the second class
-                    Y_valid_score_temp = Y_valid_score_temp[:, 1]
-
-                    # Append to array for all classifiers on this validation set
-                    Y_valid_score_it[num, :] = Y_valid_score_temp
-
-                    if num == 0:
-                        # Also store the validation ground truths
-                        Y_valid_truth.append(Y_train[valid])
-
-                    performances[it, num] = compute_performance(scoring,
-                                                                Y_train[valid],
-                                                                Y_valid_score_temp)
-
-                Y_valid_score.append(Y_valid_score_it)
-
-
-            # Sorted Ensemble Initialization -------------------------------------
-            # Go on adding to the ensemble untill we find the optimal performance
-            # Initialize variables
-
-            # Note: doing this in a greedy way doesnt work. We compute the
-            # performances for the ensembles of lengt [1, n_classifiers] and
-            # select the optimum
-            best_performance = 0
-            new_performance = 0.001
-            iteration = 0
-            ensemble = list()
-            y_score = [None]*n_iter
-            best_index = 0
-            single_estimator_performance = new_performance
-
-            if initialize:
-                # Rank the models based on scoring on the validation set
-                performances = np.mean(performances, axis=0)
-                sortedindices = np.argsort(performances)[::-1]
-                performances_n_class = list()
-
-                if verbose:
-                    print("\n")
-                    print('Sorted Ensemble Initialization.')
-                # while new_performance > best_performance:
-                for dummy in range(0, n_classifiers):
-                    # Score is better, so expand ensemble and replace new best score
-                    best_performance = new_performance
-
-                    if iteration > 1:
-                        # Stack scores: not needed for first iteration
-                        ensemble.append(best_index)
-                        # N_models += 1
-                        for num in range(0, n_iter):
-                            y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
-
-                    elif iteration == 1:
-                        # Create y_score object for second iteration
-                        single_estimator_performance = new_performance
-                        ensemble.append(best_index)
-                        # N_models += 1
-                        for num in range(0, n_iter):
-                            y_score[num] = Y_valid_score[num][ensemble[-1], :]
-
-                    # Perform n-fold cross validation to estimate performance of next best classifier
-                    performances_temp = np.zeros((n_iter))
-                    for n_crossval in range(0, n_iter):
-                        # For each estimator, add the score to the ensemble and new ensemble performance
-                        if iteration == 0:
-                            # No y_score yet, so we need to build it instead of stacking
-                            y_valid_score_new = Y_valid_score[n_crossval][sortedindices[iteration], :]
-                        else:
-                            # Stack scores of added model on top of previous scores and average
-                            y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][sortedindices[iteration], :])), axis=0)
-
-                        perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
-                        performances_temp[n_crossval] = perf
-
-                    # Check which ensemble should be in the ensemble to maximally improve
-                    new_performance = np.mean(performances_temp)
-                    performances_n_class.append(new_performance)
-                    best_index = sortedindices[iteration]
-                    iteration += 1
-
-                # Select N_models for initialization
-                new_performance = max(performances_n_class)
-                N_models = performances_n_class.index(new_performance) + 1  # +1 due to python indexing
-                ensemble = ensemble[0:N_models]
-                best_performance = new_performance
-
-                # Print the performance gain
-                print(f"Ensembling best {scoring}: {best_performance}.")
-                print(f"Single estimator best {scoring}: {single_estimator_performance}.")
-                print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
-
-            # Greedy selection  -----------------------------------------------
-            # Initialize variables
-            best_performance -= 1e-10
-            iteration = 0
-            best_ensemble_scores = list()
-            nr_of_base_classifiers = len(ensemble)
-
-            # Go on adding to the ensemble untill we find the optimal performance
-            if verbose:
-                print("\n")
-                print('Greedy selection.')
-            while iteration < 100:
-                # Score is better, so expand ensemble and replace new best score
-                if verbose:
-                    print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
-                best_performance = new_performance
-
-                if iteration > 1:
-                    # Stack scores: not needed for first iteration
-                    ensemble.append(best_index)
-                    for num in range(0, n_iter):
-                        y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
-
-                elif iteration == 1:
-                    if not initialize:
-                        # Create y_score object for second iteration
-                        single_estimator_performance = new_performance
-                        ensemble.append(best_index)
-                        for num in range(0, n_iter):
-                            y_score[num] = Y_valid_score[num][ensemble[-1], :]
-                    else:
-                        # Stack scores: not needed when ensemble initialization is already used
-                        ensemble.append(best_index)
-                        for num in range(0, n_iter):
-                            y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
-
-                # Perform n-fold cross validation to estimate performance of each possible addition to ensemble
-                performances_temp = np.zeros((n_iter, n_classifiers))
-                for n_crossval in range(0, n_iter):
-                    # For each estimator, add the score to the ensemble and new ensemble performance
-                    for n_estimator in range(0, n_classifiers):
-                        if iteration == 0:
-                            # No y_score yet, so we need to build it instead of stacking
-                            y_valid_score_new = Y_valid_score[n_crossval][n_estimator, :]
-                        else:
-                            # Stack scores of added model on top of previous scores and average
-                            y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][n_estimator, :])), axis=0)
-
-                        perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
-                        performances_temp[n_crossval, n_estimator] = perf
-
-                # Average performances over crossval
-                performances_temp = list(np.mean(performances_temp, axis=0))
-
-                # Check which ensemble should be in the ensemble to maximally improve
-                new_performance = max(performances_temp)
-                best_ensemble_scores.append(new_performance)
-                best_index = performances_temp.index(new_performance)
-                iteration += 1
-
-            # Select the optimal ensemble size
-            optimal_ensemble_performance = max(best_ensemble_scores)
-            optimal_N_models = best_ensemble_scores.index(optimal_ensemble_performance) + \
-                               nr_of_base_classifiers  # +1 due to python indexing
-            ensemble = ensemble[0:optimal_N_models]
-            best_performance = optimal_ensemble_performance
-
-            with open('/scratch/mdeen/testfiles/caruana_check.txt', 'a') as caruana_debug:
-                caruana_debug.write('Base ensemble size: ' + str(nr_of_base_classifiers) + '\n')
-                caruana_debug.write('Optimal N models: ' + str(optimal_N_models) + '\n')
-                caruana_debug.write('Final ensemble: ' + str(ensemble) + '\n')
-
-            # Print the performance gain
-            print(f"Ensembling best {scoring}: {best_performance}.")
-            print(f"Single estimator best {scoring}: {single_estimator_performance}.")
-            print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
-
-        else:
-            print(f'[WORC WARNING] No valid ensemble method given: {method}. Not ensembling')
-            return self
+            else:
+                print(f'[WORC WARNING] No valid ensemble method given: {method}. Not ensembling')
+                return self
 
         # Create the ensemble --------------------------------------------------
         # Create the ensemble trained on the full training set
