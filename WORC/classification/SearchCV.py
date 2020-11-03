@@ -1109,13 +1109,16 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             print('len of n_classifiers: ' + str(n_classifiers) + '\n')
             # Construct the array of final predictions
             Y_valid_score = np.zeros((n_iter, n_classifiers, prediction_length))
+            nr = str(np.random.randint(1000))
             for iter in range(n_iter):
                 for num in range(n_classifiers):
                     Y_valid_score[iter][num] = all_predictions[num][iter]
                     if self.cv_results_['mean_test_score'][num] != performances[num]:
-                        print('Inconsistency! (' + str(self.cv_results_['mean_test_score'][num]) +
-                              ', ' + str(performances[num]) + ') with settings: '
-                              + str(parameters_all[num]) + '\n')
+                        fn = '/scratch/mdeen/testfiles/' + nr + '.txt'
+                        with open(fn, 'a') as fh:
+                            fh.write('Inconsistency! (' + str(self.cv_results_['mean_test_score'][num]) +
+                                     ', ' + str(performances[num]) + ') with settings: '
+                                     + str(parameters_all[num]) + '\n')
 
             print('Y_valid_score: ' + str(Y_valid_score) + '\n')
 
