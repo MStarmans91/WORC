@@ -631,7 +631,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
     def process_fit(self, n_splits, parameters_all,
                     test_sample_counts, test_score_dicts,
                     train_score_dicts, fit_time, score_time, cv_iter,
-                    X, y, use_smac=True):
+                    X, y, use_smac=False):
 
         """
         Process the outcomes of a SearchCV fit and find the best settings
