@@ -1035,7 +1035,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             ensemble_configurations = list()
             for num, p_all in enumerate(parameters_all):
                 performances_iter = list()
-                predictions_iter = list() # Later append this with lists of predictions
+                predictions_iter = list()
 
                 for it, (train, valid) in enumerate(self.cv_iter):
                     # Start with storing the ground truth
@@ -1069,6 +1069,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     # Check if there are features left
                     (patients, features_left) = np.shape(processed_X)
                     if features_left == 0:
+                        print('no features left' + '\n')
                         # No features are left; do not consider this pipeline for the ensemble
                         break
                     else:
@@ -1085,6 +1086,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         performances_iter.append(compute_performance(scoring,
                                                                      Y_train[valid],
                                                                      predictions))
+
+                        print('fitandscore: ' + str(out[0][1]) + ' and computed: ' +
+                              str(compute_performance(scoring, Y_train[valid], predictions)) + '\n')
 
                         # At the end of the last iteration, store the results of this pipeline
                         if it == (n_iter - 1):
