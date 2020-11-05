@@ -662,7 +662,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             for pipeline in parameters_all:
                 splitfile.write('CNB_alpha param input ' + str(pipeline['CNB_alpha']) + '\n')
             for config in candidate_params_all:
-                splitfile.write('CNB_alpha processed ' + str(candidate_params_all[config]['CNB_alpha']) + '\n')
+                splitfile.write('CNB_alpha processed ' + str(config['CNB_alpha']) + '\n')
         #    splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
         #    splitfile.write('Candidate params: ' + str(candidate_params_all) + '\n')
         #    splitfile.write('Pipelines per split: ' + str(pipelines_per_split) + '\n')
