@@ -660,7 +660,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # DEBUG PRINTING
         with open('/scratch/mdeen/testfiles/parameters_all.txt', 'a') as splitfile:
             for pipeline in parameters_all:
-                splitfile.write('CNB_alpha param input ' + str(parameters_all[pipeline]['CNB_alpha']) + '\n')
+                splitfile.write('CNB_alpha param input ' + str(pipeline['CNB_alpha']) + '\n')
             for config in candidate_params_all:
                 splitfile.write('CNB_alpha processed ' + str(candidate_params_all[config]['CNB_alpha']) + '\n')
         #    splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
