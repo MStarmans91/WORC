@@ -1112,7 +1112,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 for num in range(n_classifiers):
                     Y_valid_score[iter][num] = all_predictions[num][iter]
 
-            if method == 'FitNumber' or method == 'ForwardSelection' or method == 'Caruana':
+            if method == 'FitNumber' or method == 'ForwardSelection' or method == 'Caruana' or \
+                method == 'Bagging':
                 # Sorted Ensemble Initialization -------------------------------------
                 # Go on adding to the ensemble untill we find the optimal performance
 
