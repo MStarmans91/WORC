@@ -951,7 +951,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         return self
 
-    def create_ensemble(self, X_train, Y_train, verbose=None, initialize=True,
+    def create_ensemble(self, X_train, Y_train, verbose=None, initialize=False,
                         scoring=None, method='top_N', size=50, overfit_scaler=False):
         '''
 
@@ -1112,7 +1112,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 for num in range(n_classifiers):
                     Y_valid_score[iter][num] = all_predictions[num][iter]
 
-            if method == 'FitNumber' or method == 'ForwardSelection' or method == 'Caruana':
+            if method == 'FitNumber' or method == 'ForwardSelection' or method == 'Caruana' or \
+                    method == 'Bagging':
                 # Sorted Ensemble Initialization -------------------------------------
                 # Go on adding to the ensemble untill we find the optimal performance
 
