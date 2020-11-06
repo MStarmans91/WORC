@@ -1339,7 +1339,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     ensemble = list()
                     nr_of_bagging_iterations = 2
                     for bag in range(nr_of_bagging_iterations):
-                        bag_ensemble = ensemble
+                        bag_ensemble = list()
                         subset_size = int(np.floor(n_classifiers / 2))
                         print('subset size: ' + str(subset_size) + '\n')
                         model_subset = random.sample(range(n_classifiers), subset_size)
@@ -1412,7 +1412,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Add the best ensemble of this bagging iteration to the final ensemble
                         bag_ensemble = bag_ensemble[0:optimal_N_models]
                         print('bag_ensemble: ' + str(bag_ensemble) + '\n')
-                        ensemble.append(bag_ensemble)
+                        for model in bag_ensemble:
+                            ensemble.append(model)
                         print('final ensemble: ' + str(ensemble) + '\n')
                         best_performance = optimal_ensemble_performance
 
