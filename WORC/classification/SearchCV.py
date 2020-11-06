@@ -1401,6 +1401,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             new_performance = max(performances_temp)
                             best_ensemble_scores.append(new_performance)
                             best_index = performances_temp.index(new_performance)
+                            print('best ensemble scores: ' + str(best_ensemble_scores) + '\n')
                             iteration += 1
 
                         # Select the optimal ensemble size
