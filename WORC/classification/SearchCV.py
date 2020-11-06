@@ -1381,6 +1381,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             performances_temp = np.zeros((n_iter, subset_size))
                             for n_crossval in range(0, n_iter):
                                 # For each estimator, add the score to the ensemble and new ensemble performance
+                                estimator_counter = 0
                                 for n_estimator in model_subset:
                                     if iteration == 0:
                                         # No y_score yet, so we need to build it instead of stacking
@@ -1390,7 +1391,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                         y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][n_estimator, :])), axis=0)
 
                                     perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
-                                    performances_temp[n_crossval, n_estimator] = perf
+                                    performances_temp[n_crossval, estimator_counter] = perf
+                                    estimator_counter += 1
 
                             # Average performances over crossval
                             performances_temp = list(np.mean(performances_temp, axis=0))
