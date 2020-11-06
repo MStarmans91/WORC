@@ -1334,6 +1334,89 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print(f"Single estimator best {scoring}: {single_estimator_performance}.")
                     print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
 
+                elif method == 'Bagging':
+                    nr_of_base_classifiers = len(ensemble)
+                    final_ensemble = ensemble
+                    nr_of_bagging_iterations = 2
+                    for bag in range(nr_of_bagging_iterations):
+                        base_ensemble = ensemble
+                        subset_size = int(np.floor(n_classifiers / 2))
+                        print('subset size: ' + str(subset_size) + '\n')
+                        model_subset = random.sample(range(n_classifiers), subset_size)
+                        print('model subset: ' + str(model_subset) + '\n')
+                        best_performance -= 1e-10
+                        iteration = 0
+                        best_ensemble_scores = list()
+
+                        # Go on adding to the ensemble untill we find the optimal performance
+                        if verbose:
+                            print("\n")
+                            print('Greedy selection.')
+                        while iteration < 100:
+                            # Score is better, so expand ensemble and replace new best score
+                            if verbose:
+                                print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
+                            best_performance = new_performance
+
+                            if iteration > 1:
+                                # Stack scores: not needed for first iteration
+                                base_ensemble.append(best_index)
+                                for num in range(0, n_iter):
+                                    y_score[num] = np.vstack((y_score[num], Y_valid_score[num][base_ensemble[-1], :]))
+
+                            elif iteration == 1:
+                                if not initialize:
+                                    # Create y_score object for second iteration
+                                    single_estimator_performance = new_performance
+                                    base_ensemble.append(best_index)
+                                    for num in range(0, n_iter):
+                                        y_score[num] = Y_valid_score[num][base_ensemble[-1], :]
+                                else:
+                                    # Stack scores: not needed when ensemble initialization is already used
+                                    base_ensemble.append(best_index)
+                                    for num in range(0, n_iter):
+                                        y_score[num] = np.vstack((y_score[num], Y_valid_score[num][base_ensemble[-1], :]))
+
+                            # Perform n-fold cross validation to estimate performance of each possible addition to ensemble
+                            performances_temp = np.zeros((n_iter, n_classifiers))
+                            for n_crossval in range(0, n_iter):
+                                # For each estimator, add the score to the ensemble and new ensemble performance
+                                for n_estimator in model_subset:
+                                    if iteration == 0:
+                                        # No y_score yet, so we need to build it instead of stacking
+                                        y_valid_score_new = Y_valid_score[n_crossval][n_estimator, :]
+                                    else:
+                                        # Stack scores of added model on top of previous scores and average
+                                        y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][n_estimator, :])), axis=0)
+
+                                    perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
+                                    performances_temp[n_crossval, n_estimator] = perf
+
+                            # Average performances over crossval
+                            performances_temp = list(np.mean(performances_temp, axis=0))
+
+                            # Check which ensemble should be in the ensemble to maximally improve
+                            new_performance = max(performances_temp)
+                            best_ensemble_scores.append(new_performance)
+                            best_index = performances_temp.index(new_performance)
+                            iteration += 1
+
+                        # Select the optimal ensemble size
+                        optimal_ensemble_performance = max(best_ensemble_scores)
+                        optimal_N_models = best_ensemble_scores.index(optimal_ensemble_performance) + \
+                                           nr_of_base_classifiers
+                        # Add the best ensemble of this bagging iteration to the final ensemble
+                        final_ensemble.append(base_ensemble[0:optimal_N_models])
+                        print('final ensemble: ' + str(final_ensemble) + '\n')
+                        best_performance = optimal_ensemble_performance
+
+                        # Print the performance gain
+                        print(f"Ensembling best {scoring}: {best_performance}.")
+                        print(f"Single estimator best {scoring}: {single_estimator_performance}.")
+                        print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
+
+                    ensemble = final_ensemble
+
                 else:
                     print(f'[WORC WARNING] No valid ensemble method given: {method}. Not ensembling')
                     return self
