@@ -440,8 +440,8 @@ class WORC(object):
 
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Method'] = 'top_N' # ['top_N', 'Caruana']
-        config['Ensemble']['Size'] = '50'
+        config['Ensemble']['Method'] = 'top_N' # ['top_N', 'FitNumber', 'ForwardSelection', 'Caruana', 'Bagging']
+        config['Ensemble']['Size'] = '50' # Size of ensemble in top_N or number of bags in Bagging
 
         # Evaluation options
         config['Evaluation'] = dict()
