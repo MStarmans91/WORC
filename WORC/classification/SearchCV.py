@@ -1333,13 +1333,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print(f"Ensembling best {scoring}: {best_performance}.")
                     print(f"Single estimator best {scoring}: {single_estimator_performance}.")
                     print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
-                    print('scores around it, minus = ' +
-                          str(best_ensemble_scores[best_ensemble_scores.index(optimal_ensemble_performance) - 1]) +
-                          ' and base = ' +
-                          str(best_ensemble_scores[best_ensemble_scores.index(optimal_ensemble_performance)]) +
-                          ' and plus = ' +
-                          str(best_ensemble_scores[best_ensemble_scores.index(optimal_ensemble_performance) + 1]) +
-                          '\n')
 
                 else:
                     print(f'[WORC WARNING] No valid ensemble method given: {method}. Not ensembling')
