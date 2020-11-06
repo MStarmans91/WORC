@@ -1406,7 +1406,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                         # Select the optimal ensemble size
                         optimal_ensemble_performance = max(best_ensemble_scores)
+                        print('optimal ensemble performance: ' + str(optimal_ensemble_performance) + '\n')
                         optimal_N_models = best_ensemble_scores.index(optimal_ensemble_performance) + 1
+                        print('optimal N models: ' + str(optimal_N_models) + '\n')
                         # Add the best ensemble of this bagging iteration to the final ensemble
                         ensemble.append(bag_ensemble[0:optimal_N_models])
                         print('final ensemble: ' + str(ensemble) + '\n')
