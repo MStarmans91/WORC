@@ -1344,7 +1344,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         print('subset size: ' + str(subset_size) + '\n')
                         model_subset = random.sample(range(n_classifiers), subset_size)
                         print('model subset: ' + str(model_subset) + '\n')
-                        best_performance -= 1e-10
+                        best_performance = 0
                         iteration = 0
                         best_ensemble_scores = list()
 
@@ -1415,8 +1415,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         print(f"Ensembling best {scoring}: {best_performance}.")
                         print(f"Single estimator best {scoring}: {single_estimator_performance}.")
                         print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
-
-                    ensemble = final_ensemble
 
                 else:
                     print(f'[WORC WARNING] No valid ensemble method given: {method}. Not ensembling')
