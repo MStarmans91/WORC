@@ -643,8 +643,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # test_score_dicts and train_score dicts are lists of dictionaries and
         # we make them into dict of lists
         test_scores = _aggregate_score_dicts(test_score_dicts)
-        #with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
-        #    testwrite.write('testscores coming into process_fit: ' + str(test_scores) + '\n')
+        with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
+            testwrite.write('testscores coming into process_fit: ' + str(test_scores) + '\n')
         if self.return_train_score:
             train_scores = _aggregate_score_dicts(train_score_dicts)
 
@@ -658,11 +658,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         n_candidates = len(candidate_params_all)
 
         # DEBUG PRINTING
-        #with open('/scratch/mdeen/testfiles/parameters_all.txt', 'a') as splitfile:
-        #    for pipeline in parameters_all:
-        #        splitfile.write('CNB_alpha param input ' + str(pipeline) + '\n')
-        #    for config in candidate_params_all:
-        #        splitfile.write('CNB_alpha processed ' + str(config) + '\n')
+        with open('/scratch/mdeen/testfiles/parameters_all.txt', 'a') as splitfile:
+            for pipeline in parameters_all:
+                splitfile.write('CNB_alpha param input ' + str(pipeline) + '\n')
+            for config in candidate_params_all:
+                splitfile.write('CNB_alpha processed ' + str(config) + '\n')
         #    splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
         #    splitfile.write('Candidate params: ' + str(candidate_params_all) + '\n')
         #    splitfile.write('Pipelines per split: ' + str(pipelines_per_split) + '\n')
