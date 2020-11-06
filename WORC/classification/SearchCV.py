@@ -1138,7 +1138,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             new_performance = 0.001
             single_estimator_performance = max(performances)
             iteration = 0
-            
+
             if method == 'FitNumber':
                 sortedindices = np.argsort(performances)[::-1]
                 print('performances: ' + str(performances))

@@ -433,15 +433,15 @@ class WORC(object):
         config['SMAC'] = dict()
         config['SMAC']['use'] = 'False'
         config['SMAC']['n_smac_cores'] = '1'
-        config['SMAC']['budget_type'] = 'time' # ['evals', 'time']
-        config['SMAC']['budget'] = '3600' # Nr of evals or time in seconds
-        config['SMAC']['init_method'] = 'sobol' # ['sobol', 'random']
-        config['SMAC']['init_budget'] = '300' # Nr of evals
+        config['SMAC']['budget_type'] = 'evals' # ['evals', 'time']
+        config['SMAC']['budget'] = '100' # Nr of evals or time in seconds
+        config['SMAC']['init_method'] = 'random' # ['sobol', 'random']
+        config['SMAC']['init_budget'] = '20' # Nr of evals
 
         # Ensemble options
         config['Ensemble'] = dict()
         config['Ensemble']['Method'] = 'top_N' # ['top_N', 'FitNumber', 'ForwardSelection', 'Caruana', 'Bagging']
-        config['Ensemble']['Size'] = '50' # Size of ensemble in top_N or number of bags in Bagging
+        config['Ensemble']['Size'] = '50' # Size of ensemble in top_N, or number of bags in Bagging
 
         # Evaluation options
         config['Evaluation'] = dict()
