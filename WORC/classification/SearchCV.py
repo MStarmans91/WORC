@@ -643,8 +643,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # test_score_dicts and train_score dicts are lists of dictionaries and
         # we make them into dict of lists
         test_scores = _aggregate_score_dicts(test_score_dicts)
-        #with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
-        #    testwrite.write('testscores coming into process_fit: ' + str(test_scores) + '\n')
         if self.return_train_score:
             train_scores = _aggregate_score_dicts(train_score_dicts)
 
@@ -656,18 +654,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         else:
             candidate_params_all = list(parameters_all[:pipelines_per_split])
         n_candidates = len(candidate_params_all)
-
-        # DEBUG PRINTING
-        #with open('/scratch/mdeen/testfiles/parameters_all.txt', 'a') as splitfile:
-        #    for pipeline in parameters_all:
-        #        splitfile.write('CNB_alpha param input ' + str(pipeline) + '\n')
-        #    for config in candidate_params_all:
-        #        splitfile.write('CNB_alpha processed ' + str(config) + '\n')
-        #    splitfile.write('Parameters_all object: ' + str(parameters_all) + '\n')
-        #    splitfile.write('Candidate params: ' + str(candidate_params_all) + '\n')
-        #    splitfile.write('Pipelines per split: ' + str(pipelines_per_split) + '\n')
-        #    splitfile.write('Old candidate_params_all: ' + str(old_candidate_params_all) + '\n')
-        #    splitfile.write('New candidate_params_all: ' + str(candidate_params_all) + '\n')
 
         # Computed the (weighted) mean and std for test scores alone
         # NOTE test_sample counts (weights) remain the same for all candidates
@@ -685,10 +671,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             else:
                 array = np.transpose(np.array(array, dtype=np.float64).reshape(n_splits,
                                                                                n_candidates))
-
-            #with open('/scratch/mdeen/testfiles/test_scores.txt', 'a') as testwrite:
-            #    testwrite.write('key_name: ' + str(key_name) + '\n')
-            #    testwrite.write('array: ' + str(array) + '\n')
 
             if splits:
                 for split_i in range(n_splits):
@@ -1005,10 +987,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Get settings for best 100 estimators
         parameters_all = self.cv_results_['params']
-        #print('Best score average: ' + str(self.cv_results_['mean_test_score'][0]) + '\n')
-        #print('All cv_results: ' + str(self.cv_results_) + '\n')
-        #with open('/scratch/mdeen/testfiles/verification.txt', 'a') as verificationfile:
-        #    verificationfile.write('cv_res: ' + str(self.cv_results_['mean_test_score']) + '\n')
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 
@@ -1141,9 +1119,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
             if method == 'FitNumber':
                 sortedindices = np.argsort(performances)[::-1]
-                print('performances: ' + str(performances))
-                with open('/scratch/mdeen/testfiles/verification.txt', 'a') as verificationfile:
-                    verificationfile.write('perfs: ' + str(performances) + '\n')
                 performances_n_class = list()
 
                 if verbose:
@@ -2906,7 +2881,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         # Process the smac_results data once finished
         # First read in the results of all smac instance files
         smac_filenames = glob.glob(
-            '/scratch/mdeen/tested_configs/' + run_name + '/smac_stats_*.json')
+            'vfs://tested_configs/' + run_name + '/smac_stats_*.json')
         # Then create a combined dictionary with all
         # results of this cross-validation split and
         # a summary
