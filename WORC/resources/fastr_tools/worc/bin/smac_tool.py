@@ -77,9 +77,9 @@ def main():
     scenario_settings = {'run_obj': 'quality',  # optimize for solution quality
                          'cs': data['search_space'],
                          'deterministic': 'true',
-                         'output_dir': 'vfs://SMAC_output/' + run_info['run_name'],
+                         'output_dir': 'vfs://scratch/SMAC_output/' + run_info['run_name'],
                          'shared_model': False,
-                         'input_psmac_dirs': 'vfs://SMAC_output/' + run_info['run_name'],
+                         'input_psmac_dirs': 'vfs://scratch/SMAC_output/' + run_info['run_name'],
                          'abort_on_first_run_crash': 'false',
                          }
 
@@ -137,7 +137,7 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
-        fname = 'vfs://tested_configs/' + run_info['run_name'] + '/' + \
+        fname = 'vfs://scratch/tested_configs/' + run_info['run_name'] + '/' + \
                 str(run_info['run_id']) + '.csv'
         if not os.path.exists(os.path.dirname(fname)):
             os.makedirs(os.path.dirname(fname))
@@ -165,14 +165,14 @@ def main():
     opt_config = smac.optimize()
 
     # Read in the stats from the SMAC output
-    stats_file_location = 'vfs://SMAC_output/' + run_info['run_name'] + \
+    stats_file_location = 'vfs:///scratch/SMAC_output/' + run_info['run_name'] + \
                           '/run_' + str(run_info['run_id']) + '/stats.json'
     with open(stats_file_location, 'r') as statsfile:
         smac_stats = json.load(statsfile)
 
     # Read in the history of the incumbents from the SMAC output
     # and append some trajectory info to the stats
-    traj_file_location = 'vfs://SMAC_output/' + run_info['run_name'] + \
+    traj_file_location = 'vfs://scratch/SMAC_output/' + run_info['run_name'] + \
                          '/run_' + str(run_info['run_id']) + '/traj.json'
     wallclock_times = []
     evaluations = []
@@ -196,7 +196,7 @@ def main():
     smac_stats['inc_costs'] = costs
     smac_stats['inc_configs'] = configs
 
-    result_file_name = 'vfs://tested_configs/' + run_info['run_name'] +\
+    result_file_name = 'vfs://scratch/tested_configs/' + run_info['run_name'] +\
                        '/smac_stats_' + str(run_info['run_id']) + '.json'
     if not os.path.exists(os.path.dirname(result_file_name)):
         os.makedirs(os.path.dirname(result_file_name))
@@ -206,7 +206,7 @@ def main():
 
     source_labels = ['RET']
 
-    output_df = pd.read_csv('vfs://tested_configs/' + run_info['run_name'] + '/' +
+    output_df = pd.read_csv('vfs://scratch/tested_configs/' + run_info['run_name'] + '/' +
                             str(run_info['run_id']) + '.csv')
     output = output_df.values.tolist()
     # Convert strings and floats to dict:

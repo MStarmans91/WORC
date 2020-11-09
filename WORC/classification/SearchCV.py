@@ -2881,7 +2881,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         # Process the smac_results data once finished
         # First read in the results of all smac instance files
         smac_filenames = glob.glob(
-            'vfs://tested_configs/' + run_name + '/smac_stats_*.json')
+            'vfs://scratch/tested_configs/' + run_name + '/smac_stats_*.json')
         # Then create a combined dictionary with all
         # results of this cross-validation split and
         # a summary
