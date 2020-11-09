@@ -16,6 +16,8 @@
 # limitations under the License.
 
 import argparse
+
+import fastr
 import pandas as pd
 import numpy as np
 import WORC.addexceptions as WORCexceptions
@@ -38,12 +40,6 @@ def main():
     parser.add_argument('-id', '--id', metavar='id',
                         dest='id', type=str, required=True,
                         help='Parallel run data in (HDF)')
-    #parser.add_argument('-tt', '--tt', metavar='tt',
-    #                    dest='tt', type=str, required=True,
-    #                    help='Train- and testdata in (HDF)')
-    #parser.add_argument('-para', '--para', metavar='para',
-    #                    dest='para', type=str, required=True,
-    #                    help='Parameters (JSON)')
     parser.add_argument('-out', '--out', metavar='out',
                         dest='out', type=str, required=True,
                         help='Output: fitted estimator (HDF)')
@@ -54,32 +50,20 @@ def main():
         args.ed = ''.join(args.ed)
     if type(args.id) is list:
         args.id = ''.join(args.id)
-    #if type(args.tt) is list:
-    #    args.tt = ''.join(args.tt)
-    #if type(args.para) is list:
-    #    args.para = ''.join(args.para)
     if type(args.out) is list:
         args.out = ''.join(args.out)
 
     # Read the data
     data = pd.read_hdf(args.ed)
     run_info = pd.read_hdf(args.id)
-    #traintest = pd.read_hdf(args.tt)
-    #with open(args.para, 'rb') as fp:
-    #    para = json.load(fp)
 
-    #init_design = InitialDesign(cs=data['search_space'],
-    #                            init_budget=0.1*data['n_iter'],
-    #                            rng=run_info['run_rng'],
-    #                            traj_logger=None,
-    #                            ta_run_limit=100)
+    output_filename = os.path.join(fastr.config.mounts['scratch'], 'SMAC_output', run_info['run_name'])
 
     scenario_settings = {'run_obj': 'quality',  # optimize for solution quality
                          'cs': data['search_space'],
                          'deterministic': 'true',
-                         'output_dir': 'vfs://scratch/SMAC_output/' + run_info['run_name'],
+                         'output_dir': output_filename,
                          'shared_model': False,
-                         'input_psmac_dirs': 'vfs://scratch/SMAC_output/' + run_info['run_name'],
                          'abort_on_first_run_crash': 'false',
                          }
 
@@ -137,8 +121,10 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
-        fname = 'vfs://scratch/tested_configs/' + run_info['run_name'] + '/' + \
-                str(run_info['run_id']) + '.csv'
+        fname = os.path.join(fastr.config.mounts['scratch'],
+                             'tested_configs',
+                             run_info['run_name'],
+                             str(run_info['run_id']) + '.csv')
         if not os.path.exists(os.path.dirname(fname)):
             os.makedirs(os.path.dirname(fname))
         with open(fname, 'a') as f:
@@ -165,15 +151,19 @@ def main():
     opt_config = smac.optimize()
 
     # Read in the stats from the SMAC output
-    stats_file_location = 'vfs:///scratch/SMAC_output/' + run_info['run_name'] + \
-                          '/run_' + str(run_info['run_id']) + '/stats.json'
+    stats_file_location = os.path.join(fastr.config.mounts['scratch'],
+                                       'SMAC_output', run_info['run_name'],
+                                       'run_' + str(run_info['run_id']),
+                                       'stats.json')
     with open(stats_file_location, 'r') as statsfile:
         smac_stats = json.load(statsfile)
 
     # Read in the history of the incumbents from the SMAC output
     # and append some trajectory info to the stats
-    traj_file_location = 'vfs://scratch/SMAC_output/' + run_info['run_name'] + \
-                         '/run_' + str(run_info['run_id']) + '/traj.json'
+    traj_file_location = os.path.join(fastr.config.mounts['scratch'],
+                                      'SMAC_output', run_info['run_name'],
+                                      'run_' + str(run_info['run_id']),
+                                      'traj.json')
     wallclock_times = []
     evaluations = []
     costs = []
@@ -196,8 +186,10 @@ def main():
     smac_stats['inc_costs'] = costs
     smac_stats['inc_configs'] = configs
 
-    result_file_name = 'vfs://scratch/tested_configs/' + run_info['run_name'] +\
-                       '/smac_stats_' + str(run_info['run_id']) + '.json'
+    result_file_name = os.path.join(fastr.config.mounts['scratch'],
+                                    'tested_configs',
+                                    run_info['run_name'],
+                                    'smac_stats_' + str(run_info['run_id']) + '.json')
     if not os.path.exists(os.path.dirname(result_file_name)):
         os.makedirs(os.path.dirname(result_file_name))
     with open(result_file_name, 'a') as file:
@@ -206,8 +198,10 @@ def main():
 
     source_labels = ['RET']
 
-    output_df = pd.read_csv('vfs://scratch/tested_configs/' + run_info['run_name'] + '/' +
-                            str(run_info['run_id']) + '.csv')
+    output_df = os.path.join(fastr.config.mounts['scratch'],
+                 'tested_configs',
+                 run_info['run_name'],
+                 str(run_info['run_id']) + '.csv')
     output = output_df.values.tolist()
     # Convert strings and floats to dict:
     for ret in output:
