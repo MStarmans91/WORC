@@ -27,7 +27,7 @@ xlrd>=1.2.0
 xnat>=0.2.2
 emcee==3.0.2
 pyrfr==0.8.0
-smac==0.12.0
+smac==0.12.3
 scikit-optimize>=0.7.4
 pyDOE>=0.3.8
 h5py>=2.10.0
