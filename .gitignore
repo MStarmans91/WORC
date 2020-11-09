@@ -138,3 +138,5 @@ WORC/tests/*.mat
 Experiments/
 run_script.py
 result_processing.py
+cartesius.py
+vanilla_script.py
