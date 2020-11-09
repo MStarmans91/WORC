@@ -1341,13 +1341,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                         # Average performances over crossval
                         performances_temp = list(np.mean(performances_temp, axis=0))
-                        print('performances_temp: ' + str(performances_temp) + '\n')
 
                         # Check which ensemble should be in the ensemble to maximally improve
                         new_performance = max(performances_temp)
-                        print('new performance: ' + str(new_performance) + '\n')
                         best_ensemble_scores.append(new_performance)
-                        print('best_ensemble_scores: ' + str(best_ensemble_scores) + '\n')
                         best_index = performances_temp.index(new_performance)
                         bag_ensemble.append(best_index)
                         iteration += 1
