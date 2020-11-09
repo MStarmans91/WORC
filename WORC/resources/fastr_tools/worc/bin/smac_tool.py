@@ -198,10 +198,10 @@ def main():
 
     source_labels = ['RET']
 
-    output_df = os.path.join(fastr.config.mounts['scratch'],
-                 'tested_configs',
-                 run_info['run_name'],
-                 str(run_info['run_id']) + '.csv')
+    output_df = pd.read_csv(os.path.join(fastr.config.mounts['scratch'],
+                                         'tested_configs',
+                                         run_info['run_name'],
+                                         str(run_info['run_id']) + '.csv'))
     output = output_df.values.tolist()
     # Convert strings and floats to dict:
     for ret in output:
