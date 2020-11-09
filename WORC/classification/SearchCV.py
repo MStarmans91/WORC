@@ -1307,6 +1307,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     model_subset = random.sample(range(n_classifiers), subset_size)
 
                     best_ensemble_scores = list()
+                    iteration = 0
 
                     while iteration < 100:
                         if verbose:
