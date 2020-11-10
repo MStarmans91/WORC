@@ -1221,7 +1221,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                 best_ensemble_scores = list()
 
-                while iteration < 100:
+                while iteration < 20:
                     if verbose:
                         print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
 
@@ -1284,7 +1284,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     best_ensemble_scores = list()
                     iteration = 0
 
-                    while iteration < 100:
+                    while iteration < 20:
                         if verbose:
                             print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
 
