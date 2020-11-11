@@ -1587,7 +1587,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         # Remove the temporary folder used
         #if name != 'DEBUG_0':
             # Do delete if not debugging for first iteration
-            #shutil.rmtree(tempfolder)
+            shutil.rmtree(tempfolder)
 
         # Process the results of the fitting procedure
         self.process_fit(n_splits=n_splits,
@@ -2931,7 +2931,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
 
         # Remove the temporary folder used
-        #shutil.rmtree(tempfolder)
+        shutil.rmtree(tempfolder)
 
         # Process the results of the fitting procedure
         self.process_fit(n_splits=n_splits,
