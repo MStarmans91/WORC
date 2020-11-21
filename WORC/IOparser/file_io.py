@@ -119,7 +119,7 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
         except ValueError as e:
             message = str(e) + '. Please take a look at your labels' +\
                 ' file and make sure it is formatted correctly. ' +\
-                r'See also https://github.com/MStarmans91/WORC/wiki/The-WORC-configuration#genetics.'
+                r'See also https://worc.readthedocs.io/en/latest/static/configuration.html#config-labels.'
             raise WORCexceptions.WORCValueError(message)
 
         if len(label_names) == 1:

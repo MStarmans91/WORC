@@ -337,7 +337,7 @@ class Evaluate(object):
         """Create links in network between nodes when adding Evaluate to WORC."""
         # Sources from the WORC network are used
         prediction = self.parent.classify.outputs['classification']
-        if self.parent.labels_test:
+        if hasattr(self.parent, 'source_patientclass_test'):
             pinfo = self.parent.source_patientclass_test.output
         else:
             pinfo = self.parent.source_patientclass_train.output
@@ -449,7 +449,7 @@ class Evaluate(object):
         self.node_Ranked_Posteriors.inputs['estimator'] = prediction
         self.node_Ranked_Posteriors.inputs['pinfo'] = pinfo
 
-        if self.parent.sources_images_test:
+        if hasattr(self.parent, 'sources_images_test'):
             images = self.parent.sources_images_test[label].output
             segmentations =\
                 self.parent.sources_segmentations_test[label].output

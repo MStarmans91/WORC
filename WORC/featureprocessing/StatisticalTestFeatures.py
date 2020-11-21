@@ -255,6 +255,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
                    13: 'LBP',
                    14: 'Phase'
                    }
+
         for o in objects:
             if 'hf_' in o:
                 labels.append(0)
@@ -276,9 +277,9 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
                 labels.append(8)
             elif 'semf_' in o:
                 labels.append(9)
-            elif 'dicomf_' in o:
+            elif 'df_' in o:
                 labels.append(10)
-            elif 'LoG_' in o:
+            elif 'logf_' in o:
                 labels.append(11)
             elif 'vf_' in o:
                 labels.append(12)
@@ -297,6 +298,8 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
         objects = [o.replace('Pyradiomics_', '') for o in objects]
         objects = [o.replace('predict_', '') for o in objects]
         objects = [o.replace('pyradiomics_', '') for o in objects]
+        objects = [o.replace('_predict', '') for o in objects]
+        objects = [o.replace('_pyradiomics', '') for o in objects]
         objects = [o.replace('original_', '') for o in objects]
         objects = [o.replace('train_', '') for o in objects]
         objects = [o.replace('test_', '') for o in objects]
@@ -312,9 +315,10 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
         objects = [o.replace('NGTDM_', '') for o in objects]
         objects = [o.replace('Gabor_', '') for o in objects]
         objects = [o.replace('semf_', '') for o in objects]
-        objects = [o.replace('dicomf_', '') for o in objects]
-        objects = [o.replace('LoG_', '') for o in objects]
+        objects = [o.replace('df_', '') for o in objects]
+        objects = [o.replace('logf_', '') for o in objects]
         objects = [o.replace('vf_', '') for o in objects]
+        objects = [o.replace('Frangi_', '') for o in objects]
         objects = [o.replace('LBP_', '') for o in objects]
         objects = [o.replace('phasef_', '') for o in objects]
         objects = [o.replace('tf_', '') for o in objects]
@@ -327,6 +331,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
         sort_indices = np.argsort(np.asarray(labels))
         p_values = [p_values[i] for i in sort_indices]
         labels = [labels[i] for i in sort_indices]
+        objects = [objects[i] for i in sort_indices]
 
         # Make manhattan plot
         manhattan_importance(values=p_values,

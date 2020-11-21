@@ -1531,6 +1531,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         # Check whether all jobs have finished
         expected_no_files = len(traintest_files) * len(parameter_files)
         sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
+        sink_files.sort()
         if len(sink_files) != expected_no_files:
             difference = expected_no_files - len(sink_files)
             fname = os.path.join(tempfolder, 'tmp')
