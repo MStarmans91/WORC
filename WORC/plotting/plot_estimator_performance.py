@@ -586,10 +586,10 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 stats["Sensitivity 95%: "] = f"{sensitivity_test} {str(compute_confidence_bootstrap(sensitivity, sensitivity_test, N_1, alpha))}"
                 stats["Specificity 95%:"] = f"{specificity_test} {str(compute_confidence_bootstrap(specificity, specificity_test, N_1, alpha))}"
             else:
-                names = ['Accuracy', 'BCA', 'AUC', 'F1-score', 'Precision'
-                                                               'NPV', 'Sensitivity', 'Specificity']
-                performances = [accuracy, bca, auc, f1_score_list,
-                                precision, npv, sensitivity, specificity]
+                names = ['Accuracy', 'BCA', 'AUC', 'F1-score', 'Precision',
+                         'NPV', 'Sensitivity', 'Specificity', 'Validation-score']
+                performances = [accuracy, bca, auc, f1_score_list, precision,
+                                npv, sensitivity, specificity, val_score]
                 for name, perf in zip(names, performances):
                     all_performances[name] = perf
                 stats["Accuracy 95%:"] = f"{np.nanmean(accuracy)} {str(compute_confidence(accuracy, N_1, N_2, alpha))}"
