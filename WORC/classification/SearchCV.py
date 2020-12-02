@@ -1026,6 +1026,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         Y_valid_truth.append(Y_train[valid])
                         prediction_length = len(Y_train[valid])
 
+                    base_estimator = clone(base_estimator)
+
                     # Fit the preprocessors of the pipeline
                     out = fit_and_score(X_train, Y_train, scoring,
                                         train, valid, p_all,
@@ -1342,6 +1344,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 return self
 
         # Create the ensemble --------------------------------------------------
+        # First create and score the ensemble on the validation set
+        selected_params = [parameters_all[i] for i in ensemble]
+
         # Create the ensemble trained on the full training set
         parameters_all = [parameters_all[i] for i in ensemble]
         estimators = list()
