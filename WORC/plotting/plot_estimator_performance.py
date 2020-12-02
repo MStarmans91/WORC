@@ -555,6 +555,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
         # Compute alpha confidence intervals (CIs)
         stats = dict()
+        all_performances = dict()
         if not regression:
             if bootstrap:
                 # Compute once for the real test set the performance
@@ -583,6 +584,12 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 stats["Sensitivity 95%: "] = f"{sensitivity_test} {str(compute_confidence_bootstrap(sensitivity, sensitivity_test, N_1, alpha))}"
                 stats["Specificity 95%:"] = f"{specificity_test} {str(compute_confidence_bootstrap(specificity, specificity_test, N_1, alpha))}"
             else:
+                names = ['Accuracy', 'BCA', 'AUC', 'F1-score', 'Precision'
+                                                               'NPV', 'Sensitivity', 'Specificity']
+                performances = [accuracy, bca, auc, f1_score_list,
+                                precision, npv, sensitivity, specificity]
+                for name, perf in zip(names, performances):
+                    all_performances[name] = perf
                 stats["Accuracy 95%:"] = f"{np.nanmean(accuracy)} {str(compute_confidence(accuracy, N_1, N_2, alpha))}"
                 stats["BCA 95%:"] = f"{np.nanmean(bca)} {str(compute_confidence(bca, N_1, N_2, alpha))}"
                 stats["AUC 95%:"] = f"{np.nanmean(auc)} {str(compute_confidence(auc, N_1, N_2, alpha))}"
@@ -650,7 +657,11 @@ def plot_estimator_performance(prediction, label_data, label_type,
         # Combine stats and rankings in one output
         output = dict()
         output['Statistics'] = stats
-        output['Rankings'] = rankings
+        if all_performances is not None:
+            output['All_performances'] = all_performances
+
+        # Do not output rankings for now
+        #output['Rankings'] = rankings
 
         return output
 
