@@ -20,13 +20,12 @@ import numpy as np
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
+import tikzplotlib
 
 
 def generate_performance_boxplots(performances, metrics, outputfolder,
                                   colors=None):
-    '''
-    Generate boxplots for performance of various models
-    '''
+    """Generate boxplots for performance of various models."""
     if colors is None:
         colors = list()
         for p in performances:
@@ -99,7 +98,7 @@ def generate_performance_boxplots(performances, metrics, outputfolder,
     plt.xticks(labelpositions, labelnames)
 
     # Changes all colors of the axes
-    for axis in ['top','bottom','left','right']:
+    for axis in ['top', 'bottom', 'left', 'right']:
         ax.spines[axis].set_linewidth(0.5)
         ax.spines[axis].set_color(linecolor)
 
@@ -110,14 +109,20 @@ def generate_performance_boxplots(performances, metrics, outputfolder,
 
     # High DTI to  make sure we save the maximized image
     fname = 'boxplot_test.png'
-    outputname = os.path.join(outputfolder, fname)
-    plt.subplots_adjust(top = 1, bottom = 0, right = 1, left = 0,
-                hspace = 0, wspace = 0)
-    f.savefig(outputname, dpi=600, bbox_inches = 'tight',
-        pad_inches = 0)
-    print(("Boxplot saved as {} !").format(outputname))
+    outputname_png = os.path.join(outputfolder, fname)
+    plt.subplots_adjust(top=1, bottom=0, right=1, left=0,
+                        hspace=0, wspace=0)
+    f.savefig(outputname_png, dpi=600, bbox_inches='tight',
+              pad_inches = 0)
+    print(("Boxplot saved as {} !").format(outputname_png))
+
+    fname = 'boxplot_test.tex'
+    outputname_tex = os.path.join(outputfolder, fname)
+    tikzplotlib.save(outputname_tex)
+
 
 def test():
+    """Test functionality with synthetic data."""
     perf1 = dict()
     perf1['AUC'] = np.random.randint(low=50, high=100, size=100) / 100.0
     perf1['Accuracy'] = np.random.randint(low=50, high=100, size=100) / 100.0
@@ -153,6 +158,7 @@ def test():
     out = os.getcwd()
     colors = [[0.5, 0, 0], [0, 0.5, 0], [0, 0, 0.5], [0, 0.5, 0.5], [0.5, 0, 0.5]]
     generate_performance_boxplots(performances, metrics, out, colors)
+
 
 if __name__ == '__main__':
     test()

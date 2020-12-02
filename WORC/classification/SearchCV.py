@@ -643,21 +643,19 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             train_scores = _aggregate_score_dicts(train_score_dicts)
 
         # We take only one result per split, default by sklearn
-        candidate_params_all = list(parameters_all[::n_splits])
+        pipelines_per_split = int(len(parameters_all) / n_splits)
+        candidate_params_all = list(parameters_all[:pipelines_per_split])
         n_candidates = len(candidate_params_all)
-
-        # Computed the (weighted) mean and std for test scores alone
-        # NOTE test_sample counts (weights) remain the same for all candidates
-        test_sample_counts = np.array(test_sample_counts[:n_splits],
-                                      dtype=np.int)
 
         # Store some of the resulting scores
         results = dict()
 
+        # Computed the (weighted) mean and std for test scores alone
         def _store(key_name, array, weights=None, splits=False, rank=False):
             """A small helper to store the scores/times to the cv_results_."""
-            array = np.array(array, dtype=np.float64).reshape(n_candidates,
-                                                              n_splits)
+            array = np.transpose(np.array(array, dtype=np.float64).reshape(n_splits,
+                                                                           n_candidates))
+
             if splits:
                 for split_i in range(n_splits):
                     results["split%d_%s"
@@ -715,11 +713,26 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         else:
             iid = False
 
+        icheck = 0
         for scorer_name in scorers.keys():
             # Computed the (weighted) mean and std for test scores alone
+            key_name = 'test_%s' % scorer_name
             _store('test_%s' % scorer_name, test_scores[scorer_name],
                    splits=True, rank=True,
                    weights=test_sample_counts if iid else None)
+
+            if DebugDetector().do_detection() and icheck == 0:
+                # Check the scores for some splits
+                for i in range(10):
+                    print('Iteration: ' + str(i))
+                    print(test_scores[scorer_name][i])
+                    print(results["split%d_%s" % (0, key_name)][i])
+                    print(test_scores[scorer_name][i + 1000])
+                    print(results["split%d_%s" % (1, key_name)][i])
+                    print(results['mean_%s' % key_name][i])
+                    print('\n')
+                    icheck += 1
+
             if self.return_train_score:
                 _store('train_%s' % scorer_name, train_scores[scorer_name],
                        splits=True)
@@ -1444,7 +1457,7 @@ class BaseSearchCVfastr(BaseSearchCV):
             with open(sourcename, 'w') as fp:
                 json.dump(temp_dict, fp, indent=4)
 
-            parameter_files[str(num)] =\
+            parameter_files[str(num).zfill(4)] =\
                 f'vfs://tmp/GS/{name}/parameters/{fname}'
 
         # Create test-train splits
@@ -1462,7 +1475,7 @@ class BaseSearchCVfastr(BaseSearchCV):
             sourcename = os.path.join(tempfolder, 'traintest', fname)
             if not os.path.exists(os.path.dirname(sourcename)):
                 os.makedirs(os.path.dirname(sourcename))
-            traintest_files[str(num)] = f'vfs://tmp/GS/{name}/traintest/{fname}'
+            traintest_files[str(num).zfill(4)] = f'vfs://tmp/GS/{name}/traintest/{fname}'
 
             sourcelabel = f"Source Data Iteration {num}"
             source_data.to_hdf(sourcename, sourcelabel)
@@ -1529,8 +1542,9 @@ class BaseSearchCVfastr(BaseSearchCV):
                         execution_plugin=self.fastr_plugin)
 
         # Check whether all jobs have finished
-        expected_no_files = len(traintest_files) * len(parameter_files)
+        expected_no_files = len(list(traintest_files.keys())) * len(list(parameter_files.keys()))
         sink_files = glob.glob(os.path.join(fastr.config.mounts['tmp'], 'GS', name) + '/output*.hdf5')
+        sink_files.sort()
         if len(sink_files) != expected_no_files:
             difference = expected_no_files - len(sink_files)
             fname = os.path.join(tempfolder, 'tmp')

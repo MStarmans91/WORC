@@ -593,6 +593,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
         # Compute statistics
         stats = dict()
         output = dict()
+        all_performances = None
         if crossval_type == 'LOO':
             performances = compute_statistics(y_truths, y_scores,
                                               y_predictions,
@@ -632,6 +633,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
             # FIXME: multilabel performance per single label not included
             # FIXME: multilabel not working in bootstrap
             # FIXME: bootstrap not done in regression
+            all_performances = dict()
             if not regression:
                 metric_names_single = ['Accuracy', 'BCA', 'Sensitivity',
                                        'Specificity', 'Precision', 'NPV',
@@ -662,13 +664,20 @@ def plot_estimator_performance(prediction, label_data, label_type,
                         stats[k] = f"{perf_test} {str(compute_confidence_bootstrap(perf, perf_test, N_1, alpha))}"
 
                 else:
+                    names = ['Accuracy', 'BCA', 'AUC', 'F1-score', 'Precision'
+                             'NPV', 'Sensitivity', 'Specificity']
+                    performances = [accuracy, bca, auc, f1_score_list,
+                                    precision, npv, sensitivity, specificity]
+                    for name, perf in zip(names, performances):
+                        all_performances[name] = perf
+
                     stats["Accuracy 95%:"] = f"{np.nanmean(accuracy)} {str(compute_confidence(accuracy, N_1, N_2, alpha))}"
                     stats["BCA 95%:"] = f"{np.nanmean(bca)} {str(compute_confidence(bca, N_1, N_2, alpha))}"
                     stats["AUC 95%:"] = f"{np.nanmean(auc)} {str(compute_confidence(auc, N_1, N_2, alpha))}"
                     stats["F1-score 95%:"] = f"{np.nanmean(f1_score_list)} {str(compute_confidence(f1_score_list, N_1, N_2, alpha))}"
                     stats["Precision 95%:"] = f"{np.nanmean(precision)} {str(compute_confidence(precision, N_1, N_2, alpha))}"
                     stats["NPV 95%:"] = f"{np.nanmean(npv)} {str(compute_confidence(npv, N_1, N_2, alpha))}"
-                    stats["Sensitivity 95%: "] = f"{np.nanmean(sensitivity)} {str(compute_confidence(sensitivity, N_1, N_2, alpha))}"
+                    stats["Sensitivity 95%:"] = f"{np.nanmean(sensitivity)} {str(compute_confidence(sensitivity, N_1, N_2, alpha))}"
                     stats["Specificity 95%:"] = f"{np.nanmean(specificity)} {str(compute_confidence(specificity, N_1, N_2, alpha))}"
 
                     if modus == 'multilabel':
@@ -715,6 +724,13 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
             else:
                 # Regression
+                names = ['R2-score', 'MSE', 'ICC', 'PearsonC', 'PearsonP'
+                         'SpearmanC', 'SpearmanP']
+                performances = [r2score, MSE, coefICC, PearsonC,
+                                PearsonP, SpearmanC, SpearmanP]
+                for name, perf in zip(names, performances):
+                    all_performances[name] = perf
+
                 stats['R2-score 95%: '] = f"{np.nanmean(r2score)} {str(compute_confidence(r2score, N_1, N_2, alpha))}"
                 stats['MSE 95%: '] = f"{np.nanmean(MSE)} {str(compute_confidence(MSE, N_1, N_2, alpha))}"
                 stats['ICC 95%: '] = f"{np.nanmean(coefICC)} {str(compute_confidence(coefICC, N_1, N_2, alpha))}"
@@ -729,6 +745,10 @@ def plot_estimator_performance(prediction, label_data, label_type,
             print(f"{k} : {v}.")
 
         output['Statistics'] = stats
+
+        if all_performances is not None:
+            output['All_performances'] = all_performances
+
         return output
 
 

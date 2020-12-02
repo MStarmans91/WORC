@@ -6,6 +6,20 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+Unreleased
+------------------
+
+Fixed
+~~~~~
+- Bug in SearchCV sorting of output files.
+- Bug in StatisticalTest for Manhattan plot.
+- Bug in evaluate when using a test set.
+
+Added
+~~~~~~~
+- All performances to output statistics.
+- Script for plotting of errors in classification. Not embedded yet.
+
 3.3.5 - 2020-10-21
 ------------------
 
