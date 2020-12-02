@@ -51,7 +51,7 @@ matrix:
         - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
         - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
         - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks performance --samples all
-        - fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0__0
+        - fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
 
 notifications:
   slack:
