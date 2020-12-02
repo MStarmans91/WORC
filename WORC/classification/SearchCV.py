@@ -906,9 +906,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Fit the estimator using the preprocessed features
         X = np.asarray([x[0] for x in X])
         #X_train = [X[i] for i in train]
-        #if y is not None:
-        #    y = y[train]
-        X, y = self.preprocess(X[train], y[train], training=True)
+        if y is not None:
+            y = y[train]
+        X, y = self.preprocess(X[train], y, training=True)
 
         best_estimator = cc.construct_classifier(parameters_all)
 
