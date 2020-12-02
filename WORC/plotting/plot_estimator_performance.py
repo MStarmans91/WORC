@@ -51,7 +51,7 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble_method, ens
         train_temp = range(0, len(train))
 
         # Refit a SearchCV object with the provided parameters
-        if ensemble:
+        if ensemble_method is not None:
             estimator.create_ensemble(X_train_temp, Y_train_temp,
                                       method=ensemble_method, size=ensemble_size,
                                       verbose=False, scoring=ensemble_scoring)
@@ -202,6 +202,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
         bca = list()
         auc = list()
         f1_score_list = list()
+        val_score = list()
 
         if modus == 'multilabel':
             acc_av = list()
@@ -493,6 +494,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 f1_score_list.append(f1_score_temp)
                 precision.append(precision_temp)
                 npv.append(npv_temp)
+                val_score.append(fitted_model.ensemble_validation_score)
 
                 if modus == 'multilabel':
                     acc_av.append(acc_av_temp)
