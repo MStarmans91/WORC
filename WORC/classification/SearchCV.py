@@ -1027,7 +1027,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         Y_valid_truth.append(Y_train[valid])
                         prediction_length = len(Y_train[valid])
 
-                    base_estimator = clone(base_estimator)
+                    new_estimator = clone(base_estimator)
 
                     # Fit the preprocessors of the pipeline
                     out = fit_and_score(X_train, Y_train, scoring,
@@ -1035,21 +1035,21 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                         return_all=True)
                     (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
                      Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
-                    base_estimator.best_groupsel = GroupSel
-                    base_estimator.best_scaler = scalers
-                    base_estimator.best_varsel = VarSel
-                    base_estimator.best_modelsel = SelectModel
-                    base_estimator.best_preprocessor = None
-                    base_estimator.best_imputer = Imputers
-                    base_estimator.best_pca = PCAs
-                    base_estimator.best_featlab = feature_labels
-                    base_estimator.best_statisticalsel = StatisticalSel
-                    base_estimator.best_reliefsel = ReliefSel
-                    base_estimator.best_Sampler = Sampler
+                    new_estimator.best_groupsel = GroupSel
+                    new_estimator.best_scaler = scalers
+                    new_estimator.best_varsel = VarSel
+                    new_estimator.best_modelsel = SelectModel
+                    new_estimator.best_preprocessor = None
+                    new_estimator.best_imputer = Imputers
+                    new_estimator.best_pca = PCAs
+                    new_estimator.best_featlab = feature_labels
+                    new_estimator.best_statisticalsel = StatisticalSel
+                    new_estimator.best_reliefsel = ReliefSel
+                    new_estimator.best_Sampler = Sampler
 
                     # Use the fitted preprocessors to preprocess the features
                     X_train_values = np.asarray([x[0] for x in X_train])
-                    processed_X, processed_y = base_estimator.preprocess(X_train_values[train],
+                    processed_X, processed_y = new_estimator.preprocess(X_train_values[train],
                                                                          Y_train[train],
                                                                          training=True)
                     # Check if there are features left
@@ -1062,8 +1062,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Construct and fit the classifier
                         best_estimator = cc.construct_classifier(p_all)
                         best_estimator.fit(processed_X, processed_y)
-                        base_estimator.best_estimator_ = best_estimator
-                        predictions = base_estimator.predict(X_train_values[valid])
+                        new_estimator.best_estimator_ = best_estimator
+                        predictions = new_estimator.predict(X_train_values[valid])
 
                         # Store the predictions on this split
                         predictions_iter.append(predictions)
@@ -1352,7 +1352,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         for train, valid in self.cv_iter:
             estimators = list()
             for enum, p_all in enumerate(selected_params):
-                base_estimator = clone(base_estimator)
+                new_estimator = clone(base_estimator)
                 '''
                 base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                train, valid,
@@ -1366,29 +1366,29 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                     return_all=True)
                 (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
                  Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
-                base_estimator.best_groupsel = GroupSel
-                base_estimator.best_scaler = scalers
-                base_estimator.best_varsel = VarSel
-                base_estimator.best_modelsel = SelectModel
-                base_estimator.best_preprocessor = None
-                base_estimator.best_imputer = Imputers
-                base_estimator.best_pca = PCAs
-                base_estimator.best_featlab = feature_labels
-                base_estimator.best_statisticalsel = StatisticalSel
-                base_estimator.best_reliefsel = ReliefSel
-                base_estimator.best_Sampler = Sampler
+                new_estimator.best_groupsel = GroupSel
+                new_estimator.best_scaler = scalers
+                new_estimator.best_varsel = VarSel
+                new_estimator.best_modelsel = SelectModel
+                new_estimator.best_preprocessor = None
+                new_estimator.best_imputer = Imputers
+                new_estimator.best_pca = PCAs
+                new_estimator.best_featlab = feature_labels
+                new_estimator.best_statisticalsel = StatisticalSel
+                new_estimator.best_reliefsel = ReliefSel
+                new_estimator.best_Sampler = Sampler
 
                 # Use the fitted preprocessors to preprocess the features
                 X_train_values = np.asarray([x[0] for x in X_train])
-                processed_X, processed_y = base_estimator.preprocess(X_train_values[train],
+                processed_X, processed_y = new_estimator.preprocess(X_train_values[train],
                                                                      Y_train[train],
                                                                      training=True)
 
                 best_estimator = cc.construct_classifier(p_all)
                 best_estimator.fit(processed_X, processed_y)
-                base_estimator.best_estimator_ = best_estimator
+                new_estimator.best_estimator_ = best_estimator
 
-                estimators.append(base_estimator)
+                estimators.append(new_estimator)
 
             temp_ensemble = Ensemble(estimators)
             # Calculate and store the final performance of the ensemble
