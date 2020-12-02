@@ -1353,16 +1353,45 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             estimators = list()
             for enum, p_all in enumerate(selected_params):
                 new_estimator = clone(base_estimator)
-
+                '''
                 new_estimator.refit_and_score(X_train, Y_train, p_all,
                                                train, valid,
                                                verbose=False)
 
                 # Determine whether to overfit the feature scaling on the test set
                 new_estimator.overfit_scaler = overfit_scaler
+                '''
+                out = fit_and_score(X_train, Y_train, scoring,
+                                    train, valid, p_all,
+                                    return_all=True)
+                (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
+                 Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
+                new_estimator.best_groupsel = GroupSel
+                new_estimator.best_scaler = scalers
+                new_estimator.best_varsel = VarSel
+                new_estimator.best_modelsel = SelectModel
+                new_estimator.best_preprocessor = None
+                new_estimator.best_imputer = Imputers
+                new_estimator.best_pca = PCAs
+                new_estimator.best_featlab = feature_labels
+                new_estimator.best_statisticalsel = StatisticalSel
+                new_estimator.best_reliefsel = ReliefSel
+                new_estimator.best_Sampler = Sampler
+
+                # Use the fitted preprocessors to preprocess the features
+                X_train_values = np.asarray([x[0] for x in X_train])
+                processed_X, processed_y = new_estimator.preprocess(X_train_values[train],
+                                                                    Y_train[train],
+                                                                    training=True)
+
+                # Construct and fit the classifier
+                best_estimator = cc.construct_classifier(p_all)
+                best_estimator.fit(processed_X, processed_y)
+                new_estimator.best_estimator_ = best_estimator
 
                 estimators.append(new_estimator)
 
+            new_estimator = clone(base_estimator)
             new_estimator.best_estimator_ = Ensemble(estimators)
             # Calculate and store the final performance of the ensemble
             # on this validation split
