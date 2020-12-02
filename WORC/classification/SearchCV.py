@@ -370,7 +370,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                  refit=True, cv=None, verbose=0, pre_dispatch='2*n_jobs',
                  random_state=None, error_score='raise', return_train_score=True,
                  n_jobspercore=100, maxlen=100, fastr_plugin=None,
-                 ranking_score='test_score'):
+                 ranking_score='test_score', ensemble_validation_score=None):
 
         # Added for fastr and joblib executions
         self.param_distributions = param_distributions
@@ -379,6 +379,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.random_state = random_state
         self.ensemble = list()
         self.fastr_plugin = fastr_plugin
+        self.ensemble_validation_score = ensemble_validation_score
 
         # Below are the defaults from sklearn
         self.scoring = scoring
@@ -1367,6 +1368,19 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         self.ensemble = Ensemble(estimators)
         self.best_estimator_ = self.ensemble
+
+        # Calculate and store the final performance of the ensemble
+        # on the validation set
+        val_split_scores = []
+        for train, valid in self.cv_iter:
+            X_train_values = np.asarray([x[0] for x in X_train])
+            predictions = self.best_estimator_.predict(X_train_values[valid])
+            val_split_scores.append(compute_performance(scoring,
+                                                        Y_train[valid],
+                                                        predictions))
+        validation_score = np.mean(val_split_scores)
+        self.ensemble_validation_score = validation_score
+        print('Final ensemble validation score: ' + str(validation_score))
         print("\n")
 
 
