@@ -600,6 +600,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 stats["NPV 95%:"] = f"{np.nanmean(npv)} {str(compute_confidence(npv, N_1, N_2, alpha))}"
                 stats["Sensitivity 95%: "] = f"{np.nanmean(sensitivity)} {str(compute_confidence(sensitivity, N_1, N_2, alpha))}"
                 stats["Specificity 95%:"] = f"{np.nanmean(specificity)} {str(compute_confidence(specificity, N_1, N_2, alpha))}"
+                stats["Validation 95%:"] = f"{np.nanmean(val_score)} {str(compute_confidence(val_score, N_1, N_2, alpha))}"
 
             if modus == 'multilabel':
                 stats["Average Accuracy 95%:"] = f"{np.nanmean(acc_av)} {str(compute_confidence(acc_av, N_1, N_2, alpha))}"
