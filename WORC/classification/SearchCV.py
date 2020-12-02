@@ -727,7 +727,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print('Iteration: ' + str(i))
                     print(test_scores[scorer_name][i])
                     print(results["split%d_%s" % (0, key_name)][i])
-                    print(test_scores[scorer_name][i + 1000])
+                    print(test_scores[scorer_name][i + 10])
                     print(results["split%d_%s" % (1, key_name)][i])
                     print(results['mean_%s' % key_name][i])
                     print('\n')
