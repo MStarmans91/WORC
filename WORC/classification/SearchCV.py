@@ -1396,7 +1396,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Calculate and store the final performance of the ensemble
             # on this validation split
             X_train_values = np.asarray([x[0] for x in X_train])
-            predictions = new_estimator.predict(X_train_values[valid])
+            predictions = new_estimator.best_estimator_.predict(X_train_values[valid])
             val_split_scores.append(compute_performance(scoring,
                                                         Y_train[valid],
                                                         predictions))
