@@ -1377,6 +1377,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 # Construct and fit the classifier
                 best_estimator = cc.construct_classifier(p_all)
                 best_estimator.fit(processed_X, processed_y)
+                base_estimator.best_estimator_ = best_estimator
 
                 # Determine whether to overfit the feature scaling on the test set
                 base_estimator.overfit_scaler = overfit_scaler
