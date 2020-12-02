@@ -1353,13 +1353,40 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             estimators = list()
             for enum, p_all in enumerate(selected_params):
                 base_estimator = clone(base_estimator)
-
+                '''
                 base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                train, valid,
                                                verbose=False)
 
                 # Determine whether to overfit the feature scaling on the test set
                 base_estimator.overfit_scaler = overfit_scaler
+                '''
+                out = fit_and_score(X_train, Y_train, scoring,
+                                    train, valid, p_all,
+                                    return_all=True)
+                (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
+                 Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
+                base_estimator.best_groupsel = GroupSel
+                base_estimator.best_scaler = scalers
+                base_estimator.best_varsel = VarSel
+                base_estimator.best_modelsel = SelectModel
+                base_estimator.best_preprocessor = None
+                base_estimator.best_imputer = Imputers
+                base_estimator.best_pca = PCAs
+                base_estimator.best_featlab = feature_labels
+                base_estimator.best_statisticalsel = StatisticalSel
+                base_estimator.best_reliefsel = ReliefSel
+                base_estimator.best_Sampler = Sampler
+
+                # Use the fitted preprocessors to preprocess the features
+                X_train_values = np.asarray([x[0] for x in X_train])
+                processed_X, processed_y = base_estimator.preprocess(X_train_values[train],
+                                                                     Y_train[train],
+                                                                     training=True)
+
+                best_estimator = cc.construct_classifier(p_all)
+                best_estimator.fit(processed_X, processed_y)
+                base_estimator.best_estimator_ = best_estimator
 
                 estimators.append(base_estimator)
 
@@ -1369,8 +1396,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             X_train_values = np.asarray([x[0] for x in X_train])
             predictions = temp_ensemble.predict(X_train_values[valid])
             val_split_scores.append(compute_performance(scoring,
-                                            Y_train[valid],
-                                            predictions))
+                                                        Y_train[valid],
+                                                        predictions))
 
         validation_score = np.mean(val_split_scores)
         self.ensemble_validation_score = validation_score
