@@ -178,8 +178,10 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                     if hasattr(est.best_estimator_, 'kernel'):
                         est.best_estimator_.kernel = str(est.best_estimator_.kernel)
                     outcome[num, :] = est.predict_proba(X)[:, 1]
+                    print('predict_proba called')
                 else:
                     outcome[num, :] = est.predict(X)
+                    print('predict called')
 
             # Replace NAN if they are there
             outcome = outcome[~np.isnan(outcome).any(axis=1)]
@@ -1391,12 +1393,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 new_estimator.best_estimator_ = best_estimator
 
                 # New method
-                prediction = new_estimator.predict(X_train_values[valid])
-                predictions.append(prediction)
+                #prediction = new_estimator.predict(X_train_values[valid])
+                #predictions.append(prediction)
 
 
-                #estimators.append(new_estimator)
+                estimators.append(new_estimator)
 
+            '''
             final_prediction = list()
             nr_of_predictions = len(predictions[0])
             for i in range(nr_of_predictions):
@@ -1421,7 +1424,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             val_split_scores.append(compute_performance(scoring,
                                                         Y_train[valid],
                                                         predictions))
-            '''
+
 
         print('val_split_scores: ' + str(val_split_scores))
         validation_score = np.mean(val_split_scores)
