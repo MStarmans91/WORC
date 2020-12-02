@@ -189,9 +189,9 @@ def plot_im_and_overlay(image, mask=None, figsize=(3, 3), alpha=0.40):
     imax = np.max(image)
     norm_im = colors.Normalize(vmin=imin, vmax=imax, clip=False)
 
-    cmap = plt.get_cmap("Reds")
+    cmap = plt.get_cmap("Blues")
     cmap.set_under(color="white", alpha=0)
-    cmap.set_over(color="r", alpha=1)
+    cmap.set_over(color="cyan", alpha=1)
     normO = colors.Normalize(vmin=0.5, vmax=0.75, clip=False)
 
     # Plot and save the full image

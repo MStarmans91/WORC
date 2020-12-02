@@ -327,6 +327,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
         sort_indices = np.argsort(np.asarray(labels))
         p_values = [p_values[i] for i in sort_indices]
         labels = [labels[i] for i in sort_indices]
+        objects = [objects[i] for i in sort_indices]
 
         # Make manhattan plot
         manhattan_importance(values=p_values,
