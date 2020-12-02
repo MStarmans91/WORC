@@ -904,11 +904,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.best_Sampler = Sampler
 
         # Fit the estimator using the preprocessed features
-        X = [x[0] for x in X]
+        X = np.asarray([x[0] for x in X])
         #X_train = [X[i] for i in train]
         #if y is not None:
         #    y = y[train]
-        X, y = self.preprocess(X, y, training=True)
+        X, y = self.preprocess(X[train], y[train], training=True)
 
         best_estimator = cc.construct_classifier(parameters_all)
 
@@ -1344,6 +1344,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 return self
 
         # Create the ensemble --------------------------------------------------
+
         # First create and score the ensemble on the validation set
         selected_params = [parameters_all[i] for i in ensemble]
         val_split_scores = []
@@ -1351,7 +1352,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             estimators = list()
             for enum, p_all in enumerate(selected_params):
                 base_estimator = clone(base_estimator)
-
+                '''
                 out = fit_and_score(X_train, Y_train, scoring,
                                     train, valid, p_all,
                                     return_all=True)
@@ -1383,6 +1384,15 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 base_estimator.overfit_scaler = overfit_scaler
 
                 estimators.append(base_estimator)
+                '''
+                base_estimator.refit_and_score(X_train, Y_train, p_all,
+                                               train, valid,
+                                               verbose=False)
+
+                # Determine whether to overfit the feature scaling on the test set
+                base_estimator.overfit_scaler = overfit_scaler
+
+                estimators.append(base_estimator)
 
             temp_ensemble = Ensemble(estimators)
             # Calculate and store the final performance of the ensemble
@@ -1396,6 +1406,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         validation_score = np.mean(val_split_scores)
         self.ensemble_validation_score = validation_score
 
+        # Fit the ensemble on the FULL training set
         selected_params = [parameters_all[i] for i in ensemble]
         estimators = list()
         train = np.arange(0, len(X_train))
