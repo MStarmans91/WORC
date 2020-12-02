@@ -173,6 +173,7 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
             # Singlelabel
             outcome = np.zeros((self.n_estimators, len(X)))
             for num, est in enumerate(self.estimators):
+                '''
                 if hasattr(est, 'predict_proba'):
                     # BUG: SVM kernel can be wrong type
                     if hasattr(est.best_estimator_, 'kernel'):
@@ -180,8 +181,9 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                     outcome[num, :] = est.predict_proba(X)[:, 1]
                     print('predict_proba called')
                 else:
-                    outcome[num, :] = est.predict(X)
-                    print('predict called')
+                '''
+                outcome[num, :] = est.predict(X)
+                print('predict called')
 
             # Replace NAN if they are there
             outcome = outcome[~np.isnan(outcome).any(axis=1)]
