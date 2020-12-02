@@ -1346,6 +1346,33 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Create the ensemble --------------------------------------------------
         # First create and score the ensemble on the validation set
         selected_params = [parameters_all[i] for i in ensemble]
+        val_split_scores = []
+        for train, valid in self.cv_iter:
+            estimators = list()
+            for enum, p_all in enumerate(selected_params):
+                base_estimator = clone(base_estimator)
+
+                base_estimator.refit_and_score(X_train, Y_train, p_all,
+                                               train, valid,
+                                               verbose=False)
+
+                # Determine whether to overfit the feature scaling on the test set
+                base_estimator.overfit_scaler = overfit_scaler
+
+                estimators.append(base_estimator)
+
+            temp_ensemble = Ensemble(estimators)
+            # Calculate and store the final performance of the ensemble
+            # on this validation split
+            X_train_values = np.asarray([x[0] for x in X_train])
+            predictions = temp_ensemble.predict(X_train_values[valid])
+            val_split_scores.append(compute_performance(scoring,
+                                            Y_train[valid],
+                                            predictions))
+
+        validation_score = np.mean(val_split_scores)
+        self.ensemble_validation_score = validation_score
+
 
         # Create the ensemble trained on the full training set
         parameters_all = [parameters_all[i] for i in ensemble]
@@ -1356,11 +1383,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Refit a SearchCV object with the provided parameters
             print(f"Refitting estimator {enum+1} / {nest}.")
             base_estimator = clone(base_estimator)
-
-            # # Check if we need to create a multiclass estimator
-            # if Y_train.shape[1] > 1 and type(base_estimator) != RankedSVM:
-            #     # Multiclass, hence employ a multiclass classifier for SVM
-            #     base_estimator = OneVsRestClassifier(base_estimator)
 
             base_estimator.refit_and_score(X_train, Y_train, p_all,
                                            train, train,
@@ -1374,17 +1396,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.ensemble = Ensemble(estimators)
         self.best_estimator_ = self.ensemble
 
-        # Calculate and store the final performance of the ensemble
-        # on the validation set
-        val_split_scores = []
-        for train, valid in self.cv_iter:
-            X_train_values = np.asarray([x[0] for x in X_train])
-            predictions = self.best_estimator_.predict(X_train_values[valid])
-            val_split_scores.append(compute_performance(scoring,
-                                                        Y_train[valid],
-                                                        predictions))
-        validation_score = np.mean(val_split_scores)
-        self.ensemble_validation_score = validation_score
         print('Final ensemble validation score: ' + str(validation_score))
         print("\n")
 
