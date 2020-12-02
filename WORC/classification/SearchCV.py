@@ -1351,6 +1351,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         val_split_scores = []
         for train, valid in self.cv_iter:
             estimators = list()
+            predictions = list()
             for enum, p_all in enumerate(selected_params):
                 new_estimator = clone(base_estimator)
                 '''
@@ -1389,8 +1390,26 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 best_estimator.fit(processed_X, processed_y)
                 new_estimator.best_estimator_ = best_estimator
 
-                estimators.append(new_estimator)
+                # New method
+                prediction = new_estimator.predict(X_train_values[valid])
+                predictions.append(prediction)
 
+
+                #estimators.append(new_estimator)
+
+            final_prediction = list()
+            nr_of_predictions = len(predictions[0])
+            for i in range(nr_of_predictions):
+                pred_value = list()
+                for pred in predictions:
+                    pred_value.append(pred[i])
+                final_prediction.append(np.mean(pred_value))
+            print('test, final prediction: ' + str(final_prediction))
+            val_split_scores.append(compute_performance(scoring,
+                                                        Y_train[valid],
+                                                        final_prediction))
+
+            '''
             new_estimator = clone(base_estimator)
             new_estimator.ensemble = Ensemble(estimators)
             new_estimator.best_estimator_ = new_estimator.ensemble
@@ -1402,11 +1421,15 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             val_split_scores.append(compute_performance(scoring,
                                                         Y_train[valid],
                                                         predictions))
+            '''
 
         print('val_split_scores: ' + str(val_split_scores))
         validation_score = np.mean(val_split_scores)
         self.ensemble_validation_score = validation_score
         print('Final ensemble validation score: ' + str(validation_score))
+
+
+
 
         # Create the ensemble trained on the full training set
         parameters_all = [parameters_all[i] for i in ensemble]
