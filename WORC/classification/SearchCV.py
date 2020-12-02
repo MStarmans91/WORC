@@ -173,6 +173,7 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
             # Singlelabel
             outcome = np.zeros((self.n_estimators, len(X)))
             for num, est in enumerate(self.estimators):
+                '''
                 if hasattr(est, 'predict_proba'):
                     # BUG: SVM kernel can be wrong type
                     if hasattr(est.best_estimator_, 'kernel'):
@@ -180,8 +181,9 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                     outcome[num, :] = est.predict_proba(X)[:, 1]
                     print('predict_proba called')
                 else:
-                    outcome[num, :] = est.predict(X)
-                    print('predict called')
+                '''
+                outcome[num, :] = est.predict(X)
+                print('predict called')
 
             # Replace NAN if they are there
             outcome = outcome[~np.isnan(outcome).any(axis=1)]
@@ -1356,13 +1358,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             predictions = list()
             for enum, p_all in enumerate(selected_params):
                 new_estimator = clone(base_estimator)
-                '''
+
                 new_estimator.refit_and_score(X_train, Y_train, p_all,
                                                train, valid,
                                                verbose=False)
 
-                # Determine whether to overfit the feature scaling on the test set
-                new_estimator.overfit_scaler = overfit_scaler
                 '''
                 out = fit_and_score(X_train, Y_train, scoring,
                                     train, valid, p_all,
@@ -1396,7 +1396,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 #prediction = new_estimator.predict(X_train_values[valid])
                 #predictions.append(prediction)
 
-
+                '''
                 estimators.append(new_estimator)
 
             '''
