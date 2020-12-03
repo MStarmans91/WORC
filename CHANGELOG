@@ -14,6 +14,8 @@ Fixed
 - Bug in SearchCV sorting of output files.
 - Bug in StatisticalTest for Manhattan plot.
 - Bug in evaluate when using a test set.
+- Bug in SearchCV for fitting preprocessing.
+- Fix random states in boosting estimators.
 
 Added
 ~~~~~~~

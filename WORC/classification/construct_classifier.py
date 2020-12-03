@@ -62,14 +62,16 @@ def construct_classifier(config):
         learning_rate = config['AdaBoost_learning_rate']
         n_estimators = config['AdaBoost_n_estimators']
         classifier = AdaBoostClassifier(n_estimators=n_estimators,
-                                        learning_rate=learning_rate)
+                                        learning_rate=learning_rate,
+                                        random_state=config['random_seed'])
 
     elif config['classifiers'] == 'AdaBoostRegressor':
         # AdaBoost regressor
         learning_rate = config['AdaBoost_learning_rate']
         n_estimators = config['AdaBoost_n_estimators']
         classifier = AdaBoostRegressor(n_estimators=n_estimators,
-                                       learning_rate=learning_rate)
+                                       learning_rate=learning_rate,
+                                       random_state=config['random_seed'])
 
     elif config['classifiers'] == 'XGBClassifier':
         # XGB Classifier
@@ -84,7 +86,8 @@ def construct_classifier(config):
                                    gamma=gamma,
                                    min_child_weight=min_child_weight,
                                    n_estimators=boosting_rounds,
-                                   colsample_bytree=colsample_bytree)
+                                   colsample_bytree=colsample_bytree,
+                                   random_state=config['random_seed'])
 
     elif config['classifiers'] == 'XGBRegressor':
         # XGB Classifier
@@ -99,7 +102,8 @@ def construct_classifier(config):
                                   gamma=gamma,
                                   min_child_weight=min_child_weight,
                                   n_estimators=boosting_rounds,
-                                  colsample_bytree=colsample_bytree)
+                                  colsample_bytree=colsample_bytree,
+                                  random_state=config['random_seed'])
 
     elif config['classifiers'] == 'RF':
         # Random forest kernel
