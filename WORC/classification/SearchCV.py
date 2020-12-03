@@ -897,7 +897,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.best_Sampler = Sampler
 
         # Fit the estimator using the preprocessed features
-        X = [x[0] for x in X]
+        X = np.asarray([x[0] for x in X])
         if y is not None:
             y = y[train]
 
