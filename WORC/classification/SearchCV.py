@@ -189,9 +189,9 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
             # Binarize
             isclassifier = is_classifier(est.best_estimator_)
 
-            #if isclassifier:
-            #    outcome[outcome >= 0.5] = 1
-            #    outcome[outcome < 0.5] = 0
+            if isclassifier:
+                outcome[outcome >= 0.5] = 1
+                outcome[outcome < 0.5] = 0
 
         return outcome
 
@@ -1064,8 +1064,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         best_estimator = cc.construct_classifier(p_all)
                         best_estimator.fit(processed_X, processed_y)
                         new_estimator.best_estimator_ = best_estimator
-                        temp_ensemble = Ensemble([new_estimator])
-                        predictions = temp_ensemble.predict(X_train_values[valid])
+                        predictions = new_estimator.predict_proba(X_train_values[valid])
                         alt_predictions = new_estimator.predict(X_train_values[valid])
 
                         # Only take the probabilities for the second class
@@ -1367,56 +1366,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                train, valid,
                                                verbose=False)
 
-                '''
-                out = fit_and_score(X_train, Y_train, scoring,
-                                    train, valid, p_all,
-                                    return_all=True)
-                (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
-                 Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
-                new_estimator.best_groupsel = GroupSel
-                new_estimator.best_scaler = scalers
-                new_estimator.best_varsel = VarSel
-                new_estimator.best_modelsel = SelectModel
-                new_estimator.best_preprocessor = None
-                new_estimator.best_imputer = Imputers
-                new_estimator.best_pca = PCAs
-                new_estimator.best_featlab = feature_labels
-                new_estimator.best_statisticalsel = StatisticalSel
-                new_estimator.best_reliefsel = ReliefSel
-                new_estimator.best_Sampler = Sampler
-
-                # Use the fitted preprocessors to preprocess the features
-                X_train_values = np.asarray([x[0] for x in X_train])
-                processed_X, processed_y = new_estimator.preprocess(X_train_values[train],
-                                                                    Y_train[train],
-                                                                    training=True)
-
-                # Construct and fit the classifier
-                best_estimator = cc.construct_classifier(p_all)
-                best_estimator.fit(processed_X, processed_y)
-                new_estimator.best_estimator_ = best_estimator
-
-                # New method
-                #prediction = new_estimator.predict(X_train_values[valid])
-                #predictions.append(prediction)
-
-                '''
                 estimators.append(new_estimator)
 
-            '''
-            final_prediction = list()
-            nr_of_predictions = len(predictions[0])
-            for i in range(nr_of_predictions):
-                pred_value = list()
-                for pred in predictions:
-                    pred_value.append(pred[i])
-                final_prediction.append(np.mean(pred_value))
-            print('test, final prediction: ' + str(final_prediction))
-            val_split_scores.append(compute_performance(scoring,
-                                                        Y_train[valid],
-                                                        final_prediction))
-
-            '''
             new_estimator = clone(base_estimator)
             new_estimator.ensemble = Ensemble(estimators)
             new_estimator.best_estimator_ = new_estimator.ensemble
