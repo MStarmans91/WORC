@@ -1248,6 +1248,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         for num in range(0, n_iter):
                             y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
                         print('y_score: ' + str(y_score[0]))
+                        print('Y_valid_sore: ' + str(Y_valid_score[0][ensemble[-1]]))
 
                     elif iteration == 1:
                         # Create y_score object for second iteration
