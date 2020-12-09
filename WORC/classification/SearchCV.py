@@ -454,11 +454,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         """
         self._check_is_fitted('predict')
-        print('is called')
+
 
         if self.ensemble:
+            print('ensemble is called')
             return self.ensemble.predict(X)
         else:
+            print('else is called')
             X, _ = self.preprocess(X)
             return self.best_estimator_.predict(X)
 
