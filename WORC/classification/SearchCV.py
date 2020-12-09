@@ -1068,7 +1068,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         best_estimator = cc.construct_classifier(p_all)
                         best_estimator.fit(processed_X, processed_y)
                         new_estimator.best_estimator_ = best_estimator
-                        predictions = new_estimator.predict_proba(X_train_values[valid])
+                        predictions = new_estimator.best_estimator_.predict_proba(X_train_values[valid])
                         #predictions = new_estimator.predict(X_train_values[valid])
                         print(predictions)
                         # Only take the probabilities for the second class
