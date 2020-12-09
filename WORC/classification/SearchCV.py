@@ -1248,13 +1248,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Stack scores: not needed for first iteration
                         for num in range(0, n_iter):
                             y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
-                        print('y_score: ' + str(y_score[0]))
-                        print('Y_valid_sore: ' + str(Y_valid_score[0][ensemble[-1]]))
 
                     elif iteration == 1:
                         # Create y_score object for second iteration
                         for num in range(0, n_iter):
-                            y_score[num] = Y_valid_score[num][ensemble[-1], :]
+                            print('Y_valid_score in iter 1: ' + str(Y_valid_score[num][ensemble[-1], :]) + '\n')
+                            #y_score[num] = Y_valid_score[num][ensemble[-1], :]
+                            y_score[num] = Y_valid_score[num][ensemble[-1]]
                             print('y_score in iteration 1: ' + str(y_score[num]) + '\n')
 
                     # Perform n-fold cross validation to estimate performance of each possible addition to ensemble
@@ -1265,7 +1265,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             if iteration == 0:
                                 # No y_score yet, so we need to build it instead of stacking
                                 y_valid_score_new = Y_valid_score[n_crossval][n_estimator, :]
-                                print('y_valid_score_new: ' + str(y_valid_score_new) + '\n')
                             else:
                                 # Stack scores of added model on top of previous scores and average
                                 y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][n_estimator, :])), axis=0)
