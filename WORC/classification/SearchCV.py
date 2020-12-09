@@ -1255,6 +1255,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Create y_score object for second iteration
                         for num in range(0, n_iter):
                             y_score[num] = Y_valid_score[num][ensemble[-1], :]
+                            print('y_score in iteration 1: ' + str(y_score[num]) + '\n')
 
                     # Perform n-fold cross validation to estimate performance of each possible addition to ensemble
                     performances_temp = np.zeros((n_iter, n_classifiers))
