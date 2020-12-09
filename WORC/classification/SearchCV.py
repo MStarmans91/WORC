@@ -178,10 +178,8 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                     if hasattr(est.best_estimator_, 'kernel'):
                         est.best_estimator_.kernel = str(est.best_estimator_.kernel)
                     outcome[num, :] = est.predict_proba(X)[:, 1]
-                    print('proba_called')
                 else:
                     outcome[num, :] = est.predict(X)
-                    print('predict_called')
 
             # Replace NAN if they are there
             outcome = outcome[~np.isnan(outcome).any(axis=1)]
@@ -191,9 +189,9 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
             # Binarize
             isclassifier = is_classifier(est.best_estimator_)
 
-            if isclassifier:
-                outcome[outcome >= 0.5] = 1
-                outcome[outcome < 0.5] = 0
+            #if isclassifier:
+            #    outcome[outcome >= 0.5] = 1
+            #    outcome[outcome < 0.5] = 0
 
         return outcome
 
