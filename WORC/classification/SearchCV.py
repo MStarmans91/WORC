@@ -180,6 +180,9 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                     outcome[num, :] = est.predict_proba(X)[:, 1]
                 else:
                     outcome[num, :] = est.predict(X)
+                with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
+                    file.write(outcome)
+                    file.write('\n')
 
             # Replace NAN if they are there
             outcome = outcome[~np.isnan(outcome).any(axis=1)]
@@ -1097,6 +1100,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             for iter in range(n_iter):
                 for num in range(n_classifiers):
                     Y_valid_score[iter][num] = all_predictions[num][iter]
+
+            with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
+                file.write(all_predictions)
+                file.write('\n')
 
             # Create the ensemble using the precomputed scores
             # The different ensemble methods are:
