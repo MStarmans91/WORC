@@ -181,7 +181,7 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                 else:
                     outcome[num, :] = est.predict(X)
                 with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
-                    file.write(outcome)
+                    file.write(str(outcome))
                     file.write('\n')
 
             # Replace NAN if they are there
@@ -1102,7 +1102,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     Y_valid_score[iter][num] = all_predictions[num][iter]
 
             with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
-                file.write(all_predictions)
+                file.write(str(all_predictions))
                 file.write('\n')
 
             # Create the ensemble using the precomputed scores
