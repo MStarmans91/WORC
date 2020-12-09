@@ -129,6 +129,7 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
             underlying estimator.
 
         """
+        print('this version of predict is called')
         self.estimators[0]._check_is_fitted('predict')
 
         # Check if we are dealing with multilabel
