@@ -1110,7 +1110,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     Y_valid_score[iter][num] = all_predictions[num][iter]
 
             with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
-                file.write('Y_valid_score: ' + str(Y_valid_score[0][0]) + '\n')
+                file.write('Y_valid_score: ' + str(Y_valid_score) + '\n')
 
             # Create the ensemble using the precomputed scores
             # The different ensemble methods are:
