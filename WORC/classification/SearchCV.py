@@ -1100,14 +1100,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             parameters_all = ensemble_configurations
             n_classifiers = len(ensemble_configurations)
             # Construct the array of final predictions
-            Y_valid_score = np.zeros((n_iter, n_classifiers, prediction_length))
+            base_Y_valid_score = np.zeros((n_iter, n_classifiers, prediction_length))
             for iter in range(n_iter):
                 for num in range(n_classifiers):
-                    Y_valid_score[iter][num] = all_predictions[num][iter]
+                    base_Y_valid_score[iter][num] = all_predictions[num][iter]
 
             with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
                 #file.write('Y_valid_score: ' + str(Y_valid_score) + '\n')
-                file.write('Y_valid_score[0][0]: ' + str(Y_valid_score[0][0]) + '\n')
+                file.write('Y_valid_score[0][0]: ' + str(base_Y_valid_score[0][0]) + '\n')
 
             # Create the ensemble using the precomputed scores
             # The different ensemble methods are:
@@ -1241,7 +1241,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 best_ensemble_scores = list()
 
                 while iteration < 20:
-                    print('Y_valid_score: ' + str(Y_valid_score) + '\n')
+                    Y_valid_score = copy.deepcopy(base_Y_valid_score)
                     if verbose:
                         print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
 
@@ -1254,8 +1254,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Create y_score object for second iteration
                         for num in range(0, n_iter):
                             print('Y_valid_score in iter 1: ' + str(Y_valid_score[num][ensemble[-1]]) + '\n')
-                            #y_score[num] = Y_valid_score[num][ensemble[-1], :]
-                            y_score[num] = Y_valid_score[num][ensemble[-1]]
+                            y_score[num] = Y_valid_score[num][ensemble[-1], :]
                             print('y_score in iteration 1: ' + str(y_score[num]) + '\n')
 
                     # Perform n-fold cross validation to estimate performance of each possible addition to ensemble
