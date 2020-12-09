@@ -1355,7 +1355,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         val_split_scores = []
         for train, valid in self.cv_iter:
             estimators = list()
-            predictions = list()
             for enum, p_all in enumerate(selected_params):
                 new_estimator = clone(base_estimator)
 
@@ -1371,7 +1370,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Calculate and store the final performance of the ensemble
             # on this validation split
             X_train_values = np.asarray([x[0] for x in X_train])
-            predictions = new_estimator.ensemble.predict(X_train_values[valid])
+            predictions = new_estimator.predict(X_train_values[valid])
             #predictions = predictions[:, 1]
             val_split_scores.append(compute_performance(scoring,
                                                         Y_train[valid],
