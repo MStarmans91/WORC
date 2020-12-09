@@ -965,6 +965,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             if scoring == 'f1_weighted' or scoring == 'f1':
                 # Convert score to binaries first
                 for num in range(0, len(Y_valid_score)):
+                    print(Y_valid_score[num])
                     if Y_valid_score[num] >= 0.5:
                         Y_valid_score[num] = 1
                     else:
