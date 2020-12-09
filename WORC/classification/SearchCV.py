@@ -178,8 +178,10 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                     if hasattr(est.best_estimator_, 'kernel'):
                         est.best_estimator_.kernel = str(est.best_estimator_.kernel)
                     outcome[num, :] = est.predict_proba(X)[:, 1]
+                    print('proba_called')
                 else:
                     outcome[num, :] = est.predict(X)
+                    print('predict_called')
 
             # Replace NAN if they are there
             outcome = outcome[~np.isnan(outcome).any(axis=1)]
@@ -1063,12 +1065,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         best_estimator = cc.construct_classifier(p_all)
                         best_estimator.fit(processed_X, processed_y)
                         new_estimator.best_estimator_ = best_estimator
-                        predictions = new_estimator.predict_proba(X_train_values[valid])
-                        alt_predictions = new_estimator.predict(X_train_values[valid])
+                        #predictions = new_estimator.predict_proba(X_train_values[valid])
+                        predictions = new_estimator.predict(X_train_values[valid])
                         # Only take the probabilities for the second class
-                        predictions = predictions[:, 1]
-                        print('predict: ' + str(alt_predictions) + '\n')
-                        print('predict_proba: ' + str(predictions) + '\n')
+                        #predictions = predictions[:, 1]
+                        #print('predict: ' + str(alt_predictions) + '\n')
+                        #print('predict_proba: ' + str(predictions) + '\n')
 
                         # Store the predictions on this split
                         predictions_iter.append(predictions)
