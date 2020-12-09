@@ -1016,10 +1016,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 print('Precomputing scores on training and validation set.')
             Y_valid_truth = list()
             performances = list()
+            performances_original = list()
             all_predictions = list()
             ensemble_configurations = list()
             for num, p_all in enumerate(parameters_all):
                 performances_iter = list()
+                performances_iter_original = list()
                 predictions_iter = list()
 
                 for it, (train, valid) in enumerate(self.cv_iter):
@@ -1080,6 +1082,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                                      Y_train[valid],
                                                                      predictions))
 
+                        performances_iter_original.append(compute_performance(scoring,
+                                                                     Y_train[valid],
+                                                                     alt_predictions))
+
                         print('fitandscore: ' + str(out[0][1]) + ' and computed: ' +
                               str(compute_performance(scoring, Y_train[valid], predictions)) + '\n')
 
@@ -1091,6 +1097,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             all_predictions.append(predictions_iter)
                             # Store the performance
                             performances.append(np.mean(performances_iter))
+                            performances_original.append(np.mean(performances_iter_original))
 
             # Update the parameters
             parameters_all = ensemble_configurations
@@ -1100,6 +1107,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             for iter in range(n_iter):
                 for num in range(n_classifiers):
                     Y_valid_score[iter][num] = all_predictions[num][iter]
+
+            with open('/scratch/mdeen/performance_comparison.txt', 'a') as file:
+                file.write('Original scores: ' + str(performances_original) + '\n')
+                file.write('Proba scores: ' + str(performances) + '\n')
 
             # Create the ensemble using the precomputed scores
             # The different ensemble methods are:
@@ -1130,6 +1141,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
             if method == 'FitNumber':
                 sortedindices = np.argsort(performances)[::-1]
+                sortedindices_original = np.argsort(performances_original)[::1]
+                with open('/scratch/mdeen/performance_comparison.txt', 'a') as file:
+                    file.write('Original ranks: ' + str(sortedindices_original) + '\n')
+                    file.write('Proba ranks: ' + str(sortedindices) + '\n')
                 performances_n_class = list()
 
                 if verbose:
