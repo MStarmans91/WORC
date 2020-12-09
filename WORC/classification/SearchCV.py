@@ -1095,6 +1095,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             all_predictions.append(predictions_iter)
                             # Store the performance
                             performances.append(np.mean(performances_iter))
+                            print('all_predictions: ' + str(all_predictions) + '\n')
 
             # Update the parameters
             with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
