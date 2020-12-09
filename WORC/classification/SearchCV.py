@@ -180,9 +180,7 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                     outcome[num, :] = est.predict_proba(X)[:, 1]
                 else:
                     outcome[num, :] = est.predict(X)
-
-            with open('/scratch/mdeen/ensemble_outcome.txt', 'a') as file:
-                file.write('ensemble outcome for each split: ' + str(outcome) + '\n')
+                    
             # Replace NAN if they are there
             outcome = outcome[~np.isnan(outcome).any(axis=1)]
 
@@ -1094,9 +1092,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             performances.append(np.mean(performances_iter))
 
             # Update the parameters
-            #with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
-                #file.write('all predictions: ' + str(all_predictions))
-                #file.write('\n')
             parameters_all = ensemble_configurations
             n_classifiers = len(ensemble_configurations)
             # Construct the array of final predictions
@@ -1104,10 +1099,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             for iter in range(n_iter):
                 for num in range(n_classifiers):
                     base_Y_valid_score[iter][num] = all_predictions[num][iter]
-
-            with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
-                #file.write('Y_valid_score: ' + str(Y_valid_score) + '\n')
-                file.write('Y_valid_score[0][0]: ' + str(base_Y_valid_score[0][0]) + '\n')
 
             # Create the ensemble using the precomputed scores
             # The different ensemble methods are:
@@ -1145,6 +1136,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print('Creating ensemble with FitNumber method.')
 
                 for iteration in range(0, n_classifiers):
+                    Y_valid_score = copy.deepcopy(base_Y_valid_score)
 
                     if iteration > 1:
                         for num in range(0, n_iter):
@@ -1191,6 +1183,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     print('Creating ensemble with ForwardSelection method.')
 
                 while new_performance > best_performance:
+                    Y_valid_score = copy.deepcopy(base_Y_valid_score)
                     if verbose:
                         print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
                     best_performance = new_performance
@@ -1249,7 +1242,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Stack scores: not needed for first iteration
                         for num in range(0, n_iter):
                             y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
-                        print('y_score[0]: ' + str(y_score[0]))
 
                     elif iteration == 1:
                         # Create y_score object for second iteration
@@ -1306,6 +1298,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     iteration = 0
 
                     while iteration < 20:
+                        Y_valid_score = copy.deepcopy(base_Y_valid_score)
                         if verbose:
                             print(f"Iteration: {iteration}, best {scoring}: {new_performance}.")
 
@@ -1384,7 +1377,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # on this validation split
             X_train_values = np.asarray([x[0] for x in X_train])
             predictions = new_estimator.predict(X_train_values[valid])
-            #predictions = predictions[:, 1]
             val_split_scores.append(compute_performance(scoring,
                                                         Y_train[valid],
                                                         predictions))
