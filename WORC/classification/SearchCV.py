@@ -1247,6 +1247,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         # Stack scores: not needed for first iteration
                         for num in range(0, n_iter):
                             y_score[num] = np.vstack((y_score[num], Y_valid_score[num][ensemble[-1], :]))
+                        print('y_score: ' + str(y_score[0]))
 
                     elif iteration == 1:
                         # Create y_score object for second iteration
@@ -1263,7 +1264,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                 y_valid_score_new = Y_valid_score[n_crossval][n_estimator, :]
                             else:
                                 # Stack scores of added model on top of previous scores and average
-                                print('y_score (is it just one layer?): ' + str(y_score[n_crossval]))
                                 y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][n_estimator, :])), axis=0)
 
                             perf = compute_performance(scoring, Y_valid_truth[n_crossval], y_valid_score_new)
