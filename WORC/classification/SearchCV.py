@@ -1068,16 +1068,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         best_estimator.fit(processed_X, processed_y)
                         new_estimator.best_estimator_ = best_estimator
                         predictions = new_estimator.predict_proba(X_train_values[valid])
-                        print('prediction: ' + str(predictions))
 
                         # Only take the probabilities for the second class
                         predictions = predictions[:, 1]
-                        print('prediction 2: ' + str(predictions))
 
                         # Store the predictions on this split
                         #predictions_iter.append(predictions)
                         predictions_iter[it, :] = predictions
-                        print('prediction_iter: ' + str(predictions_iter))
 
                         # Compute and store the performance on this split
                         performances_iter.append(compute_performance(scoring,
@@ -1095,7 +1092,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             all_predictions.append(predictions_iter)
                             # Store the performance
                             performances.append(np.mean(performances_iter))
-                            print('all_predictions: ' + str(all_predictions) + '\n')
 
             # Update the parameters
             with open('/scratch/mdeen/all_predictions.txt', 'a') as file:
