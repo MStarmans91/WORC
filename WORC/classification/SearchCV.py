@@ -129,7 +129,6 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
             underlying estimator.
 
         """
-        print('this version of predict is called')
         self.estimators[0]._check_is_fitted('predict')
 
         # Check if we are dealing with multilabel
@@ -1067,7 +1066,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         best_estimator = cc.construct_classifier(p_all)
                         best_estimator.fit(processed_X, processed_y)
                         new_estimator.best_estimator_ = best_estimator
-                        predictions = new_estimator.predict_proba(X_train_values[valid])
+                        temp_ensemble = Ensemble([new_estimator])
+                        predictions = temp_ensemble.predict(X_train_values[valid])
                         alt_predictions = new_estimator.predict(X_train_values[valid])
 
                         # Only take the probabilities for the second class
