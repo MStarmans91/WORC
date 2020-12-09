@@ -458,10 +458,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
 
         if self.ensemble:
-            print('ensemble is called')
             return self.ensemble.predict(X)
         else:
-            print('else is called')
             X, _ = self.preprocess(X)
             return self.best_estimator_.predict(X)
 
@@ -1071,6 +1069,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         new_estimator.best_estimator_ = best_estimator
                         #predictions = new_estimator.predict_proba(X_train_values[valid])
                         predictions = new_estimator.predict(X_train_values[valid])
+                        print(predictions)
                         # Only take the probabilities for the second class
                         #predictions = predictions[:, 1]
                         #print('predict: ' + str(alt_predictions) + '\n')
