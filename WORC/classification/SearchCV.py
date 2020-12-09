@@ -244,6 +244,7 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
 
             outcome = np.squeeze(np.mean(outcome, axis=0))
         else:
+            print('is this called?')
             # Single label
             # For probabilities, we get both a class0 and a class1 score
             outcome = np.zeros((len(X), 2))
