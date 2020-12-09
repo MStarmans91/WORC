@@ -1022,9 +1022,10 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             ensemble_configurations = list()
             for num, p_all in enumerate(parameters_all):
                 performances_iter = list()
-                predictions_iter = list()
+                predictions_iter = np.zeros((n_iter, 14))
 
                 for it, (train, valid) in enumerate(self.cv_iter):
+                    predictions = list()
                     # Start with storing the ground truth
                     if num == 0:
                         Y_valid_truth.append(Y_train[valid])
@@ -1074,7 +1075,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         print('prediction 2: ' + str(predictions))
 
                         # Store the predictions on this split
-                        predictions_iter.append(predictions)
+                        #predictions_iter.append(predictions)
+                        predictions_iter[it, :] = predictions
                         print('prediction_iter: ' + str(predictions_iter))
 
                         # Compute and store the performance on this split
