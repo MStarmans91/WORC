@@ -1389,18 +1389,17 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Calculate and store the final performance of the ensemble
             # on this validation split
             X_train_values = np.asarray([x[0] for x in X_train])
-            predictions = new_estimator.predict(X_train_values[valid])
+            predictions = new_estimator.predict_proba(X_train_values[valid])
             print('predictions: ' + str(predictions))
             val_split_scores.append(compute_performance(scoring,
                                                         Y_train[valid],
                                                         predictions))
 
-
         print('val_split_scores: ' + str(val_split_scores))
         validation_score = np.mean(val_split_scores)
         self.ensemble_validation_score = validation_score
         print('Final ensemble validation score: ' + str(validation_score))
-
+        
 
 
 
