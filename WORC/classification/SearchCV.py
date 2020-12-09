@@ -1264,6 +1264,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             if iteration == 0:
                                 # No y_score yet, so we need to build it instead of stacking
                                 y_valid_score_new = Y_valid_score[n_crossval][n_estimator, :]
+                                print('y_valid_score_new: ' + str(y_valid_score_new) + '\n')
                             else:
                                 # Stack scores of added model on top of previous scores and average
                                 y_valid_score_new = np.mean(np.vstack((y_score[n_crossval], Y_valid_score[n_crossval][n_estimator, :])), axis=0)
