@@ -1252,7 +1252,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     elif iteration == 1:
                         # Create y_score object for second iteration
                         for num in range(0, n_iter):
-                            print('Y_valid_score in iter 1: ' + str(Y_valid_score[num][ensemble[-1], :]) + '\n')
+                            print('Y_valid_score in iter 1: ' + str(Y_valid_score[num][ensemble[-1]]) + '\n')
                             #y_score[num] = Y_valid_score[num][ensemble[-1], :]
                             y_score[num] = Y_valid_score[num][ensemble[-1]]
                             print('y_score in iteration 1: ' + str(y_score[num]) + '\n')
