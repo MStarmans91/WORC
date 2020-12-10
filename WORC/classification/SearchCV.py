@@ -1018,17 +1018,16 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             performances = list()
             all_predictions = list()
             ensemble_configurations = list()
+            prediction_length = len(self.cv_iter[0][1])
             for num, p_all in enumerate(parameters_all):
                 performances_iter = list()
-                predictions_iter = np.zeros((n_iter, 14))
-                print(str(len(self.cv_iter[0][1])))
+                predictions_iter = np.zeros((n_iter, prediction_length))
 
                 for it, (train, valid) in enumerate(self.cv_iter):
                     predictions = list()
                     # Start with storing the ground truth
                     if num == 0:
                         Y_valid_truth.append(Y_train[valid])
-                        prediction_length = len(Y_train[valid])
 
                     new_estimator = clone(base_estimator)
 
