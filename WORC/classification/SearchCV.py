@@ -180,7 +180,7 @@ class Ensemble(six.with_metaclass(ABCMeta, BaseEstimator,
                     outcome[num, :] = est.predict_proba(X)[:, 1]
                 else:
                     outcome[num, :] = est.predict(X)
-                    
+
             # Replace NAN if they are there
             outcome = outcome[~np.isnan(outcome).any(axis=1)]
 
@@ -1021,6 +1021,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             for num, p_all in enumerate(parameters_all):
                 performances_iter = list()
                 predictions_iter = np.zeros((n_iter, 14))
+                print(str(self.cv_iter))
 
                 for it, (train, valid) in enumerate(self.cv_iter):
                     predictions = list()
