@@ -1001,15 +1001,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         elif type(self) == GuidedSearchCVSMAC:
             base_estimator = GuidedSearchCVSMAC()
 
-        if method == 'top_N':
-            # Take the N best individual classifiers, using a pre-specified value for N
-            if verbose:
-                print(f'Creating ensemble using top {str(size)} individual classifiers.')
-            if size == 1:
-                # Next functions expect list
-                ensemble = [0]
-            else:
-                ensemble = range(0, size)
+        if method == 'top_N' and size == 1:
+            # Do not refit all the classifiers if we only need the best one
+            ensemble = [0]
         else:
             # Refit the models and compute the predictions on the validation sets
             if verbose:
@@ -1127,7 +1121,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             single_estimator_performance = max(performances)
             iteration = 0
 
-            if method == 'FitNumber':
+            if method == 'top_N':
+                # Add the fixed number of best estimators to the ensemble, using the scores
+                # calculated using predict_proba
+                sortedindices = np.argsort(performances)[::-1]
+                for est_index in range(0, size):
+                    ensemble.append(sortedindices[est_index])
+
+            elif method == 'FitNumber':
                 sortedindices = np.argsort(performances)[::-1]
                 performances_n_class = list()
 
@@ -1357,33 +1358,38 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Create the ensemble --------------------------------------------------
 
         # First create and score the ensemble on the validation set
-        selected_params = [parameters_all[i] for i in ensemble]
-        val_split_scores = []
-        for train, valid in self.cv_iter:
-            estimators = list()
-            for enum, p_all in enumerate(selected_params):
+        # If we only want the best solution, we use the score from cv_results_
+        if method == 'top_N' and size == 1:
+            self.ensemble_validation_score = self.cv_results_['mean_test_score'][0]
+        else:
+            selected_params = [parameters_all[i] for i in ensemble]
+            val_split_scores = []
+            for train, valid in self.cv_iter:
+                estimators = list()
+                for enum, p_all in enumerate(selected_params):
+                    new_estimator = clone(base_estimator)
+
+                    new_estimator.refit_and_score(X_train, Y_train, p_all,
+                                                   train, valid,
+                                                   verbose=False)
+
+                    estimators.append(new_estimator)
+
                 new_estimator = clone(base_estimator)
+                new_estimator.ensemble = Ensemble(estimators)
+                new_estimator.best_estimator_ = new_estimator.ensemble
+                # Calculate and store the final performance of the ensemble
+                # on this validation split
+                X_train_values = np.asarray([x[0] for x in X_train])
+                predictions = new_estimator.predict(X_train_values[valid])
+                val_split_scores.append(compute_performance(scoring,
+                                                            Y_train[valid],
+                                                            predictions))
 
-                new_estimator.refit_and_score(X_train, Y_train, p_all,
-                                               train, valid,
-                                               verbose=False)
+            validation_score = np.mean(val_split_scores)
+            self.ensemble_validation_score = validation_score
 
-                estimators.append(new_estimator)
-
-            new_estimator = clone(base_estimator)
-            new_estimator.ensemble = Ensemble(estimators)
-            new_estimator.best_estimator_ = new_estimator.ensemble
-            # Calculate and store the final performance of the ensemble
-            # on this validation split
-            X_train_values = np.asarray([x[0] for x in X_train])
-            predictions = new_estimator.predict(X_train_values[valid])
-            val_split_scores.append(compute_performance(scoring,
-                                                        Y_train[valid],
-                                                        predictions))
-
-        validation_score = np.mean(val_split_scores)
-        self.ensemble_validation_score = validation_score
-        print('Final ensemble validation score: ' + str(validation_score))
+        print('Final ensemble validation score: ' + str(self.ensemble_validation_score))
 
 
         # Create the ensemble trained on the full training set
