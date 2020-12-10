@@ -1125,7 +1125,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 # Add the fixed number of best estimators to the ensemble, using the scores
                 # calculated using predict_proba
                 sortedindices = np.argsort(performances)[::-1]
-                final_size = np.min(len(sortedindices), size)
+                final_size = int(min(len(sortedindices), size))
                 for est_index in range(0, final_size):
                     ensemble.append(sortedindices[est_index])
 
