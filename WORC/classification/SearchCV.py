@@ -1021,7 +1021,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             for num, p_all in enumerate(parameters_all):
                 performances_iter = list()
                 predictions_iter = np.zeros((n_iter, 14))
-                print(str(self.cv_iter[0][1]))
+                print(str(len(self.cv_iter[0][1])))
 
                 for it, (train, valid) in enumerate(self.cv_iter):
                     predictions = list()
