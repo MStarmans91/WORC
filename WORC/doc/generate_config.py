@@ -368,7 +368,7 @@ def generate_config_options():
 
     # Hyperparameter optimization options
     config['HyperOptimization'] = dict()
-    config['HyperOptimization']['scoring_method'] = 'Any `sklearn metric <https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/>`_'
+    config['HyperOptimization']['scoring_method'] = 'Manual metric by WORC: f1_weighted_predictproba, average_precision_weighted, gmean. Other accepted values are any `sklearn metric <https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/>`_'
     config['HyperOptimization']['test_size'] = 'Float'
     config['HyperOptimization']['N_iterations'] = 'Integer'
     config['HyperOptimization']['n_jobspercore'] = 'Integer'

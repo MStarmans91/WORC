@@ -247,6 +247,20 @@ def multi_class_auc_score(y_truth, y_score):
     return make_scorer(multi_class_auc, needs_proba=True)
 
 
+def f1_weighted_predictproba(y_truth, y_score):
+    '''Calculate f1-score, but based on predict_proba instead of predict.
+
+    Probabilities are thresholded at 0.5.
+    '''
+    # Convert predictions to binary by thresholding at 0.5
+    y_pred = np.zeros(y_score.shape)
+    y_pred[y_score >= 0.5] = 1
+    y_pred[y_score < 0.5] = 0
+
+    # Compute and return score
+    return f1_score(y_truth, y_pred, average='weighted')
+
+
 def check_scoring(estimator, scoring=None, allow_none=False):
     '''
     Surrogate for sklearn's check_scoring to enable use of some other
@@ -256,6 +270,8 @@ def check_scoring(estimator, scoring=None, allow_none=False):
         scorer = make_scorer(average_precision_score, average='weighted', needs_proba=True)
     elif scoring == 'gmean':
         scorer = make_scorer(geometric_mean_score(), needs_proba=True)
+    elif scoring == 'f1_weighted_predictproba':
+        scorer = make_scorer(f1_weighted_predictproba(), needs_proba=True)
     else:
         scorer = check_scoring_sklearn(estimator, scoring=scoring)
     return scorer

@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-Unreleased
+3.4.0 - Unreleased
 ------------------
 
 Fixed
@@ -16,6 +16,11 @@ Fixed
 - Bug in evaluate when using a test set.
 - Bug in SearchCV for fitting preprocessing.
 - Fix random states in boosting estimators.
+
+Changed
+~~~~~~~
+- IMPORTANT: previously, used f1_score based on estimator.predict function.
+  Now, use predict_proba.
 
 Added
 ~~~~~~~

@@ -467,7 +467,7 @@ class WORC(object):
 
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
-        config['HyperOptimization']['scoring_method'] = 'f1_weighted'
+        config['HyperOptimization']['scoring_method'] = 'f1_weighted_predictproba'
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '25000'
