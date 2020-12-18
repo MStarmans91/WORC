@@ -1001,7 +1001,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         elif type(self) == GuidedSearchCVSMAC:
             base_estimator = GuidedSearchCVSMAC()
 
-        if method == 'top_N' and size == 1:
+        if method == 'Single':
             # Do not refit all the classifiers if we only need the best one
             ensemble = [0]
         else:
