@@ -1360,7 +1360,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # First create and score the ensemble on the validation set
         # If we only want the best solution, we use the score from cv_results_
-        if method == 'top_N' and size == 1:
+        if method == 'Single':
             self.ensemble_validation_score = self.cv_results_['mean_test_score'][0]
         else:
             selected_params = [parameters_all[i] for i in ensemble]
