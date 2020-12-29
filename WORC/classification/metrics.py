@@ -269,9 +269,9 @@ def check_scoring(estimator, scoring=None, allow_none=False):
     if scoring == 'average_precision_weighted':
         scorer = make_scorer(average_precision_score, average='weighted', needs_proba=True)
     elif scoring == 'gmean':
-        scorer = make_scorer(geometric_mean_score(), needs_proba=True)
+        scorer = make_scorer(geometric_mean_score, needs_proba=True)
     elif scoring == 'f1_weighted_predictproba':
-        scorer = make_scorer(f1_weighted_predictproba(), needs_proba=True)
+        scorer = make_scorer(f1_weighted_predictproba, needs_proba=True)
     else:
         scorer = check_scoring_sklearn(estimator, scoring=scoring)
     return scorer
