@@ -361,7 +361,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                  random_state=None, error_score='raise',
                  return_train_score=True,
                  n_jobspercore=100, maxlen=100, fastr_plugin=None, memory='2G',
-                 ranking_score='test_score'):
+                 ranking_score='test_score', refit_workflows=False):
         """Initialize SearchCV Object."""
         # Added for fastr and joblib executions
         self.param_distributions = param_distributions
@@ -385,6 +385,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.return_train_score = return_train_score
         self.maxlen = maxlen
         self.ranking_score = ranking_score
+        self.refit_workflows = refit_workflows
 
     @property
     def _estimator_type(self):
@@ -638,6 +639,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         """
         # test_score_dicts and train_score dicts are lists of dictionaries and
         # we make them into dict of lists
+        if self.verbose:
+            print('Processing fits.')
         test_scores = _aggregate_score_dicts(test_score_dicts)
         if self.return_train_score:
             train_scores = _aggregate_score_dicts(train_score_dicts)
@@ -819,6 +822,20 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # Store the only scorer not as a dict for single metric evaluation
         self.scorer_ = scorers if self.multimetric_ else scorers['score']
 
+        # Refit the top performing workflows on the full training dataset
+        if self.refit_workflows:
+            if self.verbose:
+                print(f'Refitting top {maxlen} workflows.')
+
+            self.fitted_workflows = list()
+            indices = np.arange(0, len(y))
+            for i_workflow in range(maxlen):
+                estimator = RandomizedSearchCVfastr()
+                params = candidate_params_all[i_workflow]
+                estimator.refit_and_score(X, y, params,
+                                          train=indices, test=indices)
+                self.fitted_workflows.append(estimator)
+
         return self
 
     def refit_and_score(self, X, y, parameters_all,
@@ -868,21 +885,22 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             preprocessor = None
 
         # Refit all preprocessing functions
-        fit_params = _check_fit_params(X, self.fit_params)
+        fit_params = _check_fit_params(X_fit, self.fit_params)
         out = fit_and_score(X_fit, y, self.scoring,
                             train, test, parameters_all,
                             fit_params=fit_params,
                             return_train_score=self.return_train_score,
                             return_n_test_samples=True,
                             return_times=True, return_parameters=False,
-                            return_estimator=False,
+                            return_estimator=True,
                             error_score=self.error_score,
                             verbose=verbose,
                             return_all=True)
 
         # Associate best options with new fits
-        (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,\
+        (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
             encoders, Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
+        fitted_estimator = save_data[-2]
         self.best_groupsel = GroupSel
         self.best_scaler = scalers
         self.best_varsel = VarSel
@@ -895,35 +913,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.best_statisticalsel = StatisticalSel
         self.best_reliefsel = ReliefSel
         self.best_Sampler = Sampler
-
-        # Fit the estimator using the preprocessed features
-        X = np.asarray([x[0] for x in X])
-        if y is not None:
-            y = y[train]
-
-        X, y = self.preprocess(X[train], y, training=True)
-
-        best_estimator = cc.construct_classifier(parameters_all)
-
-        # NOTE: This just has to go to the construct classifier function,
-        # although it is more convenient here due to the hyperparameter search
-        if type(y) is list:
-            labellength = 1
-        else:
-            try:
-                labellength = y.shape[1]
-            except IndexError:
-                labellength = 1
-
-        if labellength > 1 and type(best_estimator) != RankedSVM:
-            # Multiclass, hence employ a multiclass classifier for e.g. SVM, RF
-            best_estimator = OneVsRestClassifier(best_estimator)
-
-        if y is not None:
-            best_estimator.fit(X, y, **self.fit_params)
-        else:
-            best_estimator.fit(X, **self.fit_params)
-        self.best_estimator_ = best_estimator
+        self.best_estimator_ = fitted_estimator
+        self.best_params_ = parameters_all
 
         return self
 
@@ -1491,20 +1482,22 @@ class BaseSearchCVfastr(BaseSearchCV):
                             'return_n_test_samples',
                             'return_times', 'return_parameters',
                             'return_estimator',
-                            'error_score']
+                            'error_score', 'return_all']
 
         verbose = False
         return_n_test_samples = True
         return_times = True
         return_parameters = False
         return_estimator = False
+        return_all = False
         estimator_data = pd.Series([X, y, self.scoring,
                                     verbose, fit_params,
                                     self.return_train_score,
                                     return_n_test_samples, return_times,
                                     return_parameters,
                                     return_estimator,
-                                    self.error_score],
+                                    self.error_score,
+                                    return_all],
                                    index=estimator_labels,
                                    name='estimator Data')
         fname = 'estimatordata.hdf5'
@@ -1807,14 +1800,15 @@ class RandomizedSearchCVfastr(BaseSearchCVfastr):
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
                  error_score='raise', return_train_score=True,
                  n_jobspercore=100, fastr_plugin=None, memory='2G', maxlen=100,
-                 ranking_score='test_score'):
+                 ranking_score='test_score', refit_workflows=False):
         super(RandomizedSearchCVfastr, self).__init__(
              param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
              n_iter=n_iter, random_state=random_state, n_jobs=n_jobs, iid=iid, refit=refit, cv=cv, verbose=verbose,
              pre_dispatch=pre_dispatch, error_score=error_score,
              return_train_score=return_train_score,
              n_jobspercore=n_jobspercore, fastr_plugin=fastr_plugin,
-             memory=memory, maxlen=maxlen, ranking_score=ranking_score)
+             memory=memory, maxlen=maxlen, ranking_score=ranking_score,
+             refit_workflows=refit_workflows)
 
     def fit(self, X, y=None, groups=None):
         """Randomized model selection and hyperparameter search.

@@ -26,7 +26,8 @@ def random_search_parameters(features, labels, N_iter, test_size,
                              n_jobspercore=200, use_fastr=False,
                              n_cores=1, fastr_plugin=None, memory='2G',
                              maxlen=100,
-                             ranking_score='test_score', random_seed=None):
+                             ranking_score='test_score', random_seed=None,
+                             refit_workflows=False):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
     randomized search.
@@ -76,7 +77,8 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                                 verbose=1, cv=cv,
                                                 fastr_plugin=fastr_plugin,
                                                 memory=memory,
-                                                ranking_score=ranking_score)
+                                                ranking_score=ranking_score,
+                                                refit_workflows=refit_workflows)
     else:
         random_search = RandomizedSearchCVJoblib(param_distributions=param_grid,
                                                  n_iter=N_iter,
@@ -87,7 +89,8 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                                  verbose=1, cv=cv,
                                                  fastr_plugin=fastr_plugin,
                                                  memory=memory,
-                                                 ranking_score=ranking_score)
+                                                 ranking_score=ranking_score,
+                                                 refit_workflows=refit_workflows)
     random_search.fit(features, labels)
     print("Best found parameters:")
     for i in random_search.best_params_:

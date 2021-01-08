@@ -360,6 +360,8 @@ def load_config(config_file_path):
         settings['HyperOptimization'].getint('maxlen')
     settings_dict['HyperOptimization']['ranking_score'] = \
         str(settings['HyperOptimization']['ranking_score'])
+    settings_dict['HyperOptimization']['refit_workflows'] =\
+        settings['HyperOptimization'].getboolean('refit_workflows')
     settings_dict['HyperOptimization']['memory'] = \
         str(settings['HyperOptimization']['memory'])
 
