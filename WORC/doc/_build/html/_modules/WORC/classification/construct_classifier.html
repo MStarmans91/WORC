@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.construct_classifier &mdash; WORC 3.1.3 documentation</title>
+  <title>WORC.classification.construct_classifier &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -53,13 +53,16 @@
           
 
           
+            
+            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.1.3
+                3.3.5
               </div>
             
           
@@ -88,6 +91,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
@@ -158,7 +165,7 @@
   <h1>Source code for WORC.classification.construct_classifier</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -176,6 +183,7 @@
 <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">SVC</span>
 <span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="k">import</span> <span class="n">SVR</span> <span class="k">as</span> <span class="n">SVMR</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span><span class="p">,</span> <span class="n">RandomForestRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">AdaBoostClassifier</span><span class="p">,</span> <span class="n">AdaBoostRegressor</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">SGDClassifier</span><span class="p">,</span> <span class="n">ElasticNet</span><span class="p">,</span> <span class="n">SGDRegressor</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span><span class="p">,</span> <span class="n">Lasso</span>
 <span class="kn">from</span> <span class="nn">sklearn.naive_bayes</span> <span class="k">import</span> <span class="n">GaussianNB</span><span class="p">,</span> <span class="n">ComplementNB</span>
@@ -185,10 +193,11 @@
 <span class="kn">from</span> <span class="nn">WORC.classification.estimators</span> <span class="k">import</span> <span class="n">RankedSVM</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">log_uniform</span><span class="p">,</span> <span class="n">discrete_uniform</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
+<span class="kn">from</span> <span class="nn">xgboost</span> <span class="k">import</span> <span class="n">XGBClassifier</span><span class="p">,</span> <span class="n">XGBRegressor</span>
 
 
 <div class="viewcode-block" id="construct_classifier"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.construct_classifier.construct_classifier">[docs]</a><span class="k">def</span> <span class="nf">construct_classifier</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Interface to create classification</span>
+    <span class="sd">&quot;&quot;&quot;Interface to create classification.</span>
 
 <span class="sd">    Different classifications can be created using this common interface</span>
 
@@ -200,8 +209,8 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Constructed classifier</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># NOTE: Function is not working anymore for regression: need</span>
     <span class="c1"># to move param grid creation to the create_param_grid function</span>
     <span class="n">max_iter</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;max_iter&#39;</span><span class="p">]</span>
@@ -213,31 +222,78 @@
         <span class="c1"># Support Vector Regression</span>
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">construct_SVM</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
+    <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;AdaBoostClassifier&#39;</span><span class="p">:</span>
+        <span class="c1"># AdaBoost classifier</span>
+        <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;AdaBoost_learning_rate&#39;</span><span class="p">]</span>
+        <span class="n">n_estimators</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;AdaBoost_n_estimators&#39;</span><span class="p">]</span>
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">AdaBoostClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">,</span>
+                                        <span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;AdaBoostRegressor&#39;</span><span class="p">:</span>
+        <span class="c1"># AdaBoost regressor</span>
+        <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;AdaBoost_learning_rate&#39;</span><span class="p">]</span>
+        <span class="n">n_estimators</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;AdaBoost_n_estimators&#39;</span><span class="p">]</span>
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">AdaBoostRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">,</span>
+                                       <span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;XGBClassifier&#39;</span><span class="p">:</span>
+        <span class="c1"># XGB Classifier</span>
+        <span class="n">max_depth</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_max_depth&#39;</span><span class="p">]</span>
+        <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_learning_rate&#39;</span><span class="p">]</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_gamma&#39;</span><span class="p">]</span>
+        <span class="n">min_child_weight</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_min_child_weight&#39;</span><span class="p">]</span>
+        <span class="n">boosting_rounds</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_boosting_rounds&#39;</span><span class="p">]</span>
+        <span class="n">colsample_bytree</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">]</span>
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span>
+                                   <span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span>
+                                   <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span>
+                                   <span class="n">min_child_weight</span><span class="o">=</span><span class="n">min_child_weight</span><span class="p">,</span>
+                                   <span class="n">n_estimators</span><span class="o">=</span><span class="n">boosting_rounds</span><span class="p">,</span>
+                                   <span class="n">colsample_bytree</span><span class="o">=</span><span class="n">colsample_bytree</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;XGBRegressor&#39;</span><span class="p">:</span>
+        <span class="c1"># XGB Classifier</span>
+        <span class="n">max_depth</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_max_depth&#39;</span><span class="p">]</span>
+        <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_learning_rate&#39;</span><span class="p">]</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_gamma&#39;</span><span class="p">]</span>
+        <span class="n">min_child_weight</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_min_child_weight&#39;</span><span class="p">]</span>
+        <span class="n">boosting_rounds</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_boosting_rounds&#39;</span><span class="p">]</span>
+        <span class="n">colsample_bytree</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">]</span>
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span>
+                                  <span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">,</span>
+                                  <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span>
+                                  <span class="n">min_child_weight</span><span class="o">=</span><span class="n">min_child_weight</span><span class="p">,</span>
+                                  <span class="n">n_estimators</span><span class="o">=</span><span class="n">boosting_rounds</span><span class="p">,</span>
+                                  <span class="n">colsample_bytree</span><span class="o">=</span><span class="n">colsample_bytree</span><span class="p">)</span>
+
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;RF&#39;</span><span class="p">:</span>
         <span class="c1"># Random forest kernel</span>
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                                             <span class="n">class_weight</span><span class="o">=</span><span class="s1">&#39;balanced&#39;</span><span class="p">,</span>
                                             <span class="n">n_estimators</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RFn_estimators&#39;</span><span class="p">],</span>
                                             <span class="n">min_samples_split</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RFmin_samples_split&#39;</span><span class="p">],</span>
-                                            <span class="n">max_depth</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RFmax_depth&#39;</span><span class="p">])</span>
+                                            <span class="n">max_depth</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RFmax_depth&#39;</span><span class="p">],</span>
+                                            <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;RFR&#39;</span><span class="p">:</span>
         <span class="c1"># Random forest kernel regression</span>
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                                            <span class="n">n_estimators</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RFn_estimators&#39;</span><span class="p">],</span>
                                            <span class="n">min_samples_split</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RFmin_samples_split&#39;</span><span class="p">],</span>
-                                           <span class="n">max_depth</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RFmax_depth&#39;</span><span class="p">])</span>
+                                           <span class="n">max_depth</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RFmax_depth&#39;</span><span class="p">],</span>
+                                           <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ElasticNet&#39;</span><span class="p">:</span>
         <span class="c1"># Elastic Net Regression</span>
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">ElasticNet</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;ElasticNet_alpha&#39;</span><span class="p">],</span>
                                 <span class="n">l1_ratio</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;ElasticNet_l1_ratio&#39;</span><span class="p">],</span>
-                                <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">)</span>
+                                <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+                                <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Lasso&#39;</span><span class="p">:</span>
         <span class="c1"># LASSO Regression</span>
-        <span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)}</span>
-        <span class="n">classifier</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">)</span>
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+                           <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;SGD&#39;</span><span class="p">:</span>
         <span class="c1"># Stochastic Gradient Descent classifier</span>
@@ -245,7 +301,8 @@
                                    <span class="n">alpha</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_alpha&#39;</span><span class="p">],</span>
                                    <span class="n">l1_ratio</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_l1_ratio&#39;</span><span class="p">],</span>
                                    <span class="n">loss</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_loss&#39;</span><span class="p">],</span>
-                                   <span class="n">penalty</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_penalty&#39;</span><span class="p">])</span>
+                                   <span class="n">penalty</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_penalty&#39;</span><span class="p">],</span>
+                                   <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;SGDR&#39;</span><span class="p">:</span>
         <span class="c1"># Stochastic Gradient Descent regressor</span>
@@ -253,13 +310,25 @@
                                   <span class="n">alpha</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_alpha&#39;</span><span class="p">],</span>
                                   <span class="n">l1_ratio</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_l1_ratio&#39;</span><span class="p">],</span>
                                   <span class="n">loss</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_loss&#39;</span><span class="p">],</span>
-                                  <span class="n">penalty</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_penalty&#39;</span><span class="p">])</span>
+                                  <span class="n">penalty</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SGD_penalty&#39;</span><span class="p">],</span>
+                                  <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
         <span class="c1"># Logistic Regression</span>
+        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;elasticnet&#39;</span> <span class="ow">or</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;l1&#39;</span><span class="p">:</span>
+            <span class="c1"># saga solver required for elasticnet</span>
+            <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;saga&#39;</span><span class="p">:</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;[WORC Warning] </span><span class="si">{p}</span><span class="s2"> penalty requires saga &quot;</span> <span class="o">+</span>\
+                      <span class="n">f</span><span class="s2">&quot;solver, got </span><span class="si">{config[&#39;LR_solver&#39;]}</span><span class="s2">. Changing solver.&quot;</span><span class="p">)</span>
+                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;saga&#39;</span>
+
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
                                         <span class="n">penalty</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">],</span>
-                                        <span class="n">C</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">])</span>
+                                        <span class="n">solver</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">],</span>
+                                        <span class="n">l1_ratio</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">],</span>
+                                        <span class="n">C</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">],</span>
+                                        <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;GaussianNB&#39;</span><span class="p">:</span>
         <span class="c1"># Naive Bayes classifier using Gaussian distributions</span>
         <span class="n">classifier</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
@@ -290,8 +359,7 @@
 
 
 <div class="viewcode-block" id="construct_SVM"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.construct_classifier.construct_SVM">[docs]</a><span class="k">def</span> <span class="nf">construct_SVM</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Constructs a SVM classifier</span>
+    <span class="sd">&quot;&quot;&quot;Construct a SVM classifier.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        config (dict): Dictionary of the required config settings</span>
@@ -300,13 +368,14 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        SVM/SVR classifier, parameter grid</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">max_iter</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;max_iter&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">regression</span><span class="p">:</span>
-        <span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">class_weight</span><span class="o">=</span><span class="s1">&#39;balanced&#39;</span><span class="p">,</span> <span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">)</span>
+        <span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">class_weight</span><span class="o">=</span><span class="s1">&#39;balanced&#39;</span><span class="p">,</span> <span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+                  <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">clf</span> <span class="o">=</span> <span class="n">SVMR</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">)</span>
+        <span class="n">clf</span> <span class="o">=</span> <span class="n">SVMR</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
 
     <span class="n">clf</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMKernel&#39;</span><span class="p">])</span>
     <span class="n">clf</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMC&#39;</span><span class="p">]</span>
@@ -327,9 +396,7 @@
 
 
 <div class="viewcode-block" id="create_param_grid"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.construct_classifier.create_param_grid">[docs]</a><span class="k">def</span> <span class="nf">create_param_grid</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Create a parameter grid for the WORC classifiers based on the</span>
-<span class="sd">        provided configuration. &#39;&#39;&#39;</span>
-
+    <span class="sd">&quot;&quot;&quot;Create a parameter grid for the WORC classifiers.&quot;&quot;&quot;</span>
     <span class="c1"># We only need parameters from the Classification part of the config</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">]</span>
 
@@ -363,6 +430,10 @@
 
     <span class="c1"># Logistic Regression parameters</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
                                             <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LRC&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
@@ -397,6 +468,40 @@
         <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;CNB_alpha&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
                             <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;CNB_alpha&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
+    <span class="c1"># AdaBoost parameters</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;AdaBoost_n_estimators&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;AdaBoost_n_estimators&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;AdaBoost_n_estimators&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;AdaBoost_learning_rate&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;AdaBoost_learning_rate&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;AdaBoost_learning_rate&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># XGDBoost parameters</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;XGB_boosting_rounds&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_boosting_rounds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_boosting_rounds&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;XGB_max_depth&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_max_depth&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_max_depth&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;XGB_learning_rate&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_learning_rate&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_learning_rate&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;XGB_gamma&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_gamma&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_gamma&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;XGB_min_child_weight&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_min_child_weight&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_min_child_weight&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
     <span class="k">return</span> <span class="n">param_grid</span></div>
 </pre></div>
 
@@ -410,7 +515,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>

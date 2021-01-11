@@ -27,7 +27,8 @@ class SelectMulticlassRelief(BaseEstimator, SelectorMixin):
     Object to fit feature selection based on the type group the feature belongs
     to. The label for the feature is used for this procedure.
     '''
-    def __init__(self, n_neighbours=3, sample_size=1, distance_p=2, numf=None):
+    def __init__(self, n_neighbours=3, sample_size=1, distance_p=2, numf=None,
+                 random_state=None):
         '''
         Parameters
         ----------
@@ -49,8 +50,9 @@ class SelectMulticlassRelief(BaseEstimator, SelectorMixin):
         self.sample_size = sample_size
         self.distance_p = distance_p
         self.numf = numf
+        self.random_state = random_state
 
-    def fit(self, X, y):
+    def fit(self, X, y, random_state=None):
         '''
         Select only features specificed by parameters per patient.
 
@@ -70,13 +72,15 @@ class SelectMulticlassRelief(BaseEstimator, SelectorMixin):
                                                  nb=self.no_neighbours,
                                                  sample_size=self.sample_size,
                                                  distance_p=self.distance_p,
-                                                 numf=self.numf)
+                                                 numf=self.numf,
+                                                 random_state=self.random_state)
         else:
             indices, _ = self.single_class_relief(X, y,
-                                                 nb=self.no_neighbours,
-                                                 sample_size=self.sample_size,
-                                                 distance_p=self.distance_p,
-                                                 numf=self.numf)
+                                                  nb=self.no_neighbours,
+                                                  sample_size=self.sample_size,
+                                                  distance_p=self.distance_p,
+                                                  numf=self.numf,
+                                                  random_state=self.random_state)
 
         self.selectrows = indices
 
@@ -99,10 +103,11 @@ class SelectMulticlassRelief(BaseEstimator, SelectorMixin):
         pass
 
     def multi_class_relief(self, feature_set, label_set, nb=3, sample_size=1,
-                           distance_p=2, numf=None):
+                           distance_p=2, numf=None, random_state=None):
 
         nrow, ncol = feature_set.shape
         nlabel = label_set.shape[1]
+        np.random.seed(random_state)
         sample_list = np.random.choice(range(nrow), int(nrow * sample_size), replace=False)
 
         feature_score = np.zeros((1, ncol))
@@ -169,9 +174,10 @@ class SelectMulticlassRelief(BaseEstimator, SelectorMixin):
         return sorted_index, feature_score
 
     def single_class_relief(self, feature_set, label_set, nb=3, sample_size=1,
-                           distance_p=2, numf=None):
+                           distance_p=2, numf=None, random_state=None):
 
         nrow, ncol = feature_set.shape
+        np.random.seed(random_state)
         sample_list = np.random.choice(range(nrow), int(nrow * sample_size), replace=False)
 
         feature_score = np.zeros((1, ncol))

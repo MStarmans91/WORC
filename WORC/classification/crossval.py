@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,9 +22,11 @@ import os
 import time
 from WORC.classification import construct_classifier as cc
 from time import gmtime, strftime
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, LeaveOneOut
 from .parameter_optimization import random_search_parameters
 import WORC.addexceptions as ae
+from WORC.classification.regressors import regressors
+import glob
 
 def _convert_multilabel_to_np(i_class):
     # Sklearn multiclass requires rows to be objects/patients
@@ -36,13 +38,353 @@ def _convert_multilabel_to_np(i_class):
 
     return i_class_temp
 
+def random_split_cross_validation(image_features, feature_labels, classes,
+                                  patient_ids,
+                                  n_iterations, param_grid, config,
+                                  modus, test_size, start=0, save_data=None,
+                                  tempsave=False, tempfolder=None,
+                                  fixedsplits=None,
+                                  fixed_seed=False, use_fastr=None,
+                                  fastr_plugin=None):
+    """Cross-validation in which data is randomly split in each iteration.
+
+    Due to options of doing single-label and multi-label classification,
+    stratified splitting, and regression, we use a manual loop instead
+    of the default scikit-learn object.
+
+    Parameters
+    ------------
+
+    Returns
+    ------------
+
+    """
+    print('Starting random-split cross-validation.')
+    logging.debug('Starting random-split cross-validation.')
+    if save_data is None:
+        # Start from zero, thus empty list of previos data
+        save_data = list()
+
+    for i in range(start, n_iterations):
+        print(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
+        logging.debug(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
+        timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        print(f'\t Time: {timestamp}.')
+        logging.debug(f'\t Time: {timestamp}.')
+        if fixed_seed:
+            random_seed = i**2
+        else:
+            random_seed = np.random.randint(5000)
+
+        t = time.time()
+
+        # Split into test and training set, where the percentage of each
+        # label is maintained
+        if any(clf in regressors for clf in param_grid['classifiers']):
+            # We cannot do a stratified shuffle split with regression
+            stratify = None
+        else:
+            if modus == 'singlelabel':
+                classes_temp = stratify = classes.ravel()
+            elif modus == 'multilabel':
+                # Create a stratification object from the labels
+                # Label = 0 means no label equals one
+                # Other label numbers refer to the label name that is 1
+                stratify = list()
+                for pnum in range(0, len(classes[0])):
+                    plabel = 0
+                    for lnum, slabel in enumerate(classes):
+                        if slabel[pnum] == 1:
+                            plabel = lnum + 1
+                    stratify.append(plabel)
+
+                # Sklearn multiclass requires rows to be objects/patients
+                classes_temp = np.zeros((classes.shape[1], classes.shape[0]))
+                for n_patient in range(0, classes.shape[1]):
+                    for n_label in range(0, classes.shape[0]):
+                        classes_temp[n_patient, n_label] = classes[n_label, n_patient]
+            else:
+                raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
+
+        if fixedsplits is None:
+            # Use Random Split. Split per patient, not per sample
+            unique_patient_ids, unique_indices =\
+                np.unique(np.asarray(patient_ids), return_index=True)
+            if any(clf in regressors for clf in param_grid['classifiers']):
+                unique_stratify = None
+            else:
+                unique_stratify = [stratify[i] for i in unique_indices]
+
+            try:
+                unique_PID_train, indices_PID_test\
+                    = train_test_split(unique_patient_ids,
+                                       test_size=test_size,
+                                       random_state=random_seed,
+                                       stratify=unique_stratify)
+            except ValueError as e:
+                e = str(e) + ' Increase the size of your validation set.'
+                raise ae.WORCValueError(e)
+
+            # Check for all ids if they are in test or training
+            indices_train = list()
+            indices_test = list()
+            patient_ID_train = list()
+            patient_ID_test = list()
+            for num, pid in enumerate(patient_ids):
+                if pid in unique_PID_train:
+                    indices_train.append(num)
+
+                    # Make sure we get a unique ID
+                    if pid in patient_ID_train:
+                        n = 1
+                        while str(pid + '_' + str(n)) in patient_ID_train:
+                            n += 1
+                        pid = str(pid + '_' + str(n))
+                    patient_ID_train.append(pid)
+                else:
+                    indices_test.append(num)
+
+                    # Make sure we get a unique ID
+                    if pid in patient_ID_test:
+                        n = 1
+                        while str(pid + '_' + str(n)) in patient_ID_test:
+                            n += 1
+                        pid = str(pid + '_' + str(n))
+                    patient_ID_test.append(pid)
+
+            # Split features and labels accordingly
+            X_train = [image_features[i] for i in indices_train]
+            X_test = [image_features[i] for i in indices_test]
+            if modus == 'singlelabel':
+                Y_train = classes_temp[indices_train]
+                Y_test = classes_temp[indices_test]
+            elif modus == 'multilabel':
+                Y_train = classes_temp[indices_train, :]
+                Y_test = classes_temp[indices_test, :]
+            else:
+                raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
+
+        else:
+            # Use pre defined splits
+            train = fixedsplits[str(i) + '_train'].values
+            test = fixedsplits[str(i) + '_test'].values
+
+            # Convert the numbers to the correct indices
+            ind_train = list()
+            for j in train:
+                success = False
+                for num, p in enumerate(patient_ids):
+                    if j == p:
+                        ind_train.append(num)
+                        success = True
+                if not success:
+                    raise ae.WORCIOError("Patient " + str(j).zfill(3) + " is not included!")
+
+            ind_test = list()
+            for j in test:
+                success = False
+                for num, p in enumerate(patient_ids):
+                    if j == p:
+                        ind_test.append(num)
+                        success = True
+                if not success:
+                    raise ae.WORCIOError("Patient " + str(j).zfill(3) + " is not included!")
+
+            X_train = [image_features[i] for i in ind_train]
+            X_test = [image_features[i] for i in ind_test]
+
+            patient_ID_train = patient_ids[ind_train]
+            patient_ID_test = patient_ids[ind_test]
+
+            if modus == 'singlelabel':
+                Y_train = classes_temp[ind_train]
+                Y_test = classes_temp[ind_test]
+            elif modus == 'multilabel':
+                Y_train = classes_temp[ind_train, :]
+                Y_test = classes_temp[ind_test, :]
+            else:
+                raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
+
+        # Find best hyperparameters and construct classifier
+        config['HyperOptimization']['use_fastr'] = use_fastr
+        config['HyperOptimization']['fastr_plugin'] = fastr_plugin
+        n_cores = config['General']['Joblib_ncores']
+        trained_classifier = random_search_parameters(features=X_train,
+                                                      labels=Y_train,
+                                                      param_grid=param_grid,
+                                                      n_cores=n_cores,
+                                                      random_seed=random_seed,
+                                                      **config['HyperOptimization'])
+
+        # We only want to save the feature values and one label array
+        X_train = [x[0] for x in X_train]
+        X_test = [x[0] for x in X_test]
+
+        temp_save_data = (trained_classifier, X_train, X_test, Y_train,
+                          Y_test, patient_ID_train, patient_ID_test, random_seed)
+
+        save_data.append(temp_save_data)
+
+        # Create a temporary save
+        if tempsave:
+            panda_labels = ['trained_classifier', 'X_train', 'X_test',
+                            'Y_train', 'Y_test',
+                            'config', 'patient_ID_train', 'patient_ID_test',
+                            'random_seed', 'feature_labels']
+
+            panda_data_temp =\
+                pd.Series([trained_classifier, X_train, X_test, Y_train,
+                           Y_test, config, patient_ID_train,
+                           patient_ID_test, random_seed, feature_labels],
+                          index=panda_labels,
+                          name='Constructed crossvalidation')
+
+            panda_data = pd.DataFrame(panda_data_temp)
+            n = 0
+            filename = os.path.join(tempfolder, 'tempsave_' + str(i) + '.hdf5')
+            while os.path.exists(filename):
+                n += 1
+                filename = os.path.join(tempfolder, 'tempsave_' + str(i + n) + '.hdf5')
+
+            panda_data.to_hdf(filename, 'EstimatorData')
+            del panda_data, panda_data_temp
+
+        # Print elapsed time
+        elapsed = int((time.time() - t) / 60.0)
+        print(f'\t Fitting took {elapsed} minutes.')
+        logging.debug(f'\t Fitting took {elapsed} minutes.')
+
+    return save_data
+
+
+def LOO_cross_validation(image_features, feature_labels, classes, patient_ids,
+                         param_grid, config,
+                         modus, test_size, start=0, save_data=None,
+                         tempsave=False, tempfolder=None, fixedsplits=None,
+                         fixed_seed=False, use_fastr=None,
+                         fastr_plugin=None):
+    """Cross-validation in which each sample is once used as the test set.
+
+    Mostly based on the default sklearn object.
+
+    Parameters
+    ------------
+
+    Returns
+    ------------
+
+    """
+    print('Starting leave-one-out cross-validation.')
+    logging.debug('Starting leave-one-out cross-validation.')
+    cv = LeaveOneOut()
+    n_splits = cv.get_n_splits(image_features)
+
+    if save_data is None:
+        # Start from zero, thus empty list of previos data
+        save_data = list()
+
+    for i, (indices_train, indices_test) in enumerate(cv.split(image_features)):
+        if i < start:
+            continue
+
+        print(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_splits)))
+        logging.debug(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_splits)))
+        timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        print(f'\t Time: {timestamp}.')
+        logging.debug(f'\t Time: {timestamp}.')
+        if fixed_seed:
+            random_seed = i**2
+        else:
+            random_seed = np.random.randint(5000)
+
+        t = time.time()
+
+        # Split features and labels accordingly
+        X_train = [image_features[j] for j in indices_train]
+        X_test = [image_features[j] for j in indices_test]
+        patient_ID_train = [patient_ids[j] for j in indices_train]
+        patient_ID_test = [patient_ids[j] for j in indices_test]
+
+        if modus == 'singlelabel':
+            # Simply use the given class labels
+            classes_temp = classes.ravel()
+
+            # Split in training and testing
+            Y_train = classes_temp[indices_train]
+            Y_test = classes_temp[indices_test]
+
+        elif modus == 'multilabel':
+            # Sklearn multiclass requires rows to be objects/patients
+            classes_temp = np.zeros((classes.shape[1], classes.shape[0]))
+            for n_patient in range(0, classes.shape[1]):
+                for n_label in range(0, classes.shape[0]):
+                    classes_temp[n_patient, n_label] = classes[n_label, n_patient]
+
+            # Split in training and testing
+            Y_train = classes_temp[indices_train, :]
+            Y_test = classes_temp[indices_test, :]
+
+        else:
+            raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
+
+        # Find best hyperparameters and construct classifier
+        config['HyperOptimization']['use_fastr'] = use_fastr
+        config['HyperOptimization']['fastr_plugin'] = fastr_plugin
+        n_cores = config['General']['Joblib_ncores']
+        trained_classifier = random_search_parameters(features=X_train,
+                                                      labels=Y_train,
+                                                      param_grid=param_grid,
+                                                      n_cores=n_cores,
+                                                      random_seed=random_seed,
+                                                      **config['HyperOptimization'])
+
+        # We only want to save the feature values and one label array
+        X_train = [x[0] for x in X_train]
+        X_test = [x[0] for x in X_test]
+
+        temp_save_data = (trained_classifier, X_train, X_test, Y_train,
+                          Y_test, patient_ID_train, patient_ID_test, random_seed)
+
+        save_data.append(temp_save_data)
+
+        # Create a temporary save
+        if tempsave:
+            panda_labels = ['trained_classifier', 'X_train', 'X_test',
+                            'Y_train', 'Y_test',
+                            'config', 'patient_ID_train', 'patient_ID_test',
+                            'random_seed', 'feature_labels']
+
+            panda_data_temp =\
+                pd.Series([trained_classifier, X_train, X_test, Y_train,
+                           Y_test, config, patient_ID_train,
+                           patient_ID_test, random_seed, feature_labels],
+                          index=panda_labels,
+                          name='Constructed crossvalidation')
+
+            panda_data = pd.DataFrame(panda_data_temp)
+            n = 0
+            filename = os.path.join(tempfolder, 'tempsave_' + str(i) + '.hdf5')
+            while os.path.exists(filename):
+                n += 1
+                filename = os.path.join(tempfolder, 'tempsave_' + str(i + n) + '.hdf5')
+
+            panda_data.to_hdf(filename, 'EstimatorData')
+            del panda_data, panda_data_temp
+
+        # Print elapsed time
+        elapsed = int((time.time() - t) / 60.0)
+        print(f'\t Fitting took {elapsed} minutes.')
+        logging.debug(f'\t Fitting took {elapsed} minutes.')
+
+    return save_data
+
+
 def crossval(config, label_data, image_features,
              param_grid=None, use_fastr=False,
              fastr_plugin=None, tempsave=False,
              fixedsplits=None, ensemble={'Use': False}, outputfolder=None,
              modus='singlelabel'):
-    """
-    Constructs multiple individual classifiers based on the label settings
+    """Constructs multiple individual classifiers based on the label settings.
 
     Parameters
     ----------
@@ -52,7 +394,7 @@ def crossval(config, label_data, image_features,
 
     label_data: dict, mandatory
             Should contain the following:
-            patient_IDs (list): IDs of the patients, used to keep track of test and
+            patient_ids (list): ids of the patients, used to keep track of test and
                      training sets, and label data
             label (list): List of lists, where each list contains the
                                    label status for that patient for each
@@ -85,14 +427,14 @@ def crossval(config, label_data, image_features,
             When None, uses the default plugin from the fastr config.
 
     tempsave: boolean, default False
-            If True, create a .hdf5 file after each cross validation containing
+            If True, create a .hdf5 file after each Cross-validation containing
             the classifier and results from that that split. This is written to
             the GSOut folder in your fastr output mount. If False, only
-            the result of all combined cross validations will be saved to a .hdf5
+            the result of all combined Cross-validations will be saved to a .hdf5
             file. This will also be done if set to True.
 
     fixedsplits: string, optional
-            By default, random split cross validation is used to train and
+            By default, random split Cross-validation is used to train and
             evaluate the machine learning methods. Optionally, you can provide
             a .xlsx file containing fixed splits to be used. See the Github Wiki
             for the format.
@@ -112,7 +454,7 @@ def crossval(config, label_data, image_features,
 
     """
     # Process input data
-    patient_IDs = label_data['patient_IDs']
+    patient_ids = label_data['patient_IDs']
     label_value = label_data['label']
     label_name = label_data['label_name']
 
@@ -122,21 +464,43 @@ def crossval(config, label_data, image_features,
     logfilename = os.path.join(outputfolder, 'classifier.log')
     print("Logging to file " + str(logfilename))
 
+    # Cross-validation iteration to start with
+    start = 0
+    save_data = list()
     if tempsave:
         tempfolder = os.path.join(outputfolder, 'tempsave')
         if not os.path.exists(tempfolder):
+            # No previous tempsaves
             os.makedirs(tempfolder)
+        else:
+            # Previous tempsaves, start where we left of
+            tempsaves = glob.glob(os.path.join(tempfolder, 'tempsave_*.hdf5'))
+            start = len(tempsaves)
+
+            # Load previous tempsaves and add to save data
+            tempsaves.sort()
+            for t in tempsaves:
+                t = pd.read_hdf(t)
+                t = t['Constructed crossvalidation']
+                temp_save_data = (t.trained_classifier, t.X_train, t.X_test,
+                                  t.Y_train, t.Y_test, t.patient_ID_train,
+                                  t.patient_ID_test, t.random_seed)
+
+                save_data.append(temp_save_data)
+    else:
+        tempfolder = None
 
     for handler in logging.root.handlers[:]:
         logging.root.removeHandler(handler)
 
     logging.basicConfig(filename=logfilename, level=logging.DEBUG)
-    N_iterations = config['CrossValidation']['N_iterations']
+    crossval_type = config['CrossValidation']['Type']
+    n_iterations = config['CrossValidation']['N_iterations']
     test_size = config['CrossValidation']['test_size']
     fixed_seed = config['CrossValidation']['fixed_seed']
 
     classifier_labelss = dict()
-    logging.debug('Starting classifier')
+    logging.debug('Starting fitting of estimators.')
 
     # We only need one label instance, assuming they are all the sample
     feature_labels = image_features[0][1]
@@ -146,7 +510,7 @@ def crossval(config, label_data, image_features,
         fixedsplits = pd.read_csv(fixedsplits, header=0)
 
     if modus == 'singlelabel':
-        print('Performing Single class classification.')
+        print('Performing single class classification.')
         logging.debug('Performing Single class classification.')
     elif modus in ('multilabel', 'survival',):
         print(f'Performing {modus} classification.')
@@ -159,220 +523,66 @@ def crossval(config, label_data, image_features,
         raise ae.WORCKeyError(m)
 
     for i_class, i_name in zip(label_value, label_name):
-        if modus == 'singlelabel':
-            i_class_temp = i_class.ravel()
+        if not tempsave:
+            save_data = list()
 
-        save_data = list()
-
-        for i in range(0, N_iterations):
-            print(('Cross validation iteration {} / {} .').format(str(i + 1), str(N_iterations)))
-            logging.debug(('Cross validation iteration {} / {} .').format(str(i + 1), str(N_iterations)))
-            timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-            print(f'\t Time: {timestamp}.')
-            logging.debug(f'\t Time: {timestamp}.')
-            if fixed_seed:
-                random_seed = i**2
-            else:
-                random_seed = np.random.randint(5000)
-
-            t = time.time()
-
-            isregression = any(clf in cc.list_regression_classifiers() for clf in param_grid['classifiers'])
-
-            # Split into test and training set, where the percentage of each
-            # label is maintained
-            if isregression:
-                # We cannot do a stratified shuffle split with regression
-                stratify = None
-                msg = f'Classifier is a regression classifier, setting stratify to None'
-                print(msg)
-                logging.debug(msg)
-                if modus in ('multilabel', 'survival'):
-                    i_class_temp = _convert_multilabel_to_np(i_class)
-                else:
-                    i_class_temp = i_class
-            else:
-                if modus == 'singlelabel':
-                    stratify = i_class_temp
-                elif modus == 'multilabel':
-                    # Create a stratification object from the labels
-                    # Label = 0 means no label equals one
-                    # Other label numbers refer to the label name that is 1
-                    stratify = list()
-                    for pnum in range(0, len(i_class[0])):
-                        plabel = 0
-                        for lnum, slabel in enumerate(i_class):
-                            if slabel[pnum] == 1:
-                                plabel = lnum + 1
-                        stratify.append(plabel)
-
-                    i_class_temp = _convert_multilabel_to_np(i_class)
-                    #i_class_temp = i_class_temp
-                else:
-                    raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
-
-            if fixedsplits is None:
-                # Use Random Split. Split per patient, not per sample
-                unique_patient_IDs, unique_indices =\
-                    np.unique(np.asarray(patient_IDs), return_index=True)
-                if isregression:
-                    unique_stratify = None
-                else:
-                    unique_stratify = [stratify[i] for i in unique_indices]
-
-                try:
-                    unique_PID_train, indices_PID_test\
-                        = train_test_split(unique_patient_IDs,
-                                           test_size=test_size,
-                                           random_state=random_seed,
-                                           stratify=unique_stratify)
-                except ValueError as e:
-                    e = str(e) + ' Increase the size of your validation set.'
-                    raise ae.WORCValueError(e)
-
-                # Check for all IDs if they are in test or training
-                indices_train = list()
-                indices_test = list()
-                patient_ID_train = list()
-                patient_ID_test = list()
-                for num, pid in enumerate(patient_IDs):
-                    if pid in unique_PID_train:
-                        indices_train.append(num)
-
-                        # Make sure we get a unique ID
-                        if pid in patient_ID_train:
-                            n = 1
-                            while str(pid + '_' + str(n)) in patient_ID_train:
-                                n += 1
-                            pid = str(pid + '_' + str(n))
-                        patient_ID_train.append(pid)
-                    else:
-                        indices_test.append(num)
-
-                        # Make sure we get a unique ID
-                        if pid in patient_ID_test:
-                            n = 1
-                            while str(pid + '_' + str(n)) in patient_ID_test:
-                                n += 1
-                            pid = str(pid + '_' + str(n))
-                        patient_ID_test.append(pid)
-
-                # Split features and labels accordingly
-                X_train = [image_features[i] for i in indices_train]
-                X_test = [image_features[i] for i in indices_test]
-
-                if not isregression:
-                    if modus == 'singlelabel':
-                        Y_train = i_class_temp[indices_train]
-                        Y_test = i_class_temp[indices_test]
-                    elif modus in ('multilabel', 'survival',):
-                        Y_train = i_class_temp[indices_train, :]
-                        Y_test = i_class_temp[indices_test, :]
-                    else:
-                        raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
-                else:
-                    if modus in ('survival',):
-                        # TODO: where should we get the split from?
-                        Y_train = i_class_temp[indices_train, :]
-                        Y_test = i_class_temp[indices_test, :]
-
-                        print('1----', X_train, X_test)
-                        print('2----', Y_train, Y_test)
-
-            else:
-                # Use pre defined splits
-                train = fixedsplits[str(i) + '_train'].values
-                test = fixedsplits[str(i) + '_test'].values
-
-                # Convert the numbers to the correct indices
-                ind_train = list()
-                for j in train:
-                    success = False
-                    for num, p in enumerate(patient_IDs):
-                        if j == p:
-                            ind_train.append(num)
-                            success = True
-                    if not success:
-                        raise ae.WORCIOError("Patient " + str(j).zfill(3) + " is not included!")
-
-                ind_test = list()
-                for j in test:
-                    success = False
-                    for num, p in enumerate(patient_IDs):
-                        if j == p:
-                            ind_test.append(num)
-                            success = True
-                    if not success:
-                        raise ae.WORCIOError("Patient " + str(j).zfill(3) + " is not included!")
-
-                X_train = [image_features[i] for i in ind_train]
-                X_test = [image_features[i] for i in ind_test]
-
-                patient_ID_train = patient_IDs[ind_train]
-                patient_ID_test = patient_IDs[ind_test]
-
-                if modus == 'singlelabel':
-                    Y_train = i_class_temp[ind_train]
-                    Y_test = i_class_temp[ind_test]
-                elif modus in ('multilabel', 'survival',):
-                    Y_train = i_class_temp[ind_train, :]
-                    Y_test = i_class_temp[ind_test, :]
-                else:
-                    raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
-
-            # Find best hyperparameters and construct classifier
-            config['HyperOptimization']['use_fastr'] = use_fastr
-            config['HyperOptimization']['fastr_plugin'] = fastr_plugin
-            n_cores = config['General']['Joblib_ncores']
-            trained_classifier = random_search_parameters(features=X_train,
-                                                          labels=Y_train,
-                                                          param_grid=param_grid,
-                                                          n_cores=n_cores,
-                                                          **config['HyperOptimization'])
-
-            # Create an ensemble if required
-            # trained_classifier.create_ensemble(X_train, Y_train, method=ensemble['Use'])
-
-            # We only want to save the feature values and one label array
-            X_train = [x[0] for x in X_train]
-            X_test = [x[0] for x in X_test]
-
-            temp_save_data = (trained_classifier, X_train, X_test, Y_train,
-                              Y_test, patient_ID_train, patient_ID_test, random_seed)
-
-            save_data.append(temp_save_data)
-
-            # Create a temporary save
-            if tempsave:
-                panda_labels = ['trained_classifier', 'X_train', 'X_test', 'Y_train', 'Y_test',
-                                'config', 'patient_ID_train', 'patient_ID_test',
-                                'random_seed', 'feature_labels']
-
-                panda_data_temp =\
-                    pd.Series([trained_classifier, X_train, X_test, Y_train,
-                               Y_test, config, patient_ID_train,
-                               patient_ID_test, random_seed, feature_labels],
-                              index=panda_labels,
-                              name='Constructed crossvalidation')
-
-                panda_data = pd.DataFrame(panda_data_temp)
-                n = 0
-                filename = os.path.join(tempfolder, 'tempsave_' + str(i) + '.hdf5')
-                while os.path.exists(filename):
-                    n += 1
-                    filename = os.path.join(tempfolder, 'tempsave_' + str(i + n) + '.hdf5')
-
-                panda_data.to_hdf(filename, 'SVMdata')
-                del panda_data, panda_data_temp
-
-            # Print elapsed time
-            elapsed = int((time.time() - t) / 60.0)
-            print(f'\t Fitting took {elapsed} minutes.')
-            logging.debug(f'\t Fitting took {elapsed} minutes.')
+        if crossval_type == 'random_split':
+            print('Performing random-split cross-validations.')
+            logging.debug('Performing random-split cross-validations.')
+            save_data =\
+                random_split_cross_validation(image_features=image_features,
+                                              feature_labels=feature_labels,
+                                              classes=i_class,
+                                              patient_ids=patient_ids,
+                                              n_iterations=n_iterations,
+                                              param_grid=param_grid,
+                                              config=config,
+                                              modus=modus,
+                                              test_size=test_size,
+                                              start=start,
+                                              save_data=save_data,
+                                              tempsave=tempsave,
+                                              tempfolder=tempfolder,
+                                              fixedsplits=fixedsplits,
+                                              fixed_seed=fixed_seed,
+                                              use_fastr=use_fastr,
+                                              fastr_plugin=fastr_plugin)
+        elif crossval_type == 'LOO':
+            print('Performing leave-one-out cross-validations.')
+            logging.debug('Performing leave-one-out cross-validations.')
+            save_data =\
+                LOO_cross_validation(image_features=image_features,
+                                     feature_labels=feature_labels,
+                                     classes=i_class,
+                                     patient_ids=patient_ids,
+                                     param_grid=param_grid,
+                                     config=config,
+                                     modus=modus,
+                                     test_size=test_size,
+                                     start=start,
+                                     save_data=save_data,
+                                     tempsave=tempsave,
+                                     tempfolder=tempfolder,
+                                     fixedsplits=fixedsplits,
+                                     fixed_seed=fixed_seed,
+                                     use_fastr=use_fastr,
+                                     fastr_plugin=fastr_plugin)
+        else:
+            raise ae.WORCKeyError(f'{crossval_type} is not a recognized cross-validation type.')
 
         [classifiers, X_train_set, X_test_set, Y_train_set, Y_test_set,
          patient_ID_train_set, patient_ID_test_set, seed_set] =\
             zip(*save_data)
+
+        # Convert to lists
+        classifiers = list(classifiers)
+        X_train_set = list(X_train_set)
+        X_test_set = list(X_test_set)
+        Y_train_set = list(Y_train_set)
+        Y_test_set = list(Y_test_set)
+        patient_ID_train_set = list(patient_ID_train_set)
+        patient_ID_test_set = list(patient_ID_test_set)
+        seed_set = list(seed_set)
 
         panda_labels = ['classifiers', 'X_train', 'X_test', 'Y_train', 'Y_test',
                         'config', 'patient_ID_train', 'patient_ID_test',
@@ -401,13 +611,12 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
                image_features_test, param_grid=None, use_fastr=False,
                fastr_plugin=None, ensemble={'Use': False},
                modus='singlelabel'):
-    """
-    Constructs multiple individual classifiers based on the label settings
+    """Constructs multiple individual classifiers based on the label settings.
 
     Arguments:
         config (Dict): Dictionary with config settings
         label_data (Dict): should contain:
-        patient_IDs (list): IDs of the patients, used to keep track of test and
+        patient_ids (list): ids of the patients, used to keep track of test and
                  training sets, and label data
         label (list): List of lists, where each list contains the
                                label status for that patient for each
@@ -429,24 +638,22 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
         classifier_data (pandas dataframe)
     """
 
-    patient_IDs_train = label_data_train['patient_IDs']
+    patient_ids_train = label_data_train['patient_IDs']
     label_value_train = label_data_train['label']
     label_name_train = label_data_train['label_name']
 
-    patient_IDs_test = label_data_test['patient_IDs']
+    patient_ids_test = label_data_test['patient_IDs']
     if 'label' in label_data_test.keys():
         label_value_test = label_data_test['label']
     else:
-        label_value_test = [None] * len(patient_IDs_test)
+        label_value_test = [None] * len(patient_ids_test)
 
     logfilename = os.path.join(os.getcwd(), 'classifier.log')
     logging.basicConfig(filename=logfilename, level=logging.DEBUG)
 
     classifier_labelss = dict()
 
-    print('features')
     logging.debug('Starting classifier')
-    print(len(image_features_train))
 
     # Determine modus
     if modus == 'singlelabel':
@@ -496,13 +703,15 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
         config['HyperOptimization']['use_fastr'] = use_fastr
         config['HyperOptimization']['fastr_plugin'] = fastr_plugin
         n_cores = config['General']['Joblib_ncores']
-        trained_classifier = random_search_parameters(features=X_train,
-                                                         labels=Y_train,
-                                                         param_grid=param_grid,
-                                                         n_cores=n_cores,
-                                                         **config['HyperOptimization'])
+        trained_classifier =\
+            random_search_parameters(features=X_train,
+                                     labels=Y_train,
+                                     param_grid=param_grid,
+                                     n_cores=n_cores,
+                                     **config['HyperOptimization'])
 
         # Create an ensemble if required
+        # NOTE: removed to keep memory and storage usage low
         # trained_classifier.create_ensemble(X_train, Y_train, method=ensemble['Use'])
 
         # Extract the feature values
@@ -510,7 +719,7 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
         X_test = np.asarray([x[0] for x in X_test])
 
         temp_save_data = (trained_classifier, X_train, X_test, Y_train,
-                          Y_test, patient_IDs_train, patient_IDs_test, random_seed)
+                          Y_test, patient_ids_train, patient_ids_test, random_seed)
 
         save_data.append(temp_save_data)
 

@@ -1,6 +1,6 @@
-============== ======= ===============
-Subkey         Default Options        
-============== ======= ===============
-scale_features True    Boolean(s)     
-scaling_method z_score z_score, minmax
-============== ======= ===============
+============== ============== =============================================
+Subkey         Default        Options                                      
+============== ============== =============================================
+scaling_method robust_z_score robust_z_score, z_score, robust, minmax, None
+skip_features  semf_, pf_     Comma separated list of strings              
+============== ============== =============================================

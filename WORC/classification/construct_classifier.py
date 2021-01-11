@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +19,7 @@ from sksurv.svm import FastKernelSurvivalSVM, FastSurvivalSVM
 from sklearn.svm import SVC
 from sklearn.svm import SVR as SVMR
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
 from sklearn.linear_model import SGDClassifier, ElasticNet, SGDRegressor
 from sklearn.linear_model import LogisticRegression, Lasso
 from sklearn.naive_bayes import GaussianNB, ComplementNB
@@ -28,6 +29,7 @@ import scipy
 from WORC.classification.estimators import RankedSVM
 from WORC.classification.AdvancedSampler import log_uniform, discrete_uniform
 import WORC.addexceptions as ae
+from xgboost import XGBClassifier, XGBRegressor
 
 
 survival_classifiers = {
@@ -46,7 +48,7 @@ multilabel_classifiers = {
 }
 
 def construct_classifier(config):
-    """Interface to create classification
+    """Interface to create classification.
 
     Different classifications can be created using this common interface
 
@@ -58,8 +60,8 @@ def construct_classifier(config):
 
     Returns:
         Constructed classifier
-    """
 
+    """
     # NOTE: Function is not working anymore for regression: need
     # to move param grid creation to the create_param_grid function
     max_iter = config['max_iter']
@@ -76,31 +78,78 @@ def construct_classifier(config):
         # Support Vector Regression
         classifier = construct_SVM(config, True)
 
+    elif config['classifiers'] == 'AdaBoostClassifier':
+        # AdaBoost classifier
+        learning_rate = config['AdaBoost_learning_rate']
+        n_estimators = config['AdaBoost_n_estimators']
+        classifier = AdaBoostClassifier(n_estimators=n_estimators,
+                                        learning_rate=learning_rate)
+
+    elif config['classifiers'] == 'AdaBoostRegressor':
+        # AdaBoost regressor
+        learning_rate = config['AdaBoost_learning_rate']
+        n_estimators = config['AdaBoost_n_estimators']
+        classifier = AdaBoostRegressor(n_estimators=n_estimators,
+                                       learning_rate=learning_rate)
+
+    elif config['classifiers'] == 'XGBClassifier':
+        # XGB Classifier
+        max_depth = config['XGB_max_depth']
+        learning_rate = config['XGB_learning_rate']
+        gamma = config['XGB_gamma']
+        min_child_weight = config['XGB_min_child_weight']
+        boosting_rounds = config['XGB_boosting_rounds']
+        colsample_bytree = config['XGB_colsample_bytree']
+        classifier = XGBClassifier(max_depth=max_depth,
+                                   learning_rate=learning_rate,
+                                   gamma=gamma,
+                                   min_child_weight=min_child_weight,
+                                   n_estimators=boosting_rounds,
+                                   colsample_bytree=colsample_bytree)
+
+    elif config['classifiers'] == 'XGBRegressor':
+        # XGB Classifier
+        max_depth = config['XGB_max_depth']
+        learning_rate = config['XGB_learning_rate']
+        gamma = config['XGB_gamma']
+        min_child_weight = config['XGB_min_child_weight']
+        boosting_rounds = config['XGB_boosting_rounds']
+        colsample_bytree = config['XGB_colsample_bytree']
+        classifier = XGBRegressor(max_depth=max_depth,
+                                  learning_rate=learning_rate,
+                                  gamma=gamma,
+                                  min_child_weight=min_child_weight,
+                                  n_estimators=boosting_rounds,
+                                  colsample_bytree=colsample_bytree)
+
     elif config['classifiers'] == 'RF':
         # Random forest kernel
         classifier = RandomForestClassifier(verbose=0,
                                             class_weight='balanced',
                                             n_estimators=config['RFn_estimators'],
                                             min_samples_split=config['RFmin_samples_split'],
-                                            max_depth=config['RFmax_depth'])
+                                            max_depth=config['RFmax_depth'],
+                                            random_state=config['random_seed'])
 
     elif config['classifiers'] == 'RFR':
         # Random forest kernel regression
         classifier = RandomForestRegressor(verbose=0,
                                            n_estimators=config['RFn_estimators'],
                                            min_samples_split=config['RFmin_samples_split'],
-                                           max_depth=config['RFmax_depth'])
+                                           max_depth=config['RFmax_depth'],
+                                           random_state=config['random_seed'])
 
     elif config['classifiers'] == 'ElasticNet':
         # Elastic Net Regression
         classifier = ElasticNet(alpha=config['ElasticNet_alpha'],
                                 l1_ratio=config['ElasticNet_l1_ratio'],
-                                max_iter=max_iter)
+                                max_iter=max_iter,
+                                random_state=config['random_seed'])
 
     elif config['classifiers'] == 'Lasso':
         # LASSO Regression
-        param_grid = {'alpha': scipy.stats.uniform(loc=1.0, scale=0.5)}
-        classifier = Lasso(max_iter=max_iter)
+        classifier = Lasso(max_iter=max_iter,
+                           random_state=config['random_seed'])
 
     elif config['classifiers'] == 'SGD':
         # Stochastic Gradient Descent classifier
@@ -108,7 +157,8 @@ def construct_classifier(config):
                                    alpha=config['SGD_alpha'],
                                    l1_ratio=config['SGD_l1_ratio'],
                                    loss=config['SGD_loss'],
-                                   penalty=config['SGD_penalty'])
+                                   penalty=config['SGD_penalty'],
+                                   random_state=config['random_seed'])
 
     elif config['classifiers'] == 'SGDR':
         # Stochastic Gradient Descent regressor
@@ -116,13 +166,25 @@ def construct_classifier(config):
                                   alpha=config['SGD_alpha'],
                                   l1_ratio=config['SGD_l1_ratio'],
                                   loss=config['SGD_loss'],
-                                  penalty=config['SGD_penalty'])
+                                  penalty=config['SGD_penalty'],
+                                  random_state=config['random_seed'])
 
     elif config['classifiers'] == 'LR':
         # Logistic Regression
+        if config['LRpenalty'] == 'elasticnet' or config['LRpenalty'] == 'l1':
+            # saga solver required for elasticnet
+            if config['LR_solver'] != 'saga':
+                p = config['LRpenalty']
+                print(f"[WORC Warning] {p} penalty requires saga " +\
+                      f"solver, got {config['LR_solver']}. Changing solver.")
+                config['LR_solver'] = 'saga'
+
         classifier = LogisticRegression(max_iter=max_iter,
                                         penalty=config['LRpenalty'],
-                                        C=config['LRC'])
+                                        solver=config['LR_solver'],
+                                        l1_ratio=config['LR_l1_ratio'],
+                                        C=config['LRC'],
+                                        random_state=config['random_seed'])
     elif config['classifiers'] == 'GaussianNB':
         # Naive Bayes classifier using Gaussian distributions
         classifier = GaussianNB()
@@ -231,8 +293,7 @@ FastSurvivalSVM:
 
 
 def construct_SVM(config, regression=False):
-    """
-    Constructs a SVM classifier
+    """Construct a SVM classifier.
 
     Args:
         config (dict): Dictionary of the required config settings
@@ -241,13 +302,14 @@ def construct_SVM(config, regression=False):
 
     Returns:
         SVM/SVR classifier, parameter grid
-    """
 
+    """
     max_iter = config['max_iter']
     if not regression:
-        clf = SVC(class_weight='balanced', probability=True, max_iter=max_iter)
+        clf = SVC(class_weight='balanced', probability=True, max_iter=max_iter,
+                  random_state=config['random_seed'])
     else:
-        clf = SVMR(max_iter=max_iter)
+        clf = SVMR(max_iter=max_iter, random_state=config['random_seed'])
 
     clf.kernel = str(config['SVMKernel'])
     clf.C = config['SVMC']
@@ -268,9 +330,7 @@ def construct_SVM(config, regression=False):
 
 
 def create_param_grid(config):
-    ''' Create a parameter grid for the WORC classifiers based on the
-        provided configuration. '''
-
+    """Create a parameter grid for the WORC classifiers."""
     # We only need parameters from the Classification part of the config
     config = config['Classification']
 
@@ -304,6 +364,10 @@ def create_param_grid(config):
 
     # Logistic Regression parameters
     param_grid['LRpenalty'] = config['LRpenalty']
+    param_grid['LR_solver'] = config['LR_solver']
+    param_grid['LR_l1_ratio'] =\
+        scipy.stats.uniform(loc=config['LR_l1_ratio'][0],
+                            scale=config['LR_l1_ratio'][1])
     param_grid['LRC'] = scipy.stats.uniform(loc=config['LRC'][0],
                                             scale=config['LRC'][1])
 
@@ -337,5 +401,39 @@ def create_param_grid(config):
     param_grid['CNB_alpha'] =\
         scipy.stats.uniform(loc=config['CNB_alpha'][0],
                             scale=config['CNB_alpha'][1])
+
+    # AdaBoost parameters
+    param_grid['AdaBoost_n_estimators'] =\
+        discrete_uniform(loc=config['AdaBoost_n_estimators'][0],
+                         scale=config['AdaBoost_n_estimators'][1])
+
+    param_grid['AdaBoost_learning_rate'] =\
+        scipy.stats.uniform(loc=config['AdaBoost_learning_rate'][0],
+                            scale=config['AdaBoost_learning_rate'][1])
+
+    # XGDBoost parameters
+    param_grid['XGB_boosting_rounds'] =\
+        discrete_uniform(loc=config['XGB_boosting_rounds'][0],
+                         scale=config['XGB_boosting_rounds'][1])
+
+    param_grid['XGB_max_depth'] =\
+        discrete_uniform(loc=config['XGB_max_depth'][0],
+                         scale=config['XGB_max_depth'][1])
+
+    param_grid['XGB_learning_rate'] =\
+        scipy.stats.uniform(loc=config['XGB_learning_rate'][0],
+                            scale=config['XGB_learning_rate'][1])
+
+    param_grid['XGB_gamma'] =\
+        scipy.stats.uniform(loc=config['XGB_gamma'][0],
+                            scale=config['XGB_gamma'][1])
+
+    param_grid['XGB_min_child_weight'] =\
+        discrete_uniform(loc=config['XGB_min_child_weight'][0],
+                         scale=config['XGB_min_child_weight'][1])
+
+    param_grid['XGB_colsample_bytree'] =\
+        scipy.stats.uniform(loc=config['XGB_colsample_bytree'][0],
+                            scale=config['XGB_colsample_bytree'][1])
 
     return param_grid

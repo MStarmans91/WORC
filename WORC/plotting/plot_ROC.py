@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,17 +19,17 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
-from matplotlib2tikz import save as tikz_save
+import tikzplotlib
 import pandas as pd
 import argparse
 from WORC.plotting.compute_CI import compute_confidence as CI
 import numpy as np
 from sklearn.metrics import roc_auc_score, auc
 import csv
-from WORC.plotting.plot_SVM import plot_SVM
+from WORC.plotting.plot_estimator_performance import plot_estimator_performance
 
 
-def plot_single_ROC(y_truth, y_score, verbose=False):
+def plot_single_ROC(y_truth, y_score, verbose=False, returnplot=False):
     '''
     Get the False Positive Ratio (FPR) and True Positive Ratio (TPR)
     for the ground truth and score of a single estimator. These ratios
@@ -79,13 +79,14 @@ def plot_single_ROC(y_truth, y_score, verbose=False):
 
         i += 1
 
-    if verbose:
+    if verbose or returnplot:
         roc_auc = auc(fpr, tpr)
-        plt.figure()
+        f = plt.figure()
+        ax = plt.subplot(111)
         lw = 2
-        plt.plot(fpr, tpr, color='darkorange',
-                 lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
-        plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+        ax.plot(fpr, tpr, color='darkorange',
+                lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
+        ax.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
         plt.xlabel('False Positive Rate')
@@ -93,7 +94,10 @@ def plot_single_ROC(y_truth, y_score, verbose=False):
         plt.title('Receiver operating characteristic example')
         plt.legend(loc="lower right")
 
-    return fpr[::-1], tpr[::-1], thresholds[::-1]
+    if not returnplot:
+        return fpr[::-1], tpr[::-1], thresholds[::-1]
+    else:
+        return fpr[::-1], tpr[::-1], thresholds[::-1], f
 
 
 def ROC_thresholding(fprt, tprt, thresholds, nsamples=20):
@@ -361,18 +365,25 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
 
     # Determine the predicted score per patient
     print('Determining score per patient.')
-    y_truths, y_scores, _, _ = plot_SVM(prediction, pinfo, [label_type],
-                                        show_plots=False,
-                                        alpha=0.95, ensemble=ensemble,
-                                        output='decision')
+    y_truths, y_scores, _, _ =\
+        plot_estimator_performance(prediction, pinfo, [label_type],
+                                   alpha=0.95, ensemble=ensemble,
+                                   output='decision')
 
-    # Plot the ROC with confidence intervals
-    print("Plotting the ROC with confidence intervals.")
-    plot = 'default'
-    f, fpr, tpr = plot_ROC_CIc(y_truths, y_scores, N_1, N_2)
+    # Check if we can compute confidence intervals
+    config = prediction[label_type].config
+    crossval_type = config['CrossValidation']['Type']
 
-    if plot == 'default':
-        plot = ''
+    if crossval_type == 'LOO':
+        print("LOO: Plotting the ROC without confidence intervals.")
+        y_truths = [i[0] for i in y_truths]
+        y_scores = [i[0] for i in y_scores]
+        print(y_truths)
+        fpr, tpr, _, f = plot_single_ROC(y_truths, y_scores, returnplot=True)
+    else:
+        # Plot the ROC with confidence intervals
+        print("Plotting the ROC with confidence intervals.")
+        f, fpr, tpr = plot_ROC_CIc(y_truths, y_scores, N_1, N_2)
 
     # Save the outputs
     if output_png is not None:
@@ -380,7 +391,7 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
         print(("ROC saved as {} !").format(output_png))
 
     if output_tex is not None:
-        tikz_save(output_tex)
+        tikzplotlib.save(output_tex)
         print(("ROC saved as {} !").format(output_tex))
 
     # Save ROC values as JSON

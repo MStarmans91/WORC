@@ -1,0 +1,37 @@
+<tool id="PlotEstimator" name="PlotEstimator" version="1.0">
+    <description>A wrapper around PREDICT's Estimator Plotting Function.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="PlotEstimator.py" />
+    </targets>
+    <description>
+       PlotEstimator.py prediction pinfo ensemble label_type output_json
+       output = output_json output_tex output_csv
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="prediction" name="Radiomics estimator object from PREDICT Trainclassifier function" datatype="HDF5" prefix="--prediction" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="pinfo" name="Text file containing labels from patients" datatype="PatientInfoFile" prefix="--pinfo" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="ensemble" name="Ensemble size or ensembling method." datatype="String" prefix="--ensemble" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="label_type" name="Name of label predicted by the estimator to plot performance for." datatype="String" prefix="--label_type" cardinality="1" repeat_prefix="false" required="false" />
+     </inputs>
+    <outputs>
+      <output id="output_json" name="Output json File." datatype="JsonFile" prefix="--output_json" cardinality="1" nospace="False" order="0" required="false" />
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: to write
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

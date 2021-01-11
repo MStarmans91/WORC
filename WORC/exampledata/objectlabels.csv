@@ -1,0 +1,8 @@
+Patient,Malignant,Age,Gender,Hospital
+Patient-000,0,45,0,1
+Patient-001,0,55,0,1
+Patient-002,0,65,0,2
+Patient-003,1,35,1,1
+Patient-004,1,22,1,2
+Patient-005,1,70,1,-1
+Patient-006,1,46,0,-1

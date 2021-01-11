@@ -17,7 +17,7 @@
 
 import argparse
 import pandas as pd
-from WORC.plotting.plot_SVM import plot_SVM
+from WORC.plotting.plot_estimator_performance import plot_estimator_performance
 import WORC.processing.label_processing as lp
 import glob
 import numpy as np
@@ -112,15 +112,15 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
 
     # Determine the predicted score per patient
     print('Determining score per patient.')
-    stats = plot_SVM(prediction,
-                     pinfo,
-                     [label_type],
-                     show_plots=False,
-                     alpha=0.95,
-                     ensemble=ensemble,
-                     output='stats')
+    stats =\
+        plot_estimator_performance(prediction,
+                                   pinfo,
+                                   [label_type],
+                                   alpha=0.95,
+                                   ensemble=ensemble,
+                                   output='stats')
 
-    percentages = stats['Percentages']
+    percentages = stats['Rankings']['Percentages']
     ranking = np.argsort(list(percentages.values()))
     ranked_percentages_temp = [list(percentages.values())[r] for r in ranking]
     ranked_PIDs = [list(percentages.keys())[r] for r in ranking]
@@ -152,17 +152,16 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
                        output_itk=None, zoomfactor=4):
     # Match the images to the label data
     print('Matching image and segmentation data to labels.')
-    print(images)
     label_data, images =\
         lp.findlabeldata(pinfo,
                          [label_type],
                          images,
-                         images)
+                         objects=images)
     _, segmentations =\
         lp.findlabeldata(pinfo,
                          [label_type],
                          segmentations,
-                         segmentations)
+                         objects=segmentations)
 
     PIDs_images = label_data['patient_IDs'].tolist()
     PIDs_images = [i.lower() for i in PIDs_images]
@@ -171,10 +170,10 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
     # Order the images and segmentations in the scores ordering
     ordering = list()
     for pid in ranked_PIDs:
-        if pid in PIDs_images:
+        if pid.lower() in PIDs_images:
             ordering.append(PIDs_images.index(pid))
         else:
-            print('[WORC Warning] Patient {} not in images list!').format(str(pid))
+            print(f'[WORC Warning] Patient {pid} not in images list!')
 
     PIDs_images = [PIDs_images[i] for i in ordering]
     images = [images[i] for i in ordering]
@@ -243,13 +242,12 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
     # Determine the predicted score per patient
     print('Determining posterior per patient.')
     y_truths, y_scores, y_predictions, PIDs_scores =\
-        plot_SVM(prediction,
-                 pinfo,
-                 [label_type],
-                 show_plots=False,
-                 alpha=0.95,
-                 ensemble=ensemble,
-                 output='scores')
+        plot_estimator_performance(prediction,
+                                   pinfo,
+                                   [label_type],
+                                   alpha=0.95,
+                                   ensemble=ensemble,
+                                   output='scores')
 
     # Extract all scores for each patient
     print('Aggregating scores per patient over all crossval iterations.')
@@ -364,12 +362,19 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
                                    ensemble=ensemble,
                                    output_csv=output_csv)
     elif scores == 'percentages':
-        ranked_scores, ranked_truths, ranked_PIDs =\
-            plot_ranked_percentages(estimator=estimator,
-                                    pinfo=pinfo,
-                                    label_type=label_type,
-                                    ensemble=ensemble,
-                                    output_csv=output_csv)
+        if prediction[label_type].config['CrossValidation']['Type'] == 'LOO':
+            print('Cannot rank percentages for LOO, returning dummies.')
+            ranked_scores = ranked_truths = ranked_PIDs = []
+            with open(output_csv, 'w') as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerow(['LOO: Cannot rank percentages.'])
+        else:
+            ranked_scores, ranked_truths, ranked_PIDs =\
+                plot_ranked_percentages(estimator=estimator,
+                                        pinfo=pinfo,
+                                        label_type=label_type,
+                                        ensemble=ensemble,
+                                        output_csv=output_csv)
     else:
         message = ('{} is not a valid scoring method!').format(str(scores))
         raise WORCKeyError(message)

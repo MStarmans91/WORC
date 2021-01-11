@@ -10,10 +10,28 @@ IOparser Package
     :show-inheritance:
     :special-members:
 
+:mod:`config_io_PyRadiomics` Module
+-----------------------------------
+
+.. automodule:: WORC.IOparser.config_io_PyRadiomics
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`config_io_classifier` Module
 ----------------------------------
 
 .. automodule:: WORC.IOparser.config_io_classifier
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`config_io_combat` Module
+------------------------------
+
+.. automodule:: WORC.IOparser.config_io_combat
     :members:
     :undoc-members:
     :show-inheritance:

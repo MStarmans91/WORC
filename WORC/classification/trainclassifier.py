@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,22 +17,23 @@
 
 import json
 import os
-
+from scipy.stats import uniform
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
-from WORC.plotting.plot_SVM import plot_SVM
 import WORC.IOparser.file_io as file_io
+from WORC.IOparser.file_io import load_features
 import WORC.IOparser.config_io_classifier as config_io
 from scipy.stats import uniform
 from WORC.classification.AdvancedSampler import discrete_uniform, log_uniform
 
 
 def trainclassifier(feat_train, patientinfo_train, config,
-                    output_hdf, output_json,
+                    output_hdf,
                     feat_test=None, patientinfo_test=None,
                     fixedsplits=None, verbose=True):
-    '''
-    Train a classifier using machine learning from features. By default, if no
+    """Train a classifier using machine learning from features.
+
+    By default, if no
     split in training and test is supplied, a cross validation
     will be performed.
 
@@ -60,11 +61,6 @@ def trainclassifier(feat_train, patientinfo_train, config,
             path refering to a .hdf5 file to which the final classifier and
             it's properties will be written to.
 
-    output_json: string, mandatory
-            path refering to a .json file to which the performance of the final
-            classifier will be written to. This file is generated through one of
-            the WORC plotting functions.
-
     feat_test: string, optional
             When this argument is supplied, the machine learning will not be
             trained using a cross validation, but rather using a fixed training
@@ -84,8 +80,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
     verbose: boolean, default True
             print final feature values and labels to command line or not.
 
-    '''
-
+    """
     # Convert inputs from lists to strings
     if type(patientinfo_train) is list:
         patientinfo_train = ''.join(patientinfo_train)
@@ -108,14 +103,6 @@ def trainclassifier(feat_train, patientinfo_train, config,
             # FIXME
             print('[WORC Warning] You provided multiple output hdf files: only the first one will be used!')
             output_hdf = output_hdf[0]
-
-    if type(output_json) is list:
-        if len(output_json) == 1:
-            output_json = ''.join(output_json)
-        else:
-            # FIXME
-            print('[WORC Warning] You provided multiple output json files: only the first one will be used!')
-            output_json = output_json[0]
 
     if type(fixedsplits) is list:
         fixedsplits = ''.join(fixedsplits)
@@ -147,71 +134,8 @@ def trainclassifier(feat_train, patientinfo_train, config,
     # Construct the required classifier grid
     param_grid = cc.create_param_grid(config)
 
-    # IF at least once groupwise search is turned on, add it to the param grid
-    if 'True'in config['Featsel']['GroupwiseSearch']:
-        param_grid['SelectGroups'] = config['Featsel']['GroupwiseSearch']
-        for group in config['SelectFeatGroup'].keys():
-            param_grid[group] = config['SelectFeatGroup'][group]
-
-    # If scaling is to be applied, add to parameters
-    if config['FeatureScaling']['scale_features']:
-        if type(config['FeatureScaling']['scaling_method']) is not list:
-            param_grid['FeatureScaling'] = [config['FeatureScaling']['scaling_method']]
-        else:
-            param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
-
-    # Add parameters for oversampling methods
-    param_grid['SampleProcessing_SMOTE'] = config['SampleProcessing']['SMOTE']
-    param_grid['SampleProcessing_SMOTE_ratio'] =\
-        uniform(loc=config['SampleProcessing']['SMOTE_ratio'][0],
-                scale=config['SampleProcessing']['SMOTE_ratio'][1])
-    param_grid['SampleProcessing_SMOTE_neighbors'] =\
-        discrete_uniform(loc=config['SampleProcessing']['SMOTE_neighbors'][0],
-                         scale=config['SampleProcessing']['SMOTE_neighbors'][1])
-    param_grid['SampleProcessing_SMOTE_n_cores'] = [config['General']['Joblib_ncores']]
-    param_grid['SampleProcessing_Oversampling'] = config['SampleProcessing']['Oversampling']
-
-    # Extract hyperparameter grid settings for SearchCV from config
-    param_grid['FeatPreProcess'] = config['FeatPreProcess']['Use']
-    param_grid['Featsel_Variance'] = config['Featsel']['Variance']
-
-    param_grid['Imputation'] = config['Imputation']['use']
-    param_grid['ImputationMethod'] = config['Imputation']['strategy']
-    param_grid['ImputationNeighbours'] =\
-        discrete_uniform(loc=config['Imputation']['n_neighbors'][0],
-                         scale=config['Imputation']['n_neighbors'][1])
-
-    param_grid['SelectFromModel'] = config['Featsel']['SelectFromModel']
-
-    param_grid['UsePCA'] = config['Featsel']['UsePCA']
-    param_grid['PCAType'] = config['Featsel']['PCAType']
-
-    param_grid['StatisticalTestUse'] =\
-        config['Featsel']['StatisticalTestUse']
-    param_grid['StatisticalTestMetric'] =\
-        config['Featsel']['StatisticalTestMetric']
-    param_grid['StatisticalTestThreshold'] =\
-        log_uniform(loc=config['Featsel']['StatisticalTestThreshold'][0],
-                    scale=config['Featsel']['StatisticalTestThreshold'][1])
-
-    param_grid['ReliefUse'] =\
-        config['Featsel']['ReliefUse']
-
-    param_grid['ReliefNN'] =\
-        discrete_uniform(loc=config['Featsel']['ReliefNN'][0],
-                         scale=config['Featsel']['ReliefNN'][1])
-
-    param_grid['ReliefSampleSize'] =\
-        discrete_uniform(loc=config['Featsel']['ReliefSampleSize'][0],
-                         scale=config['Featsel']['ReliefSampleSize'][1])
-
-    param_grid['ReliefDistanceP'] =\
-        discrete_uniform(loc=config['Featsel']['ReliefDistanceP'][0],
-                         scale=config['Featsel']['ReliefDistanceP'][1])
-
-    param_grid['ReliefNumFeatures'] =\
-        discrete_uniform(loc=config['Featsel']['ReliefNumFeatures'][0],
-                         scale=config['Featsel']['ReliefNumFeatures'][1])
+    # Add non-classifier parameters
+    param_grid = add_parameters_to_grid(param_grid, config)
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
@@ -240,85 +164,105 @@ def trainclassifier(feat_train, patientinfo_train, config,
     if not os.path.exists(os.path.dirname(output_hdf)):
         os.makedirs(os.path.dirname(output_hdf))
 
-    trained_classifier.to_hdf(output_hdf, 'SVMdata')
-
-    # Check whether we do regression or classification
-    regressors = cc.list_regression_classifiers()
-    isregression = any(clf in regressors for clf in config['Classification']['classifiers'])
-
-    # Calculate statistics of performance
-    if feat_test is None:
-        statistics = plot_SVM(trained_classifier, label_data_train,
-                              label_type, modus=modus,
-                              ensemble=config['Ensemble']['Use'],
-                              bootstrap=config['Bootstrap']['Use'],
-                              bootstrap_N=config['Bootstrap']['N_iterations'])
-    else:
-        if patientinfo_test is not None:
-            statistics = plot_SVM(trained_classifier,
-                                  label_data_test,
-                                  label_type,
-                                  modus=modus,
-                                  ensemble=config['Ensemble']['Use'],
-                                  bootstrap=config['Bootstrap']['Use'],
-                                  bootstrap_N=config['Bootstrap']['N_iterations'])
-        else:
-            statistics = None
-
-    # Save output
-    savedict = dict()
-    savedict["Statistics"] = statistics
-
-    if not os.path.exists(os.path.dirname(output_json)):
-        os.makedirs(os.path.dirname(output_json))
-
-    with open(output_json, 'w') as fp:
-        json.dump(savedict, fp, sort_keys=True, indent=4)
+    trained_classifier.to_hdf(output_hdf, 'EstimatorData')
 
     print("Saved data!")
 
 
-def load_features(feat, patientinfo, label_type):
-    ''' Read feature files and stack the features per patient in an array.
-        Additionally, if a patient label file is supplied, the features from
-        a patient will be matched to the labels.
+def add_parameters_to_grid(param_grid, config):
+    """Add non-classifier parameters from config  to param grid."""
+    # IF at least once groupwise search is turned on, add it to the param grid
+    if 'True' in config['Featsel']['GroupwiseSearch']:
+        param_grid['SelectGroups'] = config['Featsel']['GroupwiseSearch']
+        for group in config['SelectFeatGroup'].keys():
+            param_grid[group] = config['SelectFeatGroup'][group]
 
-        Parameters
-        ----------
-        featurefiles: list, mandatory
-                List containing all paths to the .hdf5 feature files to be loaded.
-                The argument should contain a list per modelity, e.g.
-                [[features_mod1_patient1, features_mod1_patient2, ...],
-                 [features_mod2_patient1, features_mod2_patient2, ...]].
+    # Add feature scaling parameters
+    param_grid['FeatureScaling'] = config['FeatureScaling']['scaling_method']
+    param_grid['FeatureScaling_skip_features'] =\
+        [config['FeatureScaling']['skip_features']]
 
-        patientinfo: string, optional
-                Path referring to the .txt file to be used to read patient
-                labels from. See the Github Wiki for the format.
+    # Add parameters for oversampling methods
+    param_grid['Resampling_Use'] =\
+        boolean_uniform(threshold=config['Resampling']['Use'])
+    param_grid['Resampling_Method'] = config['Resampling']['Method']
+    param_grid['Resampling_sampling_strategy'] =\
+        config['Resampling']['sampling_strategy']
+    param_grid['Resampling_n_neighbors'] =\
+        discrete_uniform(loc=config['Resampling']['n_neighbors'][0],
+                         scale=config['Resampling']['n_neighbors'][1])
+    param_grid['Resampling_k_neighbors'] =\
+        discrete_uniform(loc=config['Resampling']['k_neighbors'][0],
+                         scale=config['Resampling']['k_neighbors'][1])
+    param_grid['Resampling_threshold_cleaning'] =\
+        uniform(loc=config['Resampling']['threshold_cleaning'][0],
+                scale=config['Resampling']['threshold_cleaning'][1])
 
-        label_names: list, optional
-                List containing all the labels that should be extracted from
-                the patientinfo file.
+    param_grid['Resampling_n_cores'] = [config['General']['Joblib_ncores']]
 
-    '''
-    # Split the feature files per modality
-    feat_temp = list()
-    modnames = list()
-    for feat_mod in feat:
-        feat_mod_temp = [str(item).strip() for item in feat_mod.split(',')]
+    # Extract hyperparameter grid settings for SearchCV from config
+    param_grid['FeatPreProcess'] = config['FeatPreProcess']['Use']
+    param_grid['Featsel_Variance'] =\
+        boolean_uniform(threshold=config['Featsel']['Variance'])
 
-        # The first item contains the name of the modality, followed by a = sign
-        temp = [str(item).strip() for item in feat_mod_temp[0].split('=')]
-        modnames.append(temp[0])
-        feat_mod_temp[0] = temp[1]
+    param_grid['OneHotEncoding'] = config['OneHotEncoding']['Use']
+    param_grid['OneHotEncoding_feature_labels_tofit'] =\
+        [config['OneHotEncoding']['feature_labels_tofit']]
 
-        # Append the files to the main list
-        feat_temp.append(feat_mod_temp)
+    param_grid['Imputation'] = config['Imputation']['use']
+    param_grid['ImputationMethod'] = config['Imputation']['strategy']
+    param_grid['ImputationNeighbours'] =\
+        discrete_uniform(loc=config['Imputation']['n_neighbors'][0],
+                         scale=config['Imputation']['n_neighbors'][1])
 
-    feat = feat_temp
+    param_grid['SelectFromModel'] =\
+        boolean_uniform(threshold=config['Featsel']['SelectFromModel'])
 
-    # Read the features and classification data
-    label_data, image_features =\
-        file_io.load_data(feat, patientinfo,
-                          label_type, modnames)
+    param_grid['SelectFromModel_lasso_alpha'] =\
+        uniform(loc=config['Featsel']['SelectFromModel_lasso_alpha'][0],
+                scale=config['Featsel']['SelectFromModel_lasso_alpha'][1])
 
-    return label_data, image_features
+    param_grid['SelectFromModel_estimator'] =\
+        config['Featsel']['SelectFromModel_estimator']
+
+    param_grid['SelectFromModel_n_trees'] =\
+        discrete_uniform(loc=config['Featsel']['SelectFromModel_n_trees'][0],
+                         scale=config['Featsel']['SelectFromModel_n_trees'][1])
+
+    param_grid['UsePCA'] =\
+        boolean_uniform(threshold=config['Featsel']['UsePCA'])
+    param_grid['PCAType'] = config['Featsel']['PCAType']
+
+    param_grid['StatisticalTestUse'] =\
+        boolean_uniform(threshold=config['Featsel']['StatisticalTestUse'])
+
+    param_grid['StatisticalTestMetric'] =\
+        config['Featsel']['StatisticalTestMetric']
+    param_grid['StatisticalTestThreshold'] =\
+        log_uniform(loc=config['Featsel']['StatisticalTestThreshold'][0],
+                    scale=config['Featsel']['StatisticalTestThreshold'][1])
+
+    param_grid['ReliefUse'] =\
+        boolean_uniform(threshold=config['Featsel']['ReliefUse'])
+
+    param_grid['ReliefNN'] =\
+        discrete_uniform(loc=config['Featsel']['ReliefNN'][0],
+                         scale=config['Featsel']['ReliefNN'][1])
+
+    param_grid['ReliefSampleSize'] =\
+        uniform(loc=config['Featsel']['ReliefSampleSize'][0],
+                scale=config['Featsel']['ReliefSampleSize'][1])
+
+    param_grid['ReliefDistanceP'] =\
+        discrete_uniform(loc=config['Featsel']['ReliefDistanceP'][0],
+                         scale=config['Featsel']['ReliefDistanceP'][1])
+
+    param_grid['ReliefNumFeatures'] =\
+        discrete_uniform(loc=config['Featsel']['ReliefNumFeatures'][0],
+                         scale=config['Featsel']['ReliefNumFeatures'][1])
+
+    # Add a random seed, which is required for many methods
+    param_grid['random_seed'] =\
+        discrete_uniform(loc=0, scale=2**32 - 1)
+
+    return param_grid

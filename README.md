@@ -1,8 +1,28 @@
-[![Build Status](https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master)](https://travis-ci.com/MStarmans91/WORC)
-
-# WORC v3.1.3
-
+# WORC v3.3.5
 ## Workflow for Optimal Radiomics Classification
+
+## Information
+
+| Linux                          | Windows                       | Documentation                 | PyPi                          |Citing WORC          |
+|--------------------------------|-------------------------------|-------------------------------|-------------------------------|---------------------|
+| [![][tci-linx]][tci-linx-lnk]  | [![][tci-wind]][tci-wind-lnk] | [![][doc]][doc-lnk]           | [![][pypi]][pypi-lnk]         | [![][DOI]][DOI-lnk] |
+
+[tci-linx]: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=1
+[tci-linx-lnk]: https://travis-ci.com/MStarmans91/WORC
+
+[tci-wind]: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=2
+[tci-wind-lnk]: https://travis-ci.com/MStarmans91/WORC
+
+[doc]:https://readthedocs.org/projects/worc/badge/?version=latest
+[doc-lnk]: https://worc.readthedocs.io/en/latest/?badge=latest
+
+[pypi]: https://badge.fury.io/py/WORC.svg
+[pypi-lnk]: https://badge.fury.io/py/WORC
+
+[DOI]: https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg
+[DOI-lnk]: https://zenodo.org/badge/latestdoi/92295542
+
+# Introduction
 
 WORC is an open-source python package for the easy execution of full radiomics pipelines.
 
@@ -47,11 +67,14 @@ NOTE: The version of PyRadiomics which WORC currently uses requires numpy to be 
 
 ## 3rd-party packages used in WORC:
 
- - [fastr (Workflow design and building)](http://fastr.readthedocs.io)
- - xnat (Collecting data from XNAT)
  - SimpleITK (Image loading and preprocessing)
  - [Pyradiomics](https://github.com/radiomics/pyradiomics)
  - [PREDICT](https://github.com/Svdvoort/PREDICTFastr)
+ - scikit-learn
+ - imbalanced-learn
+ - xgboost
+ - [fastr (Workflow design and building)](http://fastr.readthedocs.io)
+ - [ComBat](https://github.com/Jfortin1/ComBatHarmonization) (optional)
 
 See for other python packages the [requirements file](requirements.txt).
 
@@ -66,7 +89,11 @@ Besides a Jupyter notebook with instructions, we provide there also an example s
 ## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
 
-When using WORC, please cite this repository.
+When using WORC, please cite this repository as following:
+
+``Martijn P.A. Starmans, Sebastian R. van der Voort, Thomas Phil and Stefan Klein. Workflow for Optimal Radiomics Classification (WORC). Zenodo (2018). Available from:  https://github.com/MStarmans91/WORC. DOI: http://doi.org/10.5281/zenodo.3840534.``
+
+For the DOI, visit [![][DOI]][DOI-lnk].
 
 ## Contact
 We are happy to help you with any questions. Please sent us a mail or place an issue on the Github.

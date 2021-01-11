@@ -37,16 +37,75 @@ def load_config(config_file_path):
     settings = configparser.ConfigParser()
     settings.read(config_file_path)
 
-    settings_dict = {'Normalize': dict(), 'ImageFeatures': dict()}
+    settings_dict = {'Preprocessing': dict(), 'ImageFeatures': dict(),
+                     'General': dict()}
 
-    settings_dict['Normalize']['ROI'] =\
-        str(settings['Normalize']['ROI'])
-
-    settings_dict['Normalize']['Method'] =\
-        str(settings['Normalize']['Method'])
-
+    # General settings
     settings_dict['ImageFeatures']['image_type'] =\
         [str(item).strip() for item in
          settings['ImageFeatures']['image_type'].split(',')]
+
+    settings_dict['General']['AssumeSameImageAndMaskMetadata'] =\
+        settings['General'].getboolean('AssumeSameImageAndMaskMetadata')
+
+    # Detect incorrect spacing
+    settings_dict['Preprocessing']['CheckSpacing'] =\
+        settings['Preprocessing'].getboolean('CheckSpacing')
+
+    # Clipping
+    settings_dict['Preprocessing']['Clipping'] =\
+        settings['Preprocessing'].getboolean('Clipping')
+
+    settings_dict['Preprocessing']['Clipping_Range'] =\
+        [float(item) for item in
+         settings['Preprocessing']['Clipping_Range'].split(',')]
+
+    if len(settings_dict['Preprocessing']['Clipping_Range']) != 2:
+        raise ae.WORCValueError(f"Clipping range should be two floats split by a comma, got {settings['Preprocessing']['Clipping_Range']}.")
+
+    # Normalization
+    settings_dict['Preprocessing']['Normalize'] =\
+        settings['Preprocessing'].getboolean('Normalize')
+
+    settings_dict['Preprocessing']['Normalize_ROI'] =\
+        str(settings['Preprocessing']['Normalize_ROI'])
+
+    settings_dict['Preprocessing']['ROIdilate'] =\
+        str(settings['Preprocessing']['ROIdilate'])
+
+    settings_dict['Preprocessing']['ROIDetermine'] =\
+        str(settings['Preprocessing']['ROIDetermine'])
+
+    settings_dict['Preprocessing']['ROIdilateradius'] =\
+        int(settings['Preprocessing']['ROIdilateradius'])
+
+    settings_dict['Preprocessing']['Method'] =\
+        str(settings['Preprocessing']['Method'])
+
+    # Bias Correction
+    settings_dict['Preprocessing']['BiasCorrection'] =\
+        settings['Preprocessing'].getboolean('BiasCorrection')
+
+    settings_dict['Preprocessing']['BiasCorrection_Mask'] =\
+        settings['Preprocessing'].getboolean('BiasCorrection_Mask')
+
+    # Re-orientation
+    settings_dict['Preprocessing']['CheckOrientation'] =\
+        settings['Preprocessing'].getboolean('CheckOrientation')
+
+    settings_dict['Preprocessing']['OrientationPrimaryAxis'] =\
+        str(settings['Preprocessing']['OrientationPrimaryAxis'])
+
+    # Resampling
+    settings_dict['Preprocessing']['Resampling'] =\
+        settings['Preprocessing'].getboolean('Resampling')
+
+    settings_dict['Preprocessing']['Resampling_spacing'] =\
+        [float(item) for item in
+         settings['Preprocessing']['Resampling_spacing'].split(',')]
+
+    if len(settings_dict['Preprocessing']['Resampling_spacing']) != 3:
+        s = settings_dict['Preprocessing']['Resampling_spacing']
+        raise ae.WORCValueError(f'Resampling spacing should be three elements, got {s}')
 
     return settings_dict

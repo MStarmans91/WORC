@@ -16,9 +16,6 @@ will be ignored. Additionally, .py files from the ``$FASTRHOME/config.d`` folder
 as well. You will see that upon installation, WORC has already put a ``WORC_config.py`` file in the
 ``config.d`` folder.
 
-For a sample configuration file and a complete overview of the options in ``config.py`` see
-the :ref:`configuration-chapter` section.
-
 % Note: Above was originally from quick start
 As ``WORC`` and the default tools used are mostly Python based, we've chosen
 to put our configuration in a ``configparser`` object. This has several
@@ -102,154 +99,13 @@ backend.
 .. include:: ../autogen/config/WORC.config_General_defopts.rst
 
 
-.. _config-Segmentix:
-Segmentix
-~~~~~~~~~
-These fields are only important if you specified using the segmentix
-tool in the general configuration.
-
-**Description:**
-
-.. include:: ../autogen/config/WORC.config_Segmentix_description.rst
-
-**Defaults and Options:**
-
-.. include:: ../autogen/config/WORC.config_Segmentix_defopts.rst
-
-
-.. _config-Normalize:
-Normalize
-~~~~~~~~~~~~~
-The preprocessing node acts before the feature extraction on the image.
-Currently, only normalization is included: hence the dictionary name is
-*Normalize*. Additionally, scans with image type CT (see later in the
-tutorial) provided as DICOM are scaled to Hounsfield Units.
-
-**Description:**
-
-.. include:: ../autogen/config/WORC.config_Normalize_description.rst
-
-**Defaults and Options:**
-
-.. include:: ../autogen/config/WORC.config_Normalize_defopts.rst
-
-
-.. _config-ImageFeatures:
-ImageFeatures
-~~~~~~~~~~~~~
-If using the PREDICT toolbox, you can specify some settings for the
-feature computation here. Also, you can select if the certain features
-are computed or not.
-
-**Description:**
-
-.. include:: ../autogen/config/WORC.config_ImageFeatures_description.rst
-
-**Defaults and Options:**
-
-.. include:: ../autogen/config/WORC.config_ImageFeatures_defopts.rst
-
-
-.. _config-Featsel:
-Featsel
-~~~~~~~
-When using the PREDICT toolbox for classification, these settings can be
-used for feature selection methods. Note that these settings are
-actually used in the hyperparameter optimization. Hence you can provide
-multiple values per field, of which random samples will be drawn of
-which finally the best setting in combination with the other
-hyperparameters is selected. Again, these should be formatted as string
-containing the actual values, e.g. value1, value2.
-
-**Description:**
-
-.. include:: ../autogen/config/WORC.config_Featsel_description.rst
-
-**Defaults and Options:**
-
-.. include:: ../autogen/config/WORC.config_Featsel_defopts.rst
-
-
-.. _config-SelectFeatGroup:
-SelectFeatGroup
-~~~~~~~~~~~~~~~
-If the PREDICT feature computation and classification tools are used,
-then you can do a gridsearch among the various feature groups for the
-optimal combination. If you do not want this, set all fields to a single
-value.
-
-Previously, there was a single parameter for the texture features,
-selecting all, none or a single group. This is still supported, but not
-recommended, and looks as follows:
-
-**Description:**
-
-.. include:: ../autogen/config/WORC.config_SelectFeatGroup_description.rst
-
-**Defaults and Options:**
-
-.. include:: ../autogen/config/WORC.config_SelectFeatGroup_defopts.rst
-
-
-.. _config-Imputation:
-Imputation
-~~~~~~~~~~~~~~~~
-When using the PREDICT toolbox for classification, these settings are
-used for feature imputation.Note that these settings are actually used
-in the hyperparameter optimization. Hence you can provide multiple
-values per field, of which random samples will be drawn of which finally
-the best setting in combination with the other hyperparameters is
-selected.
-
-**Description:**
-
-.. include:: ../autogen/config/WORC.config_Imputation_description.rst
-
-**Defaults and Options:**
-
-.. include:: ../autogen/config/WORC.config_Imputation_defopts.rst
-
-
-.. _config-Classification:
-Classification
-~~~~~~~~~~~~~~
-When using the PREDICT toolbox for classification, you can specify the
-following settings. Almost all of these are used in CASH. Most of the
-classifiers are implemented using sklearn; hence descriptions of the
-hyperparameters can also be found there.
-
-**Description:**
-
-.. include:: ../autogen/config/WORC.config_Classification_description.rst
-
-**Defaults and Options:**
-
-.. include:: ../autogen/config/WORC.config_Classification_defopts.rst
-
-
-.. _config-CrossValidation:
-CrossValidation
-~~~~~~~~~~~~~~~
-When using the PREDICT toolbox for classification and you specified
-using cross validation, specify the following settings.
-
-**Description:**
-
-.. include:: ../autogen/config/WORC.config_CrossValidation_description.rst
-
-**Defaults and Options:**
-
-.. include:: ../autogen/config/WORC.config_CrossValidation_defopts.rst
-
-
 .. _config-Labels:
+
 Labels
 ~~~~~~~~
-When using the PREDICT toolbox for classification, you have to set the
-label used for classification.
+Set the label used for classification.
 
-
-This part is really important, as it should match your label file.
+This part is quite important, as it should match your label file.
 Suppose your patientclass.txt file you supplied as source for labels
 looks like this:
 
@@ -274,7 +130,7 @@ want to use Label1 for classification, then set:
 
 
 If you want to first train a classifier on Label1 and then Label2,
-set: ``config[Genetics][label_names] = Label1, Label2``
+set: ``config[Labels][label_names] = Label1, Label2``
 
 
 **Description:**
@@ -286,22 +142,147 @@ set: ``config[Genetics][label_names] = Label1, Label2``
 .. include:: ../autogen/config/WORC.config_Labels_defopts.rst
 
 
-.. _config-HyperOptimization:
-Hyperoptimization
-~~~~~~~~~~~~~~~~~
-When using the PREDICT toolbox for classification, you have to supply
-your hyperparameter optimization procedure here.
+.. _config-Preprocessing:
+
+Preprocessing
+~~~~~~~~~~~~~
+The preprocessing node acts before the feature extraction on the image.
+Additionally, scans with imagetype CT (see later in the tutorial) provided
+as DICOM are scaled to Hounsfield Units. For more details on the preprocessing
+options, please see
+:ref:`the additional functionality chapter <additonalfunctionality-chapter>`.
 
 **Description:**
 
-.. include:: ../autogen/config/WORC.config_HyperOptimization_description.rst
+.. include:: ../autogen/config/WORC.config_Preprocessing_description.rst
 
 **Defaults and Options:**
 
-.. include:: ../autogen/config/WORC.config_HyperOptimization_defopts.rst
+.. include:: ../autogen/config/WORC.config_Preprocessing_defopts.rst
+
+
+.. _config-Segmentix:
+
+Segmentix
+~~~~~~~~~
+These fields are only important if you specified using the segmentix
+tool in the general configuration.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_Segmentix_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Segmentix_defopts.rst
+
+
+.. _config-ImageFeatures:
+
+ImageFeatures
+~~~~~~~~~~~~~
+If using the PREDICT toolbox for feature extraction, you can specify some
+settings for the
+feature computation here. Also, you can select if the certain features
+are computed or not.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_ImageFeatures_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_ImageFeatures_defopts.rst
+
+
+.. _config-PyRadiomics:
+
+PyRadiomics
+~~~~~~~~~~~~~
+If using the PyRadiomics toolbox, you can specify some settings for the
+feature computation here. For more information, see
+https://pyradiomics.readthedocs.io/en/latest/customization.htm.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_PyRadiomics_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_PyRadiomics_defopts.rst
+
+
+.. _config-ComBat:
+
+ComBat
+~~~~~~~~~~~~~
+If using the ComBat toolbox, you can specify some settings for the
+feature harmonization here. For more information, see
+https://github.com/Jfortin1/ComBatHarmonization.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_ComBat_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_ComBat_defopts.rst
+
+
+.. _config-FeatPreProcess:
+
+FeatPreProcess
+~~~~~~~~~~~~~~
+Before the features are given to the classification function, and thus the
+hyperoptimization, these can be preprocessed as following.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_FeatPreProcess_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_FeatPreProcess_defopts.rst
+
+.. _config-OneHotEncoding:
+
+OneHotEncoding
+~~~~~~~~~~~~~~~~
+Optionally, you can use OneHotEncoding on specific features. For more
+information on why and how this is done, see https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html.
+By default, this is not done, as WORC does not know for which
+specific features you would like to do this.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_OneHotEncoding_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_OneHotEncoding_defopts.rst
+
+.. _config-Imputation:
+
+Imputation
+~~~~~~~~~~~~~~~~
+These settings are used for feature imputation. Note that these settings
+are actually used
+in the hyperparameter optimization. Hence you can provide multiple
+values per field, of which random samples will be drawn of which finally
+the best setting in combination with the other hyperparameters is
+selected.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_Imputation_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Imputation_defopts.rst
 
 
 .. _config-FeatureScaling:
+
 FeatureScaling
 ~~~~~~~~~~~~~~
 Determines which method is applied to scale each feature.
@@ -315,23 +296,115 @@ Determines which method is applied to scale each feature.
 
 .. include:: ../autogen/config/WORC.config_FeatureScaling_defopts.rst
 
+.. _config-Featsel:
 
-.. _config-SampleProcessing:
-SampleProcessing
-~~~~~~~~~~~~~~~~
-Before performing the hyperoptimization, you can use SMOTE: Synthetic
-Minority Over-sampling Technique to oversample your data.
+Featsel
+~~~~~~~
+Define feature selection methods. Note that these settings are
+actually used in the hyperparameter optimization. Hence you can provide
+multiple values per field, of which random samples will be drawn of
+which finally the best setting in combination with the other
+hyperparameters is selected. Again, these should be formatted as string
+containing the actual values, e.g. value1, value2.
 
 **Description:**
 
-.. include:: ../autogen/config/WORC.config_SampleProcessing_description.rst
+.. include:: ../autogen/config/WORC.config_Featsel_description.rst
 
 **Defaults and Options:**
 
-.. include:: ../autogen/config/WORC.config_SampleProcessing_defopts.rst
+.. include:: ../autogen/config/WORC.config_Featsel_defopts.rst
+
+.. _config-SelectFeatGroup:
+
+SelectFeatGroup
+~~~~~~~~~~~~~~~
+If the PREDICT and/or PyRadiomics feature computation tools are used,
+then you can do a gridsearch among the various feature groups for the
+optimal combination. Here, you determine which groups can be selected.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_SelectFeatGroup_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_SelectFeatGroup_defopts.rst
+
+.. _config-Resampling:
+
+Resampling
+~~~~~~~~~~~~~~~~
+Before performing the hyperoptimization, you can use various resampling
+techniques to resample (under-sampling, over-sampling, or both) the data.
+All methods are adopted from `imbalanced learn <https://imbalanced-learn.readthedocs.io/>`_.
+
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_Resampling_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Resampling_defopts.rst
+
+
+.. _config-Classification:
+
+Classification
+~~~~~~~~~~~~~~
+Determine settings for the classification in the hyperoptimization. Most of the
+classifiers are implemented using sklearn; hence descriptions of the
+hyperparameters can also be found there.
+
+Defaults for XGB are based on
+https://towardsdatascience.com/doing-xgboost-hyper-parameter-tuning-the-smart-way-part-1-of-2-f6d255a45dde
+and https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/
+
+Note, as XGB and AdaBoost take significantly longer to fit (3x), they
+are picked less often by default.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_Classification_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Classification_defopts.rst
+
+
+.. _config-CrossValidation:
+
+CrossValidation
+~~~~~~~~~~~~~~~
+When using cross validation, specify the following settings.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_CrossValidation_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_CrossValidation_defopts.rst
+
+
+.. _config-HyperOptimization:
+
+HyperOptimization
+~~~~~~~~~~~~~~~~~
+Specify the hyperparameter optimization procedure here.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_HyperOptimization_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_HyperOptimization_defopts.rst
 
 
 .. _config-Ensemble:
+
 Ensemble
 ~~~~~~~~
 WORC supports ensembling of workflows. This is not a default approach in
@@ -347,7 +420,23 @@ performing workflow.
 .. include:: ../autogen/config/WORC.config_Ensemble_defopts.rst
 
 
+.. _config-Evaluation:
+
+Evaluation
+~~~~~~~~~~
+In the evaluation of the performance, several adjustments can be made.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_Evaluation_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Evaluation_defopts.rst
+
+
 .. _config-Bootstrap:
+
 Bootstrap
 ~~~~~~~~~
 Besides cross validation, WORC supports bootstrapping on the test set for performance evaluation.
@@ -359,4 +448,3 @@ Besides cross validation, WORC supports bootstrapping on the test set for perfor
 **Defaults and Options:**
 
 .. include:: ../autogen/config/WORC.config_Bootstrap_defopts.rst
-

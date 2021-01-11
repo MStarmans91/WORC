@@ -15,14 +15,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .simpleworc import SimpleWORC, _for_all_methods, _error_buldozer
+from .simpleworc import SimpleWORC, _for_all_methods, _error_bulldozer
 import os
 import fastr
 from .helpers.processing import convert_radiomix_features
 
 
-@_for_all_methods(_error_buldozer)
+@_for_all_methods(_error_bulldozer)
 class BasicWORC(SimpleWORC):
+    """Facade around the main WORC object for simple interaction.
+
+    Based upon the SimpleWORC object, but with additional functionality:
+    - Sources of WORC (e.g. images_train, segmentations_train, ...)
+      can be directly assessed.
+
+    Please also see the `WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_.
+    """
+
     def __init__(self, name='WORC'):
         super().__init__(name)
 
@@ -44,6 +53,12 @@ class BasicWORC(SimpleWORC):
         self.label_names = []
 
     def execute(self):
+        """Execute the experiment.
+
+        Before executing the actual experiment, this function will first run several validators
+        and check the provided setup to make sure some of the most common
+        made error are caught before running the experiment.
+        """
         # this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well
         self._validate()  # do some final sanity checking before we execute the thing
 
@@ -120,9 +135,9 @@ class BasicWORC(SimpleWORC):
 
         # Find out how many configs we need to make
         if self._worc.images_train:
-          nmod = len(self._worc.images_train)
+            nmod = len(self._worc.images_train)
         else:
-          nmod = len(self.features_train)
+            nmod = len(self.features_train)
 
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
         self._worc.build()

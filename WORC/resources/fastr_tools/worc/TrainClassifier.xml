@@ -28,12 +28,11 @@
      </inputs>
     <outputs>
       <output id="classification" name="Radiomics classification" datatype="HDF5" cardinality="as:config" nospace="False" order="0" prefix="--class" required="true"/>
-      <output id="performance" name="Radiomics classification performance" datatype="JsonFile" cardinality="as:config" nospace="False" order="0" prefix="--perf" required="true"/>
     </outputs>
   </interface>
   <requirements />
   <tests />
-  <help> usage: TrainClassifier.py [-h] -feat_m1/m2/m3 FEATURES.hdf5 -pc PATIENTCLASS.txt-conf CONFIGURATION.ini -parameters PARAMETERS.ini -class CLASSIFICATION.hdf5 -perf PERFORMANCE.json
+  <help> usage: TrainClassifier.py [-h] -feat_m1/m2/m3 FEATURES.hdf5 -pc PATIENTCLASS.txt-conf CONFIGURATION.ini -parameters PARAMETERS.ini -class CLASSIFICATION.hdf5
     Perform a grid search over several features types to train multiple Support Vector Machine (SVM) classifiers.
 
     -feat_m1, ..m2, ..m3 FEATURES.HDF5 File containing the features for an object. Support up to three feature files for a single object.
@@ -41,7 +40,6 @@
     -conf CONFIGURATION.ini File specifiying the configurations for the SVM optimization.
     -parameters PARAMETERS.ini File specifying the grid search parameters containing the feature groups to use.
     -class CLASSIFICATION.hdf5 File to write the SVM output to.
-    -perf PERFORMANCE.json File containing the performance statistics of the fitted SVM.
   </help>
   <cite>
   </cite>

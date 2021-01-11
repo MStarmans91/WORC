@@ -106,13 +106,15 @@ def generate_config_options():
     config['General'] = dict()
     config['General']['cross_validation'] = 'True, False'
     config['General']['Segmentix'] = 'True, False'
-    config['General']['FeatureCalculator'] = 'predict/CalcFeatures:1.0, pyradiomics/CF_pyradiomics:1.0, your own tool reference'
+    config['General']['FeatureCalculators'] = 'predict/CalcFeatures:1.0, pyradiomics/Pyradiomics:1.0, pyradiomics/CF_pyradiomics:1.0, your own tool reference'
     config['General']['Preprocessing'] = 'worc/PreProcess:1.0, your own tool reference'
     config['General']['RegistrationNode'] = "'elastix4.8/Elastix:4.8', your own tool reference"
     config['General']['TransformationNode'] = "'elastix4.8/Transformix:4.8', your own tool reference"
     config['General']['Joblib_ncores'] = 'Integer > 0'
     config['General']['Joblib_backend'] = 'multiprocessing, threading'
     config['General']['tempsave'] = 'True, False'
+    config['General']['AssumeSameImageAndMaskMetadata'] = 'True, False'
+    config['General']['ComBat'] = 'True, False'
 
     # Segmentix
     config['Segmentix'] = dict()
@@ -121,11 +123,26 @@ def generate_config_options():
     config['Segmentix']['segradius'] = 'Integer > 0'
     config['Segmentix']['N_blobs'] = 'Integer > 0'
     config['Segmentix']['fillholes'] = 'True, False'
+    config['Segmentix']['remove_small_objects'] = 'True, False'
+    config['Segmentix']['min_object_size'] = 'Integer > 0'
 
     # Preprocessing
-    config['Normalize'] = dict()
-    config['Normalize']['ROI'] = 'True, False, Full'
-    config['Normalize']['Method'] = 'z_score, minmed'
+    config['Preprocessing'] = dict()
+    config['Preprocessing']['CheckSpacing'] = 'True, False'
+    config['Preprocessing']['Clipping'] = 'True, False'
+    config['Preprocessing']['Clipping_Range'] = 'Float, Float'
+    config['Preprocessing']['Normalize'] = 'True, False'
+    config['Preprocessing']['Normalize_ROI'] = 'True, False, Full'
+    config['Preprocessing']['ROIDetermine'] = 'Provided, Otsu'
+    config['Preprocessing']['ROIdilate'] = 'True, False'
+    config['Preprocessing']['ROIdilateradius'] = 'Integer > 0'
+    config['Preprocessing']['Method'] = 'z_score, minmed'
+    config['Preprocessing']['Resampling'] = 'True, False'
+    config['Preprocessing']['Resampling_spacing'] = 'Float, Float, Float'
+    config['Preprocessing']['BiasCorrection'] = 'True, False'
+    config['Preprocessing']['BiasCorrection_Mask'] = 'Float, Float, Float'
+    config['Preprocessing']['CheckOrientation'] = 'True, False'
+    config['Preprocessing']['OrientationPrimaryAxis'] = 'axial'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -178,6 +195,49 @@ def generate_config_options():
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Integer > 0'
 
+    # Tags from which to extract features, and how to name them
+    config['ImageFeatures']['dicom_feature_tags'] = "DICOM tag keys, e.g. 0010 0010, separated by comma's"
+    config['ImageFeatures']['dicom_feature_labels'] = 'List of strings'
+
+    # Pyradiomics - feature calculation
+    config['PyRadiomics'] = dict()
+    config['PyRadiomics']['geometryTolerance'] = 'Float'
+    config['PyRadiomics']['Preprocessing'] = 'True, False'
+    config['PyRadiomics']['normalize'] = 'Boolean'
+    config['PyRadiomics']['normalizeScale'] = 'Integer'
+    config['PyRadiomics']['resampledPixelSpacing'] = 'Float, Float, Float'
+    config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
+    config['PyRadiomics']['preCrop'] = 'True, False'
+    config['PyRadiomics']['binCount'] = 'Integer or None' # BinWidth to sensitive for normalization, thus use binCount
+    config['PyRadiomics']['binWidth'] = 'Integer or None'
+    config['PyRadiomics']['force2D'] = 'True, False'
+    config['PyRadiomics']['force2Ddimension'] = '0 = axial, 1 = coronal, 2 = sagital'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
+    config['PyRadiomics']['voxelArrayShift'] = 'Integer'
+    config['PyRadiomics']['Original'] = 'True, False'
+    config['PyRadiomics']['Wavelet'] = 'True, False'
+    config['PyRadiomics']['LoG'] = 'True, False'
+    config['PyRadiomics']['label'] = 'Integer'
+
+    # Enabled PyRadiomics features
+    config['PyRadiomics']['extract_firstorder'] = 'True, False'
+    config['PyRadiomics']['extract_shape'] = 'True, False'
+    config['PyRadiomics']['texture_GLCM'] = 'True, False'
+    config['PyRadiomics']['texture_GLRLM'] = 'True, False'
+    config['PyRadiomics']['texture_GLSZM'] = 'True, False'
+    config['PyRadiomics']['texture_GLDM'] = 'True, False'
+    config['PyRadiomics']['texture_NGTDM'] = 'True, False'
+
+    # ComBat Feature Harmonization
+    config['ComBat'] = dict()
+    config['ComBat']['language'] = 'python, matlab'
+    config['ComBat']['batch'] = 'String'
+    config['ComBat']['mod'] = 'String(s), or []'
+    config['ComBat']['par'] = '0 or 1'
+    config['ComBat']['eb'] = '0 or 1'
+    config['ComBat']['per_feature'] = '0 or 1'
+    config['ComBat']['excluded_features'] = 'List of strings, comma separated'
+    config['ComBat']['matlab'] = 'String'
+
     # Feature preprocessing before all below takes place
     config['FeatPreProcess'] = dict()
     config['FeatPreProcess']['Use'] = 'True, False'
@@ -188,17 +248,20 @@ def generate_config_options():
 
     # Feature selection
     config['Featsel'] = dict()
-    config['Featsel']['Variance'] = 'Boolean(s)'
+    config['Featsel']['Variance'] = 'Float'
     config['Featsel']['GroupwiseSearch'] = 'Boolean(s)'
-    config['Featsel']['SelectFromModel'] = 'Boolean(s)'
-    config['Featsel']['UsePCA'] = 'Boolean(s)'
-    config['Featsel']['PCAType'] = 'Inteteger(s), 95variance'
-    config['Featsel']['StatisticalTestUse'] = 'Boolean(s)'
+    config['Featsel']['SelectFromModel'] = 'Float'
+    config['Featsel']['SelectFromModel_estimator'] = 'Lasso, LR, RF'
+    config['Featsel']['SelectFromModel_lasso_alpha'] = 'Two Floats: loc and scale'
+    config['Featsel']['SelectFromModel_n_trees'] = 'Two Integers: loc and scale'
+    config['Featsel']['UsePCA'] = 'Float'
+    config['Featsel']['PCAType'] = 'Integer(s), 95variance'
+    config['Featsel']['StatisticalTestUse'] = 'Float'
     config['Featsel']['StatisticalTestMetric'] = 'ttest, Welch, Wilcoxon, MannWhitneyU'
     config['Featsel']['StatisticalTestThreshold'] = 'Two Integers: loc and scale'
-    config['Featsel']['ReliefUse'] = 'Boolean(s)'
+    config['Featsel']['ReliefUse'] = 'Float'
     config['Featsel']['ReliefNN'] = 'Two Integers: loc and scale'
-    config['Featsel']['ReliefSampleSize'] = 'Two Integers: loc and scale'
+    config['Featsel']['ReliefSampleSize'] = 'Two Floats: loc and scale'
     config['Featsel']['ReliefDistanceP'] = 'Two Integers: loc and scale'
     config['Featsel']['ReliefNumFeatures'] = 'Two Integers: loc and scale'
 
@@ -209,14 +272,16 @@ def generate_config_options():
     config['SelectFeatGroup']['orientation_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_Gabor_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLCM_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['texture_GLDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLCMMS_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['texture_GLDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLRLM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLSZM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_GLDZM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_NGLDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_NGTDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_LBP_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['patient_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['dicom_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['semantic_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['coliage_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['log_features'] = 'Boolean(s)'
@@ -226,12 +291,31 @@ def generate_config_options():
     config['SelectFeatGroup']['location_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['rgrd_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['wavelet_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['original_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['toolbox'] = 'All, or name of toolbox (PREDICT, PyRadiomics)'
+
+    # Feature OneHotEncoding
+    config['OneHotEncoding'] = dict()
+    config['OneHotEncoding']['Use'] = 'Boolean(s)'
+    config['OneHotEncoding']['feature_labels_tofit'] = 'List of strings'
 
     # Feature imputation
     config['Imputation'] = dict()
     config['Imputation']['use'] = 'Boolean(s)'
     config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
     config['Imputation']['n_neighbors'] = 'Two Integers: loc and scale'
+
+    # Resampling options
+    config['Resampling'] = dict()
+    config['Resampling']['Use'] = 'Float'
+    config['Resampling']['Method'] =\
+        'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
+        'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
+        'SMOTEENN, SMOTETomek'
+    config['Resampling']['sampling_strategy'] = 'auto, majority, not minority, not majority, all'
+    config['Resampling']['n_neighbors'] = 'Two Integers: loc and scale'
+    config['Resampling']['k_neighbors'] = 'Two Integers: loc and scale'
+    config['Resampling']['threshold_cleaning'] = 'Two Floats: loc and scale'
 
     # Classification
     config['Classification'] = dict()
@@ -248,7 +332,9 @@ def generate_config_options():
     config['Classification']['RFmin_samples_split'] = 'Two Integers: loc and scale'
     config['Classification']['RFmax_depth'] = 'Two Integers: loc and scale'
     config['Classification']['LRpenalty'] = 'none, l2, l1'
-    config['Classification']['LRC'] = 'Two Integers: loc and scale'
+    config['Classification']['LRC'] = 'Two Floats: loc and scale'
+    config['Classification']['LR_solver'] = 'Comma separated list of strings, for the options see https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html'
+    config['Classification']['LR_l1_ratio'] = 'Float between 0.0 and 1.0.'
     config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
     config['Classification']['LDA_shrinkage'] = 'Two Integers: loc and scale'
     config['Classification']['QDA_reg_param'] = 'Two Integers: loc and scale'
@@ -259,9 +345,18 @@ def generate_config_options():
     config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
     config['Classification']['SGD_penalty'] = 'none, l2, l1'
     config['Classification']['CNB_alpha'] = 'Two Integers: loc and scale'
+    config['Classification']['AdaBoost_n_estimators'] = 'Two Integers: loc and scale'
+    config['Classification']['AdaBoost_learning_rate'] = 'Two Floats: loc and scale'
+    config['Classification']['XGB_boosting_rounds'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_max_depth'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
+    config['Classification']['XGB_gamma'] = 'Two Floats: loc and scale'
+    config['Classification']['XGB_min_child_weight'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_colsample_bytree'] = 'Two Floats: loc and scale'
 
     # CrossValidation
     config['CrossValidation'] = dict()
+    config['CrossValidation']['Type'] = 'random_split, LOO'
     config['CrossValidation']['N_iterations'] = 'Integer'
     config['CrossValidation']['test_size'] = 'Float'
     config['CrossValidation']['fixed_seed'] = 'Boolean'
@@ -270,8 +365,6 @@ def generate_config_options():
     config['Labels'] = dict()
     config['Labels']['label_names'] = 'String(s)'
     config['Labels']['modus'] = 'singlelabel, multilabel'
-    config['Labels']['url'] = 'Not Supported Yet'
-    config['Labels']['projectID'] = 'Not Supported Yet'
 
     # Hyperparameter optimization options
     config['HyperOptimization'] = dict()
@@ -282,22 +375,21 @@ def generate_config_options():
     config['HyperOptimization']['n_splits'] = 'Integer'
     config['HyperOptimization']['maxlen'] = 'Integer'
     config['HyperOptimization']['ranking_score'] = 'String'
+    config['HyperOptimization']['memory'] = 'String consisting of integer + "G"'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
-    config['FeatureScaling']['scale_features'] = 'Boolean(s)'
-    config['FeatureScaling']['scaling_method'] = 'z_score, minmax'
-
-    # Sample processing options
-    config['SampleProcessing'] = dict()
-    config['SampleProcessing']['SMOTE'] = 'Boolean(s)'
-    config['SampleProcessing']['SMOTE_ratio'] = 'Two Integers: loc and scale'
-    config['SampleProcessing']['SMOTE_neighbors'] = 'Two Integers: loc and scale'
-    config['SampleProcessing']['Oversampling'] = 'Boolean(s)'
+    config['FeatureScaling']['skip_features'] = 'Comma separated list of strings'
+    config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, None'
 
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Integer'
+    config['Ensemble']['Metric'] = 'Default, generalization'
+
+    # Evaluation options
+    config['Evaluation'] = dict()
+    config['Evaluation']['OverfitScaler'] = 'True, False'
 
     # Bootstrap options
     config['Bootstrap'] = dict()
@@ -314,13 +406,15 @@ def generate_config_descriptions():
     config['General'] = dict()
     config['General']['cross_validation'] = 'Determine whether a cross validation will be performed or not. Obsolete, will be removed.'
     config['General']['Segmentix'] = 'Determine whether to use Segmentix tool for segmentation preprocessing.'
-    config['General']['FeatureCalculator'] = 'Specifies which feature calculation tool should be used.'
+    config['General']['FeatureCalculators'] = 'Specifies which feature calculation tools should be used. A list can be provided to use multiple tools.'
     config['General']['Preprocessing'] = 'Specifies which tool will be used for image preprocessing.'
     config['General']['RegistrationNode'] = "Specifies which tool will be used for image registration."
     config['General']['TransformationNode'] = "Specifies which tool will be used for applying image transformations."
     config['General']['Joblib_ncores'] = 'Number of cores to be used by joblib for multicore processing.'
     config['General']['Joblib_backend'] = 'Type of backend to be used by joblib for multicore processing.'
     config['General']['tempsave'] = 'Determines whether after every cross validation iteration the result will be saved, in addition to the result after all iterations. Especially useful for debugging.'
+    config['General']['AssumeSameImageAndMaskMetadata'] = 'Make the assumption that the image and mask have the same metadata. If True and there is a mismatch, metadata from the image will be copied to the mask.'
+    config['General']['ComBat'] = 'Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See <https://github.com/Jfortin1/ComBatHarmonization for more information./>`_ .'
 
     # Segmentix
     config['Segmentix'] = dict()
@@ -329,11 +423,26 @@ def generate_config_descriptions():
     config['Segmentix']['segradius'] = 'Define the radius of the ring used if segtype is Ring.'
     config['Segmentix']['N_blobs'] = 'How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.'
     config['Segmentix']['fillholes'] = 'Determines whether hole filling will be used.'
+    config['Segmentix']['remove_small_objects'] = 'Determines whether small objects will be removed.'
+    config['Segmentix']['min_object_size'] = 'Minimum of objects in voxels to not be removed if small objects are removed'
 
     # Preprocessing
-    config['Normalize'] = dict()
-    config['Normalize']['ROI'] = 'If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.'
-    config['Normalize']['Method'] = 'Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.'
+    config['Preprocessing'] = dict()
+    config['Preprocessing']['Clipping'] = 'Determine whether to use intensity clipping in preprocessing of image or not.'
+    config['Preprocessing']['Clipping_Range'] = 'Lower- and upperbound of intensities to be used in clipping.'
+    config['Preprocessing']['CheckSpacing'] = 'Determine whether to check the spacing or not. If True, and the spacing of the image is [1x1x1], we assume the spacing is incorrect, and overwrite it using the DICOM metadata.'
+    config['Preprocessing']['Normalize'] = 'Determine whether to use normalization in preprocessing of image or not.'
+    config['Preprocessing']['Normalize_ROI'] = 'If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.'
+    config['Preprocessing']['ROIDetermine'] = 'Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.'
+    config['Preprocessing']['ROIdilate'] = 'Determine whether the ROI has to be dilated with a disc element or not.'
+    config['Preprocessing']['ROIdilateradius'] = 'Radius of disc element to be used in ROI dilation.'
+    config['Preprocessing']['Method'] = 'Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.'
+    config['Preprocessing']['Resampling'] = 'Determine whether the image and mask will be resampled or not.'
+    config['Preprocessing']['Resampling_spacing'] = 'Spacing to resample image and mask to, if resampling is used.'
+    config['Preprocessing']['BiasCorrection'] = 'Determine whether N4 Bias correction will be applied or not.'
+    config['Preprocessing']['BiasCorrection_Mask'] = 'Whether withing bias correction, a mask generated through Otsu thresholding is used or not.'
+    config['Preprocessing']['CheckOrientation'] = 'Determine whether to check the image orientation or not. If checked, if the orientation is not equal to the OrientationPrimaryAxis, the image is rotated.'
+    config['Preprocessing']['OrientationPrimaryAxis'] = 'If CheckOrientation is True, if primary axis is not this one, rotate image such that it is. Currently, only "axial" is supported.'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -345,6 +454,7 @@ def generate_config_descriptions():
     config['ImageFeatures']['texture_LBP'] ='Determine whether LBP texture features are computed or not.'
     config['ImageFeatures']['texture_GLCM'] = 'Determine whether GLCM texture features are computed or not.'
     config['ImageFeatures']['texture_GLCMMS'] = 'Determine whether GLCM Multislice texture features are computed or not.'
+    config['ImageFeatures']['texture_GLDM'] = 'Determine whether GLDM texture features are computed or not.'
     config['ImageFeatures']['texture_GLRLM'] = 'Determine whether GLRLM texture features are computed or not.'
     config['ImageFeatures']['texture_GLSZM'] = 'Determine whether GLSZM texture features are computed or not.'
     config['ImageFeatures']['texture_NGTDM'] = 'Determine whether NGTDM texture features are computed or not.'
@@ -386,21 +496,67 @@ def generate_config_descriptions():
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Radius to determine boundary of between inner part and edge in Frangi vessel filter.'
 
+    # Tags from which to extract features, and how to name them
+    config['ImageFeatures']['dicom_feature_tags'] = "DICOM tags to be extracted as features. See https://worc.readthedocs.io/en/latest/static/features.html."
+    config['ImageFeatures']['dicom_feature_labels'] = "For each of the DICOM tag values extracted, name that should be assigned to the feature. See https://worc.readthedocs.io/en/latest/static/features.html."
+
+    # Pyradiomics - feature calculation
+    config['PyRadiomics'] = dict()
+    config['PyRadiomics']['geometryTolerance'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['Preprocessing'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['normalize'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['normalizeScale'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['resampledPixelSpacing'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
+    config['PyRadiomics']['preCrop'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['binCount'] = 'We advice to use a fixed bin count instead of a fixed bin width, as on imaging modalities such as MRI, the scale of the values varies a lot, which is incompatible with a fixed bin width. See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['binWidth'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['force2D'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['force2Ddimension'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['voxelArrayShift'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['Original'] = 'Enable/Disable computation of original image features.'
+    config['PyRadiomics']['Wavelet'] = 'Enable/Disable computation of wavelet image features.'
+    config['PyRadiomics']['LoG'] = 'Enable/Disable computation of Laplacian of Gaussian (LoG) image features.'
+    config['PyRadiomics']['label'] = '"Intensity" of the pixels in the mask to be used for feature extraction. If using segmentix, use 1, as your mask will be boolean. Otherwise, select the integer(s) corresponding to the ROI in your mask.'
+
+    # Enabled PyRadiomics features
+    config['PyRadiomics']['extract_firstorder'] = 'Determine whether first order features are computed or not.'
+    config['PyRadiomics']['extract_shape'] = 'Determine whether shape features are computed or not.'
+    config['PyRadiomics']['texture_GLCM'] = 'Determine whether GLCM features are computed or not.'
+    config['PyRadiomics']['texture_GLRLM'] = 'Determine whether GLRLM features are computed or not.'
+    config['PyRadiomics']['texture_GLSZM'] = 'Determine whether GLSZM features are computed or not.'
+    config['PyRadiomics']['texture_GLDM'] = 'Determine whether GLDM features are computed or not.'
+    config['PyRadiomics']['texture_NGTDM'] = 'Determine whether NGTDM features are computed or not.'
+
+    # ComBat Feature Harmonization
+    config['ComBat'] = dict()
+    config['ComBat']['language'] = 'Name of software implementation to use.'
+    config['ComBat']['batch'] = 'Name of batch variable = variable to correct for.'
+    config['ComBat']['mod'] = 'Name of moderation variable(s) = variables for which variation in features will be "preserverd".'
+    config['ComBat']['par'] = 'Either use the parametric (1) or non-parametric version (0) of ComBat.'
+    config['ComBat']['eb'] = 'Either use the emperical Bayes (1) or simply mean shifting version (0) of ComBat.'
+    config['ComBat']['per_feature'] = 'Either use ComBat for all features combined (0) or per feature (1), in which case a second feature equal to the single feature plus random noise will be added if eb=1'
+    config['ComBat']['excluded_features'] = 'Provide substrings of feature labels of features which should be excluded from ComBat. Recommended to use for features unaffected by the batch variable.'
+    config['ComBat']['matlab'] = 'If using Matlab, path to Matlab executable.'
+
     # Feature preprocessing before all below takes place
     config['FeatPreProcess'] = dict()
     config['FeatPreProcess']['Use'] = 'If True, use feature preprocessor in the classify node. Currently excluded features with >80% NaNs.'
 
     # Feature selection
     config['Featsel'] = dict()
-    config['Featsel']['Variance'] = 'If True, exclude features which have a variance < 0.01. Based on ` sklearn"s VarianceThreshold <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/>`_.'
+    config['Featsel']['Variance'] = 'Percentage of times features which have a variance < 0.01 are excluded. Based on ` sklearn"s VarianceThreshold <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/>`_.'
     config['Featsel']['GroupwiseSearch'] = 'Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.'
-    config['Featsel']['SelectFromModel'] = 'Select features by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also `sklearn"s SelectFromModel <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/>`_.'
-    config['Featsel']['UsePCA'] = 'If True, Use Principle Component Analysis (PCA) to select features.'
+    config['Featsel']['SelectFromModel'] = 'Percentage of times features are selected by first training a machine learning model which can rank the features with an ``importance''. See also `sklearn"s SelectFromModel <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/>`_.'
+    config['Featsel']['SelectFromModel_estimator'] = 'Machine learning model / estimator used: can be LASSO, LogisticRegression, or a Random Forest'
+    config['Featsel']['SelectFromModel_lasso_alpha'] = "When using LASSO, search space of weigth of L1 term, see also `sklearn <https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html/>`."
+    config['Featsel']['SelectFromModel_n_trees'] = 'When using a random forest, search space of number of trees used.'
+    config['Featsel']['UsePCA'] = 'Percentage of times Principle Component Analysis (PCA) is used to select features.'
     config['Featsel']['PCAType'] = 'Method to select number of components using PCA: Either the number of components that explains 95% of the variance, or use a fixed number of components.95variance'
-    config['Featsel']['StatisticalTestUse'] = 'If True, use statistical test to select features.'
+    config['Featsel']['StatisticalTestUse'] = 'Percentage of times a statistical test is used to select features.'
     config['Featsel']['StatisticalTestMetric'] = 'Define the type of statistical test to be used.'
     config['Featsel']['StatisticalTestThreshold'] = 'Specify a threshold for the p-value threshold used in the statistical test to select features. The first element defines the lower boundary, the other the upper boundary. Random sampling will occur between the boundaries.'
-    config['Featsel']['ReliefUse'] = 'If True, use Relief to select features.'
+    config['Featsel']['ReliefUse'] = 'Percentage of times Relief is used to select features.'
     config['Featsel']['ReliefNN'] = 'Min and max of number of nearest neighbors search range in Relief.'
     config['Featsel']['ReliefSampleSize'] = 'Min and max of sample size search range in Relief.'
     config['Featsel']['ReliefDistanceP'] = 'Min and max of positive distance search range in Relief.'
@@ -413,6 +569,7 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['orientation_features'] = 'If True, use orientation features in model.'
     config['SelectFeatGroup']['texture_Gabor_features'] = 'If True, use Gabor texture features in model.'
     config['SelectFeatGroup']['texture_GLCM_features'] = 'If True, use GLCM texture features in model.'
+    config['SelectFeatGroup']['texture_GLDM_features'] = 'If True, use GLDM texture features in model.'
     config['SelectFeatGroup']['texture_GLCMMS_features'] = 'If True, use GLCM Multislice texture features in model.'
     config['SelectFeatGroup']['texture_GLRLM_features'] = 'If True, use GLRLM texture features in model.'
     config['SelectFeatGroup']['texture_GLSZM_features'] = 'If True, use GLSZM texture features in model.'
@@ -420,7 +577,7 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['texture_NGTDM_features'] = 'If True, use NGTDM texture features in model.'
     config['SelectFeatGroup']['texture_NGLDM_features'] = 'If True, use NGLDM texture features in model.'
     config['SelectFeatGroup']['texture_LBP_features'] = 'If True, use LBP texture features in model.'
-    config['SelectFeatGroup']['patient_features'] = 'If True, use patient features in model.'
+    config['SelectFeatGroup']['dicom_features'] = 'If True, use DICOM features in model.'
     config['SelectFeatGroup']['semantic_features'] = 'If True, use semantic features in model.'
     config['SelectFeatGroup']['coliage_features'] = 'If True, use coliage features in model.'
     config['SelectFeatGroup']['log_features'] = 'If True, use log features in model.'
@@ -430,12 +587,28 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['location_features'] = 'If True, use location features in model.'
     config['SelectFeatGroup']['rgrd_features'] = 'If True, use rgrd features in model.'
     config['SelectFeatGroup']['wavelet_features'] = 'If True, use wavelet features in model.'
+    config['SelectFeatGroup']['original_features'] = 'If True, use original features in model.'
+    config['SelectFeatGroup']['toolbox'] = 'List of names of toolboxes to be used, or All'
+
+    # Feature OneHotEncoding
+    config['OneHotEncoding'] = dict()
+    config['OneHotEncoding']['Use'] = 'If True, use OneHotEncoding for specific features as determined by the field below.'
+    config['OneHotEncoding']['feature_labels_tofit'] = 'Labels of features for which to use OneHotEncoding. WORC will check whether any of the values specified in this field is a substring of a feature name. For example, if you give gclm, all features for which glcm is in the feature label will be one hot encoded.'
 
     # Feature imputation
     config['Imputation'] = dict()
     config['Imputation']['use'] = 'If True, use feature imputation methods to replace NaN values. If False, all NaN features will be set to zero.'
     config['Imputation']['strategy'] = 'Method to be used for imputation.'
     config['Imputation']['n_neighbors'] = 'When using k-Nearest Neighbors (kNN) for feature imputation, determines the number of neighbors used for imputation. Can be a single integer or a list.'
+
+    # Resampling options
+    config['Resampling'] = dict()
+    config['Resampling']['Use'] = 'Percentage of times Object (e.g. patient) resampling is used.'
+    config['Resampling']['Method'] = 'One of the methods adopted, see also imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/api/>`_. '
+    config['Resampling']['sampling_strategy'] = 'Sampling strategy, see also imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/api/>`_. '
+    config['Resampling']['n_neighbors'] = 'Number of n_neighbors used in resampling. This should be (much) smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['Resampling']['k_neighbors'] = 'Number of n_neighbors used in resampling. This should be (much) smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['Resampling']['threshold_cleaning'] = 'Threshold for cleaning of samples. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
 
     # Classification
     config['Classification'] = dict()
@@ -444,38 +617,47 @@ def generate_config_descriptions():
     config['Classification']['classifiers'] = "Select the estimator(s) to use. Most are implemented using `sklearn <https://scikit-learn.org/stable/>`_. For abbreviations, see above."
     config['Classification']['max_iter'] = 'Maximum number of iterations to use in training an estimator. Only for specific estimators, see `sklearn <https://scikit-learn.org/stable/>`_.'
     config['Classification']['SVMKernel'] = 'When using a SVM, specify the kernel type.'
-    config['Classification']['SVMC'] = 'Range of the SVM slack parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
-    config['Classification']['SVMdegree'] = 'Range of the SVM polynomial degree when using a polynomial kernel. We sample on a uniform scale: the parameters specify the range (a, a + b). '
-    config['Classification']['SVMcoef0'] = 'Range of SVM homogeneity parameter. We sample on a uniform scale: the parameters specify the range (a, a + b). '
-    config['Classification']['SVMgamma'] = 'Range of the SVM gamma parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b)'
-    config['Classification']['RFn_estimators'] = 'Range of number of trees in a RF. We sample on a uniform scale: the parameters specify the range (a, a + b).'
-    config['Classification']['RFmin_samples_split'] = 'Range of minimum number of samples required to split a branch in a RF. We sample on a uniform scale: the parameters specify the range (a, a + b). '
-    config['Classification']['RFmax_depth'] = 'Range of maximum depth of a RF. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['Classification']['SVMC'] = 'Range of the SVM slack parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
+    config['Classification']['SVMdegree'] = 'Range of the SVM polynomial degree when using a polynomial kernel. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['Classification']['SVMcoef0'] = 'Range of SVM homogeneity parameter. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['Classification']['SVMgamma'] = 'Range of the SVM gamma parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale)'
+    config['Classification']['RFn_estimators'] = 'Range of number of trees in a RF. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['Classification']['RFmin_samples_split'] = 'Range of minimum number of samples required to split a branch in a RF. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['Classification']['RFmax_depth'] = 'Range of maximum depth of a RF. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
     config['Classification']['LRpenalty'] = 'Penalty term used in LR.'
-    config['Classification']['LRC'] = 'Range of regularization strength in LR. We sample on a uniform scale: the parameters specify the range (a, a + b). '
+    config['Classification']['LRC'] = 'Range of regularization strength in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['Classification']['LR_solver'] = 'Solver used in LR.'
+    config['Classification']['LR_l1_ratio'] = 'Ratio between l1 and l2 penalty when using elasticnet penalty, see https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html.'
     config['Classification']['LDA_solver'] = 'Solver used in LDA.'
-    config['Classification']['LDA_shrinkage'] = 'Range of the LDA shrinkage parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
-    config['Classification']['QDA_reg_param'] = 'Range of the QDA regularization parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b). '
-    config['Classification']['ElasticNet_alpha'] = 'Range of the ElasticNet penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
-    config['Classification']['ElasticNet_l1_ratio'] = 'Range of l1 ratio in LR. We sample on a uniform scale: the parameters specify the range (a, a + b).'
-    config['Classification']['SGD_alpha'] = 'Range of the SGD penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (a, a + b).'
-    config['Classification']['SGD_l1_ratio'] = 'Range of l1 ratio in SGD. We sample on a uniform scale: the parameters specify the range (a, a + b).'
-    config['Classification']['SGD_loss'] = 'hinge, Loss function of SG'
+    config['Classification']['LDA_shrinkage'] = 'Range of the LDA shrinkage parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
+    config['Classification']['QDA_reg_param'] = 'Range of the QDA regularization parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale). '
+    config['Classification']['ElasticNet_alpha'] = 'Range of the ElasticNet penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
+    config['Classification']['ElasticNet_l1_ratio'] = 'Range of l1 ratio in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['Classification']['SGD_alpha'] = 'Range of the SGD penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
+    config['Classification']['SGD_l1_ratio'] = 'Range of l1 ratio in SGD. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
+    config['Classification']['SGD_loss'] = 'Loss function of SGD.'
     config['Classification']['SGD_penalty'] = 'Penalty term in SGD.'
-    config['Classification']['CNB_alpha'] = 'Regularization strenght in ComplementNB. We sample on a uniform scale: the parameters specify the range (a, a + b)'
+    config['Classification']['CNB_alpha'] = 'Regularization strenght in ComplementNB. We sample on a uniform scale: the parameters specify the range (loc, loc + scale)'
+    config['Classification']['AdaBoost_n_estimators'] = "Number of estimators used in AdaBoost. Default is equal to config['Classification']['RFn_estimators']."
+    config['Classification']['AdaBoost_learning_rate'] = 'Learning rate in AdaBoost.'
+    config['Classification']['XGB_boosting_rounds'] = "Number of estimators / boosting rounds used in XGB. Default is equal to config['Classification']['RFn_estimators']."
+    config['Classification']['XGB_max_depth'] = 'Maximum depth of XGB.'
+    config['Classification']['XGB_learning_rate'] = "Learning rate in AdaBoost. Default is equal to config['Classification']['AdaBoost_learning_rate']."
+    config['Classification']['XGB_gamma'] = 'Gamma of XGB.'
+    config['Classification']['XGB_min_child_weight'] = 'Minimum child weights in XGB.'
+    config['Classification']['XGB_colsample_bytree'] = 'Col sample by tree in XGB.'
 
     # CrossValidation
     config['CrossValidation'] = dict()
-    config['CrossValidation']['N_iterations'] = 'Number of times the data is split in training and test in the outer cross-validation.'
-    config['CrossValidation']['test_size'] = 'The percentage of data to be used for testing.'
-    config['CrossValidation']['fixed_seed'] = 'If True, use a fixed seed for the cross-validation splits.'
+    config['CrossValidation']['Type'] = 'If performing a cross-validationm, type of cross-validation used. Currently random-splitting and leave-one-out (LOO) are supported.'
+    config['CrossValidation']['N_iterations'] = 'Number of times the data is split in training and test in the outer cross-validation when using random-splitting.'
+    config['CrossValidation']['test_size'] = 'The percentage of data to be used for testing when using random-splitting.'
+    config['CrossValidation']['fixed_seed'] = 'If True, use a fixed seed for the cross-validation splits when using random-splitting.'
 
     # Options for the object/patient labels that are used
     config['Labels'] = dict()
     config['Labels']['label_names'] = 'The labels used from your label file for classification.'
     config['Labels']['modus'] = 'Determine whether multilabel or singlelabel classification or regression will be performed.'
-    config['Labels']['url'] = 'WIP'
-    config['Labels']['projectID'] = 'WIP'
 
     # Hyperparameter optimization options
     config['HyperOptimization'] = dict()
@@ -486,22 +668,21 @@ def generate_config_descriptions():
     config['HyperOptimization']['n_splits'] = 'Number of iterations in train-validation cross-validation used for model optimization.'
     config['HyperOptimization']['maxlen'] = 'Number of estimators for which the fitted outcomes and parameters are saved. Increasing this number will increase the memory usage.'
     config['HyperOptimization']['ranking_score'] = 'Score used for ranking the performance of the evaluated workflows.'
+    config['HyperOptimization']['memory'] = 'When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + "G".'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
-    config['FeatureScaling']['scale_features'] = 'Determine whether to use feature scaling is.'
+    config['FeatureScaling']['skip_features'] = 'Determine which features should be skipped. This field should contain a comma separated list of substrings: when one or more of these are in a feature name, the feature is skipped.'
     config['FeatureScaling']['scaling_method'] = 'Determine the scaling method.'
-
-    # Sample processing options
-    config['SampleProcessing'] = dict()
-    config['SampleProcessing']['SMOTE'] = 'Determine whether to use SMOTE oversampling, see also ` imbalanced learn <https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.over_sampling.SMOTE.html/>`_. '
-    config['SampleProcessing']['SMOTE_ratio'] = 'Determine the ratio of oversampling. If 1, the minority class will be oversampled to the same size as the majority class. We sample on a uniform scale: the parameters specify the range (a, a + b). '
-    config['SampleProcessing']['SMOTE_neighbors'] = 'Number of neighbors used in SMOTE. This should be much smaller than the number of objects/patients you supply. We sample on a uniform scale: the parameters specify the range (a, a + b).'
-    config['SampleProcessing']['Oversampling'] = 'Determine whether to random oversampling.'
 
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.'
+    config['Ensemble']['Metric'] = 'Metric used to determine ranking of estimators in ensemble. When using default, the metric that is used in the hyperoptimization is used.'
+
+    # Evaluation options
+    config['Evaluation'] = dict()
+    config['Evaluation']['OverfitScaler'] = 'Wheter to fit a separate scaler on the test set (=overfitting) or use scaler on training dataset. Only used for experimental purposes: never overfit your scaler for the actual performance evaluation.'
 
     # Bootstrap options
     config['Bootstrap'] = dict()

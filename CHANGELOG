@@ -6,7 +6,233 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-Unreleased
+3.3.5 - 2020-10-21
+------------------
+
+Fixed
+~~~~~
+- Some function cleaning: removing redundant parts / variables.
+
+Changed
+~~~~~~~
+- Part of developper documentation for addinf methods to hyperoptimization.
+- Default config: SelectFromModel incorporated, so now also use
+  that in feature selection step.
+
+Added
+~~~~~~~
+- OneHotEncoder to workflows / HyperOptimization.
+- Documentation updates.
+- SelectFromModel expanded and properly integrated in workflow.
+- AdaBoost as classifier and regressor.
+- XGDBoost as classifier and regressor.
+- Plotting of hyperparameters of best workflows in Evaluate network.
+- Plotting of p-values of features.
+
+3.3.4 - 2020-10-06
+------------------
+
+Fixed
+~~~~~
+- Bugfixes in some error messages.
+- If a classifier cannot give a score, use the prediction instead.
+- Bugfix in bootstrapping.
+- Bugfix: use f1-weighted score in SimpleWORC binary classification.
+
+Changed
+~~~~~~~
+- There are no longer ''patient_features'' in PREDICT: these are extracted
+  from the DICOM tags and are thus now called ''dicom_features.
+- As bootstrapping is now more efficient, increase default to 1000 iterations.
+
+Added
+~~~~~~~
+- Option to transpose all images and segmentations to a default orientation.
+  Currently only supports axial.
+- Support for PREDICT DICOM features.
+- Memory of single optimization job to general config.
+- Catch when imputation completely removes a feature.
+- Clipping as preprocessing option
+- Function to show which hyperparameters were used in the best workflows.
+
+3.3.3 - 2020-09-11
+------------------
+
+Fixed
+~~~~~
+- In the RobustStandardScaler, if less than two values for a feature are left,
+  use the original set inset of the ``robust'' reduced set.
+
+Changed
+~~~~~~~
+- By default, semantic features are skipped in scaling, as the robust scaler
+  cannot deal well with categorical variables.
+- Wrapped scalers in single WORC scaler object to allow above for all scalers.
+
+Added
+~~~~~~~
+- Leave-One-Out (LOO) cross-validation.
+- Option to skip features in scaling.
+- Bias correction in preprocessing.
+- Option to check whether Nifti spacing seems incorrect and correct
+  with DICOM metadata.
+- ElasticNet as classifier through LogisticRegression penalty.
+
+3.3.2 - 2020-08-19
+------------------
+
+Fixed
+~~~~~
+- Bug in fit and score when using scaling: was incorrectly parsed as string
+  and always set to None.
+- Catch exception in ADASYN sampling.
+- Typo in configuration documentation.
+
+Added
+~~~~~~~
+- New type of scaler (robust z-scoring)
+- Resampling of image and mask in preprocessing (preprocessing and segmentix
+  nodes)
+
+Changed
+~~~~~~~
+- Newly added scaler is now also the default to use, instead of the search
+  over the older included scalers.
+- Evaluation of estimator is now separate from training it.
+
+3.3.1 - 2020-07-31
+------------------
+
+Changed
+~~~~~~~
+- Updated to using tikzplotlib for conversion of figures to LaTeX instead
+  of deprecated matplotlib2tikz.
+- Output of evaluation pipeline now in separate subfolder.
+- KNNImputer now also in sklearn, missingpy deprecated, so switched to
+  sklearn KNNImputer.
+
+Fixed
+~~~~~
+- Bug in fixandscore when using resampling.
+
+
+3.3.0 - 2020-07-28
+------------------
+
+Added
+~~~~~~~
+- Graphviz vizualization of network is now nicely grouped.
+- Properly integrated ObjectSampler: various resampling options now available.
+- Verbose option to fit and score tool
+- Validator for PyRadiomics output.
+- FAQ version to documentation
+
+Changed
+~~~~~~~
+- Upgraded to new versions of sklearn (0.23.1) and imbalanced learn (0.7.0)
+- Some defaults, based on computation time.
+- Do not skip workflow if feature selection selects zero features,
+  but disable the feature selection.
+- Do not skip workflow if resampling is unsuccesfull,
+  but disable the resampling.
+- Default scaling is now not only Z-score, but also MinMax and Robust
+- Renamed plot SVM function and all functions using it, as now
+  we use all kinds of estimators.
+- L1 penalty does not work with new standard LR solver. Removed L1 penalty.
+
+Fixed
+~~~~~
+- Bug when using both elastix and segmentix.
+- Bug when using elastix in train-test workflow.
+- IMPORTANT: Previously, all methods except the machine learning where fit on
+  both the training and validation set together in fitandscore. This led
+  to overfitting on the validation set. Now, these are properly split.
+- Bugfix in Evaluate standalone for decompositon tool.
+- Applied imputation in decomposition if NaNs are detected.
+- In the facade ConfigBuilder, an error is raised when incorrect
+  overrides are given.
+- Bugfix in statistical feature test plotting.
+- Bugfix in Evaluate when using ComBat
+- Bugfix in feature converter of PyRadiomics when using 2D images.
+- Catch Graphviz error.
+- Bug in ICC.
+
+
+3.2.2 - 2020-07-14
+------------------
+
+Added
+~~~~~~~
+- In classify node, when using temporary saves, start from where
+  the process previously stopped instead of from the beginning.
+- Imputation to ComBat.
+
+Changed
+~~~~~~~
+- Imputation is now the first step in the workflows. More logical as
+  scaler and variance threshold can crash on missing values.
+- In config, preprocessing fields are now actually called preprocessing and
+  not normalize.
+
+Fixed
+~~~~~
+- Preflightcheck now also compatible with BasicWORC.
+- Bugfix in ComBat when not using mod variable and skipping patients.
+- Bug in PyRadiomics feature converter: can now handle 2D images.
+- ReliefSampleSize parameter is now a uniform distribution, which it should be.
+- Gabor features now actually used in model instead of only computing them.
+
+
+3.2.1 - 2020-07-02
+------------------
+
+Added
+~~~~~~~
+- Major documentation update.
+
+Changed
+~~~~~~~
+- PyRadiomics setup not dependent on pre-install of numpy anymore, so altered
+  travis, yml, setup, and documentation.
+- PREDICT updated, change dependencies.
+- Defaults are now a bit different: see argumentation in the documentation.
+  Main thing is that PyRadiomics and PREDICT both compute certain features,
+  so it's redundant to use both. Additionally, the wavelet features
+  from PyRadiomics add +1000 features, which did not seem to help in many
+  experiments while majorly slowing down the computation.
+
+Fixed
+~~~~~
+- Catch error when PCA does not converge in fit and score function.
+
+3.2.0 - 2020-06-26
+------------------
+
+Added
+~~~~~~~
+- Labelprocessing can now also handle having patient ID in the feature files.
+  Was required for ComBat.
+
+Changed
+~~~~~~~
+- Output of plot_SVM function is better ordered.
+- Several defaults, as we now have PyRadiomics fully embedded, resulting in
+  a large increase in features.
+- No more overrides for the full config, as the default now is the full config.
+
+Fixed
+~~~~~
+- Cardinality of decomposition tool was incorrect.
+- ComBat integration in WORC network now works properly.
+- Documentation didn't build due to C-extension dependencies of PyRadiomics,
+  and thus therefore also PREDICT. Fixed in setup.py and readthedocs files.
+- Documentation building.
+- Bugfix in segmentix test output url.
+- Bugfix in SimpleWORC facade when using features.
+- Warning when using Evaluation pipeline without images.
+
+
+3.1.4 - 2020-05-26
 ------------------
 
 Added
@@ -15,15 +241,52 @@ Added
   images.
 - Add support in SimpleWORC and BasicWORC for multiple segmentations per
   patient.
+- Chi2 test in statistical testing.
+- fastr tool to make boxplots of all features, overall and per class.
+- Added this boxplot tool to the evaluate workflow.
+- Option in evaluation to overfit feature scaling to test set: should only
+  be used to assess differences between the training and test sets, not
+  in an actual model.
+- Option to delete small objects in segmentation.
+- Option to within the preprocessing, use a dilated ROI.
+- Otsu thresholding as mask for preprocessing.
+- Memory for each fastr node is now in a dictionary of the WORC object and can
+  be easily changed.
+- PyRadiomics now fully embedded and configurable.
+- ComBat harmonization: currently as separate tool on full dataset,
+  not in cross-validation.
+- Computation of ICC, and thresholding object to use ICC for feature selection.
+- Added groupwise feature selection per feature extraction toolbox.
+- Feature converter tool, to convert features from a toolbox to WORC compatible
+  format.
+- RobustScaler for feature scaling.
+- Decomposition to evaluate network.
+- Combat: in WORK workflow.
 
 Changed
 ~~~~~~~
 - Resampling of objects is now after feature selection.
+- Made plot_SVM function more memory efficient.
+- For PCA, Relief, VarianceThreshold, and SelectFromModel feature selection,
+  you can now simply supply a float to determine the percentage of times
+  this method is used in the created workflows.
+- Moved load_features from trainclassifier to file_io.
+- Matching of PID from labels from label file to other objects is now all
+  converted to lower case.
+- Refactoring of WORC network building.
+- Segmentix tool is cleaned up. Segmentix script is moved to processing.
 
 Fixed
 ~~~~~
 - Order of methods in preprocessing function of SearchCV did not correspond
   with that in fitandscore.
+- Replace spaces in uri conversion of sources in SimpleWORC.
+- Check whether all fitandscore jobs succeeded, otherwise throw error.
+- Bug in PCA when n_components > min(n_samples, n_features)
+- Random seed is now set and passed to PCA, Relief and all classifiers
+  for reproducability of the results.
+- Evaluate can now also accept multiple feature toolboxes.
+
 
 3.1.3 - 2020-01-24
 ------------------
@@ -320,6 +583,6 @@ Fixed
 - For multiple modalities, add only optional sources like metadata when present.
 
 1.0.0rc1 - 2017-05-08
-------------------
+---------------------
 
 First release

@@ -37,7 +37,7 @@ def load_config(config_file_path):
     settings = configparser.ConfigParser()
     settings.read(config_file_path)
 
-    settings_dict = {'Segmentix': dict()}
+    settings_dict = {'Segmentix': dict(), 'Preprocessing': dict()}
 
     # Segmentation settings
     settings_dict['Sementix'] = dict()
@@ -55,5 +55,37 @@ def load_config(config_file_path):
 
     settings_dict['Segmentix']['fillholes'] =\
         settings['Segmentix'].getboolean('fillholes')
+
+    settings_dict['Segmentix']['remove_small_objects'] =\
+        settings['Segmentix'].getboolean('remove_small_objects')
+
+    settings_dict['Segmentix']['min_object_size'] =\
+        int(settings['Segmentix']['min_object_size'])
+
+    settings_dict['Segmentix']['AssumeSameImageAndMaskMetadata'] =\
+        settings['General'].getboolean('AssumeSameImageAndMaskMetadata')
+
+    # Check spacing
+    settings_dict['Preprocessing']['CheckSpacing'] =\
+        settings['Preprocessing'].getboolean('CheckSpacing')
+
+    # Re-orientation
+    settings_dict['Preprocessing']['CheckOrientation'] =\
+        settings['Preprocessing'].getboolean('CheckOrientation')
+
+    settings_dict['Preprocessing']['OrientationPrimaryAxis'] =\
+        str(settings['Preprocessing']['OrientationPrimaryAxis'])
+        
+    # Resampling
+    settings_dict['Preprocessing']['Resampling'] =\
+        settings['Preprocessing'].getboolean('Resampling')
+
+    settings_dict['Preprocessing']['Resampling_spacing'] =\
+        [float(item) for item in
+         settings['Preprocessing']['Resampling_spacing'].split(',')]
+
+    if len(settings_dict['Preprocessing']['Resampling_spacing']) != 3:
+        s = settings_dict['Preprocessing']['Resampling_spacing']
+        raise ae.WORCValueError(f'Resampling spacing should be three elements, got {s}')
 
     return settings_dict

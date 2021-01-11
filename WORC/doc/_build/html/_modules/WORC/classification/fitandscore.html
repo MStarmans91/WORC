@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.fitandscore &mdash; WORC 3.1.3 documentation</title>
+  <title>WORC.classification.fitandscore &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -53,13 +53,16 @@
           
 
           
+            
+            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.1.3
+                3.3.5
               </div>
             
           
@@ -88,6 +91,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/features.html">Radiomics Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
@@ -158,7 +165,7 @@
   <h1>Source code for WORC.classification.fitandscore</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -173,28 +180,27 @@
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">MinMaxScaler</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection._validation</span> <span class="k">import</span> <span class="n">_fit_and_score</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">Lasso</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">Lasso</span><span class="p">,</span> <span class="n">LogisticRegression</span>
 <span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="k">import</span> <span class="n">SelectFromModel</span>
-<span class="kn">import</span> <span class="nn">scipy</span>
 <span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="k">import</span> <span class="n">PCA</span>
 <span class="kn">from</span> <span class="nn">sklearn.multiclass</span> <span class="k">import</span> <span class="n">OneVsRestClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestClassifier</span>
-<span class="kn">from</span> <span class="nn">imblearn.over_sampling</span> <span class="k">import</span> <span class="n">SMOTE</span><span class="p">,</span> <span class="n">RandomOverSampler</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="k">import</span> <span class="n">check_random_state</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">make_scorer</span><span class="p">,</span> <span class="n">average_precision_score</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.ObjectSampler</span> <span class="k">import</span> <span class="n">ObjectSampler</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="k">import</span> <span class="n">_safe_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">_num_samples</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.estimators</span> <span class="k">import</span> <span class="n">RankedSVM</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.metrics</span> <span class="k">import</span> <span class="n">check_scoring</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.metrics</span> <span class="k">import</span> <span class="n">check_multimetric_scoring</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.Relief</span> <span class="k">import</span> <span class="n">SelectMulticlassRelief</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.Imputer</span> <span class="k">import</span> <span class="n">Imputer</span>
+<span class="kn">from</span> <span class="nn">WORC.featureprocessing.Scalers</span> <span class="k">import</span> <span class="n">WORCScaler</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.VarianceThreshold</span> <span class="k">import</span> <span class="n">selfeat_variance</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.StatisticalTestThreshold</span> <span class="k">import</span> <span class="n">StatisticalTestThreshold</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.SelectGroups</span> <span class="k">import</span> <span class="n">SelectGroups</span>
+<span class="kn">from</span> <span class="nn">WORC.featureprocessing.OneHotEncoderWrapper</span> <span class="k">import</span> <span class="n">OneHotEncoderWrapper</span>
+<span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
 
 <span class="c1"># Specific imports for error management</span>
 <span class="kn">from</span> <span class="nn">sklearn.discriminant_analysis</span> <span class="k">import</span> <span class="n">LinearDiscriminantAnalysis</span> <span class="k">as</span> <span class="n">LDA</span>
@@ -202,26 +208,29 @@
 
 
 <div class="viewcode-block" id="fit_and_score"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.fitandscore.fit_and_score">[docs]</a><span class="k">def</span> <span class="nf">fit_and_score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scoring</span><span class="p">,</span>
-                  <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">para</span><span class="p">,</span>
+                  <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span>
                   <span class="n">fit_params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">return_n_test_samples</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                  <span class="n">return_times</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_parameters</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                  <span class="n">return_times</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_parameters</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">return_estimator</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">return_all</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Fit an estimator to a dataset and score the performance. The following</span>
+    <span class="sd">&quot;&quot;&quot;Fit an estimator to a dataset and score the performance.</span>
+
+<span class="sd">    The following</span>
 <span class="sd">    methods can currently be applied as preprocessing before fitting, in</span>
 <span class="sd">    this order:</span>
-<span class="sd">    1. Select features based on feature type group (e.g. shape, histogram).</span>
-<span class="sd">    2. Oversampling</span>
-<span class="sd">    3. Apply feature imputation (WIP).</span>
+<span class="sd">    0. Apply OneHotEncoder</span>
+<span class="sd">    1. Apply feature imputation</span>
+<span class="sd">    2. Select features based on feature type group (e.g. shape, histogram).</span>
+<span class="sd">    3. Scale features with e.g. z-scoring.</span>
 <span class="sd">    4. Apply feature selection based on variance of feature among patients.</span>
 <span class="sd">    5. Univariate statistical testing (e.g. t-test, Wilcoxon).</span>
-<span class="sd">    6. Scale features with e.g. z-scoring.</span>
-<span class="sd">    7. Use Relief feature selection.</span>
-<span class="sd">    8. Select features based on a fit with a LASSO model.</span>
-<span class="sd">    9. Select features using PCA.</span>
+<span class="sd">    6. Use Relief feature selection.</span>
+<span class="sd">    7. Select features based on a fit with a LASSO model.</span>
+<span class="sd">    8. Select features using PCA.</span>
+<span class="sd">    9. Resampling</span>
 <span class="sd">    10. If a SingleLabel classifier is used for a MultiLabel problem,</span>
 <span class="sd">        a OneVsRestClassifier is employed around it.</span>
 
@@ -248,7 +257,7 @@
 <span class="sd">    test: list, mandatory</span>
 <span class="sd">            Indices of the objects to be used as testing set.</span>
 
-<span class="sd">    para: dictionary, mandatory</span>
+<span class="sd">    parameters: dictionary, mandatory</span>
 <span class="sd">            Contains the settings used for the above preprocessing functions</span>
 <span class="sd">            and the fitting. TODO: Create a default object and show the</span>
 <span class="sd">            fields.</span>
@@ -270,6 +279,9 @@
 <span class="sd">    return_parameters: boolean, default True</span>
 <span class="sd">            Return the parameters used in the final fit to the final SearchCV</span>
 <span class="sd">            object.</span>
+
+<span class="sd">    return_estimator : bool, default=False</span>
+<span class="sd">        Whether to return the fitted estimator.</span>
 
 <span class="sd">    error_score: numeric or &quot;raise&quot; by default</span>
 <span class="sd">            Value to assign to the score if an error occurs in estimator</span>
@@ -293,7 +305,7 @@
 
 <span class="sd">    ret: list</span>
 <span class="sd">        Contains optionally the train_scores and the test_scores,</span>
-<span class="sd">        test_sample_counts, fit_time, score_time, parameters_est</span>
+<span class="sd">        fit_time, score_time, parameters_est</span>
 <span class="sd">        and parameters_all.</span>
 
 <span class="sd">    GroupSel: WORC GroupSel Object</span>
@@ -316,6 +328,10 @@
 <span class="sd">        Either None if feature scaling is not used, or</span>
 <span class="sd">        the fitted object.</span>
 
+<span class="sd">    encoder: WORC Encoder Object</span>
+<span class="sd">        Either None if feature OneHotEncoding is not used, or</span>
+<span class="sd">        the fitted object.</span>
+
 <span class="sd">    imputer: WORC Imputater Object</span>
 <span class="sd">        Either None if feature imputation is not used, or</span>
 <span class="sd">        the fitted object.</span>
@@ -332,62 +348,101 @@
 <span class="sd">        Either None if the RELIEF feature selection is not used, or</span>
 <span class="sd">        the fitted object.</span>
 
-<span class="sd">    sm: WORC SMOTE Object</span>
-<span class="sd">        Either None if the SMOTE oversampling is not used, or</span>
-<span class="sd">        the fitted object.</span>
+<span class="sd">    Sampler: WORC ObjectSampler Object</span>
+<span class="sd">        Either None if no resampling is used, or an ObjectSampler object</span>
 
-<span class="sd">    ros: WORC ROS Object</span>
-<span class="sd">        Either None if Random Oversampling is not used, or</span>
-<span class="sd">        the fitted object.</span>
 
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="c1"># Set some defaults for if a part fails and we return a dummy</span>
-    <span class="n">test_sample_counts</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
-    <span class="n">fit_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
-    <span class="n">score_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
-    <span class="n">train_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">test_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># We copy the parameter object so we can alter it and keep the original</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#######################################&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Starting fit and score of new workflow.&#39;</span><span class="p">)</span>
-    <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">para</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">estimator</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">construct_classifier</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">scoring</span> <span class="o">!=</span> <span class="s1">&#39;average_precision_weighted&#39;</span><span class="p">:</span>
-        <span class="n">scorer</span> <span class="o">=</span> <span class="n">check_scoring</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">scorer</span> <span class="o">=</span> <span class="n">make_scorer</span><span class="p">(</span><span class="n">average_precision_score</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Check the scorer</span>
+    <span class="n">scorers</span><span class="p">,</span> <span class="n">__</span> <span class="o">=</span> <span class="n">check_multimetric_scoring</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">)</span>
 
     <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_cc_para</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
+
+    <span class="c1"># Get random seed from parameters</span>
+    <span class="n">random_seed</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">]</span>
+    <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">]</span>
 
     <span class="c1"># X is a tuple: split in two arrays</span>
     <span class="n">feature_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="p">])</span>
     <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="p">])</span>
 
-    <span class="c1"># ------------------------------------------------------------------------</span>
-    <span class="c1"># Feature scaling</span>
-    <span class="k">if</span> <span class="s1">&#39;FeatureScaling&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitting scaler and transforming features.&quot;</span><span class="p">)</span>
+    <span class="c1"># Split in train and testing</span>
+    <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">_safe_split</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">train</span><span class="p">)</span>
+    <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">_safe_split</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">train</span><span class="p">)</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;z_score&#39;</span><span class="p">:</span>
-            <span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;minmax&#39;</span><span class="p">:</span>
-            <span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="k">if</span> <span class="n">scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">feature_values</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span>
+    <span class="c1"># Set some defaults for if a part fails and we return a dummy</span>
+    <span class="n">fit_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="n">score_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="n">Sampler</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">encoder</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">imputer</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">GroupSel</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">SelectModel</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pca</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">StatisticalSel</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">VarSel</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">ReliefSel</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scorers</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">test_scores</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">scorers</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">return_train_score</span><span class="p">:</span>
+            <span class="n">train_scores</span> <span class="o">=</span> <span class="n">test_scores</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">test_scores</span> <span class="o">=</span> <span class="n">error_score</span>
+        <span class="k">if</span> <span class="n">return_train_score</span><span class="p">:</span>
+            <span class="n">train_scores</span> <span class="o">=</span> <span class="n">error_score</span>
+
+    <span class="c1"># Initiate dummy return object for when fit and scoring failes: sklearn defaults</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">]</span> <span class="k">if</span> <span class="n">return_train_score</span> <span class="k">else</span> <span class="p">[</span><span class="n">test_scores</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">return_n_test_samples</span><span class="p">:</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_num_samples</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">return_times</span><span class="p">:</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">return_parameters</span><span class="p">:</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">return_estimator</span><span class="p">:</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
+
+    <span class="c1"># Additional to sklearn defaults: return all parameters</span>
+    <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------------</span>
+    <span class="c1"># OneHotEncoder</span>
+    <span class="k">if</span> <span class="s1">&#39;OneHotEncoding&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Applying OneHotEncoding, will ignore unknowns.&#39;</span><span class="p">)</span>
+            <span class="n">feature_labels_tofit</span> <span class="o">=</span>\
+                <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding_feature_labels_tofit&#39;</span><span class="p">]</span>
+            <span class="n">encoder</span> <span class="o">=</span>\
+                <span class="n">OneHotEncoderWrapper</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span>
+                                     <span class="n">feature_labels_tofit</span><span class="o">=</span><span class="n">feature_labels_tofit</span><span class="p">,</span>
+                                     <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="n">encoder</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encoder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Encoder is fitted</span>
+                <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">encoded_feature_labels</span>
+                <span class="n">X_train</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+                <span class="n">X_test</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding_feature_labels_tofit&#39;</span><span class="p">]</span>
 
     <span class="c1"># Delete the object if we do not need to return it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
-        <span class="k">del</span> <span class="n">scaler</span>
+        <span class="k">del</span> <span class="n">encoder</span>
 
     <span class="c1"># ------------------------------------------------------------------------</span>
     <span class="c1"># Feature imputation</span>
@@ -400,14 +455,17 @@
 
             <span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputer</span><span class="p">(</span><span class="n">missing_values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="n">imp_type</span><span class="p">,</span>
                               <span class="n">n_neighbors</span><span class="o">=</span><span class="n">imp_nn</span><span class="p">)</span>
-            <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-            <span class="n">feature_values</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">imputer</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">imputer</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">imputer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="s1">&#39;Imputation&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">original_shape</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">X_train</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="n">imputed_shape</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">X_test</span> <span class="o">=</span> <span class="n">imputer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">original_shape</span> <span class="o">!=</span> <span class="n">imputed_shape</span><span class="p">:</span>
+                <span class="n">removed_features</span> <span class="o">=</span> <span class="n">original_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">imputed_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Several features (</span><span class="si">{removed_features}</span><span class="s1">) were np.NaN for all objects. Hence, imputation was not possible. Either make sure this is correct and turn of imputation, or correct the feature.&#39;</span><span class="p">)</span>
+
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ImputationMethod&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ImputationNeighbours&#39;</span><span class="p">]</span>
@@ -417,99 +475,8 @@
         <span class="k">del</span> <span class="n">imputer</span>
 
     <span class="c1"># Remove any NaN feature values if these are still left after imputation</span>
-    <span class="n">feature_values</span> <span class="o">=</span> <span class="n">replacenan</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">feature_labels</span><span class="o">=</span><span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="c1"># ------------------------------------------------------------------------</span>
-    <span class="c1"># Use SMOTE oversampling</span>
-    <span class="k">if</span> <span class="s1">&#39;SampleProcessing_SMOTE&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
-
-            <span class="c1"># Determine our starting balance</span>
-            <span class="n">pos_initial</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-            <span class="n">neg_initial</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos_initial</span><span class="p">)</span>
-            <span class="n">len_in</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-
-            <span class="c1"># Fit SMOTE object and transform dataset</span>
-            <span class="c1"># NOTE: need to save random state for this one as well!</span>
-            <span class="n">sm</span> <span class="o">=</span> <span class="n">SMOTE</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">ratio</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_ratio&#39;</span><span class="p">],</span>
-                       <span class="n">m_neighbors</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_neighbors&#39;</span><span class="p">],</span>
-                       <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;borderline1&#39;</span><span class="p">,</span>
-                       <span class="n">n_jobs</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_n_cores&#39;</span><span class="p">])</span>
-
-            <span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">fit_sample</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-
-            <span class="c1"># Also make sure our feature label object has the same size</span>
-            <span class="c1"># NOTE: Not sure if this is the best implementation</span>
-            <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X</span><span class="p">])</span>
-
-            <span class="c1"># Note the user what SMOTE did</span>
-            <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-            <span class="n">neg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Sampling with SMOTE from </span><span class="si">{len_in}</span><span class="s2"> (</span><span class="si">{pos_initial}</span><span class="s2"> pos,&quot;</span> <span class="o">+</span>\
-                          <span class="n">f</span><span class="s2">&quot; </span><span class="si">{neg_initial}</span><span class="s2"> neg) to {len(y)} (</span><span class="si">{pos}</span><span class="s2"> pos, </span><span class="si">{neg}</span><span class="s2"> neg) patients.&quot;</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sm</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">if</span> <span class="s1">&#39;SampleProcessing_SMOTE&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_ratio&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_neighbors&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_n_cores&#39;</span><span class="p">]</span>
-
-    <span class="c1"># Delete the object if we do not need to return it</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
-        <span class="k">del</span> <span class="n">sm</span>
-
-    <span class="c1"># ------------------------------------------------------------------------</span>
-    <span class="c1"># Full Oversampling: To Do</span>
-    <span class="k">if</span> <span class="s1">&#39;SampleProcessing_Oversampling&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_Oversampling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Oversample underrepresented classes in training.&#39;</span><span class="p">)</span>
-
-            <span class="c1"># Oversample underrepresented classes in training</span>
-            <span class="c1"># We always use a factor 1, e.g. all classes end up with an</span>
-            <span class="c1"># equal number of samples</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="c1"># Single Class, use imblearn oversampling</span>
-
-                <span class="c1"># Create another random state</span>
-                <span class="c1"># NOTE: Also need to save this random seed. Can be same as SMOTE</span>
-                <span class="n">random_seed2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
-                <span class="n">random_state2</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_seed2</span><span class="p">)</span>
-
-                <span class="n">ros</span> <span class="o">=</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state2</span><span class="p">)</span>
-                <span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ros</span><span class="o">.</span><span class="n">fit_sample</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># Multi class, use own method as imblearn cannot do this</span>
-                <span class="n">sumclass</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
-                <span class="n">maxclass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">sumclass</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                    <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">maxclass</span><span class="p">:</span>
-                        <span class="c1"># Oversample</span>
-                        <span class="n">nz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">y</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
-                        <span class="n">noversample</span> <span class="o">=</span> <span class="n">sumclass</span><span class="p">[</span><span class="n">maxclass</span><span class="p">]</span> <span class="o">-</span> <span class="n">sumclass</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                        <span class="k">while</span> <span class="n">noversample</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                            <span class="n">n_sample</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nz</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-                            <span class="n">n_sample</span> <span class="o">=</span> <span class="n">nz</span><span class="p">[</span><span class="n">n_sample</span><span class="p">]</span>
-                            <span class="n">i_sample</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">n_sample</span><span class="p">,</span> <span class="p">:]</span>
-                            <span class="n">x_sample</span> <span class="o">=</span> <span class="n">feature_values</span><span class="p">[</span><span class="n">n_sample</span><span class="p">]</span>
-                            <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span> <span class="n">i_sample</span><span class="p">))</span>
-                            <span class="n">feature_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x_sample</span><span class="p">)</span>
-                            <span class="n">noversample</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ros</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">if</span> <span class="s1">&#39;SampleProcessing_Oversampling&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_Oversampling&#39;</span><span class="p">]</span>
-
-    <span class="c1"># Delete the object if we do not need to return it</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
-        <span class="k">del</span> <span class="n">ros</span>
+    <span class="n">X_train</span> <span class="o">=</span> <span class="n">replacenan</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">feature_labels</span><span class="o">=</span><span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">X_test</span> <span class="o">=</span> <span class="n">replacenan</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">feature_labels</span><span class="o">=</span><span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="c1"># ------------------------------------------------------------------------</span>
     <span class="c1"># Groupwise feature selection</span>
@@ -518,23 +485,34 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Selecting groups of features.&quot;</span><span class="p">)</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectGroups&#39;</span><span class="p">]</span>
         <span class="c1"># TODO: more elegant way to solve this</span>
-        <span class="n">feature_groups</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;histogram_features&quot;</span><span class="p">,</span> <span class="s2">&quot;orientation_features&quot;</span><span class="p">,</span>
-                          <span class="s2">&quot;patient_features&quot;</span><span class="p">,</span> <span class="s2">&quot;semantic_features&quot;</span><span class="p">,</span>
-                          <span class="s2">&quot;shape_features&quot;</span><span class="p">,</span>
-                          <span class="s2">&quot;coliage_features&quot;</span><span class="p">,</span> <span class="s1">&#39;vessel_features&#39;</span><span class="p">,</span>
-                          <span class="s2">&quot;phase_features&quot;</span><span class="p">,</span> <span class="s2">&quot;log_features&quot;</span><span class="p">,</span>
-                          <span class="s2">&quot;texture_gabor_features&quot;</span><span class="p">,</span> <span class="s2">&quot;texture_glcm_features&quot;</span><span class="p">,</span>
-                          <span class="s2">&quot;texture_glcmms_features&quot;</span><span class="p">,</span> <span class="s2">&quot;texture_glrlm_features&quot;</span><span class="p">,</span>
-                          <span class="s2">&quot;texture_glszm_features&quot;</span><span class="p">,</span> <span class="s1">&#39;texture_gldzm_features&#39;</span><span class="p">,</span>
-                          <span class="s2">&quot;texture_ngtdm_features&quot;</span><span class="p">,</span>
-                          <span class="s2">&quot;texture_lbp_features&quot;</span><span class="p">,</span> <span class="s2">&quot;texture_ngldm_features&quot;</span><span class="p">,</span>
-                          <span class="s1">&#39;wavelet_features&#39;</span><span class="p">,</span> <span class="s1">&#39;rgrd_features&#39;</span><span class="p">,</span>
-                          <span class="s1">&#39;location_features&#39;</span><span class="p">,</span> <span class="s1">&#39;fractal_features&#39;</span><span class="p">,</span>
-                          <span class="s1">&#39;texture_GLDZM_features&#39;</span><span class="p">]</span>
+        <span class="n">feature_groups</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;shape_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;histogram_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;orientation_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_gabor_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_glcm_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_gldm_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_glcmms_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_glrlm_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_glszm_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_gldzm_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_ngtdm_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_ngldm_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;texture_lbp_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;dicom_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;semantic_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;coliage_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;vessel_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;phase_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;fractal_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;location_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;rgrd_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;original_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;wavelet_features&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;log_features&#39;</span><span class="p">]</span>
 
-        <span class="c1"># Backwards compatability</span>
-        <span class="k">if</span> <span class="s1">&#39;texture_features&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">feature_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;texture_features&#39;</span><span class="p">)</span>
+        <span class="c1"># First take out the toolbox selection, which is a list</span>
+        <span class="n">toolboxes</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;toolbox&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;toolbox&#39;</span><span class="p">]</span>
 
         <span class="c1"># Check per feature group if the parameter is present</span>
         <span class="n">parameters_featsel</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -551,56 +529,69 @@
 
             <span class="n">parameters_featsel</span><span class="p">[</span><span class="n">group</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="n">GroupSel</span> <span class="o">=</span> <span class="n">SelectGroups</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters_featsel</span><span class="p">)</span>
+        <span class="c1"># Fit groupwise feature selection object</span>
+        <span class="n">GroupSel</span> <span class="o">=</span> <span class="n">SelectGroups</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters_featsel</span><span class="p">,</span>
+                                <span class="n">toolboxes</span><span class="o">=</span><span class="n">toolboxes</span><span class="p">)</span>
         <span class="n">GroupSel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-        <span class="n">feature_values</span> <span class="o">=</span> <span class="n">GroupSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+
+        <span class="c1"># Transform all objectd accordingly</span>
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">GroupSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+        <span class="n">X_test</span> <span class="o">=</span> <span class="n">GroupSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
         <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">GroupSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">GroupSel</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># Delete the object if we do not need to return it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
         <span class="k">del</span> <span class="n">GroupSel</span>
 
     <span class="c1"># Check whether there are any features left</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># TODO: Make a specific WORC exception for this warning.</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WARNING]: No features are selected! Probably all feature groups were set to False. Parameters:&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">para</span><span class="p">)</span>
-
-        <span class="c1"># Return a zero performance dummy</span>
-        <span class="n">VarSel</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">SelectModel</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">pca</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">StatisticalSel</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">ReliefSel</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
 
         <span class="c1"># Delete the non-used fields</span>
         <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
 
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_score</span><span class="p">,</span> <span class="n">test_score</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-               <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">para_estimator</span><span class="p">,</span> <span class="n">para</span><span class="p">]</span>
-
         <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">ros</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ret</span>
 
     <span class="c1"># ------------------------------------------------------------------------</span>
-    <span class="c1"># FIXME: When only using LBP feature, X is 3 dimensional with 3rd dimension length 1</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">feature_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="p">(</span><span class="n">feature_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">feature_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">,</span> <span class="p">(</span><span class="n">feature_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">feature_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="c1"># Feature scaling</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Fitting scaler and transforming features, method &#39;</span> <span class="o">+</span>
+              <span class="n">f</span><span class="s1">&#39;</span><span class="si">{para_estimator[&quot;FeatureScaling&quot;]}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
-    <span class="c1"># Remove any NaN feature values if these are still left after imputation</span>
-    <span class="n">feature_values</span> <span class="o">=</span> <span class="n">replacenan</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">feature_labels</span><span class="o">=</span><span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">scaling_method</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">scaling_method</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span><span class="p">:</span>
+        <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">skip_features</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling_skip_features&#39;</span><span class="p">]</span>
+        <span class="n">n_skip_feat</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">e</span> <span class="ow">in</span> <span class="n">i</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">skip_features</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">n_skip_feat</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="c1"># Don&#39;t need to scale any features</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] Skipping scaling, only skip features selected.&#39;</span><span class="p">)</span>
+            <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">scaler</span> <span class="o">=</span> <span class="n">WORCScaler</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">scaling_method</span><span class="p">,</span> <span class="n">skip_features</span><span class="o">=</span><span class="n">skip_features</span><span class="p">)</span>
+            <span class="n">scaler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">X_train</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+        <span class="n">X_test</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+    <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Delete the object if we do not need to return it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">scaler</span>
 
     <span class="c1"># --------------------------------------------------------------------</span>
     <span class="c1"># Feature selection based on variance</span>
@@ -608,18 +599,17 @@
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Selecting features based on variance.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">feature_values</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">VarSel</span> <span class="o">=</span>\
-                <span class="n">selfeat_variance</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">)</span>
+            <span class="n">X_train</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">VarSel</span> <span class="o">=</span>\
+                <span class="n">selfeat_variance</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">)</span>
+            <span class="n">X_test</span> <span class="o">=</span> <span class="n">VarSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WARNING]: No features meet the selected Variance threshold! Skipping selection.&#39;</span><span class="p">)</span>
-            <span class="n">VarSel</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">VarSel</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+
     <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Featsel_Variance&#39;</span><span class="p">]</span>
 
     <span class="c1"># Delete the object if we do not need to return it</span>
@@ -627,44 +617,15 @@
         <span class="k">del</span> <span class="n">VarSel</span>
 
     <span class="c1"># Check whether there are any features left</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># TODO: Make a specific WORC exception for this warning.</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WARNING]: No features are selected! Probably you selected a feature group that is not in your feature file. Parameters:&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">para</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WARNING]: No features are selected! Probably your features have too little variance. Parameters:&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
         <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
 
-        <span class="c1"># Return a zero performance dummy</span>
-        <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">SelectModel</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">pca</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">StatisticalSel</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_score</span><span class="p">,</span> <span class="n">test_score</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-               <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">para_estimator</span><span class="p">,</span> <span class="n">para</span><span class="p">]</span>
-
         <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">ros</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span>
-
-    <span class="c1"># Check whether there are any features left</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="c1"># TODO: Make a specific WORC exception for this warning.</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING]: No features are selected! Probably you selected a feature group that is not in your feature file. Parameters:&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">para</span><span class="p">)</span>
-
-        <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
-
-        <span class="c1"># Return a zero performance dummy</span>
-        <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">SelectModel</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">pca</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_score</span><span class="p">,</span> <span class="n">test_score</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-               <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">para_estimator</span><span class="p">,</span> <span class="n">para</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">ros</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ret</span>
 
@@ -683,65 +644,115 @@
             <span class="n">distance_p</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefDistanceP&#39;</span><span class="p">]</span>
             <span class="n">numf</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">]</span>
 
+            <span class="c1"># Fit RELIEF object</span>
             <span class="n">ReliefSel</span> <span class="o">=</span> <span class="n">SelectMulticlassRelief</span><span class="p">(</span><span class="n">n_neighbours</span><span class="o">=</span><span class="n">n_neighbours</span><span class="p">,</span>
                                                <span class="n">sample_size</span><span class="o">=</span><span class="n">sample_size</span><span class="p">,</span>
                                                <span class="n">distance_p</span><span class="o">=</span><span class="n">distance_p</span><span class="p">,</span>
-                                               <span class="n">numf</span><span class="o">=</span><span class="n">numf</span><span class="p">)</span>
-            <span class="n">ReliefSel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                                               <span class="n">numf</span><span class="o">=</span><span class="n">numf</span><span class="p">,</span>
+                                               <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
+            <span class="n">ReliefSel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-            <span class="n">feature_values</span> <span class="o">=</span> <span class="n">ReliefSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+
+            <span class="c1"># Transform all objects accordingly</span>
+            <span class="n">X_train</span> <span class="o">=</span> <span class="n">ReliefSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="n">X_test</span> <span class="o">=</span> <span class="n">ReliefSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
             <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">ReliefSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ReliefSel</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ReliefSel</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="c1"># Delete the object if we do not need to return it</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
-        <span class="k">del</span> <span class="n">ReliefSel</span>
-
-    <span class="k">if</span> <span class="s1">&#39;ReliefUse&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefNN&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefSampleSize&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefDistanceP&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">]</span>
 
+    <span class="c1"># Delete the object if we do not need to return it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">ReliefSel</span>
+
+    <span class="c1"># Check whether there are any features left</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># TODO: Make a specific WORC exception for this warning.</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WARNING]: No features are selected! Probably RELIEF could not properly select features. Parameters:&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ret</span>
+
     <span class="c1"># ------------------------------------------------------------------------</span>
     <span class="c1"># Perform feature selection using a model</span>
+    <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
     <span class="k">if</span> <span class="s1">&#39;SelectFromModel&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_estimator&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Selecting features using lasso model.&quot;</span><span class="p">)</span>
-        <span class="c1"># Use lasso model for feature selection</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Selecting features using model </span><span class="si">{model}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># First, draw a random value for alpha and the penalty ratio</span>
-        <span class="n">alpha</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span><span class="o">.</span><span class="n">rvs</span><span class="p">()</span>
-        <span class="c1"># l1_ratio = scipy.stats.uniform(loc=0.5, scale=0.4).rvs()</span>
+        <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;Lasso&#39;</span><span class="p">:</span>
+            <span class="c1"># Use lasso model for feature selection</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">]</span>
+            <span class="n">selectestimator</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
 
-        <span class="c1"># Create and fit lasso model</span>
-        <span class="n">lassomodel</span> <span class="o">=</span> <span class="n">Lasso</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
-        <span class="n">lassomodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;LR&#39;</span><span class="p">:</span>
+            <span class="c1"># Use logistic regression model for feature selection</span>
+            <span class="n">selectestimator</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="n">model</span> <span class="o">==</span> <span class="s1">&#39;RF&#39;</span><span class="p">:</span>
+            <span class="c1"># Use random forest model for feature selection</span>
+            <span class="n">n_estimators</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">]</span>
+            <span class="n">selectestimator</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="n">n_estimators</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Model </span><span class="si">{model}</span><span class="s1"> is not known for SelectFromModel. Use Lasso, LR, or RF.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Prefit model</span>
+        <span class="n">selectestimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
         <span class="c1"># Use fit to select optimal features</span>
-        <span class="n">SelectModel</span> <span class="o">=</span> <span class="n">SelectFromModel</span><span class="p">(</span><span class="n">lassomodel</span><span class="p">,</span> <span class="n">prefit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">SelectModel</span> <span class="o">=</span> <span class="n">SelectFromModel</span><span class="p">(</span><span class="n">selectestimator</span><span class="p">,</span> <span class="n">prefit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-        <span class="n">feature_values</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-        <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">SelectModel</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+
+        <span class="n">X_train_temp</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING]: No features are selected! Probably your data is too noisy or the selection too strict. Skipping SelectFromModel.&#39;</span><span class="p">)</span>
+            <span class="n">SelectModel</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X_train</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="n">X_test</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+            <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">SelectModel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
 
     <span class="k">if</span> <span class="s1">&#39;SelectFromModel&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_estimator&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">]</span>
 
     <span class="c1"># Delete the object if we do not need to return it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
         <span class="k">del</span> <span class="n">SelectModel</span>
+
+    <span class="c1"># Check whether there are any features left</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># TODO: Make a specific WORC exception for this warning.</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WARNING]: No features are selected! Probably SelectFromModel could not properly select features. Parameters:&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ret</span>
 
     <span class="c1"># ----------------------------------------------------------------</span>
     <span class="c1"># PCA dimensionality reduction</span>
@@ -749,11 +760,21 @@
     <span class="k">if</span> <span class="s1">&#39;UsePCA&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fitting PCA&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
         <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;95variance&#39;</span><span class="p">:</span>
             <span class="c1"># Select first X components that describe 95 percent of the explained variance</span>
-            <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-            <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+            <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">LinAlgError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WARNING]: skipping this setting due to PCA Error: </span><span class="si">{e}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">ret</span>
+
             <span class="n">evariance</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
             <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
@@ -762,26 +783,37 @@
                 <span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
 
             <span class="c1"># Make a PCA based on the determined amound of components</span>
-            <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
-            <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-            <span class="n">feature_values</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+            <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">num</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">LinAlgError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WARNING]: skipping this setting due to PCA Error: </span><span class="si">{e}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">ret</span>
+
+            <span class="n">X_train</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="n">X_test</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Assume a fixed number of components</span>
-            <span class="n">n_components</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;PCAType&#39;</span><span class="p">])</span>
+            <span class="c1"># Assume a fixed number of components: cannot be larger than</span>
+            <span class="c1"># n_samples</span>
+            <span class="n">n_components</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]))</span>
 
-            <span class="k">if</span> <span class="n">n_components</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;[WORC WARNING] PCA n_components (</span><span class="si">{n_components}</span><span class="s2">)&gt; n_features ({len(feature_values[0])}): skipping PCA.&quot;</span><span class="p">)</span>
-                <span class="n">pca</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">n_components</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;[WORC WARNING] PCA n_components (</span><span class="si">{n_components}</span><span class="s2">)&gt; n_features ({len(X_train[0])}): skipping PCA.&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
-                <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-                <span class="n">feature_values</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
+                <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">)</span>
+                <span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+                <span class="n">X_train</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+                <span class="n">X_test</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">pca</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
 
     <span class="c1"># Delete the object if we do not need to return it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
@@ -798,53 +830,116 @@
             <span class="n">metric</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span>
             <span class="n">threshold</span> <span class="o">=</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Selecting features based on statistical test. Method </span><span class="si">{metric}</span><span class="s2">, threshold {round(threshold, 2)}.&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Selecting features based on statistical test. Method </span><span class="si">{metric}</span><span class="s2">, threshold {round(threshold, 5)}.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Original Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
 
             <span class="n">StatisticalSel</span> <span class="o">=</span> <span class="n">StatisticalTestThreshold</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span>
                                                       <span class="n">threshold</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
 
-            <span class="n">StatisticalSel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-            <span class="n">feature_values</span> <span class="o">=</span> <span class="n">StatisticalSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_values</span><span class="p">)</span>
-            <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">StatisticalSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
+            <span class="n">StatisticalSel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">X_train_temp</span> <span class="o">=</span> <span class="n">StatisticalSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING]: No features are selected! Probably your statistical test feature selection was too strict. Skipping thresholding.&#39;</span><span class="p">)</span>
+                <span class="n">StatisticalSel</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;StatisticalTestUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">X_train</span> <span class="o">=</span> <span class="n">StatisticalSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+                <span class="n">X_test</span> <span class="o">=</span> <span class="n">StatisticalSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+                <span class="n">feature_labels</span> <span class="o">=</span> <span class="n">StatisticalSel</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">feature_labels</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">StatisticalSel</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> New Length: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;StatisticalTestUse&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">StatisticalSel</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># Delete the object if we do not need to return it</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
         <span class="k">del</span> <span class="n">StatisticalSel</span>
 
-    <span class="c1"># --------------------------------------------------------------------</span>
-    <span class="c1"># Final check if there are still features left</span>
-    <span class="c1"># Check whether there are any features left</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="c1"># TODO: Make a specific WORC exception for this warning.</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING]: No features are selected! Probably you selected a feature group that is not in your feature file. Parameters:&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">para</span><span class="p">)</span>
+    <span class="c1"># ------------------------------------------------------------------------</span>
+    <span class="c1"># Use object resampling</span>
+    <span class="k">if</span> <span class="s1">&#39;Resampling_Use&#39;</span> <span class="ow">in</span> <span class="n">para_estimator</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_Use&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
 
-        <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
+            <span class="c1"># Determine our starting balance</span>
+            <span class="n">pos_initial</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+            <span class="n">neg_initial</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos_initial</span><span class="p">)</span>
+            <span class="n">len_in</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
 
-        <span class="c1"># Return a zero performance dummy</span>
-        <span class="n">scaler</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">SelectModel</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">pca</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_score</span><span class="p">,</span> <span class="n">test_score</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-               <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">para_estimator</span><span class="p">,</span> <span class="n">para</span><span class="p">]</span>
+            <span class="c1"># Fit ObjectSampler and transform dataset</span>
+            <span class="c1"># NOTE: need to save random state for this one as well!</span>
+            <span class="n">Sampler</span> <span class="o">=</span>\
+                <span class="n">ObjectSampler</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_Method&#39;</span><span class="p">],</span>
+                              <span class="n">sampling_strategy</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_sampling_strategy&#39;</span><span class="p">],</span>
+                              <span class="n">n_jobs</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_n_cores&#39;</span><span class="p">],</span>
+                              <span class="n">n_neighbors</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_n_neighbors&#39;</span><span class="p">],</span>
+                              <span class="n">k_neighbors</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_k_neighbors&#39;</span><span class="p">],</span>
+                              <span class="n">threshold_cleaning</span><span class="o">=</span><span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_threshold_cleaning&#39;</span><span class="p">],</span>
+                              <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">ros</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ret</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">Sampler</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+                <span class="n">X_train_temp</span><span class="p">,</span> <span class="n">y_train_temp</span> <span class="o">=</span> <span class="n">Sampler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Skipping resampling: &#39;</span> <span class="o">+</span> <span class="n">message</span><span class="p">)</span>
+                <span class="n">Sampler</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Resampling_Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+
+            <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;ADASYN is not suited for this specific dataset. Use SMOTE instead.&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                    <span class="c1"># Seldomly occurs, therefore return performance dummy</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WARNING]: </span><span class="si">{e}</span><span class="s1">. Returning dummies. Parameters: &#39;</span><span class="p">)</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+                    <span class="n">para_estimator</span> <span class="o">=</span> <span class="n">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">para_estimator</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">ret</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_train_temp</span><span class="p">))</span>
+                <span class="n">neg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train_temp</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="ow">or</span> <span class="n">neg</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WORC WARNING] Skipping resampling: to few objects returned in one or both classes (pos: </span><span class="si">{pos}</span><span class="s1">, neg: </span><span class="si">{neg}</span><span class="s1">).&#39;</span><span class="p">)</span>
+                    <span class="n">Sampler</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Resampling_Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train_temp</span>
+                    <span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train_temp</span>
+
+                    <span class="c1"># Notify the user what the resampling did</span>
+                    <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+                    <span class="n">neg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">-</span> <span class="n">pos</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                        <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Resampling from </span><span class="si">{len_in}</span><span class="s2"> (</span><span class="si">{pos_initial}</span><span class="s2"> pos,&quot;</span> <span class="o">+</span>\
+                                  <span class="n">f</span><span class="s2">&quot; </span><span class="si">{neg_initial}</span><span class="s2"> neg) to {len(y_train)} (</span><span class="si">{pos}</span><span class="s2"> pos, </span><span class="si">{neg}</span><span class="s2"> neg) patients.&quot;</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+                    <span class="c1"># Also reset train and test indices</span>
+                    <span class="n">train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+                    <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_test</span><span class="p">))</span>
+
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_Use&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_Method&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_sampling_strategy&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_n_neighbors&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_k_neighbors&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_threshold_cleaning&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">para_estimator</span><span class="p">[</span><span class="s1">&#39;Resampling_n_cores&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Delete the object if we do not need to return it</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">return_all</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">Sampler</span>
 
     <span class="c1"># ----------------------------------------------------------------</span>
     <span class="c1"># Fitting and scoring</span>
@@ -870,60 +965,70 @@
         <span class="c1"># Multiclass, hence employ a multiclass classifier for e.g. SVM, LR</span>
         <span class="n">estimator</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="o">**</span><span class="n">para_estimator</span><span class="p">)</span>
         <span class="n">estimator</span> <span class="o">=</span> <span class="n">OneVsRestClassifier</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
-        <span class="n">para_estimator</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitting ML.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Fitting ML method: </span><span class="si">{parameters[&#39;classifiers&#39;]}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Recombine feature values and label for train and test set</span>
+    <span class="n">feature_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">para_estimator</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">_fit_and_score</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">feature_values</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
-                             <span class="n">scorer</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span>
+                             <span class="n">scorers</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span>
                              <span class="n">test</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span>
-                             <span class="n">para_estimator</span><span class="p">,</span> <span class="n">fit_params</span><span class="p">,</span> <span class="n">return_train_score</span><span class="p">,</span>
-                             <span class="n">return_parameters</span><span class="p">,</span>
-                             <span class="n">return_n_test_samples</span><span class="p">,</span>
-                             <span class="n">return_times</span><span class="p">,</span> <span class="n">error_score</span><span class="p">)</span>
+                             <span class="n">para_estimator</span><span class="p">,</span> <span class="n">fit_params</span><span class="p">,</span>
+                             <span class="n">return_train_score</span><span class="o">=</span><span class="n">return_train_score</span><span class="p">,</span>
+                             <span class="n">return_parameters</span><span class="o">=</span><span class="n">return_parameters</span><span class="p">,</span>
+                             <span class="n">return_n_test_samples</span><span class="o">=</span><span class="n">return_n_test_samples</span><span class="p">,</span>
+                             <span class="n">return_times</span><span class="o">=</span><span class="n">return_times</span><span class="p">,</span>
+                             <span class="n">return_estimator</span><span class="o">=</span><span class="n">return_estimator</span><span class="p">,</span>
+                             <span class="n">error_score</span><span class="o">=</span><span class="n">error_score</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">LinAlgError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span> <span class="o">==</span> <span class="n">LDA</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WARNING]: skipping this setting due to LDA Error: &#39;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
-            <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">train_score</span><span class="p">,</span> <span class="n">test_score</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-                   <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">para_estimator</span><span class="p">,</span> <span class="n">para</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WARNING]: skipping this setting due to LDA Error: </span><span class="si">{e}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">ros</span>
+                <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">ret</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">e</span>
 
-    <span class="c1"># Remove &#39;estimator object&#39;, it&#39;s the causes of a bug.</span>
-    <span class="c1"># Somewhere between scikit-learn 0.18.2 and 0.20.2</span>
-    <span class="c1"># the estimator object return value was added</span>
-    <span class="c1"># removing this element fixes a bug that occurs later</span>
-    <span class="c1"># in SearchCV.py, where an array without estimator</span>
-    <span class="c1"># object is expected.</span>
-    <span class="k">del</span> <span class="n">ret</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="c1"># Paste original parameters in performance</span>
-    <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">para</span><span class="p">)</span>
+    <span class="c1"># Add original parameters to return object</span>
+    <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">ros</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">scaler</span><span class="p">,</span> <span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">pca</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
 
 <div class="viewcode-block" id="delete_nonestimator_parameters"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.fitandscore.delete_nonestimator_parameters">[docs]</a><span class="k">def</span> <span class="nf">delete_nonestimator_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;Delete non-estimator parameters.</span>
+
 <span class="sd">    Delete all parameters in a parameter dictionary that are not used for the</span>
 <span class="sd">    actual estimator.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="s1">&#39;Number&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Number&#39;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="s1">&#39;UsePCA&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="s1">&#39;ReliefUse&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;ReliefNN&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;ReliefSampleSize&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;ReliefDistanceP&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="s1">&#39;OneHotEncoding&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding_feature_labels_tofit&#39;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="s1">&#39;Imputation&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span>
@@ -932,6 +1037,9 @@
 
     <span class="k">if</span> <span class="s1">&#39;SelectFromModel&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_estimator&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="s1">&#39;Featsel_Variance&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Featsel_Variance&#39;</span><span class="p">]</span>
@@ -947,14 +1055,17 @@
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span>
         <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="s1">&#39;SampleProcessing_SMOTE&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_ratio&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_neighbors&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_SMOTE_n_cores&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;Resampling_Use&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Resampling_Use&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Resampling_Method&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Resampling_sampling_strategy&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Resampling_n_neighbors&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Resampling_k_neighbors&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Resampling_threshold_cleaning&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Resampling_n_cores&#39;</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="s1">&#39;SampleProcessing_Oversampling&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;SampleProcessing_Oversampling&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;random_seed&#39;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">del</span> <span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">parameters</span></div>
 
@@ -979,9 +1090,7 @@
 
 
 <div class="viewcode-block" id="delete_cc_para"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.fitandscore.delete_cc_para">[docs]</a><span class="k">def</span> <span class="nf">delete_cc_para</span><span class="p">(</span><span class="n">para</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Delete all parameters that are involved in classifier construction.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;Delete all parameters that are involved in classifier construction.&quot;&quot;&quot;</span>
     <span class="n">deletekeys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">,</span>
                   <span class="s1">&#39;max_iter&#39;</span><span class="p">,</span>
                   <span class="s1">&#39;SVMKernel&#39;</span><span class="p">,</span>
@@ -1003,7 +1112,15 @@
                   <span class="s1">&#39;SGD_l1_ratio&#39;</span><span class="p">,</span>
                   <span class="s1">&#39;SGD_loss&#39;</span><span class="p">,</span>
                   <span class="s1">&#39;SGD_penalty&#39;</span><span class="p">,</span>
-                  <span class="s1">&#39;CNB_alpha&#39;</span><span class="p">]</span>
+                  <span class="s1">&#39;CNB_alpha&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;AdaBoost_learning_rate&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;AdaBoost_n_estimators&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_boosting_rounds&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_max_depth&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_learning_rate&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_gamma&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_min_child_weight&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">deletekeys</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">para</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1022,7 +1139,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>

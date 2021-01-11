@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>processing Package &mdash; WORC 3.1.3 documentation</title>
+  <title>processing Package &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -55,13 +55,16 @@
           
 
           
+            
+            <img src="../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.1.3
+                3.3.5
               </div>
             
           
@@ -90,6 +93,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/features.html">Radiomics Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
 </ul>
@@ -110,10 +117,15 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">processing Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.ExtractNLargestBlobsn"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ExtractNLargestBlobsn</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.classes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classes</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">helpers</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.label_processing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">preprocessing</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.processing.segmentix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">segmentix</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.resources.html">resources Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.statistics.html">statistics Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.tests.html">tests Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
 </ul>
@@ -251,17 +263,48 @@ numberToExtract: number of blobs to extract (integer).</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-WORC.processing.helpers">
+<span id="helpers-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">helpers</span></code> Module<a class="headerlink" href="#module-WORC.processing.helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.processing.helpers.check_image_orientation">
+<code class="descclassname">WORC.processing.helpers.</code><code class="descname">check_image_orientation</code><span class="sig-paren">(</span><em>image</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#check_image_orientation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.check_image_orientation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the orientation of an ITK image.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.helpers.resample_image">
+<code class="descclassname">WORC.processing.helpers.</code><code class="descname">resample_image</code><span class="sig-paren">(</span><em>image</em>, <em>new_spacing</em>, <em>interpolator=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#resample_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.resample_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample an image to another spacing.</p>
+<dl class="simple">
+<dt>image<span class="classifier">ITK Image</span></dt><dd><p>Input image.</p>
+</dd>
+<dt>new_spacing<span class="classifier">list</span></dt><dd><p>Spacing to resample image to</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>resampled_image<span class="classifier">ITK Image</span></dt><dd><p>Output image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.helpers.transpose_image">
+<code class="descclassname">WORC.processing.helpers.</code><code class="descname">transpose_image</code><span class="sig-paren">(</span><em>image</em>, <em>primary_axis='axial'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/helpers.html#transpose_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.helpers.transpose_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transpose an ITK image, while keeping the metadata.</p>
+</dd></dl>
+
+</div>
 <div class="section" id="module-WORC.processing.label_processing">
 <span id="label-processing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">label_processing</span></code> Module<a class="headerlink" href="#module-WORC.processing.label_processing" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.processing.label_processing.findlabeldata">
-<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">findlabeldata</code><span class="sig-paren">(</span><em>patientinfo</em>, <em>label_type</em>, <em>filenames</em>, <em>image_features_temp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#findlabeldata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.findlabeldata" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.processing.label_processing.</code><code class="descname">findlabeldata</code><span class="sig-paren">(</span><em>patientinfo</em>, <em>label_type</em>, <em>filenames=None</em>, <em>objects=None</em>, <em>pids=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/label_processing.html#findlabeldata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.label_processing.findlabeldata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the label data and match to the unage features.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>patientinfo (string): file with patient label data
 label_type (string): name of the label read out from patientinfo
 filenames (list): names of the patient feature files, used for matching
-image_features (np.array or list): array of the features</p>
+objects (np.array or list): array of objects you want to order as well</p>
 </dd>
 <dt>Returns:</dt><dd><p>label_data (dict): contains patient ids, their labels and the label name</p>
 </dd>
@@ -354,6 +397,145 @@ label_type (list): List of the names of the labels to load</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-WORC.processing.preprocessing">
+<span id="preprocessing-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">preprocessing</span></code> Module<a class="headerlink" href="#module-WORC.processing.preprocessing" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.processing.preprocessing.bias_correct_image">
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">bias_correct_image</code><span class="sig-paren">(</span><em>img</em>, <em>usemask=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#bias_correct_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.bias_correct_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply N4 Bias Correction.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.preprocessing.clip_image">
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">clip_image</code><span class="sig-paren">(</span><em>image</em>, <em>lowerbound=-1000.0</em>, <em>upperbound=3000.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#clip_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.clip_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clip intensity range of an image.</p>
+<p>Parameters
+image: ITK Image</p>
+<blockquote>
+<div><p>Image to normalize</p>
+</div></blockquote>
+<dl class="simple">
+<dt>lowerbound: float, default -1000.0</dt><dd><p>lower bound of clipping range</p>
+</dd>
+<dt>upperbound: float, default 3000.0</dt><dd><p>lower bound of clipping range</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>image<span class="classifier">ITK Image</span></dt><dd><p>Output image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.preprocessing.normalize_image">
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">normalize_image</code><span class="sig-paren">(</span><em>image</em>, <em>mask=None</em>, <em>method='z_score'</em>, <em>Normalize_ROI='Full'</em>, <em>Dilate_ROI='True'</em>, <em>ROI_dilate_radius=5</em>, <em>ROIDetermine='Provided'</em>, <em>AssumeSameImageAndMaskMetadata=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#normalize_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.normalize_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply normalization to an image.</p>
+<dl class="simple">
+<dt>image: ITK Image</dt><dd><p>Image to normalize</p>
+</dd>
+<dt>mask: None or ITK Image</dt><dd><p>Optional: mask to be used for normalization</p>
+</dd>
+<dt>method: string, default z_score</dt><dd><p>Method to be used for normalization.</p>
+</dd>
+<dt>Normalize_ROI: string, default Full</dt><dd><p>ROI to use for normalization, Can be Full or True</p>
+</dd>
+<dt>Dilate_ROI: string, default True</dt><dd><p>Whether to dilate the ROI or not</p>
+</dd>
+<dt>ROI_dilate_radius: int, default 5</dt><dd><p>Radius to use for ROI dilation.</p>
+</dd>
+<dt>ROIDetermine: string, default provided</dt><dd><p>Whether mask is used as ROI or it is determined, e.g. through Otsu.</p>
+</dd>
+<dt>AssumeSameImageAndMaskMetadata: boolean</dt><dd><p>If True, copy metadata from image to mask.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>image<span class="classifier">ITK Image</span></dt><dd><p>Output image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.preprocessing.preprocess">
+<code class="descclassname">WORC.processing.preprocessing.</code><code class="descname">preprocess</code><span class="sig-paren">(</span><em>imagefile</em>, <em>config</em>, <em>metadata=None</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/preprocessing.html#preprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.preprocessing.preprocess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply preprocessing to an image to prepare it for feture extration.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.processing.segmentix">
+<span id="segmentix-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">segmentix</span></code> Module<a class="headerlink" href="#module-WORC.processing.segmentix" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.processing.segmentix.dilate_contour">
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">dilate_contour</code><span class="sig-paren">(</span><em>contour</em>, <em>radius=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#dilate_contour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.dilate_contour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dilate the contour.</p>
+<dl class="simple">
+<dt>contour: numpy array</dt><dd><p>Array containing the contour</p>
+</dd>
+<dt>radius: int, default 5</dt><dd><p>Radius of ring to be extracted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.segmentix.get_ring">
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">get_ring</code><span class="sig-paren">(</span><em>contour</em>, <em>radius=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#get_ring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.get_ring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a ring on the boundary of the contour.</p>
+<dl class="simple">
+<dt>contour: numpy array</dt><dd><p>Array containing the contour</p>
+</dd>
+<dt>radius: int, default 5</dt><dd><p>Radius of ring to be extracted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.segmentix.mask_contour">
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">mask_contour</code><span class="sig-paren">(</span><em>contour</em>, <em>mask</em>, <em>method='multiply'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#mask_contour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.mask_contour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a mask to a contour.</p>
+<dl class="simple">
+<dt>contour: numpy array</dt><dd><p>Array containing the contour</p>
+</dd>
+<dt>mask: string</dt><dd><p>path referring to the mask used for the final segmentation.
+Should be a format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+.raw, .tiff, .nrrd.</p>
+</dd>
+<dt>method: string</dt><dd><p>How masking is applied: can be subtract or pairwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="WORC.processing.segmentix.segmentix">
+<code class="descclassname">WORC.processing.segmentix.</code><code class="descname">segmentix</code><span class="sig-paren">(</span><em>parameters</em>, <em>image=None</em>, <em>segmentation=None</em>, <em>output=None</em>, <em>metadata_file=None</em>, <em>mask=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/processing/segmentix.html#segmentix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.processing.segmentix.segmentix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alter a segmentation.</p>
+<p>Segmentix is a mixture of processing methods that can be applied to
+agument a segmentation. Examples include selecting only the largest blob
+and the application of morphological operations.</p>
+<dl class="simple">
+<dt>parameters: string, mandatory</dt><dd><p>Contains the path referring to a .ini file in which the
+parameters to be used are specified. See the Github Wiki
+for more details on the format and content.</p>
+</dd>
+<dt>image: string, optional</dt><dd><p>Note implemented yet! Image to be used for automatic segmentation.</p>
+</dd>
+<dt>segmentation: string, currently mandatory</dt><dd><p>path referring to the input segmentation file. Should be a
+format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+.raw, .tiff, .nrrd.</p>
+</dd>
+<dt>output: string, mandatory</dt><dd><p>path referring to the output segmentation file. Should be a
+format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+.raw, .tiff, .nrrd.</p>
+</dd>
+<dt>metadata_file: string, optional</dt><dd><p>Note implemented yet! Path referring to the .dcm from which
+fields can be used as metadata for segmentation.</p>
+</dd>
+<dt>mask: string, optional</dt><dd><p>path referring to the mask used for the final segmentation.
+Should be a format compatible with ITK, e.g. .nii, .nii.gz, .mhd,
+.raw, .tiff, .nrrd.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -376,7 +558,7 @@ label_type (list): List of the names of the labels to load</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>

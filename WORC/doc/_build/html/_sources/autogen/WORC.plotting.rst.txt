@@ -37,15 +37,6 @@ plotting Package
     :show-inheritance:
     :special-members:
 
-:mod:`plot_SVM` Module
-----------------------
-
-.. automodule:: WORC.plotting.plot_SVM
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :special-members:
-
 :mod:`plot_barchart` Module
 ---------------------------
 
@@ -55,10 +46,37 @@ plotting Package
     :show-inheritance:
     :special-members:
 
-:mod:`plot_boxplot` Module
---------------------------
+:mod:`plot_boxplot_features` Module
+-----------------------------------
 
-.. automodule:: WORC.plotting.plot_boxplot
+.. automodule:: WORC.plotting.plot_boxplot_features
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`plot_boxplot_performance` Module
+--------------------------------------
+
+.. automodule:: WORC.plotting.plot_boxplot_performance
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`plot_estimator_performance` Module
+----------------------------------------
+
+.. automodule:: WORC.plotting.plot_estimator_performance
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`plot_hyperparameters` Module
+----------------------------------
+
+.. automodule:: WORC.plotting.plot_hyperparameters
     :members:
     :undoc-members:
     :show-inheritance:
@@ -68,6 +86,15 @@ plotting Package
 -------------------------
 
 .. automodule:: WORC.plotting.plot_images
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`plot_pvalues_features` Module
+-----------------------------------
+
+.. automodule:: WORC.plotting.plot_pvalues_features
     :members:
     :undoc-members:
     :show-inheritance:

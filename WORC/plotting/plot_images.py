@@ -39,9 +39,9 @@ def extract_boundary(contour, radius=2):
             contour_e = morphology.binary_erosion(contour[ind, :, :], disk)
             contour[ind, :, :] = np.bitwise_xor(contour_d, contour_e)
     else:
-            contour_d = morphology.binary_dilation(contour, disk)
-            contour_e = morphology.binary_erosion(contour, disk)
-            contour = np.bitwise_xor(contour_d, contour_e)
+        contour_d = morphology.binary_dilation(contour, disk)
+        contour_e = morphology.binary_erosion(contour, disk)
+        contour = np.bitwise_xor(contour_d, contour_e)
 
     contour = contour.astype(np.uint16)  # To be compatible with SimpleITK
     if returnitk:
@@ -50,10 +50,10 @@ def extract_boundary(contour, radius=2):
         return contour
 
 
-def slicer(image, mask, output_name, output_name_zoom=None,
+def slicer(image, mask=None, output_name=None, output_name_zoom=None,
            thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False,
            expand=False, boundary=False, square=False, flip=True,
-           alpha=0.40):
+           alpha=0.40, index=None):
     '''
     image and mask should both be arrays
     '''
@@ -65,23 +65,34 @@ def slicer(image, mask, output_name, output_name_zoom=None,
 
     # Convert images to numpy arrays
     image = sitk.GetArrayFromImage(image)
-    mask = sitk.GetArrayFromImage(mask)
+    if mask is not None:
+        mask = sitk.GetArrayFromImage(mask)
 
     # Determine which axial slice has the largest area
-    areas = np.sum(mask, axis=1).tolist()
-    max_ind = areas.index(max(areas))
-    imslice = image[max_ind, :, :]
-    maskslice = mask[max_ind, :, :]
+    if index is None:
+        if mask is not None:
+            areas = np.sum(mask, axis=1).tolist()
+            index = areas.index(max(areas))
+        else:
+            index = int(image.shape[0]/2)
+
+    imslice = image[index, :, :]
+    if mask is not None:
+        maskslice = mask[index, :, :]
+    else:
+        maskslice = None
 
     # Rotate, as this is not done automatically
     if flip:
         print('\t Flipping up-down.')
         imslice = np.flipud(imslice)
-        maskslice = np.flipud(maskslice)
+        if mask is not None:
+            maskslice = np.flipud(maskslice)
 
-    if boundary:
-        print('\t Extracting boundary.')
-        maskslice = extract_boundary(maskslice)
+    if mask is not None:
+        if boundary:
+            print('\t Extracting boundary.')
+            maskslice = extract_boundary(maskslice)
 
     if normalize:
         print('\t Normalizing.')
@@ -99,27 +110,31 @@ def slicer(image, mask, output_name, output_name_zoom=None,
                 newimslice[:, int(diff/2.0):sz[1] + int(diff/2.0)] = imslice
                 imslice = newimslice
 
-                newmaskslice = np.zeros((sz[0], sz[0]))
-                newmaskslice[:, int(diff/2.0):sz[1] + int(diff/2.0)] = maskslice
-                maskslice = newmaskslice
+                if mask is not None:
+                    newmaskslice = np.zeros((sz[0], sz[0]))
+                    newmaskslice[:, int(diff/2.0):sz[1] + int(diff/2.0)] = maskslice
+                    maskslice = newmaskslice
             else:
                 diff = sz[1] - sz[0]
                 newimslice = np.ones((sz[1], sz[1])) * np.min(imslice)
                 newimslice[int(diff/2.0):sz[0] + int(diff/2.0), :] = imslice
                 imslice = newimslice
 
-                newmaskslice = np.zeros((sz[1], sz[1]))
-                newmaskslice[int(diff/2.0):sz[0] + int(diff/2.0), :] = maskslice
-                maskslice = newmaskslice
+                if mask is not None:
+                    newmaskslice = np.zeros((sz[1], sz[1]))
+                    newmaskslice[int(diff/2.0):sz[0] + int(diff/2.0), :] = maskslice
+                    maskslice = newmaskslice
 
     if expand:
         print('\t Expanding.')
         imslice = sitk.GetImageFromArray(imslice)
-        maskslice = sitk.GetImageFromArray(maskslice)
+        if mask is not None:
+            maskslice = sitk.GetImageFromArray(maskslice)
 
         newsize = (4, 4)
         imslice = sitk.Expand(imslice, newsize)
-        maskslice = sitk.Expand(maskslice, newsize)
+        if mask is not None:
+            maskslice = sitk.Expand(maskslice, newsize)
 
         # Adjust the size
         spacing = float(imslice.GetSpacing()[0])
@@ -127,7 +142,8 @@ def slicer(image, mask, output_name, output_name_zoom=None,
         figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
 
         imslice = sitk.GetArrayFromImage(imslice)
-        maskslice = sitk.GetArrayFromImage(maskslice)
+        if mask is not None:
+            maskslice = sitk.GetArrayFromImage(maskslice)
 
     # Threshold the image if desired
     if thresholds:
@@ -145,25 +161,26 @@ def slicer(image, mask, output_name, output_name_zoom=None,
     # Save some memory
     # del fig
 
-    if output_name_zoom is not None:
-        # Create a bounding box and save zoomed image
-        imslice, maskslice = bbox_2D(imslice, maskslice, padding=[20, 20])
-        imsize = [float(imslice.shape[0]), float(imslice.shape[1])]
+    if mask is not None:
+        if output_name_zoom is not None:
+            # Create a bounding box and save zoomed image
+            imslice, maskslice = bbox_2D(imslice, maskslice, padding=[20, 20])
+            imsize = [float(imslice.shape[0]), float(imslice.shape[1])]
 
-        # NOTE: As these zoomed images get small, we double the spacing
-        spacing = spacing * zoomfactor
-        figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
-        fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize, alpha=alpha)
-        fig.savefig(output_name_zoom, bbox_inches='tight', pad_inches=0, dpi=dpi)
-        plt.close('all')
+            # NOTE: As these zoomed images get small, we double the spacing
+            spacing = spacing * zoomfactor
+            figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
+            fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize, alpha=alpha)
+            fig.savefig(output_name_zoom, bbox_inches='tight', pad_inches=0, dpi=dpi)
+            plt.close('all')
 
-        # Save some memory
-        del fig, image, mask
+            # Save some memory
+            del fig, image, mask
 
     return imslice, maskslice
 
 
-def plot_im_and_overlay(image, mask, figsize=(3, 3), alpha=0.40):
+def plot_im_and_overlay(image, mask=None, figsize=(3, 3), alpha=0.40):
     '''
     Plot an image in a matplotlib figure and overlay with a mask.
     '''
@@ -181,7 +198,8 @@ def plot_im_and_overlay(image, mask, figsize=(3, 3), alpha=0.40):
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(1, 1, 1)
     ax.imshow(image, cmap=plt.cm.gray, norm=norm_im, interpolation="bilinear")
-    ax.imshow(mask, cmap=cmap, norm=normO, alpha=alpha, interpolation="bilinear")
+    if mask is not None:
+        ax.imshow(mask, cmap=cmap, norm=normO, alpha=alpha, interpolation="bilinear")
 
     # Set locator to zero to make sure padding is removed upon saving
     ax.xaxis.set_major_locator(NullLocator())

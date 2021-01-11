@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,8 +24,9 @@ from WORC.classification import construct_classifier as cc
 def random_search_parameters(features, labels, N_iter, test_size,
                              param_grid, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
-                             n_cores=1, fastr_plugin=None, maxlen=100,
-                             ranking_score='test_score'):
+                             n_cores=1, fastr_plugin=None, memory='2G',
+                             maxlen=100,
+                             ranking_score='test_score', random_seed=None):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
     randomized search.
@@ -52,8 +53,8 @@ def random_search_parameters(features, labels, N_iter, test_size,
     Returns:
         random_search: sklearn randomsearch object containing the results.
     """
-
-    random_seed = np.random.randint(1, 5000)
+    if random_seed is None:
+        random_seed = np.random.randint(1, 5000)
     random_state = check_random_state(random_seed)
 
     if any(clf in cc.list_regression_classifiers() for clf in param_grid['classifiers']):
@@ -73,6 +74,7 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                                 maxlen=maxlen,
                                                 verbose=1, cv=cv,
                                                 fastr_plugin=fastr_plugin,
+                                                memory=memory,
                                                 ranking_score=ranking_score)
     else:
         random_search = RandomizedSearchCVJoblib(param_distributions=param_grid,
@@ -83,12 +85,12 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                                  maxlen=maxlen,
                                                  verbose=1, cv=cv,
                                                  fastr_plugin=fastr_plugin,
+                                                 memory=memory,
                                                  ranking_score=ranking_score)
     random_search.fit(features, labels)
     print("Best found parameters:")
     for i in random_search.best_params_:
         print(f'{i}: {random_search.best_params_[i]}.')
-    print("\n Best score using best parameters:")
-    print(random_search.best_score_)
+    print(f"\n Best score using best parameters: {scoring_method} = {random_search.best_score_}")
 
     return random_search

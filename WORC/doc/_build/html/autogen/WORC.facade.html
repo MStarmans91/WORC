@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>facade Package &mdash; WORC 3.1.3 documentation</title>
+  <title>facade Package &mdash; WORC 3.3.5 documentation</title>
   
 
   
@@ -55,13 +55,16 @@
           
 
           
+            
+            <img src="../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          
           </a>
 
           
             
             
               <div class="version">
-                3.1.3
+                3.3.5
               </div>
             
           
@@ -90,6 +93,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/features.html">Radiomics Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
 </ul>
@@ -115,6 +122,8 @@
 <li class="toctree-l3"><a class="reference internal" href="WORC.plotting.html">plotting Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.resources.html">resources Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.statistics.html">statistics Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.tests.html">tests Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
 </ul>
@@ -196,12 +205,24 @@
 <span id="basicworc-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">basicworc</span></code> Module<a class="headerlink" href="#module-WORC.facade.basicworc" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WORC.facade.basicworc.BasicWORC">
-<em class="property">class </em><code class="descclassname">WORC.facade.basicworc.</code><code class="descname">BasicWORC</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.facade.basicworc.</code><code class="descname">BasicWORC</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC" title="WORC.facade.simpleworc.SimpleWORC"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.facade.simpleworc.SimpleWORC</span></code></a></p>
+<p>Facade around the main WORC object for simple interaction.</p>
+<p>Based upon the SimpleWORC object, but with additional functionality:
+- Sources of WORC (e.g. images_train, segmentations_train, …)</p>
+<blockquote>
+<div><p>can be directly assessed.</p>
+</div></blockquote>
+<p>Please also see the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.</p>
 <dl class="method">
 <dt id="WORC.facade.basicworc.BasicWORC.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize SimpleWORC object.</p>
+<dl class="simple">
+<dt>name: string, default WORC</dt><dd><p>String to identify name of experiments. Will be used in the temporary files and outputs.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="WORC.facade.basicworc.BasicWORC.__module__">
@@ -210,8 +231,12 @@
 
 <dl class="method">
 <dt id="WORC.facade.basicworc.BasicWORC.execute">
-<code class="descname">execute</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.execute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the experiment.</p>
+<p>Before executing the actual experiment, this function will first run several validators
+and check the provided setup to make sure some of the most common
+made error are caught before running the experiment.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -220,17 +245,24 @@
 <span id="simpleworc-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">simpleworc</span></code> Module<a class="headerlink" href="#module-WORC.facade.simpleworc" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WORC.facade.simpleworc.SimpleWORC">
-<em class="property">class </em><code class="descclassname">WORC.facade.simpleworc.</code><code class="descname">SimpleWORC</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.facade.simpleworc.</code><code class="descname">SimpleWORC</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Facade around the main WORC object for simple interaction.</p>
+<p>Please also see the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.</p>
 <dl class="attribute">
 <dt id="WORC.facade.simpleworc.SimpleWORC.__dict__">
-<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.facade.simpleworc', '__init__': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'features_from_this_directory': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'images_from_this_directory': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'segmentations_from_this_directory': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'labels_from_this_file': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'semantics_from_this_file': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'predict_labels': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, '_set_and_validate_estimators': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'count_num_subjects': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, '_validate': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'execute': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'binary_classification': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'regression': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'survival': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'add_config_overrides': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'add_evaluation': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'set_tmpdir': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'set_multicore_execution': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, 'features_from_radiomix_xlsx': &lt;function _error_buldozer.&lt;locals&gt;.dec&gt;, '__dict__': &lt;attribute '__dict__' of 'SimpleWORC' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'SimpleWORC' objects&gt;, '__doc__': None})</em><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__dict__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.facade.simpleworc', '__doc__': 'Facade around the main WORC object for simple interaction.\n\n    Please also see the `WORCTutorial Github &lt;https://github.com/MStarmans91/WORCTutorial/&gt;`_.\n    ', '__init__': &lt;function SimpleWORC.__init__&gt;, 'features_from_this_directory': &lt;function SimpleWORC.features_from_this_directory&gt;, 'images_from_this_directory': &lt;function SimpleWORC.images_from_this_directory&gt;, 'segmentations_from_this_directory': &lt;function SimpleWORC.segmentations_from_this_directory&gt;, 'labels_from_this_file': &lt;function SimpleWORC.labels_from_this_file&gt;, 'semantics_from_this_file': &lt;function SimpleWORC.semantics_from_this_file&gt;, 'predict_labels': &lt;function SimpleWORC.predict_labels&gt;, '_set_and_validate_estimators': &lt;function SimpleWORC._set_and_validate_estimators&gt;, 'count_num_subjects': &lt;function SimpleWORC.count_num_subjects&gt;, '_validate': &lt;function SimpleWORC._validate&gt;, 'execute': &lt;function SimpleWORC.execute&gt;, 'binary_classification': &lt;function SimpleWORC.binary_classification&gt;, 'regression': &lt;function SimpleWORC.regression&gt;, 'survival': &lt;function SimpleWORC.survival&gt;, 'add_config_overrides': &lt;function SimpleWORC.add_config_overrides&gt;, 'add_evaluation': &lt;function SimpleWORC.add_evaluation&gt;, 'set_tmpdir': &lt;function SimpleWORC.set_tmpdir&gt;, 'set_multicore_execution': &lt;function SimpleWORC.set_multicore_execution&gt;, 'features_from_radiomix_xlsx': &lt;function SimpleWORC.features_from_radiomix_xlsx&gt;, '__dict__': &lt;attribute '__dict__' of 'SimpleWORC' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'SimpleWORC' objects&gt;})</em><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__dict__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>name='WORC'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize SimpleWORC object.</p>
+<dl class="simple">
+<dt>name: string, default WORC</dt><dd><p>String to identify name of experiments. Will be used in the temporary files and outputs.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="WORC.facade.simpleworc.SimpleWORC.__module__">
@@ -245,83 +277,230 @@
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.add_config_overrides">
-<code class="descname">add_config_overrides</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.add_config_overrides"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.add_config_overrides" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">add_config_overrides</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.add_config_overrides"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.add_config_overrides" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add manual overrides for the WORC configuration.</p>
+<p>For a full list of options, see the
+<a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
+<dl class="simple">
+<dt>config: dictionary</dt><dd><p>Determine which options to override with which values.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.add_evaluation">
-<code class="descname">add_evaluation</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.add_evaluation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.add_evaluation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">add_evaluation</code><span class="sig-paren">(</span><em>selected_label=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.add_evaluation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.add_evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the evaluation workflow to the standard WORC workflow.</p>
+<p>Adds several evaluation measures, including:</p>
+<ul class="simple">
+<li><p>Computation of 95% confidence intervals for performance</p></li>
+<li><p>Univariate testing of features</p></li>
+<li><p>ROC curve with confidence bands construction</p></li>
+<li><p>Ranking of patients based on percentage / posterior</p></li>
+<li><p>Decompositions (e.g. PCA, t-SNE)</p></li>
+</ul>
+<p>See the <span class="xref std std-ref">WORC documentation</span> for additional info.</p>
+<dl class="simple">
+<dt>selected_label: integer, default 0</dt><dd><p>Determine for which of the labels to be predicted the evaluate workflow
+should be executed.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.binary_classification">
-<code class="descname">binary_classification</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.binary_classification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.binary_classification" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">binary_classification</code><span class="sig-paren">(</span><em>estimators=None</em>, <em>scoring_method='f1_weighted'</em>, <em>coarse=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.binary_classification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.binary_classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell WORC do to a binary classification experiment.</p>
+<dl>
+<dt>estimators: list</dt><dd><p>List of strings with names of valid estimators. See the
+<a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
+<p>If coarse, only an SVM will be used. If not, the default full
+config will be used.</p>
+</dd>
+<dt>scoring_method: string, default f1</dt><dd><p>Name of the scoring method used to rank the workflows. See the
+<a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
+</dd>
+<dt>coarse: boolean, default True</dt><dd><p>Determine whether to do a coarse or full experiment.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.count_num_subjects">
-<code class="descname">count_num_subjects</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.count_num_subjects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.count_num_subjects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">count_num_subjects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.count_num_subjects"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.count_num_subjects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count the number of subjects in the experiment.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.execute">
-<code class="descname">execute</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.execute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the experiment.</p>
+<p>Before executing the actual experiment, this function will first run several validators
+and check the provided setup to make sure some of the most common
+made error are caught before running the experiment.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.features_from_radiomix_xlsx">
-<code class="descname">features_from_radiomix_xlsx</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.features_from_radiomix_xlsx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.features_from_radiomix_xlsx" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">features_from_radiomix_xlsx</code><span class="sig-paren">(</span><em>feature_file</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.features_from_radiomix_xlsx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.features_from_radiomix_xlsx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use a feature file which is generated by the OncoRadiomics Radiomix tool.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.features_from_this_directory">
-<code class="descname">features_from_this_directory</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.features_from_this_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.features_from_this_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">features_from_this_directory</code><span class="sig-paren">(</span><em>directory</em>, <em>feature_file_name='features.hdf5'</em>, <em>glob='*/'</em>, <em>is_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.features_from_this_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.features_from_this_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use features from a directory as sources in WORC.</p>
+<p>SimpleWORC uses a directory glob to look for files meeting
+the requirements to include, based on the input parameters.</p>
+<p>Example:
+When using “directory = C:UsersMyNameFeatureFolder”,
+features_from_this_directory will include all features.hdf5 files from all subfolders in the directory.</p>
+<dl class="simple">
+<dt>directory: string</dt><dd><p>Identifies the root directory in which to search for feature files.</p>
+</dd>
+<dt>feature_file_name: string, default features.hdf5</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
+</dd>
+<dt>glob: string, default <a href="#id3"><span class="problematic" id="id4">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+</dd>
+<dt>is_training: Boolean, default True</dt><dd><p>Identify whether these features should be used in the training or test dataset.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.images_from_this_directory">
-<code class="descname">images_from_this_directory</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.images_from_this_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.images_from_this_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">images_from_this_directory</code><span class="sig-paren">(</span><em>directory</em>, <em>image_file_name='image.nii.gz'</em>, <em>glob='*/'</em>, <em>is_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.images_from_this_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.images_from_this_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use images from a directory as sources in WORC.</p>
+<p>SimpleWORC uses a directory glob to look for files meeting
+the requirements to include, based on the input parameters.</p>
+<p>Example:
+When using “directory = C:UsersMyNameImageFolder”,
+images_from_this_directory will include all image.nii.gz files from all subfolders in the directory.</p>
+<dl class="simple">
+<dt>directory: string</dt><dd><p>Identifies the root directory in which to search for image files.</p>
+</dd>
+<dt>image_file_name: string, default image.nii.gz</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
+</dd>
+<dt>glob: string, default <a href="#id5"><span class="problematic" id="id6">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+</dd>
+<dt>is_training: Boolean, default True</dt><dd><p>Identify whether these images should be used in the training or test dataset.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.labels_from_this_file">
-<code class="descname">labels_from_this_file</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.labels_from_this_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.labels_from_this_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">labels_from_this_file</code><span class="sig-paren">(</span><em>file_path</em>, <em>is_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.labels_from_this_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.labels_from_this_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define which file should be used by WORC to extract the object labels.</p>
+<p>Should be a .csv or .txt file: see
+<span class="xref std std-ref">the WORC user manual</span> for more details on
+the formatting of this file.</p>
+<dl class="simple">
+<dt>file_path: basestring</dt><dd><p>Location of the file to be used as label file. Can be a .csv or .txt file.</p>
+</dd>
+<dt>is_training: Boolean, default True</dt><dd><p>Identify whether this label file should be used in the training or test dataset.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.predict_labels">
-<code class="descname">predict_labels</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.predict_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.predict_labels" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">predict_labels</code><span class="sig-paren">(</span><em>label_names</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.predict_labels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.predict_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine which label(s) to predict in your experiments.</p>
+<p>The labels(s) you want to predict should be given in strings and
+should be included in the header of your labels_from_this_file csv.
+Note that you therefore first need to use that function to determine
+which label file to use, and afterwards use this function
+to select one of the headers / columns containing the actual label.</p>
+<dl class="simple">
+<dt>label_names: list</dt><dd><p>List of strings containing the label name(s) to predict. For each
+label, a separate (classification) model will be created, or,
+if a multilabel experiment is run, a singel multiclass / multilabel
+classification model</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.regression">
-<code class="descname">regression</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.regression" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">regression</code><span class="sig-paren">(</span><em>estimators=None</em>, <em>scoring_method='r2'</em>, <em>coarse=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell WORC do to a regression experiment.</p>
+<dl>
+<dt>estimators: list</dt><dd><p>List of strings with names of valid estimators. See the
+<a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
+<p>If coarse, only SVR will be used. If not, the default full
+config will be used.</p>
+</dd>
+<dt>scoring_method: string, default r2</dt><dd><p>Name of the scoring method used to rank the workflows. See the
+<a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
+</dd>
+<dt>coarse: boolean, default True</dt><dd><p>Determine whether to do a coarse or full experiment.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.segmentations_from_this_directory">
-<code class="descname">segmentations_from_this_directory</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.segmentations_from_this_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.segmentations_from_this_directory" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">segmentations_from_this_directory</code><span class="sig-paren">(</span><em>directory</em>, <em>segmentation_file_name='segmentation.nii.gz'</em>, <em>glob='*/'</em>, <em>is_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.segmentations_from_this_directory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.segmentations_from_this_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use segmentations from a directory as sources in WORC.</p>
+<p>SimpleWORC uses a directory glob to look for files meeting
+the requirements to include, based on the input parameters.</p>
+<p>Example:
+When using “directory = C:UsersMyNameSegmentationFolder”,
+segmentations_from_this_directory will include all segmentation.nii.gz files from all subfolders in the directory.</p>
+<dl class="simple">
+<dt>directory: string</dt><dd><p>Identifies the root directory in which to search for segmentation files.</p>
+</dd>
+<dt>segmentation_file_name: string, default segmentation.nii.gz</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
+</dd>
+<dt>glob: string, default <a href="#id7"><span class="problematic" id="id8">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+</dd>
+<dt>is_training: Boolean, default True</dt><dd><p>Identify whether these segmentations should be used in the training or test dataset.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.semantics_from_this_file">
-<code class="descname">semantics_from_this_file</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.semantics_from_this_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.semantics_from_this_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">semantics_from_this_file</code><span class="sig-paren">(</span><em>file_path</em>, <em>is_training=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.semantics_from_this_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.semantics_from_this_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define which file should be used by WORC to extract the semantic features.</p>
+<p>The values in these file can be used as semantic, i.e. non-computational,
+features in WORC. Should be a .csv file: see
+<span class="xref std std-ref">the WORC user manual</span> for more details on
+the formatting of this file.</p>
+<dl class="simple">
+<dt>file_path: basestring</dt><dd><p>Location of the file to be used as semantics file. Can be a .csv or .txt file.</p>
+</dd>
+<dt>is_training: Boolean, default True</dt><dd><p>Identify whether this semantics  file should be used in the training or test dataset.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.set_multicore_execution">
-<code class="descname">set_multicore_execution</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_multicore_execution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_multicore_execution" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">set_multicore_execution</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_multicore_execution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_multicore_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>“Execute experiment in multicore mode.</p>
+<p>By default, SimpleWORC executes experiments in LinearExecution mode, meaning that
+only a single core will be used and jobs are executed in series. When multicore mode
+is enabled, jobs are parallellized over all available cores, which majorly speeds
+up the computation.</p>
+<p>Note: SimpleWORC has an automatic detector for the BIGR and Cartesius cluster. Hence,
+on those clusters, do not use the multicore execution, as this will overwrite
+the changes applied by the detectors.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.set_tmpdir">
-<code class="descname">set_tmpdir</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_tmpdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_tmpdir" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">set_tmpdir</code><span class="sig-paren">(</span><em>tmpdir</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_tmpdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_tmpdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a directory for storing temporary files from the experiment.</p>
+<p>If not specified, the default fastr tmpdir is used, see <code class="docutils literal notranslate"><span class="pre">fastr.config.mounts['tmp']</span></code> .</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="WORC.facade.simpleworc.SimpleWORC.survival">
-<code class="descname">survival</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.survival"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.survival" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">survival</code><span class="sig-paren">(</span><em>estimators</em>, <em>scoring_method</em>, <em>coarse=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.survival"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.survival" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell WORC do to a regression experiment. Not implemented yet.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -361,7 +540,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2019, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>

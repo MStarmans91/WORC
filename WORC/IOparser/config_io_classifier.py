@@ -22,14 +22,14 @@ import WORC.addexceptions as ae
 
 
 def load_config(config_file_path):
-    """
-    Load the config ini, parse settings to WORC
+    """Load the config ini, parse settings to WORC.
 
     Args:
         config_file_path (String): path of the .ini config file
 
     Returns:
         settings_dict (dict): dict with the loaded settings
+
     """
     if not os.path.exists(config_file_path):
         e = f'File {config_file_path} does not exist!'
@@ -42,9 +42,10 @@ def load_config(config_file_path):
                      'Labels': dict(), 'HyperOptimization': dict(),
                      'Classification': dict(), 'SelectFeatGroup': dict(),
                      'Featsel': dict(), 'FeatureScaling': dict(),
-                     'SampleProcessing': dict(), 'Imputation': dict(),
+                     'Resampling': dict(), 'Imputation': dict(),
                      'Ensemble': dict(), 'Bootstrap': dict(),
-                     'FeatPreProcess': dict()}
+                     'FeatPreProcess': dict(), 'Evaluation': dict(),
+                     'OneHotEncoding': dict()}
 
     settings_dict['General']['cross_validation'] =\
         settings['General'].getboolean('cross_validation')
@@ -58,29 +59,50 @@ def load_config(config_file_path):
     settings_dict['General']['tempsave'] =\
         settings['General'].getboolean('tempsave')
 
-    settings_dict['Featsel']['Variance'] =\
+    # Feature Scaling
+    settings_dict['FeatureScaling']['scale_features'] =\
+        settings['FeatureScaling'].getboolean('scale_features')
+
+    settings_dict['FeatureScaling']['scaling_method'] =\
         [str(item).strip() for item in
-         settings['Featsel']['Variance'].split(',')]
+         settings['FeatureScaling']['scaling_method'].split(',')]
+
+    settings_dict['FeatureScaling']['skip_features'] =\
+        [str(item).strip() for item in
+         settings['FeatureScaling']['skip_features'].split(',')]
+
+    # Feature selection
+    settings_dict['Featsel']['Variance'] =\
+        settings['Featsel'].getfloat('Variance')
 
     settings_dict['Featsel']['SelectFromModel'] =\
+        settings['Featsel'].getfloat('SelectFromModel')
+
+    settings_dict['Featsel']['SelectFromModel_lasso_alpha'] =\
+        [float(str(item).strip()) for item in
+         settings['Featsel']['SelectFromModel_lasso_alpha'].split(',')]
+
+    settings_dict['Featsel']['SelectFromModel_estimator'] =\
         [str(item).strip() for item in
-         settings['Featsel']['SelectFromModel'].split(',')]
+         settings['Featsel']['SelectFromModel_estimator'].split(',')]
+
+    settings_dict['Featsel']['SelectFromModel_n_trees'] =\
+        [int(str(item).strip()) for item in
+         settings['Featsel']['SelectFromModel_n_trees'].split(',')]
 
     settings_dict['Featsel']['GroupwiseSearch'] =\
         [str(item).strip() for item in
          settings['Featsel']['GroupwiseSearch'].split(',')]
 
     settings_dict['Featsel']['UsePCA'] =\
-        [str(item).strip() for item in
-         settings['Featsel']['UsePCA'].split(',')]
+        settings['Featsel'].getfloat('UsePCA')
 
     settings_dict['Featsel']['PCAType'] =\
         [str(item).strip() for item in
          settings['Featsel']['PCAType'].split(',')]
 
     settings_dict['Featsel']['StatisticalTestUse'] =\
-        [str(item).strip() for item in
-         settings['Featsel']['StatisticalTestUse'].split(',')]
+        settings['Featsel'].getfloat('StatisticalTestUse')
 
     settings_dict['Featsel']['StatisticalTestMetric'] =\
         [str(item).strip() for item in
@@ -91,15 +113,14 @@ def load_config(config_file_path):
          settings['Featsel']['StatisticalTestThreshold'].split(',')]
 
     settings_dict['Featsel']['ReliefUse'] =\
-        [str(item).strip() for item in
-         settings['Featsel']['ReliefUse'].split(',')]
+        settings['Featsel'].getfloat('ReliefUse')
 
     settings_dict['Featsel']['ReliefNN'] =\
         [int(str(item).strip()) for item in
          settings['Featsel']['ReliefNN'].split(',')]
 
     settings_dict['Featsel']['ReliefSampleSize'] =\
-        [int(str(item).strip()) for item in
+        [float(str(item).strip()) for item in
          settings['Featsel']['ReliefSampleSize'].split(',')]
 
     settings_dict['Featsel']['ReliefDistanceP'] =\
@@ -113,6 +134,7 @@ def load_config(config_file_path):
     settings_dict['FeatPreProcess']['Use'] =\
         [str(settings['FeatPreProcess']['Use'])]
 
+    # Imputation
     settings_dict['Imputation']['use'] =\
         [str(item).strip() for item in
          settings['Imputation']['use'].split(',')]
@@ -125,14 +147,49 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Imputation']['n_neighbors'].split(',')]
 
-    settings_dict['General']['FeatureCalculator'] =\
-        str(settings['General']['FeatureCalculator'])
+    # OneHotEncoding
+    settings_dict['OneHotEncoding']['Use'] =\
+        [str(item).strip() for item in
+         settings['Imputation']['use'].split(',')]
+
+    settings_dict['OneHotEncoding']['feature_labels_tofit'] =\
+        [str(item).strip() for item in
+         settings['OneHotEncoding']['feature_labels_tofit'].split(',')]
+
+    # General
+    settings_dict['General']['FeatureCalculators'] =\
+        [str(item).strip() for item in
+         settings['General']['FeatureCalculators'].split(',')]
 
     # Feature selection options
     for key in settings['SelectFeatGroup'].keys():
         settings_dict['SelectFeatGroup'][key] =\
             [str(item).strip() for item in
              settings['SelectFeatGroup'][key].split(',')]
+
+    # Settings for sample processing, i.e. oversampling, undersampling etc
+    settings_dict['Resampling']['Use'] =\
+        settings['Resampling'].getfloat('Use')
+
+    settings_dict['Resampling']['Method'] =\
+        [str(item).strip() for item in
+         settings['Resampling']['Method'].split(',')]
+
+    settings_dict['Resampling']['sampling_strategy'] =\
+        [str(item).strip() for item in
+         settings['Resampling']['sampling_strategy'].split(',')]
+
+    settings_dict['Resampling']['n_neighbors'] =\
+        [int(str(item).strip()) for item in
+         settings['Resampling']['n_neighbors'].split(',')]
+
+    settings_dict['Resampling']['k_neighbors'] =\
+        [int(str(item).strip()) for item in
+         settings['Resampling']['k_neighbors'].split(',')]
+
+    settings_dict['Resampling']['threshold_cleaning'] =\
+        [float(str(item).strip()) for item in
+         settings['Resampling']['threshold_cleaning'].split(',')]
 
     # Classification options
     settings_dict['Classification']['fastr'] =\
@@ -188,6 +245,12 @@ def load_config(config_file_path):
     settings_dict['Classification']['LRC'] =\
         [float(str(item).strip()) for item in
          settings['Classification']['LRC'].split(',')]
+    settings_dict['Classification']['LR_solver'] =\
+        [str(item).strip() for item in
+         settings['Classification']['LR_solver'].split(',')]
+    settings_dict['Classification']['LR_l1_ratio'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['LR_l1_ratio'].split(',')]
 
     # Specific LDA/QDA options
     settings_dict['Classification']['LDA_solver'] =\
@@ -227,7 +290,44 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Classification']['CNB_alpha'].split(',')]
 
+    # AdaBoost
+    settings_dict['Classification']['AdaBoost_n_estimators'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['AdaBoost_n_estimators'].split(',')]
+
+    settings_dict['Classification']['AdaBoost_learning_rate'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['AdaBoost_learning_rate'].split(',')]
+
+    # XGD Boost
+    settings_dict['Classification']['XGB_boosting_rounds'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['XGB_boosting_rounds'].split(',')]
+
+    settings_dict['Classification']['XGB_max_depth'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['XGB_max_depth'].split(',')]
+
+    settings_dict['Classification']['XGB_learning_rate'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['XGB_learning_rate'].split(',')]
+
+    settings_dict['Classification']['XGB_gamma'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['XGB_gamma'].split(',')]
+
+    settings_dict['Classification']['XGB_min_child_weight'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['XGB_min_child_weight'].split(',')]
+
+    settings_dict['Classification']['XGB_colsample_bytree'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['XGB_colsample_bytree'].split(',')]
+
     # Cross validation settings
+    settings_dict['CrossValidation']['Type'] =\
+        str(settings['CrossValidation']['Type'])
+
     settings_dict['CrossValidation']['N_iterations'] =\
         settings['CrossValidation'].getint('N_iterations')
 
@@ -260,32 +360,15 @@ def load_config(config_file_path):
         settings['HyperOptimization'].getint('maxlen')
     settings_dict['HyperOptimization']['ranking_score'] = \
         str(settings['HyperOptimization']['ranking_score'])
-
-    settings_dict['FeatureScaling']['scale_features'] =\
-        settings['FeatureScaling'].getboolean('scale_features')
-    settings_dict['FeatureScaling']['scaling_method'] =\
-        str(settings['FeatureScaling']['scaling_method'])
-
-    # Settings for sample processing, i.e. oversampling, undersampling etc
-    settings_dict['SampleProcessing']['SMOTE'] =\
-        [str(item).strip() for item in
-         settings['SampleProcessing']['SMOTE'].split(',')]
-
-    settings_dict['SampleProcessing']['SMOTE_ratio'] =\
-        [int(str(item).strip()) for item in
-         settings['SampleProcessing']['SMOTE_ratio'].split(',')]
-
-    settings_dict['SampleProcessing']['SMOTE_neighbors'] =\
-        [int(str(item).strip()) for item in
-         settings['SampleProcessing']['SMOTE_neighbors'].split(',')]
-
-    settings_dict['SampleProcessing']['Oversampling'] =\
-        [str(item).strip() for item in
-         settings['SampleProcessing']['Oversampling'].split(',')]
+    settings_dict['HyperOptimization']['memory'] = \
+        str(settings['HyperOptimization']['memory'])
 
     # Settings for ensembling
     settings_dict['Ensemble']['Use'] =\
         settings['Ensemble'].getint('Use')
+
+    settings_dict['Ensemble']['Metric'] =\
+        settings['Ensemble']['Metric']
 
     # Settings for bootstrapping
     settings_dict['Bootstrap']['Use'] =\
@@ -293,5 +376,9 @@ def load_config(config_file_path):
 
     settings_dict['Bootstrap']['N_iterations'] =\
         settings['Bootstrap'].getint('N_iterations')
+
+    # Settings for evaluation
+    settings_dict['Evaluation']['OverfitScaler'] =\
+        settings['Evaluation'].getboolean('OverfitScaler')
 
     return settings_dict
