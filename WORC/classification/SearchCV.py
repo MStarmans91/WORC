@@ -381,11 +381,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.cv = cv
         self.verbose = verbose
         self.pre_dispatch = pre_dispatch
+
+        # Manually added steps
         self.error_score = error_score
         self.return_train_score = return_train_score
         self.maxlen = maxlen
         self.ranking_score = ranking_score
         self.refit_workflows = refit_workflows
+        self.fitted_workflows = list()
 
     @property
     def _estimator_type(self):
@@ -1319,29 +1322,34 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             return self
 
         # Create the ensemble --------------------------------------------------
-        # Create the ensemble trained on the full training set
-        parameters_all = [parameters_all[i] for i in ensemble]
-        estimators = list()
-        train = np.arange(0, len(X_train))
-        nest = len(ensemble)
-        for enum, p_all in enumerate(parameters_all):
-            # Refit a SearchCV object with the provided parameters
-            print(f"Refitting estimator {enum+1} / {nest}.")
-            base_estimator = clone(base_estimator)
+        if self.fitted_workflows:
+            # Simply select the required estimators
+            print('\t - Detected already fitted workflows.')
+            estimators = [self.fitted_workflows[i] for i in ensemble]
+        else:
+            # Create the ensemble trained on the full training set
+            parameters_all = [parameters_all[i] for i in ensemble]
+            estimators = list()
+            train = np.arange(0, len(X_train))
+            nest = len(ensemble)
+            for enum, p_all in enumerate(parameters_all):
+                # Refit a SearchCV object with the provided parameters
+                print(f"Refitting estimator {enum+1} / {nest}.")
+                base_estimator = clone(base_estimator)
 
-            # # Check if we need to create a multiclass estimator
-            # if Y_train.shape[1] > 1 and type(base_estimator) != RankedSVM:
-            #     # Multiclass, hence employ a multiclass classifier for SVM
-            #     base_estimator = OneVsRestClassifier(base_estimator)
+                # # Check if we need to create a multiclass estimator
+                # if Y_train.shape[1] > 1 and type(base_estimator) != RankedSVM:
+                #     # Multiclass, hence employ a multiclass classifier for SVM
+                #     base_estimator = OneVsRestClassifier(base_estimator)
 
-            base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                           train, train,
-                                           verbose=False)
+                base_estimator.refit_and_score(X_train, Y_train, p_all,
+                                               train, train,
+                                               verbose=False)
 
-            # Determine whether to overfit the feature scaling on the test set
-            base_estimator.overfit_scaler = overfit_scaler
+                # Determine whether to overfit the feature scaling on the test set
+                base_estimator.overfit_scaler = overfit_scaler
 
-            estimators.append(base_estimator)
+                estimators.append(base_estimator)
 
         self.ensemble = Ensemble(estimators)
         self.best_estimator_ = self.ensemble
