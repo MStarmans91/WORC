@@ -150,7 +150,9 @@ def plot_estimator_performance(prediction, label_data, label_type,
                                thresholds=None, survival=False,
                                shuffle_estimators=False,
                                bootstrap=None, bootstrap_N=None,
-                               overfit_scaler=None):
+                               overfit_scaler=None,
+                               save_memory=True,
+                               refit_ensemble=False):
     """Plot the output of a single estimator, e.g. a SVM.
 
     Parameters
@@ -408,7 +410,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
         if bootstrap and i > 0:
             # For bootstrapping, only do this at the first iteration
             pass
-        elif not fitted_model.ensemble:
+        elif not fitted_model.ensemble or refit_ensemble:
             # If required, rank according to generalization score instead of mean_validation_score
             if ensemble_metric == 'generalization':
                 print('Using generalization score for estimator ranking.')
@@ -574,7 +576,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 SpearmanP.append(SpearmanP_temp)
 
         # Delete some objects to save memory in cross-validtion
-        if not bootstrap:
+        if not bootstrap and save_memory:
             del fitted_model, X_test_temp, X_train_temp, Y_train_temp
             del Y_test_temp, test_patient_IDs, train_patient_IDs
             prediction[label_type]['X_test'][i] = None
