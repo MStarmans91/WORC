@@ -1322,6 +1322,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             return self
 
         # Create the ensemble --------------------------------------------------
+        train = np.arange(0, len(X_train))
         if self.fitted_workflows:
             # Simply select the required estimators
             print('\t - Detected already fitted workflows.')
@@ -1331,8 +1332,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     # Try a prediction to see if estimator is truly fitted
                     self.fitted_workflows[i].predict(np.asarray([X_train[0][0], X_train[1][0]]))
                     estimators.append(self.fitted_workflows[i])
-                except NotFittedError:
-                    print(f'\t\t - Estimator {i} not fitted yet, refit.')
+                except (NotFittedError, ValueError):
+                    print(f'\t\t - Estimator {i} not fitted (correctly) yet, refit.')
                     estimator = self.fitted_workflows[i]
                     estimator.refit_and_score(X_train, Y_train,
                                               parameters_all[i],
@@ -1343,7 +1344,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Create the ensemble trained on the full training set
             parameters_all = [parameters_all[i] for i in ensemble]
             estimators = list()
-            train = np.arange(0, len(X_train))
             nest = len(ensemble)
             for enum, p_all in enumerate(parameters_all):
                 # Refit a SearchCV object with the provided parameters

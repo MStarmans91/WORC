@@ -27,6 +27,7 @@ Added
 - All performances to output statistics.
 - Script for plotting of errors in classification. Not embedded yet.
 - Option to refit top performing workflows and save them.
+- Part to conduct experiment with varying random search and ensemble sizes.
 
 3.3.5 - 2020-10-21
 ------------------

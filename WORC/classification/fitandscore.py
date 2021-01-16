@@ -41,6 +41,10 @@ import WORC.addexceptions as ae
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from numpy.linalg import LinAlgError
 
+# Suppress sklearn warnings
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 def fit_and_score(X, y, scoring,
                   train, test, parameters,
