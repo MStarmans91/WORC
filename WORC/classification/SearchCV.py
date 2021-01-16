@@ -51,7 +51,6 @@ from sklearn.model_selection._validation import _aggregate_score_dicts
 
 from WORC.classification.fitandscore import fit_and_score, replacenan
 from WORC.classification.metrics import check_multimetric_scoring
-from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.featureprocessing.Preprocessor import Preprocessor
 from WORC.detectors.detectors import DebugDetector
@@ -390,6 +389,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.refit_workflows = refit_workflows
         self.fitted_workflows = list()
 
+        # Only for WORC Paper
+        self.test_RS = True
+
     @property
     def _estimator_type(self):
         return self.estimator._estimator_type
@@ -631,7 +633,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
     def process_fit(self, n_splits, parameters_all,
                     test_sample_counts, test_score_dicts,
                     train_score_dicts, fit_time, score_time, cv_iter,
-                    X, y):
+                    X, y, fitted_workflows=None):
         """Process a fit.
 
         Process the outcomes of a SearchCV fit and find the best settings
@@ -827,17 +829,16 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Refit the top performing workflows on the full training dataset
         if self.refit_workflows:
-            if self.verbose:
-                print(f'Refitting top {maxlen} workflows.')
+            # Select only from one train-val split, as they are identical
+            fitted_workflows = fitted_workflows[:pipelines_per_split]
 
-            self.fitted_workflows = list()
-            indices = np.arange(0, len(y))
-            for i_workflow in range(maxlen):
-                estimator = RandomizedSearchCVfastr()
-                params = candidate_params_all[i_workflow]
-                estimator.refit_and_score(X, y, params,
-                                          train=indices, test=indices)
-                self.fitted_workflows.append(estimator)
+            # Sort according to best indices
+            fitted_workflows = [fitted_workflows[i] for i in bestindices]
+
+            # Remove None workflows
+            fitted_workflows = [f for f in fitted_workflows if f is not None]
+
+            self.fitted_workflows = fitted_workflows
 
         return self
 
@@ -1503,7 +1504,7 @@ class BaseSearchCVfastr(BaseSearchCV):
                             'return_n_test_samples',
                             'return_times', 'return_parameters',
                             'return_estimator',
-                            'error_score', 'return_all']
+                            'error_score', 'return_all', 'refit_workflows']
 
         verbose = False
         return_n_test_samples = True
@@ -1518,7 +1519,7 @@ class BaseSearchCVfastr(BaseSearchCV):
                                     return_parameters,
                                     return_estimator,
                                     self.error_score,
-                                    return_all],
+                                    return_all, self.refit_workflows],
                                    index=estimator_labels,
                                    name='estimator Data')
         fname = 'estimatordata.hdf5'
@@ -1582,13 +1583,25 @@ class BaseSearchCVfastr(BaseSearchCV):
 
         # if one choose to see train score, "out" will contain train score info
         if self.return_train_score:
-            (train_scores, test_scores, test_sample_counts,
-             fit_time, score_time, parameters_all) =\
-              zip(*save_data)
+            if self.refit_workflows:
+                (train_scores, test_scores, test_sample_counts,
+                 fit_time, score_time, parameters_all, fitted_workflows) =\
+                  zip(*save_data)
+            else:
+                fitted_workflows = None
+                (train_scores, test_scores, test_sample_counts,
+                 fit_time, score_time, parameters_all) =\
+                    zip(*save_data)
         else:
-            (test_scores, test_sample_counts,
-             fit_time, score_time, parameters_all) =\
-              zip(*save_data)
+            if self.refit_workflows:
+                (test_scores, test_sample_counts,
+                 fit_time, score_time, parameters_all, fitted_workflows) =\
+                  zip(*save_data)
+            else:
+                fitted_workflows = None
+                (test_scores, test_sample_counts,
+                 fit_time, score_time, parameters_all) =\
+                    zip(*save_data)
 
         # Remove the temporary folder used
         if name != 'DEBUG_0':
@@ -1604,7 +1617,8 @@ class BaseSearchCVfastr(BaseSearchCV):
                          fit_time=fit_time,
                          score_time=score_time,
                          cv_iter=cv_iter,
-                         X=X, y=y)
+                         X=X, y=y,
+                         fitted_workflows=fitted_workflows)
 
 
 class RandomizedSearchCVfastr(BaseSearchCVfastr):

@@ -30,8 +30,6 @@ import random
 import json
 from copy import copy
 from sklearn.metrics import f1_score, roc_auc_score
-from joblib import Parallel, delayed
-from WORC.classification.SearchCV import RandomizedSearchCVfastr
 
 
 def random_split_cross_validation(image_features, feature_labels, classes,
@@ -230,6 +228,10 @@ def random_split_cross_validation(image_features, feature_labels, classes,
                              X_test=X_test, Y_test=Y_test,
                              feature_labels=feature_labels,
                              output_json=output_json)
+
+            # Save memory
+            delattr(trained_classifier, 'fitted_workflows')
+            trained_classifier.fitted_workflows = list()
 
         # Create a temporary save
         if tempsave:
@@ -760,34 +762,16 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
     WORC paper to test how the performance varies with varying random search
     and ensemble sizes. We do not recommend usage in general of this part.
     """
-    # Settings
-    RSs = [10, 50, 100, 1000, 10000] * 10 + [25000]
-    ensembles = [1, 10, 50, 100]
-    maxlen = max(ensembles)
 
     # Process some input
     estimator_original = copy(estimator_input)
     X_train_temp = [(x, feature_labels) for x in X_train]
+    n_workflows = len(estimator_original.fitted_workflows)
 
-    # Refit all workflows on the full training dataset
-    estimator_original.fitted_workflows = list()
-    indices = np.arange(0, len(Y_train))
-
-    def refit_estimator(i_workflow):
-        print(f'\t Refitting workflow {i_workflow}.')
-        estimator = RandomizedSearchCVfastr()
-        params = estimator_original.cv_results_['params'][i_workflow]
-        estimator.refit_and_score(X_train_temp, Y_train, params,
-                                  train=indices, test=indices)
-        return estimator
-
-    # NOTE: parellelization through joblib, not fast.
-    fitted_workflows =\
-        Parallel(n_jobs=-1)(delayed(refit_estimator)(i_workflow=i_workflow)
-                            for i_workflow in range(estimator_original.maxlen))
-
-    estimator_original.fitted_workflows = fitted_workflows
-    n_workflows = len(fitted_workflows)
+    # Settings
+    RSs = [10, 50, 100, 1000, 10000] * 10 + [n_workflows]
+    ensembles = [1, 10, 50, 100]
+    maxlen = max(ensembles)
 
     # Loop over the random searches and ensembles
     keys = list()

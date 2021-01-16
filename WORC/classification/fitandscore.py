@@ -35,6 +35,7 @@ from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
 from WORC.featureprocessing.OneHotEncoderWrapper import OneHotEncoderWrapper
+import WORC
 import WORC.addexceptions as ae
 
 # Specific imports for error management
@@ -54,7 +55,8 @@ def fit_and_score(X, y, scoring,
                   return_times=True, return_parameters=False,
                   return_estimator=False,
                   error_score='raise', verbose=True,
-                  return_all=True):
+                  return_all=True,
+                  refit_workflows=False):
     """Fit an estimator to a dataset and score the performance.
 
     The following
@@ -253,8 +255,11 @@ def fit_and_score(X, y, scoring,
     if return_estimator:
         ret.append(estimator)
 
-    # Additional to sklearn defaults: return all parameters
+    # Additional to sklearn defaults: return all parameters and refitted estimator
     ret.append(parameters)
+
+    if refit_workflows:
+        ret.append(None)
 
     # ------------------------------------------------------------------------
     # OneHotEncoder
@@ -810,11 +815,11 @@ def fit_and_score(X, y, scoring,
 
     # Recombine feature values and label for train and test set
     feature_values = np.concatenate((X_train, X_test), axis=0)
-    y = np.concatenate((y_train, y_test), axis=0)
+    y_all = np.concatenate((y_train, y_test), axis=0)
     para_estimator = None
 
     try:
-        ret = _fit_and_score(estimator, feature_values, y,
+        ret = _fit_and_score(estimator, feature_values, y_all,
                              scorers, train,
                              test, verbose,
                              para_estimator, fit_params,
@@ -838,6 +843,13 @@ def fit_and_score(X, y, scoring,
 
     # Add original parameters to return object
     ret.append(parameters)
+
+    if refit_workflows:
+        indices = np.arange(0, len(y))
+        estimator = WORC.classification.SearchCV.RandomizedSearchCVfastr()
+        estimator.refit_and_score(X, y, parameters,
+                                  train=indices, test=indices)
+        ret.append(estimator)
 
     if return_all:
         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
