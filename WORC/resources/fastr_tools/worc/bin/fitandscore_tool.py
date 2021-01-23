@@ -91,7 +91,8 @@ def main():
                                  return_times=data['return_times'],
                                  return_estimator=data['return_estimator'],
                                  error_score=data['error_score'],
-                                 return_all=data['return_all'])
+                                 return_all=data['return_all'],
+                                 refit_workflows=data['refit_workflows'])
           for parameters in para.values())
 
         source_labels = ['RET', 'GroupSel', 'VarSel', 'SelectModel',
@@ -122,7 +123,8 @@ def main():
                                  return_times=data['return_times'],
                                  return_estimator=data['return_estimator'],
                                  error_score=data['error_score'],
-                                 return_all=data['return_all'])
+                                 return_all=data['return_all'],
+                                 refit_workflows=data['refit_workflows'])
           for parameters in para.values())
 
         source_labels = ['RET']
