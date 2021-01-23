@@ -344,7 +344,7 @@ class Evaluate(object):
 
         config = self.parent.source_class_config.output
 
-        if hasattr(self, 'parent.sources_images_train'):
+        if hasattr(self.parent, 'sources_images_train'):
             if self.parent.sources_images_train:
                 # NOTE: Use images of first modality to depict tumor
                 label = self.parent.modlabels[0]
@@ -403,7 +403,7 @@ class Evaluate(object):
         else:
             for idx, label in enumerate(self.parent.modlabels):
                 # NOTE: Currently statistical testing is only done within the training set
-                if hasattr(self, 'parent.sources_images_train'):
+                if hasattr(self.parent, 'sources_images_train'):
                     if self.parent.sources_images_train:
                         # Take features directly from feature computation toolboxes
                         for node in self.parent.featureconverter_train[label]:
@@ -485,7 +485,7 @@ class Evaluate(object):
                 self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
             self.link_segmentations_post.collapse = 'test'
 
-        elif hasattr(self, 'parent.sources_images_train'):
+        elif hasattr(self.parent, 'sources_images_train'):
             if self.parent.sources_images_train:
                 self.link_images_perc =\
                     self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
