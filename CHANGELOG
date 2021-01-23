@@ -21,6 +21,7 @@ Changed
 ~~~~~~~
 - IMPORTANT: previously, used f1_score based on estimator.predict function.
   Now, use predict_proba.
+- New defaults for random-search and ensemble.
 
 Added
 ~~~~~~~

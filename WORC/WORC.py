@@ -470,16 +470,16 @@ class WORC(object):
         config['HyperOptimization']['scoring_method'] = 'f1_weighted_predictproba'
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
-        config['HyperOptimization']['N_iterations'] = '25000'
-        config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
+        config['HyperOptimization']['N_iterations'] = '1000'
+        config['HyperOptimization']['n_jobspercore'] = '100'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['memory'] = '3G'
-        config['HyperOptimization']['refit_workflows'] = 'False'
+        config['HyperOptimization']['refit_workflows'] = '100'
 
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Use'] = '50'
+        config['Ensemble']['Use'] = '100'
         config['Ensemble']['Metric'] = 'Default'
 
         # Evaluation options

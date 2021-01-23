@@ -40,7 +40,7 @@ def random_split_cross_validation(image_features, feature_labels, classes,
                                   fixedsplits=None,
                                   fixed_seed=False, use_fastr=None,
                                   fastr_plugin=None,
-                                  do_test_RS_Ensemble=True):
+                                  do_test_RS_Ensemble=False):
     """Cross-validation in which data is randomly split in each iteration.
 
     Due to options of doing single-label and multi-label classification,
@@ -618,7 +618,7 @@ def crossval(config, label_data, image_features,
 def nocrossval(config, label_data_train, label_data_test, image_features_train,
                image_features_test, param_grid=None, use_fastr=False,
                fastr_plugin=None, ensemble={'Use': False},
-               modus='singlelabel'):
+               modus='singlelabel', do_test_RS_Ensemble=False):
     """Constructs multiple individual classifiers based on the label settings.
 
     Arguments:
@@ -748,6 +748,23 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
 
         i_name = ''.join(i_name)
         classifier_labelss[i_name] = panda_data_temp
+
+        # Test performance for various RS and ensemble sizes
+        if do_test_RS_Ensemble:
+            # FIXME: Use home folder, as this function does not know
+            # Where final or temporary output is located
+            output_json = os.path.join(os.path.expanduser("~"),
+                                       f'performance_RS_Ens.json')
+
+            test_RS_Ensemble(estimator_input=trained_classifier,
+                             X_train=X_train, Y_train=Y_train,
+                             X_test=X_test, Y_test=Y_test,
+                             feature_labels=feature_labels,
+                             output_json=output_json)
+
+            # Save memory
+            delattr(trained_classifier, 'fitted_workflows')
+            trained_classifier.fitted_workflows = list()
 
     panda_data = pd.DataFrame(classifier_labelss)
 
