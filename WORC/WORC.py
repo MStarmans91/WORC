@@ -475,7 +475,7 @@ class WORC(object):
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['memory'] = '3G'
-        config['HyperOptimization']['refit_workflows'] = 'True'
+        config['HyperOptimization']['refit_workflows'] = 'False'
 
         # Ensemble options
         config['Ensemble'] = dict()
