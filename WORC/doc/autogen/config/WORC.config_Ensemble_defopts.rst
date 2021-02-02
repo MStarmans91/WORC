@@ -1,6 +1,6 @@
 ====== ======= =======================
 Subkey Default Options                
 ====== ======= =======================
-Use    50      Integer                
+Use    100     Integer                
 Metric Default Default, generalization
 ====== ======= =======================

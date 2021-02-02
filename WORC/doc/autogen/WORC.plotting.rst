@@ -64,6 +64,15 @@ plotting Package
     :show-inheritance:
     :special-members:
 
+:mod:`plot_errors` Module
+-------------------------
+
+.. automodule:: WORC.plotting.plot_errors
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`plot_estimator_performance` Module
 ----------------------------------------
 

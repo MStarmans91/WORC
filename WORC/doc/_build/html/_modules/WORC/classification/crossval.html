@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.crossval &mdash; WORC 3.3.5 documentation</title>
+  <title>WORC.classification.crossval &mdash; WORC 3.4.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -49,7 +50,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> WORC
+            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> WORC
           
 
           
@@ -62,7 +63,7 @@
             
             
               <div class="version">
-                3.3.5
+                3.4.0
               </div>
             
           
@@ -79,6 +80,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -105,6 +107,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -143,7 +146,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -165,7 +168,7 @@
   <h1>Source code for WORC.classification.crossval</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -185,12 +188,16 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">gmtime</span><span class="p">,</span> <span class="n">strftime</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">LeaveOneOut</span>
-<span class="kn">from</span> <span class="nn">.parameter_optimization</span> <span class="k">import</span> <span class="n">random_search_parameters</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">gmtime</span><span class="p">,</span> <span class="n">strftime</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">LeaveOneOut</span>
+<span class="kn">from</span> <span class="nn">.parameter_optimization</span> <span class="kn">import</span> <span class="n">random_search_parameters</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.regressors</span> <span class="k">import</span> <span class="n">regressors</span>
+<span class="kn">from</span> <span class="nn">WORC.classification.regressors</span> <span class="kn">import</span> <span class="n">regressors</span>
 <span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span>
 
 
 <div class="viewcode-block" id="random_split_cross_validation"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.random_split_cross_validation">[docs]</a><span class="k">def</span> <span class="nf">random_split_cross_validation</span><span class="p">(</span><span class="n">image_features</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span>
@@ -200,7 +207,8 @@
                                   <span class="n">tempsave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tempfolder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                   <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                   <span class="n">fixed_seed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                  <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                                  <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                  <span class="n">do_test_RS_Ensemble</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Cross-validation in which data is randomly split in each iteration.</span>
 
 <span class="sd">    Due to options of doing single-label and multi-label classification,</span>
@@ -224,8 +232,8 @@
         <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;Cross-validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_iterations</span><span class="p">)))</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">((</span><span class="s1">&#39;Cross-validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_iterations</span><span class="p">)))</span>
         <span class="n">timestamp</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span> <span class="n">gmtime</span><span class="p">())</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{timestamp}</span><span class="s1">.&#39;</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{timestamp}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fixed_seed</span><span class="p">:</span>
             <span class="n">random_seed</span> <span class="o">=</span> <span class="n">i</span><span class="o">**</span><span class="mi">2</span>
         <span class="k">else</span><span class="p">:</span>
@@ -380,6 +388,19 @@
 
         <span class="n">save_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp_save_data</span><span class="p">)</span>
 
+        <span class="c1"># Test performance for various RS and ensemble sizes</span>
+        <span class="k">if</span> <span class="n">do_test_RS_Ensemble</span><span class="p">:</span>
+            <span class="n">output_json</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;performance_RS_Ens_crossval_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">.json&#39;</span><span class="p">)</span>
+            <span class="n">test_RS_Ensemble</span><span class="p">(</span><span class="n">estimator_input</span><span class="o">=</span><span class="n">trained_classifier</span><span class="p">,</span>
+                             <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
+                             <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="o">=</span><span class="n">Y_test</span><span class="p">,</span>
+                             <span class="n">feature_labels</span><span class="o">=</span><span class="n">feature_labels</span><span class="p">,</span>
+                             <span class="n">output_json</span><span class="o">=</span><span class="n">output_json</span><span class="p">)</span>
+
+            <span class="c1"># Save memory</span>
+            <span class="nb">delattr</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="s1">&#39;fitted_workflows&#39;</span><span class="p">)</span>
+            <span class="n">trained_classifier</span><span class="o">.</span><span class="n">fitted_workflows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
         <span class="c1"># Create a temporary save</span>
         <span class="k">if</span> <span class="n">tempsave</span><span class="p">:</span>
             <span class="n">panda_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;trained_classifier&#39;</span><span class="p">,</span> <span class="s1">&#39;X_train&#39;</span><span class="p">,</span> <span class="s1">&#39;X_test&#39;</span><span class="p">,</span>
@@ -406,8 +427,8 @@
 
         <span class="c1"># Print elapsed time</span>
         <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{elapsed}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{elapsed}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{</span><span class="n">elapsed</span><span class="si">}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{</span><span class="n">elapsed</span><span class="si">}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">save_data</span></div>
 
@@ -445,8 +466,8 @@
         <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;Cross-validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_splits</span><span class="p">)))</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">((</span><span class="s1">&#39;Cross-validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_splits</span><span class="p">)))</span>
         <span class="n">timestamp</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span> <span class="n">gmtime</span><span class="p">())</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{timestamp}</span><span class="s1">.&#39;</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{timestamp}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Time: </span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">fixed_seed</span><span class="p">:</span>
             <span class="n">random_seed</span> <span class="o">=</span> <span class="n">i</span><span class="o">**</span><span class="mi">2</span>
         <span class="k">else</span><span class="p">:</span>
@@ -528,8 +549,8 @@
 
         <span class="c1"># Print elapsed time</span>
         <span class="n">elapsed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{elapsed}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{elapsed}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{</span><span class="n">elapsed</span><span class="si">}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Fitting took </span><span class="si">{</span><span class="n">elapsed</span><span class="si">}</span><span class="s1"> minutes.&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">save_data</span></div>
 
@@ -723,7 +744,7 @@
                                      <span class="n">use_fastr</span><span class="o">=</span><span class="n">use_fastr</span><span class="p">,</span>
                                      <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{crossval_type}</span><span class="s1"> is not a recognized cross-validation type.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">crossval_type</span><span class="si">}</span><span class="s1"> is not a recognized cross-validation type.&#39;</span><span class="p">)</span>
 
         <span class="p">[</span><span class="n">classifiers</span><span class="p">,</span> <span class="n">X_train_set</span><span class="p">,</span> <span class="n">X_test_set</span><span class="p">,</span> <span class="n">Y_train_set</span><span class="p">,</span> <span class="n">Y_test_set</span><span class="p">,</span>
          <span class="n">patient_ID_train_set</span><span class="p">,</span> <span class="n">patient_ID_test_set</span><span class="p">,</span> <span class="n">seed_set</span><span class="p">]</span> <span class="o">=</span>\
@@ -765,7 +786,7 @@
 <div class="viewcode-block" id="nocrossval"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.nocrossval">[docs]</a><span class="k">def</span> <span class="nf">nocrossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span> <span class="n">label_data_test</span><span class="p">,</span> <span class="n">image_features_train</span><span class="p">,</span>
                <span class="n">image_features_test</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Use&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
-               <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">):</span>
+               <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">,</span> <span class="n">do_test_RS_Ensemble</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Constructs multiple individual classifiers based on the label settings.</span>
 
 <span class="sd">    Arguments:</span>
@@ -896,9 +917,115 @@
         <span class="n">i_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i_name</span><span class="p">)</span>
         <span class="n">classifier_labelss</span><span class="p">[</span><span class="n">i_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">panda_data_temp</span>
 
+        <span class="c1"># Test performance for various RS and ensemble sizes</span>
+        <span class="k">if</span> <span class="n">do_test_RS_Ensemble</span><span class="p">:</span>
+            <span class="c1"># FIXME: Use home folder, as this function does not know</span>
+            <span class="c1"># Where final or temporary output is located</span>
+            <span class="n">output_json</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span>
+                                       <span class="sa">f</span><span class="s1">&#39;performance_RS_Ens.json&#39;</span><span class="p">)</span>
+
+            <span class="n">test_RS_Ensemble</span><span class="p">(</span><span class="n">estimator_input</span><span class="o">=</span><span class="n">trained_classifier</span><span class="p">,</span>
+                             <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
+                             <span class="n">X_test</span><span class="o">=</span><span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="o">=</span><span class="n">Y_test</span><span class="p">,</span>
+                             <span class="n">feature_labels</span><span class="o">=</span><span class="n">feature_labels</span><span class="p">,</span>
+                             <span class="n">output_json</span><span class="o">=</span><span class="n">output_json</span><span class="p">)</span>
+
+            <span class="c1"># Save memory</span>
+            <span class="nb">delattr</span><span class="p">(</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="s1">&#39;fitted_workflows&#39;</span><span class="p">)</span>
+            <span class="n">trained_classifier</span><span class="o">.</span><span class="n">fitted_workflows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
     <span class="n">panda_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">classifier_labelss</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">panda_data</span></div>
+
+
+<div class="viewcode-block" id="test_RS_Ensemble"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.test_RS_Ensemble">[docs]</a><span class="k">def</span> <span class="nf">test_RS_Ensemble</span><span class="p">(</span><span class="n">estimator_input</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="p">,</span>
+                     <span class="n">feature_labels</span><span class="p">,</span> <span class="n">output_json</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Test performance for different random search and ensemble sizes.</span>
+
+<span class="sd">    This function is written for conducting a specific experiment from the</span>
+<span class="sd">    WORC paper to test how the performance varies with varying random search</span>
+<span class="sd">    and ensemble sizes. We do not recommend usage in general of this part.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Process some input</span>
+    <span class="n">estimator_original</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">estimator_input</span><span class="p">)</span>
+    <span class="n">X_train_temp</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">]</span>
+    <span class="n">n_workflows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">estimator_original</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">)</span>
+
+    <span class="c1"># Settings</span>
+    <span class="n">RSs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="p">[</span><span class="n">n_workflows</span><span class="p">]</span>
+    <span class="n">ensembles</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+    <span class="n">maxlen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ensembles</span><span class="p">)</span>
+
+    <span class="c1"># Loop over the random searches and ensembles</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">performances</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">RS</span> <span class="ow">in</span> <span class="n">RSs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">RS</span> <span class="o">&lt;=</span> <span class="n">n_workflows</span><span class="p">:</span>
+            <span class="c1"># Make a key for saving the score</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;RS </span><span class="si">{</span><span class="n">RS</span><span class="si">}</span><span class="s1"> try </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">while</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;RS </span><span class="si">{</span><span class="n">RS</span><span class="si">}</span><span class="s1"> try </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+            <span class="c1"># Make a local copy of the estimator and select only subset of workflows</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Using RS </span><span class="si">{</span><span class="n">RS</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="n">estimator</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">estimator_original</span><span class="p">)</span>
+            <span class="n">workflow_num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_workflows</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+            <span class="c1"># Select only a specific set of workflows</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">workflow_num</span><span class="p">)</span>
+            <span class="n">selected_workflows</span> <span class="o">=</span> <span class="n">workflow_num</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">RS</span><span class="p">]</span>
+
+            <span class="c1"># Get the mean performances and get new ranking</span>
+            <span class="n">F1_validation</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_score&#39;</span><span class="p">]</span>
+            <span class="n">F1_validation</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_validation</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_workflows</span><span class="p">]</span>
+            <span class="n">workflow_ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">F1_validation</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Normally, rank from smallest to largest, so reverse</span>
+            <span class="n">F1_validation</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_validation</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">workflow_ranking</span><span class="p">]</span>
+
+            <span class="c1"># Only keep the number of RS required and resort based on ensemble</span>
+            <span class="n">estimator</span><span class="o">.</span><span class="n">fitted_workflows</span> <span class="o">=</span>\
+                <span class="p">[</span><span class="n">estimator</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_workflows</span><span class="p">]</span>
+            <span class="n">estimator</span><span class="o">.</span><span class="n">fitted_workflows</span> <span class="o">=</span>\
+                <span class="p">[</span><span class="n">estimator</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">workflow_ranking</span><span class="p">]</span>
+
+            <span class="c1"># Store train and validation AUC</span>
+            <span class="n">mean_val_F1</span> <span class="o">=</span> <span class="n">F1_validation</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">maxlen</span><span class="p">]</span>
+            <span class="n">F1_training</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_train_score&#39;</span><span class="p">]</span>
+            <span class="n">F1_training</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_training</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_workflows</span><span class="p">]</span>
+            <span class="n">F1_training</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_training</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">workflow_ranking</span><span class="p">]</span>
+            <span class="n">mean_train_F1</span> <span class="o">=</span> <span class="n">F1_training</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">maxlen</span><span class="p">]</span>
+
+            <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Mean training F1-score </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1"> top </span><span class="si">{</span><span class="n">maxlen</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_train_F1</span>
+            <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Mean validation F1-score </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1"> top </span><span class="si">{</span><span class="n">maxlen</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_val_F1</span>
+
+            <span class="k">for</span> <span class="n">ensemble</span> <span class="ow">in</span> <span class="n">ensembles</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">ensemble</span> <span class="o">&lt;=</span> <span class="n">RS</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Using ensemble </span><span class="si">{</span><span class="n">ensemble</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                    <span class="c1"># Create the ensemble</span>
+                    <span class="n">estimator</span><span class="o">.</span><span class="n">create_ensemble</span><span class="p">(</span><span class="n">X_train_temp</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">ensemble</span><span class="p">)</span>
+
+                    <span class="c1"># Compute performance</span>
+                    <span class="n">y_prediction</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+                    <span class="n">y_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">y_score</span><span class="p">)</span>
+                    <span class="n">f1_score_out</span> <span class="o">=</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+                    <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Test F1-score Ensemble </span><span class="si">{</span><span class="n">ensemble</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f1_score_out</span>
+                    <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Test AUC Ensemble </span><span class="si">{</span><span class="n">ensemble</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auc</span>
+
+                    <span class="n">y_prediction</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+                    <span class="n">y_score</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">y_score</span><span class="p">)</span>
+                    <span class="n">f1_score_out</span> <span class="o">=</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">y_prediction</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">)</span>
+                    <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Train F1-score Ensemble </span><span class="si">{</span><span class="n">ensemble</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f1_score_out</span>
+                    <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Train AUC Ensemble </span><span class="si">{</span><span class="n">ensemble</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auc</span>
+
+        <span class="c1"># Write output</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_json</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">performances</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
@@ -911,11 +1038,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -926,7 +1061,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

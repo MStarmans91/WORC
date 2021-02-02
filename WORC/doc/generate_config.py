@@ -376,6 +376,7 @@ def generate_config_options():
     config['HyperOptimization']['maxlen'] = 'Integer'
     config['HyperOptimization']['ranking_score'] = 'String'
     config['HyperOptimization']['memory'] = 'String consisting of integer + "G"'
+    config['HyperOptimization']['refit_workflows'] = 'Boolean'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
@@ -669,6 +670,7 @@ def generate_config_descriptions():
     config['HyperOptimization']['maxlen'] = 'Number of estimators for which the fitted outcomes and parameters are saved. Increasing this number will increase the memory usage.'
     config['HyperOptimization']['ranking_score'] = 'Score used for ranking the performance of the evaluated workflows.'
     config['HyperOptimization']['memory'] = 'When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + "G".'
+    config['HyperOptimization']['refit_workflows'] = 'If True, refit all workflows in the ensemble automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
