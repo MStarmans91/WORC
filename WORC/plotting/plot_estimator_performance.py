@@ -660,10 +660,11 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
                     # Compute confidence intervals for all metrics
                     for p in range(len(metric_names_single)):
-                        k = metric_names_single[p] + ' 95%'
+                        k = metric_names_single[p] + ' 95%:'
                         perf = performances_bootstrapped[p]
                         perf_test = performances_test[p]
                         stats[k] = f"{perf_test} {str(compute_confidence_bootstrap(perf, perf_test, N_1, alpha))}"
+                        all_performances[metric_names_single[p]] = perf
 
                 else:
                     names = ['Accuracy', 'BCA', 'AUC', 'F1-score', 'Precision'

@@ -113,7 +113,7 @@ def generate_performance_boxplots(performances, metrics, outputfolder,
     plt.subplots_adjust(top=1, bottom=0, right=1, left=0,
                         hspace=0, wspace=0)
     f.savefig(outputname_png, dpi=600, bbox_inches='tight',
-              pad_inches = 0)
+              pad_inches=0)
     print(("Boxplot saved as {} !").format(outputname_png))
 
     fname = 'boxplot_test.tex'

@@ -471,7 +471,7 @@ class WORC(object):
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '1000'
-        config['HyperOptimization']['n_jobspercore'] = '100'  # only relevant when using fastr in classification
+        config['HyperOptimization']['n_jobspercore'] = '500'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['memory'] = '3G'
