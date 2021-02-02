@@ -352,7 +352,7 @@ class WORC(object):
         config['Featsel']['Variance'] = '1.0'
         config['Featsel']['GroupwiseSearch'] = 'True'
         config['Featsel']['SelectFromModel'] = '0.2'
-        config['Featsel']['SelectFromModel_estimator'] = 'Lasso'
+        config['Featsel']['SelectFromModel_estimator'] = 'Lasso, LR, RF'
         config['Featsel']['SelectFromModel_lasso_alpha'] = '0.1, 1.4'
         config['Featsel']['SelectFromModel_n_trees'] = '10, 90'
         config['Featsel']['UsePCA'] = '0.2'
@@ -364,7 +364,7 @@ class WORC(object):
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '0.75, 0.2'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
-        config['Featsel']['ReliefNumFeatures'] = '10, 50'
+        config['Featsel']['ReliefNumFeatures'] = '10, 40'
 
         # Groupwise Featureselection options
         config['SelectFeatGroup'] = dict()
@@ -405,7 +405,7 @@ class WORC(object):
             'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
             'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
             'SMOTEENN, SMOTETomek'
-        config['Resampling']['sampling_strategy'] = 'auto, majority, not minority, not majority, all'
+        config['Resampling']['sampling_strategy'] = 'majority, not minority, not majority, all'
         config['Resampling']['n_neighbors'] = '3, 12'
         config['Resampling']['k_neighbors'] = '5, 15'
         config['Resampling']['threshold_cleaning'] = '0.25, 0.5'
@@ -424,7 +424,7 @@ class WORC(object):
             'AdaBoostClassifier, ' +\
             'XGBClassifier'
         config['Classification']['max_iter'] = '100000'
-        config['Classification']['SVMKernel'] = 'poly, rbf, linear'
+        config['Classification']['SVMKernel'] = 'linear, poly, rbf'
         config['Classification']['SVMC'] = '0, 6'
         config['Classification']['SVMdegree'] = '1, 6'
         config['Classification']['SVMcoef0'] = '0, 1'
@@ -433,7 +433,7 @@ class WORC(object):
         config['Classification']['RFmin_samples_split'] = '2, 3'
         config['Classification']['RFmax_depth'] = '5, 5'
         config['Classification']['LRpenalty'] = 'l1, l2, elasticnet'
-        config['Classification']['LRC'] = '0.01, 1.0'
+        config['Classification']['LRC'] = '0.01, 0.99'
         config['Classification']['LR_solver'] = 'lbfgs, saga'
         config['Classification']['LR_l1_ratio'] = '0, 1'
         config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
@@ -467,18 +467,19 @@ class WORC(object):
 
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
-        config['HyperOptimization']['scoring_method'] = 'f1_weighted'
+        config['HyperOptimization']['scoring_method'] = 'f1_weighted_predictproba'
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
-        config['HyperOptimization']['N_iterations'] = '25000'
-        config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
+        config['HyperOptimization']['N_iterations'] = '1000'
+        config['HyperOptimization']['n_jobspercore'] = '500'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['memory'] = '3G'
+        config['HyperOptimization']['refit_workflows'] = 'False'
 
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Use'] = '50'
+        config['Ensemble']['Use'] = '100'
         config['Ensemble']['Metric'] = 'Default'
 
         # Evaluation options

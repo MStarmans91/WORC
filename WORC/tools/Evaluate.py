@@ -337,19 +337,20 @@ class Evaluate(object):
         """Create links in network between nodes when adding Evaluate to WORC."""
         # Sources from the WORC network are used
         prediction = self.parent.classify.outputs['classification']
-        if self.parent.labels_test:
+        if hasattr(self.parent, 'source_patientclass_test'):
             pinfo = self.parent.source_patientclass_test.output
         else:
             pinfo = self.parent.source_patientclass_train.output
 
         config = self.parent.source_class_config.output
 
-        if self.parent.sources_images_train:
-            # NOTE: Use images of first modality to depict tumor
-            label = self.parent.modlabels[0]
-            images = self.parent.sources_images_train[label].output
-            segmentations =\
-                self.parent.sources_segmentations_train[label].output
+        if hasattr(self.parent, 'sources_images_train'):
+            if self.parent.sources_images_train:
+                # NOTE: Use images of first modality to depict tumor
+                label = self.parent.modlabels[0]
+                images = self.parent.sources_images_train[label].output
+                segmentations =\
+                    self.parent.sources_segmentations_train[label].output
 
         self.node_ROC.inputs['ensemble'] = self.parent.source_Ensemble.output
         self.node_ROC.inputs['label_type'] = self.parent.source_LabelType.output
@@ -402,26 +403,43 @@ class Evaluate(object):
         else:
             for idx, label in enumerate(self.parent.modlabels):
                 # NOTE: Currently statistical testing is only done within the training set
-                if self.parent.sources_images_train:
-                    # Take features directly from feature computation toolboxes
-                    for node in self.parent.featureconverter_train[label]:
-                        name = node.id
-                        self.links_STest_Features[name] =\
-                            self.node_STest.inputs['features'][name] << node.outputs['feat_out']
+                if hasattr(self.parent, 'sources_images_train'):
+                    if self.parent.sources_images_train:
+                        # Take features directly from feature computation toolboxes
+                        for node in self.parent.featureconverter_train[label]:
+                            name = node.id
+                            self.links_STest_Features[name] =\
+                                self.node_STest.inputs['features'][name] << node.outputs['feat_out']
 
-                        self.links_decomposition_Features[name] =\
-                            self.node_decomposition.inputs['features'][name] << node.outputs['feat_out']
+                            self.links_decomposition_Features[name] =\
+                                self.node_decomposition.inputs['features'][name] << node.outputs['feat_out']
 
-                        self.links_Boxplots_Features[name] =\
-                            self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
+                            self.links_Boxplots_Features[name] =\
+                                self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
 
-                        # All features should be input at once
-                        self.links_STest_Features[name].collapse = 'train'
-                        self.links_decomposition_Features[name].collapse = 'train'
-                        self.links_Boxplots_Features[name].collapse = 'train'
+                            # All features should be input at once
+                            self.links_STest_Features[name].collapse = 'train'
+                            self.links_decomposition_Features[name].collapse = 'train'
+                            self.links_Boxplots_Features[name].collapse = 'train'
+                    else:
+                        # Feature are precomputed and given as sources
+                        for node in self.parent.sources_features_train.values():
+                            name = node.id
+                            self.links_STest_Features[name] =\
+                                self.node_STest.inputs['features'][name] << node.output
+                            self.links_decomposition_Features[name] =\
+                                self.node_decomposition.inputs['features'][name] << node.output
+                            self.links_Boxplots_Features[name] =\
+                                self.node_Boxplots_Features.inputs['features'][name] << node.output
+
+                            # All features should be input at once
+                            self.links_STest_Features[name].collapse = 'train'
+                            self.links_decomposition_Features[name].collapse = 'train'
+                            self.links_Boxplots_Features[name].collapse = 'train'
+
                 else:
                     # Feature are precomputed and given as sources
-                    for node in self.parent.sources_features_train[label]:
+                    for node in self.parent.sources_features_train.values():
                         name = node.id
                         self.links_STest_Features[name] =\
                             self.node_STest.inputs['features'][name] << node.output
@@ -449,7 +467,7 @@ class Evaluate(object):
         self.node_Ranked_Posteriors.inputs['estimator'] = prediction
         self.node_Ranked_Posteriors.inputs['pinfo'] = pinfo
 
-        if self.parent.sources_images_test:
+        if hasattr(self.parent, 'sources_images_test'):
             images = self.parent.sources_images_test[label].output
             segmentations =\
                 self.parent.sources_segmentations_test[label].output
@@ -467,20 +485,21 @@ class Evaluate(object):
                 self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
             self.link_segmentations_post.collapse = 'test'
 
-        elif self.parent.sources_images_train:
-            self.link_images_perc =\
-                self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
-            self.link_images_perc.collapse = 'train'
-            self.link_segmentations_perc =\
-                self.network.create_link(segmentations, self.node_Ranked_Percentages.inputs['segmentations'])
-            self.link_segmentations_perc.collapse = 'train'
+        elif hasattr(self.parent, 'sources_images_train'):
+            if self.parent.sources_images_train:
+                self.link_images_perc =\
+                    self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
+                self.link_images_perc.collapse = 'train'
+                self.link_segmentations_perc =\
+                    self.network.create_link(segmentations, self.node_Ranked_Percentages.inputs['segmentations'])
+                self.link_segmentations_perc.collapse = 'train'
 
-            self.link_images_post =\
-                self.network.create_link(images, self.node_Ranked_Posteriors.inputs['images'])
-            self.link_images_post.collapse = 'train'
-            self.link_segmentations_post =\
-                self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
-            self.link_segmentations_post.collapse = 'train'
+                self.link_images_post =\
+                    self.network.create_link(images, self.node_Ranked_Posteriors.inputs['images'])
+                self.link_images_post.collapse = 'train'
+                self.link_segmentations_post =\
+                    self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
+                self.link_segmentations_post.collapse = 'train'
 
     def set(self, estimator=None, pinfo=None, images=None,
             segmentations=None, config=None, features=None,

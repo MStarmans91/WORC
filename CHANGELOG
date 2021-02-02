@@ -6,6 +6,30 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.4.0 - 2021-02-02
+------------------
+
+Fixed
+~~~~~
+- MAJOR: Bug in SearchCV sorting of output files.
+- Bug in StatisticalTest for Manhattan plot.
+- Bug in evaluate when using a test set.
+- Bug in SearchCV for fitting preprocessing.
+- Fix random states in boosting estimators.
+
+Changed
+~~~~~~~
+- IMPORTANT: previously, used f1_score based on estimator.predict function.
+  Now, use predict_proba.
+- New defaults for random-search and ensemble.
+
+Added
+~~~~~~~
+- All performances to output statistics.
+- Script for plotting of errors in classification. Not embedded yet.
+- Option to refit top performing workflows and save them.
+- Part to conduct experiment with varying random search and ensemble sizes.
+
 3.3.5 - 2020-10-21
 ------------------
 

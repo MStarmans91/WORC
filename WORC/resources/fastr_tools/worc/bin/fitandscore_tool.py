@@ -72,31 +72,68 @@ def main():
 
     # Run the tool
     n_cores = 1
-    ret = Parallel(
-        n_jobs=n_cores, verbose=args.verbose,
-        pre_dispatch=2*n_cores
-    )(delayed(fit_and_score)(X=data['X'], y=data['y'],
-                             scoring=data['scoring'],
-                             train=traintest['train'],
-                             test=traintest['test'], verbose=args.verbose,
-                             parameters=parameters,
-                             fit_params=data['fit_params'],
-                             return_train_score=data['return_train_score'],
-                             return_parameters=data['return_parameters'],
-                             return_n_test_samples=data['return_n_test_samples'],
-                             return_times=data['return_times'],
-                             return_estimator=data['return_estimator'],
-                             error_score=data['error_score'],
-                             return_all=False)
-      for parameters in para.values())
+    if data['return_all']:
+        # Return not only the performance, but all fitted objects
+        (ret, GroupSel, VarSel, SelectModel, _, scaler,
+            encoder, imputer, pca, StatisticalSel, ReliefSel,
+            Sampler) = Parallel(
+            n_jobs=n_cores, verbose=args.verbose,
+            pre_dispatch=2*n_cores
+        )(delayed(fit_and_score)(X=data['X'], y=data['y'],
+                                 scoring=data['scoring'],
+                                 train=traintest['train'],
+                                 test=traintest['test'], verbose=args.verbose,
+                                 parameters=parameters,
+                                 fit_params=data['fit_params'],
+                                 return_train_score=data['return_train_score'],
+                                 return_parameters=data['return_parameters'],
+                                 return_n_test_samples=data['return_n_test_samples'],
+                                 return_times=data['return_times'],
+                                 return_estimator=data['return_estimator'],
+                                 error_score=data['error_score'],
+                                 return_all=data['return_all'],
+                                 refit_workflows=data['refit_workflows'])
+          for parameters in para.values())
 
-    source_labels = ['RET']
+        source_labels = ['RET', 'GroupSel', 'VarSel', 'SelectModel',
+                         'scaler', 'encoder', 'imputer',
+                         'pca', 'StatisticalSel', 'ReliefSel', 'Sampler']
 
-    source_data =\
-        pd.Series([ret],
-                  index=source_labels,
-                  name='Fit and Score Output')
-    source_data.to_hdf(args.out, 'RET')
+        source_data =\
+            pd.Series([ret, GroupSel, VarSel, SelectModel, scaler,
+                       encoder, imputer, pca, StatisticalSel, ReliefSel,
+                       Sampler],
+                      index=source_labels,
+                      name='Fit and Score Output')
+        source_data.to_hdf(args.out, 'RET')
+
+    else:
+        ret = Parallel(
+            n_jobs=n_cores, verbose=args.verbose,
+            pre_dispatch=2*n_cores
+        )(delayed(fit_and_score)(X=data['X'], y=data['y'],
+                                 scoring=data['scoring'],
+                                 train=traintest['train'],
+                                 test=traintest['test'], verbose=args.verbose,
+                                 parameters=parameters,
+                                 fit_params=data['fit_params'],
+                                 return_train_score=data['return_train_score'],
+                                 return_parameters=data['return_parameters'],
+                                 return_n_test_samples=data['return_n_test_samples'],
+                                 return_times=data['return_times'],
+                                 return_estimator=data['return_estimator'],
+                                 error_score=data['error_score'],
+                                 return_all=data['return_all'],
+                                 refit_workflows=data['refit_workflows'])
+          for parameters in para.values())
+
+        source_labels = ['RET']
+
+        source_data =\
+            pd.Series([ret],
+                      index=source_labels,
+                      name='Fit and Score Output')
+        source_data.to_hdf(args.out, 'RET')
 
 
 if __name__ == '__main__':

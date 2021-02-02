@@ -53,11 +53,11 @@ def extract_boundary(contour, radius=2):
 def slicer(image, mask=None, output_name=None, output_name_zoom=None,
            thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False,
            expand=False, boundary=False, square=False, flip=True,
-           alpha=0.40, index=None):
-    '''
-    image and mask should both be arrays
-    '''
+           alpha=0.40, index=None, color='cyan'):
+    """Plot slice of image where mask is largest, with mask as overlay.
 
+    image and mask should both be arrays
+    """
     # Determine figure size by spacing
     spacing = float(image.GetSpacing()[0])
     imsize = [float(image.GetSize()[0]), float(image.GetSize()[1])]
@@ -152,7 +152,8 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
         imslice[imslice > thresholds[1]] = thresholds[1]
 
     # Plot the image and overlay the mask
-    fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize, alpha=alpha)
+    fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize, alpha=alpha,
+                              color=color)
 
     # Save Output
     print('\t Saving output.')
@@ -180,18 +181,17 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
     return imslice, maskslice
 
 
-def plot_im_and_overlay(image, mask=None, figsize=(3, 3), alpha=0.40):
-    '''
-    Plot an image in a matplotlib figure and overlay with a mask.
-    '''
+def plot_im_and_overlay(image, mask=None, figsize=(3, 3), alpha=0.40,
+                        color='cyan'):
+    """Plot an image in a matplotlib figure and overlay with a mask."""
     # Create a normalized colormap for the image and mask
     imin = np.min(image)
     imax = np.max(image)
     norm_im = colors.Normalize(vmin=imin, vmax=imax, clip=False)
 
-    cmap = plt.get_cmap("Reds")
+    cmap = plt.get_cmap("Blues")
     cmap.set_under(color="white", alpha=0)
-    cmap.set_over(color="r", alpha=1)
+    cmap.set_over(color=color, alpha=1)
     normO = colors.Normalize(vmin=0.5, vmax=0.75, clip=False)
 
     # Plot and save the full image

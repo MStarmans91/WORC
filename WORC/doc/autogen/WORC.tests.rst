@@ -28,6 +28,15 @@ tests Package
     :show-inheritance:
     :special-members:
 
+:mod:`test_plot_errors` Module
+------------------------------
+
+.. automodule:: WORC.tests.test_plot_errors
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`test_validators` Module
 -----------------------------
 

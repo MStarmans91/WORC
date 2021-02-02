@@ -119,7 +119,7 @@ def generate_config_options():
     # Segmentix
     config['Segmentix'] = dict()
     config['Segmentix']['mask'] = 'subtract, multiply'
-    config['Segmentix']['segtype'] = 'None, Ring'
+    config['Segmentix']['segtype'] = 'None, Ring, Dilate'
     config['Segmentix']['segradius'] = 'Integer > 0'
     config['Segmentix']['N_blobs'] = 'Integer > 0'
     config['Segmentix']['fillholes'] = 'True, False'
@@ -368,7 +368,7 @@ def generate_config_options():
 
     # Hyperparameter optimization options
     config['HyperOptimization'] = dict()
-    config['HyperOptimization']['scoring_method'] = 'Any `sklearn metric <https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/>`_'
+    config['HyperOptimization']['scoring_method'] = 'Manual metric by WORC: f1_weighted_predictproba, average_precision_weighted, gmean. Other accepted values are any `sklearn metric <https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/>`_'
     config['HyperOptimization']['test_size'] = 'Float'
     config['HyperOptimization']['N_iterations'] = 'Integer'
     config['HyperOptimization']['n_jobspercore'] = 'Integer'
@@ -376,6 +376,7 @@ def generate_config_options():
     config['HyperOptimization']['maxlen'] = 'Integer'
     config['HyperOptimization']['ranking_score'] = 'String'
     config['HyperOptimization']['memory'] = 'String consisting of integer + "G"'
+    config['HyperOptimization']['refit_workflows'] = 'Boolean'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
@@ -419,8 +420,8 @@ def generate_config_descriptions():
     # Segmentix
     config['Segmentix'] = dict()
     config['Segmentix']['mask'] = 'If a mask is supplied, should the mask be subtracted from the contour or multiplied.'
-    config['Segmentix']['segtype'] = 'If Ring, then a ring around the segmentation will be used as contour.'
-    config['Segmentix']['segradius'] = 'Define the radius of the ring used if segtype is Ring.'
+    config['Segmentix']['segtype'] = 'If Ring, then a ring around the segmentation will be used as contour. If Dilate, the segmentation will be dilated per 2-D axial slice with a disc.'
+    config['Segmentix']['segradius'] = 'Define the radius of the ring or disc used if segtype is Ring or Dilate, respectively.'
     config['Segmentix']['N_blobs'] = 'How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.'
     config['Segmentix']['fillholes'] = 'Determines whether hole filling will be used.'
     config['Segmentix']['remove_small_objects'] = 'Determines whether small objects will be removed.'
@@ -669,6 +670,7 @@ def generate_config_descriptions():
     config['HyperOptimization']['maxlen'] = 'Number of estimators for which the fitted outcomes and parameters are saved. Increasing this number will increase the memory usage.'
     config['HyperOptimization']['ranking_score'] = 'Score used for ranking the performance of the evaluated workflows.'
     config['HyperOptimization']['memory'] = 'When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + "G".'
+    config['HyperOptimization']['refit_workflows'] = 'If True, refit all workflows in the ensemble automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()

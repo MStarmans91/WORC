@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.3.5 documentation</title>
+  <title>Configuration &mdash; WORC 3.4.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Radiomics Features" href="features.html" />
@@ -51,7 +52,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> WORC
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> WORC
           
 
           
@@ -64,7 +65,7 @@
             
             
               <div class="version">
-                3.3.5
+                3.4.0
               </div>
             
           
@@ -81,6 +82,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -134,6 +136,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -172,7 +175,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Configuration</li>
     
@@ -254,7 +257,7 @@ list can be created by using commas for separation, e.g.
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <p>The config object can be indexed as <code class="docutils literal notranslate"><span class="pre">config[key][subkey]</span> <span class="pre">=</span> <span class="pre">value</span></code>. The various keys, subkeys, and the values
 (description, defaults and options) can be found below.</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 75%" />
@@ -337,7 +340,7 @@ WORC on a cluster with nodes supporting only a single core to be used
 per node, e.g. the BIGR cluster, use only 1 core and threading as a
 backend.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 14%" />
 <col style="width: 86%" />
@@ -384,7 +387,7 @@ backend.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 15%" />
 <col style="width: 28%" />
@@ -450,7 +453,7 @@ backend.</p>
 <p>This part is quite important, as it should match your label file.
 Suppose your patientclass.txt file you supplied as source for labels
 looks like this:</p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 38%" />
 <col style="width: 31%" />
@@ -486,7 +489,7 @@ want to use Label1 for classification, then set:</p>
 <p>If you want to first train a classifier on Label1 and then Label2,
 set: <code class="docutils literal notranslate"><span class="pre">config[Labels][label_names]</span> <span class="pre">=</span> <span class="pre">Label1,</span> <span class="pre">Label2</span></code></p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 11%" />
 <col style="width: 89%" />
@@ -512,7 +515,7 @@ set: <code class="docutils literal notranslate"><span class="pre">config[Labels]
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 23%" />
 <col style="width: 29%" />
@@ -552,7 +555,7 @@ as DICOM are scaled to Hounsfield Units. For more details on the preprocessing
 options, please see
 <span class="xref std std-ref">the additional functionality chapter</span>.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 8%" />
 <col style="width: 92%" />
@@ -578,17 +581,17 @@ options, please see
 <tr class="row-even"><td><p>Normalize_ROI</p></td>
 <td><p>If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.</p></td>
 </tr>
-<tr class="row-odd"><td><p>ROIDetermine</p></td>
+<tr class="row-odd"><td><p>Method</p></td>
+<td><p>Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.</p></td>
+</tr>
+<tr class="row-even"><td><p>ROIDetermine</p></td>
 <td><p>Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.</p></td>
 </tr>
-<tr class="row-even"><td><p>ROIdilate</p></td>
+<tr class="row-odd"><td><p>ROIdilate</p></td>
 <td><p>Determine whether the ROI has to be dilated with a disc element or not.</p></td>
 </tr>
-<tr class="row-odd"><td><p>ROIdilateradius</p></td>
+<tr class="row-even"><td><p>ROIdilateradius</p></td>
 <td><p>Radius of disc element to be used in ROI dilation.</p></td>
-</tr>
-<tr class="row-even"><td><p>Method</p></td>
-<td><p>Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.</p></td>
 </tr>
 <tr class="row-odd"><td><p>Resampling</p></td>
 <td><p>Determine whether the image and mask will be resampled or not.</p></td>
@@ -611,7 +614,7 @@ options, please see
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 39%" />
 <col style="width: 27%" />
@@ -644,21 +647,21 @@ options, please see
 <td><p>Full</p></td>
 <td><p>True, False, Full</p></td>
 </tr>
-<tr class="row-odd"><td><p>ROIDetermine</p></td>
+<tr class="row-odd"><td><p>Method</p></td>
+<td><p>z_score</p></td>
+<td><p>z_score, minmed</p></td>
+</tr>
+<tr class="row-even"><td><p>ROIDetermine</p></td>
 <td><p>Provided</p></td>
 <td><p>Provided, Otsu</p></td>
 </tr>
-<tr class="row-even"><td><p>ROIdilate</p></td>
+<tr class="row-odd"><td><p>ROIdilate</p></td>
 <td><p>False</p></td>
 <td><p>True, False</p></td>
 </tr>
-<tr class="row-odd"><td><p>ROIdilateradius</p></td>
+<tr class="row-even"><td><p>ROIdilateradius</p></td>
 <td><p>10</p></td>
 <td><p>Integer &gt; 0</p></td>
-</tr>
-<tr class="row-even"><td><p>Method</p></td>
-<td><p>z_score</p></td>
-<td><p>z_score, minmed</p></td>
 </tr>
 <tr class="row-odd"><td><p>Resampling</p></td>
 <td><p>False</p></td>
@@ -692,10 +695,10 @@ options, please see
 <p>These fields are only important if you specified using the segmentix
 tool in the general configuration.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
-<col style="width: 16%" />
-<col style="width: 84%" />
+<col style="width: 12%" />
+<col style="width: 88%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -707,10 +710,10 @@ tool in the general configuration.</p>
 <td><p>If a mask is supplied, should the mask be subtracted from the contour or multiplied.</p></td>
 </tr>
 <tr class="row-odd"><td><p>segtype</p></td>
-<td><p>If Ring, then a ring around the segmentation will be used as contour.</p></td>
+<td><p>If Ring, then a ring around the segmentation will be used as contour. If Dilate, the segmentation will be dilated per 2-D axial slice with a disc.</p></td>
 </tr>
 <tr class="row-even"><td><p>segradius</p></td>
-<td><p>Define the radius of the ring used if segtype is Ring.</p></td>
+<td><p>Define the radius of the ring or disc used if segtype is Ring or Dilate, respectively.</p></td>
 </tr>
 <tr class="row-odd"><td><p>N_blobs</p></td>
 <td><p>How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.</p></td>
@@ -727,7 +730,7 @@ tool in the general configuration.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 43%" />
 <col style="width: 17%" />
@@ -746,7 +749,7 @@ tool in the general configuration.</p>
 </tr>
 <tr class="row-odd"><td><p>segtype</p></td>
 <td><p>None</p></td>
-<td><p>None, Ring</p></td>
+<td><p>None, Ring, Dilate</p></td>
 </tr>
 <tr class="row-even"><td><p>segradius</p></td>
 <td><p>5</p></td>
@@ -778,7 +781,7 @@ settings for the
 feature computation here. Also, you can select if the certain features
 are computed or not.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 88%" />
@@ -882,7 +885,7 @@ are computed or not.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 22%" />
 <col style="width: 22%" />
@@ -1024,7 +1027,7 @@ are computed or not.</p>
 feature computation here. For more information, see
 <a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.htm">https://pyradiomics.readthedocs.io/en/latest/customization.htm</a>.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 7%" />
 <col style="width: 93%" />
@@ -1104,7 +1107,7 @@ feature computation here. For more information, see
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 14%" />
 <col style="width: 7%" />
@@ -1214,7 +1217,7 @@ feature computation here. For more information, see
 feature harmonization here. For more information, see
 <a class="reference external" href="https://github.com/Jfortin1/ComBatHarmonization">https://github.com/Jfortin1/ComBatHarmonization</a>.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 9%" />
 <col style="width: 91%" />
@@ -1252,7 +1255,7 @@ feature harmonization here. For more information, see
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 18%" />
 <col style="width: 48%" />
@@ -1305,7 +1308,7 @@ feature harmonization here. For more information, see
 <p>Before the features are given to the classification function, and thus the
 hyperoptimization, these can be preprocessed as following.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -1322,7 +1325,7 @@ hyperoptimization, these can be preprocessed as following.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 30%" />
 <col style="width: 35%" />
@@ -1349,7 +1352,7 @@ information on why and how this is done, see <a class="reference external" href=
 By default, this is not done, as WORC does not know for which
 specific features you would like to do this.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 7%" />
 <col style="width: 93%" />
@@ -1369,7 +1372,7 @@ specific features you would like to do this.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 48%" />
 <col style="width: 17%" />
@@ -1402,7 +1405,7 @@ values per field, of which random samples will be drawn of which finally
 the best setting in combination with the other hyperparameters is
 selected.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 7%" />
 <col style="width: 93%" />
@@ -1425,7 +1428,7 @@ selected.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 44%" />
@@ -1457,7 +1460,7 @@ selected.</p>
 <span id="config-featurescaling"></span><h3>FeatureScaling<a class="headerlink" href="#featurescaling" title="Permalink to this headline">¶</a></h3>
 <p>Determines which method is applied to scale each feature.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 7%" />
 <col style="width: 93%" />
@@ -1477,7 +1480,7 @@ selected.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 19%" />
 <col style="width: 19%" />
@@ -1510,7 +1513,7 @@ which finally the best setting in combination with the other
 hyperparameters is selected. Again, these should be formatted as string
 containing the actual values, e.g. value1, value2.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 9%" />
 <col style="width: 91%" />
@@ -1572,7 +1575,7 @@ containing the actual values, e.g. value1, value2.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 31%" />
 <col style="width: 27%" />
@@ -1598,7 +1601,7 @@ containing the actual values, e.g. value1, value2.</p>
 <td><p>Float</p></td>
 </tr>
 <tr class="row-odd"><td><p>SelectFromModel_estimator</p></td>
-<td><p>Lasso</p></td>
+<td><p>Lasso, LR, RF</p></td>
 <td><p>Lasso, LR, RF</p></td>
 </tr>
 <tr class="row-even"><td><p>SelectFromModel_lasso_alpha</p></td>
@@ -1646,7 +1649,7 @@ containing the actual values, e.g. value1, value2.</p>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 <tr class="row-odd"><td><p>ReliefNumFeatures</p></td>
-<td><p>10, 50</p></td>
+<td><p>10, 40</p></td>
 <td><p>Two Integers: loc and scale</p></td>
 </tr>
 </tbody>
@@ -1658,7 +1661,7 @@ containing the actual values, e.g. value1, value2.</p>
 then you can do a gridsearch among the various feature groups for the
 optimal combination. Here, you determine which groups can be selected.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 29%" />
 <col style="width: 71%" />
@@ -1747,7 +1750,7 @@ optimal combination. Here, you determine which groups can be selected.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 24%" />
 <col style="width: 27%" />
@@ -1869,7 +1872,7 @@ optimal combination. Here, you determine which groups can be selected.</p>
 techniques to resample (under-sampling, over-sampling, or both) the data.
 All methods are adopted from <a class="reference external" href="https://imbalanced-learn.readthedocs.io/">imbalanced learn</a>.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 8%" />
 <col style="width: 92%" />
@@ -1901,7 +1904,7 @@ All methods are adopted from <a class="reference external" href="https://imbalan
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 47%" />
@@ -1923,7 +1926,7 @@ All methods are adopted from <a class="reference external" href="https://imbalan
 <td><p>RandomUnderSampling, RandomOverSampling, NearMiss, NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, SMOTEENN, SMOTETomek</p></td>
 </tr>
 <tr class="row-even"><td><p>sampling_strategy</p></td>
-<td><p>auto, majority, not minority, not majority, all</p></td>
+<td><p>majority, not minority, not majority, all</p></td>
 <td><p>auto, majority, not minority, not majority, all</p></td>
 </tr>
 <tr class="row-odd"><td><p>n_neighbors</p></td>
@@ -1952,7 +1955,7 @@ and <a class="reference external" href="https://www.analyticsvidhya.com/blog/201
 <p>Note, as XGB and AdaBoost take significantly longer to fit (3x), they
 are picked less often by default.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 12%" />
 <col style="width: 88%" />
@@ -2068,7 +2071,7 @@ are picked less often by default.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 48%" />
@@ -2098,7 +2101,7 @@ are picked less often by default.</p>
 <td><p>Integer</p></td>
 </tr>
 <tr class="row-even"><td><p>SVMKernel</p></td>
-<td><p>poly, rbf, linear</p></td>
+<td><p>linear, poly, rbf</p></td>
 <td><p>poly, linear, rbf</p></td>
 </tr>
 <tr class="row-odd"><td><p>SVMC</p></td>
@@ -2134,7 +2137,7 @@ are picked less often by default.</p>
 <td><p>none, l2, l1</p></td>
 </tr>
 <tr class="row-odd"><td><p>LRC</p></td>
-<td><p>0.01, 1.0</p></td>
+<td><p>0.01, 0.99</p></td>
 <td><p>Two Floats: loc and scale</p></td>
 </tr>
 <tr class="row-even"><td><p>LR_solver</p></td>
@@ -2224,7 +2227,7 @@ are picked less often by default.</p>
 <span id="config-crossvalidation"></span><h3>CrossValidation<a class="headerlink" href="#crossvalidation" title="Permalink to this headline">¶</a></h3>
 <p>When using cross validation, specify the following settings.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 8%" />
 <col style="width: 92%" />
@@ -2250,7 +2253,7 @@ are picked less often by default.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 29%" />
 <col style="width: 29%" />
@@ -2286,10 +2289,10 @@ are picked less often by default.</p>
 <span id="config-hyperoptimization"></span><h3>HyperOptimization<a class="headerlink" href="#hyperoptimization" title="Permalink to this headline">¶</a></h3>
 <p>Specify the hyperparameter optimization procedure here.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
-<col style="width: 9%" />
-<col style="width: 91%" />
+<col style="width: 7%" />
+<col style="width: 93%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2321,14 +2324,17 @@ are picked less often by default.</p>
 <tr class="row-odd"><td><p>memory</p></td>
 <td><p>When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + “G”.</p></td>
 </tr>
+<tr class="row-even"><td><p>refit_workflows</p></td>
+<td><p>If True, refit all workflows in the ensemble automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.</p></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 8%" />
-<col style="width: 82%" />
+<col style="width: 6%" />
+<col style="width: 9%" />
+<col style="width: 85%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2338,8 +2344,8 @@ are picked less often by default.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>scoring_method</p></td>
-<td><p>f1_weighted</p></td>
-<td><p>Any <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/">sklearn metric</a></p></td>
+<td><p>f1_weighted_predictproba</p></td>
+<td><p>Manual metric by WORC: f1_weighted_predictproba, average_precision_weighted, gmean. Other accepted values are any <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/">sklearn metric</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>test_size</p></td>
 <td><p>0.15</p></td>
@@ -2350,11 +2356,11 @@ are picked less often by default.</p>
 <td><p>Integer</p></td>
 </tr>
 <tr class="row-odd"><td><p>N_iterations</p></td>
-<td><p>25000</p></td>
+<td><p>1000</p></td>
 <td><p>Integer</p></td>
 </tr>
 <tr class="row-even"><td><p>n_jobspercore</p></td>
-<td><p>1000</p></td>
+<td><p>500</p></td>
 <td><p>Integer</p></td>
 </tr>
 <tr class="row-odd"><td><p>maxlen</p></td>
@@ -2369,6 +2375,10 @@ are picked less often by default.</p>
 <td><p>3G</p></td>
 <td><p>String consisting of integer + “G”</p></td>
 </tr>
+<tr class="row-even"><td><p>refit_workflows</p></td>
+<td><p>False</p></td>
+<td><p>Boolean</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -2378,7 +2388,7 @@ are picked less often by default.</p>
 radiomics, hence the default is to not use it and select only the best
 performing workflow.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 4%" />
 <col style="width: 96%" />
@@ -2398,7 +2408,7 @@ performing workflow.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 17%" />
 <col style="width: 19%" />
@@ -2412,7 +2422,7 @@ performing workflow.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>Use</p></td>
-<td><p>50</p></td>
+<td><p>100</p></td>
 <td><p>Integer</p></td>
 </tr>
 <tr class="row-odd"><td><p>Metric</p></td>
@@ -2426,7 +2436,7 @@ performing workflow.</p>
 <span id="config-evaluation"></span><h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
 <p>In the evaluation of the performance, several adjustments can be made.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 6%" />
 <col style="width: 94%" />
@@ -2443,7 +2453,7 @@ performing workflow.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 42%" />
 <col style="width: 23%" />
@@ -2467,7 +2477,7 @@ performing workflow.</p>
 <span id="config-bootstrap"></span><h3>Bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this headline">¶</a></h3>
 <p>Besides cross validation, WORC supports bootstrapping on the test set for performance evaluation.</p>
 <p><strong>Description:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 21%" />
 <col style="width: 79%" />
@@ -2487,7 +2497,7 @@ performing workflow.</p>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
-<table class="docutils align-center">
+<table class="docutils align-default">
 <colgroup>
 <col style="width: 46%" />
 <col style="width: 27%" />
@@ -2534,11 +2544,19 @@ performing workflow.</p>
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -2549,7 +2567,6 @@ performing workflow.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
