@@ -33,7 +33,8 @@ def ExtractNLargestBlobsn(binaryImage, numberToExtract=1):
     """
 
     # Get all the blob properties.
-    labeledImage = label(binaryImage, connectivity=3)
+    connectivity = binaryImage.ndim
+    labeledImage = label(binaryImage, connectivity=connectivity)
     blobMeasurements = regionprops(labeledImage)
 
     if len(blobMeasurements) == 1:
