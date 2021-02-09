@@ -749,6 +749,10 @@ def plot_estimator_performance(prediction, label_data, label_type,
         for k, v in stats.items():
             print(f"{k} : {v}.")
 
+        with open('/scratch/mdeen/debugfile.txt', 'a') as debugfile:
+            debugfile.write('stats object: ' + str(stats) + '\n')
+            debugfile.write('output object: ' + str(output) + '\n')
+
         output['Statistics'] = stats
 
         if all_performances is not None:
