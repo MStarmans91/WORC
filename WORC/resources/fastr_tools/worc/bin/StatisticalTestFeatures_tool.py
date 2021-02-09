@@ -24,16 +24,21 @@ def main():
     parser.add_argument('-feat', '--feat', metavar='features',
                         nargs='+', dest='feat', type=str, required=True,
                         help='Patient features input of first modality (HDF)')
-    parser.add_argument('-pc', '--pc', metavar='Patientinfo',
-                        dest='pc',
+    parser.add_argument('-pc', '--pc', metavar='Patientinfo', dest='pc',
                         type=str, required=True, nargs='+',
                         help='Classification of patient')
     parser.add_argument('-cf', '--conf', metavar='config', nargs='+',
                         dest='cf', type=str, required=True,
                         help='Configuration')
-    parser.add_argument('-perf', '--perf', metavar='performance',
-                        dest='perf', type=str, required=True, nargs='+',
-                        help='Performance (JSON)')
+    parser.add_argument('-output_csv', '--output_csv', metavar='output_csv',
+                        dest='output_csv', type=str, required=True, nargs='+',
+                        help='P-values of statistical tests (CSV)')
+    parser.add_argument('-output_png', '--output_png', metavar='output_png',
+                        dest='output_png', type=str, required=False, nargs='+',
+                        help='P-values of statistical tests (PNG)')
+    parser.add_argument('-output_tex', '--output_tex', metavar='output_tex',
+                        dest='output_tex', type=str, required=False, nargs='+',
+                        help='P-values of statistical tests (Tex)')
     args = parser.parse_args()
 
     if type(args.pc) is list:
@@ -41,11 +46,13 @@ def main():
 
     if type(args.cf) is list:
         args.cf = ''.join(args.cf)
-        
+
     StatisticalTestFeatures(features=args.feat,
                             patientinfo=args.pc,
                             config=args.cf,
-                            output=args.perf,
+                            output_csv=args.output_csv,
+                            output_png=args.output_png,
+                            output_tex=args.output_tex,
                             verbose=False)
 
 

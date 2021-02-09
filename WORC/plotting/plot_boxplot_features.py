@@ -122,6 +122,15 @@ def generate_feature_boxplots(image_features, label_data, output_zip, dpi=500,
             plt.boxplot([featvect[lab]['all'], featvect[lab]['1'], featvect[lab]['0']])
 
             fz = 5  # Works best after saving
+
+            # Alter the label, remove redundant parts
+            lab = lab.replace('featureconverter_', '')
+            lab = lab.replace('train_', '')
+            lab = lab.replace('test_', '')
+            lab = lab.replace('CalcFeatures', '')
+            lab = lab.replace('predict', '')
+            lab = lab.replace('pyradiomics', '')
+            
             ax.set_title(lab, fontsize=fz)
             for tick in ax.xaxis.get_major_ticks():
                 tick.label.set_fontsize(fz)

@@ -105,6 +105,7 @@ class WORC(object):
             when using elastix, copy metadata from image to segmentation or not
 
     """
+
     def __init__(self, name='test'):
         """Initialize WORC object.
 
@@ -156,13 +157,14 @@ class WORC(object):
         # Memory settings for all fastr nodes
         self.fastr_memory_parameters = dict()
         self.fastr_memory_parameters['FeatureCalculator'] = '14G'
-        self.fastr_memory_parameters['Classification'] = '12G'
+        self.fastr_memory_parameters['Classification'] = '6G'
         self.fastr_memory_parameters['WORCCastConvert'] = '4G'
         self.fastr_memory_parameters['Preprocessing'] = '4G'
         self.fastr_memory_parameters['Elastix'] = '4G'
         self.fastr_memory_parameters['Transformix'] = '4G'
         self.fastr_memory_parameters['Segmentix'] = '6G'
         self.fastr_memory_parameters['ComBat'] = '12G'
+        self.fastr_memory_parameters['PlotEstimator'] = '12G'
 
         if DebugDetector().do_detection():
             print(fastr.config)
@@ -200,14 +202,21 @@ class WORC(object):
 
         # Preprocessing
         config['Preprocessing'] = dict()
+        config['Preprocessing']['CheckSpacing'] = 'False'
+        config['Preprocessing']['Clipping'] = 'False'
+        config['Preprocessing']['Clipping_Range'] = '-1000.0, 3000.0'
         config['Preprocessing']['Normalize'] = 'True'
         config['Preprocessing']['Normalize_ROI'] = 'Full'
+        config['Preprocessing']['Method'] = 'z_score'
         config['Preprocessing']['ROIDetermine'] = 'Provided'
         config['Preprocessing']['ROIdilate'] = 'False'
         config['Preprocessing']['ROIdilateradius'] = '10'
-        config['Preprocessing']['Method'] = 'z_score'
         config['Preprocessing']['Resampling'] = 'False'
         config['Preprocessing']['Resampling_spacing'] = '1, 1, 1'
+        config['Preprocessing']['BiasCorrection'] = 'False'
+        config['Preprocessing']['BiasCorrection_Mask'] = 'False'
+        config['Preprocessing']['CheckOrientation'] = 'False'
+        config['Preprocessing']['OrientationPrimaryAxis'] = 'axial'
 
         # Segmentix
         config['Segmentix'] = dict()
@@ -270,6 +279,10 @@ class WORC(object):
         # Vessel features radius for erosion to determine boudnary
         config['ImageFeatures']['vessel_radius'] = '5'
 
+        # Tags from which to extract features, and how to name them
+        config['ImageFeatures']['dicom_feature_tags'] = '0010 1010, 0010 0040'
+        config['ImageFeatures']['dicom_feature_labels'] = 'age, sex'
+
         # PyRadiomics - Feature calculation
         # Addition to the above, specifically for PyRadiomics
         # Mostly based on specific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml
@@ -277,9 +290,11 @@ class WORC(object):
         config['PyRadiomics']['geometryTolerance'] = '0.0001'
         config['PyRadiomics']['normalize'] = 'False'
         config['PyRadiomics']['normalizeScale'] = '100'
+        config['PyRadiomics']['resampledPixelSpacing'] = 'None'
         config['PyRadiomics']['interpolator'] = 'sitkBSpline'
         config['PyRadiomics']['preCrop'] = 'True'
         config['PyRadiomics']['binCount'] = config['ImageFeatures']['GLCM_levels'] # BinWidth to sensitive for normalization, thus use binCount
+        config['PyRadiomics']['binWidth'] = 'None'
         config['PyRadiomics']['force2D'] = 'False'
         config['PyRadiomics']['force2Ddimension'] = '0'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
         config['PyRadiomics']['voxelArrayShift'] = '300'
@@ -312,6 +327,11 @@ class WORC(object):
         config['ComBat']['excluded_features'] = 'sf_, of_, semf_, pf_'
         config['ComBat']['matlab'] = 'C:\\Program Files\\MATLAB\\R2015b\\bin\\matlab.exe'
 
+        # Feature OneHotEncoding
+        config['OneHotEncoding'] = dict()
+        config['OneHotEncoding']['Use'] = 'False'
+        config['OneHotEncoding']['feature_labels_tofit'] = ''
+
         # Feature imputation
         config['Imputation'] = dict()
         config['Imputation']['use'] = 'True'
@@ -321,6 +341,7 @@ class WORC(object):
         # Feature scaling options
         config['FeatureScaling'] = dict()
         config['FeatureScaling']['scaling_method'] = 'robust_z_score'
+        config['FeatureScaling']['skip_features'] = 'semf_, pf_'
 
         # Feature preprocessing before all below takes place
         config['FeatPreProcess'] = dict()
@@ -330,17 +351,20 @@ class WORC(object):
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = '1.0'
         config['Featsel']['GroupwiseSearch'] = 'True'
-        config['Featsel']['SelectFromModel'] = '0.0'
-        config['Featsel']['UsePCA'] = '0.25'
+        config['Featsel']['SelectFromModel'] = '0.2'
+        config['Featsel']['SelectFromModel_estimator'] = 'Lasso, LR, RF'
+        config['Featsel']['SelectFromModel_lasso_alpha'] = '0.1, 1.4'
+        config['Featsel']['SelectFromModel_n_trees'] = '10, 90'
+        config['Featsel']['UsePCA'] = '0.2'
         config['Featsel']['PCAType'] = '95variance, 10, 50, 100'
-        config['Featsel']['StatisticalTestUse'] = '0.25'
+        config['Featsel']['StatisticalTestUse'] = '0.2'
         config['Featsel']['StatisticalTestMetric'] = 'MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '-3, 2.5'
-        config['Featsel']['ReliefUse'] = '0.25'
+        config['Featsel']['ReliefUse'] = '0.2'
         config['Featsel']['ReliefNN'] = '2, 4'
-        config['Featsel']['ReliefSampleSize'] = '0.75, 0.25'
+        config['Featsel']['ReliefSampleSize'] = '0.75, 0.2'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
-        config['Featsel']['ReliefNumFeatures'] = '10, 50'
+        config['Featsel']['ReliefNumFeatures'] = '10, 40'
 
         # Groupwise Featureselection options
         config['SelectFeatGroup'] = dict()
@@ -357,7 +381,7 @@ class WORC(object):
         config['SelectFeatGroup']['texture_NGTDM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_NGLDM_features'] = 'True, False'
         config['SelectFeatGroup']['texture_LBP_features'] = 'True, False'
-        config['SelectFeatGroup']['patient_features'] = 'False'
+        config['SelectFeatGroup']['dicom_features'] = 'False'
         config['SelectFeatGroup']['semantic_features'] = 'False'
         config['SelectFeatGroup']['coliage_features'] = 'False'
         config['SelectFeatGroup']['vessel_features'] = 'True, False'
@@ -381,7 +405,7 @@ class WORC(object):
             'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
             'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
             'SMOTEENN, SMOTETomek'
-        config['Resampling']['sampling_strategy'] = 'auto, majority, not minority, not majority, all'
+        config['Resampling']['sampling_strategy'] = 'majority, not minority, not majority, all'
         config['Resampling']['n_neighbors'] = '3, 12'
         config['Resampling']['k_neighbors'] = '5, 15'
         config['Resampling']['threshold_cleaning'] = '0.25, 0.5'
@@ -390,9 +414,17 @@ class WORC(object):
         config['Classification'] = dict()
         config['Classification']['fastr'] = 'True'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
-        config['Classification']['classifiers'] = 'SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB'
+        config['Classification']['classifiers'] =\
+            'SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, ' +\
+            'RF, RF, RF, ' +\
+            'LR, LR, LR, ' +\
+            'LDA, LDA, LDA, ' +\
+            'QDA, QDA, QDA, ' +\
+            'GaussianNB, GaussianNB, GaussianNB, ' +\
+            'AdaBoostClassifier, ' +\
+            'XGBClassifier'
         config['Classification']['max_iter'] = '100000'
-        config['Classification']['SVMKernel'] = 'poly, rbf, linear'
+        config['Classification']['SVMKernel'] = 'linear, poly, rbf'
         config['Classification']['SVMC'] = '0, 6'
         config['Classification']['SVMdegree'] = '1, 6'
         config['Classification']['SVMcoef0'] = '0, 1'
@@ -400,8 +432,10 @@ class WORC(object):
         config['Classification']['RFn_estimators'] = '10, 90'
         config['Classification']['RFmin_samples_split'] = '2, 3'
         config['Classification']['RFmax_depth'] = '5, 5'
-        config['Classification']['LRpenalty'] = 'l2'
-        config['Classification']['LRC'] = '0.01, 1.0'
+        config['Classification']['LRpenalty'] = 'l1, l2, elasticnet'
+        config['Classification']['LRC'] = '0.01, 0.99'
+        config['Classification']['LR_solver'] = 'lbfgs, saga'
+        config['Classification']['LR_l1_ratio'] = '0, 1'
         config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
         config['Classification']['LDA_shrinkage'] = '-5, 5'
         config['Classification']['QDA_reg_param'] = '-5, 5'
@@ -412,22 +446,36 @@ class WORC(object):
         config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
         config['Classification']['SGD_penalty'] = 'none, l2, l1'
         config['Classification']['CNB_alpha'] = '0, 1'
+        config['Classification']['AdaBoost_n_estimators'] = config['Classification']['RFn_estimators']
+        config['Classification']['AdaBoost_learning_rate'] = '0.01, 0.99'
+
+        # Based on https://towardsdatascience.com/doing-xgboost-hyper-parameter-tuning-the-smart-way-part-1-of-2-f6d255a45dde
+        # and https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/
+        config['Classification']['XGB_boosting_rounds'] = config['Classification']['RFn_estimators']
+        config['Classification']['XGB_max_depth'] = '3, 12'
+        config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
+        config['Classification']['XGB_gamma'] = '0.01, 0.99'
+        config['Classification']['XGB_min_child_weight'] = '1, 6'
+        config['Classification']['XGB_colsample_bytree'] = '0.3, 0.7'
 
         # CrossValidation
         config['CrossValidation'] = dict()
+        config['CrossValidation']['Type'] = 'random_split'
         config['CrossValidation']['N_iterations'] = '100'
         config['CrossValidation']['test_size'] = '0.2'
         config['CrossValidation']['fixed_seed'] = 'False'
 
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
-        config['HyperOptimization']['scoring_method'] = 'f1_weighted'
+        config['HyperOptimization']['scoring_method'] = 'f1_weighted_predictproba'
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
-        config['HyperOptimization']['N_iterations'] = '25000' # represents either wallclock time limit or nr of evaluations when using SMAC
-        config['HyperOptimization']['n_jobspercore'] = '1000'  # only relevant when using fastr in classification
+        config['HyperOptimization']['N_iterations'] = '1000' # represents either wallclock time limit or nr of evaluations when using SMAC
+        config['HyperOptimization']['n_jobspercore'] = '500'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
+        config['HyperOptimization']['memory'] = '3G'
+        config['HyperOptimization']['refit_workflows'] = 'False'
 
         # SMAC options
         config['SMAC'] = dict()
@@ -441,7 +489,8 @@ class WORC(object):
         # Ensemble options
         config['Ensemble'] = dict()
         config['Ensemble']['Method'] = 'top_N' # ['Single', 'top_N', 'FitNumber', 'ForwardSelection', 'Caruana', 'Bagging']
-        config['Ensemble']['Size'] = '50' # Size of ensemble in top_N, or number of bags in Bagging
+        config['Ensemble']['Size'] = '100' # Size of ensemble in top_N, or number of bags in Bagging
+        config['Ensemble']['Metric'] = 'Default'
 
         # Evaluation options
         config['Evaluation'] = dict()
@@ -450,7 +499,7 @@ class WORC(object):
         # Bootstrap options
         config['Bootstrap'] = dict()
         config['Bootstrap']['Use'] = 'False'
-        config['Bootstrap']['N_iterations'] = '100'
+        config['Bootstrap']['N_iterations'] = '1000'
 
         return config
 
@@ -530,10 +579,11 @@ class WORC(object):
                                                  id='LabelType',
                                                  step_id='Evaluation')
 
+                memory = self.fastr_memory_parameters['PlotEstimator']
                 self.plot_estimator =\
                     self.network.create_node('worc/PlotEstimator:1.0', tool_version='1.0',
                                              id='plot_Estimator',
-                                             resources=ResourceLimit(memory='12G'),
+                                             resources=ResourceLimit(memory=memory),
                                              step_id='Evaluation')
 
                 # Outputs
@@ -826,7 +876,7 @@ class WORC(object):
                         if self.configs[nmod]['General']['Segmentix'] == 'True':
                             self.add_segmentix(label, nmod)
                         elif self.configs[nmod]['Preprocessing']['Resampling'] == 'True':
-                            raise WORCValueError('If you use resampling, ' +
+                            raise WORCexceptions.WORCValueError('If you use resampling, ' +
                                                  'have to use segmentix to ' +
                                                  ' make sure the mask is ' +
                                                  'also resampled. Please ' +
@@ -1510,6 +1560,10 @@ class WORC(object):
         self.nodes_segmentix_train[label].inputs['image'] =\
             self.converters_im_train[label].outputs['image']
 
+        # Input the metadata
+        if self.metadata_train and len(self.metadata_train) >= nmod + 1:
+            self.nodes_segmentix_train[label].inputs['metadata'] = self.sources_metadata_train[label].output
+
         # Input the segmentation
         if hasattr(self, 'transformix_seg_nodes_train'):
             if label in self.transformix_seg_nodes_train.keys():
@@ -1544,8 +1598,13 @@ class WORC(object):
                                          resources=ResourceLimit(memory=memory),
                                          step_id='Preprocessing')
 
+            # Input the image
             self.nodes_segmentix_test[label].inputs['image'] =\
                 self.converters_im_test[label].outputs['image']
+
+            # Input the metadata
+            if self.metadata_test and len(self.metadata_test) >= nmod + 1:
+                self.nodes_segmentix_test[label].inputs['metadata'] = self.sources_metadata_test[label].output
 
             if hasattr(self, 'transformix_seg_nodes_test'):
                 if label in self.transformix_seg_nodes_test.keys():

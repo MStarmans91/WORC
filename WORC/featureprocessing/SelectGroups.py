@@ -36,7 +36,7 @@ class SelectGroups(BaseEstimator, SelectorMixin):
                 - shape_features
                 - orientation_features
                 - semantic_features
-                - patient_features
+                - dicom_features
                 - coliage_features
                 - phase_features
                 - vessel_features
@@ -71,8 +71,8 @@ class SelectGroups(BaseEstimator, SelectorMixin):
             params.append('of_')
         if parameters['semantic_features'] == 'True':
             params.append('semf_')
-        if parameters['patient_features'] == 'True':
-            params.append('pf_')
+        if parameters['dicom_features'] == 'True':
+            params.append('df_')
         if parameters['coliage_features'] == 'True':
             params.append('cf_')
         if parameters['phase_features'] == 'True':

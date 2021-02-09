@@ -15,34 +15,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
 from sklearn.model_selection._validation import _fit_and_score
 import numpy as np
-from sklearn.linear_model import Lasso
+from sklearn.linear_model import Lasso, LogisticRegression
 from sklearn.feature_selection import SelectFromModel
-import scipy
 from sklearn.decomposition import PCA
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.ensemble import RandomForestClassifier
 from WORC.classification.ObjectSampler import ObjectSampler
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils.validation import _num_samples
-from sklearn.metrics import make_scorer, average_precision_score
 from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.classification.metrics import check_multimetric_scoring
 from WORC.featureprocessing.Relief import SelectMulticlassRelief
 from WORC.featureprocessing.Imputer import Imputer
-from WORC.featureprocessing.Scalers import RobustStandardScaler
+from WORC.featureprocessing.Scalers import WORCScaler
 from WORC.featureprocessing.VarianceThreshold import selfeat_variance
 from WORC.featureprocessing.StatisticalTestThreshold import StatisticalTestThreshold
 from WORC.featureprocessing.SelectGroups import SelectGroups
+from WORC.featureprocessing.OneHotEncoderWrapper import OneHotEncoderWrapper
+import WORC
 import WORC.addexceptions as ae
 import time
 
 # Specific imports for error management
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from numpy.linalg import LinAlgError
+
+# Suppress sklearn warnings
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 def fit_and_score(X, y, scoring,
@@ -52,14 +55,15 @@ def fit_and_score(X, y, scoring,
                   return_n_test_samples=True,
                   return_times=True, return_parameters=False,
                   return_estimator=False,
-                  error_score='raise', verbose=False,
-                  return_all=True,
+                  error_score='raise', verbose=True,
+                  return_all=True, refit_workflows=False,
                   use_smac=False):
     """Fit an estimator to a dataset and score the performance.
 
     The following
     methods can currently be applied as preprocessing before fitting, in
     this order:
+    0. Apply OneHotEncoder
     1. Apply feature imputation
     2. Select features based on feature type group (e.g. shape, histogram).
     3. Scale features with e.g. z-scoring.
@@ -143,7 +147,7 @@ def fit_and_score(X, y, scoring,
 
     ret: list
         Contains optionally the train_scores and the test_scores,
-        test_sample_counts, fit_time, score_time, parameters_est
+        fit_time, score_time, parameters_est
         and parameters_all.
 
     GroupSel: WORC GroupSel Object
@@ -164,6 +168,10 @@ def fit_and_score(X, y, scoring,
 
     scaler: scaler object
         Either None if feature scaling is not used, or
+        the fitted object.
+
+    encoder: WORC Encoder Object
+        Either None if feature OneHotEncoding is not used, or
         the fitted object.
 
     imputer: WORC Imputater Object
@@ -215,10 +223,10 @@ def fit_and_score(X, y, scoring,
     test = np.arange(len(y_train), len(y_train) + len(y_test))
 
     # Set some defaults for if a part fails and we return a dummy
-    test_sample_counts = len(test)
     fit_time = np.inf
     score_time = np.inf
     Sampler = None
+    encoder = None
     imputer = None
     scaler = None
     GroupSel = None
@@ -239,9 +247,6 @@ def fit_and_score(X, y, scoring,
     # Initiate dummy return object for when fit and scoring failes: sklearn defaults
     ret = [train_scores, test_scores] if return_train_score else [test_scores]
 
-    # ret = [train_scores, test_scores, test_sample_counts,
-    #        fit_time, score_time, para_estimator, para]
-
     if return_n_test_samples:
         ret.append(_num_samples(X_test))
     if return_times:
@@ -251,8 +256,38 @@ def fit_and_score(X, y, scoring,
     if return_estimator:
         ret.append(estimator)
 
-    # Additional to sklearn defaults: return all parameters
+    # Additional to sklearn defaults: return all parameters and refitted estimator
     ret.append(parameters)
+
+    if refit_workflows:
+        ret.append(None)
+
+    # ------------------------------------------------------------------------
+    # OneHotEncoder
+    if 'OneHotEncoding' in para_estimator.keys():
+        if para_estimator['OneHotEncoding'] == 'True':
+            if verbose:
+                print(f'Applying OneHotEncoding, will ignore unknowns.')
+            feature_labels_tofit =\
+                para_estimator['OneHotEncoding_feature_labels_tofit']
+            encoder =\
+                OneHotEncoderWrapper(handle_unknown='ignore',
+                                     feature_labels_tofit=feature_labels_tofit,
+                                     verbose=verbose)
+            encoder.fit(X_train, feature_labels)
+
+            if encoder.encoder is not None:
+                # Encoder is fitted
+                feature_labels = encoder.encoder.encoded_feature_labels
+                X_train = encoder.transform(X_train)
+                X_test = encoder.transform(X_test)
+
+        del para_estimator['OneHotEncoding']
+        del para_estimator['OneHotEncoding_feature_labels_tofit']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del encoder
 
     # Start the timing
     start_time = time.time()
@@ -273,8 +308,15 @@ def fit_and_score(X, y, scoring,
             imputer = Imputer(missing_values=np.nan, strategy=imp_type,
                               n_neighbors=imp_nn)
             imputer.fit(X_train)
+
+            original_shape = X_train.shape
             X_train = imputer.transform(X_train)
+            imputed_shape = X_train.shape
             X_test = imputer.transform(X_test)
+
+            if original_shape != imputed_shape:
+                removed_features = original_shape[1] - imputed_shape[1]
+                raise ae.WORCValueError(f'Several features ({removed_features}) were np.NaN for all objects. Hence, imputation was not possible. Either make sure this is correct and turn of imputation, or correct the feature.')
 
         del para_estimator['Imputation']
         del para_estimator['ImputationMethod']
@@ -309,7 +351,7 @@ def fit_and_score(X, y, scoring,
                           'texture_ngtdm_features',
                           'texture_ngldm_features',
                           'texture_lbp_features',
-                          'patient_features',
+                          'dicom_features',
                           'semantic_features',
                           'coliage_features',
                           'vessel_features',
@@ -363,7 +405,7 @@ def fit_and_score(X, y, scoring,
         # TODO: Make a specific WORC exception for this warning.
         if verbose:
             print('[WARNING]: No features are selected! Probably all feature groups were set to False. Parameters:')
-            print(para)
+            print(parameters)
 
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
@@ -377,7 +419,7 @@ def fit_and_score(X, y, scoring,
             ret[2] = runtime
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
 
@@ -387,20 +429,20 @@ def fit_and_score(X, y, scoring,
         print(f'Fitting scaler and transforming features, method ' +
               f'{para_estimator["FeatureScaling"]}.')
 
-    if para_estimator['FeatureScaling'] == 'robust_z_score':
-        scaler = RobustStandardScaler().fit(X_train)
-    elif para_estimator['FeatureScaling'] == 'z_score':
-        scaler = StandardScaler().fit(X_train)
-    elif para_estimator['FeatureScaling'] == 'robust':
-        scaler = RobustScaler().fit(X_train)
-    elif para_estimator['FeatureScaling'] == 'minmax':
-        scaler = MinMaxScaler().fit(X_train)
-    elif para_estimator['FeatureScaling'] == 'None':
+    scaling_method = para_estimator['FeatureScaling']
+    if scaling_method == 'None':
         scaler = None
     else:
-        raise WORCKeyError(f'{para_estimator["FeatureScaling"]} is not a ' +
-                           'valid scaling method. Should be z_score, ' +
-                           'robust, minmax, or None.')
+        skip_features = para_estimator['FeatureScaling_skip_features']
+        n_skip_feat = len([i for i in feature_labels[0] if any(e in i for e in skip_features)])
+        if n_skip_feat == len(X_train[0]):
+            # Don't need to scale any features
+            if verbose:
+                print('[WORC Warning] Skipping scaling, only skip features selected.')
+            scaler = None
+        else:
+            scaler = WORCScaler(method=scaling_method, skip_features=skip_features)
+            scaler.fit(X_train, feature_labels[0])
 
     if scaler is not None:
         X_train = scaler.transform(X_train)
@@ -452,7 +494,7 @@ def fit_and_score(X, y, scoring,
             ret[2] = runtime
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
 
@@ -489,7 +531,6 @@ def fit_and_score(X, y, scoring,
                 print("\t New Length: " + str(len(X_train[0])))
             feature_labels = ReliefSel.transform(feature_labels)
 
-
         del para_estimator['ReliefUse']
         del para_estimator['ReliefNN']
         del para_estimator['ReliefSampleSize']
@@ -517,37 +558,61 @@ def fit_and_score(X, y, scoring,
             ret[2] = runtime
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
 
     # ------------------------------------------------------------------------
     # Perform feature selection using a model
+    para_estimator['SelectFromModel'] = 'True'
     if 'SelectFromModel' in para_estimator.keys() and para_estimator['SelectFromModel'] == 'True':
+        model = para_estimator['SelectFromModel_estimator']
         if verbose:
-            print("Selecting features using lasso model.")
-        # Use lasso model for feature selection
+            print(f"Selecting features using model {model}.")
 
-        # First, draw a random value for alpha and the penalty ratio
-        alpha = scipy.stats.uniform(loc=0.0, scale=1.5).rvs()
-        # l1_ratio = scipy.stats.uniform(loc=0.5, scale=0.4).rvs()
+        if model == 'Lasso':
+            # Use lasso model for feature selection
+            alpha = para_estimator['SelectFromModel_lasso_alpha']
+            selectestimator = Lasso(alpha=alpha)
 
-        # Create and fit lasso model
-        lassomodel = Lasso(alpha=alpha)
-        lassomodel.fit(X_train, y)
+        elif model == 'LR':
+            # Use logistic regression model for feature selection
+            selectestimator = LogisticRegression()
+
+        elif model == 'RF':
+            # Use random forest model for feature selection
+            n_estimators = para_estimator['SelectFromModel_n_trees']
+            selectestimator = RandomForestClassifier(n_estimators=n_estimators)
+        else:
+            raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
+
+        # Prefit model
+        selectestimator.fit(X_train, y_train)
 
         # Use fit to select optimal features
-        SelectModel = SelectFromModel(lassomodel, prefit=True)
+        SelectModel = SelectFromModel(selectestimator, prefit=True)
         if verbose:
             print("\t Original Length: " + str(len(X_train[0])))
-        X_train = SelectModel.transform(X_train)
-        X_test = SelectModel.transform(X_test)
-        if verbose:
-            print("\t New Length: " + str(len(X_train[0])))
-        feature_labels = SelectModel.transform(feature_labels)
+
+        X_train_temp = SelectModel.transform(X_train)
+        if len(X_train_temp[0]) == 0:
+            if verbose:
+                print('[WORC WARNING]: No features are selected! Probably your data is too noisy or the selection too strict. Skipping SelectFromModel.')
+            SelectModel = None
+            parameters['SelectFromModel'] = 'False'
+        else:
+            X_train = SelectModel.transform(X_train)
+            X_test = SelectModel.transform(X_test)
+            feature_labels = SelectModel.transform(feature_labels)
+
+            if verbose:
+                print("\t New Length: " + str(len(X_train[0])))
 
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']
+        del para_estimator['SelectFromModel_lasso_alpha']
+        del para_estimator['SelectFromModel_estimator']
+        del para_estimator['SelectFromModel_n_trees']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -570,7 +635,7 @@ def fit_and_score(X, y, scoring,
             ret[2] = runtime
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
 
@@ -599,7 +664,7 @@ def fit_and_score(X, y, scoring,
                     ret[2] = runtime
 
                 if return_all:
-                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
                     return ret
 
@@ -627,7 +692,7 @@ def fit_and_score(X, y, scoring,
                     ret[2] = runtime
 
                 if return_all:
-                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
                     return ret
 
@@ -699,6 +764,7 @@ def fit_and_score(X, y, scoring,
 
             if verbose:
                 print("\t New Length: " + str(len(X_train[0])))
+
         del para_estimator['StatisticalTestUse']
         del para_estimator['StatisticalTestMetric']
         del para_estimator['StatisticalTestThreshold']
@@ -756,7 +822,7 @@ def fit_and_score(X, y, scoring,
                         ret[2] = runtime
 
                     if return_all:
-                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                     else:
                         return ret
                 else:
@@ -823,15 +889,15 @@ def fit_and_score(X, y, scoring,
         estimator = OneVsRestClassifier(estimator)
 
     if verbose:
-        print("Fitting ML.")
+        print(f"Fitting ML method: {parameters['classifiers']}.")
 
     # Recombine feature values and label for train and test set
     feature_values = np.concatenate((X_train, X_test), axis=0)
-    y = np.concatenate((y_train, y_test), axis=0)
+    y_all = np.concatenate((y_train, y_test), axis=0)
     para_estimator = None
 
     try:
-        ret = _fit_and_score(estimator, feature_values, y,
+        ret = _fit_and_score(estimator, feature_values, y_all,
                              scorers, train,
                              test, verbose,
                              para_estimator, fit_params,
@@ -855,7 +921,7 @@ def fit_and_score(X, y, scoring,
                 ret[2] = runtime
 
             if return_all:
-                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
             else:
                 return ret
         else:
@@ -863,6 +929,13 @@ def fit_and_score(X, y, scoring,
 
     # Add original parameters to return object
     ret.append(parameters)
+
+    if refit_workflows:
+        indices = np.arange(0, len(y))
+        estimator = WORC.classification.SearchCV.RandomizedSearchCVfastr()
+        estimator.refit_and_score(X, y, parameters,
+                                  train=indices, test=indices)
+        ret.append(estimator)
 
     # End the timing and store the fit_time
     end_time = time.time()
@@ -873,16 +946,17 @@ def fit_and_score(X, y, scoring,
         ret[2] = runtime
 
     if return_all:
-        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
     else:
         return ret
 
 
 def delete_nonestimator_parameters(parameters):
-    '''
+    """Delete non-estimator parameters.
+
     Delete all parameters in a parameter dictionary that are not used for the
     actual estimator.
-    '''
+    """
     if 'Number' in parameters.keys():
         del parameters['Number']
 
@@ -897,6 +971,10 @@ def delete_nonestimator_parameters(parameters):
         del parameters['ReliefDistanceP']
         del parameters['ReliefNumFeatures']
 
+    if 'OneHotEncoding' in parameters.keys():
+        del parameters['OneHotEncoding']
+        del parameters['OneHotEncoding_feature_labels_tofit']
+
     if 'Imputation' in parameters.keys():
         del parameters['Imputation']
         del parameters['ImputationMethod']
@@ -904,6 +982,9 @@ def delete_nonestimator_parameters(parameters):
 
     if 'SelectFromModel' in parameters.keys():
         del parameters['SelectFromModel']
+        del parameters['SelectFromModel_lasso_alpha']
+        del parameters['SelectFromModel_estimator']
+        del parameters['SelectFromModel_n_trees']
 
     if 'Featsel_Variance' in parameters.keys():
         del parameters['Featsel_Variance']
@@ -976,7 +1057,15 @@ def delete_cc_para(para):
                   'SGD_l1_ratio',
                   'SGD_loss',
                   'SGD_penalty',
-                  'CNB_alpha']
+                  'CNB_alpha',
+                  'AdaBoost_learning_rate',
+                  'AdaBoost_n_estimators',
+                  'XGB_boosting_rounds',
+                  'XGB_max_depth',
+                  'XGB_learning_rate',
+                  'XGB_gamma',
+                  'XGB_min_child_weight',
+                  'XGB_colsample_bytree']
 
     for k in deletekeys:
         if k in para.keys():

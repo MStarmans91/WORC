@@ -1,39 +1,40 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.WORC &mdash; WORC 3.3.2 documentation</title>
+  <title>WORC.WORC &mdash; WORC 3.4.0 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
@@ -49,7 +50,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> WORC
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> WORC
           
 
           
@@ -62,7 +63,7 @@
             
             
               <div class="version">
-                3.3.2
+                3.4.0
               </div>
             
           
@@ -79,6 +80,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -105,6 +107,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -143,7 +146,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
@@ -185,16 +188,16 @@
 <span class="kn">import</span> <span class="nn">fastr</span>
 <span class="kn">import</span> <span class="nn">graphviz</span>
 <span class="kn">import</span> <span class="nn">configparser</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">randint</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.file_io</span> <span class="k">as</span> <span class="nn">io</span>
-<span class="kn">from</span> <span class="nn">fastr.api</span> <span class="k">import</span> <span class="n">ResourceLimit</span>
-<span class="kn">from</span> <span class="nn">WORC.tools.Slicer</span> <span class="k">import</span> <span class="n">Slicer</span>
-<span class="kn">from</span> <span class="nn">WORC.tools.Elastix</span> <span class="k">import</span> <span class="n">Elastix</span>
-<span class="kn">from</span> <span class="nn">WORC.tools.Evaluate</span> <span class="k">import</span> <span class="n">Evaluate</span>
+<span class="kn">from</span> <span class="nn">fastr.api</span> <span class="kn">import</span> <span class="n">ResourceLimit</span>
+<span class="kn">from</span> <span class="nn">WORC.tools.Slicer</span> <span class="kn">import</span> <span class="n">Slicer</span>
+<span class="kn">from</span> <span class="nn">WORC.tools.Elastix</span> <span class="kn">import</span> <span class="n">Elastix</span>
+<span class="kn">from</span> <span class="nn">WORC.tools.Evaluate</span> <span class="kn">import</span> <span class="n">Evaluate</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.config_WORC</span> <span class="k">as</span> <span class="nn">config_io</span>
-<span class="kn">from</span> <span class="nn">WORC.detectors.detectors</span> <span class="k">import</span> <span class="n">DebugDetector</span>
+<span class="kn">from</span> <span class="nn">WORC.detectors.detectors</span> <span class="kn">import</span> <span class="n">DebugDetector</span>
 
 
 <div class="viewcode-block" id="WORC"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC">[docs]</a><span class="k">class</span> <span class="nc">WORC</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -270,7 +273,8 @@
 <span class="sd">            when using elastix, copy metadata from image to segmentation or not</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="WORC.__init__"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="WORC.__init__"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize WORC object.</span>
 
 <span class="sd">        Set the initial variables all to None, except for some defaults.</span>
@@ -321,13 +325,14 @@
         <span class="c1"># Memory settings for all fastr nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;FeatureCalculator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;14G&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;12G&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;6G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;WORCCastConvert&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Elastix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Transformix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;6G&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;12G&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;PlotEstimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;12G&#39;</span>
 
         <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="p">)</span></div>
@@ -365,14 +370,21 @@
 
         <span class="c1"># Preprocessing</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;CheckSpacing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Clipping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Clipping_Range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;-1000.0, 3000.0&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Normalize_ROI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Full&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;z_score&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;ROIDetermine&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Provided&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;ROIdilate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;ROIdilateradius&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;10&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;z_score&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Resampling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Resampling_spacing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1, 1, 1&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;BiasCorrection&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;BiasCorrection_Mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;CheckOrientation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;OrientationPrimaryAxis&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;axial&#39;</span>
 
         <span class="c1"># Segmentix</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -435,6 +447,10 @@
         <span class="c1"># Vessel features radius for erosion to determine boudnary</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;vessel_radius&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5&#39;</span>
 
+        <span class="c1"># Tags from which to extract features, and how to name them</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;dicom_feature_tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0010 1010, 0010 0040&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;dicom_feature_labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;age, sex&#39;</span>
+
         <span class="c1"># PyRadiomics - Feature calculation</span>
         <span class="c1"># Addition to the above, specifically for PyRadiomics</span>
         <span class="c1"># Mostly based on specific MR Settings: see https://github.com/Radiomics/pyradiomics/blob/master/examples/exampleSettings/exampleMR_NoResampling.yaml</span>
@@ -442,9 +458,11 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;geometryTolerance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.0001&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;normalizeScale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;resampledPixelSpacing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;interpolator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sitkBSpline&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;preCrop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;binCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;GLCM_levels&#39;</span><span class="p">]</span> <span class="c1"># BinWidth to sensitive for normalization, thus use binCount</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;binWidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2D&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;force2Ddimension&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>  <span class="c1"># axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;voxelArrayShift&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;300&#39;</span>
@@ -477,6 +495,11 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;excluded_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sf_, of_, semf_, pf_&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;ComBat&#39;</span><span class="p">][</span><span class="s1">&#39;matlab&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;C:</span><span class="se">\\</span><span class="s1">Program Files</span><span class="se">\\</span><span class="s1">MATLAB</span><span class="se">\\</span><span class="s1">R2015b</span><span class="se">\\</span><span class="s1">bin</span><span class="se">\\</span><span class="s1">matlab.exe&#39;</span>
 
+        <span class="c1"># Feature OneHotEncoding</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">][</span><span class="s1">&#39;feature_labels_tofit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
         <span class="c1"># Feature imputation</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
@@ -486,6 +509,7 @@
         <span class="c1"># Feature scaling options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scaling_method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;robust_z_score&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;skip_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;semf_, pf_&#39;</span>
 
         <span class="c1"># Feature preprocessing before all below takes place</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatPreProcess&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -495,17 +519,20 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;Variance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.0&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;GroupwiseSearch&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.0&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.25&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_estimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Lasso, LR, RF&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_lasso_alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.1, 1.4&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;10, 90&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;95variance, 10, 50, 100&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.25&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestMetric&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;MannWhitneyU&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;StatisticalTestThreshold&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;-3, 2.5&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.25&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefUse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefNN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2, 4&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefSampleSize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.75, 0.25&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefSampleSize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.75, 0.2&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefDistanceP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1, 3&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;10, 50&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;10, 40&#39;</span>
 
         <span class="c1"># Groupwise Featureselection options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -522,7 +549,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;texture_NGTDM_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True, False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;texture_NGLDM_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True, False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;texture_LBP_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True, False&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;patient_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;dicom_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;semantic_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;coliage_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SelectFeatGroup&#39;</span><span class="p">][</span><span class="s1">&#39;vessel_features&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True, False&#39;</span>
@@ -546,7 +573,7 @@
             <span class="s1">&#39;RandomUnderSampling, RandomOverSampling, NearMiss, &#39;</span> <span class="o">+</span>\
             <span class="s1">&#39;NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, &#39;</span> <span class="o">+</span>\
             <span class="s1">&#39;SMOTEENN, SMOTETomek&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;sampling_strategy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;auto, majority, not minority, not majority, all&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;sampling_strategy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;majority, not minority, not majority, all&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;3, 12&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;k_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5, 15&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Resampling&#39;</span><span class="p">][</span><span class="s1">&#39;threshold_cleaning&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.25, 0.5&#39;</span>
@@ -555,9 +582,17 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fastr_plugin</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;SVM, SVM, SVM, RF, LR, LDA, QDA, GaussianNB&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="s1">&#39;SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, &#39;</span> <span class="o">+</span>\
+            <span class="s1">&#39;RF, RF, RF, &#39;</span> <span class="o">+</span>\
+            <span class="s1">&#39;LR, LR, LR, &#39;</span> <span class="o">+</span>\
+            <span class="s1">&#39;LDA, LDA, LDA, &#39;</span> <span class="o">+</span>\
+            <span class="s1">&#39;QDA, QDA, QDA, &#39;</span> <span class="o">+</span>\
+            <span class="s1">&#39;GaussianNB, GaussianNB, GaussianNB, &#39;</span> <span class="o">+</span>\
+            <span class="s1">&#39;AdaBoostClassifier, &#39;</span> <span class="o">+</span>\
+            <span class="s1">&#39;XGBClassifier&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;max_iter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100000&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;SVMKernel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;poly, rbf, linear&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;SVMKernel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;linear, poly, rbf&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;SVMC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0, 6&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;SVMdegree&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1, 6&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;SVMcoef0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0, 1&#39;</span>
@@ -565,8 +600,10 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFn_estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;10, 90&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFmin_samples_split&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2, 3&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFmax_depth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5, 5&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;l2&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.01, 1.0&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRpenalty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;l1, l2, elasticnet&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LRC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.01, 0.99&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LR_solver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;lbfgs, saga&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LR_l1_ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0, 1&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LDA_solver&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;svd, lsqr, eigen&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LDA_shrinkage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;-5, 5&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;QDA_reg_param&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;-5, 5&#39;</span>
@@ -577,26 +614,41 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;SGD_loss&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;hinge, squared_hinge, modified_huber&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;SGD_penalty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none, l2, l1&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;CNB_alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0, 1&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;AdaBoost_n_estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFn_estimators&#39;</span><span class="p">]</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;AdaBoost_learning_rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.01, 0.99&#39;</span>
+
+        <span class="c1"># Based on https://towardsdatascience.com/doing-xgboost-hyper-parameter-tuning-the-smart-way-part-1-of-2-f6d255a45dde</span>
+        <span class="c1"># and https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;XGB_boosting_rounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;RFn_estimators&#39;</span><span class="p">]</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;XGB_max_depth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;3, 12&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;XGB_learning_rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;AdaBoost_learning_rate&#39;</span><span class="p">]</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;XGB_gamma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.01, 0.99&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;XGB_min_child_weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1, 6&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.3, 0.7&#39;</span>
 
         <span class="c1"># CrossValidation</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;random_split&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;test_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;fixed_seed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
 
         <span class="c1"># Hyperparameter optimization options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;scoring_method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;f1_weighted&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;scoring_method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;f1_weighted_predictproba&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;test_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.15&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;n_splits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;25000&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;n_jobspercore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1000&#39;</span>  <span class="c1"># only relevant when using fastr in classification</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1000&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;n_jobspercore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;500&#39;</span>  <span class="c1"># only relevant when using fastr in classification</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;maxlen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;ranking_score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;test_score&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;memory&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;3G&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;refit_workflows&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
 
         <span class="c1"># Ensemble options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;50&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Metric&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Default&#39;</span>
 
         <span class="c1"># Evaluation options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -605,7 +657,7 @@
         <span class="c1"># Bootstrap options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Bootstrap&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1000&#39;</span>
 
         <span class="k">return</span> <span class="n">config</span></div>
 
@@ -681,10 +733,11 @@
                                                  <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;LabelType&#39;</span><span class="p">,</span>
                                                  <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
+                <span class="n">memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fastr_memory_parameters</span><span class="p">[</span><span class="s1">&#39;PlotEstimator&#39;</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">plot_estimator</span> <span class="o">=</span>\
                     <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotEstimator:1.0&#39;</span><span class="p">,</span> <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                              <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_Estimator&#39;</span><span class="p">,</span>
-                                             <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
+                                             <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">),</span>
                                              <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
                 <span class="c1"># Outputs</span>
@@ -780,9 +833,9 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">nseg</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentations_train</span><span class="p">)</span>
                         <span class="n">nim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_types</span><span class="p">)</span>
-                        <span class="n">m</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Length of segmentations for training is &#39;</span> <span class="o">+</span>\
-                            <span class="n">f</span><span class="s1">&#39;</span><span class="si">{nseg}</span><span class="s1">: should be equal to number of images&#39;</span> <span class="o">+</span>\
-                            <span class="n">f</span><span class="s1">&#39; (</span><span class="si">{nim}</span><span class="s1">) or 1 when using registration.&#39;</span>
+                        <span class="n">m</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Length of segmentations for training is &#39;</span> <span class="o">+</span>\
+                            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">nseg</span><span class="si">}</span><span class="s1">: should be equal to number of images&#39;</span> <span class="o">+</span>\
+                            <span class="sa">f</span><span class="s1">&#39; (</span><span class="si">{</span><span class="n">nim</span><span class="si">}</span><span class="s1">) or 1 when using registration.&#39;</span>
                         <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
                     <span class="c1"># BUG: We assume that first type defines if we use segmentix</span>
@@ -916,7 +969,7 @@
                             <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 
                         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feature_calculators</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> - Adding feature calculation node: </span><span class="si">{f}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> - Adding feature calculation node: </span><span class="si">{</span><span class="n">f</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">add_feature_calculator</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">nmod</span><span class="p">)</span>
 
                         <span class="c1"># -----------------------------------------------------</span>
@@ -970,7 +1023,7 @@
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">nmod</span><span class="p">][</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">add_segmentix</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">nmod</span><span class="p">)</span>
                         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">nmod</span><span class="p">][</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Resampling&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
-                            <span class="k">raise</span> <span class="n">WORCValueError</span><span class="p">(</span><span class="s1">&#39;If you use resampling, &#39;</span> <span class="o">+</span>
+                            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="s1">&#39;If you use resampling, &#39;</span> <span class="o">+</span>
                                                  <span class="s1">&#39;have to use segmentix to &#39;</span> <span class="o">+</span>
                                                  <span class="s1">&#39; make sure the mask is &#39;</span> <span class="o">+</span>
                                                  <span class="s1">&#39;also resampled. Please &#39;</span> <span class="o">+</span>
@@ -1011,13 +1064,13 @@
                             <span class="c1"># Link features to ComBat</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_Combat1_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
                             <span class="k">for</span> <span class="n">i_node</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">featurecalculators</span><span class="p">[</span><span class="n">label</span><span class="p">]):</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">links_Combat1_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_train&#39;</span><span class="p">][</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">_</span><span class="si">{self.featurecalculators[label][i_node]}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_Combat1_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_train&#39;</span><span class="p">][</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">featurecalculators</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">links_Combat1_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TrainTest</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">links_Combat1_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
                                 <span class="k">for</span> <span class="n">i_node</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">featurecalculators</span><span class="p">[</span><span class="n">label</span><span class="p">]):</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">links_Combat1_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_test&#39;</span><span class="p">][</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">_</span><span class="si">{self.featurecalculators[label][i_node]}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_test</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">links_Combat1_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_test&#39;</span><span class="p">][</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">featurecalculators</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_test</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">links_Combat1_test</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
 
                         <span class="c1"># -----------------------------------------------------</span>
@@ -1035,7 +1088,7 @@
 
                             <span class="c1"># Append features to the classification</span>
                             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">links_C1_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_train&#39;</span><span class="p">][</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">_</span><span class="si">{self.featurecalculators[label][i_node]}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_C1_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_train&#39;</span><span class="p">][</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">featurecalculators</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">links_C1_train</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
                             <span class="c1"># Save output</span>
@@ -1048,7 +1101,7 @@
 
                                 <span class="c1"># Append features to the classification</span>
                                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">links_C1_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_test&#39;</span><span class="p">][</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">_</span><span class="si">{self.featurecalculators[label][i_node]}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_test</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">links_C1_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features_test&#39;</span><span class="p">][</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">featurecalculators</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">featureconverter_test</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">])</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">links_C1_test</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
 
                                 <span class="c1"># Save output</span>
@@ -1279,12 +1332,12 @@
         <span class="k">elif</span> <span class="s1">&#39;predict&#39;</span> <span class="ow">in</span> <span class="n">calcfeat_node</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
             <span class="n">toolbox</span> <span class="o">=</span> <span class="s1">&#39;PREDICT&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;Toolbox </span><span class="si">{calcfeat_node}</span><span class="s1"> not recognized!&#39;</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Toolbox </span><span class="si">{</span><span class="n">calcfeat_node</span><span class="si">}</span><span class="s1"> not recognized!&#39;</span>
             <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">source_toolbox_name</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_constant</span><span class="p">(</span><span class="s1">&#39;String&#39;</span><span class="p">,</span> <span class="n">toolbox</span><span class="p">,</span>
-                                         <span class="nb">id</span><span class="o">=</span><span class="n">f</span><span class="s1">&#39;toolbox_name_</span><span class="si">{toolbox}</span><span class="s1">_</span><span class="si">{label}</span><span class="s1">&#39;</span><span class="p">,</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;toolbox_name_</span><span class="si">{</span><span class="n">toolbox</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
                                          <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Feature_Extraction&#39;</span><span class="p">)</span>
 
         <span class="n">conv_train</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;toolbox&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_toolbox_name</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
@@ -1654,6 +1707,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes_segmentix_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">converters_im_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span>
 
+        <span class="c1"># Input the metadata</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_train</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_train</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">nmod</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes_segmentix_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources_metadata_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
+
         <span class="c1"># Input the segmentation</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;transformix_seg_nodes_train&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformix_seg_nodes_train</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1688,8 +1745,13 @@
                                          <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">),</span>
                                          <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">)</span>
 
+            <span class="c1"># Input the image</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nodes_segmentix_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span>\
                 <span class="bp">self</span><span class="o">.</span><span class="n">converters_im_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Input the metadata</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_test</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_test</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">nmod</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nodes_segmentix_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sources_metadata_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
 
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;transformix_seg_nodes_test&#39;</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transformix_seg_nodes_test</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1845,15 +1907,15 @@
         <span class="k">except</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">ExecutableNotFound</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Graphviz executable not found: not drawing network diagram. Make sure the Graphviz executables are on your systems PATH.&#39;</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WORC WARNING] Graphviz executable gave an error: not drawing network diagram. Original error: </span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[WORC WARNING] Graphviz executable gave an error: not drawing network diagram. Original error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Source Data:&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{k}</span><span class="s2">: </span><span class="si">{self.source_data[k]}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Sink Data:&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{k}</span><span class="s2">: </span><span class="si">{self.sink_data[k]}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
             <span class="c1"># When debugging, set the tempdir to the default of fastr + name</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fastr</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">mounts</span><span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">],</span>
@@ -1890,7 +1952,7 @@
                 <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
                 <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
                 <span class="n">c</span> <span class="o">=</span> <span class="n">config</span>
-            <span class="n">cfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;config_</span><span class="si">{self.name}</span><span class="s2">_</span><span class="si">{num}</span><span class="s2">.ini&quot;</span><span class="p">)</span>
+            <span class="n">cfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;config_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">.ini&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">cfile</span><span class="p">)):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">cfile</span><span class="p">))</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">configfile</span><span class="p">:</span>
@@ -1898,15 +1960,15 @@
 
             <span class="c1"># If PyRadiomics is used, also write a config for PyRadiomics</span>
             <span class="k">if</span> <span class="s1">&#39;pyradiomics&#39;</span> <span class="ow">in</span> <span class="n">c</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;FeatureCalculators&#39;</span><span class="p">]:</span>
-                <span class="n">cfile_pyradiomics</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">,</span> <span class="n">f</span><span class="s2">&quot;config_pyradiomics_</span><span class="si">{self.name}</span><span class="s2">_</span><span class="si">{num}</span><span class="s2">.yaml&quot;</span><span class="p">)</span>
+                <span class="n">cfile_pyradiomics</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;config_pyradiomics_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">)</span>
                 <span class="n">config_pyradiomics</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">convert_config_pyradiomics</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cfile_pyradiomics</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
                     <span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">(</span><span class="n">config_pyradiomics</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-                <span class="n">cfile_pyradiomics</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="s2">&quot;config_pyradiomics_</span><span class="si">{self.name}</span><span class="s2">_</span><span class="si">{num}</span><span class="s2">.yaml&quot;</span>
+                <span class="n">cfile_pyradiomics</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;config_pyradiomics_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">.yaml&quot;</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pyradiomics_configs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfile_pyradiomics</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;%20&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))</span>
 
             <span class="c1"># BUG: Make path with pathlib to create windows double slashes</span>
-            <span class="n">cfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="n">f</span><span class="s2">&quot;config_</span><span class="si">{self.name}</span><span class="s2">_</span><span class="si">{num}</span><span class="s2">.ini&quot;</span>
+            <span class="n">cfile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fastr_tmpdir</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;config_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">num</span><span class="si">}</span><span class="s2">.ini&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fastrconfigs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfile</span><span class="o">.</span><span class="n">as_uri</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;%20&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))</span></div></div>
 
 
@@ -1920,7 +1982,7 @@
 <span class="sd">    3. Slicer pipeline, to create pngs of middle slice of images.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Tools.__init__"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.Tools.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Tools.__init__"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.Tools.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize object with all pipelines.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Elastix</span> <span class="o">=</span> <span class="n">Elastix</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Evaluate</span> <span class="o">=</span> <span class="n">Evaluate</span><span class="p">()</span>
@@ -1937,11 +1999,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1952,7 +2022,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

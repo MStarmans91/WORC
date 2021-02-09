@@ -14,7 +14,7 @@ texture_GLDZM_features  If True, use GLDZM texture features in model.
 texture_NGTDM_features  If True, use NGTDM texture features in model.          
 texture_NGLDM_features  If True, use NGLDM texture features in model.          
 texture_LBP_features    If True, use LBP texture features in model.            
-patient_features        If True, use patient features in model.                
+dicom_features          If True, use DICOM features in model.                  
 semantic_features       If True, use semantic features in model.               
 coliage_features        If True, use coliage features in model.                
 vessel_features         If True, use vessel features in model.                 

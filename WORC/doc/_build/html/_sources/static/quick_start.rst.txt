@@ -251,3 +251,6 @@ Some things we would advice to always do:
 .. code-block:: python
 
       experiment.add_evaluation()
+
+For a complete overview of all functions, please look at the
+:ref:`Config chapter <config-chapter>`.

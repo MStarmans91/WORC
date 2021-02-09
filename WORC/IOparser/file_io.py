@@ -119,7 +119,7 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
         except ValueError as e:
             message = str(e) + '. Please take a look at your labels' +\
                 ' file and make sure it is formatted correctly. ' +\
-                r'See also https://github.com/MStarmans91/WORC/wiki/The-WORC-configuration#genetics.'
+                r'See also https://worc.readthedocs.io/en/latest/static/configuration.html#config-labels.'
             raise WORCexceptions.WORCValueError(message)
 
         if len(label_names) == 1:
@@ -192,8 +192,10 @@ def load_features(feat, patientinfo, label_type):
 
 
 def convert_config_pyradiomics(config):
-    """
-    Convert fields from WORC confiparser object to a PyRadiomics compatible dictionary
+    """Convert WORC to PyRadiomics config.
+
+    Convert fields from WORC confiparser object to a PyRadiomics
+    compatible dictionary.
     """
     # Creatae main config structure
     outputconfig = dict()
@@ -202,34 +204,59 @@ def convert_config_pyradiomics(config):
     outputconfig['featureClass'] = dict()
 
     # Take out the specific PyRadiomics values
-    outputconfig['setting']['geometryTolerance'] = float(config['PyRadiomics']['geometryTolerance'])
+    outputconfig['setting']['geometryTolerance'] =\
+        float(config['PyRadiomics']['geometryTolerance'])
 
     if config['PyRadiomics']['normalize'] == 'True':
         outputconfig['setting']['normalize'] = True
     else:
         outputconfig['setting']['normalize'] = False
 
-    outputconfig['setting']['normalizeScale'] = int(config['PyRadiomics']['normalizeScale'])
+    outputconfig['setting']['normalizeScale'] =\
+        int(config['PyRadiomics']['normalizeScale'])
 
-    outputconfig['setting']['interpolator'] = config['PyRadiomics']['interpolator']
+    outputconfig['setting']['interpolator'] =\
+        config['PyRadiomics']['interpolator']
 
     if config['PyRadiomics']['preCrop'] == 'True':
         outputconfig['setting']['preCrop'] = True
     else:
         outputconfig['setting']['preCrop'] = False
 
-    outputconfig['setting']['label'] = int(config['PyRadiomics']['label'])
+    outputconfig['setting']['label'] =\
+        int(config['PyRadiomics']['label'])
 
     if config['PyRadiomics']['force2D'] == 'True':
         outputconfig['setting']['force2D'] = True
     else:
         outputconfig['setting']['force2D'] = False
 
-    outputconfig['setting']['force2Ddimension'] = int(config['PyRadiomics']['force2Ddimension'])
+    outputconfig['setting']['force2Ddimension'] =\
+        int(config['PyRadiomics']['force2Ddimension'])
 
-    outputconfig['setting']['voxelArrayShift'] = int(config['PyRadiomics']['voxelArrayShift'])
+    outputconfig['setting']['voxelArrayShift'] =\
+        int(config['PyRadiomics']['voxelArrayShift'])
 
-    outputconfig['setting']['binCount'] = int(config['PyRadiomics']['binCount'])
+    if config['PyRadiomics']['binCount'] == 'None':
+        outputconfig['setting']['binCount'] = None
+    else:
+        outputconfig['setting']['binCount'] =\
+            int(config['PyRadiomics']['binCount'])
+
+    if config['PyRadiomics']['binWidth'] == 'None':
+        outputconfig['setting']['binWidth'] = None
+    else:
+        outputconfig['setting']['binWidth'] =\
+            float(config['PyRadiomics']['binWidth'])
+
+    if config['PyRadiomics']['resampledPixelSpacing'] == 'None':
+        outputconfig['setting']['resampledPixelSpacing'] = None
+    else:
+        outputconfig['setting']['resampledPixelSpacing'] =\
+            [float(i) for i in config['PyRadiomics']['resampledPixelSpacing'].split(',')]
+        if len(outputconfig['setting']['resampledPixelSpacing']) != 3:
+            length = len(outputconfig['setting']['resampledPixelSpacing'])
+            raise WORCexceptions.WORCValueError(f'Length PyRadiomics resampledPixelSpacing should be 3, got {length}.')
 
     # Extract several general values as well
     # Convert strings with values to list of ints

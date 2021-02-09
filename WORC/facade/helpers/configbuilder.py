@@ -127,7 +127,7 @@ class ConfigBuilder():
                 # Only perform a 3x random-split cross-validation
                 'N_iterations': '3',
                 # Set a fixed seed, so we get the same result every time
-                'fixed_seed': ' True'
+                'fixed_seed': 'True'
                 },
             # Hyperoptimization is very minimal
             'HyperOptimization': {'n_splits': '2',
@@ -175,12 +175,19 @@ class ConfigBuilder():
                     'vessel_features': 'False',
                     'phase_features': 'False'
                     },
+                'OneHotEncoding': {
+                    'Use': 'True',
+                    'feature_labels_tofit': 'NGTDM'
+                    },
                 'Resampling': {
                     'Use': '0.5',
                     },
                 'CrossValidation': {
                     'N_iterations': '2',
-                    'fixed_seed': ' True'
+                    'fixed_seed': 'True'
+                    },
+                'Classification': {
+                    'classifiers': 'SVM, RF, LR, LDA, QDA, GaussianNB'
                     },
                 'HyperOptimization': {
                     'N_iterations': '10',

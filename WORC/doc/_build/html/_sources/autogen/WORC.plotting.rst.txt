@@ -64,6 +64,15 @@ plotting Package
     :show-inheritance:
     :special-members:
 
+:mod:`plot_errors` Module
+-------------------------
+
+.. automodule:: WORC.plotting.plot_errors
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`plot_estimator_performance` Module
 ----------------------------------------
 
@@ -73,10 +82,28 @@ plotting Package
     :show-inheritance:
     :special-members:
 
+:mod:`plot_hyperparameters` Module
+----------------------------------
+
+.. automodule:: WORC.plotting.plot_hyperparameters
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`plot_images` Module
 -------------------------
 
 .. automodule:: WORC.plotting.plot_images
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`plot_pvalues_features` Module
+-----------------------------------
+
+.. automodule:: WORC.plotting.plot_pvalues_features
     :members:
     :undoc-members:
     :show-inheritance:

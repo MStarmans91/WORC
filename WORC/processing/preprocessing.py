@@ -20,8 +20,9 @@ import pydicom
 import WORC.IOparser.config_preprocessing as config_io
 import os
 from WORC.processing.segmentix import dilate_contour
-from WORC.processing.helpers import resample_image
+from WORC.processing import helpers as h
 import numpy as np
+import WORC.addexceptions as ae
 
 
 def preprocess(imagefile, config, metadata=None, mask=None):
@@ -44,6 +45,51 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         image = image*metadata.RescaleSlope +\
             metadata.RescaleIntercept
 
+    # Apply bias correction
+    if config['Preprocessing']['BiasCorrection']:
+        print('Apply bias correction.')
+        usemask = config['Preprocessing']['BiasCorrection_Mask']
+        image = bias_correct_image(img=image, usemask=usemask)
+    else:
+        print('No bias correction was applied.')
+
+    # Detect incorrect spacings
+    if config['Preprocessing']['CheckSpacing']:
+        if metadata is None:
+            raise ae.WORCValueError('When correcting for spacing, you need to input metadata.')
+
+        if image.GetSpacing() == (1, 1, 1):
+            print('Detected 1x1x1 spacing, overwriting with DICOM metadata.')
+            if [0x18, 0x50] in list(metadata.keys()):
+                slice_thickness = metadata[0x18, 0x50].value
+            elif [0x18, 0x88] in list(metadata.keys()):
+                # Take spacing between slices
+                slice_thickness = metadata[0x18, 0x88].value
+            else:
+                slice_thickness = 1.0
+
+            if [0x28, 0x30] in list(metadata.keys()):
+                pixel_spacing = metadata[0x28, 0x30].value
+            else:
+                pixel_spacing = [1.0, 1.0]
+
+            spacing = (float(pixel_spacing[0]),
+                       float(pixel_spacing[1]),
+                       float(slice_thickness))
+            image.SetSpacing(spacing)
+    else:
+        print('No spacing checking was applied.')
+
+    # Apply clipping
+    if config['Preprocessing']['Clipping']:
+        range = config['Preprocessing']['Clipping_Range']
+        print(f'Apply clipping to range {range}.')
+        image = clip_image(image=image,
+                           lowerbound=range[0],
+                           upperbound=range[1])
+    else:
+        print('No clipping was applied.')
+
     # Apply normalization
     if config['Preprocessing']['Normalize']:
         method = config['Preprocessing']['Method']
@@ -51,7 +97,7 @@ def preprocess(imagefile, config, metadata=None, mask=None):
         dilate = config['Preprocessing']['ROIdilate']
         radius = config['Preprocessing']['ROIdilateradius']
         ROIDetermine = config['Preprocessing']['ROIDetermine']
-        metadata = config['General']['AssumeSameImageAndMaskMetadata']
+        samemetadata = config['General']['AssumeSameImageAndMaskMetadata']
         image = normalize_image(image=image,
                                 mask=mask,
                                 method=method,
@@ -59,20 +105,83 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                                 Dilate_ROI=dilate,
                                 ROI_dilate_radius=radius,
                                 ROIDetermine=ROIDetermine,
-                                AssumeSameImageAndMaskMetadata=metadata)
+                                AssumeSameImageAndMaskMetadata=samemetadata)
     else:
         print('No normalization was applied.')
 
-    # Apply preprocessing
+    # Apply re-orientation of the image
+    if config['Preprocessing']['CheckOrientation']:
+        primary_axis = config['Preprocessing']['OrientationPrimaryAxis']
+        print(f'Apply re-orientation of image to {primary_axis} if required.')
+        image = h.transpose_image(image=image, primary_axis=primary_axis)
+    else:
+        print('No re-orientation was applied.')
+
+    # Apply resampling
     if config['Preprocessing']['Resampling']:
         new_spacing = config['Preprocessing']['Resampling_spacing']
         print(f'Apply resampling of image to spacing {new_spacing}.')
-        image = resample_image(image=image, new_spacing=new_spacing,
-                               interpolator=sitk.sitkBSpline)
+        image = h.resample_image(image=image, new_spacing=new_spacing,
+                                 interpolator=sitk.sitkBSpline)
     else:
         print('No resampling was applied.')
 
     return image
+
+
+def bias_correct_image(img, usemask=False):
+    """Apply N4 Bias Correction."""
+    # print('working on N4')
+    initial_img = img
+
+    # Cast to float to enable bias correction to be used
+    image = sitk.Cast(img, sitk.sitkFloat64)
+
+    # Set zeroes to a small number to prevent division by zero
+    image = sitk.GetArrayFromImage(image)
+    image[image == 0] = np.finfo(float).eps
+    image = sitk.GetImageFromArray(image)
+    image.CopyInformation(initial_img)
+
+    if usemask:
+        maskImage = sitk.OtsuThreshold(image, 0, 1)
+
+    # apply image bias correction using N4 bias correction
+    corrector = sitk.N4BiasFieldCorrectionImageFilter()
+    if usemask:
+        corrected_image = corrector.Execute(image, maskImage)
+    else:
+        corrected_image = corrector.Execute(image)
+
+    return corrected_image
+
+
+def clip_image(image, lowerbound=-1000.0, upperbound=3000.0):
+    """Clip intensity range of an image.
+
+    Parameters
+    image: ITK Image
+        Image to normalize
+    lowerbound: float, default -1000.0
+        lower bound of clipping range
+    upperbound: float, default 3000.0
+        lower bound of clipping range
+
+    Returns
+    -------
+    image : ITK Image
+        Output image.
+
+    """
+    # Create clamping filter for clipping and set variables
+    filter = sitk.ClampImageFilter()
+    filter.SetLowerBound(lowerbound)
+    filter.SetUpperBound(upperbound)
+
+    # Execute
+    clipped_image = filter.Execute(image)
+
+    return clipped_image
 
 
 def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',
@@ -90,7 +199,7 @@ def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',
     method: string, default z_score
         Method to be used for normalization.
     Normalize_ROI: string, default Full
-        ROI to use for normalization
+        ROI to use for normalization, Can be Full or True
     Dilate_ROI: string, default True
         Whether to dilate the ROI or not
     ROI_dilate_radius: int, default 5

@@ -19,6 +19,15 @@ tools Package
     :show-inheritance:
     :special-members:
 
+:mod:`Inference` Module
+-----------------------
+
+.. automodule:: WORC.tools.Inference
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`Slicer` Module
 --------------------
 

@@ -8,6 +8,56 @@ already benefit from the main functionality of WORC, i.e. the automatic algorith
 optimization. However, several additional functionalities are provided, which are discussed in
 this chapter.
 
+For a description of the radiomics features, please see
+:ref:`the radiomics features chapter <features-chapter>`. For a description of
+the data mining components, see
+:ref:`the data mining chapter <datamining-chapter>`. All other components
+are discussed here.
+
+For a comprehensive overview of all functions and parameters, please look at
+:ref:`the config chapter <config-chapter>`.
+
+
+Image Preprocessing
+--------------------
+Preprocessing of the image, and accordingly the mask, is done in respectively
+the :py:mod:`WORC.processing.preprocessing` and the
+:py:mod:`WORC.processing.segmentix` scripts. Options for preprocessing
+the image include, in the following order:
+
+1. N4 Bias field correction, see also https://simpleitk.readthedocs.io/en/master/link_N4BiasFieldCorrection_docs.html.
+2. Checking and optionally correcting the spacing if it's 1x1x1 and the DICOM metadata says otherwise.
+3. Clipping of the image intensities above and below a certain value.
+4. Normalization, see :py:mod:`WORC.processing.preprocessing.normalize_image` for all options.
+5. Transposing the image to another ''main'' orientation, e.g. axial.
+6. Resampling the image to a different spacing.
+
+Options for preprocessing the segmentation include:
+
+1. Hole filling. Many feature computations cannot deal with holes.
+2. Removing small objects. Many feature computations cannot deal with multiple
+  objects in a single segmentation.
+3. Extracing the largest blob. Many feature computations cannot deal with
+  multiple objects in a single segmentation.
+4. Instead of using the full segmentation, extracting a ring around the border
+  of the image to compute the features on. Ring captures both the inner and
+  outer border.
+5. Dilating the contour.
+6. Masking the contour with another contour.
+7. When assuming the same image and metadata, copy the metadata of the image
+  to the segmentation.
+8. Checking and optionally correcting the spacing if it's 1x1x1 and the
+  DICOM metadata says otherwise. Same as image preprocessing step 2.
+9. Transposing the segmentation to another ''main'' orientation, e.g. axial.
+  Same as image preprocessing step 5.
+10. Resampling the segmentation **and the segmentation** to a different spacing.
+  Same as image preprocessing step 10.
+
+Image Registration
+-------------------
+
+Documentation WIP.
+
 ComBat
 --------
 
@@ -31,22 +81,12 @@ When using ComBat, the following configurations should be done:
     Hence, to avoid serious overfitting, we advice to **NEVER** use the variable
     you are trying to predict as the moderation variable.
 
-Elastix
----------
-Documentation WIP.
-
-Regression
-------------
-Documentation WIP.
-
-Survival
-----------
-Documentation WIP.
-
-Segmentix
-----------
-Documentation WIP.
-
 ICC
 ----
 Documentation WIP.
+
+Additional classifiers
+-----------------------
+When using the XGDBoost classifiers or regressors, install ``xgdboost``,
+which can be done using ``pip``, see https://xgboost.readthedocs.io/en/latest/python/python_intro.html.
+``WORC`` makes use of the scikit-learn API.

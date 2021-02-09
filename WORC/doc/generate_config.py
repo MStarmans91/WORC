@@ -119,7 +119,7 @@ def generate_config_options():
     # Segmentix
     config['Segmentix'] = dict()
     config['Segmentix']['mask'] = 'subtract, multiply'
-    config['Segmentix']['segtype'] = 'None, Ring'
+    config['Segmentix']['segtype'] = 'None, Ring, Dilate'
     config['Segmentix']['segradius'] = 'Integer > 0'
     config['Segmentix']['N_blobs'] = 'Integer > 0'
     config['Segmentix']['fillholes'] = 'True, False'
@@ -128,6 +128,9 @@ def generate_config_options():
 
     # Preprocessing
     config['Preprocessing'] = dict()
+    config['Preprocessing']['CheckSpacing'] = 'True, False'
+    config['Preprocessing']['Clipping'] = 'True, False'
+    config['Preprocessing']['Clipping_Range'] = 'Float, Float'
     config['Preprocessing']['Normalize'] = 'True, False'
     config['Preprocessing']['Normalize_ROI'] = 'True, False, Full'
     config['Preprocessing']['ROIDetermine'] = 'Provided, Otsu'
@@ -136,6 +139,10 @@ def generate_config_options():
     config['Preprocessing']['Method'] = 'z_score, minmed'
     config['Preprocessing']['Resampling'] = 'True, False'
     config['Preprocessing']['Resampling_spacing'] = 'Float, Float, Float'
+    config['Preprocessing']['BiasCorrection'] = 'True, False'
+    config['Preprocessing']['BiasCorrection_Mask'] = 'Float, Float, Float'
+    config['Preprocessing']['CheckOrientation'] = 'True, False'
+    config['Preprocessing']['OrientationPrimaryAxis'] = 'axial'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -188,15 +195,21 @@ def generate_config_options():
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Integer > 0'
 
+    # Tags from which to extract features, and how to name them
+    config['ImageFeatures']['dicom_feature_tags'] = "DICOM tag keys, e.g. 0010 0010, separated by comma's"
+    config['ImageFeatures']['dicom_feature_labels'] = 'List of strings'
+
     # Pyradiomics - feature calculation
     config['PyRadiomics'] = dict()
     config['PyRadiomics']['geometryTolerance'] = 'Float'
     config['PyRadiomics']['Preprocessing'] = 'True, False'
     config['PyRadiomics']['normalize'] = 'Boolean'
     config['PyRadiomics']['normalizeScale'] = 'Integer'
+    config['PyRadiomics']['resampledPixelSpacing'] = 'Float, Float, Float'
     config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
     config['PyRadiomics']['preCrop'] = 'True, False'
-    config['PyRadiomics']['binCount'] = 'Integer' # BinWidth to sensitive for normalization, thus use binCount
+    config['PyRadiomics']['binCount'] = 'Integer or None' # BinWidth to sensitive for normalization, thus use binCount
+    config['PyRadiomics']['binWidth'] = 'Integer or None'
     config['PyRadiomics']['force2D'] = 'True, False'
     config['PyRadiomics']['force2Ddimension'] = '0 = axial, 1 = coronal, 2 = sagital'  # axial slices, for coronal slices, use dimension 1 and for sagittal, dimension 2.
     config['PyRadiomics']['voxelArrayShift'] = 'Integer'
@@ -238,8 +251,11 @@ def generate_config_options():
     config['Featsel']['Variance'] = 'Float'
     config['Featsel']['GroupwiseSearch'] = 'Boolean(s)'
     config['Featsel']['SelectFromModel'] = 'Float'
+    config['Featsel']['SelectFromModel_estimator'] = 'Lasso, LR, RF'
+    config['Featsel']['SelectFromModel_lasso_alpha'] = 'Two Floats: loc and scale'
+    config['Featsel']['SelectFromModel_n_trees'] = 'Two Integers: loc and scale'
     config['Featsel']['UsePCA'] = 'Float'
-    config['Featsel']['PCAType'] = 'Inteteger(s), 95variance'
+    config['Featsel']['PCAType'] = 'Integer(s), 95variance'
     config['Featsel']['StatisticalTestUse'] = 'Float'
     config['Featsel']['StatisticalTestMetric'] = 'ttest, Welch, Wilcoxon, MannWhitneyU'
     config['Featsel']['StatisticalTestThreshold'] = 'Two Integers: loc and scale'
@@ -265,7 +281,7 @@ def generate_config_options():
     config['SelectFeatGroup']['texture_NGLDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_NGTDM_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['texture_LBP_features'] = 'Boolean(s)'
-    config['SelectFeatGroup']['patient_features'] = 'Boolean(s)'
+    config['SelectFeatGroup']['dicom_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['semantic_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['coliage_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['log_features'] = 'Boolean(s)'
@@ -277,6 +293,11 @@ def generate_config_options():
     config['SelectFeatGroup']['wavelet_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['original_features'] = 'Boolean(s)'
     config['SelectFeatGroup']['toolbox'] = 'All, or name of toolbox (PREDICT, PyRadiomics)'
+
+    # Feature OneHotEncoding
+    config['OneHotEncoding'] = dict()
+    config['OneHotEncoding']['Use'] = 'Boolean(s)'
+    config['OneHotEncoding']['feature_labels_tofit'] = 'List of strings'
 
     # Feature imputation
     config['Imputation'] = dict()
@@ -311,7 +332,9 @@ def generate_config_options():
     config['Classification']['RFmin_samples_split'] = 'Two Integers: loc and scale'
     config['Classification']['RFmax_depth'] = 'Two Integers: loc and scale'
     config['Classification']['LRpenalty'] = 'none, l2, l1'
-    config['Classification']['LRC'] = 'Two Integers: loc and scale'
+    config['Classification']['LRC'] = 'Two Floats: loc and scale'
+    config['Classification']['LR_solver'] = 'Comma separated list of strings, for the options see https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html'
+    config['Classification']['LR_l1_ratio'] = 'Float between 0.0 and 1.0.'
     config['Classification']['LDA_solver'] = 'svd, lsqr, eigen'
     config['Classification']['LDA_shrinkage'] = 'Two Integers: loc and scale'
     config['Classification']['QDA_reg_param'] = 'Two Integers: loc and scale'
@@ -322,9 +345,18 @@ def generate_config_options():
     config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
     config['Classification']['SGD_penalty'] = 'none, l2, l1'
     config['Classification']['CNB_alpha'] = 'Two Integers: loc and scale'
+    config['Classification']['AdaBoost_n_estimators'] = 'Two Integers: loc and scale'
+    config['Classification']['AdaBoost_learning_rate'] = 'Two Floats: loc and scale'
+    config['Classification']['XGB_boosting_rounds'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_max_depth'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
+    config['Classification']['XGB_gamma'] = 'Two Floats: loc and scale'
+    config['Classification']['XGB_min_child_weight'] = 'Two Integers: loc and scale'
+    config['Classification']['XGB_colsample_bytree'] = 'Two Floats: loc and scale'
 
     # CrossValidation
     config['CrossValidation'] = dict()
+    config['CrossValidation']['Type'] = 'random_split, LOO'
     config['CrossValidation']['N_iterations'] = 'Integer'
     config['CrossValidation']['test_size'] = 'Float'
     config['CrossValidation']['fixed_seed'] = 'Boolean'
@@ -336,21 +368,25 @@ def generate_config_options():
 
     # Hyperparameter optimization options
     config['HyperOptimization'] = dict()
-    config['HyperOptimization']['scoring_method'] = 'Any `sklearn metric <https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/>`_'
+    config['HyperOptimization']['scoring_method'] = 'Manual metric by WORC: f1_weighted_predictproba, average_precision_weighted, gmean. Other accepted values are any `sklearn metric <https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/>`_'
     config['HyperOptimization']['test_size'] = 'Float'
     config['HyperOptimization']['N_iterations'] = 'Integer'
     config['HyperOptimization']['n_jobspercore'] = 'Integer'
     config['HyperOptimization']['n_splits'] = 'Integer'
     config['HyperOptimization']['maxlen'] = 'Integer'
     config['HyperOptimization']['ranking_score'] = 'String'
+    config['HyperOptimization']['memory'] = 'String consisting of integer + "G"'
+    config['HyperOptimization']['refit_workflows'] = 'Boolean'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
-    config['FeatureScaling']['scaling_method'] = 'robust_z_score. z_score, robust, minmax, None'
+    config['FeatureScaling']['skip_features'] = 'Comma separated list of strings'
+    config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, None'
 
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Integer'
+    config['Ensemble']['Metric'] = 'Default, generalization'
 
     # Evaluation options
     config['Evaluation'] = dict()
@@ -384,8 +420,8 @@ def generate_config_descriptions():
     # Segmentix
     config['Segmentix'] = dict()
     config['Segmentix']['mask'] = 'If a mask is supplied, should the mask be subtracted from the contour or multiplied.'
-    config['Segmentix']['segtype'] = 'If Ring, then a ring around the segmentation will be used as contour.'
-    config['Segmentix']['segradius'] = 'Define the radius of the ring used if segtype is Ring.'
+    config['Segmentix']['segtype'] = 'If Ring, then a ring around the segmentation will be used as contour. If Dilate, the segmentation will be dilated per 2-D axial slice with a disc.'
+    config['Segmentix']['segradius'] = 'Define the radius of the ring or disc used if segtype is Ring or Dilate, respectively.'
     config['Segmentix']['N_blobs'] = 'How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.'
     config['Segmentix']['fillholes'] = 'Determines whether hole filling will be used.'
     config['Segmentix']['remove_small_objects'] = 'Determines whether small objects will be removed.'
@@ -393,6 +429,9 @@ def generate_config_descriptions():
 
     # Preprocessing
     config['Preprocessing'] = dict()
+    config['Preprocessing']['Clipping'] = 'Determine whether to use intensity clipping in preprocessing of image or not.'
+    config['Preprocessing']['Clipping_Range'] = 'Lower- and upperbound of intensities to be used in clipping.'
+    config['Preprocessing']['CheckSpacing'] = 'Determine whether to check the spacing or not. If True, and the spacing of the image is [1x1x1], we assume the spacing is incorrect, and overwrite it using the DICOM metadata.'
     config['Preprocessing']['Normalize'] = 'Determine whether to use normalization in preprocessing of image or not.'
     config['Preprocessing']['Normalize_ROI'] = 'If a mask is supplied and this is set to True, normalize image based on supplied ROI. Otherwise, the full image is used for normalization using the SimpleITK Normalize function. Lastly, setting this to False will result in no normalization being applied.'
     config['Preprocessing']['ROIDetermine'] = 'Choose whether a ROI for normalization is provided, or Otsu thresholding is used to determine one.'
@@ -401,6 +440,10 @@ def generate_config_descriptions():
     config['Preprocessing']['Method'] = 'Method used for normalization if ROI is supplied. Currently, z-scoring or using the minimum and median of the ROI can be used.'
     config['Preprocessing']['Resampling'] = 'Determine whether the image and mask will be resampled or not.'
     config['Preprocessing']['Resampling_spacing'] = 'Spacing to resample image and mask to, if resampling is used.'
+    config['Preprocessing']['BiasCorrection'] = 'Determine whether N4 Bias correction will be applied or not.'
+    config['Preprocessing']['BiasCorrection_Mask'] = 'Whether withing bias correction, a mask generated through Otsu thresholding is used or not.'
+    config['Preprocessing']['CheckOrientation'] = 'Determine whether to check the image orientation or not. If checked, if the orientation is not equal to the OrientationPrimaryAxis, the image is rotated.'
+    config['Preprocessing']['OrientationPrimaryAxis'] = 'If CheckOrientation is True, if primary axis is not this one, rotate image such that it is. Currently, only "axial" is supported.'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -454,15 +497,21 @@ def generate_config_descriptions():
     # Vessel features radius for erosion to determine boudnary
     config['ImageFeatures']['vessel_radius'] = 'Radius to determine boundary of between inner part and edge in Frangi vessel filter.'
 
+    # Tags from which to extract features, and how to name them
+    config['ImageFeatures']['dicom_feature_tags'] = "DICOM tags to be extracted as features. See https://worc.readthedocs.io/en/latest/static/features.html."
+    config['ImageFeatures']['dicom_feature_labels'] = "For each of the DICOM tag values extracted, name that should be assigned to the feature. See https://worc.readthedocs.io/en/latest/static/features.html."
+
     # Pyradiomics - feature calculation
     config['PyRadiomics'] = dict()
     config['PyRadiomics']['geometryTolerance'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['Preprocessing'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['normalize'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['normalizeScale'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['resampledPixelSpacing'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
     config['PyRadiomics']['preCrop'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['binCount'] = 'We advice to use a fixed bin count instead of a fixed bin width, as on imaging modalities such as MRI, the scale of the values varies a lot, which is incompatible with a fixed bin width. See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['binWidth'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['force2D'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['force2Ddimension'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['voxelArrayShift'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
@@ -499,7 +548,10 @@ def generate_config_descriptions():
     config['Featsel'] = dict()
     config['Featsel']['Variance'] = 'Percentage of times features which have a variance < 0.01 are excluded. Based on ` sklearn"s VarianceThreshold <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html/>`_.'
     config['Featsel']['GroupwiseSearch'] = 'Randomly select which feature groups to use. Parameters determined by the SelectFeatGroup config part, see below.'
-    config['Featsel']['SelectFromModel'] = 'Percentage of times features are selected by first training a LASSO model. The alpha for the LASSO model is randomly generated. See also `sklearn"s SelectFromModel <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/>`_.'
+    config['Featsel']['SelectFromModel'] = 'Percentage of times features are selected by first training a machine learning model which can rank the features with an ``importance''. See also `sklearn"s SelectFromModel <https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html/>`_.'
+    config['Featsel']['SelectFromModel_estimator'] = 'Machine learning model / estimator used: can be LASSO, LogisticRegression, or a Random Forest'
+    config['Featsel']['SelectFromModel_lasso_alpha'] = "When using LASSO, search space of weigth of L1 term, see also `sklearn <https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html/>`."
+    config['Featsel']['SelectFromModel_n_trees'] = 'When using a random forest, search space of number of trees used.'
     config['Featsel']['UsePCA'] = 'Percentage of times Principle Component Analysis (PCA) is used to select features.'
     config['Featsel']['PCAType'] = 'Method to select number of components using PCA: Either the number of components that explains 95% of the variance, or use a fixed number of components.95variance'
     config['Featsel']['StatisticalTestUse'] = 'Percentage of times a statistical test is used to select features.'
@@ -526,7 +578,7 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['texture_NGTDM_features'] = 'If True, use NGTDM texture features in model.'
     config['SelectFeatGroup']['texture_NGLDM_features'] = 'If True, use NGLDM texture features in model.'
     config['SelectFeatGroup']['texture_LBP_features'] = 'If True, use LBP texture features in model.'
-    config['SelectFeatGroup']['patient_features'] = 'If True, use patient features in model.'
+    config['SelectFeatGroup']['dicom_features'] = 'If True, use DICOM features in model.'
     config['SelectFeatGroup']['semantic_features'] = 'If True, use semantic features in model.'
     config['SelectFeatGroup']['coliage_features'] = 'If True, use coliage features in model.'
     config['SelectFeatGroup']['log_features'] = 'If True, use log features in model.'
@@ -538,6 +590,11 @@ def generate_config_descriptions():
     config['SelectFeatGroup']['wavelet_features'] = 'If True, use wavelet features in model.'
     config['SelectFeatGroup']['original_features'] = 'If True, use original features in model.'
     config['SelectFeatGroup']['toolbox'] = 'List of names of toolboxes to be used, or All'
+
+    # Feature OneHotEncoding
+    config['OneHotEncoding'] = dict()
+    config['OneHotEncoding']['Use'] = 'If True, use OneHotEncoding for specific features as determined by the field below.'
+    config['OneHotEncoding']['feature_labels_tofit'] = 'Labels of features for which to use OneHotEncoding. WORC will check whether any of the values specified in this field is a substring of a feature name. For example, if you give gclm, all features for which glcm is in the feature label will be one hot encoded.'
 
     # Feature imputation
     config['Imputation'] = dict()
@@ -570,6 +627,8 @@ def generate_config_descriptions():
     config['Classification']['RFmax_depth'] = 'Range of maximum depth of a RF. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
     config['Classification']['LRpenalty'] = 'Penalty term used in LR.'
     config['Classification']['LRC'] = 'Range of regularization strength in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale). '
+    config['Classification']['LR_solver'] = 'Solver used in LR.'
+    config['Classification']['LR_l1_ratio'] = 'Ratio between l1 and l2 penalty when using elasticnet penalty, see https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html.'
     config['Classification']['LDA_solver'] = 'Solver used in LDA.'
     config['Classification']['LDA_shrinkage'] = 'Range of the LDA shrinkage parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
     config['Classification']['QDA_reg_param'] = 'Range of the QDA regularization parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale). '
@@ -577,15 +636,24 @@ def generate_config_descriptions():
     config['Classification']['ElasticNet_l1_ratio'] = 'Range of l1 ratio in LR. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
     config['Classification']['SGD_alpha'] = 'Range of the SGD penalty parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'
     config['Classification']['SGD_l1_ratio'] = 'Range of l1 ratio in SGD. We sample on a uniform scale: the parameters specify the range (loc, loc + scale).'
-    config['Classification']['SGD_loss'] = 'hinge, Loss function of SG'
+    config['Classification']['SGD_loss'] = 'Loss function of SGD.'
     config['Classification']['SGD_penalty'] = 'Penalty term in SGD.'
     config['Classification']['CNB_alpha'] = 'Regularization strenght in ComplementNB. We sample on a uniform scale: the parameters specify the range (loc, loc + scale)'
+    config['Classification']['AdaBoost_n_estimators'] = "Number of estimators used in AdaBoost. Default is equal to config['Classification']['RFn_estimators']."
+    config['Classification']['AdaBoost_learning_rate'] = 'Learning rate in AdaBoost.'
+    config['Classification']['XGB_boosting_rounds'] = "Number of estimators / boosting rounds used in XGB. Default is equal to config['Classification']['RFn_estimators']."
+    config['Classification']['XGB_max_depth'] = 'Maximum depth of XGB.'
+    config['Classification']['XGB_learning_rate'] = "Learning rate in AdaBoost. Default is equal to config['Classification']['AdaBoost_learning_rate']."
+    config['Classification']['XGB_gamma'] = 'Gamma of XGB.'
+    config['Classification']['XGB_min_child_weight'] = 'Minimum child weights in XGB.'
+    config['Classification']['XGB_colsample_bytree'] = 'Col sample by tree in XGB.'
 
     # CrossValidation
     config['CrossValidation'] = dict()
-    config['CrossValidation']['N_iterations'] = 'Number of times the data is split in training and test in the outer cross-validation.'
-    config['CrossValidation']['test_size'] = 'The percentage of data to be used for testing.'
-    config['CrossValidation']['fixed_seed'] = 'If True, use a fixed seed for the cross-validation splits.'
+    config['CrossValidation']['Type'] = 'If performing a cross-validationm, type of cross-validation used. Currently random-splitting and leave-one-out (LOO) are supported.'
+    config['CrossValidation']['N_iterations'] = 'Number of times the data is split in training and test in the outer cross-validation when using random-splitting.'
+    config['CrossValidation']['test_size'] = 'The percentage of data to be used for testing when using random-splitting.'
+    config['CrossValidation']['fixed_seed'] = 'If True, use a fixed seed for the cross-validation splits when using random-splitting.'
 
     # Options for the object/patient labels that are used
     config['Labels'] = dict()
@@ -601,14 +669,18 @@ def generate_config_descriptions():
     config['HyperOptimization']['n_splits'] = 'Number of iterations in train-validation cross-validation used for model optimization.'
     config['HyperOptimization']['maxlen'] = 'Number of estimators for which the fitted outcomes and parameters are saved. Increasing this number will increase the memory usage.'
     config['HyperOptimization']['ranking_score'] = 'Score used for ranking the performance of the evaluated workflows.'
+    config['HyperOptimization']['memory'] = 'When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + "G".'
+    config['HyperOptimization']['refit_workflows'] = 'If True, refit all workflows in the ensemble automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
+    config['FeatureScaling']['skip_features'] = 'Determine which features should be skipped. This field should contain a comma separated list of substrings: when one or more of these are in a feature name, the feature is skipped.'
     config['FeatureScaling']['scaling_method'] = 'Determine the scaling method.'
 
     # Ensemble options
     config['Ensemble'] = dict()
     config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.'
+    config['Ensemble']['Metric'] = 'Metric used to determine ranking of estimators in ensemble. When using default, the metric that is used in the hyperoptimization is used.'
 
     # Evaluation options
     config['Evaluation'] = dict()
