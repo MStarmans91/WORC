@@ -106,8 +106,9 @@ def guided_search_parameters(features, labels, N_iter, test_size,
                              parameters, scoring_method, n_splits=5,
                              n_jobspercore=200, use_fastr=False,
                              n_cores=1, fastr_plugin=None,
-                             maxlen=100, ranking_score='test_score',
-                             random_seed=None, smac_result_file=None):
+                             memory='2G', maxlen=100, ranking_score='test_score',
+                             random_seed=None, refit_workflows=False,
+                             smac_result_file=None):
     """
     Train a classifier and simultaneously optimizes hyperparameters using a
     Bayesian optimization approach.
