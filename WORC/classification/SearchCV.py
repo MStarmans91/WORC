@@ -363,7 +363,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                  fit_params=None, n_jobs=1, iid=True,
                  refit=True, cv=None, verbose=0, pre_dispatch='2*n_jobs',
                  random_state=None, error_score='raise', return_train_score=True,
-                 n_jobspercore=100, maxlen=100, fastr_plugin=None, memory=' 2G',
+                 n_jobspercore=100, maxlen=100, fastr_plugin=None, memory='2G',
                  ranking_score='test_score', refit_workflows=False,
                  ensemble_validation_score=None):
         """Initialize SearchCV Object."""
