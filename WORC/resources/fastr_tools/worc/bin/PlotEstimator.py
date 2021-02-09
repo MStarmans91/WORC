@@ -68,7 +68,8 @@ def main():
                                    label_data=args.pinfo,
                                    ensemble_method=args.ensemble_method,
                                    ensemble_size=int(args.ensemble_size),
-                                   label_type=args.label_type)
+                                   label_type=args.label_type,
+                                   output='stats')
 
     with open(args.output_json, 'w') as fp:
         json.dump(stats, fp, indent=4)
