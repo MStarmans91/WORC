@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -477,6 +477,11 @@ def plot_estimator_performance(prediction, label_data, label_type,
                     test_patient_IDs = test_patient_IDs_temp
                 else:
                     raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
+
+            if type(y_prediction) is np.ndarray:
+                if y_prediction.shape[0] == 1:
+                    # Convert to list for compatability
+                    y_prediction = [y_prediction.tolist()]
 
             # If all scores are NaN, the classifier cannot do probabilities, thus
             # use hard predictions
