@@ -652,7 +652,16 @@ def fit_and_score(X, y, scoring,
                     print(f"[WORC WARNING] PCA n_components ({n_components})> n_features ({len(X_train[0])}): skipping PCA.")
             else:
                 pca = PCA(n_components=n_components, random_state=random_seed)
-                pca.fit(X_train)
+                try:
+                    pca.fit(X_train)
+                except (ValueError, LinAlgError) as e:
+                    if verbose:
+                        print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    else:
+                        return ret
                 X_train = pca.transform(X_train)
                 X_test = pca.transform(X_test)
 
