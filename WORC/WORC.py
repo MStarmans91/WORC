@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -467,7 +467,7 @@ class WORC(object):
 
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
-        config['HyperOptimization']['scoring_method'] = 'f1_weighted_predictproba'
+        config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '1000'

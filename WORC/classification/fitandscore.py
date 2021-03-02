@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -614,6 +614,7 @@ def fit_and_score(X, y, scoring,
                 if verbose:
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
+                pca = None
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
@@ -634,6 +635,7 @@ def fit_and_score(X, y, scoring,
                 if verbose:
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
+                pca = None
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
@@ -658,10 +660,12 @@ def fit_and_score(X, y, scoring,
                     if verbose:
                         print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
+                    pca = None
                     if return_all:
                         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                     else:
                         return ret
+
                 X_train = pca.transform(X_train)
                 X_test = pca.transform(X_test)
 

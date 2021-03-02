@@ -6,13 +6,22 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-3.4.1 - Unlreleased
--------------------
+
+3.4.1 - Unreleased
+------------------
 
 Fixed
-~~~~~~~
-- Catch another PCA Error in fitandscore.
+~~~~~
+- Bugfix when PCA cannot be fitted.
+- Bugfix when using LOO cross-validation in performance evaluation.
+- Fix XGboost verson, as newest version automatically uses multihreading,
+  which is unsuitable for clusters.
+- Bug in decomposition for Evaluation.
 
+Changed
+~~~~~~~
+- Reverted back to weighted f1-score without predictproba for optimization,
+  more stable.
 
 3.4.0 - 2021-02-02
 ------------------

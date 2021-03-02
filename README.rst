@@ -1,4 +1,4 @@
-WORC v3.4.0
+WORC v3.4.1
 ===========
 
 Workflow for Optimal Radiomics Classification
@@ -27,6 +27,18 @@ to facilitate and stimulate collaboration, standardisation and
 comparison of different radiomics approaches. By combining this in a
 single framework, we hope to find a universal radiomics strategy that
 can address various problems.
+
+License
+-------
+
+This package is covered by the open source `APACHE 2.0
+License <APACHE-LICENSE-2.0>`__.
+
+When using WORC, please cite this repository as following:
+
+``Martijn P.A. Starmans, Sebastian R. van der Voort, Thomas Phil and Stefan Klein. Workflow for Optimal Radiomics Classification (WORC). Zenodo (2018). Available from:  https://github.com/MStarmans91/WORC. DOI: http://doi.org/10.5281/zenodo.3840534.``
+
+For the DOI, visit |image5|.
 
 Disclaimer
 ----------
@@ -110,18 +122,6 @@ WIP
 -  We are writing the paper on WORC.
 -  We are expanding the example experiments of WORC with open source
    datasets.
-
-License
--------
-
-This package is covered by the open source `APACHE 2.0
-License <APACHE-LICENSE-2.0>`__.
-
-When using WORC, please cite this repository as following:
-
-``Martijn P.A. Starmans, Sebastian R. van der Voort, Thomas Phil and Stefan Klein. Workflow for Optimal Radiomics Classification (WORC). Zenodo (2018). Available from:  https://github.com/MStarmans91/WORC. DOI: http://doi.org/10.5281/zenodo.3840534.``
-
-For the DOI, visit |image5|.
 
 Contact
 -------
