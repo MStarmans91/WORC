@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,8 +131,15 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Featsel']['ReliefNumFeatures'].split(',')]
 
+    # Feature preprocessing before the whole HyperOptimization
     settings_dict['FeatPreProcess']['Use'] =\
         [str(settings['FeatPreProcess']['Use'])]
+
+    settings_dict['FeatPreProcess']['Combine'] =\
+        settings['FeatPreProcess'].getboolean('Combine')
+
+    settings_dict['FeatPreProcess']['Combine_method'] =\
+        str(settings['FeatPreProcess']['Combine_method'])
 
     # Imputation
     settings_dict['Imputation']['use'] =\

@@ -343,9 +343,11 @@ class WORC(object):
         config['FeatureScaling']['scaling_method'] = 'robust_z_score'
         config['FeatureScaling']['skip_features'] = 'semf_, pf_'
 
-        # Feature preprocessing before all below takes place
+        # Feature preprocessing before the whole HyperOptimization
         config['FeatPreProcess'] = dict()
         config['FeatPreProcess']['Use'] = 'False'
+        config['FeatPreProcess']['Combine'] = 'False'
+        config['FeatPreProcess']['Combine_method'] = 'mean'
 
         # Feature selection
         config['Featsel'] = dict()

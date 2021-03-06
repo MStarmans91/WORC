@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,10 @@ import numpy as np
 import os
 
 
-def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
-    ''' Read feature files and stack the features per patient in an array.
+def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[],
+              combine_features=False, combine_method='mean'):
+    """Read feature files and stack the features per patient in an array.
+
         Additionally, if a patient label file is supplied, the features from
         a patient will be matched to the labels.
 
@@ -44,8 +46,13 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
                 List containing all the labels that should be extracted from
                 the patientinfo file.
 
-    '''
+        combine_features: boolean, default False
+                Determines whether to combine the features from all samples
+                of the same patient or not.
 
+        combine_methods: string, mean or max
+                If features per patient should be combined, determine how.
+    """
     # Read out all feature values and labels
     image_features_temp = list()
     feature_labels_all = list()
@@ -138,11 +145,61 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[]):
         label_data = dict()
         label_data['patient_IDs'] = patient_IDs
 
+    # Optionally, combine features of same patient
+    print(label_data)
+    if combine_features:
+        print('Combining features of the same patient.')
+        feature_labels = image_features[0][1]
+        label_name = label_data['label_name']
+        new_label_data = list()
+        new_pids = list()
+        new_features = list()
+
+        already_processed = list()
+        for pnum, pid in enumerate(label_data['patient_IDs']):
+            if pid not in already_processed:
+                # NOTE: should check whether we have already processed this patient
+                occurrences = list(label_data['patient_IDs']).count(pid)
+
+                # NOTE: Assume all object from one patient have the same label
+                label = label_data['label'][0][pnum]
+                new_label_data.append(label)
+                new_pids.append(pid)
+
+                # Only process patients which occur multiple times
+                if occurrences > 1:
+                    print(f'\tFound {occurrences} occurrences for {pid}.')
+                    indices = [i for i, x in enumerate(label_data['patient_IDs']) if x == pid]
+                    feature_values_thispatient = np.asarray([image_features[i][0] for i in indices])
+                    if combine_method == 'mean':
+                        feature_values_thispatient = np.nanmean(feature_values_thispatient, axis=0).tolist()
+                    else:
+                        raise WORCexceptions.KeyError(f'{combine_method} is not a valid combination method, should be mean or max.')
+                    features = (feature_labels, feature_values_thispatient)
+
+                    # And add the new one
+                    new_features.append(features)
+                else:
+                    new_features.append(image_features[pnum])
+
+                already_processed.append(pid)
+
+        # Adjust the labels and features for further processing
+        label_data = dict()
+        label_data['patient_IDs'] = np.asarray(new_pids)
+        label_data['label'] = np.asarray([new_label_data])
+        label_data['label_name'] = label_name
+
+        image_features = new_features
+
+    print(label_data)
     return label_data, image_features
 
 
-def load_features(feat, patientinfo, label_type):
-    ''' Read feature files and stack the features per patient in an array.
+def load_features(feat, patientinfo, label_type, combine_features=False,
+                  combine_method='mean'):
+    """Read feature files and stack the features per patient in an array.
+
         Additionally, if a patient label file is supplied, the features from
         a patient will be matched to the labels.
 
@@ -162,7 +219,14 @@ def load_features(feat, patientinfo, label_type):
                 List containing all the labels that should be extracted from
                 the patientinfo file.
 
-    '''
+        combine_features: boolean, default False
+                Determines whether to combine the features from all samples
+                of the same patient or not.
+
+        combine_methods: string, mean or max
+                If features per patient should be combined, determine how.
+
+    """
     # Check if features is a simple list, or just one string
     if '=' not in feat[0]:
         feat = ['Mod0=' + ','.join(feat)]
@@ -186,7 +250,9 @@ def load_features(feat, patientinfo, label_type):
     # Read the features and classification data
     label_data, image_features =\
         load_data(feat, patientinfo,
-                  label_type, modnames)
+                  label_type, modnames,
+                  combine_features,
+                  combine_method)
 
     return label_data, image_features
 
