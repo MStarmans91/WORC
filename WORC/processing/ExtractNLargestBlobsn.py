@@ -33,7 +33,13 @@ def ExtractNLargestBlobsn(binaryImage, numberToExtract=1):
     """
 
     # Get all the blob properties.
-    labeledImage = label(binaryImage, connectivity=3)
+    connectivity = binaryImage.ndim
+    
+    if connectivity == 3 and binaryImage.shape[2] == 1:
+        # Oh no! Its a 2D image disguised as a 3D image! We must change connectivity to 2
+        connectivity = 2
+    
+    labeledImage = label(binaryImage, connectivity=connectivity)
     blobMeasurements = regionprops(labeledImage)
 
     if len(blobMeasurements) == 1:
