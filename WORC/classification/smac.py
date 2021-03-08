@@ -245,9 +245,25 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=relief_numFeatures, parent=relief, values=['True']))
 
     # Select from model --> turned off in RS
-    # 0 hyperparameters
-    #select_from_model = CategoricalHyperparameter('SelectFromModel', choices=['True', 'False'])
-    #cs.add_hyperparameter(select_from_model)
+    # 3 hyperparameters
+    #   1) estimator
+    #   2) lasso_alpha      | conditional on estimator: lasso
+    #   3) rf_n_trees       | conditional on estimator: rf
+    select_from_model = CategoricalHyperparameter('SelectFromModel', choices=['True', 'False'])
+    cs.add_hyperparameter(select_from_model)
+
+    estimator = CategoricalHyperparameter('SelectFromModel_estimator', choices=parameters['Featsel']['SelectFromModel_estimator'])
+    lasso_alpha = UniformFloatHyperparameter('SelectFromModel_lasso_alpha',
+                                             lower=parameters['Featsel']['SelectFromModel_lasso_alpha'][0],
+                                             upper=parameters['Featsel']['SelectFromModel_lasso_alpha'][0] +
+                                                   parameters['Featsel']['SelectFromModel_lasso_alpha'][1])
+    n_trees = UniformIntegerHyperparameter('SelectFromModel_n_trees',
+                                           lower=parameters['Featsel']['SelectFromModel_n_trees'][0],
+                                           upper=parameters['Featsel']['SelectFromModel_n_trees'][0] + parameters['Featsel']['SelectFromModel_n_trees'][1])
+    cs.add_hyperparameters([estimator, lasso_alpha, n_trees])
+    cs.add_conditions([InCondition(child=estimator, parent=select_from_model, values=['True']),
+                       InCondition(child=lasso_alpha, parent=estimator, values=['Lasso']),
+                       InCondition(child=n_trees, parent=estimator, values=['RF'])])
 
     # PCA
     # 2 hyperparameters:
