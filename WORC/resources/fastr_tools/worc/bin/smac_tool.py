@@ -84,7 +84,6 @@ def main():
     def score_cfg(cfg):
         # Construct a new dictionary with parameters from the input configuration
 
-        # ! THIS POTENTIALLY HAS A BUG BUT PROBABLY NOT ACTUALLY ! #
         if cfg is not None:
             parameters = convert_cfg(cfg.get_dictionary())
         else:
