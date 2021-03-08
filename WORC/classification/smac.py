@@ -68,7 +68,7 @@ def build_smac_config(parameters):
                                           upper=cf['SVMdegree'][0] + cf['SVMdegree'][1])
     coef0 = UniformFloatHyperparameter('SVMcoef0',
                                        lower=cf['SVMcoef0'][0],
-                                       upper=cf['SVMcoef0'][1])
+                                       upper=cf['SVMcoef0'][0] + cf['SVMcoef0'][1])
     gamma = UniformFloatHyperparameter('SVMgamma',
                                        lower=pow(10, cf['SVMgamma'][0]),
                                        upper=pow(10, cf['SVMgamma'][0] + cf['SVMgamma'][1]),
@@ -101,13 +101,21 @@ def build_smac_config(parameters):
     # 2 hyperparameters:
     #   1) penalty          | conditional on classifier: LR
     #   2) C                | conditional on classifier: LR
+    #   3) solver           | conditional on classifier: LR
+    #   4) l1_ratio         | conditional on penalty: elasticnet
     penalty = CategoricalHyperparameter('LRpenalty', choices=cf['LRpenalty'])
     C = UniformFloatHyperparameter('LRC',
                                    lower=cf['LRC'][0],
                                    upper=cf['LRC'][0] + cf['LRC'][1])
-    cs.add_hyperparameters([penalty, C])
+    lr_solver = CategoricalHyperparameter('LR_solver', choices=cf['LR_solver'])
+    lr_l1_ratio = UniformFloatHyperparameter('LR_l1_ratio',
+                                             lower=cf['LR_l1_ratio'][0],
+                                             upper=cf['LR_l1_ratio'][0] + cf['LR_l1_ratio'][1])
+    cs.add_hyperparameters([penalty, C, lr_solver, lr_l1_ratio])
     cs.add_conditions([InCondition(child=penalty, parent=classifier, values=['LR']),
-                       InCondition(child=C, parent=classifier, values=['LR'])])
+                       InCondition(child=C, parent=classifier, values=['LR']),
+                       InCondition(child=lr_solver, parent=classifier, values=['LR']),
+                       InCondition(child=lr_l1_ratio, parent=penalty, values=['elasticnet'])])
 
     # LDA
     # 2 hyperparameters:
@@ -157,6 +165,8 @@ def build_smac_config(parameters):
     #   1) scaling method
     scaling = Constant('FeatureScaling', value=parameters['FeatureScaling']['scaling_method'][0])
     cs.add_hyperparameter(scaling)
+    scaling_skip_features = Constant('FeatureScaling_skip_features', value=parameters['FeatureScaling']['skip_features'][0])
+    cs.add_hyperparameter(scaling_skip_features)
 
     '''
     scaling = CategoricalHyperparameter('use_featureScaling',
@@ -344,6 +354,7 @@ def build_smac_config(parameters):
         cs.add_condition(InCondition(child=group_parameter, parent=groupwise_search,
                                      values=['True']))
 
+    # Other parameters not part of the optimization
     random_seed = Constant('random_seed', value=parameters['Other']['random_seed'])
     cs.add_hyperparameter(random_seed)
 
