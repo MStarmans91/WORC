@@ -42,7 +42,8 @@ def build_smac_config(parameters):
 
     # The first argument to parse is the choice of classifier
     classifier = CategoricalHyperparameter('classifiers',
-                                           choices=['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB'])
+                                           choices=['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB',
+                                                    'AdaBoostClassifier', 'XGBClassifier'])
     cs.add_hyperparameter(classifier)
 
     # SVM
@@ -145,6 +146,63 @@ def build_smac_config(parameters):
 
     # GaussianNB
     # 0 hyperparameters
+
+    # AdaBoostClassifier
+    # 2 hyperparameters:
+    #   1) n_estimators     | conditional on classifier: AdaBoost
+    #   2) learning_rate    | conditional on classifier: AdaBoost
+    ada_n_estimators = UniformIntegerHyperparameter('AdaBoost_n_estimators',
+                                                    lower=cf['AdaBoost_n_estimators'][0],
+                                                    upper=cf['AdaBoost_n_estimators'][0] +
+                                                          cf['AdaBoost_n_estimators'][1])
+    ada_learning_rate = UniformFloatHyperparameter('AdaBoost_learning_rate',
+                                                   lower=cf['AdaBoost_learning_rate'][0],
+                                                   upper=cf['AdaBoost_learning_rate'][0] +
+                                                         cf['AdaBoost_learning_rate'][1])
+    cs.add_hyperparameters([ada_n_estimators, ada_learning_rate])
+    cs.add_conditions([InCondition(child=ada_n_estimators, parent=classifier, values=['AdaBoostClassifier']),
+                       InCondition(child=ada_learning_rate, parent=classifier, values=['AdaBoostClassifier'])])
+
+    # XGBClassifier
+    # 6 hyperparameters:
+    #   1) boosting_rounds  | conditional on classifier: XGB
+    #   2) max_depth        | conditional on classifier: XGB
+    #   3) learning_rate    | conditional on classifier: XGB
+    #   4) gamma            | conditional on classifier: XGB
+    #   5) min_child_weight | conditional on classifier: XGB
+    #   6) colsample_bytree | conditional on classifier: XGB
+    boosting_rounds = UniformIntegerHyperparameter('XGB_boosting_rounds',
+                                                   lower=cf['XGB_boosting_rounds'][0],
+                                                   upper=cf['XGB_boosting_rounds'][0] +
+                                                         cf['XGB_boosting_rounds'][1])
+    xgb_max_depth = UniformIntegerHyperparameter('XGB_max_depth',
+                                                 lower=cf['XGB_max_depth'][0],
+                                                 upper=cf['XGB_max_depth'][0] +
+                                                       cf['XGB_max_depth'][1])
+    xgb_learning_rate = UniformFloatHyperparameter('XGB_learning_rate',
+                                                   lower=cf['XGB_learning_rate'][0],
+                                                   upper=cf['XGB_learning_rate'][0] +
+                                                         cf['XGB_learning_rate'][1])
+    xgb_gamma = UniformFloatHyperparameter('XGB_gamma',
+                                           lower=cf['XGB_gamma'][0],
+                                           upper=cf['XGB_gamma'][0] +
+                                                 cf['XGB_gamma'][1])
+    min_child_weight = UniformIntegerHyperparameter('XGB_min_child_weight',
+                                                    lower=cf['XGB_min_child_weight'][0],
+                                                    upper=cf['XGB_min_child_weight'][0] +
+                                                          cf['XGB_min_child_weight'][1])
+    colsample_bytree = UniformFloatHyperparameter('XGB_colsample_bytree',
+                                                  lower=cf['XGB_colsample_bytree'][0],
+                                                  upper=cf['XGB_colsample_bytree'][0] +
+                                                        cf['XGB_colsample_bytree'][1])
+    cs.add_hyperparameters([boosting_rounds, xgb_max_depth, xgb_learning_rate,
+                            xgb_gamma, min_child_weight, colsample_bytree])
+    cs.add_conditions([InCondition(child=boosting_rounds, parent=classifier, values=['XGBClassifier']),
+                       InCondition(child=xgb_max_depth, parent=classifier, values=['XGBClassifier']),
+                       InCondition(child=xgb_learning_rate, parent=classifier, values=['XGBClassifier']),
+                       InCondition(child=xgb_gamma, parent=classifier, values=['XGBClassifier']),
+                       InCondition(child=min_child_weight, parent=classifier, values=['XGBClassifier']),
+                       InCondition(child=colsample_bytree, parent=classifier, values=['XGBClassifier'])])
 
 
     ### Preprocessing ###
