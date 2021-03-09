@@ -610,9 +610,12 @@ def fit_and_score(X, y, scoring,
 
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']
-        del para_estimator['SelectFromModel_lasso_alpha']
-        del para_estimator['SelectFromModel_estimator']
-        del para_estimator['SelectFromModel_n_trees']
+        if 'SelectFromModel_lasso_alpha' in para_estimator.keys():
+            del para_estimator['SelectFromModel_lasso_alpha']
+        if 'SelectFromModel_estimator' in para_estimator.keys():
+            del para_estimator['SelectFromModel_estimator']
+        if 'SelectFromModel_n_trees' in para_estimator.keys():
+            del para_estimator['SelectFromModel_n_trees']
 
     # Delete the object if we do not need to return it
     if not return_all:
