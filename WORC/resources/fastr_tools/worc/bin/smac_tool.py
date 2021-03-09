@@ -232,8 +232,9 @@ def convert_cfg(cfg):
         parameters['PCAType'] = parameters.pop('n_components')
     # Add a dummy value for lr_l1_ratio when it is not active;
     # fit_and_score expects it
-    if parameters['LRpenalty'] != 'elasticnet':
-        parameters['LR_l1_ratio'] = 0
+    if parameters['classifiers'] == 'LR':
+        if parameters['LRpenalty'] != 'elasticnet':
+            parameters['LR_l1_ratio'] = 0
 
     return parameters
 
