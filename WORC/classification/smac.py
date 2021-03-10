@@ -226,17 +226,6 @@ def build_smac_config(parameters):
     scaling_skip_features = Constant('FeatureScaling_skip_features', value=parameters['FeatureScaling']['skip_features'][0])
     cs.add_hyperparameter(scaling_skip_features)
 
-    '''
-    scaling = CategoricalHyperparameter('use_featureScaling',
-                                        choices=['True', 'False'])
-    cs.add_hyperparameter(scaling)
-
-    scaling_method = CategoricalHyperparameter('FeatureScaling', 
-                                               choices=parameters['FeatureScaling']['scaling_method'])
-    cs.add_hyperparameter(scaling_method)
-    cs.add_condition(InCondition(child=scaling_method, parent=scaling, values=['True']))
-    '''
-
     # Feature imputation --> always on in RS
     # 2 hyperparameters:
     #   1) strategy
@@ -364,58 +353,7 @@ def build_smac_config(parameters):
     cs.add_condition(InCondition(child=statistical_test_threshold, parent=statistical_test,
                                  values=['True']))
     
-    '''
-    # Resampling
-    # 5 hyperparameters:
-    #   1) Method
-    #   2) Sampling strategy
-    #   3) n_neighbors
-    #   4) k_neighbors
-    #   5) threshold cleaning
-    resampling = CategoricalHyperparameter('Resampling_Use', choices=['True'])
-    cs.add_hyperparameter(resampling)
-
-    resampling_method = CategoricalHyperparameter('Resampling_Method',
-                                                  choices=parameters['Resampling']['Method'])
-    cs.add_hyperparameter(resampling_method)
-    cs.add_condition(InCondition(child=resampling_method, parent=resampling,
-                                 values=['True']))
-
-    resampling_sampling_strategy = CategoricalHyperparameter('Resampling_sampling_strategy',
-                                                             choices=parameters['Resampling']['sampling_strategy'])
-    cs.add_hyperparameter(resampling_sampling_strategy)
-    cs.add_condition(InCondition(child=resampling_sampling_strategy, parent=resampling,
-                                 values=['True']))
-
-    resampling_n_neighbors = UniformIntegerHyperparameter('Resampling_n_neighbors',
-                                                          lower=parameters['Resampling']['n_neighbors'][0],
-                                                          upper=parameters['Resampling']['n_neighbors'][0] +
-                                                                parameters['Resampling']['n_neighbors'][1])
-    cs.add_hyperparameter(resampling_n_neighbors)
-    cs.add_condition(InCondition(child=resampling_n_neighbors, parent=resampling,
-                                 values=['True']))
-
-    resampling_k_neighbors = UniformIntegerHyperparameter('Resampling_k_neighbors',
-                                                          lower=parameters['Resampling']['k_neighbors'][0],
-                                                          upper=parameters['Resampling']['k_neighbors'][0] +
-                                                                parameters['Resampling']['k_neighbors'][1])
-    cs.add_hyperparameter(resampling_k_neighbors)
-    cs.add_condition(InCondition(child=resampling_k_neighbors, parent=resampling,
-                                 values=['True']))
-
-    resampling_threshold_cleaning = UniformFloatHyperparameter('Resampling_threshold_cleaning',
-                                                               lower=parameters['Resampling']['threshold_cleaning'][0],
-                                                               upper=parameters['Resampling']['threshold_cleaning'][0] +
-                                                                     parameters['Resampling']['threshold_cleaning'][1])
-    cs.add_hyperparameter(resampling_threshold_cleaning)
-    cs.add_condition(InCondition(child=resampling_threshold_cleaning, parent=resampling,
-                                 values=['True']))
-
-    resampling_n_cores = Constant('Resampling_n_cores', value=parameters['General']['Joblib_ncores'])
-    cs.add_hyperparameter(resampling_n_cores)
-    cs.add_condition(InCondition(child=resampling_n_cores, parent=resampling,
-                                 values=['True']))
-    '''
+    # RESAMPLING CURRENTLY NOT COMPATIBLE!
 
     # Groupwise feature selection
     groupwise_search = CategoricalHyperparameter('SelectGroups', choices=parameters['Featsel']['GroupwiseSearch'])
