@@ -947,22 +947,29 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         Create an (optimal) ensemble of a combination of hyperparameter settings
         and the associated groupsels, PCAs, estimators etc.
 
-        Based on Caruana et al. 2004, but a little different:
-
-        1. Recreate the training/validation splits for a n-fold cross validation.
-        2. For each fold:
-            a. Start with an empty ensemble
-            b. Create starting ensemble by adding N individually best performing
-               models on the validation set. N is tuned on the validation set.
-            c. Add model that improves ensemble performance on validation set the most, with replacement.
-            d. Repeat (c) untill performance does not increase
-
-        The performance metric is the same as for the original hyperparameter
-        search, i.e. probably the F1-score for classification and r2-score
-        for regression. However, we recommend using the SAR score, as this is
-        more universal.
-
-        Method: top50 or Caruana
+        # The following ensemble methods are supported:
+            #   Single:
+            #       only use the single best classifier. Performance is computed
+            #       using the same predict function as during the optimization
+            #   top_N:
+            #       make an ensemble of the best N individual classifiers, where N is
+            #       given as an input. If N==1, then only the single best classifier is
+            #       used, but it is evaluated using predict_proba.
+            #   FitNumber:
+            #       make an ensemble of the best N individual classifiers, choosing N
+            #       that gives the highest performance
+            #   ForwardSelection:
+            #       add the model that optimizes the total ensemble performance,
+            #       then repeat with replacement until there is no more improvement
+            #       in performance
+            #   Caruana:
+            #       for a fixed number of iterations, add the model that optimizes
+            #       the total ensemble performance, then choose the ensemble size
+            #       which gave the best performance
+            #   Bagging:
+            #       same as Caruana method, but the final ensemble is a weighted average
+            #       of a number of ensembles that each use only a subset of the available
+            #       models
 
         """
         # Define a function for scoring the performance of a classifier
@@ -1107,30 +1114,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 for num in range(n_classifiers):
                     base_Y_valid_score[iter][num] = all_predictions[num][iter]
 
-            # Create the ensemble using the precomputed scores
-            # The different ensemble methods are:
-            #   Single:
-            #       only use the single best classifier. Performance is computed
-            #       using the same predict function as during the optimization
-            #   top_N:
-            #       make an ensemble of the best N individual classifiers, where N is
-            #       given as an input. If N==1, then only the single best classifier is
-            #       used, but it is evaluated using predict_proba.
-            #   FitNumber:
-            #       make an ensemble of the best N individual classifiers, choosing N
-            #       that gives the highest performance
-            #   ForwardSelection:
-            #       add the model that optimizes the total ensemble performance,
-            #       then repeat with replacement until there is no more improvement
-            #       in performance
-            #   Caruana:
-            #       for a fixed number of iterations, add the model that optimizes
-            #       the total ensemble performance, then choose the ensemble size
-            #       which gave the best performance
-            #   Bagging:
-            #       same as Caruana method, but the final ensemble is a weighted average
-            #       of a number of ensembles that each use only a subset of the available
-            #       models
+            # Create the ensemble using the precomputed scores:
 
             # Initialize the ensemble
             ensemble = list()
