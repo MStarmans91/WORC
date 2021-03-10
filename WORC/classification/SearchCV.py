@@ -1109,6 +1109,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
             # Create the ensemble using the precomputed scores
             # The different ensemble methods are:
+            #   Single:
+            #       only use the single best classifier. Performance is computed
+            #       using the same predict function as during the optimization
+            #   top_N:
+            #       make an ensemble of the best N individual classifiers, where N is
+            #       given as an input. If N==1, then only the single best classifier is
+            #       used, but it is evaluated using predict_proba.
             #   FitNumber:
             #       make an ensemble of the best N individual classifiers, choosing N
             #       that gives the highest performance
