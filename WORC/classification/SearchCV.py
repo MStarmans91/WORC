@@ -2827,27 +2827,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
         if not os.path.exists(tempfolder):
             os.makedirs(tempfolder)
-        '''
-        traintest_files = dict()
-        num = 0
-        for train, test in cv_iter:
-            source_labels = ['train', 'test']
 
-            source_data = pd.Series([train, test],
-                                    index=source_labels,
-                                    name='Train-test data')
-
-            fname = f'traintest_{num}.hdf5'
-            sourcename = os.path.join(tempfolder, 'traintest', fname)
-            if not os.path.exists(os.path.dirname(sourcename)):
-                os.makedirs(os.path.dirname(sourcename))
-            traintest_files[str(num)] = f'vfs://tmp/GS/{name}/traintest/{fname}'
-
-            sourcelabel = f"Source Data Iteration {num}"
-            source_data.to_hdf(sourcename, sourcelabel)
-
-            num += 1
-        '''
         # Create the files containing the estimator and settings
         estimator_labels = ['X', 'y', 'search_space', 'cv_iter', 'scoring',
                             'verbose', 'fit_params', 'return_train_score',
@@ -2875,23 +2855,6 @@ class BaseSearchCVSMAC(BaseSearchCV):
         estimatordata = f"vfs://tmp/GS/{name}/{fname}"
 
         # Create the files containing the instance data
-
-        # Attempt one
-        '''
-        instance_labels = ['run_info']
-        instance_info = []
-        for i in range(5): # update this later to a config value
-            instance_info.append([i, random.randint(0, 2 ** 32 - 1)])
-        instance_data = pd.Series([instance_info],
-                                  index=instance_labels,
-                                  name='instance data')
-        fname = 'instancedata.hdf5'
-        instancename = os.path.join(tempfolder, fname)
-        instance_data.to_hdf(instancename, 'Instance Data')
-        instancedata = f"vfs://tmp/GS/{name}/{fname}"
-        '''
-
-        # Attempt two
         instance_labels = ['run_id', 'run_rng', 'run_name']
         current_date_time = datetime.now()
         random_id = random.randint(1000, 9999)
@@ -2914,20 +2877,13 @@ class BaseSearchCVSMAC(BaseSearchCV):
         network = fastr.create_network('WORC_SMAC_' + name)
         estimator_data = network.create_source('HDF5', id='estimator_source')
         instance_data = network.create_source('HDF5', id='instance_source')
-        #traintest_data = network.create_source('HDF5', id='traintest')
-        #parameter_data = network.create_source('JsonFile', id='parameters')
         sink_output = network.create_sink('HDF5', id='output')
 
         smac_node = network.create_node('worc/smac:1.0', tool_version='1.0', id='smac',
                                           resources=ResourceLimit(memory='4G'))
-        #smac_node.inputs['estimatordata'].input_group = 'estimator'
-        #fitandscore.inputs['traintest'].input_group = 'traintest'
-        #fitandscore.inputs['parameters'].input_group = 'parameters'
 
         smac_node.inputs['estimatordata'] = estimator_data.output
         smac_node.inputs['instancedata'] = instance_data.output
-        #fitandscore.inputs['traintest'] = traintest_data.output
-        #fitandscore.inputs['parameters'] = parameter_data.output
         sink_output.input = smac_node.outputs['fittedestimator']
 
         source_data = {'estimator_source': estimatordata,
@@ -3036,71 +2992,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                          cv_iter=cv_iter,
                          X=self.features, y=self.labels,
                          use_smac=True)
-        '''
-        # Skip the preprocessing for now, by setting FeatPreProcess
-        # always to False. This next section is not accurate at this point.
-        # Preprocess features if required
-        if 'FeatPreProcess' in best_parameters:
-            if best_parameters['FeatPreProcess'] == 'True':
-                print("Preprocessing features.")
-                feature_values = np.asarray([x[0] for x in X])
-                feature_labels = np.asarray([x[1] for x in X])
-                preprocessor = Preprocessor(verbose=False)
-                preprocessor.fit(feature_values, feature_labels=feature_labels[0, :])
-                feature_values = preprocessor.transform(feature_values)
-                feature_labels = preprocessor.transform(feature_labels)
-                X = [(values, labels) for values, labels in zip(feature_values, feature_labels)]
-        
-        # Make a temporary artificial configuration
-        crashing_config = {'UsePCA': 'False',
-                           'classifiers': 'LR',
-                           'LRC': 0.4001607630812365,
-                           'LRpenalty': 'l1',
-                           'random_seed': self.random_state,
-                           'max_iter': self.param_distributions['Classification']['max_iter'][0],
-                           'FeatPreProcess': False,
-                           'Featsel_Variance': False
-                           }
-        best_configs = [(0, 0, crashing_config)]
-        
-        # Score the best found result and save the full results
-        out = Parallel(
-            n_jobs=1, verbose=self.verbose,
-            pre_dispatch=pre_dispatch
-        )(delayed(fit_and_score)(self.features, self.labels, self.scoring,
-                                 train, test, parameters,
-                                 fit_params=self.fit_params,
-                                 return_train_score=self.return_train_score,
-                                 return_n_test_samples=True,
-                                 return_times=True, return_parameters=True,
-                                 error_score=self.error_score,
-                                 verbose=False,
-                                 return_all=False)
-          for score, iter, parameters in best_configs
-          for train, test in cv_iter)
-        save_data = zip(*out)
-        
-        # if one choose to see train score, "out" will contain train score info
-        if self.return_train_score:
-            (train_scores, test_scores, test_sample_counts,
-             fit_time, score_time, parameters_est, parameters_all) = \
-                save_data
-        else:
-            (test_scores, test_sample_counts,
-             fit_time, score_time, parameters_est, parameters_all) = \
-                save_data
 
-        self.process_fit(n_splits=n_splits,
-                         parameters_est=parameters_est,
-                         parameters_all=parameters_all,
-                         test_sample_counts=test_sample_counts,
-                         test_scores=test_scores,
-                         train_scores=train_scores,
-                         fit_time=fit_time,
-                         score_time=score_time,
-                         cv_iter=cv_iter,
-                         X=self.features, y=self.labels)
-        '''
         return self
 
     def convert_cfg(self, cfg):
@@ -3120,11 +3012,6 @@ class BaseSearchCVSMAC(BaseSearchCV):
             parameters.pop('StatisticalTestUse')
         if parameters['SampleProcessing_SMOTE'] == 'False':
             parameters.pop('SampleProcessing_SMOTE')
-        #if parameters['SampleProcessing_Oversampling'] == 'False':
-        #    parameters.pop('SampleProcessing_Oversampling')
-        #if parameters['ReliefUse'] == 'False':
-        #    parameters.pop('ReliefUse')
-        # 'PCAType' is either '95variance' or an int
         if parameters['UsePCA'] == 'True' and \
                 parameters['PCAType'] == 'n_components':
             parameters['PCAType'] = parameters.pop('n_components')
