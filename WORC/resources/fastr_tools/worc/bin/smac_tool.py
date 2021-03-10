@@ -78,9 +78,6 @@ def main():
 
     scenario = Scenario(scenario_settings)
 
-    # "runcount-limit": data['n_iter'],  # max. number of function evaluations;
-    # "wallclock-limit": data['n_iter'],
-
     def score_cfg(cfg):
         # Construct a new dictionary with parameters from the input configuration
 
