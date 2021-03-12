@@ -149,8 +149,7 @@ def construct_classifier(config):
                                   alpha=config['SGD_alpha'],
                                   l1_ratio=config['SGD_l1_ratio'],
                                   loss=config['SGD_loss'],
-                                  penalty=config['SGD_penalty'],
-                                  random_state=config['random_seed'])
+                                  penalty=config['SGD_penalty'])
 
     elif config['classifiers'] == 'LR':
         # Logistic Regression
@@ -214,7 +213,7 @@ def construct_SVM(config, regression=False):
         clf = SVC(class_weight='balanced', probability=True, max_iter=max_iter,
                   random_state=config['random_seed'])
     else:
-        clf = SVMR(max_iter=max_iter, random_state=config['random_seed'])
+        clf = SVMR(max_iter=max_iter)
 
     clf.kernel = str(config['SVMKernel'])
     clf.C = config['SVMC']

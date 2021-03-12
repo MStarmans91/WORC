@@ -511,6 +511,14 @@ class SimpleWORC():
         elif estimators is None:
             estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR']
 
+        # regression-specific override
+        overrides = {
+            'CrossValidation': {
+                'Type': 'LOO',  # only leave-one-out cval supported for regression atm
+            }
+        }
+        self.add_config_overrides(overrides)
+
         self._set_and_validate_estimators(estimators, scoring_method, 'regression', coarse)
 
     def survival(self, estimators, scoring_method, coarse=True):
