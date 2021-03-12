@@ -443,7 +443,7 @@ class WORC(object):
         config['Classification']['ElasticNet_l1_ratio'] = '0, 1'
         config['Classification']['SGD_alpha'] = '-5, 5'
         config['Classification']['SGD_l1_ratio'] = '0, 1'
-        config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
+        config['Classification']['SGD_loss'] = 'squared_loss, huber, epsilon_insensitive, squared_epsilon_insensitive'
         config['Classification']['SGD_penalty'] = 'none, l2, l1'
         config['Classification']['CNB_alpha'] = '0, 1'
         config['Classification']['AdaBoost_n_estimators'] = config['Classification']['RFn_estimators']
