@@ -6,6 +6,28 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+
+3.4.1 - Unreleased
+------------------
+
+Fixed
+~~~~~
+- Bugfix when PCA cannot be fitted.
+- Bugfix when using LOO cross-validation in performance evaluation.
+- Fix XGboost verson, as newest version automatically uses multihreading,
+  which is unsuitable for clusters.
+- Bug in decomposition for Evaluation.
+
+Changed
+~~~~~~~
+- Reverted back to weighted f1-score without predictproba for optimization,
+  more stable.
+
+Added
+~~~~~~~
+- Option to combine features from a varying number of objects per patient,
+  e.g. by averaging or taking the maximum.
+
 3.4.0 - 2021-02-02
 ------------------
 

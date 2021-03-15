@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -343,9 +343,11 @@ class WORC(object):
         config['FeatureScaling']['scaling_method'] = 'robust_z_score'
         config['FeatureScaling']['skip_features'] = 'semf_, pf_'
 
-        # Feature preprocessing before all below takes place
+        # Feature preprocessing before the whole HyperOptimization
         config['FeatPreProcess'] = dict()
         config['FeatPreProcess']['Use'] = 'False'
+        config['FeatPreProcess']['Combine'] = 'False'
+        config['FeatPreProcess']['Combine_method'] = 'mean'
 
         # Feature selection
         config['Featsel'] = dict()
@@ -467,7 +469,7 @@ class WORC(object):
 
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
-        config['HyperOptimization']['scoring_method'] = 'f1_weighted_predictproba'
+        config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '1000'
