@@ -23,7 +23,7 @@ sphinx>=1.4
 tables>=3.5.1
 tikzplotlib>=0.9.3
 tqdm>=4.7.1
-xgboost>=1.2.1
+xgboost==1.2.1
 xlrd>=1.2.0
 xnat>=0.2.2
 emcee==3.0.2
