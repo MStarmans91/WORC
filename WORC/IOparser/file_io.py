@@ -146,7 +146,6 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[],
         label_data['patient_IDs'] = patient_IDs
 
     # Optionally, combine features of same patient
-    print(label_data)
     if combine_features:
         print('Combining features of the same patient.')
         feature_labels = image_features[0][1]
@@ -154,6 +153,8 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[],
         new_label_data = list()
         new_pids = list()
         new_features = list()
+        pid_length = len(label_data['patient_IDs'])
+        print(f'\tOriginal number of samples / patients: {pid_length}.')
 
         already_processed = list()
         for pnum, pid in enumerate(label_data['patient_IDs']):
@@ -175,7 +176,7 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[],
                         feature_values_thispatient = np.nanmean(feature_values_thispatient, axis=0).tolist()
                     else:
                         raise WORCexceptions.KeyError(f'{combine_method} is not a valid combination method, should be mean or max.')
-                    features = (feature_labels, feature_values_thispatient)
+                    features = (feature_values_thispatient, feature_labels)
 
                     # And add the new one
                     new_features.append(features)
@@ -192,7 +193,9 @@ def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[],
 
         image_features = new_features
 
-    print(label_data)
+        pid_length = len(label_data['patient_IDs'])
+        print(f'\tNumber of samples / patients after combining: {pid_length}.')
+
     return label_data, image_features
 
 
