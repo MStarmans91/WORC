@@ -94,7 +94,6 @@ which can be done using ``pip``, see https://xgboost.readthedocs.io/en/latest/py
 
 SMAC
 -----
-.. note:: In order to use SMAC, first run ``git install [my smac fork]``.
 The SMAC algorithm, using Bayesian optimization, can be used for the hyperparameter optimization by
 setting the ``config['SMAC']['use']`` parameter to ``'True'``. For details on which SMAC parameters
 can be modified, see :ref:`Config chapter <config-chapter>`.
@@ -104,8 +103,12 @@ The core functionality of SMAC within WORC is implemented in
 in :py:mod:`WORC.classification.smac`, which is also where new methods can be added to the search space.
 
 There is additional output when using SMAC. The final output file ``smac_results_all_0.json``
-is added along with the regular performance files. It contains information on the optimization procedure for
-each cross-validation split, with statistics on the performance and all intermediate best found configurations.
-The end of the file contains a summary of the average statistics over all train-test cross-validations.
+is added along with the regular performance file in the output folder. It contains information on the
+optimization procedure for each cross-validation split, with statistics on the performance and all
+intermediate best found configurations.The end of the file contains a summary of the average statistics
+over all train-test cross-validations.
+
+.. note:: In order to use SMAC, make sure to use ``swig3.0``. Additionally, it might be necessary
+to uninstall and reinstall the ``pyrfr`` package.
 
 
