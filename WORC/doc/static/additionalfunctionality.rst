@@ -90,3 +90,22 @@ Additional classifiers
 When using the XGDBoost classifiers or regressors, install ``xgdboost``,
 which can be done using ``pip``, see https://xgboost.readthedocs.io/en/latest/python/python_intro.html.
 ``WORC`` makes use of the scikit-learn API.
+
+
+SMAC
+-----
+.. note:: In order to use SMAC, first run ``git install [my smac fork]``.
+The SMAC algorithm, using Bayesian optimization, can be used for the hyperparameter optimization by
+setting the ``config['SMAC']['use']`` parameter to ``'True'``. For details on which SMAC parameters
+can be modified, see :ref:`Config chapter <config-chapter>`.
+
+The core functionality of SMAC within WORC is implemented in
+:py:mod:`WORC.resources.fastr_tools.worc.bin.smac_tool`. The configuration space of SMAC is specified
+in :py:mod:`WORC.classification.smac`, which is also where new methods can be added to the search space.
+
+There is additional output when using SMAC. The final output file ``smac_results_all_0.json``
+is added along with the regular performance files. It contains information on the optimization procedure for
+each cross-validation split, with statistics on the performance and all intermediate best found configurations.
+The end of the file contains a summary of the average statistics over all train-test cross-validations.
+
+

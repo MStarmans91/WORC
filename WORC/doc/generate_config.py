@@ -383,9 +383,18 @@ def generate_config_options():
     config['FeatureScaling']['skip_features'] = 'Comma separated list of strings'
     config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, None'
 
+    config['SMAC'] = dict()
+    config['SMAC']['use'] = 'True, False'
+    config['SMAC']['n_smac_cores'] = 'Integer'
+    config['SMAC']['budget_type'] = 'evals, time'
+    config['SMAC']['budget'] = 'Integer'
+    config['SMAC']['init_method'] = 'random, sobol'
+    config['SMAC']['init_budget'] = 'Integer'
+
     # Ensemble options
     config['Ensemble'] = dict()
-    config['Ensemble']['Use'] = 'Integer'
+    config['Ensemble']['Method'] = 'Single, top_N, FitNumber, ForwardSelection, Caruana, Bagging'
+    config['Ensemble']['Size'] = 'Integer'
     config['Ensemble']['Metric'] = 'Default, generalization'
 
     # Evaluation options
@@ -677,9 +686,18 @@ def generate_config_descriptions():
     config['FeatureScaling']['skip_features'] = 'Determine which features should be skipped. This field should contain a comma separated list of substrings: when one or more of these are in a feature name, the feature is skipped.'
     config['FeatureScaling']['scaling_method'] = 'Determine the scaling method.'
 
+    config['SMAC'] = dict()
+    config['SMAC']['use'] = 'If True, use SMAC as the optimization strategy.'
+    config['SMAC']['n_smac_cores'] = 'Number of independent, parallel SMAC instances to use.'
+    config['SMAC']['budget_type'] = 'Type of budget to use for the SMAC optimization, either an evaluation limit or a time limit.'
+    config['SMAC']['budget'] = 'Size of the budget, which depends on the type of budget. Number of evaluations for an evaluation limit, or wallclock seconds for a time limit.'
+    config['SMAC']['init_method'] = 'Initialization method of SMAC. Supported are a random initialization or a sobol sequence.'
+    config['SMAC']['init_budget'] = 'Number of evaluations used for the initialization. Always an evaluation limit, regardless of the budget type choice of the optimization.'
+
     # Ensemble options
     config['Ensemble'] = dict()
-    config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.'
+    config['Ensemble']['Method'] = 'Choose which ensemble method to use. If you do not wish to use an ensemble, use Single or top_N with size 1.'
+    config['Ensemble']['Size'] = 'Number of estimators to use in the ensemble for the top_N method, or the number of bags for the Bagging method.'
     config['Ensemble']['Metric'] = 'Metric used to determine ranking of estimators in ensemble. When using default, the metric that is used in the hyperoptimization is used.'
 
     # Evaluation options
