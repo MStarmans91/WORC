@@ -2855,13 +2855,13 @@ class BaseSearchCVSMAC(BaseSearchCV):
         estimatordata = f"vfs://tmp/GS/{name}/{fname}"
 
         # Create the files containing the instance data
-        instance_labels = ['run_id', 'run_rng', 'run_name']
+        instance_labels = ['run_id', 'run_rng', 'run_name', 'tempfolder']
         current_date_time = datetime.now()
         random_id = random.randint(1000, 9999)
         run_name = current_date_time.strftime('smac-run_' + '%m-%d_%H-%M-%S' + str(random_id))
         instance_files = dict()
         for i in range(self.param_distributions['SMAC']['n_smac_cores']):
-            instance_info = [i, random.randint(0, 2 ** 32 - 1), run_name]
+            instance_info = [i, random.randint(0, 2 ** 32 - 1), run_name, tempfolder]
             instance_data = pd.Series(instance_info,
                                       index=instance_labels,
                                       name=f'instance data {i}')
@@ -2928,7 +2928,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         # Process the smac_results data once finished
         # First read in the results of all smac instance files
-        smac_filenames = glob.glob(os.path.join(fastr.config.mounts['scratch'],
+        smac_filenames = glob.glob(os.path.join(tempfolder,
                                                 'tested_configs',
                                                 run_name) + '/smac_stats_*.json')
         # Then create a combined dictionary with all

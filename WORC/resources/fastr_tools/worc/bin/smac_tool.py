@@ -57,7 +57,7 @@ def main():
     data = pd.read_hdf(args.ed)
     run_info = pd.read_hdf(args.id)
 
-    output_filename = os.path.join(fastr.config.mounts['scratch'], 'SMAC_output', run_info['run_name'])
+    output_filename = os.path.join(run_info['tempfolder'], 'SMAC_output', run_info['run_name'])
 
     scenario_settings = {'run_obj': 'quality',  # optimize for solution quality
                          'cs': data['search_space'],
@@ -117,7 +117,7 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
-        fname = os.path.join(fastr.config.mounts['scratch'],
+        fname = os.path.join(run_info['tempfolder'],
                              'tested_configs',
                              run_info['run_name'],
                              str(run_info['run_id']) + '.csv')
@@ -147,7 +147,7 @@ def main():
     opt_config = smac.optimize()
 
     # Read in the stats from the SMAC output
-    stats_file_location = os.path.join(fastr.config.mounts['scratch'],
+    stats_file_location = os.path.join(run_info['tempfolder'],
                                        'SMAC_output', run_info['run_name'],
                                        'run_' + str(run_info['run_id']),
                                        'stats.json')
@@ -156,7 +156,7 @@ def main():
 
     # Read in the history of the incumbents from the SMAC output
     # and append some trajectory info to the stats
-    traj_file_location = os.path.join(fastr.config.mounts['scratch'],
+    traj_file_location = os.path.join(run_info['tempfolder'],
                                       'SMAC_output', run_info['run_name'],
                                       'run_' + str(run_info['run_id']),
                                       'traj.json')
@@ -182,7 +182,7 @@ def main():
     smac_stats['inc_costs'] = costs
     smac_stats['inc_configs'] = configs
 
-    result_file_name = os.path.join(fastr.config.mounts['scratch'],
+    result_file_name = os.path.join(run_info['tempfolder'],
                                     'tested_configs',
                                     run_info['run_name'],
                                     'smac_stats_' + str(run_info['run_id']) + '.json')
@@ -194,7 +194,7 @@ def main():
 
     source_labels = ['RET']
 
-    output_df = pd.read_csv(os.path.join(fastr.config.mounts['scratch'],
+    output_df = pd.read_csv(os.path.join(run_info['tempfolder'],
                                          'tested_configs',
                                          run_info['run_name'],
                                          str(run_info['run_id']) + '.csv'))
