@@ -43,9 +43,7 @@ def build_smac_config(parameters):
     # The first argument to parse is the choice of classifier
     classifier = CategoricalHyperparameter('classifiers',
                                            choices=['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB',
-                                                    'AdaBoostClassifier'])
-                                           #choices=['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB',
-                                           #         'AdaBoostClassifier', 'XGBClassifier'])
+                                                    'AdaBoostClassifier', 'XGBClassifier'])
     cs.add_hyperparameter(classifier)
 
     # SVM
@@ -164,7 +162,7 @@ def build_smac_config(parameters):
     cs.add_hyperparameters([ada_n_estimators, ada_learning_rate])
     cs.add_conditions([InCondition(child=ada_n_estimators, parent=classifier, values=['AdaBoostClassifier']),
                        InCondition(child=ada_learning_rate, parent=classifier, values=['AdaBoostClassifier'])])
-    '''
+
     # XGBClassifier
     # 6 hyperparameters:
     #   1) boosting_rounds  | conditional on classifier: XGB
@@ -205,7 +203,7 @@ def build_smac_config(parameters):
                        InCondition(child=xgb_gamma, parent=classifier, values=['XGBClassifier']),
                        InCondition(child=min_child_weight, parent=classifier, values=['XGBClassifier']),
                        InCondition(child=colsample_bytree, parent=classifier, values=['XGBClassifier'])])
-    '''
+
 
     ### Preprocessing ###
     # 9 preprocessing steps are included:
