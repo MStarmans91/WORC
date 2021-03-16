@@ -2880,7 +2880,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
         sink_output = network.create_sink('HDF5', id='output')
 
         smac_node = network.create_node('worc/smac:1.0', tool_version='1.0', id='smac',
-                                          resources=ResourceLimit(memory='10G'))
+                                          resources=ResourceLimit(memory='5G'))
 
         smac_node.inputs['estimatordata'] = estimator_data.output
         smac_node.inputs['instancedata'] = instance_data.output
