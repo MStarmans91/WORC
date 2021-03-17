@@ -134,7 +134,7 @@ class ConfigBuilder():
                                   'N_iterations': '1000',
                                   'n_jobspercore': '500'},
             # No ensembling
-            'Ensemble': {'Use': '1'}
+            'Ensemble': {'Method': 'Single'}
         }
         self.custom_config_overrides(overrides)
         return overrides
