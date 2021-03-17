@@ -117,7 +117,8 @@ class ConfigBuilder():
             },
             'Imputation': {
                 # Do not use KNN on small datasets
-                'strategy': 'mean, median, most_frequent, constant',
+                'use': 'False'
+                #'strategy': 'mean, median, most_frequent, constant',
                 },
             # Do not use any resampling
             'Resampling': {
