@@ -133,6 +133,8 @@ class ConfigBuilder():
             'HyperOptimization': {'n_splits': '2',
                                   'N_iterations': '1000',
                                   'n_jobspercore': '500'},
+            # SMAC
+            'SMAC': {'use': 'True'},
             # No ensembling
             'Ensemble': {'Method': 'Single'}
         }
