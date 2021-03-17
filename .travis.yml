@@ -42,6 +42,7 @@ matrix:
        - sudo ln -s /usr/bin/swig3.0 /usr/bin/swig
        - sudo apt-get -qq -y install git
        - pip install -r requirements.txt
+       - pip install git+https://github.com/mitchelldeen/SMAC3.git
       env:
         - WORCDEBUG=true
       install:
