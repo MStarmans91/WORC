@@ -2822,8 +2822,21 @@ class BaseSearchCVSMAC(BaseSearchCV):
         # Run the optimization
 
         # Here we will create and execute a fastr network
-        # Create test-train splits
-        name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+
+        # Create temporary directory for fastr
+        if DebugDetector().do_detection():
+            # Specific name for easy debugging
+            debugnum = 0
+            name = 'DEBUG_' + str(debugnum)
+            tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
+            while os.path.exists(tempfolder):
+                debugnum += 1
+                name = 'DEBUG_' + str(debugnum)
+                tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
+
+        else:
+            name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+
         tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
         if not os.path.exists(tempfolder):
             os.makedirs(tempfolder)
