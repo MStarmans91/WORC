@@ -95,8 +95,8 @@ which can be done using ``pip``, see https://xgboost.readthedocs.io/en/latest/py
 SMAC
 -----
 .. note:: The SMAC algorithm only works on Linux, because of its random forest surrogate model
-implementation. Make sure to use ``swig3.0``. To circumvent ``pyrfr`` issues
-with SMAC, we use a custom SMAC package that needs to be installed separately.
+    implementation. Make sure to use ``swig3.0``. To circumvent ``pyrfr`` issues
+    with SMAC, we use a custom SMAC package that needs to be installed separately.
 
 Steps to take in order to use SMAC within WORC:
 
@@ -104,7 +104,7 @@ Steps to take in order to use SMAC within WORC:
 2. ``sudo apt-get install swig3.0``
 3. ``sudo ln -s /usr/bin/swig3.0 /usr/bin/swig``
 4. ``pip install pyrfr==0.8.0``
-4. ``pip install git+https://github.com/mitchelldeen/SMAC3.git``
+5. ``pip install git+https://github.com/mitchelldeen/SMAC3.git``
 
 The SMAC algorithm, using Bayesian optimization, can be used for the hyperparameter optimization by
 setting the ``config['SMAC']['use']`` parameter to ``'True'``. For details on which SMAC parameters
