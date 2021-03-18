@@ -27,7 +27,7 @@ try:
     from smac.initial_design.random_configuration_design import RandomConfigurations
     from smac.initial_design.sobol_design import SobolDesign
 except:
-    print("SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html".)
+    print("SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.")
 import ast
 import os
 import json

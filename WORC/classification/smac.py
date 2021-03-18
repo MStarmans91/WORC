@@ -22,7 +22,7 @@ try:
         Constant
     from smac.configspace import ConfigurationSpace
 except:
-    print("SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html".)
+    print("SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.")
 
 
 
