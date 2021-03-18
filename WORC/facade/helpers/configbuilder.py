@@ -115,26 +115,24 @@ class ConfigBuilder():
                 'phase_features': 'False',
                 'toolbox': 'PREDICT'
             },
-            #'Imputation': {
-                # Do not use KNN on small datasets
-                #'strategy': 'mean, median, most_frequent, constant',
-                #},
+            'Imputation': {
+                 #Do not use KNN on small datasets
+                'strategy': 'mean, median, most_frequent, constant',
+            },
             # Do not use any resampling
             'Resampling': {
                 'Use': '0.0',
-                },
+            },
             'CrossValidation': {
                 # Only perform a 3x random-split cross-validation
                 'N_iterations': '3',
                 # Set a fixed seed, so we get the same result every time
                 'fixed_seed': 'True'
-                },
+            },
             # Hyperoptimization is very minimal
             'HyperOptimization': {'n_splits': '2',
                                   'N_iterations': '1000',
                                   'n_jobspercore': '500'},
-            # SMAC
-            'SMAC': {'use': 'True'},
             # No ensembling
             'Ensemble': {'Method': 'Single'}
         }
