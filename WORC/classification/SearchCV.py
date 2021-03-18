@@ -2990,9 +2990,10 @@ class BaseSearchCVSMAC(BaseSearchCV):
             with open(result_file, 'a') as jsonfile:
                 json.dump(smac_results_for_this_cv, jsonfile, indent=4)
 
-
         # Remove the temporary folder used
-        shutil.rmtree(tempfolder)
+        if name != 'DEBUG_0':
+            # Do delete if not debugging for first iteration
+            shutil.rmtree(tempfolder)
 
         # Process the results of the fitting procedure
         self.process_fit(n_splits=n_splits,
