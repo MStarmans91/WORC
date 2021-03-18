@@ -30,7 +30,7 @@ from WORC.plotting.compute_CI import compute_confidence
 from WORC.plotting.compute_CI import compute_confidence_bootstrap
 
 
-def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_scoring):
+def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble_method, ensemble_size, ensemble_scoring):
     print('Fitting thresholds on validation set')
     if not hasattr(estimator, 'cv_iter'):
         cv_iter = list(estimator.cv.split(X_train, Y_train))
@@ -50,10 +50,10 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_s
         train_temp = range(0, len(train))
 
         # Refit a SearchCV object with the provided parameters
-        if ensemble:
+        if ensemble_method is not None:
             estimator.create_ensemble(X_train_temp, Y_train_temp,
-                                      method=ensemble, verbose=False,
-                                      scoring=ensemble_scoring)
+                                      method=ensemble_method, size=ensemble_size,
+                                      verbose=False, scoring=ensemble_scoring)
         else:
             estimator.refit_and_score(X_train_temp, Y_train_temp, p_all,
                                       train_temp, train_temp,
@@ -143,9 +143,10 @@ def compute_statistics(y_truth, y_score, y_prediction, modus, regression):
 
 
 def plot_estimator_performance(prediction, label_data, label_type,
-                               crossval_type=None,
-                               alpha=0.95, ensemble=None,
-                               verbose=True, ensemble_scoring=None,
+                               crossval_type=None, alpha=0.95,
+                               ensemble_method='top_N',
+                               ensemble_size=50, verbose=True,
+                               ensemble_scoring=None,
                                output=None, modus=None,
                                thresholds=None, survival=False,
                                shuffle_estimators=False,
@@ -173,12 +174,12 @@ def plot_estimator_performance(prediction, label_data, label_type,
     alpha: float, default 0.95
         Significance of confidence intervals.
 
-    ensemble: False, integer or 'Caruana'
-        Determine whether an ensemble will be created. If so,
-        either provide an integer to determine how many of the
-        top performing classifiers should be in the ensemble, or use
-        the string "Caruana" to use smart ensembling based on
-        Caruana et al. 2004.
+    ensemble_method: string, default 'top_N'
+        Determine which method to use for creating the ensemble.
+        Choices: top_N or Caruana
+
+    ensemble_size: int, default 50
+        Determine the size of the ensemble. Only relevant for top_N
 
     verbose: boolean, default True
         Plot intermedate messages.
@@ -257,8 +258,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
     # Get some configuration variables if present in the prediction
     config = prediction[label_type].config
-    if ensemble is None:
-        ensemble = int(config['Ensemble']['Use'])
 
     if modus is None:
         modus = config['Labels']['modus']
@@ -287,6 +286,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
         bca = list()
         auc = list()
         f1_score_list = list()
+        val_score = list()
 
         if modus == 'multilabel':
             acc_av = list()
@@ -427,8 +427,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
             # Create the ensemble
             X_train_temp = [(x, feature_labels) for x in X_train_temp]
             fitted_model.create_ensemble(X_train_temp, Y_train_temp,
-                                         method=ensemble, verbose=verbose,
-                                         scoring=ensemble_scoring,
+                                         method=ensemble_method, size=ensemble_size,
+                                         verbose=verbose, scoring=ensemble_scoring,
                                          overfit_scaler=overfit_scaler)
 
         # If bootstrap, generate a bootstrapped sample
@@ -459,14 +459,14 @@ def plot_estimator_performance(prediction, label_data, label_type,
                     y_truth_temp = list()
                     test_patient_IDs_temp = list()
 
-                    thresholds_val = fit_thresholds(thresholds, fitted_model, X_train_temp, Y_train_temp, ensemble,
-                                                    ensemble_scoring)
-                    for pnum in range(len(y_score)):
-                        if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
-                            y_score_temp.append(y_score[pnum])
-                            y_prediction_temp.append(y_prediction[pnum])
-                            y_truth_temp.append(y_truth[pnum])
-                            test_patient_IDs_temp.append(test_patient_IDs[pnum])
+                thresholds_val = fit_thresholds(thresholds, fitted_model, X_train_temp, Y_train_temp,
+                                                ensemble_method, ensemble_size, ensemble_scoring)
+                for pnum in range(len(y_score)):
+                    if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
+                        y_score_temp.append(y_score[pnum])
+                        y_prediction_temp.append(y_prediction[pnum])
+                        y_truth_temp.append(y_truth[pnum])
+                        test_patient_IDs_temp.append(test_patient_IDs[pnum])
 
                     perc = float(len(y_prediction_temp))/float(len(y_prediction))
                     percentages_selected.append(perc)
@@ -553,6 +553,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 f1_score_list.append(f1_score_temp)
                 precision.append(precision_temp)
                 npv.append(npv_temp)
+                val_score.append(fitted_model.ensemble_validation_score)
 
                 if modus == 'multilabel':
                     acc_av.append(acc_av_temp)
@@ -672,10 +673,10 @@ def plot_estimator_performance(prediction, label_data, label_type,
                         all_performances[metric_names_single[p]] = perf
 
                 else:
-                    names = ['Accuracy', 'BCA', 'AUC', 'F1-score', 'Precision'
-                             'NPV', 'Sensitivity', 'Specificity']
+                    names = ['Accuracy', 'BCA', 'AUC', 'F1-score', 'Precision',
+                             'NPV', 'Sensitivity', 'Specificity', 'Validation-score']
                     performances = [accuracy, bca, auc, f1_score_list,
-                                    precision, npv, sensitivity, specificity]
+                                    precision, npv, sensitivity, specificity, val_score]
                     for name, perf in zip(names, performances):
                         all_performances[name] = perf
 
@@ -687,6 +688,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
                     stats["NPV 95%:"] = f"{np.nanmean(npv)} {str(compute_confidence(npv, N_1, N_2, alpha))}"
                     stats["Sensitivity 95%:"] = f"{np.nanmean(sensitivity)} {str(compute_confidence(sensitivity, N_1, N_2, alpha))}"
                     stats["Specificity 95%:"] = f"{np.nanmean(specificity)} {str(compute_confidence(specificity, N_1, N_2, alpha))}"
+                    stats["Validation 95%:"] = f"{np.nanmean(val_score)} {str(compute_confidence(val_score, N_1, N_2, alpha))}"
 
                     if modus == 'multilabel':
                         stats["Average Accuracy 95%:"] = f"{np.nanmean(acc_av)} {str(compute_confidence(acc_av, N_1, N_2, alpha))}"

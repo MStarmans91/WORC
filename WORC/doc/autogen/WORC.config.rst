@@ -20,5 +20,6 @@ Preprocessing     :ref:`Preprocessing <config-Preprocessing>`
 PyRadiomics       :ref:`PyRadiomics <config-PyRadiomics>`            
 Resampling        :ref:`Resampling <config-Resampling>`              
 Segmentix         :ref:`Segmentix <config-Segmentix>`                
-SelectFeatGroup   :ref:`SelectFeatGroup <config-SelectFeatGroup>`    
+SelectFeatGroup   :ref:`SelectFeatGroup <config-SelectFeatGroup>`
+SMAC              :ref:`SMAC <config-SMAC>`
 ================= ===================================================

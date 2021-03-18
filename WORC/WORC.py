@@ -474,16 +474,26 @@ class WORC(object):
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.15'
         config['HyperOptimization']['n_splits'] = '5'
-        config['HyperOptimization']['N_iterations'] = '1000'
+        config['HyperOptimization']['N_iterations'] = '1000' # represents either wallclock time limit or nr of evaluations when using SMAC
         config['HyperOptimization']['n_jobspercore'] = '500'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['memory'] = '3G'
         config['HyperOptimization']['refit_workflows'] = 'False'
 
+        # SMAC options
+        config['SMAC'] = dict()
+        config['SMAC']['use'] = 'False'
+        config['SMAC']['n_smac_cores'] = '1'
+        config['SMAC']['budget_type'] = 'evals' # ['evals', 'time']
+        config['SMAC']['budget'] = '100' # Nr of evals or time in seconds
+        config['SMAC']['init_method'] = 'random' # ['sobol', 'random']
+        config['SMAC']['init_budget'] = '20' # Nr of evals
+
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Use'] = '100'
+        config['Ensemble']['Method'] = 'top_N' # ['Single', 'top_N', 'FitNumber', 'ForwardSelection', 'Caruana', 'Bagging']
+        config['Ensemble']['Size'] = '100' # Size of ensemble in top_N, or number of bags in Bagging
         config['Ensemble']['Metric'] = 'Default'
 
         # Evaluation options
@@ -564,9 +574,13 @@ class WORC(object):
                     self.fixedsplits = self.network.create_source('CSVFile', id='fixedsplits_source', node_group='conf', step_id='general_sources')
                     self.classify.inputs['fixedsplits'] = self.fixedsplits.output
 
-                self.source_Ensemble =\
-                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Use']],
-                                                 id='Ensemble',
+                self.source_ensemble_method =\
+                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Method']],
+                                                 id='ensemble_method',
+                                                 step_id='Evaluation')
+                self.source_ensemble_size =\
+                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Size']],
+                                                 id='ensemble_size',
                                                  step_id='Evaluation')
                 self.source_LabelType =\
                     self.network.create_constant('String', [self.configs[0]['Labels']['label_names']],
@@ -592,7 +606,8 @@ class WORC(object):
                 self.link_class_1.collapse = 'conf'
                 self.link_class_2.collapse = 'pctrain'
 
-                self.plot_estimator.inputs['ensemble'] = self.source_Ensemble.output
+                self.plot_estimator.inputs['ensemble_method'] = self.source_ensemble_method.output
+                self.plot_estimator.inputs['ensemble_size'] = self.source_ensemble_size.output
                 self.plot_estimator.inputs['label_type'] = self.source_LabelType.output
 
                 if self.labels_test:
@@ -602,6 +617,12 @@ class WORC(object):
 
                 self.plot_estimator.inputs['prediction'] = self.classify.outputs['classification']
                 self.plot_estimator.inputs['pinfo'] = pinfo
+
+                # Optional SMAC output
+                if self.configs[0]['SMAC']['use'] == 'True':
+                   self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results',
+                                                                     step_id='general_sinks')
+                   self.sink_smac_results.input = self.classify.outputs['smac_results']
 
                 if self.TrainTest:
                     # FIXME: the naming here is ugly
@@ -1649,6 +1670,7 @@ class WORC(object):
 
         self.sink_data['classification'] = ("vfs://output/{}/estimator_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.sink_data['smac_results'] = ("vfs://output/{}/smac_results_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_test_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)

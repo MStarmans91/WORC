@@ -45,7 +45,7 @@ def load_config(config_file_path):
                      'Resampling': dict(), 'Imputation': dict(),
                      'Ensemble': dict(), 'Bootstrap': dict(),
                      'FeatPreProcess': dict(), 'Evaluation': dict(),
-                     'OneHotEncoding': dict()}
+                     'OneHotEncoding': dict(), 'SMAC': dict()}
 
     settings_dict['General']['cross_validation'] =\
         settings['General'].getboolean('cross_validation')
@@ -372,9 +372,26 @@ def load_config(config_file_path):
     settings_dict['HyperOptimization']['memory'] = \
         str(settings['HyperOptimization']['memory'])
 
+    # Settings for SMAC
+    settings_dict['SMAC']['use'] =\
+        settings['SMAC'].getboolean('use')
+    settings_dict['SMAC']['n_smac_cores'] =\
+        int(settings['SMAC']['n_smac_cores'])
+    settings_dict['SMAC']['budget_type'] =\
+        str(settings['SMAC']['budget_type'])
+    settings_dict['SMAC']['budget'] =\
+        int(settings['SMAC']['budget'])
+    settings_dict['SMAC']['init_method'] =\
+        str(settings['SMAC']['init_method'])
+    settings_dict['SMAC']['init_budget'] =\
+        int(settings['SMAC']['init_budget'])
+
     # Settings for ensembling
-    settings_dict['Ensemble']['Use'] =\
-        settings['Ensemble'].getint('Use')
+    settings_dict['Ensemble']['Method'] =\
+        str(settings['Ensemble']['Method'])
+    settings_dict['Ensemble']['Size'] =\
+        int(settings['Ensemble']['Size'])
+        #settings['Ensemble'].getint('Use')
 
     settings_dict['Ensemble']['Metric'] =\
         settings['Ensemble']['Metric']

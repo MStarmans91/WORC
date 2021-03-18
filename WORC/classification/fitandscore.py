@@ -37,6 +37,7 @@ from WORC.featureprocessing.SelectGroups import SelectGroups
 from WORC.featureprocessing.OneHotEncoderWrapper import OneHotEncoderWrapper
 import WORC
 import WORC.addexceptions as ae
+import time
 
 # Specific imports for error management
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
@@ -55,8 +56,8 @@ def fit_and_score(X, y, scoring,
                   return_times=True, return_parameters=False,
                   return_estimator=False,
                   error_score='raise', verbose=True,
-                  return_all=True,
-                  refit_workflows=False):
+                  return_all=True, refit_workflows=False,
+                  use_smac=False):
     """Fit an estimator to a dataset and score the performance.
 
     The following
@@ -288,6 +289,9 @@ def fit_and_score(X, y, scoring,
     if not return_all:
         del encoder
 
+    # Start the timing
+    start_time = time.time()
+
     # ------------------------------------------------------------------------
     # Feature imputation
     if 'Imputation' in para_estimator.keys():
@@ -295,7 +299,11 @@ def fit_and_score(X, y, scoring,
             imp_type = para_estimator['ImputationMethod']
             if verbose:
                 print(f'Imputing NaN with {imp_type}.')
-            imp_nn = para_estimator['ImputationNeighbours']
+            # Only used with KNN in SMAC, otherwise assign default
+            if 'ImputationNeighbours' in para_estimator.keys():
+                imp_nn = para_estimator['ImputationNeighbours']
+            else:
+                imp_nn = 8
 
             imputer = Imputer(missing_values=np.nan, strategy=imp_type,
                               n_neighbors=imp_nn)
@@ -312,7 +320,8 @@ def fit_and_score(X, y, scoring,
 
         del para_estimator['Imputation']
         del para_estimator['ImputationMethod']
-        del para_estimator['ImputationNeighbours']
+        if 'ImputationNeighbours' in para_estimator.keys():
+            del para_estimator['ImputationNeighbours']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -401,6 +410,14 @@ def fit_and_score(X, y, scoring,
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
@@ -468,6 +485,14 @@ def fit_and_score(X, y, scoring,
             print(parameters)
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
@@ -524,6 +549,14 @@ def fit_and_score(X, y, scoring,
             print(parameters)
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
@@ -577,9 +610,12 @@ def fit_and_score(X, y, scoring,
 
     if 'SelectFromModel' in para_estimator.keys():
         del para_estimator['SelectFromModel']
-        del para_estimator['SelectFromModel_lasso_alpha']
-        del para_estimator['SelectFromModel_estimator']
-        del para_estimator['SelectFromModel_n_trees']
+        if 'SelectFromModel_lasso_alpha' in para_estimator.keys():
+            del para_estimator['SelectFromModel_lasso_alpha']
+        if 'SelectFromModel_estimator' in para_estimator.keys():
+            del para_estimator['SelectFromModel_estimator']
+        if 'SelectFromModel_n_trees' in para_estimator.keys():
+            del para_estimator['SelectFromModel_n_trees']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -592,6 +628,14 @@ def fit_and_score(X, y, scoring,
             print('[WARNING]: No features are selected! Probably SelectFromModel could not properly select features. Parameters:')
             print(parameters)
         para_estimator = delete_nonestimator_parameters(para_estimator)
+
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
 
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
@@ -614,6 +658,14 @@ def fit_and_score(X, y, scoring,
                 if verbose:
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
+                # Update the runtime
+                end_time = time.time()
+                runtime = end_time - start_time
+                if return_train_score:
+                    ret[3] = runtime
+                else:
+                    ret[2] = runtime
+
                 pca = None
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
@@ -634,6 +686,14 @@ def fit_and_score(X, y, scoring,
             except (ValueError, LinAlgError) as e:
                 if verbose:
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+
+                # Update the runtime
+                end_time = time.time()
+                runtime = end_time - start_time
+                if return_train_score:
+                    ret[3] = runtime
+                else:
+                    ret[2] = runtime
 
                 pca = None
                 if return_all:
@@ -678,7 +738,8 @@ def fit_and_score(X, y, scoring,
 
     if 'UsePCA' in para_estimator.keys():
         del para_estimator['UsePCA']
-        del para_estimator['PCAType']
+        if 'PCAType' in para_estimator.keys():
+            del para_estimator['PCAType']
 
     # --------------------------------------------------------------------
     # Feature selection based on a statistical test
@@ -698,8 +759,20 @@ def fit_and_score(X, y, scoring,
             if len(X_train_temp[0]) == 0:
                 if verbose:
                     print('[WORC WARNING]: No features are selected! Probably your statistical test feature selection was too strict. Skipping thresholding.')
-                StatisticalSel = None
-                parameters['StatisticalTestUse'] = 'False'
+                para_estimator = delete_nonestimator_parameters(para_estimator)
+                # Update the runtime
+                end_time = time.time()
+                runtime = end_time - start_time
+                if return_train_score:
+                    ret[3] = runtime
+                else:
+                    ret[2] = runtime
+                if return_all:
+                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], \
+                           scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                else:
+                    return ret
+
             else:
                 X_train = StatisticalSel.transform(X_train)
                 X_test = StatisticalSel.transform(X_test)
@@ -755,6 +828,14 @@ def fit_and_score(X, y, scoring,
                         print(f'[WARNING]: {e}. Returning dummies. Parameters: ')
                         print(parameters)
                     para_estimator = delete_nonestimator_parameters(para_estimator)
+
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
 
                     if return_all:
                         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
@@ -847,6 +928,14 @@ def fit_and_score(X, y, scoring,
             if verbose:
                 print(f'[WARNING]: skipping this setting due to LDA Error: {e}.')
 
+            # Update the runtime
+            end_time = time.time()
+            runtime = end_time - start_time
+            if return_train_score:
+                ret[3] = runtime
+            else:
+                ret[2] = runtime
+
             if return_all:
                 return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
             else:
@@ -863,6 +952,14 @@ def fit_and_score(X, y, scoring,
         estimator.refit_and_score(X, y, parameters,
                                   train=indices, test=indices)
         ret.append(estimator)
+
+    # End the timing and store the fit_time
+    end_time = time.time()
+    runtime = end_time - start_time
+    if return_train_score:
+        ret[3] = runtime
+    else:
+        ret[2] = runtime
 
     if return_all:
         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
