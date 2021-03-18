@@ -17,16 +17,17 @@
 
 import argparse
 
-import fastr
 import pandas as pd
 import numpy as np
 import WORC.addexceptions as WORCexceptions
 from WORC.classification.fitandscore import fit_and_score
-from smac.scenario.scenario import Scenario
-from smac.facade.smac_hpo_facade import SMAC4HPO
-from smac.initial_design.initial_design import InitialDesign
-from smac.initial_design.random_configuration_design import RandomConfigurations
-from smac.initial_design.sobol_design import SobolDesign
+try:
+    from smac.scenario.scenario import Scenario
+    from smac.facade.smac_hpo_facade import SMAC4HPO
+    from smac.initial_design.random_configuration_design import RandomConfigurations
+    from smac.initial_design.sobol_design import SobolDesign
+except:
+    print("SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html".)
 import ast
 import os
 import json

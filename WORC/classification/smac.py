@@ -15,11 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ConfigSpace.conditions import InCondition
-from ConfigSpace.hyperparameters import CategoricalHyperparameter, \
-    UniformFloatHyperparameter, UniformIntegerHyperparameter, \
-    Constant
-from smac.configspace import ConfigurationSpace
+try:
+    from ConfigSpace.conditions import InCondition
+    from ConfigSpace.hyperparameters import CategoricalHyperparameter, \
+        UniformFloatHyperparameter, UniformIntegerHyperparameter, \
+        Constant
+    from smac.configspace import ConfigurationSpace
+except:
+    print("SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html".)
 
 
 
