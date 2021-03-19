@@ -77,6 +77,7 @@ def random_split_cross_validation(image_features, feature_labels, classes,
         # label is maintained
         if any(clf in regressors for clf in param_grid['classifiers']):
             # We cannot do a stratified shuffle split with regression
+            classes_temp = classes
             stratify = None
         else:
             if modus == 'singlelabel':
