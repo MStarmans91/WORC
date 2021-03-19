@@ -142,7 +142,7 @@ class SimpleWORC():
         features = list(directory.glob(f'{glob}{feature_file_name}'))
 
         if len(features) == 0:
-            raise NoFeaturesFoundException(f'{directory}{glob}{image_file_name}')
+            raise NoFeaturesFoundException(f'{directory}{glob}{feature_file_name}')
 
         features_per_subject = {feature.parent.name: feature.as_uri().replace('%20', ' ') for feature in features}
         if is_training:

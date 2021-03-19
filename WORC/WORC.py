@@ -142,6 +142,8 @@ class WORC(object):
         self.Elastix_Para = list()
         self.label_names = 'Label1, Label2'
 
+        self.fixedsplits = list()
+
         # Set some defaults, name
         self.fastr_plugin = 'LinearExecution'
         if name == '':
@@ -557,6 +559,10 @@ class WORC(object):
                                                          id='classify',
                                                          resources=ResourceLimit(memory=memory),
                                                          step_id='WorkflowOptimization')
+
+                if self.fixedsplits:
+                    self.fixedsplits = self.network.create_source('CSVFile', id='fixedsplits_source', node_group='conf', step_id='general_sources')
+                    self.classify.inputs['fixedsplits'] = self.fixedsplits.output
 
                 self.source_Ensemble =\
                     self.network.create_constant('String', [self.configs[0]['Ensemble']['Use']],

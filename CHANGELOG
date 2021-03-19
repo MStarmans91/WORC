@@ -27,6 +27,8 @@ Added
 ~~~~~~~
 - Option to combine features from a varying number of objects per patient,
   e.g. by averaging or taking the maximum.
+- Logarithmic z-score scaler to be more robust to non-normal distributions
+  and outliers.
 
 3.4.0 - 2021-02-02
 ------------------

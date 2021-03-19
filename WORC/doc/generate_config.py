@@ -240,11 +240,9 @@ def generate_config_options():
 
     # Feature preprocessing before all below takes place
     config['FeatPreProcess'] = dict()
-    config['FeatPreProcess']['Use'] = 'True, False'
-
-    # Feature preprocessing before all below takes place
-    config['FeatPreProcess'] = dict()
     config['FeatPreProcess']['Use'] = 'Boolean'
+    config['FeatPreProcess']['Combine'] = 'Boolean'
+    config['FeatPreProcess']['Combine_method'] = 'mean or max'
 
     # Feature selection
     config['Featsel'] = dict()
@@ -381,7 +379,7 @@ def generate_config_options():
     # Feature scaling options
     config['FeatureScaling'] = dict()
     config['FeatureScaling']['skip_features'] = 'Comma separated list of strings'
-    config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, None'
+    config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, log_z_score, None'
 
     # Ensemble options
     config['Ensemble'] = dict()
@@ -543,6 +541,8 @@ def generate_config_descriptions():
     # Feature preprocessing before all below takes place
     config['FeatPreProcess'] = dict()
     config['FeatPreProcess']['Use'] = 'If True, use feature preprocessor in the classify node. Currently excluded features with >80% NaNs.'
+    config['FeatPreProcess']['Combine'] = 'If True, features of multiple objects (e.g. lesions) of the same patient are combined.'
+    config['FeatPreProcess']['Combine_method'] = 'If features of multiple objects are combined, this determines the method. Currently included options are mean and max.'
 
     # Feature selection
     config['Featsel'] = dict()
