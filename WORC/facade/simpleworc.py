@@ -513,9 +513,9 @@ class SimpleWORC():
 
         # regression-specific override
         overrides = {
-        #    'CrossValidation': {
-        #        'Type': 'LOO',  # only leave-one-out cval supported for regression atm
-        #    }
+            'CrossValidation': {
+                'Type': 'LOO',  # only leave-one-out cval supported for regression atm
+            }
         }
         self.add_config_overrides(overrides)
 
