@@ -37,14 +37,14 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
         r2score = metrics.r2_score(y_truth, y_prediction)
         MSE = metrics.mean_squared_error(y_truth, y_prediction)
         coefICC = ICC(np.column_stack((y_prediction, y_truth)))
-        C = pearsonr(y_prediction, y_truth)
-        PearsonC = C[0]
-        PearsonP = C[1]
-        C = spearmanr(y_prediction, y_truth)
-        SpearmanC = C.correlation
-        SpearmanP = C.pvalue
+        #C = pearsonr(y_prediction, y_truth)
+        #PearsonC = C[0]
+        #PearsonP = C[1]
+        #C = spearmanr(y_prediction, y_truth)
+        #SpearmanC = C.correlation
+        #SpearmanP = C.pvalue
 
-        return r2score, MSE, coefICC, PearsonC, PearsonP, SpearmanC, SpearmanP
+        return r2score, MSE, coefICC#, PearsonC, PearsonP, SpearmanC, SpearmanP
 
     else:
         # Compute confuction matrics and extract measures
