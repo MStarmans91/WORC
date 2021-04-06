@@ -162,8 +162,8 @@ def random_split_cross_validation(image_features, feature_labels, classes,
 
         else:
             # Use pre defined splits
-            train = fixedsplits[str(i) + '_train'].values
-            test = fixedsplits[str(i) + '_test'].values
+            train = fixedsplits[str(i) + '_train'].dropna().values
+            test = fixedsplits[str(i) + '_test'].dropna().values
 
             # Convert the numbers to the correct indices
             ind_train = list()

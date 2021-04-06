@@ -121,7 +121,7 @@ class SimpleWORC():
         if self._fixed_splits is not None:
             print('WARN: set_fixed_splits already set. Please check your script to make sure this is ok!')
 
-        self._fixed_splits = [fixed_splits_csv]
+        self._fixed_splits = fixed_splits_csv
 
     def features_from_this_directory(self, directory,
                                      feature_file_name='features.hdf5',
@@ -527,9 +527,9 @@ class SimpleWORC():
 
         # regression-specific override
         overrides = {
-            'CrossValidation': {
-                'Type': 'LOO',  # only leave-one-out cval supported for regression atm
-            },
+            #'CrossValidation': {
+            #    'Type': 'LOO',  # only leave-one-out cval supported for regression atm
+            #},
             'Featsel': {
                 'SelectFromModel': 0.0,
                 'StatisticalTestUse': 0.0,

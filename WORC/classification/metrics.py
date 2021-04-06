@@ -34,6 +34,12 @@ def performance_singlelabel(y_truth, y_prediction, y_score, regression=False):
     Singleclass performance metrics
     '''
     if regression:
+        print('-------------------')
+        print('y_truth', y_truth)
+        print('ASDASD')
+        print('y_prediction', y_prediction)
+        print('-------------------')
+        y_truth = np.array(y_truth).flatten()
         r2score = metrics.r2_score(y_truth, y_prediction)
         MSE = metrics.mean_squared_error(y_truth, y_prediction)
         coefICC = ICC(np.column_stack((y_prediction, y_truth)))
