@@ -91,7 +91,6 @@ def compute_statistics(y_truth, y_score, y_prediction, modus, regression):
                                                    y_prediction,
                                                    y_score,
                                                    regression)
-            return
 
     elif modus == 'multilabel':
         # Convert class objects to single label per patient
@@ -479,7 +478,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
                     raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
 
             if crossval_type != 'LOO' and type(y_prediction) is np.ndarray:
-                print(y_prediction)
                 if y_prediction.shape == 1 or y_prediction.shape[0] == 1:
                     # Convert to list for compatability
                     y_prediction = [y_prediction.tolist()]

@@ -527,9 +527,6 @@ class SimpleWORC():
 
         # regression-specific override
         overrides = {
-            #'CrossValidation': {
-            #    'Type': 'LOO',  # only leave-one-out cval supported for regression atm
-            #},
             'Featsel': {
                 'SelectFromModel': 0.0,
                 'StatisticalTestUse': 0.0,
