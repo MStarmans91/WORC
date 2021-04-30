@@ -149,7 +149,7 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
 
 def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
                        ranked_scores, ranked_PIDs, output_zip=None,
-                       output_itk=None, zoomfactor=4, scores='percentages':
+                       output_itk=None, zoomfactor=4, scores='percentages'):
     # Match the images to the label data
     print('Matching image and segmentation data to labels.')
     label_data, images =\
