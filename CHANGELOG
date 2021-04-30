@@ -17,11 +17,13 @@ Fixed
 - Fix XGboost verson, as newest version automatically uses multihreading,
   which is unsuitable for clusters.
 - Bug in decomposition for Evaluation.
+- RankedPosteriors naming of images was rounded to an integer, now unrounded
 
 Changed
 ~~~~~~~
 - Reverted back to weighted f1-score without predictproba for optimization,
   more stable.
+- Updated regressors in SimpleWORC.
 
 Added
 ~~~~~~~
@@ -29,6 +31,7 @@ Added
   e.g. by averaging or taking the maximum.
 - Logarithmic z-score scaler to be more robust to non-normal distributions
   and outliers.
+- Linear and Ridge regression.
 
 3.4.0 - 2021-02-02
 ------------------

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,8 @@ from sklearn.svm import SVR as SVMR
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
 from sklearn.linear_model import SGDClassifier, ElasticNet, SGDRegressor
-from sklearn.linear_model import LogisticRegression, Lasso
+from sklearn.linear_model import LogisticRegression, LinearRegression, Lasso
+from sklearn.linear_model import Ridge
 from sklearn.naive_bayes import GaussianNB, ComplementNB
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
@@ -168,6 +169,17 @@ def construct_classifier(config):
                                         l1_ratio=config['LR_l1_ratio'],
                                         C=config['LRC'],
                                         random_state=config['random_seed'])
+
+    elif config['classifiers'] == 'LinR':
+        # Linear Regression
+        classifier = LinearRegression()
+
+    elif config['classifiers'] == 'Ridge':
+        # Ridge Regression
+        classifier = Ridge(alpha=config['ElasticNet_alpha'],
+                           max_iter=max_iter,
+                           random_state=config['random_seed'])
+
     elif config['classifiers'] == 'GaussianNB':
         # Naive Bayes classifier using Gaussian distributions
         classifier = GaussianNB()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -336,7 +336,7 @@ class SimpleWORC():
         if method == 'classification':
             valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'GaussianNB', 'ComplementNB', 'LDA', 'QDA', 'RankedSVM']
         elif method == 'regression':
-            valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR']
+            valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR', 'XGBRegressor', 'AdaBoostRegressor', 'LinR', 'Ridge']
         else:
             valid_estimators = []
 
@@ -509,7 +509,7 @@ class SimpleWORC():
         if coarse and estimators is None:
             estimators = ['SVR']
         elif estimators is None:
-            estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR']
+            estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'AdaBoostRegressor', 'XGBRegressor', 'LinR', 'Ridge']
 
         self._set_and_validate_estimators(estimators, scoring_method, 'regression', coarse)
 

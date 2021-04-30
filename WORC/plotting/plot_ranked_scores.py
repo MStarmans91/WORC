@@ -149,7 +149,7 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
 
 def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
                        ranked_scores, ranked_PIDs, output_zip=None,
-                       output_itk=None, zoomfactor=4):
+                       output_itk=None, zoomfactor=4, scores='percentages':
     # Match the images to the label data
     print('Matching image and segmentation data to labels.')
     label_data, images =\
@@ -203,7 +203,11 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
         im = sitk.ReadImage(images[idx])
         seg = sitk.ReadImage(segmentations[idx])
         pid = PIDs_images[idx]
-        fname = str(abs(int(ranked_scores[idx]))) + '_' + pid + '_TrueLabel_' + str(ranked_truths[idx]) + '_slice.png'
+        score = ranked_scores[idx]
+        if scores == 'percentages':
+            score = abs(int(score))
+
+        fname = str(score) + '_' + pid + '_TrueLabel_' + str(ranked_truths[idx]) + '_slice.png'
         if int(ranked_scores[idx]) < 0:
             fname = 'min' + fname
 
@@ -405,7 +409,8 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
                            ranked_scores=ranked_scores,
                            ranked_PIDs=ranked_PIDs,
                            output_zip=output_zip,
-                           output_itk=output_itk)
+                           output_itk=output_itk,
+                           scores=scores)
 
 
 def example():
@@ -505,7 +510,8 @@ def example():
                            ranked_truths=ranked_truths,
                            ranked_scores=ranked_scores,
                            ranked_PIDs=ranked_PIDs,
-                           output_zip=output_zip)
+                           output_zip=output_zip,
+                           scores=scores)
 
 
 if __name__ == '__main__':
