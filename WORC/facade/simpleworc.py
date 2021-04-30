@@ -103,6 +103,8 @@ class SimpleWORC():
 
         self._method = None
 
+        self._fixed_splits = None
+
         self._config_builder = ConfigBuilder()
         self._add_evaluation = False
 
@@ -111,6 +113,15 @@ class SimpleWORC():
             self._worc.fastr_plugin = 'DRMAAExecution'
         elif CartesiusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
+
+    def set_fixed_splits(self, fixed_splits_csv):
+        if not Path(fixed_splits_csv).is_file():
+            raise PathNotFoundException(fixed_splits_csv)
+
+        if self._fixed_splits is not None:
+            print('WARN: set_fixed_splits already set. Please check your script to make sure this is ok!')
+
+        self._fixed_splits = fixed_splits_csv
 
     def features_from_this_directory(self, directory,
                                      feature_file_name='features.hdf5',
@@ -400,6 +411,9 @@ class SimpleWORC():
         # Do some final sanity checking before we execute the experiment
         self._validate()
 
+        if self._fixed_splits:
+            self._worc.fixedsplits = self._fixed_splits
+
         if self._radiomix_feature_file:
             # Convert radiomix features and use those as inputs
             output_folder = os.path.join(fastr.config.mounts['tmp'],
@@ -510,6 +524,19 @@ class SimpleWORC():
             estimators = ['SVR']
         elif estimators is None:
             estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'AdaBoostRegressor', 'XGBRegressor', 'LinR', 'Ridge']
+
+        # regression-specific override
+        overrides = {
+            #'CrossValidation': {
+            #    'Type': 'LOO',  # only leave-one-out cval supported for regression atm
+            #},
+            'Featsel': {
+                'SelectFromModel': 0.0,
+                'StatisticalTestUse': 0.0,
+                'ReliefUse': 0.0,
+            },
+        }
+        self.add_config_overrides(overrides)
 
         self._set_and_validate_estimators(estimators, scoring_method, 'regression', coarse)
 

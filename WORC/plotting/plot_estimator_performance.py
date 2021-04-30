@@ -478,16 +478,17 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 else:
                     raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
 
-            if type(y_prediction) is np.ndarray:
-                if y_prediction.shape[0] == 1:
+            if crossval_type != 'LOO' and type(y_prediction) is np.ndarray:
+                print(y_prediction)
+                if y_prediction.shape == 1 or y_prediction.shape[0] == 1:
                     # Convert to list for compatability
                     y_prediction = [y_prediction.tolist()]
 
-            # If all scores are NaN, the classifier cannot do probabilities, thus
-            # use hard predictions
-            if np.sum(np.isnan(y_score)) == len(y_prediction):
-                print('[WORC Warning] All scores NaN, replacing with prediction.')
-                y_score = y_prediction
+                # If all scores are NaN, the classifier cannot do probabilities, thus
+                # use hard predictions
+                if np.sum(np.isnan(y_score)) == len(y_prediction):
+                    print('[WORC Warning] All scores NaN, replacing with prediction.')
+                    y_score = y_prediction
 
         if bootstrap and i == 0:
             # Save objects for re-use

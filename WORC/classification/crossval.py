@@ -60,6 +60,11 @@ def random_split_cross_validation(image_features, feature_labels, classes,
         # Start from zero, thus empty list of previos data
         save_data = list()
 
+    # If we are using fixed splits, set the n_iterations to the number of splits
+    if fixedsplits is not None:
+        n_iterations = int(fixedsplits.columns.shape[0] / 2)
+        print(f'Fixedsplits detected, adjusting n_iterations to {n_iterations}') 
+
     for i in range(start, n_iterations):
         print(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
         logging.debug(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
@@ -162,8 +167,8 @@ def random_split_cross_validation(image_features, feature_labels, classes,
 
         else:
             # Use pre defined splits
-            train = fixedsplits[str(i) + '_train'].values
-            test = fixedsplits[str(i) + '_test'].values
+            train = fixedsplits[str(i) + '_train'].dropna().values
+            test = fixedsplits[str(i) + '_test'].dropna().values
 
             # Convert the numbers to the correct indices
             ind_train = list()
@@ -517,6 +522,7 @@ def crossval(config, label_data, image_features,
     # Check if we need to use fixedsplits:
     if fixedsplits is not None and '.csv' in fixedsplits:
         fixedsplits = pd.read_csv(fixedsplits, header=0)
+        crossval_type = 'random_split'  # random split crossvalidator handles fixed splits as expected, while LOO crossvalidator does not support this
 
     if modus == 'singlelabel':
         print('Performing single-class classification.')

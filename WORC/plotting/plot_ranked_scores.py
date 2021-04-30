@@ -257,8 +257,13 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
     print('Aggregating scores per patient over all crossval iterations.')
     scores = dict()
     truths = dict()
+
+    print(y_truths)
+    print(y_scores)
+
     y_truths_flat = [item for sublist in y_truths for item in sublist]
-    y_scores_flat = [item for sublist in y_scores for item in sublist]
+    #y_scores_flat = [item for sublist in y_scores for item in sublist]
+    y_scores_flat = np.array(y_scores).flatten()
     PIDs_scores_flat = [item for sublist in PIDs_scores for item in sublist]
     for yt, ys, pid in zip(y_truths_flat, y_scores_flat, PIDs_scores_flat):
         if pid not in scores.keys():

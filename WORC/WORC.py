@@ -447,7 +447,7 @@ class WORC(object):
         config['Classification']['ElasticNet_l1_ratio'] = '0, 1'
         config['Classification']['SGD_alpha'] = '-5, 5'
         config['Classification']['SGD_l1_ratio'] = '0, 1'
-        config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
+        config['Classification']['SGD_loss'] = 'squared_loss, huber, epsilon_insensitive, squared_epsilon_insensitive'
         config['Classification']['SGD_penalty'] = 'none, l2, l1'
         config['Classification']['CNB_alpha'] = '0, 1'
         config['Classification']['AdaBoost_n_estimators'] = config['Classification']['RFn_estimators']
@@ -561,8 +561,8 @@ class WORC(object):
                                                          step_id='WorkflowOptimization')
 
                 if self.fixedsplits:
-                    self.fixedsplits = self.network.create_source('CSVFile', id='fixedsplits_source', node_group='conf', step_id='general_sources')
-                    self.classify.inputs['fixedsplits'] = self.fixedsplits.output
+                    self.fixedsplits_node = self.network.create_source('CSVFile', id='fixedsplits_source', node_group='conf', step_id='general_sources')
+                    self.classify.inputs['fixedsplits'] = self.fixedsplits_node.output
 
                 self.source_Ensemble =\
                     self.network.create_constant('String', [self.configs[0]['Ensemble']['Use']],
@@ -1640,6 +1640,10 @@ class WORC(object):
         # Save the configurations as files
         self.save_config()
 
+        # fixed splits
+        if self.fixedsplits:
+          self.source_data['fixedsplits_source'] = self.fixedsplits
+
         # Generate gridsearch parameter files if required
         self.source_data['config_classification_source'] = self.fastrconfigs[0]
 
@@ -1652,6 +1656,8 @@ class WORC(object):
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_test_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
+
 
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):
