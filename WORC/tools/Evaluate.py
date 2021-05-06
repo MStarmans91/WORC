@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -133,6 +133,16 @@ class Evaluate(object):
             self.network.create_sink('CSVFile', id='ROC_CSV',
                                      step_id='general_sinks')
 
+        self.sink_PRC_PNG =\
+            self.network.create_sink('PNGFile', id='PRC_PNG',
+                                     step_id='general_sinks')
+        self.sink_PRC_Tex =\
+            self.network.create_sink('TexFile', id='PRC_Tex',
+                                     step_id='general_sinks')
+        self.sink_PRC_CSV =\
+            self.network.create_sink('CSVFile', id='PRC_CSV',
+                                     step_id='general_sinks')
+
         if self.mode == 'StandAlone':
             self.sink_Estimator_Json =\
                 self.network.create_sink('JsonFile', id='Estimator_Json',
@@ -190,9 +200,13 @@ class Evaluate(object):
                                      step_id='general_sinks')
 
         # Create links to sinks
-        self.sink_ROC_PNG.input = self.node_ROC.outputs['output_png']
-        self.sink_ROC_Tex.input = self.node_ROC.outputs['output_tex']
-        self.sink_ROC_CSV.input = self.node_ROC.outputs['output_csv']
+        self.sink_ROC_PNG.input = self.node_ROC.outputs['ROC_png']
+        self.sink_ROC_Tex.input = self.node_ROC.outputs['ROC_tex']
+        self.sink_ROC_CSV.input = self.node_ROC.outputs['ROC_csv']
+
+        self.sink_PRC_PNG.input = self.node_ROC.outputs['PRC_png']
+        self.sink_PRC_Tex.input = self.node_ROC.outputs['PRC_tex']
+        self.sink_PRC_CSV.input = self.node_ROC.outputs['PRC_csv']
 
         if self.mode == 'StandAlone':
             self.sink_Estimator_Json.input = self.node_Estimator.outputs['output_json']
@@ -528,6 +542,12 @@ class Evaluate(object):
             self.sink_data['ROC_Tex'] = ("vfs://output/{}/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         if 'ROC_CSV' not in sink_data.keys():
             self.sink_data['ROC_CSV'] = ("vfs://output/{}/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        if 'PRC_PNG' not in sink_data.keys():
+            self.sink_data['PRC_PNG'] = ("vfs://output/{}/Evaluation/PRC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        if 'PRC_Tex' not in sink_data.keys():
+            self.sink_data['PRC_Tex'] = ("vfs://output/{}/Evaluation/PRC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        if 'PRC_CSV' not in sink_data.keys():
+            self.sink_data['PRC_CSV'] = ("vfs://output/{}/Evaluation/PRC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
         if 'Estimator_Json' not in sink_data.keys():
             self.sink_data['Estimator_Json'] = ("vfs://output/{}/Evaluation/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)

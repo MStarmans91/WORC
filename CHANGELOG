@@ -18,6 +18,7 @@ Fixed
   which is unsuitable for clusters.
 - Bug in decomposition for Evaluation.
 - RankedPosteriors naming of images was rounded to an integer, now unrounded
+- Several fixes for regression.
 
 Changed
 ~~~~~~~
@@ -32,6 +33,7 @@ Added
 - Logarithmic z-score scaler to be more robust to non-normal distributions
   and outliers.
 - Linear and Ridge regression.
+- Precision-recall curves.
 
 3.4.0 - 2021-02-02
 ------------------
