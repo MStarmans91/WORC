@@ -118,41 +118,41 @@ def download_project(project_name, xnat_url, datafolder, nsubjects=10,
                      verbose=True):
 
     # Connect to XNAT and retreive project
-    session = xnat.connect(xnat_url)
-    project = session.projects[project_name]
+    with xnat.connect(xnat_url) as session:
+        project = session.projects[project_name]
 
-    # Create the data folder if it does not exist yet
-    datafolder = os.path.join(datafolder, project_name)
-    if not os.path.exists(datafolder):
-        os.makedirs(datafolder)
+        # Create the data folder if it does not exist yet
+        datafolder = os.path.join(datafolder, project_name)
+        if not os.path.exists(datafolder):
+            os.makedirs(datafolder)
 
-    subjects_len = len(project.subjects)
-    if nsubjects == 'all':
-        nsubjects = subjects_len
-    else:
-        nsubjects = min(nsubjects, subjects_len)
+        subjects_len = len(project.subjects)
+        if nsubjects == 'all':
+            nsubjects = subjects_len
+        else:
+            nsubjects = min(nsubjects, subjects_len)
 
-    subjects_counter = 1
-    downloaded_subjects_counter = 0
-    for s in range(0, subjects_len):
-        s = project.subjects[s]
-        print(f'Working on subject {subjects_counter}/{subjects_len}')
-        subjects_counter += 1
+        subjects_counter = 1
+        downloaded_subjects_counter = 0
+        for s in range(0, subjects_len):
+            s = project.subjects[s]
+            print(f'Working on subject {subjects_counter}/{subjects_len}')
+            subjects_counter += 1
 
-        success = download_subject(project_name, s, datafolder, session, verbose)
-        if success:
-            downloaded_subjects_counter += 1
+            success = download_subject(project_name, s, datafolder, session, verbose)
+            if success:
+                downloaded_subjects_counter += 1
 
-        # Stop downloading if we have reached the required number of subjects
-        if downloaded_subjects_counter == nsubjects:
-            break
+            # Stop downloading if we have reached the required number of subjects
+            if downloaded_subjects_counter == nsubjects:
+                break
 
-    # Disconnect the session
-    session.disconnect()
-    if downloaded_subjects_counter < nsubjects:
-        raise ValueError(f'Number of subjects downloaded {downloaded_subjects_counter} is smaller than the number required {nsubjects}.')
+        # Disconnect the session
+        session.disconnect()
+        if downloaded_subjects_counter < nsubjects:
+            raise ValueError(f'Number of subjects downloaded {downloaded_subjects_counter} is smaller than the number required {nsubjects}.')
 
-    print('Done downloading!')
+        print('Done downloading!')
 
 
 def download_HeadAndNeck(datafolder=None, nsubjects=10):

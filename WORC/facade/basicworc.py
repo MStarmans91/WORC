@@ -149,7 +149,8 @@ class BasicWORC(SimpleWORC):
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
         self._worc.build()
         if self._add_evaluation:
-            self._worc.add_evaluation(label_type=self._label_names[self._selected_label])
+            self._worc.add_evaluation(label_type=self._label_names[self._selected_label],
+                                      modus=self._method)
 
         self._worc.set()
         self._worc.execute()

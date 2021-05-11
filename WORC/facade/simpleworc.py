@@ -469,7 +469,8 @@ class SimpleWORC():
         # Build the fastr network
         self._worc.build()
         if self._add_evaluation:
-            self._worc.add_evaluation(label_type=self._label_names[self._selected_label])
+            self._worc.add_evaluation(label_type=self._label_names[self._selected_label],
+                                      modus=self._method)
 
         # Set the sources and sinks and execute the experiment.
         self._worc.set()
@@ -576,6 +577,7 @@ class SimpleWORC():
         """
         self._add_evaluation = True
         self._selected_label = 0
+        self._worc.modus = self._method
 
     def set_tmpdir(self, tmpdir):
         """Set a directory for storing temporary files from the experiment.

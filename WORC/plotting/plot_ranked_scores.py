@@ -403,16 +403,17 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
         # Convert to lower to later on overcome matching errors
         ranked_PIDs = [i.lower() for i in ranked_PIDs]
 
-        plot_ranked_images(pinfo=pinfo,
-                           label_type=label_type,
-                           images=images,
-                           segmentations=segmentations,
-                           ranked_truths=ranked_truths,
-                           ranked_scores=ranked_scores,
-                           ranked_PIDs=ranked_PIDs,
-                           output_zip=output_zip,
-                           output_itk=output_itk,
-                           scores=scores)
+        if images:
+            plot_ranked_images(pinfo=pinfo,
+                               label_type=label_type,
+                               images=images,
+                               segmentations=segmentations,
+                               ranked_truths=ranked_truths,
+                               ranked_scores=ranked_scores,
+                               ranked_PIDs=ranked_PIDs,
+                               output_zip=output_zip,
+                               output_itk=output_itk,
+                               scores=scores)
 
 
 def example():
@@ -505,15 +506,16 @@ def example():
         # Convert to lower to later on overcome matching errors
         ranked_PIDs = [i.lower() for i in ranked_PIDs]
 
-        plot_ranked_images(pinfo=pinfo,
-                           label_type=label_type,
-                           images=images,
-                           segmentations=segmentations,
-                           ranked_truths=ranked_truths,
-                           ranked_scores=ranked_scores,
-                           ranked_PIDs=ranked_PIDs,
-                           output_zip=output_zip,
-                           scores=scores)
+        if images:
+            plot_ranked_images(pinfo=pinfo,
+                               label_type=label_type,
+                               images=images,
+                               segmentations=segmentations,
+                               ranked_truths=ranked_truths,
+                               ranked_scores=ranked_scores,
+                               ranked_PIDs=ranked_PIDs,
+                               output_zip=output_zip,
+                               scores=scores)
 
 
 if __name__ == '__main__':
