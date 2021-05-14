@@ -52,6 +52,8 @@ class BasicWORC(SimpleWORC):
         self.labels_file_test = None
         self.label_names = []
 
+        self.fixed_splits = None
+
     def execute(self):
         """Execute the experiment.
 
@@ -61,6 +63,11 @@ class BasicWORC(SimpleWORC):
         """
         # this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well
         self._validate()  # do some final sanity checking before we execute the thing
+
+        if self._fixed_splits:
+            self._worc.fixedsplits = self._fixed_splits
+        elif self.fixed_splits:
+            self._worc.fixedsplits = self.fixed_splits
 
         if self._radiomix_feature_file:
             # Convert radiomix features and use those as inputs
@@ -142,7 +149,8 @@ class BasicWORC(SimpleWORC):
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
         self._worc.build()
         if self._add_evaluation:
-            self._worc.add_evaluation(label_type=self._label_names[self._selected_label])
+            self._worc.add_evaluation(label_type=self._label_names[self._selected_label],
+                                      modus=self._method)
 
         self._worc.set()
         self._worc.execute()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,6 +103,8 @@ class SimpleWORC():
 
         self._method = None
 
+        self._fixed_splits = None
+
         self._config_builder = ConfigBuilder()
         self._add_evaluation = False
 
@@ -111,6 +113,15 @@ class SimpleWORC():
             self._worc.fastr_plugin = 'DRMAAExecution'
         elif CartesiusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
+
+    def set_fixed_splits(self, fixed_splits_csv):
+        if not Path(fixed_splits_csv).is_file():
+            raise PathNotFoundException(fixed_splits_csv)
+
+        if self._fixed_splits is not None:
+            print('WARN: set_fixed_splits already set. Please check your script to make sure this is ok!')
+
+        self._fixed_splits = fixed_splits_csv
 
     def features_from_this_directory(self, directory,
                                      feature_file_name='features.hdf5',
@@ -142,7 +153,7 @@ class SimpleWORC():
         features = list(directory.glob(f'{glob}{feature_file_name}'))
 
         if len(features) == 0:
-            raise NoFeaturesFoundException(f'{directory}{glob}{image_file_name}')
+            raise NoFeaturesFoundException(f'{directory}{glob}{feature_file_name}')
 
         features_per_subject = {feature.parent.name: feature.as_uri().replace('%20', ' ') for feature in features}
         if is_training:
@@ -247,9 +258,9 @@ class SimpleWORC():
             raise InvalidCsvFileException(labels_file.absolute())
 
         if is_training:
-            self._labels_file_train = labels_file.as_uri().replace('%20', ' ')
+            self._labels_file_train = str(labels_file.absolute()).replace('%20', ' ')
         else:
-            self._labels_file_test = labels_file.as_uri().replace('%20', ' ')
+            self._labels_file_test = str(labels_file.absolute()).replace('%20', ' ')
 
     def semantics_from_this_file(self, file_path, is_training=True):
         """Define which file should be used by WORC to extract the semantic features.
@@ -277,9 +288,9 @@ class SimpleWORC():
 
         # TODO: implement sanity check semantics file e.g. is it a semantics file and are there semantics available
         if is_training:
-            self._semantics_file_train = [semantics_file.as_uri().replace('%20', ' ')]
+            self._semantics_file_train = [str(semantics_file.absolute()).replace('%20', ' ')]
         else:
-            self._semantics_file_test = [semantics_file.as_uri().replace('%20', ' ')]
+            self._semantics_file_test = [str(semantics_file.absolute()).replace('%20', ' ')]
 
     def predict_labels(self, label_names: list):
         """Determine which label(s) to predict in your experiments.
@@ -336,7 +347,7 @@ class SimpleWORC():
         if method == 'classification':
             valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'GaussianNB', 'ComplementNB', 'LDA', 'QDA', 'RankedSVM']
         elif method == 'regression':
-            valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR']
+            valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR', 'XGBRegressor', 'AdaBoostRegressor', 'LinR', 'Ridge']
         else:
             valid_estimators = []
 
@@ -400,6 +411,9 @@ class SimpleWORC():
         # Do some final sanity checking before we execute the experiment
         self._validate()
 
+        if self._fixed_splits:
+            self._worc.fixedsplits = self._fixed_splits
+
         if self._radiomix_feature_file:
             # Convert radiomix features and use those as inputs
             output_folder = os.path.join(fastr.config.mounts['tmp'],
@@ -455,7 +469,8 @@ class SimpleWORC():
         # Build the fastr network
         self._worc.build()
         if self._add_evaluation:
-            self._worc.add_evaluation(label_type=self._label_names[self._selected_label])
+            self._worc.add_evaluation(label_type=self._label_names[self._selected_label],
+                                      modus=self._method)
 
         # Set the sources and sinks and execute the experiment.
         self._worc.set()
@@ -509,7 +524,17 @@ class SimpleWORC():
         if coarse and estimators is None:
             estimators = ['SVR']
         elif estimators is None:
-            estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR']
+            estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'AdaBoostRegressor', 'XGBRegressor', 'LinR', 'Ridge']
+
+        # regression-specific override
+        overrides = {
+            'Featsel': {
+                'SelectFromModel': 0.0,
+                'StatisticalTestUse': 0.0,
+                'ReliefUse': 0.0,
+            },
+        }
+        self.add_config_overrides(overrides)
 
         self._set_and_validate_estimators(estimators, scoring_method, 'regression', coarse)
 
@@ -552,6 +577,7 @@ class SimpleWORC():
         """
         self._add_evaluation = True
         self._selected_label = 0
+        self._worc.modus = self._method
 
     def set_tmpdir(self, tmpdir):
         """Set a directory for storing temporary files from the experiment.

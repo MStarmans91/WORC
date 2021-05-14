@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,7 +88,7 @@ def plot_single_ROC(y_truth, y_score, verbose=False, returnplot=False):
                 lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
         ax.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
         plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
+        plt.ylim([0.0, 1.0])
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
         plt.title('Receiver operating characteristic example')
@@ -100,10 +100,86 @@ def plot_single_ROC(y_truth, y_score, verbose=False, returnplot=False):
         return fpr[::-1], tpr[::-1], thresholds[::-1], f
 
 
-def ROC_thresholding(fprt, tprt, thresholds, nsamples=20):
+def plot_single_PRC(y_truth, y_score, verbose=False, returnplot=False):
     '''
-    Construct FPR and TPR ratios at different thresholds for the scores of an
-    estimator.
+    Get the precision and recall (=true positive rate)
+    for the ground truth and score of a single estimator. These ratios
+    can be used to plot a Precision Recall Curve (ROC).
+    '''
+    # Sort both lists based on the scores
+    y_truth = np.asarray(y_truth)
+    y_truth = np.int_(y_truth)
+    y_score = np.asarray(y_score)
+    inds = y_score.argsort()
+    y_truth_sorted = y_truth[inds]
+    y_score = y_score[inds]
+
+    # Compute the TPR and FPR for all possible thresholds
+    FP = 0
+    TP = 0
+    precision = list()
+    tpr = list()
+    thresholds = list()
+    fprev = -np.inf
+    i = 0
+    N = float(np.bincount(y_truth)[0])
+    if len(np.bincount(y_truth)) == 1:
+        # No class = 1 present.
+        P = 0
+    else:
+        P = float(np.bincount(y_truth)[1])
+
+    if N == 0:
+        print('[WORC Warning] No negative class samples found, cannot determine PRC. Skipping iteration.')
+        return precision, tpr, thresholds
+    elif P == 0:
+        print('[WORC Warning] No positive class samples found, cannot determine PRC. Skipping iteration.')
+        return precision, tpr, thresholds
+
+    while i < len(y_truth_sorted):
+        if y_score[i] != fprev:
+            if TP == 0:
+                # Prevent division by zero
+                precision.append(0)
+            else:
+                precision.append(TP/(TP + FP))
+
+            tpr.append(1 - TP/P)
+            thresholds.append(y_score[i])
+            fprev = y_score[i]
+
+        if y_truth_sorted[i] == 1:
+            TP += 1
+        else:
+            FP += 1
+
+        i += 1
+
+    if verbose or returnplot:
+        prc_auc = auc(tpr, precision)
+        f = plt.figure()
+        ax = plt.subplot(111)
+        lw = 2
+        ax.plot(tpr, precision, color='darkorange',
+                lw=lw, label='PR curve (area = %0.2f)' % prc_auc)
+        ax.plot([0, 1], [1, 0], color='navy', lw=lw, linestyle='--')
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.0])
+        plt.xlabel('Recall')
+        plt.ylabel('Precision')
+        plt.title('Precision-Recall curve')
+        plt.legend(loc="lower right")
+
+    if not returnplot:
+        return tpr[::-1], precision[::-1], thresholds[::-1]
+    else:
+        return tpr[::-1], precision[::-1], thresholds[::-1], f
+
+
+def curve_thresholding(metric1t, metric2t, thresholds, nsamples=20):
+    '''
+    Construct metric1 and metric2 (either FPR and TPR, or TPR and Precision)
+    ratios at different thresholds for the scores of an estimator.
     '''
     # Combine all found thresholds in a list and create samples
     T = list()
@@ -112,10 +188,10 @@ def ROC_thresholding(fprt, tprt, thresholds, nsamples=20):
     T = sorted(T)
     tsamples = np.linspace(0, len(T) - 1, nsamples)
 
-    # Compute the fprs and tprs at the sample points
-    nrocs = len(fprt)
-    fpr = np.zeros((nsamples, nrocs))
-    tpr = np.zeros((nsamples, nrocs))
+    # Compute the metric1s and metric2s at the sample points
+    nrocs = len(metric1t)
+    metric1 = np.zeros((nsamples, nrocs))
+    metric2 = np.zeros((nsamples, nrocs))
 
     th = list()
     for n_sample, tidx in enumerate(tsamples):
@@ -125,10 +201,10 @@ def ROC_thresholding(fprt, tprt, thresholds, nsamples=20):
             idx = 0
             while float(thresholds[i_roc][idx]) > float(T[tidx]) and idx < (len(thresholds[i_roc]) - 1):
                 idx += 1
-            fpr[n_sample, i_roc] = fprt[i_roc][idx]
-            tpr[n_sample, i_roc] = tprt[i_roc][idx]
+            metric1[n_sample, i_roc] = metric1t[i_roc][idx]
+            metric2[n_sample, i_roc] = metric2t[i_roc][idx]
 
-    return fpr, tpr, th
+    return metric1, metric2, th
 
 
 def plot_ROC_CIc(y_truth, y_score, N_1, N_2, plot='default', alpha=0.95,
@@ -153,7 +229,7 @@ def plot_ROC_CIc(y_truth, y_score, N_1, N_2, plot='default', alpha=0.95,
             thresholds.append(thresholds_temp)
 
     # Sample FPR and TPR at numerous points
-    fpr, tpr, th = ROC_thresholding(fprt, tprt, thresholds, tsamples)
+    fpr, tpr, th = curve_thresholding(fprt, tprt, thresholds, tsamples)
 
     # Compute the confidence intervals for the ROC
     CIs_tpr = list()
@@ -232,7 +308,7 @@ def plot_ROC_CIc(y_truth, y_score, N_1, N_2, plot='default', alpha=0.95,
 
     subplot.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
     plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
+    plt.ylim([0.0, 1.0])
     plt.xlabel('False Positive Rate (1 - Specificity)')
     plt.ylabel('True Positive Rate (Sensitivity)')
     plt.title('Receiver operating characteristic')
@@ -287,13 +363,183 @@ def plot_ROC_CIc(y_truth, y_score, N_1, N_2, plot='default', alpha=0.95,
 
         subplot.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
         plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
+        plt.ylim([0.0, 1.0])
         plt.xlabel('False Positive Rate (1 - Specificity)')
         plt.ylabel('True Positive Rate (Sensitivity)')
         plt.title('Receiver operating characteristic')
         plt.legend(loc="lower right")
 
     return f, CIs_fpr, CIs_tpr
+
+
+def plot_PRC_CIc(y_truth, y_score, N_1, N_2, plot='default', alpha=0.95,
+                 verbose=False, DEBUG=False, tsamples=20):
+    '''
+    Plot a Precision-Recall curve with confidence intervals.
+
+    tsamples: number of sample points on which to determine the confidence intervals.
+              The sample pointsare used on the thresholds for y_score.
+    '''
+    # Compute PR curve and PR area for each class
+    tprt = list()
+    precisiont = list()
+    prc_auc = list()
+    thresholds = list()
+    for yt, ys in zip(y_truth, y_score):
+        tpr_temp, precision_temp, thresholds_temp = plot_single_PRC(yt, ys)
+        if tpr_temp:
+            prc_auc.append(auc(tpr_temp, precision_temp))
+            tprt.append(tpr_temp)
+            precisiont.append(precision_temp)
+            thresholds.append(thresholds_temp)
+
+    # Sample TPR and precision at numerous points
+    tpr, precisionr, th = curve_thresholding(tprt, precisiont, thresholds, tsamples)
+
+    # Compute the confidence intervals for the ROC
+    CIs_precisionr = list()
+    CIs_tpr = list()
+    for i in range(0, tsamples):
+        if i == 0:
+            # Point (0, 0) is always in there, but shows as (nan, nan)
+            CIs_tpr.append([1, 1])
+            CIs_precisionr.append([0, 0])
+        else:
+            cit_tpr = CI(tpr[i, :], N_1, N_2, alpha)
+            CIs_tpr.append([cit_tpr[0], cit_tpr[1]])
+
+            cit_precisionr = CI(precisionr[i, :], N_1, N_2, alpha)
+            CIs_precisionr.append([cit_precisionr[0], cit_precisionr[1]])
+
+    # The point (0, 1) is also always there but not computed
+    CIs_tpr.append([0, 0])
+    CIs_precisionr.append([1, 1])
+
+    # Calculate also means of CIs after converting to array
+    CIs_precisionr = np.asarray(CIs_precisionr)
+    CIs_tpr = np.asarray(CIs_tpr)
+    CIs_precisionr_means = np.mean(CIs_precisionr, axis=1).tolist()
+    CIs_tpr_means = np.mean(CIs_tpr, axis=1).tolist()
+
+    # compute AUC CI
+    prc_auc = CI(prc_auc, N_1, N_2, alpha)
+
+    f = plt.figure()
+    lw = 2
+    subplot = f.add_subplot(111)
+    subplot.plot(CIs_tpr_means, CIs_precisionr_means, color='orange',
+                 lw=lw, label='PR curve (AUC = (%0.2f, %0.2f))' % (prc_auc[0], prc_auc[1]))
+
+    for i in range(0, len(CIs_tpr_means)):
+        if CIs_precisionr[i, 1] <= 1:
+            ymax = CIs_precisionr[i, 1]
+        else:
+            ymax = 1
+
+        if CIs_precisionr[i, 0] <= 0:
+            ymin = 0
+        else:
+            ymin = CIs_precisionr[i, 0]
+
+        if CIs_precisionr_means[i] <= 1:
+            ymean = CIs_precisionr_means[i]
+        else:
+            ymean = 1
+
+        if CIs_tpr[i, 1] <= 1:
+            xmax = CIs_tpr[i, 1]
+        else:
+            xmax = 1
+
+        if CIs_tpr[i, 0] <= 0:
+            xmin = 0
+        else:
+            xmin = CIs_tpr[i, 0]
+
+        if CIs_tpr_means[i] <= 1:
+            xmean = CIs_tpr_means[i]
+        else:
+            xmean = 1
+
+        if DEBUG:
+            print(xmin, xmax, ymean)
+            print(ymin, ymax, xmean)
+
+        subplot.plot([xmin, xmax],
+                     [ymean, ymean],
+                     color='black', alpha=0.15)
+        subplot.plot([xmean, xmean],
+                     [ymin, ymax],
+                     color='black', alpha=0.15)
+
+    subplot.plot([0, 1], [1, 0], color='navy', lw=lw, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.0])
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Precision-Recall curve')
+    plt.legend(loc="lower right")
+
+    if verbose:
+        plt.show()
+
+        f = plt.figure()
+        lw = 2
+        subplot = f.add_subplot(111)
+        subplot.plot(CIs_tpr_means, CIs_precisionr_means, color='darkorange',
+                     lw=lw, label='PRC curve (AUC = (%0.2f, %0.2f))' % (prc_auc[0], prc_auc[1]))
+
+        for i in range(0, len(CIs_tpr_means)):
+            if CIs_precisionr[i, 1] <= 1:
+                ymax = CIs_precisionr[i, 1]
+            else:
+                ymax = 1
+
+            if CIs_precisionr[i, 0] <= 0:
+                ymin = 0
+            else:
+                ymin = CIs_precisionr[i, 0]
+
+            if CIs_precisionr[i] <= 1:
+                ymean = CIs_precisionr[i]
+            else:
+                ymean = 1
+
+            if CIs_tpr[i, 1] <= 1:
+                xmax = CIs_tpr[i, 1]
+            else:
+                xmax = 1
+
+            if CIs_tpr[i, 0] <= 0:
+                xmin = 0
+            else:
+                xmin = CIs_tpr[i, 0]
+
+            if CIs_tpr_means[i] <= 1:
+                xmean = CIs_tpr_means[i]
+            else:
+                xmean = 1
+
+            if DEBUG:
+                print(xmin, xmax, ymean)
+                print(ymin, ymax, xmean)
+
+            subplot.plot([xmin, xmax],
+                         [ymean, ymean],
+                         color='black', alpha=0.15)
+            subplot.plot([xmean, xmean],
+                         [ymin, ymax],
+                         color='black', alpha=0.15)
+
+        subplot.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+        plt.xlim([0.0, 1.0])
+        plt.ylim([0.0, 1.0])
+        plt.xlabel('Recall')
+        plt.ylabel('Precision')
+        plt.title('Precision-Recall curve')
+        plt.legend(loc="lower right")
+
+    return f, CIs_tpr, CIs_precisionr
 
 
 def main():
@@ -310,28 +556,41 @@ def main():
     parser.add_argument('-label_type', '--label_type', metavar='label_type',
                         nargs='+', dest='label_type', type=str, required=True,
                         help='Label name that is predicted (string)')
-    parser.add_argument('-output_png', '--output_png', metavar='output_png',
-                        nargs='+', dest='output_png', type=str, required=False,
-                        help='File to write output to (PNG)')
-    parser.add_argument('-output_csv', '--output_csv', metavar='output_csv',
-                        nargs='+', dest='output_csv', type=str, required=False,
-                        help='File to write output to (csv)')
-    parser.add_argument('-output_tex', '--output_tex', metavar='output_tex',
-                        nargs='+', dest='output_tex', type=str, required=False,
-                        help='File to write output to (tex)')
+    parser.add_argument('-ROC_png', '--ROC_png', metavar='ROC_png',
+                        nargs='+', dest='ROC_png', type=str, required=False,
+                        help='File to write ROC to (PNG)')
+    parser.add_argument('-ROC_csv', '--ROC_csv', metavar='ROC_csv',
+                        nargs='+', dest='ROC_csv', type=str, required=False,
+                        help='File to write ROC to (csv)')
+    parser.add_argument('-ROC_tex', '--ROC_tex', metavar='ROC_tex',
+                        nargs='+', dest='ROC_tex', type=str, required=False,
+                        help='File to write ROC to (tex)')
+    parser.add_argument('-PRC_png', '--PRC_png', metavar='PRC_png',
+                        nargs='+', dest='PRC_png', type=str, required=False,
+                        help='File to write PR to (PNG)')
+    parser.add_argument('-PRC_csv', '--PRC_csv', metavar='PRC_csv',
+                        nargs='+', dest='PRC_csv', type=str, required=False,
+                        help='File to write PR to (csv)')
+    parser.add_argument('-PRC_tex', '--PRC_tex', metavar='PRC_tex',
+                        nargs='+', dest='PRC_tex', type=str, required=False,
+                        help='File to write PR to (tex)')
     args = parser.parse_args()
 
     plot_ROC(prediction=args.prediction,
              pinfo=args.pinfo,
              ensemble=args.ensemble,
              label_type=args.label_type,
-             output_png=args.output_png,
-             output_tex=args.output_tex,
-             output_csv=args.output_csv)
+             ROC_png=args.ROC_png,
+             ROC_tex=args.ROC_tex,
+             ROC_csv=args.ROC_csv,
+             PRC_png=args.PRC_png,
+             PRC_tex=args.PRC_tex,
+             PRC_csv=args.PRC_csv)
 
 
 def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
-             output_png=None, output_tex=None, output_csv=None):
+             ROC_png=None, ROC_tex=None, ROC_csv=None,
+             PRC_png=None, PRC_tex=None, PRC_csv=None):
     # Convert the inputs to the correct format
     if type(prediction) is list:
         prediction = ''.join(prediction)
@@ -341,16 +600,24 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
 
     if type(ensemble) is list:
         ensemble = int(ensemble[0])
-        # ensemble = ''.join(ensemble)
 
-    if type(output_png) is list:
-        output_png = ''.join(output_png)
+    if type(ROC_png) is list:
+        ROC_png = ''.join(ROC_png)
 
-    if type(output_csv) is list:
-        output_csv = ''.join(output_csv)
+    if type(ROC_csv) is list:
+        ROC_csv = ''.join(ROC_csv)
 
-    if type(output_tex) is list:
-        output_tex = ''.join(output_tex)
+    if type(ROC_tex) is list:
+        ROC_tex = ''.join(ROC_tex)
+
+    if type(PRC_png) is list:
+        PRC_png = ''.join(PRC_png)
+
+    if type(PRC_csv) is list:
+        PRC_csv = ''.join(PRC_csv)
+
+    if type(PRC_tex) is list:
+        PRC_tex = ''.join(PRC_tex)
 
     if type(label_type) is list:
         label_type = ''.join(label_type)
@@ -374,11 +641,12 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
     config = prediction[label_type].config
     crossval_type = config['CrossValidation']['Type']
 
+    # --------------------------------------------------------------
+    # ROC Curve
     if crossval_type == 'LOO':
         print("LOO: Plotting the ROC without confidence intervals.")
         y_truths = [i[0] for i in y_truths]
         y_scores = [i[0] for i in y_scores]
-        print(y_truths)
         fpr, tpr, _, f = plot_single_ROC(y_truths, y_scores, returnplot=True)
     else:
         # Plot the ROC with confidence intervals
@@ -386,24 +654,48 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
         f, fpr, tpr = plot_ROC_CIc(y_truths, y_scores, N_1, N_2)
 
     # Save the outputs
-    if output_png is not None:
-        f.savefig(output_png)
-        print(("ROC saved as {} !").format(output_png))
+    if ROC_png is not None:
+        f.savefig(ROC_png)
+        print(("ROC saved as {} !").format(ROC_png))
 
-    if output_tex is not None:
-        tikzplotlib.save(output_tex)
-        print(("ROC saved as {} !").format(output_tex))
+    if ROC_tex is not None:
+        tikzplotlib.save(ROC_tex)
+        print(("ROC saved as {} !").format(ROC_tex))
 
-    # Save ROC values as JSON
-    if output_csv is not None:
-        with open(output_csv, 'w') as csv_file:
+    if ROC_csv is not None:
+        with open(ROC_csv, 'w') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(['FPR', 'TPR'])
             for i in range(0, len(fpr)):
                 data = [str(fpr[i]), str(tpr[i])]
                 writer.writerow(data)
 
-        print(("ROC saved as {} !").format(output_csv))
+        print(("ROC saved as {} !").format(ROC_csv))
+
+    # --------------------------------------------------------------
+    # PR Curve
+    if crossval_type == 'LOO':
+        tpr, precisionr, _, f = plot_single_PRC(y_truths, y_scores, returnplot=True)
+    else:
+        f, tpr, precisionr = plot_PRC_CIc(y_truths, y_scores, N_1, N_2)
+
+    if PRC_png is not None:
+        f.savefig(PRC_png)
+        print(("PRC saved as {} !").format(PRC_png))
+
+    if PRC_tex is not None:
+        tikzplotlib.save(PRC_tex)
+        print(("PRC saved as {} !").format(PRC_tex))
+
+    if PRC_csv is not None:
+        with open(PRC_csv, 'w') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(['Recall', 'Precision'])
+            for i in range(0, len(tpr)):
+                data = [str(tpr[i]), str(precisionr[i])]
+                writer.writerow(data)
+
+        print(("PRC saved as {} !").format(PRC_csv))
 
     return f, fpr, tpr
 

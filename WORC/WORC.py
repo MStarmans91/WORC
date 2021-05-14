@@ -142,6 +142,8 @@ class WORC(object):
         self.Elastix_Para = list()
         self.label_names = 'Label1, Label2'
 
+        self.fixedsplits = list()
+
         # Set some defaults, name
         self.fastr_plugin = 'LinearExecution'
         if name == '':
@@ -407,7 +409,7 @@ class WORC(object):
             'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
             'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
             'SMOTEENN, SMOTETomek'
-        config['Resampling']['sampling_strategy'] = 'majority, not minority, not majority, all'
+        config['Resampling']['sampling_strategy'] = 'majority, minority, not minority, not majority, all'
         config['Resampling']['n_neighbors'] = '3, 12'
         config['Resampling']['k_neighbors'] = '5, 15'
         config['Resampling']['threshold_cleaning'] = '0.25, 0.5'
@@ -445,7 +447,7 @@ class WORC(object):
         config['Classification']['ElasticNet_l1_ratio'] = '0, 1'
         config['Classification']['SGD_alpha'] = '-5, 5'
         config['Classification']['SGD_l1_ratio'] = '0, 1'
-        config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
+        config['Classification']['SGD_loss'] = 'squared_loss, huber, epsilon_insensitive, squared_epsilon_insensitive'
         config['Classification']['SGD_penalty'] = 'none, l2, l1'
         config['Classification']['CNB_alpha'] = '0, 1'
         config['Classification']['AdaBoost_n_estimators'] = config['Classification']['RFn_estimators']
@@ -557,6 +559,10 @@ class WORC(object):
                                                          id='classify',
                                                          resources=ResourceLimit(memory=memory),
                                                          step_id='WorkflowOptimization')
+
+                if self.fixedsplits:
+                    self.fixedsplits_node = self.network.create_source('CSVFile', id='fixedsplits_source', node_group='conf', step_id='general_sources')
+                    self.classify.inputs['fixedsplits'] = self.fixedsplits_node.output
 
                 self.source_Ensemble =\
                     self.network.create_constant('String', [self.configs[0]['Ensemble']['Use']],
@@ -1634,6 +1640,10 @@ class WORC(object):
         # Save the configurations as files
         self.save_config()
 
+        # fixed splits
+        if self.fixedsplits:
+          self.source_data['fixedsplits_source'] = self.fixedsplits
+
         # Generate gridsearch parameter files if required
         self.source_data['config_classification_source'] = self.fastrconfigs[0]
 
@@ -1646,6 +1656,8 @@ class WORC(object):
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_test_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
+
 
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):
@@ -1757,7 +1769,7 @@ class WORC(object):
 
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 
-    def add_evaluation(self, label_type):
+    def add_evaluation(self, label_type, modus='classification'):
         """Add branch for evaluation of performance to network.
 
         Note: should be done after build, before set:
@@ -1767,7 +1779,8 @@ class WORC(object):
         WORC.execute()
 
         """
-        self.Evaluate = Evaluate(label_type=label_type, parent=self)
+        self.Evaluate =\
+            Evaluate(label_type=label_type, parent=self, modus=modus)
         self._add_evaluation = True
 
     def save_config(self):
