@@ -19,6 +19,7 @@ Fixed
 - Bug in decomposition for Evaluation.
 - RankedPosteriors naming of images was rounded to an integer, now unrounded
 - Several fixes for regression.
+- Several fixes for using 2D images.
 
 Changed
 ~~~~~~~
