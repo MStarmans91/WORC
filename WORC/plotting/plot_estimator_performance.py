@@ -398,7 +398,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 test_indices.append(np.where(patient_IDs == i_ID)[0][0])
 
         # Extract ground truth
-        y_truth = Y_test_temp
+        y_truth = np.array(Y_test_temp).flatten()
 
         # If required, shuffle estimators for "Random" ensembling
         if shuffle_estimators:

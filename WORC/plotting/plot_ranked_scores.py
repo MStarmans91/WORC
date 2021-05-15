@@ -230,6 +230,15 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
 
         del im, seg, imslice, maskslice
 
+def flattenarr(arr):
+    out = []
+    for x in arr:
+        if isinstance(x, (list, pd.core.series.Series, np.ndarray)):
+            out += flattenarr(x)
+        else:
+            out.append(x)
+
+    return out
 
 def plot_ranked_posteriors(estimator, pinfo, label_type=None,
                            ensemble=50, output_csv=None):
@@ -254,13 +263,13 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
     scores = dict()
     truths = dict()
 
-    print(y_truths)
-    print(y_scores)
-
-    y_truths_flat = [item for sublist in y_truths for item in sublist]
+    # y_truths_flat = [item for sublist in y_truths for item in sublist]
+    y_truths_flat = flattenarr(y_truths)
     #y_scores_flat = [item for sublist in y_scores for item in sublist]
-    y_scores_flat = np.array(y_scores).flatten()
-    PIDs_scores_flat = [item for sublist in PIDs_scores for item in sublist]
+    y_scores_flat = flattenarr(y_scores)
+
+    PIDs_scores_flat = flattenarr(PIDs_scores)
+
     for yt, ys, pid in zip(y_truths_flat, y_scores_flat, PIDs_scores_flat):
         if pid not in scores.keys():
             # No scores yet for patient, create list
