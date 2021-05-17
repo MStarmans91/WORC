@@ -540,16 +540,17 @@ def fit_and_score(X, y, scoring,
         if model == 'Lasso':
             # Use lasso model for feature selection
             alpha = para_estimator['SelectFromModel_lasso_alpha']
-            selectestimator = Lasso(alpha=alpha)
+            selectestimator = Lasso(alpha=alpha, random_state=random_seed)
 
         elif model == 'LR':
             # Use logistic regression model for feature selection
-            selectestimator = LogisticRegression()
+            selectestimator = LogisticRegression(random_state=random_seed)
 
         elif model == 'RF':
             # Use random forest model for feature selection
             n_estimators = para_estimator['SelectFromModel_n_trees']
-            selectestimator = RandomForestClassifier(n_estimators=n_estimators)
+            selectestimator = RandomForestClassifier(n_estimators=n_estimators,
+                                                     random_state=random_seed)
         else:
             raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
 
@@ -735,7 +736,8 @@ def fit_and_score(X, y, scoring,
                               n_neighbors=para_estimator['Resampling_n_neighbors'],
                               k_neighbors=para_estimator['Resampling_k_neighbors'],
                               threshold_cleaning=para_estimator['Resampling_threshold_cleaning'],
-                              verbose=verbose)
+                              verbose=verbose,
+                              random_seed=random_seed)
 
             try:
                 Sampler.fit(X_train, y_train)
