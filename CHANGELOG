@@ -7,7 +7,7 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 
-3.4.1 - Unreleased
+3.4.1 - 2021-05-18
 ------------------
 
 Fixed
@@ -19,6 +19,7 @@ Fixed
 - Bug in decomposition for Evaluation.
 - RankedPosteriors naming of images was rounded to an integer, now unrounded
 - Several fixes for regression.
+- Regression in unit test.
 
 Changed
 ~~~~~~~
