@@ -206,7 +206,7 @@ edition can be downloaded and installed for free.</p>
 </div>
 <div class="section" id="tutorials">
 <h2>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h2>
-<p>To start out using WORC, we recommend you to follow the tutorials located in the
+<p>To start out using WORC, we strongly recommend you to follow the tutorials located in the
 <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>. This repository
 contains tutorials for an introduction to WORC, as well as more advanced workflows.</p>
 <p>If you run into any issue, you can first debug your network using
@@ -215,6 +215,8 @@ If you’re stuck, feel free to post an issue on the <a class="reference externa
 </div>
 <div class="section" id="running-an-experiment">
 <h2>Running an experiment<a class="headerlink" href="#running-an-experiment" title="Permalink to this headline">¶</a></h2>
+<p>We strongly recommend you to follow the tutorials, see the section above. In this section,
+a point by point description of the tutorial is given.</p>
 <p>Below is the same script as found in the SimpleWORC tutorial found in the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.
 In this tutorial, we will make use of the <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> facade, which simplifies interacting with <code class="docutils literal notranslate"><span class="pre">WORC</span></code>.
 Additional information on <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> can be found in the
@@ -238,6 +240,9 @@ which is slightly more advanced, and the <code class="docutils literal notransla
 
 <span class="c1"># Define the folder this script is in, so we can easily find the example data</span>
 <span class="n">script_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+
+<span class="c1"># Determine whether you would like to use WORC for classification or regression</span>
+<span class="n">modus</span> <span class="o">=</span> <span class="s1">&#39;classification&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -301,7 +306,13 @@ a subset of 20 patients in this folder. You can change this settings if you like
 <span class="n">label_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;Examplefiles&#39;</span><span class="p">,</span> <span class="s1">&#39;pinfo_HN.csv&#39;</span><span class="p">)</span>
 
 <span class="c1"># Name of the label you want to predict</span>
-<span class="n">label_name</span> <span class="o">=</span> <span class="s1">&#39;imaginary_label_1&#39;</span>
+<span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+    <span class="c1"># Classification: predict a binary (0 or 1) label</span>
+    <span class="n">label_name</span> <span class="o">=</span> <span class="s1">&#39;imaginary_label_1&#39;</span>
+
+<span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span><span class="p">:</span>
+    <span class="c1"># Regression: predict a continuous label</span>
+    <span class="n">label_name</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
 
 <span class="c1"># Determine whether we want to do a coarse quick experiment, or a full lengthy</span>
 <span class="c1"># one. Again, change this accordingly if you use your own data.</span>
@@ -330,8 +341,11 @@ a subset of 20 patients in this folder. You can change this settings if you like
 <span class="n">experiment</span><span class="o">.</span><span class="n">labels_from_this_file</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">predict_labels</span><span class="p">([</span><span class="n">label_name</span><span class="p">])</span>
 
-<span class="c1"># Use the standard workflow for binary classification</span>
-<span class="n">experiment</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
+<span class="c1"># Use the standard workflow for binary classification or regression</span>
+<span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+    <span class="n">experiment</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span><span class="p">:</span>
+    <span class="n">experiment</span><span class="o">.</span><span class="n">regression</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
 
 <span class="c1"># Set the temporary directory</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">set_tmpdir</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span>
@@ -362,6 +376,8 @@ named after your experiment name.</p>
 <span class="n">feature_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">experiment_folder</span><span class="p">,</span>
                                        <span class="s1">&#39;Features&#39;</span><span class="p">,</span>
                                        <span class="s1">&#39;features_*.hdf5&#39;</span><span class="p">))</span>
+
+<span class="n">feature_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 <span class="n">featurefile_p1</span> <span class="o">=</span> <span class="n">feature_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">features_p1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">featurefile_p1</span><span class="p">)</span>
 
@@ -371,7 +387,7 @@ named after your experiment name.</p>
     <span class="n">performance</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
 
 <span class="c1"># Print the feature values and names</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Feature values:&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Feature values from first patient:&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">features_p1</span><span class="o">.</span><span class="n">feature_values</span><span class="p">,</span> <span class="n">features_p1</span><span class="o">.</span><span class="n">feature_labels</span><span class="p">):</span>
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> {l} : {v}.&quot;</span><span class="p">)</span>
 

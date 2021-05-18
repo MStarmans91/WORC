@@ -39,6 +39,8 @@ For more information regarding radiomics, we recommend the following book chapte
 
 The article on WORC is currently in preparation. WORC has been presented at the following conferences:
 
+    `M. P. A. Starmans. "Multicentre studies for more robust radiomics signatures." European Congress of Radiology (ECR) 2021: E³ 422 - Radiomics: principles and applications. <https://connect.myesr.org/course/radiomics-principles-and-applications-2/>`_
+
     `M. P. A. Starmans. "Multicentre studies for more robust radiomics signatures." European Congress of Radiology (ECR) 2020: E3 420-4 Radiomics: principles and applications. <https://connect.myesr.org/course/radiomics-principles-and-applications/>`_
 
     `M. P. A. Starmans, S. R. van der Voort, M. Vos, F. Incekara, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen and S. Klein. "Fully automatic construction of optimal radiomics workflows." European Congress of Radiology (ECR) 2019. <https://youtu.be/iDUCIxw0D4I/>`_
@@ -51,9 +53,9 @@ WORC has among others been used in the following studies:
 
     `J. M. Castillo T., M. Arif, W. J. Niessen, S. Klein, C. H. Bangma, I. G. Schoots, J. F. Veenland. "A Multi-Center, Multi-Vendor Study to Evaluate the Generalizability of a Radiomics Model for Classifying Prostate Cancer: High Grade vs. Low Grade." Diagnostics 2021 <https://www.mdpi.com/2075-4418/11/2/369>`_
 
-    `M. P. A. Starmans, M. J. M. Timbergen, M. Vos, M. Renckens, D. J. Grünhagen, G. J. L. H. van Leenders, R. S. Dwarkasing, F. J. A. Willemssen, W. J. Niessen, C. Verhoef, S. Sleijfer, J. J. Visser,  S. Klein. "Differential diagnosis and molecular stratification of gastrointestinal stromal tumors on CT images using a radiomics approach. arXiv preprint arXiv:2010.06824 <https://arxiv.org/abs/2010.06824>`_
+    `M. P. A. Starmans, M. J. M. Timbergen, M. Vos, M. Renckens, D. J. Grünhagen, G. J. L. H. van Leenders, R. S. Dwarkasing, F. J. A. Willemssen, W. J. Niessen, C. Verhoef, S. Sleijfer, J. J. Visser,  S. Klein. "Differential diagnosis and molecular stratification of gastrointestinal stromal tumors on CT images using a radiomics approach". arXiv preprint arXiv:2010.06824 <https://arxiv.org/abs/2010.06824>`_
 
-    `M. J. M. Timbergen, M. P. A. Starmans, M. Vos, G. A. Padmos, D. J. Grünhagen, G. J. L. H. van Leenders, D. Hanff, C. Verhoef, W. J. Niessen, S. Sleijfer, S. Klein, J. J. Visser. "Differential diagnosis and mutation stratification of desmoid-type fibromatosis on MRI using radiomics." European Journal of Radiology 2020, https://doi.org/10.1016/j.ejrad.2020.109266 <https://doi.org/10.1016/j.ejrad.2020.109266>`_
+    `M. J. M. Timbergen, M. P. A. Starmans, M. Vos, G. A. Padmos, D. J. Grünhagen, G. J. L. H. van Leenders, D. Hanff, C. Verhoef, W. J. Niessen, S. Sleijfer, S. Klein, J. J. Visser. "Differential diagnosis and mutation stratification of desmoid-type fibromatosis on MRI using radiomics." European Journal of Radiology 2020 <https://doi.org/10.1016/j.ejrad.2020.109266>`_
 
     `M. P. A. Starmans, C. J. Els, F. Fiduzi, W. J. Niessen, S.Klein, R. S. Dwarkasing. "Radiomics model to predict hepatocellular carcinoma on liver MRI of high-risk patients in surveillance: a proof-of-concept study." European Congress of Radiology (ECR) 2020 <https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/>`_
 
