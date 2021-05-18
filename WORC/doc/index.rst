@@ -5,14 +5,14 @@ WORC: Workflow for Optimal Radiomics Classification
 Welcome to the WORC documentation!
 ---------------------------------------------
 
-WORC is an open-source python package for the easy execution of end-to-end
-radiomics pipelines. Using automatic algorithm optimization, WORC automatically determines the optimal combination
-from a wide variety of radiomics methods to develop a signature on your dataset. Thereby, performing
+WORC is an open-source python package for the fully automatic execution of end-to-end
+radiomics pipelines. Using automated machine learning, WORC automatically determines the optimal combination
+from a wide variety of radiomics methods and parameters to develop a radiomics model on your dataset. Thereby, performing
 a radiomics study is effectively reduced to a black box with a push button, where you simply have to input
 your data and WORC will adapt the workflow to your application. Thus, WORC is especially suitable
-for the fast development of signatures and thus probing datasets for new biomarkers.
+for the fast development of signatures and probing datasets for new biomarkers.
 
-.. note:: Despite the name, besides classification, WORC can actually also be used for regression and survival signatures!
+.. note:: Despite the name, besides classification, WORC can actually also be used for regression and multilabel classification. Survival is WIP.
 
 We aim to establish a general radiomics platform supporting easy
 integration of other tools. With our modular build and support of
@@ -37,7 +37,7 @@ For more information regarding radiomics, we recommend the following book chapte
 
     `M. P. A. Starmans, S. R. van der Voort, J. M. Castillo T., J. F. Veenland, S. Klein, W. J. Niessen. "Radiomics: Data mining using quantitative medical image features" Handbook of Medical Image Computing and Computer Assisted Intervention (MICCAI) 2020 <https://www.sciencedirect.com/science/article/pii/B9780128161760000235/>`_
 
-The article on WORC is currently in preparation. WORC has been presented in the following:
+The article on WORC is currently in preparation. WORC has been presented at the following conferences:
 
     `M. P. A. Starmans. "Multicentre studies for more robust radiomics signatures." European Congress of Radiology (ECR) 2020: E3 420-4 Radiomics: principles and applications. <https://connect.myesr.org/course/radiomics-principles-and-applications/>`_
 
@@ -45,7 +45,13 @@ The article on WORC is currently in preparation. WORC has been presented in the 
 
     `M. P. A. Starmans, S. R. van der Voort, R. L. Miclea, M. Vos, F. Incekara, M. J. M. Timbergen, M. M. J. Wijnenga, G. A. Padmos, G. H. J. van Leenders, G. Kapsas, M. J. van den Bent, A. J.P.E. Vincent, D. J. Grünhagen, C. Verhoef, S. Sleijfer, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen, S. Klein. "Harmonizing radiomics among applications through adaptive workflow optimization." European Society of Medical Imaging Informatics (EuSoMII) Annual Meeting 2019. <https://www.eusomii.org/events/eusomii-annual-meeting-2018/>`_
 
-WORC has been used in the following studies:
+WORC has among others been used in the following studies:
+
+    `L. Angus, M. P. A. Starmans, A. Rajicic, A. E. Odink, M. Jalving, W. J. Niessen, J. J. Visser, S. Sleijfer, S. Klein, A. A. M. van der Veldt. "The BRAF P. V600E Mutation Status of Melanoma Lung Metastases Cannot Be Discriminated on Computed Tomography by LIDC Criteria nor Radiomics Using Machine Learning." Journal of Personalized Medicine 2021 <https://www.mdpi.com/1056234>`_
+
+    `J. M. Castillo T., M. Arif, W. J. Niessen, S. Klein, C. H. Bangma, I. G. Schoots, J. F. Veenland. "A Multi-Center, Multi-Vendor Study to Evaluate the Generalizability of a Radiomics Model for Classifying Prostate Cancer: High Grade vs. Low Grade." Diagnostics 2021 <https://www.mdpi.com/2075-4418/11/2/369>`_
+
+    `M. P. A. Starmans, M. J. M. Timbergen, M. Vos, M. Renckens, D. J. Grünhagen, G. J. L. H. van Leenders, R. S. Dwarkasing, F. J. A. Willemssen, W. J. Niessen, C. Verhoef, S. Sleijfer, J. J. Visser,  S. Klein. "Differential diagnosis and molecular stratification of gastrointestinal stromal tumors on CT images using a radiomics approach. arXiv preprint arXiv:2010.06824 <https://arxiv.org/abs/2010.06824>`_
 
     `M. J. M. Timbergen, M. P. A. Starmans, M. Vos, G. A. Padmos, D. J. Grünhagen, G. J. L. H. van Leenders, D. Hanff, C. Verhoef, W. J. Niessen, S. Sleijfer, S. Klein, J. J. Visser. "Differential diagnosis and mutation stratification of desmoid-type fibromatosis on MRI using radiomics." European Journal of Radiology 2020, https://doi.org/10.1016/j.ejrad.2020.109266 <https://doi.org/10.1016/j.ejrad.2020.109266>`_
 
