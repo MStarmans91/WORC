@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from WORC.processing.label_processing import load_label_csv
 import WORC.addexceptions as ae
+import os
 
 # Global variables
 min_subjects = 10
@@ -91,14 +92,18 @@ class InvalidLabelsValidator(AbstractValidator):
     def _validate(self, simpleworc):
         errstr = None
 
-        try:
-            if simpleworc._labels_file_train:
-                labels, subjects, _ = load_label_csv(simpleworc._labels_file_train)
-            elif simpleworc.labels_file_train:
-                labels, subjects, _ = load_label_csv(simpleworc.labels_file_train)
-            else:
-                raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
+        if simpleworc._labels_file_train:
+            labels_file_train = simpleworc._labels_file_train
+        elif simpleworc.labels_file_train:
+            labels_file_train = simpleworc.labels_file_train
+        else:
+            raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
 
+        if not os.path.exists(labels_file_train):
+            raise ae.WORCValueError(f'Given label file {labels_file_train} does not exist.')
+
+        try:
+            labels, subjects, _ = load_label_csv(labels_file_train)
         except ae.WORCAssertionError as wae:
             if 'First column should be patient ID' in str(wae):
                 # TODO: print wrong column name and file so that it is clear what needs to be replaced in which file

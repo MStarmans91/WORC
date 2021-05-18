@@ -20,6 +20,7 @@ Fixed
 - RankedPosteriors naming of images was rounded to an integer, now unrounded
 - Several fixes for regression.
 - Regression in unit test.
+- Several fixes for using 2D images.
 
 Changed
 ~~~~~~~

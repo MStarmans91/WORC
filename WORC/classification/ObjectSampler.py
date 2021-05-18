@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ class ObjectSampler(object):
 
     """
 
-    def __init__(self, method,
+    def __init__(self, method, random_seed,
                  sampling_strategy='auto',
                  n_jobs=1,
                  n_neighbors=3,
@@ -41,8 +41,8 @@ class ObjectSampler(object):
                  verbose=True):
         """Initialize object."""
         # Initialize a random state
-        self.random_seed = np.random.randint(5000)
-        self.random_state = check_random_state(self.random_seed)
+        self.random_seed = random_seed
+        self.random_state = check_random_state(random_seed)
 
         # Initialize all objects as Nones: overriden when required by functions
         self.object = None

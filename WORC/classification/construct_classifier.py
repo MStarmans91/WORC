@@ -150,7 +150,8 @@ def construct_classifier(config):
                                   alpha=config['SGD_alpha'],
                                   l1_ratio=config['SGD_l1_ratio'],
                                   loss=config['SGD_loss'],
-                                  penalty=config['SGD_penalty'])
+                                  penalty=config['SGD_penalty'],
+                                  random_state=config['random_seed'])
 
     elif config['classifiers'] == 'LR':
         # Logistic Regression

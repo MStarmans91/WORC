@@ -258,9 +258,9 @@ class SimpleWORC():
             raise InvalidCsvFileException(labels_file.absolute())
 
         if is_training:
-            self._labels_file_train = labels_file.as_uri().replace('%20', ' ')
+            self._labels_file_train = str(labels_file.absolute()).replace('%20', ' ')
         else:
-            self._labels_file_test = labels_file.as_uri().replace('%20', ' ')
+            self._labels_file_test = str(labels_file.absolute()).replace('%20', ' ')
 
     def semantics_from_this_file(self, file_path, is_training=True):
         """Define which file should be used by WORC to extract the semantic features.
@@ -288,9 +288,9 @@ class SimpleWORC():
 
         # TODO: implement sanity check semantics file e.g. is it a semantics file and are there semantics available
         if is_training:
-            self._semantics_file_train = [semantics_file.as_uri().replace('%20', ' ')]
+            self._semantics_file_train = [str(semantics_file.absolute()).replace('%20', ' ')]
         else:
-            self._semantics_file_test = [semantics_file.as_uri().replace('%20', ' ')]
+            self._semantics_file_test = [str(semantics_file.absolute()).replace('%20', ' ')]
 
     def predict_labels(self, label_names: list):
         """Determine which label(s) to predict in your experiments.
