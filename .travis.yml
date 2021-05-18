@@ -52,7 +52,13 @@ matrix:
         - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
         - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks performance --samples all
         - fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
-
+        # Change the tutorial script to also run a regression experiment,
+        # using the previously calculated features
+        - rm -r /tmp/GS/DEBUG_0
+        - python WORC/tests/WORCTutorialSimple_travis_regression.py
+        - fastr trace /tmp/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks classification --samples all
+        - fastr trace /tmp/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks performance --samples all
+        - fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
 notifications:
   slack:
     secure: ytP+qd6Rx1m1uXYMaN7dFHnFNu+bCIcyugSnAY7BtbumJwCuEt8hbWvQ/sDoAKqxj5VYcnBlTRDn1gjg2t2shs7pBGgjdeZQpQglXyAtN4bz3suSUbQ9/RIwt+RPmbiTXkWQtoZ4q0DotydozKMnq8Cvhdy+d5pMqToER6kMq/WCC+Y/99mmnqO2VrWpvAvP6bBOWDvrk/C4u3y5m3Rp5iE7uAYR3TDTprIW9UNEntDoEYT2T+bidkDRl7DMsi8R4q4s/A6EhZpB4Tnhwz7ama155z77ywdZLhdmk5HJvngXcunVwH4v/l8DbBZU0PqMEJzaRMn/tQCCqjx1/unpyFCv+QuhmP5K4wo17R77jHlcn7SBkdzYr/CKHrilWuShmvOMCckBShpQw3H9PivcI6/G5mVA23tH+gJSQUbzZmBR683x7oQHmnK3g977yD/ufEvV6qME9HFXt3+jIzVEwsUjtJsTV/NsbHlErJfhBp8HJTpq6IRhtKcX9QS1i/APXcYcCSCFJe8tOTLN6xmAKBgONG3XOAvJwfwXbF+rmfjX0x6KMUuD5WmHLjMLhQp0dS00LV7C9s18UkFBgKydqvF2AMPUsbgIGyZ/Vz3v5nz7JiNLDfp0HxQpqAABpdwDHR3/CfuhCDcqzIXAgRgXaFrqCxqoH6OrsgRH6UxUXnM=

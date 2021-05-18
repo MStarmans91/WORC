@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -540,16 +540,17 @@ def fit_and_score(X, y, scoring,
         if model == 'Lasso':
             # Use lasso model for feature selection
             alpha = para_estimator['SelectFromModel_lasso_alpha']
-            selectestimator = Lasso(alpha=alpha)
+            selectestimator = Lasso(alpha=alpha, random_state=random_seed)
 
         elif model == 'LR':
             # Use logistic regression model for feature selection
-            selectestimator = LogisticRegression()
+            selectestimator = LogisticRegression(random_state=random_seed)
 
         elif model == 'RF':
             # Use random forest model for feature selection
             n_estimators = para_estimator['SelectFromModel_n_trees']
-            selectestimator = RandomForestClassifier(n_estimators=n_estimators)
+            selectestimator = RandomForestClassifier(n_estimators=n_estimators,
+                                                     random_state=random_seed)
         else:
             raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
 
@@ -614,6 +615,7 @@ def fit_and_score(X, y, scoring,
                 if verbose:
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
+                pca = None
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
@@ -634,6 +636,7 @@ def fit_and_score(X, y, scoring,
                 if verbose:
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
+                pca = None
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
@@ -652,7 +655,18 @@ def fit_and_score(X, y, scoring,
                     print(f"[WORC WARNING] PCA n_components ({n_components})> n_features ({len(X_train[0])}): skipping PCA.")
             else:
                 pca = PCA(n_components=n_components, random_state=random_seed)
-                pca.fit(X_train)
+                try:
+                    pca.fit(X_train)
+                except (ValueError, LinAlgError) as e:
+                    if verbose:
+                        print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+
+                    pca = None
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    else:
+                        return ret
+
                 X_train = pca.transform(X_train)
                 X_test = pca.transform(X_test)
 
@@ -722,7 +736,8 @@ def fit_and_score(X, y, scoring,
                               n_neighbors=para_estimator['Resampling_n_neighbors'],
                               k_neighbors=para_estimator['Resampling_k_neighbors'],
                               threshold_cleaning=para_estimator['Resampling_threshold_cleaning'],
-                              verbose=verbose)
+                              verbose=verbose,
+                              random_seed=random_seed)
 
             try:
                 Sampler.fit(X_train, y_train)

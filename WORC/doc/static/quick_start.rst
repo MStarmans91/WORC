@@ -45,7 +45,7 @@ If you still get an error similar to error: ``Microsoft Visual C++ 14.0 is requi
 
 Tutorials
 ---------
-To start out using WORC, we recommend you to follow the tutorials located in the
+To start out using WORC, we strongly recommend you to follow the tutorials located in the
 `WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_. This repository
 contains tutorials for an introduction to WORC, as well as more advanced workflows.
 
@@ -56,6 +56,9 @@ If you're stuck, feel free to post an issue on the `WORC Github <https://github.
 
 Running an experiment
 ---------------------
+
+We strongly recommend you to follow the tutorials, see the section above. In this section,
+a point by point description of the tutorial is given.
 
 Below is the same script as found in the SimpleWORC tutorial found in the `WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_.
 In this tutorial, we will make use of the ``SimpleWORC`` facade, which simplifies interacting with ``WORC``.
@@ -85,6 +88,9 @@ First, import WORC and some additional python packages.
 
     # Define the folder this script is in, so we can easily find the example data
     script_path = os.path.dirname(os.path.abspath(__file__))
+
+    # Determine whether you would like to use WORC for classification or regression
+    modus = 'classification'
 
 Input
 `````
@@ -133,7 +139,13 @@ Identify our data structure: change the fields below accordingly if you use your
     label_file = os.path.join(data_path, 'Examplefiles', 'pinfo_HN.csv')
 
     # Name of the label you want to predict
-    label_name = 'imaginary_label_1'
+    if modus == 'classification':
+        # Classification: predict a binary (0 or 1) label
+        label_name = 'imaginary_label_1'
+
+    elif modus == 'regression':
+        # Regression: predict a continuous label
+        label_name = 'Age'
 
     # Determine whether we want to do a coarse quick experiment, or a full lengthy
     # one. Again, change this accordingly if you use your own data.
@@ -164,8 +176,11 @@ After defining the inputs, the following code can be used to run your first expe
     experiment.labels_from_this_file(label_file)
     experiment.predict_labels([label_name])
 
-    # Use the standard workflow for binary classification
-    experiment.binary_classification(coarse=coarse)
+    # Use the standard workflow for binary classification or regression
+    if modus == 'classification':
+        experiment.binary_classification(coarse=coarse)
+    elif modus == 'regression':
+        experiment.regression(coarse=coarse)
 
     # Set the temporary directory
     experiment.set_tmpdir(tmpdir)
@@ -195,6 +210,8 @@ named after your experiment name.
     feature_files = glob.glob(os.path.join(experiment_folder,
                                            'Features',
                                            'features_*.hdf5'))
+
+    feature_files.sort()
     featurefile_p1 = feature_files[0]
     features_p1 = pd.read_hdf(featurefile_p1)
 
@@ -204,7 +221,7 @@ named after your experiment name.
         performance = json.load(fp)
 
     # Print the feature values and names
-    print("Feature values:")
+    print("Feature values from first patient:")
     for v, l in zip(features_p1.feature_values, features_p1.feature_labels):
         print(f"\t {l} : {v}.")
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2020 - 2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2020 - 2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,8 @@ from sklearn.utils.validation import check_is_fitted
 import numpy as np
 import WORC.addexceptions as ae
 
-accepted_scalers = ['robust_z_score', 'z_score', 'robust', 'minmax']
+accepted_scalers = ['robust_z_score', 'z_score', 'robust', 'minmax',
+                    'log_z_score']
 
 
 class WORCScaler(TransformerMixin, BaseEstimator):
@@ -96,6 +97,8 @@ class WORCScaler(TransformerMixin, BaseEstimator):
             scaler = RobustScaler().fit(X_train_scaling)
         elif self.method == 'minmax':
             scaler = MinMaxScaler().fit(X_train_scaling)
+        elif self.method == 'log_z_score':
+            scaler = LogStandardScaler().fit(X_train_scaling)
         else:
             raise ae.WORCKeyError(f'{self.method} is not a ' +
                                   'valid scaling method. Should be any of ' +
@@ -116,6 +119,12 @@ class WORCScaler(TransformerMixin, BaseEstimator):
             X_test_nonscaling = np.asarray([np.asarray(i)[excl].tolist() for i in X_test])
         else:
             X_test_scaling = X_test
+
+        # Check if we should apply a logit transform and if so, do so
+        if self.method == 'log_z_score':
+            # See LogStandardScaler docstring: apply logit after adding constants
+            X_test_scaling = np.log(X_test_scaling - self.scaler.F_min +
+                                    self.scaler.F_median - self.scaler.F_min)
 
         # Apply scaling to included features
         X_test_scaling = self.scaler.transform(X_test_scaling)
@@ -139,7 +148,7 @@ class WORCScaler(TransformerMixin, BaseEstimator):
 
 
 class RobustStandardScaler(StandardScaler):
-    """Scale features using statistics that are robust to outliers.
+    """Scale features using z-score that is robust to outliers.
 
     This scaler removes outliers (<5th and >95th percentile) and
     afterwards uses z-scoring to scale the features.
@@ -200,8 +209,48 @@ class RobustStandardScaler(StandardScaler):
         return self.partial_fit(X_selected, y)
 
 
+class LogStandardScaler(StandardScaler):
+    """Scale features using z-score and a logit transform.
+
+    This scaler first applies a logit transform to each feature before
+    applying a z-score, i.e. the standard scaler. To handle negative
+    and zero values, a constant is added before applying the logit transform:
+
+    lij = log(fij - min(Fj) + median(Fj) - min(Fj))
+    Zij = (lij - mu)/ sigma
+
+    Based on https://arxiv.org/pdf/2012.06875v1.pdf.
+
+
+    """
+
+    def fit(self, X, y=None):
+        """Compute the mean and std to be used for later scaling.
+
+        Parameters
+        ----------
+        X : {array-like, sparse matrix}, shape [n_samples, n_features]
+            The data used to compute the mean and standard deviation
+            used for later scaling along the features axis.
+        y
+            Ignored
+
+        """
+        # Reset internal state before fitting
+        self._reset()
+
+        # Determine constant terms
+        self.F_median = np.median(X, axis=0)
+        self.F_min = np.min(X, axis=0)
+
+        # Apply logit transform
+        X = np.log(X - self.F_min + self.F_median - self.F_min)
+
+        return self.partial_fit(X, y)
+
+
 def test():
-    """Test RobustStandardScaler."""
+    """Test Scaling."""
     # Small test
     a = np.random.rand(8, 10)
     a[5, 8] = 2
@@ -216,7 +265,7 @@ def test():
     s.fit(a, feature_labels)
     b = s.transform(a)
 
-    print('Output:')
+    print('Output robust z_score:')
     print(b)
     print('Percentiles:')
     print(s.scaler.percentile_[0])
@@ -225,13 +274,26 @@ def test():
     print(s.scaler.mean_)
     print(s.scaler.var_)
 
+    # Compare with Log StandardScaler
+    s2 = WORCScaler(method='log_z_score', skip_features=skip_features)
+    s2.fit(a, feature_labels)
+    b = s2.transform(a)
+    print('Output log z_score:')
+    print(b)
+    print('F_median and F_min:')
+    print(s2.scaler.F_median)
+    print(s2.scaler.F_min)
+    print('Mean and std:')
+    print(s2.scaler.mean_)
+    print(s2.scaler.var_)
+
     # Compare with StandardScaler
-    s2 = StandardScaler().fit(a)
+    s3 = StandardScaler().fit(a)
     print('Standard scaler mean and std:')
-    print(s2.mean_)
-    print(s2.var_)
+    print(s3.mean_)
+    print(s3.var_)
     print('Output:')
-    print(s2.transform(a))
+    print(s3.transform(a))
 
     # See if we're robust to NaN's
     nanmatrix = np.squeeze([[[np.nan]*400] * 10])
