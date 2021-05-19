@@ -7,6 +7,15 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 
+3.4.2 - Unreleased
+------------------
+
+Fixed
+~~~~~
+- Bug in flattening of plot_ranked_posteriors function.
+- Bug in plot_images: could not handle 2D images when applying slicing.
+- Bug in precision-recall curve.
+
 3.4.1 - 2021-05-18
 ------------------
 
