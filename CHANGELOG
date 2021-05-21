@@ -15,6 +15,7 @@ Fixed
 - Bug in flattening of plot_ranked_posteriors function.
 - Bug in plot_images: could not handle 2D images when applying slicing.
 - Bug in precision-recall curve.
+- Bug in performance estimation plotting.
 
 3.4.1 - 2021-05-18
 ------------------

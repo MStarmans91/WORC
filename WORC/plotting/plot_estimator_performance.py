@@ -704,11 +704,20 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 for i_ID in patient_classification_list:
                     percentage_right = patient_classification_list[i_ID]['N_correct'] / float(patient_classification_list[i_ID]['N_test'])
 
-                    if i_ID in patient_IDs:
-                        label = labels[0][np.where(i_ID == patient_IDs)]
+                    # Check if this is exactly the label of the patient within the label file
+                    check_id = i_ID
+                    if check_id not in patient_IDs:
+                        print(f'[WORC WARNING] Patient {check_id} is not found the patient labels, removing underscore.')
+                        check_id = check_id.split("_")[0]
+                        if check_id not in patient_IDs:
+                            print(f'[WORC WARNING] Did not help, excluding patient {check_id}.')
+                            continue
+
+                    if check_id in patient_IDs:
+                        label = labels[0][np.where(check_id == patient_IDs)]
                     else:
                         # Multiple instance of one patient
-                        label = labels[0][np.where(i_ID.split('_')[0] == patient_IDs)]
+                        label = labels[0][np.where(check_id.split('_')[0] == patient_IDs)]
 
                     label = label[0][0]
                     percentages[i_ID] = str(label) + ': ' + str(round(percentage_right, 2) * 100) + '%'
