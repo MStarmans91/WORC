@@ -858,7 +858,19 @@ def fit_and_score(X, y, scoring,
                              return_estimator=return_estimator,
                              error_score=error_score)
     except (ValueError, LinAlgError) as e:
-        if type(estimator) == LDA:
+        if type(estimator) == LDA or 'Input contains NaN' in str(e):
+            from pprint import pprint
+            pprint(dict(est=estimator, vals=feature_values, y_all=y_all,
+                             s=scorers, tr=train,
+                             t=test, v=verbose,
+                             pe=para_estimator, fp=fit_params,
+                             return_train_score=return_train_score,
+                             return_parameters=return_parameters,
+                             return_n_test_samples=return_n_test_samples,
+                             return_times=return_times,
+                             return_estimator=return_estimator,
+                             error_score=error_score))
+
             if verbose:
                 print(f'[WARNING]: skipping this setting due to LDA Error: {e}.')
 
