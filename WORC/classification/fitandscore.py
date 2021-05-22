@@ -829,11 +829,19 @@ def fit_and_score(X, y, scoring,
     # Recombine feature values and label for train and test set
     feature_values = np.concatenate((X_train, X_test), axis=0)
 
+    from pprint import pprint
+
+    print('y_train', len(y_train), y_train.shape)
+    pprint(y_train)
+
+    print('y_test', len(y_test), y_test.shape)
+    pprint(y_test)
+
     if y_train.ndim != y_test.ndim:
-        if y_test.ndim > y_train.ndim:
-            y_train = np.reshape(y_train, y_test.shape)
-        else:
-            y_test = np.reshape(y_test, y_train.shape)
+        print(f'Resizing y_train {y_train.ndim} -> y_test.ndim')
+        old = y_train.shape
+        y_train = np.reshape(y_train, (-1, y_test.shape[1]))
+        print(f'Old shape {old} new shape {y_train.shape}')
 
     y_all = np.concatenate((y_train, y_test), axis=0)
     para_estimator = None
