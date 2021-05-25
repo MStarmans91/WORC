@@ -30,6 +30,7 @@ import random
 import json
 from copy import copy
 from sklearn.metrics import f1_score, roc_auc_score
+from WORC.statistics.crossvalstats import CrossvalStats
 
 
 def random_split_cross_validation(image_features, feature_labels, classes,
@@ -63,20 +64,22 @@ def random_split_cross_validation(image_features, feature_labels, classes,
     # If we are using fixed splits, set the n_iterations to the number of splits
     if fixedsplits is not None:
         n_iterations = int(fixedsplits.columns.shape[0] / 2)
-        print(f'Fixedsplits detected, adjusting n_iterations to {n_iterations}') 
+        print(f'Fixedsplits detected, adjusting n_iterations to {n_iterations}')
 
-    for i in range(start, n_iterations):
-        print(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
-        logging.debug(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
-        timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-        print(f'\t Time: {timestamp}.')
-        logging.debug(f'\t Time: {timestamp}.')
+    cvstats = CrossvalStats()
+
+    for i in cvstats.cviter(start, n_iterations):
+        #print(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
+        #logging.debug(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
+        #timestamp = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        #print(f'\t Time: {timestamp}.')
+        #logging.debug(f'\t Time: {timestamp}.')
         if fixed_seed:
             random_seed = i**2
         else:
             random_seed = np.random.randint(5000)
 
-        t = time.time()
+        #t = time.time()
 
         # Split into test and training set, where the percentage of each
         # label is maintained
@@ -264,9 +267,9 @@ def random_split_cross_validation(image_features, feature_labels, classes,
             del panda_data, panda_data_temp
 
         # Print elapsed time
-        elapsed = int((time.time() - t) / 60.0)
-        print(f'\t Fitting took {elapsed} minutes.')
-        logging.debug(f'\t Fitting took {elapsed} minutes.')
+        #elapsed = int((time.time() - t) / 60.0)
+        #print(f'\t Fitting took {elapsed} minutes.')
+        #logging.debug(f'\t Fitting took {elapsed} minutes.')
 
     return save_data
 
