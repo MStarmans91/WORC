@@ -22,9 +22,9 @@ class CrossvalStats(object):
             self._iter[j] = {'timeit_start': pd.to_datetime('now')}
 
             if self._eta_iter:
-                self._logger.info(f'CrossValidation {j+1} / {n} started at {self._iter[j]["timeit_start"]} ETA: {self._eta_iter}')
+                self._logger.info(f'CrossValidation {j+1} / {n} started at {self._dateformatter(self._iter[j]["timeit_start"])} ETA: {self._dateformatter(self._eta_iter)}')
             else:
-                self._logger.info(f'CrossValidation {j + 1} / {n} started at {self._iter[j]["timeit_start"]}')
+                self._logger.info(f'CrossValidation {j + 1} / {n} started at {self._dateformatter(self._iter[j]["timeit_start"])}')
 
             yield i
 
@@ -32,7 +32,10 @@ class CrossvalStats(object):
             self._iter[j]['timeit_seconds'] = (self._iter[j]['timeit_end'] - self._iter[j]['timeit_start']).total_seconds()
 
             self._dostats()
-            self._logger.info(f'CrossValidation {j+1} / {n} ended at {self._iter[j]["timeit_end"]}')
+            self._logger.info(f'CrossValidation {j+1} / {n} ended at {self._dateformatter(self._iter[j]["timeit_end"])}')
+
+            minutes = np.ceil(self._iter[j]['timeit_seconds'] / 60).astype(int)
+            self._logger.info(f'CrossValidation {j+1} / {n} took {minutes} minutes to complete')
             self._logger.info(str(self))
 
     def _dostats(self):
@@ -53,5 +56,8 @@ class CrossvalStats(object):
 
         self._logger.debug(f'\n{str(df_stats)}')
 
+    def _dateformatter(self, d):
+        return d.strftime('%Y-%m-%d %H:%M')
+
     def __str__(self):
-        return f'ETA Until all iters completion: {self._eta} (local time is now {pd.to_datetime("now")})'
+        return f'ETA Until all iters completion: {self._dateformatter(self._eta)} (time is now {self._dateformatter(pd.to_datetime("now"))})'
