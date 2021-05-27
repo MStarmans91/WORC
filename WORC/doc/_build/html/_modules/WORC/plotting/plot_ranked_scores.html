@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.4.1 documentation</title>
+  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.4.2 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.1
+                3.4.2
               </div>
             
           
@@ -165,7 +165,7 @@
   <h1>Source code for WORC.plotting.plot_ranked_scores</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -266,6 +266,18 @@
                        <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
                        <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">,</span>
                        <span class="n">output_zip</span><span class="o">=</span><span class="n">output_zip</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="flatten_object"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.flatten_object">[docs]</a><span class="k">def</span> <span class="nf">flatten_object</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Flatten various objects to a 1D list.&quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">input</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">out</span> <span class="o">+=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out</span></div>
 
 
 <div class="viewcode-block" id="plot_ranked_percentages"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.plot_ranked_percentages">[docs]</a><span class="k">def</span> <span class="nf">plot_ranked_percentages</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">pinfo</span><span class="p">,</span> <span class="n">label_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -423,10 +435,10 @@
     <span class="n">scores</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">truths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-    <span class="n">y_truths_flat</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">y_truths</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
-    <span class="c1">#y_scores_flat = [item for sublist in y_scores for item in sublist]</span>
-    <span class="n">y_scores_flat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_scores</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="n">PIDs_scores_flat</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">PIDs_scores</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+    <span class="n">y_truths_flat</span> <span class="o">=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">y_truths</span><span class="p">)</span>
+    <span class="n">y_scores_flat</span> <span class="o">=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">y_scores</span><span class="p">)</span>
+    <span class="n">PIDs_scores_flat</span> <span class="o">=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">PIDs_scores</span><span class="p">)</span>
+
     <span class="k">for</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y_truths_flat</span><span class="p">,</span> <span class="n">y_scores_flat</span><span class="p">,</span> <span class="n">PIDs_scores_flat</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">pid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="c1"># No scores yet for patient, create list</span>

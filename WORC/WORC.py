@@ -409,7 +409,7 @@ class WORC(object):
             'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
             'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
             'SMOTEENN, SMOTETomek'
-        config['Resampling']['sampling_strategy'] = 'majority, minority, not minority, not majority, all'
+        config['Resampling']['sampling_strategy'] = 'auto, majority, minority, not minority, not majority, all'
         config['Resampling']['n_neighbors'] = '3, 12'
         config['Resampling']['k_neighbors'] = '5, 15'
         config['Resampling']['threshold_cleaning'] = '0.25, 0.5'
