@@ -16,6 +16,11 @@ Fixed
 - Bug in plot_images: could not handle 2D images when applying slicing.
 - Bug in precision-recall curve.
 - Bug in performance estimation plotting.
+- Preflighcheck now also accepts labels from txt or XNAT.
+
+Added
+~~~~~~~
+- Label file can now also be separated by semicolons.
 
 3.4.1 - 2021-05-18
 ------------------
