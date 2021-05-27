@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ import WORC.addexceptions as ae
 import pandas as pd
 
 
-def load_labels(label_file, label_type):
+def load_labels(label_file, label_type=None):
     """Loads the label data from a label file
 
     Args:
@@ -53,6 +53,10 @@ def load_labels(label_file, label_type):
     else:
         raise ae.WORCIOError(extension + ' is not valid label file extension.')
 
+    if label_type is None:
+        print("Label_type given is None, extracting all labels.")
+        label_type = label_names
+
     print("Label names to extract: " + str(label_type))
     labels = list()
     for i_label in label_type:
@@ -62,6 +66,7 @@ def load_labels(label_file, label_type):
         else:
             labels.append(label_status[:, label_index])
 
+    # Create object to return
     label_data = dict()
     label_data['patient_IDs'] = patient_IDs
     label_data['label'] = labels
@@ -118,7 +123,7 @@ def load_label_csv(input_file):
         label_status (numpy array): The status of the different labels
          for each patient
     """
-    data = pd.read_csv(input_file, header=0)
+    data = pd.read_csv(input_file, sep=None, header=0)
 
     # Load and check the header
     header = data.keys()

@@ -68,19 +68,24 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
     if mask is not None:
         mask = sitk.GetArrayFromImage(mask)
 
-    # Determine which axial slice has the largest area
-    if index is None:
-        if mask is not None:
-            areas = np.sum(mask, axis=1).tolist()
-            index = areas.index(max(areas))
-        else:
-            index = int(image.shape[0]/2)
-
-    imslice = image[index, :, :]
-    if mask is not None:
-        maskslice = mask[index, :, :]
+    if len(image.shape) == 2:
+        # 2D image, so image and mask are already single slices
+        imslice = image
+        maskslice = mask
     else:
-        maskslice = None
+        # Determine which axial slice has the largest area
+        if index is None:
+            if mask is not None:
+                areas = np.sum(mask, axis=1).tolist()
+                index = areas.index(max(areas))
+            else:
+                index = int(image.shape[0]/2)
+
+        imslice = image[index, :, :]
+        if mask is not None:
+            maskslice = mask[index, :, :]
+        else:
+            maskslice = None
 
     # Rotate, as this is not done automatically
     if flip:

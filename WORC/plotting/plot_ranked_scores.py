@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,6 +101,18 @@ def main():
                        ensemble=ensemble,
                        output_csv=output_csv,
                        output_zip=output_zip)
+
+
+def flatten_object(input):
+    """Flatten various objects to a 1D list."""
+    out = []
+    for x in input:
+        if isinstance(x, (list, pd.core.series.Series, np.ndarray)):
+            out += flatten_object(x)
+        else:
+            out.append(x)
+
+    return out
 
 
 def plot_ranked_percentages(estimator, pinfo, label_type=None,
@@ -258,10 +270,10 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
     scores = dict()
     truths = dict()
 
-    y_truths_flat = [item for sublist in y_truths for item in sublist]
-    #y_scores_flat = [item for sublist in y_scores for item in sublist]
-    y_scores_flat = np.array(y_scores).flatten()
-    PIDs_scores_flat = [item for sublist in PIDs_scores for item in sublist]
+    y_truths_flat = flatten_object(y_truths)
+    y_scores_flat = flatten_object(y_scores)
+    PIDs_scores_flat = flatten_object(PIDs_scores)
+
     for yt, ys, pid in zip(y_truths_flat, y_scores_flat, PIDs_scores_flat):
         if pid not in scores.keys():
             # No scores yet for patient, create list

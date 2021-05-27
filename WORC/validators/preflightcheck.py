@@ -1,6 +1,23 @@
+#!/usr/bin/env python
+
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from abc import ABC, abstractmethod
 
-from WORC.processing.label_processing import load_label_csv
+from WORC.processing.label_processing import load_labels
 import WORC.addexceptions as ae
 import os
 
@@ -103,13 +120,15 @@ class InvalidLabelsValidator(AbstractValidator):
             raise ae.WORCValueError(f'Given label file {labels_file_train} does not exist.')
 
         try:
-            labels, subjects, _ = load_label_csv(labels_file_train)
+            label_data = load_labels(labels_file_train)
         except ae.WORCAssertionError as wae:
             if 'First column should be patient ID' in str(wae):
                 # TODO: print wrong column name and file so that it is clear what needs to be replaced in which file
                 raise ae.WORCValueError(f'First column in the file given to SimpleWORC().labels_from_this_file(**) needs to be named Patient.')
 
         # check labels for substrings of eachother
+        labels = label_data['label_name']
+        subjects = label_data['patient_IDs']
         labels_matches = self._get_all_substrings_for_array(labels)
 
         if labels_matches:

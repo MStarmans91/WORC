@@ -25,6 +25,7 @@ import argparse
 from WORC.plotting.compute_CI import compute_confidence as CI
 import numpy as np
 from sklearn.metrics import roc_auc_score, auc
+from sklearn.metrics import precision_recall_curve
 import csv
 from WORC.plotting.plot_estimator_performance import plot_estimator_performance
 
@@ -115,13 +116,6 @@ def plot_single_PRC(y_truth, y_score, verbose=False, returnplot=False):
     y_score = y_score[inds]
 
     # Compute the TPR and FPR for all possible thresholds
-    FP = 0
-    TP = 0
-    precision = list()
-    tpr = list()
-    thresholds = list()
-    fprev = -np.inf
-    i = 0
     N = float(np.bincount(y_truth)[0])
     if len(np.bincount(y_truth)) == 1:
         # No class = 1 present.
@@ -131,29 +125,19 @@ def plot_single_PRC(y_truth, y_score, verbose=False, returnplot=False):
 
     if N == 0:
         print('[WORC Warning] No negative class samples found, cannot determine PRC. Skipping iteration.')
-        return precision, tpr, thresholds
+        return list(), list(), list()
     elif P == 0:
         print('[WORC Warning] No positive class samples found, cannot determine PRC. Skipping iteration.')
-        return precision, tpr, thresholds
+        return list(), list(), list()
 
-    while i < len(y_truth_sorted):
-        if y_score[i] != fprev:
-            if TP == 0:
-                # Prevent division by zero
-                precision.append(0)
-            else:
-                precision.append(TP/(TP + FP))
+    precision, tpr, thresholds =\
+        precision_recall_curve(y_truth_sorted, y_score)
 
-            tpr.append(1 - TP/P)
-            thresholds.append(y_score[i])
-            fprev = y_score[i]
+    # Convert to lists
+    precision = precision.tolist()
+    tpr = tpr.tolist()
+    thresholds = thresholds.tolist()
 
-        if y_truth_sorted[i] == 1:
-            TP += 1
-        else:
-            FP += 1
-
-        i += 1
 
     if verbose or returnplot:
         prc_auc = auc(tpr, precision)
