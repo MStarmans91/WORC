@@ -137,7 +137,9 @@ class BasicWORC(SimpleWORC):
             self._worc.semantics_test = self._semantics_file_test
 
         self._worc.label_names = ', '.join(self._label_names)
-        self._config_builder._custom_overrides['Labels'] = dict()
+        if 'Labels' not in self._config_builder._custom_overrides.keys():
+            self._config_builder._custom_overrides['Labels'] = dict()
+            
         self._config_builder._custom_overrides['Labels']['label_names'] = self._worc.label_names
 
         # Find out how many configs we need to make

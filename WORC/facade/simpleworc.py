@@ -345,7 +345,7 @@ class SimpleWORC():
         """
         # validate
         if method == 'classification':
-            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'GaussianNB', 'ComplementNB', 'LDA', 'QDA', 'RankedSVM']
+            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
         elif method == 'regression':
             valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR', 'XGBRegressor', 'AdaBoostRegressor', 'LinR', 'Ridge']
         else:
@@ -401,81 +401,6 @@ class SimpleWORC():
         for validator in validators:
             validator.do_validation(self)
 
-    def execute(self):
-        """Execute the experiment.
-
-        Before executing the actual experiment, this function will first run several validators
-        and check the provided setup to make sure some of the most common
-        made error are caught before running the experiment.
-        """
-        # Do some final sanity checking before we execute the experiment
-        self._validate()
-
-        if self._fixed_splits:
-            self._worc.fixedsplits = self._fixed_splits
-
-        if self._radiomix_feature_file:
-            # Convert radiomix features and use those as inputs
-            output_folder = os.path.join(fastr.config.mounts['tmp'],
-                                         'Radiomix_features')
-
-            # Check if output folder exists: otherwise create
-            if not os.path.exists(output_folder):
-                os.mkdir(output_folder)
-
-            # convert the features
-            convert_radiomix_features(self._radiomix_feature_file, output_folder)
-
-            # Set the newly created feature files as the WORC input
-            self.features_from_this_directory(output_folder)
-
-        # Give set sources to the WORC object
-        self._worc.images_train = self._images_train
-        self._worc.features_train = self._features_train
-        self._worc.segmentations_train = self._segmentations_train
-        self._worc.labels_train = self._labels_file_train
-        self._worc.semantics_train = self._semantics_file_train
-
-        # If a specific train-test setup is provided, add test sources
-        if self._images_test:
-            self._worc.images_test = self._images_test
-
-        if self._features_test:
-            self._worc.features_test = self._features_test
-
-        if self._segmentations_test:
-            self._worc.segmentations_test = self._segmentations_test
-
-        if self._labels_file_test:
-            self._worc.labels_test = self._labels_file_test
-
-        if self._semantics_file_test:
-            self._worc.semantics_test = self._semantics_file_test
-
-        # Set the labels to predict
-        self._worc.label_names = ', '.join(self._label_names)
-        self._config_builder._custom_overrides['Labels'] = dict()
-        self._config_builder._custom_overrides['Labels']['label_names'] = self._worc.label_names
-
-        # Find out how many configs we need to make
-        if self._worc.images_train:
-            nmod = len(self._worc.images_train)
-        else:
-            nmod = len(self._worc.features_train)
-
-        # Create configuration files
-        self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
-
-        # Build the fastr network
-        self._worc.build()
-        if self._add_evaluation:
-            self._worc.add_evaluation(label_type=self._label_names[self._selected_label],
-                                      modus=self._method)
-
-        # Set the sources and sinks and execute the experiment.
-        self._worc.set()
-        self._worc.execute()
-
     def binary_classification(self, estimators=None,
                               scoring_method='f1_weighted',
                               coarse=True):
@@ -499,9 +424,47 @@ class SimpleWORC():
         if coarse and estimators is None:
             estimators = ['SVM']
         elif estimators is None:
-            estimators = ['SVM', 'SVM', 'SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB']
+            estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
 
         self._set_and_validate_estimators(estimators, scoring_method, 'classification', coarse)
+
+    def multiclass_classification(self, estimators=None,
+                                  scoring_method='f1_weighted',
+                                  coarse=True):
+        """Tell WORC do to a multiclass classification experiment.
+
+        Parameters
+        ----------
+        estimators: list
+            List of strings with names of valid estimators. See the
+            :ref:`WORC Config chapter <config-chapter>` for allowed options.
+
+            If coarse, only an SVM will be used. If not, the default full
+            config will be used.
+        scoring_method: string, default f1
+            Name of the scoring method used to rank the workflows. See the
+            :ref:`WORC Config chapter <config-chapter>` for allowed options.
+        coarse: boolean, default True
+            Determine whether to do a coarse or full experiment.
+
+        """
+        if coarse and estimators is None:
+            estimators = ['SVM']
+        elif estimators is None:
+            estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
+
+        self._set_and_validate_estimators(estimators, scoring_method, 'classification', coarse)
+
+        overrides = {
+            'Labels': {
+                'modus': 'multilabel',
+            },
+            'Featsel': {
+                # Other estimators do not support multiclass
+                'SelectFromModel_estimator': 'RF'
+            }
+        }
+        self.add_config_overrides(overrides)
 
     def regression(self, estimators=None, scoring_method='r2', coarse=True):
         """Tell WORC do to a regression experiment.
@@ -604,3 +567,80 @@ class SimpleWORC():
     def features_from_radiomix_xlsx(self, feature_file):
         """Use a feature file which is generated by the OncoRadiomics Radiomix tool."""
         self._radiomix_feature_file = feature_file
+
+    def execute(self):
+        """Execute the experiment.
+
+        Before executing the actual experiment, this function will first run several validators
+        and check the provided setup to make sure some of the most common
+        made error are caught before running the experiment.
+        """
+        # Do some final sanity checking before we execute the experiment
+        self._validate()
+
+        if self._fixed_splits:
+            self._worc.fixedsplits = self._fixed_splits
+
+        if self._radiomix_feature_file:
+            # Convert radiomix features and use those as inputs
+            output_folder = os.path.join(fastr.config.mounts['tmp'],
+                                         'Radiomix_features')
+
+            # Check if output folder exists: otherwise create
+            if not os.path.exists(output_folder):
+                os.mkdir(output_folder)
+
+            # convert the features
+            convert_radiomix_features(self._radiomix_feature_file, output_folder)
+
+            # Set the newly created feature files as the WORC input
+            self.features_from_this_directory(output_folder)
+
+        # Give set sources to the WORC object
+        self._worc.images_train = self._images_train
+        self._worc.features_train = self._features_train
+        self._worc.segmentations_train = self._segmentations_train
+        self._worc.labels_train = self._labels_file_train
+        self._worc.semantics_train = self._semantics_file_train
+
+        # If a specific train-test setup is provided, add test sources
+        if self._images_test:
+            self._worc.images_test = self._images_test
+
+        if self._features_test:
+            self._worc.features_test = self._features_test
+
+        if self._segmentations_test:
+            self._worc.segmentations_test = self._segmentations_test
+
+        if self._labels_file_test:
+            self._worc.labels_test = self._labels_file_test
+
+        if self._semantics_file_test:
+            self._worc.semantics_test = self._semantics_file_test
+
+        # Set the labels to predict
+        self._worc.label_names = ', '.join(self._label_names)
+        if 'Labels' not in self._config_builder._custom_overrides.keys():
+            self._config_builder._custom_overrides['Labels'] = dict()
+
+        self._config_builder._custom_overrides['Labels']['label_names'] = self._worc.label_names
+
+        # Find out how many configs we need to make
+        if self._worc.images_train:
+            nmod = len(self._worc.images_train)
+        else:
+            nmod = len(self._worc.features_train)
+
+        # Create configuration files
+        self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
+
+        # Build the fastr network
+        self._worc.build()
+        if self._add_evaluation:
+            self._worc.add_evaluation(label_type=self._label_names[self._selected_label],
+                                      modus=self._method)
+
+        # Set the sources and sinks and execute the experiment.
+        self._worc.set()
+        self._worc.execute()

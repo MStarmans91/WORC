@@ -104,6 +104,7 @@ def random_split_cross_validation(image_features, feature_labels, classes,
                 for n_patient in range(0, classes.shape[1]):
                     for n_label in range(0, classes.shape[0]):
                         classes_temp[n_patient, n_label] = classes[n_label, n_patient]
+
             else:
                 raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
 

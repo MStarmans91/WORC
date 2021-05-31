@@ -419,12 +419,7 @@ class WORC(object):
         config['Classification']['fastr'] = 'True'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
         config['Classification']['classifiers'] =\
-            'SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, ' +\
-            'RF, RF, RF, ' +\
-            'LR, LR, LR, ' +\
-            'LDA, LDA, LDA, ' +\
-            'QDA, QDA, QDA, ' +\
-            'GaussianNB, GaussianNB, GaussianNB, ' +\
+            'SVM, RF, LR, LDA, QDA, GaussianNB, ' +\
             'AdaBoostClassifier, ' +\
             'XGBClassifier'
         config['Classification']['max_iter'] = '100000'
@@ -472,7 +467,7 @@ class WORC(object):
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
-        config['HyperOptimization']['test_size'] = '0.15'
+        config['HyperOptimization']['test_size'] = '0.2'
         config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '1000'
         config['HyperOptimization']['n_jobspercore'] = '500'  # only relevant when using fastr in classification
