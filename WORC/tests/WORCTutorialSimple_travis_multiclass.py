@@ -59,9 +59,9 @@ def main():
 
     nsubjects = 20  # use "all" to download all patients
     # NOTE: already downloaded for classification, so simply set the data path
-    # data_path = '/home/travis/build/MStarmans91/WORC/WORCTutorial/Data'
+    data_path = '/home/travis/build/MStarmans91/WORC/WORCTutorial/Data'
     # data_path = '/home/martijn/git/WORCTutorial/Data'
-    data_path = r'C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\Data'
+    # data_path = r'C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\Data'
     # download_HeadAndNeck(datafolder=data_path, nsubjects=nsubjects)
 
     # Identify our data structure: change the fields below accordingly
