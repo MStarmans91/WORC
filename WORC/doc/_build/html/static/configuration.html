@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.4.2 documentation</title>
+  <title>Configuration &mdash; WORC 3.4.3 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.4.2
+                3.4.3
               </div>
             
           
@@ -2084,9 +2084,9 @@ are picked less often by default.</p>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 5%" />
-<col style="width: 39%" />
-<col style="width: 56%" />
+<col style="width: 7%" />
+<col style="width: 21%" />
+<col style="width: 73%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2104,7 +2104,7 @@ are picked less often by default.</p>
 <td><p>Any <a class="reference external" href="https://fastr.readthedocs.io/en/develop/_autogen/fastr.reference.html#executionplugin-reference/">fastr execution plugin</a> .</p></td>
 </tr>
 <tr class="row-even"><td><p>classifiers</p></td>
-<td><p>SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, RF, RF, RF, LR, LR, LR, LDA, LDA, LDA, QDA, QDA, QDA, GaussianNB, GaussianNB, GaussianNB, AdaBoostClassifier, XGBClassifier</p></td>
+<td><p>SVM, RF, LR, LDA, QDA, GaussianNB, AdaBoostClassifier, XGBClassifier</p></td>
 <td><p>SVM , SVR, SGD, SGDR, RF, LDA, QDA, ComplementND, GaussianNB, AdaBoostClassifier, XGBClassifier, LR, RFR, Lasso, ElasticNet, LinR, Ridge, AdaBoostRegressor, XGBRegressor. All are estimators from <a class="reference external" href="https://scikit-learn.org/stable//">sklearn</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>max_iter</p></td>
@@ -2359,7 +2359,7 @@ are picked less often by default.</p>
 <td><p>Manual metric by WORC: f1_weighted_predictproba, average_precision_weighted, gmean. Other accepted values are any <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values/">sklearn metric</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>test_size</p></td>
-<td><p>0.15</p></td>
+<td><p>0.2</p></td>
 <td><p>Float</p></td>
 </tr>
 <tr class="row-even"><td><p>n_splits</p></td>

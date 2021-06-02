@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.crossval &mdash; WORC 3.4.2 documentation</title>
+  <title>WORC.classification.crossval &mdash; WORC 3.4.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.2
+                3.4.3
               </div>
             
           
@@ -269,6 +269,7 @@
                 <span class="k">for</span> <span class="n">n_patient</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">classes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                     <span class="k">for</span> <span class="n">n_label</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">classes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
                         <span class="n">classes_temp</span><span class="p">[</span><span class="n">n_patient</span><span class="p">,</span> <span class="n">n_label</span><span class="p">]</span> <span class="o">=</span> <span class="n">classes</span><span class="p">[</span><span class="n">n_label</span><span class="p">,</span> <span class="n">n_patient</span><span class="p">]</span>
+
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid modus!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">modus</span><span class="p">)</span>
 

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.4.2 documentation</title>
+  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.4.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.2
+                3.4.3
               </div>
             
           
@@ -285,7 +285,6 @@
 
     <span class="c1"># Read the inputs</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
-    <span class="n">label_type</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># NOTE: Assume we want to have the first key</span>
 
     <span class="c1"># Determine the predicted score per patient</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Determining score per patient.&#39;</span><span class="p">)</span>
@@ -435,49 +434,107 @@
     <span class="n">scores</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">truths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-    <span class="n">y_truths_flat</span> <span class="o">=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">y_truths</span><span class="p">)</span>
-    <span class="n">y_scores_flat</span> <span class="o">=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">y_scores</span><span class="p">)</span>
-    <span class="n">PIDs_scores_flat</span> <span class="o">=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">PIDs_scores</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">aggregate_scores</span><span class="p">(</span><span class="n">y_truths_in</span><span class="p">,</span> <span class="n">y_scores_in</span><span class="p">,</span> <span class="n">PIDs_scores_in</span><span class="p">):</span>
+        <span class="n">y_truths_flat</span> <span class="o">=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">y_truths_in</span><span class="p">)</span>
+        <span class="n">y_scores_flat</span> <span class="o">=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">y_scores_in</span><span class="p">)</span>
+        <span class="n">PIDs_scores_flat</span> <span class="o">=</span> <span class="n">flatten_object</span><span class="p">(</span><span class="n">PIDs_scores_in</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y_truths_flat</span><span class="p">,</span> <span class="n">y_scores_flat</span><span class="p">,</span> <span class="n">PIDs_scores_flat</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">pid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="c1"># No scores yet for patient, create list</span>
-            <span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-            <span class="n">truths</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="n">yt</span>
-        <span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y_truths_flat</span><span class="p">,</span> <span class="n">y_scores_flat</span><span class="p">,</span> <span class="n">PIDs_scores_flat</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="c1"># No scores yet for patient, create list</span>
+                <span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="n">truths</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="n">yt</span>
+            <span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span>
 
-    <span class="c1"># Take the mean for each patient and rank them</span>
-    <span class="n">scores_means</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">maxlen</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">scores_means</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">maxlen</span><span class="p">:</span>
-            <span class="n">maxlen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span>
+        <span class="c1"># Take the mean for each patient and rank them</span>
+        <span class="n">scores_means</span> <span class="o">=</span> <span class="p">{</span><span class="n">pid</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="n">pid</span><span class="p">])</span> <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
 
-    <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">scores_means</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
-    <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">scores_means</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+        <span class="c1"># Rank according to mean scores</span>
+        <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">scores_means</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+        <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">scores_means</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
 
-    <span class="n">ranked_mean_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores_means</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
-    <span class="n">ranked_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
-    <span class="n">ranked_truths</span> <span class="o">=</span> <span class="p">[</span><span class="n">truths</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+        <span class="n">ranked_mean_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores_means</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+        <span class="n">ranked_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">scores</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+        <span class="n">ranked_truths</span> <span class="o">=</span> <span class="p">[</span><span class="n">truths</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">ranked_PIDs</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_mean_scores</span><span class="p">,</span> <span class="n">ranked_scores</span>
 
-    <span class="c1"># Write output to csv</span>
-    <span class="k">if</span> <span class="n">output_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing output scores to CSV.&quot;</span><span class="p">)</span>
-        <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PatientID&#39;</span><span class="p">,</span> <span class="s1">&#39;TrueLabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Probability&#39;</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">):</span>
-            <span class="n">header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Score&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># Gather ground truth for each pid</span>
+    <span class="n">pid_truths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">y</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y_truths</span><span class="p">,</span> <span class="n">PIDs_scores</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+            <span class="n">pid_truths</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Multiclass</span>
+        <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">ranked_truths</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">ranked_mean_scores</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">ranked_scores</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">total_scores</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">means</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">lnum</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">label_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)):</span>
+            <span class="c1"># Select only values for this label</span>
+            <span class="n">y_truths_thislabel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_truths</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="n">lnum</span><span class="p">]</span>
+            <span class="n">y_scores_thislabel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_scores</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="n">lnum</span><span class="p">]</span>
 
-            <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">smean</span><span class="p">,</span> <span class="n">scores</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ranked_PIDs</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_mean_scores</span><span class="p">,</span> <span class="n">ranked_scores</span><span class="p">):</span>
-                <span class="n">towrite</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">truth</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">smean</span><span class="p">)]</span>
-                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
-                    <span class="n">towrite</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+            <span class="c1"># Rank the patients and scores</span>
+            <span class="n">ranked_PIDs_label</span><span class="p">,</span> <span class="n">ranked_truths_label</span><span class="p">,</span> <span class="n">ranked_mean_scores_label</span><span class="p">,</span> <span class="n">ranked_scores_label</span> <span class="o">=</span>\
+                <span class="n">aggregate_scores</span><span class="p">(</span><span class="n">y_truths_thislabel</span><span class="p">,</span> <span class="n">y_scores_thislabel</span><span class="p">,</span> <span class="n">PIDs_scores</span><span class="p">)</span>
 
-                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">towrite</span><span class="p">)</span>
+            <span class="n">ranked_PIDs</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">ranked_PIDs_label</span>
+            <span class="n">ranked_truths</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">ranked_truths_label</span>
+            <span class="n">ranked_mean_scores</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">ranked_mean_scores_label</span>
+            <span class="n">ranked_scores</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">ranked_scores_label</span>
+
+            <span class="n">means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Mean_</span><span class="si">{label}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">total_scores</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">f</span><span class="s2">&quot;Score_</span><span class="si">{label}</span><span class="s2">_</span><span class="si">{i}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">ranked_scores_label</span><span class="p">]))])</span>
+
+        <span class="c1"># Write output to csv</span>
+        <span class="n">unique_pids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">flatten_object</span><span class="p">(</span><span class="n">PIDs_scores</span><span class="p">)))</span>
+        <span class="c1"># FIXME: bug in scores, so only give the means</span>
+        <span class="k">if</span> <span class="n">output_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing output scores to CSV.&quot;</span><span class="p">)</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PatientID&#39;</span><span class="p">,</span> <span class="s1">&#39;TrueLabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Predicted&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">means</span>   <span class="c1">#+ total_scores</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+                <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">unique_pids</span><span class="p">:</span>
+                    <span class="n">pid_means</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="n">pid_truth</span> <span class="o">=</span> <span class="n">pid_truths</span><span class="p">[</span><span class="n">pid</span><span class="p">]</span>
+                    <span class="n">pid_scores</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">lnum</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">label_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)):</span>
+                        <span class="n">p_index</span> <span class="o">=</span> <span class="n">ranked_PIDs</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+                        <span class="n">pid_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ranked_mean_scores</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">p_index</span><span class="p">])</span>
+                        <span class="n">pid_scores</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">p_index</span><span class="p">])</span>
+
+                    <span class="n">towrite</span> <span class="o">=</span> <span class="p">[</span><span class="n">pid</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">pid_truth</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">pid_means</span><span class="p">)]</span> <span class="o">+</span> <span class="n">pid_means</span>   <span class="c1">#+ pid_scores</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">towrite</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Single Label</span>
+        <span class="n">ranked_PIDs</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_mean_scores</span><span class="p">,</span> <span class="n">ranked_scores</span> <span class="o">=</span>\
+            <span class="n">aggregate_scores</span><span class="p">(</span><span class="n">y_truths</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">,</span> <span class="n">PIDs_scores</span><span class="p">)</span>
+
+        <span class="c1"># Write output to csv</span>
+        <span class="n">maxlen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">scores</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+        <span class="k">if</span> <span class="n">output_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing output scores to CSV.&quot;</span><span class="p">)</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PatientID&#39;</span><span class="p">,</span> <span class="s1">&#39;TrueLabel&#39;</span><span class="p">,</span> <span class="s1">&#39;Probability&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">):</span>
+                <span class="n">header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Score&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+                <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">pid</span><span class="p">,</span> <span class="n">truth</span><span class="p">,</span> <span class="n">smean</span><span class="p">,</span> <span class="n">scores</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ranked_PIDs</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_mean_scores</span><span class="p">,</span> <span class="n">ranked_scores</span><span class="p">):</span>
+                    <span class="n">towrite</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">pid</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">truth</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">smean</span><span class="p">)]</span>
+                    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+                        <span class="n">towrite</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+
+                    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">towrite</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ranked_mean_scores</span><span class="p">,</span> <span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_PIDs</span></div>
 
@@ -545,7 +602,7 @@
                                    <span class="n">ensemble</span><span class="o">=</span><span class="n">ensemble</span><span class="p">,</span>
                                    <span class="n">output_csv</span><span class="o">=</span><span class="n">output_csv</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">scores</span> <span class="o">==</span> <span class="s1">&#39;percentages&#39;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">prediction</span><span class="p">[</span><span class="n">label_type</span><span class="p">]</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;LOO&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prediction</span><span class="p">[</span><span class="n">prediction</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;LOO&#39;</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cannot rank percentages for LOO, returning dummies.&#39;</span><span class="p">)</span>
             <span class="n">ranked_scores</span> <span class="o">=</span> <span class="n">ranked_truths</span> <span class="o">=</span> <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
@@ -563,35 +620,41 @@
         <span class="k">raise</span> <span class="n">WORCKeyError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">output_itk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># Rerank the scores split per ground truth class: negative for 0, positive for 1</span>
-        <span class="n">ranked_scores_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_scores</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">p</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="c1"># FIXME: check for multilabel by checking type</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">():</span>
+            <span class="c1"># Rerank the scores split per ground truth class: negative for 0, positive for 1</span>
+            <span class="n">ranked_scores_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_scores</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">p</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 
-        <span class="n">ranked_scores</span> <span class="o">=</span> <span class="n">ranked_scores_temp</span>
-        <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">)</span>
-        <span class="n">ranked_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
-        <span class="n">ranked_truths</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_truths</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
-        <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_PIDs</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+            <span class="n">ranked_scores</span> <span class="o">=</span> <span class="n">ranked_scores_temp</span>
+            <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">)</span>
+            <span class="n">ranked_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+            <span class="n">ranked_truths</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_truths</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+            <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_PIDs</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
 
-        <span class="c1"># Convert to lower to later on overcome matching errors</span>
-        <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+            <span class="c1"># Convert to lower to later on overcome matching errors</span>
+            <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">images</span><span class="p">:</span>
-            <span class="n">plot_ranked_images</span><span class="p">(</span><span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
-                               <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
-                               <span class="n">images</span><span class="o">=</span><span class="n">images</span><span class="p">,</span>
-                               <span class="n">segmentations</span><span class="o">=</span><span class="n">segmentations</span><span class="p">,</span>
-                               <span class="n">ranked_truths</span><span class="o">=</span><span class="n">ranked_truths</span><span class="p">,</span>
-                               <span class="n">ranked_scores</span><span class="o">=</span><span class="n">ranked_scores</span><span class="p">,</span>
-                               <span class="n">ranked_PIDs</span><span class="o">=</span><span class="n">ranked_PIDs</span><span class="p">,</span>
-                               <span class="n">output_zip</span><span class="o">=</span><span class="n">output_zip</span><span class="p">,</span>
-                               <span class="n">output_itk</span><span class="o">=</span><span class="n">output_itk</span><span class="p">,</span>
-                               <span class="n">scores</span><span class="o">=</span><span class="n">scores</span><span class="p">)</span></div>
-
+            <span class="k">if</span> <span class="n">images</span><span class="p">:</span>
+                <span class="n">plot_ranked_images</span><span class="p">(</span><span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
+                                   <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
+                                   <span class="n">images</span><span class="o">=</span><span class="n">images</span><span class="p">,</span>
+                                   <span class="n">segmentations</span><span class="o">=</span><span class="n">segmentations</span><span class="p">,</span>
+                                   <span class="n">ranked_truths</span><span class="o">=</span><span class="n">ranked_truths</span><span class="p">,</span>
+                                   <span class="n">ranked_scores</span><span class="o">=</span><span class="n">ranked_scores</span><span class="p">,</span>
+                                   <span class="n">ranked_PIDs</span><span class="o">=</span><span class="n">ranked_PIDs</span><span class="p">,</span>
+                                   <span class="n">output_zip</span><span class="o">=</span><span class="n">output_zip</span><span class="p">,</span>
+                                   <span class="n">output_itk</span><span class="o">=</span><span class="n">output_itk</span><span class="p">,</span>
+                                   <span class="n">scores</span><span class="o">=</span><span class="n">scores</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Make dummy</span>
+            <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">output_zip</span><span class="p">,</span>
+                                <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_DEFLATED</span><span class="p">,</span> <span class="n">allowZip64</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="example"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.example">[docs]</a><span class="k">def</span> <span class="nf">example</span><span class="p">():</span>
     <span class="n">case</span> <span class="o">=</span> <span class="s1">&#39;MESFIB&#39;</span>
@@ -692,7 +755,12 @@
                                <span class="n">ranked_scores</span><span class="o">=</span><span class="n">ranked_scores</span><span class="p">,</span>
                                <span class="n">ranked_PIDs</span><span class="o">=</span><span class="n">ranked_PIDs</span><span class="p">,</span>
                                <span class="n">output_zip</span><span class="o">=</span><span class="n">output_zip</span><span class="p">,</span>
-                               <span class="n">scores</span><span class="o">=</span><span class="n">scores</span><span class="p">)</span></div>
+                               <span class="n">scores</span><span class="o">=</span><span class="n">scores</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Make dummy</span>
+            <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">output_zip</span><span class="p">,</span>
+                                <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_DEFLATED</span><span class="p">,</span> <span class="n">allowZip64</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>

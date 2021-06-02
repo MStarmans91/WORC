@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_barchart &mdash; WORC 3.4.2 documentation</title>
+  <title>WORC.plotting.plot_barchart &mdash; WORC 3.4.3 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.2
+                3.4.3
               </div>
             
           
@@ -232,7 +232,11 @@
     <span class="k">if</span> <span class="n">label_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">label_type</span> <span class="o">=</span> <span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="n">prediction</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="n">label_type</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="n">label_type</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="c1"># Multiclass reroute</span>
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="n">keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
     <span class="c1"># Extract the parameter settings:</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
