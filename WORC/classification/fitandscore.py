@@ -555,7 +555,7 @@ def fit_and_score(X, y, scoring,
         else:
             raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
 
-        if y_train.shape[1] == 2 and model != 'RF':
+        if len(y_train.shape) >= 2 and model != 'RF':
             raise ae.WORCValueError(f'Model {model} is not suitable for multiclass classification. Please use RF or do not use SelectFromModel.')
 
         # Prefit model
