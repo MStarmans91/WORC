@@ -674,32 +674,35 @@ def plot_estimator_performance(prediction, label_data, label_type,
                         all_performances[metric_names_single[p]] = perf
 
                 else:
-                    # Singleclass
-                    performances = [accuracy, bca, sensitivity, specificity,
-                                    precision, npv, f1_score_list, auc]
-                    for name, perf in zip(metric_names_single, performances):
-                        if name == 'BCA':
-                            if not bca:
-                                # Multiclass, bca empty, skip
-                                continue
-
-                        all_performances[name] = perf
-                        stats[f"{name} 95%:"] = f"{np.nanmean(perf)} {str(compute_confidence(perf, N_1, N_2, alpha))}"
-
                     if modus == 'multilabel':
-                        # Multiclass additions
-                        stats["Average Accuracy 95%:"] = f"{np.nanmean(acc_av)} {str(compute_confidence(acc_av, N_1, N_2, alpha))}"
-                        metric_names_multi = ['Accuracy', 'Sensitivity',
-                                              'Specificity', 'Precision', 'NPV',
-                                              'F1-score', 'AUC',
-                                              'Average Accuracy']
+                        # Multiclass
+                        # First gather overall performances
+                        performances = [accuracy, sensitivity, specificity,
+                                        precision, npv, f1_score_list, auc,
+                                        acc_av]
+
+                        for name, perf in zip(metric_names_multi, performances):
+                            all_performances[name] = perf
+                            stats[f"{name} 95%:"] = f"{np.nanmean(perf)} {str(compute_confidence(perf, N_1, N_2, alpha))}"
+
+                        # Performance per label
+                        performances = [accuracy_single, bca_single,
+                                        sensitivity_single, specificity_single,
+                                        auc_single, f1_score_list_single,
+                                        precision_single, npv_single]
+
+                        print(sensitivity_single)
+                        for name, perf in zip(metric_names_single, performances):
+                            for nlabel, label in enumerate(label_type.split(',')):
+                                all_performances[f"{name}_{label}"] = perf[nlabel]
+                                stats[f"{name}_{label} 95%:"] = f"{np.nanmean(perf[nlabel])} {str(compute_confidence(perf, N_1, N_2, alpha))}"
+                    else:
+                        # Singleclass
                         performances = [accuracy, bca, sensitivity, specificity,
                                         precision, npv, f1_score_list, auc]
-
-                        for name, perf in zip(metric_names_multi performances):
-                            for j in range(n_labels):
-                                all_performances[name] = perf
-                                stats[f"{name} 95%:"] = f"{np.nanmean(perf)} {str(compute_confidence(perf, N_1, N_2, alpha))}"
+                        for name, perf in zip(metric_names_single, performances):
+                            all_performances[name] = perf
+                            stats[f"{name} 95%:"] = f"{np.nanmean(perf)} {str(compute_confidence(perf, N_1, N_2, alpha))}"
 
                 if thresholds is not None:
                     if len(thresholds) == 2:

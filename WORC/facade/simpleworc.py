@@ -24,7 +24,7 @@ from WORC import WORC
 from .helpers.processing import convert_radiomix_features
 from .helpers.exceptions import PathNotFoundException, NoImagesFoundException, \
     NoSegmentationsFoundException, InvalidCsvFileException, \
-    NoFeaturesFoundException
+    NoFeaturesFoundException, NoMasksFoundException
 from WORC.addexceptions import WORCKeyError, WORCValueError, WORCAssertionError
 from .helpers.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
@@ -51,7 +51,7 @@ def _error_bulldozer(func):
         PathNotFoundException, NoImagesFoundException,
         NoSegmentationsFoundException, InvalidCsvFileException,
         TypeError, ValueError, NotImplementedError, WORCKeyError,
-        WORCValueError, WORCAssertionError
+        WORCValueError, WORCAssertionError, NoMasksFoundException,
     ]
     _valid_exceptions += [c[1] for c in inspect.getmembers(fastr.exceptions, inspect.isclass)]
 
@@ -93,6 +93,8 @@ class SimpleWORC():
         self._features_test = []
         self._segmentations_train = []
         self._segmentations_test = []
+        self._masks_train = []
+        self._masks_test = []
         self._semantics_file_train = None
         self._semantics_file_test = None
         self._radiomix_feature_file = None
@@ -201,6 +203,9 @@ class SimpleWORC():
                                           is_training=True):
         """Use segmentations from a directory as sources in WORC.
 
+        Segmentations define the region of interest from which the features
+        are extracted.
+
          SimpleWORC uses a directory glob to look for files meeting
          the requirements to include, based on the input parameters.
 
@@ -233,6 +238,48 @@ class SimpleWORC():
             self._segmentations_train.append(segmentations_per_subject)
         else:
             self._segmentations_test.append(segmentations_per_subject)
+
+    def masks_from_this_directory(self, directory,
+                                  mask_file_name='mask.nii.gz', glob='*/',
+                                  is_training=True):
+        """Use masks from a directory as sources in WORC.
+
+        Masks are used in a variety of tools to ``mask'' certain parts
+        of the image, e.g. in the normalization. Masks are fully
+        optional.
+
+        SimpleWORC uses a directory glob to look for files meeting
+        the requirements to include, based on the input parameters.
+
+        Example:
+        When using "directory = C:\\Users\\MyName\\MaskFolder",
+        masks_from_this_directory will include all mask.nii.gz files from all subfolders in the directory.
+
+        Parameters
+        ----------
+        directory: string
+             Identifies the root directory in which to search for mask files.
+        mask_file_name: string, default mask.nii.gz
+             Name of the files which will be included. Can include wildcards (*).
+        glob: string, default */
+             Identify the search string to be used in the glob. Can include wildcards (*).
+        is_training: Boolean, default True
+             Identify whether these masks should be used in the training or test dataset.
+        """
+        directory = Path(directory).expanduser()
+        if not directory.exists():
+            raise PathNotFoundException(directory)
+
+        masks = list(directory.glob(f'{glob}{mask_file_name}'))
+
+        if len(masks) == 0:
+            raise NoMasksFoundException(str(directory))
+
+        masks_per_subject = {mask.parent.name: mask.as_uri().replace('%20', ' ') for mask in masks}
+        if is_training:
+            self._masks_train.append(masks_per_subject)
+        else:
+            self._masks_test.append(masks_per_subject)
 
     def labels_from_this_file(self, file_path, is_training=True):
         """Define which file should be used by WORC to extract the object labels.
@@ -344,7 +391,7 @@ class SimpleWORC():
 
         """
         # validate
-        if method == 'classification':
+        if 'classification' in method:
             valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
         elif method == 'regression':
             valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR', 'XGBRegressor', 'AdaBoostRegressor', 'LinR', 'Ridge']
@@ -426,7 +473,7 @@ class SimpleWORC():
         elif estimators is None:
             estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
 
-        self._set_and_validate_estimators(estimators, scoring_method, 'classification', coarse)
+        self._set_and_validate_estimators(estimators, scoring_method, 'binary_classification', coarse)
 
     def multiclass_classification(self, estimators=None,
                                   scoring_method='f1_weighted',
@@ -453,7 +500,7 @@ class SimpleWORC():
         elif estimators is None:
             estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
 
-        self._set_and_validate_estimators(estimators, scoring_method, 'classification', coarse)
+        self._set_and_validate_estimators(estimators, scoring_method, 'multiclass_classification', coarse)
 
         overrides = {
             'Labels': {
@@ -600,6 +647,7 @@ class SimpleWORC():
         self._worc.images_train = self._images_train
         self._worc.features_train = self._features_train
         self._worc.segmentations_train = self._segmentations_train
+        self._worc.masks_train = self._masks_train
         self._worc.labels_train = self._labels_file_train
         self._worc.semantics_train = self._semantics_file_train
 
@@ -612,6 +660,9 @@ class SimpleWORC():
 
         if self._segmentations_test:
             self._worc.segmentations_test = self._segmentations_test
+
+        if self._masks_test:
+            self._worc.masks_test = self._masks_test
 
         if self._labels_file_test:
             self._worc.labels_test = self._labels_file_test

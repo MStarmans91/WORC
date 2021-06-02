@@ -12,6 +12,7 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_
 Fixed
 ~~~~~
 - SimpleWORC and BasicWORC now support multilabel workflows.
+- SimpleWORC and BasicWORC now support use of masks.
 
 Added
 ~~~~~~~

@@ -977,6 +977,7 @@ class WORC(object):
                             self.links_C1_test[label] = self.classify.inputs['features_test'][str(label)] << self.sources_features_test[label].output
                             self.links_C1_test[label].collapse = 'test'
 
+
             else:
                 raise WORCexceptions.WORCIOError("Please provide labels.")
         else:
@@ -1764,7 +1765,7 @@ class WORC(object):
 
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 
-    def add_evaluation(self, label_type, modus='classification'):
+    def add_evaluation(self, label_type, modus='binary_classification'):
         """Add branch for evaluation of performance to network.
 
         Note: should be done after build, before set:

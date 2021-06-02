@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +42,8 @@ class BasicWORC(SimpleWORC):
         self.features_test = []
         self.segmentations_train = []
         self.segmentations_test = []
+        self.masks_train = []
+        self.masks_test = []
         self.metadata_train = []
         self.metadata_test = []
         self.semantics_file_train = []
@@ -100,6 +102,11 @@ class BasicWORC(SimpleWORC):
         elif self._segmentations_train:
             self._worc.segmentations_train = self._segmentations_train
 
+        if self.masks_train:
+            self._worc.masks_train = self.masks_train
+        elif self._masks_train:
+            self._worc.masks_train = self._masks_train
+
         if self.labels_file_train:
             self._worc.labels_train = self.labels_train
         elif self._labels_file_train:
@@ -126,6 +133,11 @@ class BasicWORC(SimpleWORC):
         elif self._segmentations_test:
             self._worc.segmentations_test = self._segmentations_test
 
+        if self.masks_test:
+            self._worc.masks_test = self.masks_test
+        elif self._masks_test:
+            self._worc.masks_test = self._masks_test
+
         if self.labels_file_test:
             self._worc.labels_test = self.labels_test
         elif self._labels_file_test:
@@ -139,7 +151,7 @@ class BasicWORC(SimpleWORC):
         self._worc.label_names = ', '.join(self._label_names)
         if 'Labels' not in self._config_builder._custom_overrides.keys():
             self._config_builder._custom_overrides['Labels'] = dict()
-            
+
         self._config_builder._custom_overrides['Labels']['label_names'] = self._worc.label_names
 
         # Find out how many configs we need to make

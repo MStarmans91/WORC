@@ -120,7 +120,6 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
 
     # Read the inputs
     prediction = pd.read_hdf(estimator)
-    label_type = prediction.keys()[0]  # NOTE: Assume we want to have the first key
 
     # Determine the predicted score per patient
     print('Determining score per patient.')
@@ -270,49 +269,107 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
     scores = dict()
     truths = dict()
 
-    y_truths_flat = flatten_object(y_truths)
-    y_scores_flat = flatten_object(y_scores)
-    PIDs_scores_flat = flatten_object(PIDs_scores)
+    def aggregate_scores(y_truths_in, y_scores_in, PIDs_scores_in):
+        y_truths_flat = flatten_object(y_truths_in)
+        y_scores_flat = flatten_object(y_scores_in)
+        PIDs_scores_flat = flatten_object(PIDs_scores_in)
 
-    for yt, ys, pid in zip(y_truths_flat, y_scores_flat, PIDs_scores_flat):
-        if pid not in scores.keys():
-            # No scores yet for patient, create list
-            scores[pid] = list()
-            truths[pid] = yt
-        scores[pid].append(ys)
+        for yt, ys, pid in zip(y_truths_flat, y_scores_flat, PIDs_scores_flat):
+            if pid not in scores.keys():
+                # No scores yet for patient, create list
+                scores[pid] = list()
+                truths[pid] = yt
+            scores[pid].append(ys)
 
-    # Take the mean for each patient and rank them
-    scores_means = dict()
-    maxlen = 0
-    for pid in scores.keys():
-        scores_means[pid] = np.mean(scores[pid])
-        if len(scores[pid]) > maxlen:
-            maxlen = len(scores[pid])
+        # Take the mean for each patient and rank them
+        scores_means = {pid: np.mean(scores[pid]) for pid in scores.keys()}
 
-    ranking = np.argsort(list(scores_means.values()))
-    ranked_PIDs = [list(scores_means.keys())[r] for r in ranking]
+        # Rank according to mean scores
+        ranking = np.argsort(list(scores_means.values()))
+        ranked_PIDs = [list(scores_means.keys())[r] for r in ranking]
 
-    ranked_mean_scores = [scores_means[r] for r in ranked_PIDs]
-    ranked_scores = [scores[r] for r in ranked_PIDs]
-    ranked_truths = [truths[r] for r in ranked_PIDs]
+        ranked_mean_scores = [scores_means[r] for r in ranked_PIDs]
+        ranked_scores = [scores[r] for r in ranked_PIDs]
+        ranked_truths = [truths[r] for r in ranked_PIDs]
+        return ranked_PIDs, ranked_truths, ranked_mean_scores, ranked_scores
 
-    # Write output to csv
-    if output_csv is not None:
-        print("Writing output scores to CSV.")
-        header = ['PatientID', 'TrueLabel', 'Probability']
-        for i in range(0, maxlen):
-            header.append('Score' + str(i+1))
+    # Gather ground truth for each pid
+    pid_truths = dict()
+    for y, p in zip(y_truths, PIDs_scores):
+        for k, v in zip(p, y):
+            pid_truths[k] = v
 
-        with open(output_csv, 'w') as csv_file:
-            writer = csv.writer(csv_file)
-            writer.writerow(header)
+    if len(label_type.split(',')) != 1:
+        # Multiclass
+        ranked_PIDs = dict()
+        ranked_truths = dict()
+        ranked_mean_scores = dict()
+        ranked_scores = dict()
+        total_scores = list()
+        means = list()
+        for lnum, label in enumerate(label_type.split(',')):
+            # Select only values for this label
+            y_truths_thislabel = np.asarray(y_truths)[:, :, lnum]
+            y_scores_thislabel = np.asarray(y_scores)[:, :, lnum]
 
-            for pid, truth, smean, scores in zip(ranked_PIDs, ranked_truths, ranked_mean_scores, ranked_scores):
-                towrite = [str(pid), str(truth), str(smean)]
-                for s in scores:
-                    towrite.append(str(s))
+            # Rank the patients and scores
+            ranked_PIDs_label, ranked_truths_label, ranked_mean_scores_label, ranked_scores_label =\
+                aggregate_scores(y_truths_thislabel, y_scores_thislabel, PIDs_scores)
 
-                writer.writerow(towrite)
+            ranked_PIDs[label] = ranked_PIDs_label
+            ranked_truths[label] = ranked_truths_label
+            ranked_mean_scores[label] = ranked_mean_scores_label
+            ranked_scores[label] = ranked_scores_label
+
+            means.append(f"Mean_{label}")
+            total_scores.extend([f"Score_{label}_{i}" for i in range(max([len(score) for score in ranked_scores_label]))])
+
+        # Write output to csv
+        unique_pids = list(set(flatten_object(PIDs_scores)))
+        # FIXME: bug in scores, so only give the means
+        if output_csv is not None:
+            print("Writing output scores to CSV.")
+            header = ['PatientID', 'TrueLabel', 'Predicted'] + means   #+ total_scores
+
+            with open(output_csv, 'w') as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerow(header)
+
+                for pid in unique_pids:
+                    pid_means = list()
+                    pid_truth = pid_truths[pid]
+                    pid_scores = list()
+                    for lnum, label in enumerate(label_type.split(',')):
+                        p_index = ranked_PIDs[label].index(pid)
+                        pid_means.append(ranked_mean_scores[label][p_index])
+                        pid_scores.extend(ranked_scores[label][p_index])
+
+                    towrite = [pid, str(pid_truth), np.argmax(pid_means)] + pid_means   #+ pid_scores
+                    writer.writerow(towrite)
+
+    else:
+        # Single Label
+        ranked_PIDs, ranked_truths, ranked_mean_scores, ranked_scores =\
+            aggregate_scores(y_truths, y_scores, PIDs_scores)
+
+        # Write output to csv
+        maxlen = max([len(score) for score in scores.values()])
+        if output_csv is not None:
+            print("Writing output scores to CSV.")
+            header = ['PatientID', 'TrueLabel', 'Probability']
+            for i in range(0, maxlen):
+                header.append('Score' + str(i+1))
+
+            with open(output_csv, 'w') as csv_file:
+                writer = csv.writer(csv_file)
+                writer.writerow(header)
+
+                for pid, truth, smean, scores in zip(ranked_PIDs, ranked_truths, ranked_mean_scores, ranked_scores):
+                    towrite = [str(pid), str(truth), str(smean)]
+                    for s in scores:
+                        towrite.append(str(s))
+
+                    writer.writerow(towrite)
 
     return ranked_mean_scores, ranked_truths, ranked_PIDs
 
@@ -380,7 +437,7 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
                                    ensemble=ensemble,
                                    output_csv=output_csv)
     elif scores == 'percentages':
-        if prediction[label_type].config['CrossValidation']['Type'] == 'LOO':
+        if prediction[prediction.keys()[0]].config['CrossValidation']['Type'] == 'LOO':
             print('Cannot rank percentages for LOO, returning dummies.')
             ranked_scores = ranked_truths = ranked_PIDs = []
             with open(output_csv, 'w') as csv_file:
@@ -398,35 +455,41 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
         raise WORCKeyError(message)
 
     if output_zip is not None or output_itk is not None:
-        # Rerank the scores split per ground truth class: negative for 0, positive for 1
-        ranked_scores_temp = list()
-        for l, p in zip(ranked_truths, ranked_scores):
-            if l == 0:
-                ranked_scores_temp.append(-p)
-            else:
-                ranked_scores_temp.append(p)
+        # FIXME: check for multilabel by checking type
+        if type(ranked_scores) == list():
+            # Rerank the scores split per ground truth class: negative for 0, positive for 1
+            ranked_scores_temp = list()
+            for l, p in zip(ranked_truths, ranked_scores):
+                if l == 0:
+                    ranked_scores_temp.append(-p)
+                else:
+                    ranked_scores_temp.append(p)
 
-        ranked_scores = ranked_scores_temp
-        ranking = np.argsort(ranked_scores)
-        ranked_scores = [ranked_scores[r] for r in ranking]
-        ranked_truths = [ranked_truths[r] for r in ranking]
-        ranked_PIDs = [ranked_PIDs[r] for r in ranking]
+            ranked_scores = ranked_scores_temp
+            ranking = np.argsort(ranked_scores)
+            ranked_scores = [ranked_scores[r] for r in ranking]
+            ranked_truths = [ranked_truths[r] for r in ranking]
+            ranked_PIDs = [ranked_PIDs[r] for r in ranking]
 
-        # Convert to lower to later on overcome matching errors
-        ranked_PIDs = [i.lower() for i in ranked_PIDs]
+            # Convert to lower to later on overcome matching errors
+            ranked_PIDs = [i.lower() for i in ranked_PIDs]
 
-        if images:
-            plot_ranked_images(pinfo=pinfo,
-                               label_type=label_type,
-                               images=images,
-                               segmentations=segmentations,
-                               ranked_truths=ranked_truths,
-                               ranked_scores=ranked_scores,
-                               ranked_PIDs=ranked_PIDs,
-                               output_zip=output_zip,
-                               output_itk=output_itk,
-                               scores=scores)
-
+            if images:
+                plot_ranked_images(pinfo=pinfo,
+                                   label_type=label_type,
+                                   images=images,
+                                   segmentations=segmentations,
+                                   ranked_truths=ranked_truths,
+                                   ranked_scores=ranked_scores,
+                                   ranked_PIDs=ranked_PIDs,
+                                   output_zip=output_zip,
+                                   output_itk=output_itk,
+                                   scores=scores)
+        else:
+            # Make dummy
+            if output_zip is not None:
+                zipfile.ZipFile(output_zip,
+                                'w', zipfile.ZIP_DEFLATED, allowZip64=True)
 
 def example():
     case = 'MESFIB'
@@ -528,6 +591,11 @@ def example():
                                ranked_PIDs=ranked_PIDs,
                                output_zip=output_zip,
                                scores=scores)
+        else:
+            # Make dummy
+            if output_zip is not None:
+                zipfile.ZipFile(output_zip,
+                                'w', zipfile.ZIP_DEFLATED, allowZip64=True)
 
 
 if __name__ == '__main__':

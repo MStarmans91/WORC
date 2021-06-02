@@ -611,6 +611,10 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
     if label_type is None:
         # Assume we want to have the first key
         label_type = prediction.keys()[0]
+    elif len(label_type.split(',')) != 1:
+        # Multiclass, just take the prediction label
+        label_type = prediction.keys()[0]
+
     N_1 = len(prediction[label_type].Y_train[0])
     N_2 = len(prediction[label_type].Y_test[0])
 

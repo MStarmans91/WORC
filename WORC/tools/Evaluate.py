@@ -25,7 +25,7 @@ import graphviz
 class Evaluate(object):
     """Build a network that evaluates the performance of an estimator."""
 
-    def __init__(self, label_type, modus='classification', ensemble=50,
+    def __init__(self, label_type, modus='binary_classification', ensemble=50,
                  scores='percentages',
                  parent=None, features=None,
                  fastr_plugin='LinearExecution',
@@ -67,7 +67,7 @@ class Evaluate(object):
     def create_network(self):
         """Add evaluate components to network."""
         # Create all nodes
-        if self.modus == 'classification':
+        if self.modus == 'binary_classification':
             self.node_ROC =\
                 self.network.create_node('worc/PlotROC:1.0', tool_version='1.0',
                                          id='plot_ROC',
@@ -92,7 +92,7 @@ class Evaluate(object):
                                      resources=ResourceLimit(memory='6G'),
                                      step_id='Evaluation')
 
-        if self.modus == 'classification':
+        if 'classification' in self.modus:
             self.node_STest =\
                 self.network.create_node('worc/StatisticalTestFeatures:1.0',
                                          tool_version='1.0',
@@ -129,7 +129,7 @@ class Evaluate(object):
                                      step_id='Evaluation')
 
         # Create sinks
-        if self.modus == 'classification':
+        if self.modus == 'binary_classification':
             self.sink_ROC_PNG =\
                 self.network.create_sink('PNGFile', id='ROC_PNG',
                                          step_id='general_sinks')
@@ -167,7 +167,7 @@ class Evaluate(object):
             self.network.create_sink('CSVFile', id='Hyperparameters_CSV',
                                      step_id='general_sinks')
 
-        if self.modus == 'classification':
+        if 'classification' in self.modus:
             self.sink_STest_CSV =\
                 self.network.create_sink('CSVFile',
                                          id='StatisticalTestFeatures_CSV',
@@ -208,7 +208,7 @@ class Evaluate(object):
                                      step_id='general_sinks')
 
         # Create links to sinks
-        if self.modus == 'classification':
+        if self.modus == 'binary_classification':
             self.sink_ROC_PNG.input = self.node_ROC.outputs['ROC_png']
             self.sink_ROC_Tex.input = self.node_ROC.outputs['ROC_tex']
             self.sink_ROC_CSV.input = self.node_ROC.outputs['ROC_csv']
@@ -225,7 +225,7 @@ class Evaluate(object):
 
         self.sink_Hyperparameters_CSV.input = self.node_Hyperparameters.outputs['output_csv']
 
-        if self.modus == 'classification':
+        if 'classification' in self.modus:
             self.sink_STest_CSV.input = self.node_STest.outputs['output_csv']
             self.sink_STest_PNG.input = self.node_STest.outputs['output_png']
             self.sink_STest_Tex.input = self.node_STest.outputs['output_tex']
@@ -292,7 +292,7 @@ class Evaluate(object):
     def create_links_Standalone(self):
         """Create links in network between nodes when using standalone."""
         # Sources from the Evaluate network are used
-        if self.modus == 'classification':
+        if self.modus == 'binary_classification':
             self.node_ROC.inputs['prediction'] = self.source_Estimator.output
             self.node_ROC.inputs['pinfo'] = self.source_PatientInfo.output
 
@@ -303,13 +303,13 @@ class Evaluate(object):
 
         self.node_Hyperparameters.inputs['prediction'] = self.source_Estimator.output
 
-        if self.modus == 'classification':
+        if 'classification' in self.modus:
             self.links_STest_Features = list()
             self.links_decomposition_Features = list()
 
         self.links_Boxplots_Features = list()
         for idx, label in enumerate(self.labels):
-            if self.modus == 'classification':
+            if 'classification' in self.modus:
                 self.links_STest_Features.append(self.node_STest.inputs['features'][str(label)] << self.source_Features[idx].output)
                 self.links_STest_Features[idx].collapse = 'features'
 
@@ -319,7 +319,7 @@ class Evaluate(object):
             self.links_Boxplots_Features.append(self.node_Boxplots_Features.inputs['features'][str(label)] << self.source_Features[idx].output)
             self.links_Boxplots_Features[idx].collapse = 'features'
 
-        if self.modus == 'classification':
+        if 'classification' in self.modus:
             self.node_STest.inputs['patientclass'] = self.source_PatientInfo.output
             self.node_STest.inputs['config'] = self.source_Config.output
 
@@ -333,7 +333,6 @@ class Evaluate(object):
             self.link_segmentations_perc = self.network.create_link(self.source_Segmentations.output, self.node_Ranked_Percentages.inputs['segmentations'])
             self.link_segmentations_perc.collapse = 'patients'
 
-
         self.node_Boxplots_Features.inputs['patientclass'] = self.source_PatientInfo.output
         self.node_Boxplots_Features.inputs['config'] = self.source_Config.output
 
@@ -344,10 +343,11 @@ class Evaluate(object):
         self.link_segmentations_post = self.network.create_link(self.source_Segmentations.output, self.node_Ranked_Posteriors.inputs['segmentations'])
         self.link_segmentations_post.collapse = 'patients'
 
-        if self.modus == 'classification':
+        if self.modus == 'binary_classification':
             self.node_ROC.inputs['ensemble'] = self.source_Ensemble.output
             self.node_ROC.inputs['label_type'] = self.source_LabelType.output
 
+        if 'classification' in self.modus:
             self.node_Ranked_Percentages.inputs['ensemble'] =\
                 self.source_Ensemble.output
             self.node_Ranked_Percentages.inputs['label_type'] =\
@@ -386,10 +386,11 @@ class Evaluate(object):
                 segmentations =\
                     self.parent.sources_segmentations_train[label].output
 
-        if self.modus == 'classification':
+        if self.modus == 'binary_classification':
             self.node_ROC.inputs['ensemble'] = self.parent.source_Ensemble.output
             self.node_ROC.inputs['label_type'] = self.parent.source_LabelType.output
 
+        if 'classification' in self.modus:
             self.node_Ranked_Percentages.inputs['ensemble'] =\
                 self.parent.source_Ensemble.output
             self.node_Ranked_Percentages.inputs['label_type'] =\
@@ -406,7 +407,7 @@ class Evaluate(object):
         self.node_Ranked_Posteriors.inputs['label_type'] =\
             self.parent.source_LabelType.output
 
-        if self.modus == 'classification':
+        if self.modus == 'binary_classification':
             self.node_ROC.inputs['prediction'] = prediction
             self.node_ROC.inputs['pinfo'] = pinfo
 
@@ -414,7 +415,7 @@ class Evaluate(object):
 
         self.node_Hyperparameters.inputs['prediction'] = prediction
 
-        if self.modus == 'classification':
+        if 'classification' in self.modus:
             self.links_STest_Features = dict()
 
         self.links_decomposition_Features = dict()
@@ -424,7 +425,7 @@ class Evaluate(object):
         if self.parent.configs[0]['General']['ComBat'] == 'True':
             name = 'ComBat'
             # Take features from ComBat
-            if self.modus == 'classification':
+            if 'classification' in self.modus:
                 self.links_STest_Features[name] =\
                     self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_STest.inputs['features'])
 
@@ -435,7 +436,7 @@ class Evaluate(object):
                 self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_Boxplots_Features.inputs['features'])
 
             # All features should be input at once
-            if self.modus == 'classification':
+            if 'classification' in self.modus:
                 self.links_STest_Features[name].collapse = 'ComBat'
 
             self.links_decomposition_Features[name].collapse = 'ComBat'
@@ -449,7 +450,7 @@ class Evaluate(object):
                         # Take features directly from feature computation toolboxes
                         for node in self.parent.featureconverter_train[label]:
                             name = node.id
-                            if self.modus == 'classification':
+                            if 'classification' in self.modus:
                                 self.links_STest_Features[name] =\
                                     self.node_STest.inputs['features'][name] << node.outputs['feat_out']
 
@@ -460,7 +461,7 @@ class Evaluate(object):
                                 self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
 
                             # All features should be input at once
-                            if self.modus == 'classification':
+                            if 'classification' in self.modus:
                                 self.links_STest_Features[name].collapse = 'train'
 
                             self.links_decomposition_Features[name].collapse = 'train'
@@ -469,7 +470,7 @@ class Evaluate(object):
                         # Feature are precomputed and given as sources
                         for node in self.parent.sources_features_train.values():
                             name = node.id
-                            if self.modus == 'classification':
+                            if 'classification' in self.modus:
                                 self.links_STest_Features[name] =\
                                     self.node_STest.inputs['features'][name] << node.output
 
@@ -479,7 +480,7 @@ class Evaluate(object):
                                 self.node_Boxplots_Features.inputs['features'][name] << node.output
 
                             # All features should be input at once
-                            if self.modus == 'classification':
+                            if 'classification' in self.modus:
                                 self.links_STest_Features[name].collapse = 'train'
 
                             self.links_decomposition_Features[name].collapse = 'train'
@@ -489,7 +490,7 @@ class Evaluate(object):
                     # Feature are precomputed and given as sources
                     for node in self.parent.sources_features_train.values():
                         name = node.id
-                        if self.modus == 'classification':
+                        if 'classification' in self.modus:
                             self.links_STest_Features[name] =\
                                 self.node_STest.inputs['features'][name] << node.output
                             self.links_decomposition_Features[name] =\
@@ -499,13 +500,13 @@ class Evaluate(object):
                             self.node_Boxplots_Features.inputs['features'][name] << node.output
 
                         # All features should be input at once
-                        if self.modus == 'classification':
+                        if 'classification' in self.modus:
                             self.links_STest_Features[name].collapse = 'train'
                             self.links_decomposition_Features[name].collapse = 'train'
 
                         self.links_Boxplots_Features[name].collapse = 'train'
 
-        if self.modus == 'classification':
+        if 'classification' in self.modus:
             self.node_STest.inputs['patientclass'] = pinfo
             self.node_STest.inputs['config'] = config
 
@@ -526,7 +527,7 @@ class Evaluate(object):
             segmentations =\
                 self.parent.sources_segmentations_test[label].output
 
-            if self.modus == 'classification':
+            if 'classification' in self.modus:
                 self.link_images_perc =\
                     self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
                 self.link_images_perc.collapse = 'test'
@@ -543,7 +544,7 @@ class Evaluate(object):
 
         elif hasattr(self.parent, 'sources_images_train'):
             if self.parent.sources_images_train:
-                if self.modus == 'classification':
+                if 'classification' in self.modus:
                     self.link_images_perc =\
                         self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
                     self.link_images_perc.collapse = 'train'
@@ -579,7 +580,7 @@ class Evaluate(object):
         else:
             self.sink_data = self.parent.sink_data
 
-        if self.modus == 'classification':
+        if self.modus == 'binary_classification':
             if 'ROC_PNG' not in sink_data.keys():
                 self.sink_data['ROC_PNG'] = ("vfs://output/{}/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
             if 'ROC_Tex' not in sink_data.keys():
@@ -604,7 +605,7 @@ class Evaluate(object):
         if 'Hyperparameters_CSV' not in sink_data.keys():
             self.sink_data['Hyperparameters_CSV'] = ("vfs://output/{}/Evaluation/Hyperparameters_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
-        if self.modus == 'classification':
+        if 'classification' in self.modus:
             if 'StatisticalTestFeatures_CSV' not in sink_data.keys():
                 self.sink_data['StatisticalTestFeatures_CSV'] = ("vfs://output/{}/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
