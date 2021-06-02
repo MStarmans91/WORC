@@ -26,3 +26,7 @@ class NoImagesFoundException(Exception):
 class NoSegmentationsFoundException(Exception):
     def __init__(self, path):
         super(NoSegmentationsFoundException, self).__init__(f'No segmentations found in directory {path}')
+
+class NoMasksFoundException(Exception):
+    def __init__(self, path):
+        super(NoMasksFoundException, self).__init__(f'No masks found in directory {path}')

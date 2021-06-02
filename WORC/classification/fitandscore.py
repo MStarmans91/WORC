@@ -432,6 +432,7 @@ def fit_and_score(X, y, scoring,
         X_test = scaler.transform(X_test)
 
     del para_estimator['FeatureScaling']
+    del para_estimator['FeatureScaling_skip_features']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -553,6 +554,11 @@ def fit_and_score(X, y, scoring,
                                                      random_state=random_seed)
         else:
             raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
+
+        if len(y_train.shape) >= 2:
+            # Multilabel or regression. Regression: second dimension has length 1
+            if y_train.shape[1] > 1 and model != 'RF':
+                raise ae.WORCValueError(f'Model {model} is not suitable for multiclass classification. Please use RF or do not use SelectFromModel.')
 
         # Prefit model
         selectestimator.fit(X_train, y_train)
@@ -968,6 +974,8 @@ def delete_cc_para(para):
                   'RFmin_samples_split',
                   'RFmax_depth',
                   'LRpenalty',
+                  'LR_l1_ratio',
+                  'LR_solver',
                   'LRC',
                   'LDA_solver',
                   'LDA_shrinkage',

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>tools Package &mdash; WORC 3.4.2 documentation</title>
+  <title>tools Package &mdash; WORC 3.4.3 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.4.2
+                3.4.3
               </div>
             
           
@@ -262,7 +262,7 @@ with a certain padding</p>
 <span id="evaluate-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Evaluate</span></code> Module<a class="headerlink" href="#module-WORC.tools.Evaluate" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WORC.tools.Evaluate.Evaluate">
-<em class="property">class </em><code class="descclassname">WORC.tools.Evaluate.</code><code class="descname">Evaluate</code><span class="sig-paren">(</span><em>label_type</em>, <em>modus='classification'</em>, <em>ensemble=50</em>, <em>scores='percentages'</em>, <em>parent=None</em>, <em>features=None</em>, <em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.tools.Evaluate.</code><code class="descname">Evaluate</code><span class="sig-paren">(</span><em>label_type</em>, <em>modus='binary_classification'</em>, <em>ensemble=50</em>, <em>scores='percentages'</em>, <em>parent=None</em>, <em>features=None</em>, <em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Build a network that evaluates the performance of an estimator.</p>
 <dl class="attribute">
@@ -272,7 +272,7 @@ with a certain padding</p>
 
 <dl class="method">
 <dt id="WORC.tools.Evaluate.Evaluate.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>label_type</em>, <em>modus='classification'</em>, <em>ensemble=50</em>, <em>scores='percentages'</em>, <em>parent=None</em>, <em>features=None</em>, <em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>label_type</em>, <em>modus='binary_classification'</em>, <em>ensemble=50</em>, <em>scores='percentages'</em>, <em>parent=None</em>, <em>features=None</em>, <em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize object.</p>
 <dl class="simple">
 <dt>network: fastr network, default None</dt><dd><p>If you input a network, the evaluate network is added

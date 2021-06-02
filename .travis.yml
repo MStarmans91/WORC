@@ -52,12 +52,17 @@ matrix:
         - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
         - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks performance --samples all
         - fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
-        # Change the tutorial script to also run a regression experiment,
-        # using the previously calculated features
+        # Also run a regression experiment, using the previously calculated features
         - rm -r /tmp/GS/DEBUG_0
         - python WORC/tests/WORCTutorialSimple_travis_regression.py
         - fastr trace /tmp/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks classification --samples all
         - fastr trace /tmp/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks performance --samples all
+        - fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
+        # Also run a multiclass experiment, using the previously calculated features
+        - rm -r /tmp/GS/DEBUG_0
+        - python WORC/tests/WORCTutorialSimple_travis_multiclass.py
+        - fastr trace /tmp/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks classification --samples all
+        - fastr trace /tmp/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks performance --samples all
         - fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
 notifications:
   slack:

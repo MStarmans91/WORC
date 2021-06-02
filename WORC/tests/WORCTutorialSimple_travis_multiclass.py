@@ -25,7 +25,7 @@ from WORC.exampledata.datadownloader import download_HeadAndNeck
 script_path = os.path.dirname(os.path.abspath(__file__))
 
 # Determine whether you would like to use WORC for classification or regression
-modus = 'regression'
+modus = 'multiclass_classification'
 
 
 def main():
@@ -82,18 +82,22 @@ def main():
     # Name of the label you want to predict
     if modus == 'classification':
         # Classification: predict a binary (0 or 1) label
-        label_name = 'imaginary_label_1'
+        label_name = ['imaginary_label_1']
 
     elif modus == 'regression':
         # Regression: predict a continuous label
-        label_name = 'Age'
+        label_name = ['Age']
+
+    elif modus == 'multiclass_classification':
+        # Multiclass classification: predict several mutually exclusive binaru labels together
+        label_name = ['imaginary_label_1', 'complement_label_1']
 
     # Determine whether we want to do a coarse quick experiment, or a full lengthy
     # one. Again, change this accordingly if you use your own data.
     coarse = True
 
     # Give your experiment a name
-    experiment_name = 'Example_STWStrategyHN_Regression'
+    experiment_name = 'Example_STWStrategyHN_Multiclass'
 
     # Instead of the default tempdir, let's but the temporary output in a subfolder
     # in the same folder as this script
@@ -126,13 +130,15 @@ def main():
 
     # Labels
     experiment.labels_from_this_file(label_file)
-    experiment.predict_labels([label_name])
+    experiment.predict_labels(label_name)
 
     # Use the standard workflow for binary classification
     if modus == 'classification':
         experiment.binary_classification(coarse=coarse)
     elif modus == 'regression':
         experiment.regression(coarse=coarse)
+    elif modus == 'multiclass_classification':
+        experiment.multiclass_classification(coarse=coarse)
 
     # Set the temporary directory
     experiment.set_tmpdir(tmpdir)

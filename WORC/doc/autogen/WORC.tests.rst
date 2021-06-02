@@ -1,6 +1,15 @@
 tests Package
 =============
 
+:mod:`WORCTutorialSimple_travis_multiclass` Module
+--------------------------------------------------
+
+.. automodule:: WORC.tests.WORCTutorialSimple_travis_multiclass
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`WORCTutorialSimple_travis_regression` Module
 --------------------------------------------------
 
