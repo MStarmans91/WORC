@@ -392,7 +392,7 @@ class SimpleWORC():
         """
         # validate
         if 'classification' in method:
-            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
+            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier']
         elif method == 'regression':
             valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR', 'XGBRegressor', 'AdaBoostRegressor', 'LinR', 'Ridge']
         else:
@@ -471,7 +471,7 @@ class SimpleWORC():
         if coarse and estimators is None:
             estimators = ['SVM']
         elif estimators is None:
-            estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
+            estimators = ['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB', 'AdaBoostClassifier', 'XGBClassifier']
 
         self._set_and_validate_estimators(estimators, scoring_method, 'binary_classification', coarse)
 
@@ -498,7 +498,7 @@ class SimpleWORC():
         if coarse and estimators is None:
             estimators = ['SVM']
         elif estimators is None:
-            estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
+            estimators = ['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB', 'AdaBoostClassifier', 'XGBClassifier']
 
         self._set_and_validate_estimators(estimators, scoring_method, 'multiclass_classification', coarse)
 

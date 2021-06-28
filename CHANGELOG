@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.4.4 - Unreleased
+------------------
+
+Changed
+~~~~~~~
+- Apply variance threshold selection before feature scaling, otherwise
+  variance is always the same for all features.
+- RELIEF, selection using a model, PCA, and univariate testing default
+  use changed from 0.20 to 0.275.
+
 3.4.3 - 2021-06-02
 ------------------
 

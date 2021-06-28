@@ -191,7 +191,7 @@ class ConfigBuilder():
                     'n_jobspercore': '10',
                     'n_splits': '2'
                     },
-                'Ensemble': {'Use': '1'}
+                'Ensemble': {'Use': '2'}
             }
 
             # Additionally, turn queue reporting system on
