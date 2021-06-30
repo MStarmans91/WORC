@@ -127,7 +127,7 @@ Alternatively, you can use default feature labels in ``WORC`` and still use
 the groupwise feature selection. This is relatively simple: for example,
 shape features are recognized by looking for ``"sf_"`` in the feature label
 name. To see which labels are exactly used, please see
-:py:mod:`WORC.featureprocessing.SelectGroups` and the SelectFeatGroup section in the
+:source:`WORC.featureprocessing.SelectGroups` and the SelectFeatGroup section in the
 :ref:`Config chapter <config-chapter>`.
 
 3. Tell ``WORC`` to use your feature and not compute the default ones
