@@ -80,7 +80,7 @@ def main():
     label_file = os.path.join(data_path, 'Examplefiles', 'pinfo_HN.csv')
 
     # Name of the label you want to predict
-    if modus == 'classification':
+    if modus == 'binary_classification':
         # Classification: predict a binary (0 or 1) label
         label_name = ['imaginary_label_1']
 
@@ -132,8 +132,8 @@ def main():
     experiment.labels_from_this_file(label_file)
     experiment.predict_labels(label_name)
 
-    # Use the standard workflow for binary classification
-    if modus == 'classification':
+    # Use the standard workflow for your specific modus
+    if modus == 'binary_classification':
         experiment.binary_classification(coarse=coarse)
     elif modus == 'regression':
         experiment.regression(coarse=coarse)
