@@ -24,6 +24,29 @@ class SelectGroups(BaseEstimator, SelectorMixin):
     '''
     Object to fit feature selection based on the type group the feature belongs
     to. The label for the feature is used for this procedure.
+
+    The following groups can be selected, and are detected through looking for
+    the following substrings in the feature label:
+        - histogram_features: hf_
+        - shape_features: sf_
+        - orientation_features: of_
+        - semantic_features: semf_
+        - dicom_features: df_
+        - coliage_features_ cf_
+        - phase_features: phasef_
+        - vessel_features: vf_
+        - texture_Gabor_features: Gabor
+        - texture_GLCM_features: GLCM_
+        - texture_GLCMMS_features: GLCMMS_
+        - texture_GLRLM_features: GLRLM_
+        - texture_GLSZM_features: GLSZM_
+        - texture_GLDZM_features: GLDZM_
+        - texture_NGTDM_features: NGTDM_
+        - texture_NGLDM_features: NGLDM_
+        - texture_LBP_features: LBP_
+        - fractal_features: fracf_
+        - location_features: locf_
+        - RGRD_features: rgrdf_
     '''
     def __init__(self, parameters, toolboxes=['PREDICT']):
         '''
