@@ -53,17 +53,24 @@ def extract_boundary(contour, radius=2):
 def slicer(image, mask=None, output_name=None, output_name_zoom=None,
            thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False,
            expand=False, boundary=False, square=False, flip=True,
-           alpha=0.40, index=None, color='cyan'):
+           alpha=0.40, axis='axial', index=None, color='cyan'):
     """Plot slice of image where mask is largest, with mask as overlay.
 
     image and mask should both be arrays
     """
     # Determine figure size by spacing
-    spacing = float(image.GetSpacing()[0])
-    imsize = [float(image.GetSize()[0]), float(image.GetSize()[1])]
-    figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
+    spacing = [float(image.GetSpacing()[0]), float(image.GetSpacing()[1]), float(image.GetSpacing()[2])]
+    imsize = [float(image.GetSize()[0]), float(image.GetSize()[1]), float(image.GetSize()[2])]
+
+    if axis == 'axial':
+        figsize = (imsize[0]*spacing[0]/100.0, imsize[1]*spacing[1]/100.0)
+    elif axis == 'coronal':
+        figsize = (imsize[0]*spacing[0]/100.0, imsize[2]*spacing[2]/100.0)
+    elif axis == 'transversal':
+        figsize = (imsize[1]*spacing[1]/100.0, imsize[2]*spacing[2]/100.0)
 
     # Convert images to numpy arrays
+    figsize = (30, 1)
     image = sitk.GetArrayFromImage(image)
     if mask is not None:
         mask = sitk.GetArrayFromImage(mask)
@@ -76,14 +83,40 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
         # Determine which axial slice has the largest area
         if index is None:
             if mask is not None:
-                areas = np.sum(mask, axis=1).tolist()
+                if axis == 'axial':
+                    areas = np.sum(mask, axis=2).tolist()
+                elif axis == 'coronal':
+                    areas = np.sum(mask, axis=1).tolist()
+                elif axis == 'transversal':
+                    areas = np.sum(mask, axis=0).tolist()
+
                 index = areas.index(max(areas))
             else:
-                index = int(image.shape[0]/2)
+                if axis == 'axial':
+                    index = int(image.shape[2]/2)
+                elif axis == 'coronal':
+                    index = int(image.shape[1]/2)
+                elif axis == 'transversal':
+                    index = int(image.shape[0]/2)
 
-        imslice = image[index, :, :]
+        if axis == 'axial':
+            imslice = image[index, :, :]
+        elif axis == 'coronal':
+            imslice = image[:, index, :]
+        elif axis == 'transversal':
+            imslice = image[:, :, index]
+        else:
+            raise ValueError(f'{axis} is not a valid value for the axis, should be axial, coronal, or transversal.')
+
         if mask is not None:
-            maskslice = mask[index, :, :]
+            if axis == 'axial':
+                maskslice = mask[index, :, :]
+            elif axis == 'coronal':
+                maskslice = mask[:, index, :]
+            elif axis == 'transversal':
+                maskslice = mask[:, :, index]
+            else:
+                raise ValueError(f'{axis} is not a valid value for the axis, should be axial, coronal, or transversal.')
         else:
             maskslice = None
 
@@ -142,9 +175,12 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
             maskslice = sitk.Expand(maskslice, newsize)
 
         # Adjust the size
-        spacing = float(imslice.GetSpacing()[0])
-        imsize = [float(imslice.GetSize()[0]), float(imslice.GetSize()[1])]
-        figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
+        if axis == 'axial':
+            figsize = (imsize[0]*spacing[0]/100.0, imsize[1]*spacing[1]/100.0)
+        elif axis == 'coronal':
+            figsize = (imsize[0]*spacing[0]/100.0, imsize[2]*spacing[2]/100.0)
+        elif axis == 'transversal':
+            figsize = (imsize[1]*spacing[1]/100.0, imsize[2]*spacing[2]/100.0)
 
         imslice = sitk.GetArrayFromImage(imslice)
         if mask is not None:
@@ -205,6 +241,10 @@ def plot_im_and_overlay(image, mask=None, figsize=(3, 3), alpha=0.40,
     ax.imshow(image, cmap=plt.cm.gray, norm=norm_im, interpolation="bilinear")
     if mask is not None:
         ax.imshow(mask, cmap=cmap, norm=normO, alpha=alpha, interpolation="bilinear")
+
+    # Alter aspect ratio according to figure size
+    aspect = figsize[0]/figsize[1]
+    ax.set_aspect(aspect)
 
     # Set locator to zero to make sure padding is removed upon saving
     ax.xaxis.set_major_locator(NullLocator())
