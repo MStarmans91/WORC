@@ -181,7 +181,7 @@ After defining the inputs, the following code can be used to run your first expe
     experiment.segmentations_from_this_directory(imagedatadir,
                                         segmentation_file_name=segmentation_file_name)
     experiment.labels_from_this_file(label_file)
-    experiment.predict_labels([label_name])
+    experiment.predict_labels(label_name)
 
     # Use the standard workflow for your specific modus
     if modus == 'binary_classification':

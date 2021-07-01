@@ -366,6 +366,9 @@ class SimpleWORC():
             raise TypeError(f'label_names is of type {type(label_names)} while list is expected')
 
         for label in label_names:
+            if not isinstance(label, str):
+                raise TypeError(f'label {label} is of type {type(label)} while str is expected')
+
             if len(label.strip()) == 0:
                 raise ValueError('Invalid label, length = 0')
 

@@ -80,13 +80,17 @@ def main():
     label_file = os.path.join(data_path, 'Examplefiles', 'pinfo_HN.csv')
 
     # Name of the label you want to predict
-    if modus == 'classification':
+    if modus == 'binary_classification':
         # Classification: predict a binary (0 or 1) label
-        label_name = 'imaginary_label_1'
+        label_name = ['imaginary_label_1']
 
     elif modus == 'regression':
         # Regression: predict a continuous label
-        label_name = 'Age'
+        label_name = ['Age']
+
+    elif modus == 'multiclass_classification':
+        # Multiclass classification: predict several mutually exclusive binaru labels together
+        label_name = ['imaginary_label_1', 'complement_label_1']
 
     # Determine whether we want to do a coarse quick experiment, or a full lengthy
     # one. Again, change this accordingly if you use your own data.
@@ -126,7 +130,7 @@ def main():
 
     # Labels
     experiment.labels_from_this_file(label_file)
-    experiment.predict_labels([label_name])
+    experiment.predict_labels(label_name)
 
     # Use the standard workflow for binary classification
     if modus == 'classification':
