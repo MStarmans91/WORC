@@ -52,7 +52,7 @@ def extract_boundary(contour, radius=2):
 
 def slicer(image, mask=None, output_name=None, output_name_zoom=None,
            thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False,
-           expand=False, boundary=False, square=False, flip=True,
+           expand=False, boundary=False, square=False, flip=True, rot90=0,
            alpha=0.40, axis='axial', index=None, color='cyan'):
     """Plot slice of image where mask is largest, with mask as overlay.
 
@@ -120,7 +120,12 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
         else:
             maskslice = None
 
-    # Rotate, as this is not done automatically
+    if rot90 != 0:
+        print(f'\t Rotating {rot90 * 90} degrees.')
+        imslice = np.rot90(imslice, rot90)
+        if mask is not None:
+            maskslice = np.rot90(maskslice, rot90)
+
     if flip:
         print('\t Flipping up-down.')
         imslice = np.flipud(imslice)

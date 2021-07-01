@@ -4,6 +4,7 @@ Quick start guide
 =================
 
 This manual will show users how to install WORC, configure WORC and construct and run a simple experiment.
+It's exactly the same as the `WORC Tutorial <https://github.com/MStarmans91/WORCTutorial>`_.
 
 .. _installation-chapter:
 
@@ -11,7 +12,6 @@ Installation
 ------------
 
 You can install WORC either using pip, or from the source code. We strongly advice you to install ``WORC`` in a `virtualenv <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_.
-
 
 
 **Installing via pip**
@@ -250,6 +250,9 @@ Tips and Tricks
 For tips and tricks on running a full experiment instead of this simple
 example, adding more evaluation options, debugging a crashed network etcetera,
 please go to :ref:`User Manual <usermanual-chapter>` chapter.
+We advice you to look at the docstrings of the SimpleWORC functions
+introduced in this tutorial, and explore the other SimpleWORC functions,
+s SimpleWORC offers much more functionality than presented here.
 
 Some things we would advice to always do:
 

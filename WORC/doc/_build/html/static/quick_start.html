@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quick start guide &mdash; WORC 3.4.3 documentation</title>
+  <title>Quick start guide &mdash; WORC 3.4.4 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.4.3
+                3.4.4
               </div>
             
           
@@ -179,8 +179,9 @@
            <div itemprop="articleBody">
             
   <div class="section" id="quick-start-guide">
-<h1>Quick start guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
-<p>This manual will show users how to install WORC, configure WORC and construct and run a simple experiment.</p>
+<span id="quickstart-chapter"></span><h1>Quick start guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
+<p>This manual will show users how to install WORC, configure WORC and construct and run a simple experiment.
+It’s exactly the same as the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial">WORC Tutorial</a>.</p>
 <div class="section" id="installation">
 <span id="installation-chapter"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>You can install WORC either using pip, or from the source code. We strongly advice you to install <code class="docutils literal notranslate"><span class="pre">WORC</span></code> in a <a class="reference external" href="http://docs.python-guide.org/en/latest/dev/virtualenvs/">virtualenv</a>.</p>
@@ -241,8 +242,9 @@ which is slightly more advanced, and the <code class="docutils literal notransla
 <span class="c1"># Define the folder this script is in, so we can easily find the example data</span>
 <span class="n">script_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 
-<span class="c1"># Determine whether you would like to use WORC for classification or regression</span>
-<span class="n">modus</span> <span class="o">=</span> <span class="s1">&#39;classification&#39;</span>
+<span class="c1"># Determine whether you would like to use WORC for binary_classification,</span>
+<span class="c1"># multiclass_classification or regression</span>
+<span class="n">modus</span> <span class="o">=</span> <span class="s1">&#39;binary_classification&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -306,13 +308,17 @@ a subset of 20 patients in this folder. You can change this settings if you like
 <span class="n">label_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;Examplefiles&#39;</span><span class="p">,</span> <span class="s1">&#39;pinfo_HN.csv&#39;</span><span class="p">)</span>
 
 <span class="c1"># Name of the label you want to predict</span>
-<span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
     <span class="c1"># Classification: predict a binary (0 or 1) label</span>
-    <span class="n">label_name</span> <span class="o">=</span> <span class="s1">&#39;imaginary_label_1&#39;</span>
+    <span class="n">label_name</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;imaginary_label_1&#39;</span><span class="p">]</span>
 
 <span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span><span class="p">:</span>
     <span class="c1"># Regression: predict a continuous label</span>
-    <span class="n">label_name</span> <span class="o">=</span> <span class="s1">&#39;Age&#39;</span>
+    <span class="n">label_name</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span>
+
+<span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;multiclass_classification&#39;</span><span class="p">:</span>
+    <span class="c1"># Multiclass classification: predict several mutually exclusive binaru labels together</span>
+    <span class="n">label_name</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;imaginary_label_1&#39;</span><span class="p">,</span> <span class="s1">&#39;complement_label_1&#39;</span><span class="p">]</span>
 
 <span class="c1"># Determine whether we want to do a coarse quick experiment, or a full lengthy</span>
 <span class="c1"># one. Again, change this accordingly if you use your own data.</span>
@@ -341,11 +347,13 @@ a subset of 20 patients in this folder. You can change this settings if you like
 <span class="n">experiment</span><span class="o">.</span><span class="n">labels_from_this_file</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">predict_labels</span><span class="p">([</span><span class="n">label_name</span><span class="p">])</span>
 
-<span class="c1"># Use the standard workflow for binary classification or regression</span>
-<span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span class="p">:</span>
+<span class="c1"># Use the standard workflow for your specific modus</span>
+<span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
     <span class="n">experiment</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
 <span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span><span class="p">:</span>
     <span class="n">experiment</span><span class="o">.</span><span class="n">regression</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;multiclass_classification&#39;</span><span class="p">:</span>
+    <span class="n">experiment</span><span class="o">.</span><span class="n">multiclass_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
 
 <span class="c1"># Set the temporary directory</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">set_tmpdir</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span>
@@ -408,7 +416,10 @@ named after your experiment name.</p>
 <h3>Tips and Tricks<a class="headerlink" href="#tips-and-tricks" title="Permalink to this headline">¶</a></h3>
 <p>For tips and tricks on running a full experiment instead of this simple
 example, adding more evaluation options, debugging a crashed network etcetera,
-please go to <span class="xref std std-ref">User Manual</span> chapter.</p>
+please go to <span class="xref std std-ref">User Manual</span> chapter.
+We advice you to look at the docstrings of the SimpleWORC functions
+introduced in this tutorial, and explore the other SimpleWORC functions,
+s SimpleWORC offers much more functionality than presented here.</p>
 <p>Some things we would advice to always do:</p>
 <ul class="simple">
 <li><p>Run actual experiments on the full settings (coarse=False):</p></li>
