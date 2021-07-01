@@ -325,8 +325,8 @@ def create_param_grid(config):
                          scale=config['AdaBoost_n_estimators'][1])
 
     param_grid['AdaBoost_learning_rate'] =\
-        scipy.stats.uniform(loc=config['AdaBoost_learning_rate'][0],
-                            scale=config['AdaBoost_learning_rate'][1])
+        log_uniform(loc=config['AdaBoost_learning_rate'][0],
+                    scale=config['AdaBoost_learning_rate'][1])
 
     # XGDBoost parameters
     param_grid['XGB_boosting_rounds'] =\
@@ -338,8 +338,8 @@ def create_param_grid(config):
                          scale=config['XGB_max_depth'][1])
 
     param_grid['XGB_learning_rate'] =\
-        scipy.stats.uniform(loc=config['XGB_learning_rate'][0],
-                            scale=config['XGB_learning_rate'][1])
+        log_uniform(loc=config['XGB_learning_rate'][0],
+                    scale=config['XGB_learning_rate'][1])
 
     param_grid['XGB_gamma'] =\
         scipy.stats.uniform(loc=config['XGB_gamma'][0],

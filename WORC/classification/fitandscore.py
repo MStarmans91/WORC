@@ -199,6 +199,7 @@ def fit_and_score(X, y, scoring,
         print("\n")
         print('#######################################')
         print('Starting fit and score of new workflow.')
+
     para_estimator = parameters.copy()
     estimator = cc.construct_classifier(para_estimator)
 
@@ -406,38 +407,6 @@ def fit_and_score(X, y, scoring,
         else:
             return ret
 
-    # ------------------------------------------------------------------------
-    # Feature scaling
-    if verbose and para_estimator['FeatureScaling'] != 'None':
-        print(f'Fitting scaler and transforming features, method ' +
-              f'{para_estimator["FeatureScaling"]}.')
-
-    scaling_method = para_estimator['FeatureScaling']
-    if scaling_method == 'None':
-        scaler = None
-    else:
-        skip_features = para_estimator['FeatureScaling_skip_features']
-        n_skip_feat = len([i for i in feature_labels[0] if any(e in i for e in skip_features)])
-        if n_skip_feat == len(X_train[0]):
-            # Don't need to scale any features
-            if verbose:
-                print('[WORC Warning] Skipping scaling, only skip features selected.')
-            scaler = None
-        else:
-            scaler = WORCScaler(method=scaling_method, skip_features=skip_features)
-            scaler.fit(X_train, feature_labels[0])
-
-    if scaler is not None:
-        X_train = scaler.transform(X_train)
-        X_test = scaler.transform(X_test)
-
-    del para_estimator['FeatureScaling']
-    del para_estimator['FeatureScaling_skip_features']
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del scaler
-
     # --------------------------------------------------------------------
     # Feature selection based on variance
     if para_estimator['Featsel_Variance'] == 'True':
@@ -473,6 +442,39 @@ def fit_and_score(X, y, scoring,
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
+
+    # ------------------------------------------------------------------------
+    # Feature scaling
+    if verbose and para_estimator['FeatureScaling'] != 'None':
+        print(f'Fitting scaler and transforming features, method ' +
+              f'{para_estimator["FeatureScaling"]}.')
+
+    scaling_method = para_estimator['FeatureScaling']
+    if scaling_method == 'None':
+        scaler = None
+    else:
+        skip_features = para_estimator['FeatureScaling_skip_features']
+        n_skip_feat = len([i for i in feature_labels[0] if any(e in i for e in skip_features)])
+        if n_skip_feat == len(X_train[0]):
+            # Don't need to scale any features
+            if verbose:
+                print('[WORC Warning] Skipping scaling, only skip features selected.')
+            scaler = None
+        else:
+            scaler = WORCScaler(method=scaling_method, skip_features=skip_features)
+            scaler.fit(X_train, feature_labels[0])
+
+    if scaler is not None:
+        X_train = scaler.transform(X_train)
+        X_test = scaler.transform(X_test)
+
+    del para_estimator['FeatureScaling']
+    del para_estimator['FeatureScaling_skip_features']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del scaler
+
 
     # --------------------------------------------------------------------
     # Relief feature selection, possibly multi classself.

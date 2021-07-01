@@ -6,6 +6,27 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.4.4 - 2021-07-01
+------------------
+
+Fixed
+~~~~~
+- Bug where most recent added estimators were not valid in SimpleWORC.
+- SelectorMixin is now imported directly from sklearn.feature_selection,
+  as sklearn.feature_selection.base is deprecated and will be removed.
+
+Changed
+~~~~~~~
+- Apply variance threshold selection before feature scaling, otherwise
+  variance is always the same for all features.
+- RELIEF, selection using a model, PCA, and univariate testing default
+  use changed from 0.20 to 0.275.
+
+Added
+~~~~~~~
+- Functionality in plotting images functions.
+- Documentation on how to use your own features.
+
 3.4.3 - 2021-06-02
 ------------------
 

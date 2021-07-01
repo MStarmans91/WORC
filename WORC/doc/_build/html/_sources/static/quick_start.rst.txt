@@ -1,7 +1,10 @@
+.. _quickstart-chapter:
+
 Quick start guide
 =================
 
 This manual will show users how to install WORC, configure WORC and construct and run a simple experiment.
+It's exactly the same as the `WORC Tutorial <https://github.com/MStarmans91/WORCTutorial>`_.
 
 .. _installation-chapter:
 
@@ -9,7 +12,6 @@ Installation
 ------------
 
 You can install WORC either using pip, or from the source code. We strongly advice you to install ``WORC`` in a `virtualenv <http://docs.python-guide.org/en/latest/dev/virtualenvs/>`_.
-
 
 
 **Installing via pip**
@@ -89,8 +91,9 @@ First, import WORC and some additional python packages.
     # Define the folder this script is in, so we can easily find the example data
     script_path = os.path.dirname(os.path.abspath(__file__))
 
-    # Determine whether you would like to use WORC for classification or regression
-    modus = 'classification'
+    # Determine whether you would like to use WORC for binary_classification,
+    # multiclass_classification or regression
+    modus = 'binary_classification'
 
 Input
 `````
@@ -139,13 +142,17 @@ Identify our data structure: change the fields below accordingly if you use your
     label_file = os.path.join(data_path, 'Examplefiles', 'pinfo_HN.csv')
 
     # Name of the label you want to predict
-    if modus == 'classification':
+    if modus == 'binary_classification':
         # Classification: predict a binary (0 or 1) label
-        label_name = 'imaginary_label_1'
+        label_name = ['imaginary_label_1']
 
     elif modus == 'regression':
         # Regression: predict a continuous label
-        label_name = 'Age'
+        label_name = ['Age']
+
+    elif modus == 'multiclass_classification':
+        # Multiclass classification: predict several mutually exclusive binaru labels together
+        label_name = ['imaginary_label_1', 'complement_label_1']
 
     # Determine whether we want to do a coarse quick experiment, or a full lengthy
     # one. Again, change this accordingly if you use your own data.
@@ -174,13 +181,15 @@ After defining the inputs, the following code can be used to run your first expe
     experiment.segmentations_from_this_directory(imagedatadir,
                                         segmentation_file_name=segmentation_file_name)
     experiment.labels_from_this_file(label_file)
-    experiment.predict_labels([label_name])
+    experiment.predict_labels(label_name)
 
-    # Use the standard workflow for binary classification or regression
-    if modus == 'classification':
+    # Use the standard workflow for your specific modus
+    if modus == 'binary_classification':
         experiment.binary_classification(coarse=coarse)
     elif modus == 'regression':
         experiment.regression(coarse=coarse)
+    elif modus == 'multiclass_classification':
+        experiment.multiclass_classification(coarse=coarse)
 
     # Set the temporary directory
     experiment.set_tmpdir(tmpdir)
@@ -241,6 +250,9 @@ Tips and Tricks
 For tips and tricks on running a full experiment instead of this simple
 example, adding more evaluation options, debugging a crashed network etcetera,
 please go to :ref:`User Manual <usermanual-chapter>` chapter.
+We advice you to look at the docstrings of the SimpleWORC functions
+introduced in this tutorial, and explore the other SimpleWORC functions,
+s SimpleWORC offers much more functionality than presented here.
 
 Some things we would advice to always do:
 

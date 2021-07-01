@@ -366,6 +366,9 @@ class SimpleWORC():
             raise TypeError(f'label_names is of type {type(label_names)} while list is expected')
 
         for label in label_names:
+            if not isinstance(label, str):
+                raise TypeError(f'label {label} is of type {type(label)} while str is expected')
+
             if len(label.strip()) == 0:
                 raise ValueError('Invalid label, length = 0')
 
@@ -392,7 +395,7 @@ class SimpleWORC():
         """
         # validate
         if 'classification' in method:
-            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
+            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier']
         elif method == 'regression':
             valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR', 'XGBRegressor', 'AdaBoostRegressor', 'LinR', 'Ridge']
         else:
@@ -471,7 +474,7 @@ class SimpleWORC():
         if coarse and estimators is None:
             estimators = ['SVM']
         elif estimators is None:
-            estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
+            estimators = ['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB', 'AdaBoostClassifier', 'XGBClassifier']
 
         self._set_and_validate_estimators(estimators, scoring_method, 'binary_classification', coarse)
 
@@ -498,7 +501,7 @@ class SimpleWORC():
         if coarse and estimators is None:
             estimators = ['SVM']
         elif estimators is None:
-            estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'RankedSVM']
+            estimators = ['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB', 'AdaBoostClassifier', 'XGBClassifier']
 
         self._set_and_validate_estimators(estimators, scoring_method, 'multiclass_classification', coarse)
 

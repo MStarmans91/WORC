@@ -17,7 +17,7 @@
 
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.base import BaseEstimator
-from sklearn.feature_selection.base import SelectorMixin
+from sklearn.feature_selection import SelectorMixin
 import numpy as np
 import WORC.addexceptions as ae
 

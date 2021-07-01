@@ -355,16 +355,16 @@ class WORC(object):
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = '1.0'
         config['Featsel']['GroupwiseSearch'] = 'True'
-        config['Featsel']['SelectFromModel'] = '0.2'
+        config['Featsel']['SelectFromModel'] = '0.275'
         config['Featsel']['SelectFromModel_estimator'] = 'Lasso, LR, RF'
         config['Featsel']['SelectFromModel_lasso_alpha'] = '0.1, 1.4'
         config['Featsel']['SelectFromModel_n_trees'] = '10, 90'
-        config['Featsel']['UsePCA'] = '0.2'
+        config['Featsel']['UsePCA'] = '0.275'
         config['Featsel']['PCAType'] = '95variance, 10, 50, 100'
-        config['Featsel']['StatisticalTestUse'] = '0.2'
+        config['Featsel']['StatisticalTestUse'] = '0.275'
         config['Featsel']['StatisticalTestMetric'] = 'MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '-3, 2.5'
-        config['Featsel']['ReliefUse'] = '0.2'
+        config['Featsel']['ReliefUse'] = '0.275'
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '0.75, 0.2'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
@@ -450,10 +450,11 @@ class WORC(object):
 
         # Based on https://towardsdatascience.com/doing-xgboost-hyper-parameter-tuning-the-smart-way-part-1-of-2-f6d255a45dde
         # and https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/
+        # and https://medium.com/data-design/xgboost-hi-im-gamma-what-can-i-do-for-you-and-the-tuning-of-regularization-a42ea17e6ab6
         config['Classification']['XGB_boosting_rounds'] = config['Classification']['RFn_estimators']
         config['Classification']['XGB_max_depth'] = '3, 12'
         config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
-        config['Classification']['XGB_gamma'] = '0.01, 0.99'
+        config['Classification']['XGB_gamma'] = '0.01, 9.99'
         config['Classification']['XGB_min_child_weight'] = '1, 6'
         config['Classification']['XGB_colsample_bytree'] = '0.3, 0.7'
 

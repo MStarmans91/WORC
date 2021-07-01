@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>featureprocessing Package &mdash; WORC 3.4.3 documentation</title>
+  <title>featureprocessing Package &mdash; WORC 3.4.4 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.4.3
+                3.4.4
               </div>
             
           
@@ -772,6 +772,32 @@ this feature is excluded.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.feature_selection._base.SelectorMixin</span></code></p>
 <p>Object to fit feature selection based on the type group the feature belongs
 to. The label for the feature is used for this procedure.</p>
+<p>The following groups can be selected, and are detected through looking for
+the following substrings in the feature label:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>histogram_features: <a href="#id2"><span class="problematic" id="id3">hf_</span></a></p></li>
+<li><p>shape_features: <a href="#id4"><span class="problematic" id="id5">sf_</span></a></p></li>
+<li><p>orientation_features: <a href="#id6"><span class="problematic" id="id7">of_</span></a></p></li>
+<li><p>semantic_features: <a href="#id8"><span class="problematic" id="id9">semf_</span></a></p></li>
+<li><p>dicom_features: <a href="#id10"><span class="problematic" id="id11">df_</span></a></p></li>
+<li><p><a href="#id12"><span class="problematic" id="id13">coliage_features_</span></a> <a href="#id14"><span class="problematic" id="id15">cf_</span></a></p></li>
+<li><p>phase_features: <a href="#id16"><span class="problematic" id="id17">phasef_</span></a></p></li>
+<li><p>vessel_features: <a href="#id18"><span class="problematic" id="id19">vf_</span></a></p></li>
+<li><p>texture_Gabor_features: Gabor</p></li>
+<li><p>texture_GLCM_features: <a href="#id20"><span class="problematic" id="id21">GLCM_</span></a></p></li>
+<li><p>texture_GLCMMS_features: <a href="#id22"><span class="problematic" id="id23">GLCMMS_</span></a></p></li>
+<li><p>texture_GLRLM_features: <a href="#id24"><span class="problematic" id="id25">GLRLM_</span></a></p></li>
+<li><p>texture_GLSZM_features: <a href="#id26"><span class="problematic" id="id27">GLSZM_</span></a></p></li>
+<li><p>texture_GLDZM_features: <a href="#id28"><span class="problematic" id="id29">GLDZM_</span></a></p></li>
+<li><p>texture_NGTDM_features: <a href="#id30"><span class="problematic" id="id31">NGTDM_</span></a></p></li>
+<li><p>texture_NGLDM_features: <a href="#id32"><span class="problematic" id="id33">NGLDM_</span></a></p></li>
+<li><p>texture_LBP_features: <a href="#id34"><span class="problematic" id="id35">LBP_</span></a></p></li>
+<li><p>fractal_features: <a href="#id36"><span class="problematic" id="id37">fracf_</span></a></p></li>
+<li><p>location_features: <a href="#id38"><span class="problematic" id="id39">locf_</span></a></p></li>
+<li><p>RGRD_features: <a href="#id40"><span class="problematic" id="id41">rgrdf_</span></a></p></li>
+</ul>
+</div></blockquote>
 <dl class="attribute">
 <dt id="WORC.featureprocessing.SelectGroups.SelectGroups.__abstractmethods__">
 <code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.featureprocessing.SelectGroups.SelectGroups.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
