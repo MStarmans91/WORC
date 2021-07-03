@@ -16,6 +16,7 @@ import pandas as pd
 import json
 import fastr
 import glob
+import shutil
 
 # If you don't want to use your own data, we use the following example set,
 # see also the next code block in this example.
@@ -103,6 +104,16 @@ def main():
     # in the same folder as this script
     tmpdir = os.path.join(script_path, 'WORC_' + experiment_name)
 
+    # Remove temp and output folders
+    outputfolder = fastr.config.mounts['output']
+    experiment_folder = os.path.join(outputfolder, 'WORC_' + experiment_name)
+
+    if os.path.exists(tmpdir):
+        shutil.rmtree(tmpdir)
+
+    if os.path.exists(experiment_folder):
+        shutil.rmtree(experiment_folder)
+
     # ---------------------------------------------------------------------------
     # The actual experiment
     # ---------------------------------------------------------------------------
@@ -118,7 +129,6 @@ def main():
 
     # Use features from classification to be quicker
     # Locate output folder
-    outputfolder = fastr.config.mounts['output']
     classification_experiment_folder =\
         os.path.join(outputfolder, 'WORC_Example_STWStrategyHN')
 
@@ -169,7 +179,6 @@ def main():
     # named after your experiment name.
 
     # Read the overall peformance
-    experiment_folder = os.path.join(outputfolder, 'WORC_' + experiment_name)
     performance_file = os.path.join(experiment_folder, 'performance_all_0.json')
     if not os.path.exists(performance_file):
         raise ValueError('No performance file found: your network has failed.')

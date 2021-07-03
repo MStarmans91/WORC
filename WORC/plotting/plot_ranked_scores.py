@@ -463,24 +463,25 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
     if output_zip is not None or output_itk is not None:
         # FIXME: check for multilabel by checking type
         if isinstance(ranked_scores, list):
-            # Rerank the scores split per ground truth class: negative for 0, positive for 1
-            ranked_scores_temp = list()
-            for l, p in zip(ranked_truths, ranked_scores):
-                if l == 0:
-                    ranked_scores_temp.append(-p)
-                else:
-                    ranked_scores_temp.append(p)
-
-            ranked_scores = ranked_scores_temp
-            ranking = np.argsort(ranked_scores)
-            ranked_scores = [ranked_scores[r] for r in ranking]
-            ranked_truths = [ranked_truths[r] for r in ranking]
-            ranked_PIDs = [ranked_PIDs[r] for r in ranking]
-
-            # Convert to lower to later on overcome matching errors
-            ranked_PIDs = [i.lower() for i in ranked_PIDs]
-
             if images:
+                # Rerank the scores split per ground truth class: negative for 0, positive for 1
+                ranked_scores_temp = list()
+                for l, p in zip(ranked_truths, ranked_scores):
+                    if l == 0:
+                        ranked_scores_temp.append(-p)
+                    else:
+                        ranked_scores_temp.append(p)
+
+                ranked_scores = ranked_scores_temp
+                ranking = np.argsort(ranked_scores)
+                ranked_scores = [ranked_scores[r] for r in ranking]
+                ranked_truths = [ranked_truths[r] for r in ranking]
+                ranked_PIDs = [ranked_PIDs[r] for r in ranking]
+
+                # Convert to lower to later on overcome matching errors
+                ranked_PIDs = [i.lower() for i in ranked_PIDs]
+
+                # Plot the ranked images
                 plot_ranked_images(pinfo=pinfo,
                                    label_type=label_type,
                                    images=images,
@@ -491,6 +492,13 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
                                    output_zip=output_zip,
                                    output_itk=output_itk,
                                    scores=scores)
+
+            else:
+                # Make dummy
+                if output_zip is not None:
+                    zipfile.ZipFile(output_zip,
+                                    'w', zipfile.ZIP_DEFLATED, allowZip64=True)
+
         else:
             # Make dummy
             if output_zip is not None:
