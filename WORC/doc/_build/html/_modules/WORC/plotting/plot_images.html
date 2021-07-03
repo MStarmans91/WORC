@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_images &mdash; WORC 3.4.4 documentation</title>
+  <title>WORC.plotting.plot_images &mdash; WORC 3.4.5 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.4
+                3.4.5
               </div>
             
           
@@ -235,7 +235,6 @@
         <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">imsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">imsize</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span>
 
     <span class="c1"># Convert images to numpy arrays</span>
-    <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">image</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetArrayFromImage</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">sitk</span><span class="o">.</span><span class="n">GetArrayFromImage</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
@@ -381,7 +380,7 @@
 
             <span class="c1"># NOTE: As these zoomed images get small, we double the spacing</span>
             <span class="n">spacing</span> <span class="o">=</span> <span class="n">spacing</span> <span class="o">*</span> <span class="n">zoomfactor</span>
-            <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">imsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">imsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span>
+            <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">imsize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">imsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">spacing</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plot_im_and_overlay</span><span class="p">(</span><span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_name_zoom</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>

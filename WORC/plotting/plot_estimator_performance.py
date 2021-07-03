@@ -234,7 +234,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
     # Load the label data
     if type(label_data) is not dict:
         if os.path.isfile(label_data):
-            print(label_type, type(label_type))
             if type(label_type) is not list:
                 # Singlelabel: convert to list
                 label_type = [[label_type]]
