@@ -48,10 +48,10 @@ jobs:
           WORCDEBUG: true
       - name: Debugging on Linux
         run: |
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/WORC_Example_STWStrategyHN/__sink_data__.json --sinks performance --samples all
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
+            fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
+            fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
+            fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks performance --samples all
+            fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
         if: matrix.os == 'ubuntu-latest'
       - name: Debugging on Windows
         run: |
@@ -69,14 +69,14 @@ jobs:
         if: matrix.os == 'macos-latest'
       - name: Run additional tests for multiclass and regression on Linux
         run: |
-            rm -r /home/runner/work/WORC/WORC/WORCTutorial/GS/DEBUG_0
+            rm -r /tmp/GS/DEBUG_0
             python WORC/tests/WORCTutorialSimple_unittest_regression.py
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks classification --samples all
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks performance --samples all
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
-            rm -r /home/runner/work/WORC/WORC/WORCTutorial/GS/DEBUG_0
+            fastr trace /tmp/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks classification --samples all
+            fastr trace /tmp/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks performance --samples all
+            fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
+            rm -r /tmp/GS/DEBUG_0
             python WORC/tests/WORCTutorialSimple_unittest_multiclass.py
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks classification --samples all
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks performance --samples all
-            fastr trace /home/runner/work/WORC/WORC/WORCTutorial/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
+            fastr trace /tmp/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks classification --samples all
+            fastr trace /tmp/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks performance --samples all
+            fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
         if: matrix.os == 'ubuntu-latest'
