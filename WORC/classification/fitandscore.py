@@ -25,7 +25,6 @@ from sklearn.ensemble import RandomForestClassifier
 from WORC.classification.ObjectSampler import ObjectSampler
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils.validation import _num_samples
-from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.classification.metrics import check_multimetric_scoring
 from WORC.featureprocessing.Relief import SelectMulticlassRelief
@@ -827,8 +826,7 @@ def fit_and_score(X, y, scoring,
         except IndexError:
             labellength = 1
 
-    if labellength > 1 and type(estimator) not in [RankedSVM,
-                                                   RandomForestClassifier]:
+    if labellength > 1 and type(estimator) not in [RandomForestClassifier]:
         # Multiclass, hence employ a multiclass classifier for e.g. SVM, LR
         estimator.set_params(**para_estimator)
         estimator = OneVsRestClassifier(estimator)
