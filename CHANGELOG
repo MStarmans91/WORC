@@ -17,7 +17,7 @@ Fixed
 
 Changed
 ~~~~~~~
-- Removed deprecated scatterplot function.
+- Removed deprecated scatterplot, RankedSVM functions.
 - Unit tests moved to Github Workflow.
 
 3.4.4 - 2021-07-01
