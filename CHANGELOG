@@ -7,12 +7,18 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 
-3.4.5 - 2021-07-03
+3.4.5 - Unreleased
 ------------------
 
 Fixed
 ~~~~~
 - Bug in plotting images when ranking the posteriors or percentages.
+- Linting issues.
+
+Changed
+~~~~~~~
+- Removed deprecated scatterplot function.
+- Unit tests moved to Github Workflow.
 
 3.4.4 - 2021-07-01
 ------------------

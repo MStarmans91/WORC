@@ -1,0 +1,47 @@
+name: Unit test
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+          pip install -r requirements.txt
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --statistics
+      - name: Install WORC package itself
+        run: python setup.py -q install
+      - name: Clone the WORC Tutorial and run as test
+        run: |
+          git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
+          python WORCTutorial/WORCTutorialSimple.py
+          fastr trace "C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks features_train_CT_0_predict --samples HN1331
+          fastr trace "C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks classification --samples all
+          fastr trace "C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks performance --samples all
+          fastr trace "C:\Users\travis\AppData\Local\Temp\GS\DEBUG_0\tmp\__sink_data__.json" --sinks output --samples id_0__0000__0000
+        env:
+          WORCDEBUG: true

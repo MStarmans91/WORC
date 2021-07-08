@@ -30,14 +30,14 @@ from WORC.plotting.compute_CI import compute_confidence
 from WORC.plotting.compute_CI import compute_confidence_bootstrap
 
 
-def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_scoring):
+def fit_thresholds(thresholds, estimator, label_type, X_train, Y_train,
+                   ensemble, ensemble_scoring):
     print('Fitting thresholds on validation set')
     if not hasattr(estimator, 'cv_iter'):
         cv_iter = list(estimator.cv.split(X_train, Y_train))
         estimator.cv_iter = cv_iter
 
     p_all = estimator.cv_results_['params'][0]
-    n_iter = len(estimator.cv_iter)
 
     thresholds_low = list()
     thresholds_high = list()
@@ -45,8 +45,8 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_s
         print(' - iteration {it + 1} / {n_iter}.')
         # NOTE: Explicitly exclude validation set, elso refit and score
         # somehow still seems to use it.
-        X_train_temp = [prediction[label_type]['X_train'][i] for i in train]
-        Y_train_temp = [prediction[label_type]['Y_train'][i] for i in train]
+        X_train_temp = [estimator[label_type]['X_train'][i] for i in train]
+        Y_train_temp = [estimator[label_type]['Y_train'][i] for i in train]
         train_temp = range(0, len(train))
 
         # Refit a SearchCV object with the provided parameters
@@ -60,7 +60,7 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble, ensemble_s
                                       verbose=False)
 
         # Predict and save scores
-        X_train_values = [x[0] for x in X_train] # Throw away labels
+        X_train_values = [x[0] for x in X_train]  # Throw away labels
         X_train_values_valid = [X_train_values[i] for i in valid]
         Y_valid_score_temp = estimator.predict_proba(X_train_values_valid)
 
@@ -461,7 +461,9 @@ def plot_estimator_performance(prediction, label_data, label_type,
                     y_truth_temp = list()
                     test_patient_IDs_temp = list()
 
-                    thresholds_val = fit_thresholds(thresholds, fitted_model, X_train_temp, Y_train_temp, ensemble,
+                    thresholds_val = fit_thresholds(thresholds, fitted_model,
+                                                    label_type, X_train_temp,
+                                                    Y_train_temp, ensemble,
                                                     ensemble_scoring)
                     for pnum in range(len(y_score)):
                         if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
@@ -781,7 +783,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
         return output
 
 
-def combine_multiple_estimators(predictions, label_data, multilabel_type, label_types,
+def combine_multiple_estimators(predictions, label_data, N_1, N_2,
+                                multilabel_type, label_types,
                                 ensemble=1, strategy='argmax', alpha=0.95):
     '''
     Combine multiple estimators in a single model.
@@ -851,7 +854,7 @@ def combine_multiple_estimators(predictions, label_data, multilabel_type, label_
         # Compute multilabel performance metrics
         y_truth = np.argmax(y_truth, axis=0)
         accuracy_temp, sensitivity_temp, specificity_temp, \
-            precision_temp, npv_temp, f1_score_temp, auc_temp, accav_temp = \
+            precision_temp, npv_temp, f1_score_temp, auc_temp, acc_av_temp = \
             metrics.performance_multilabel(y_truth,
                                            y_prediction,
                                            y_score)
@@ -869,10 +872,6 @@ def combine_multiple_estimators(predictions, label_data, multilabel_type, label_
         precision.append(precision_temp)
         npv.append(npv_temp)
         acc_av.append(acc_av_temp)
-
-    # Extract sample size
-    N_1 = float(len(train_patient_IDs))
-    N_2 = float(len(test_patient_IDs))
 
     # Compute confidence intervals
     stats = dict()
