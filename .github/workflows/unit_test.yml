@@ -22,26 +22,28 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
-      - name: Install dependencies
+      - name: Install dependencies for Linux
         run: |
+          sudo apt-get -qq update
+          sudo apt-get -qq -y install git
           python -m pip install --upgrade pip
           pip install flake8
           pip install -r requirements.txt
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --statistics
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=WORC_config.py
+          # exit-zero treats all errors as warnings.
+          flake8 . --count --exit-zero --statistics --max-line-length=1000 --exclude=WORC_config.py,*elastixtools*
       - name: Install WORC package itself
         run: python setup.py -q install
       - name: Clone the WORC Tutorial and run as test
         run: |
           git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
           python WORCTutorial/WORCTutorialSimple.py
-          fastr trace "C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks features_train_CT_0_predict --samples HN1331
-          fastr trace "C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks classification --samples all
-          fastr trace "C:\Users\travis\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks performance --samples all
-          fastr trace "C:\Users\travis\AppData\Local\Temp\GS\DEBUG_0\tmp\__sink_data__.json" --sinks output --samples id_0__0000__0000
+        - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
+        - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
+        - fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks performance --samples all
+        - fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
         env:
           WORCDEBUG: true

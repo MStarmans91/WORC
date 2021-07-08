@@ -315,6 +315,13 @@ def plot_estimator_performance(prediction, label_data, label_type,
     patient_classification_list = dict()
     percentages_selected = list()
 
+    if bootstrap:
+        # To be compatible with flake8, initialize some variables
+        y_truth_all = None
+        y_prediction_all = None
+        y_score_all = None
+        test_patient_IDs_or = None
+
     if output in ['scores', 'decision'] or crossval_type == 'LOO':
         # Keep track of all groundth truths and scores
         y_truths = list()

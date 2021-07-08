@@ -1,6 +1,6 @@
 class InvalidOrderException(Exception):
     def __init__(self, function, execute_first):
-        super(InvalidOrderException, self).__init__(f'Invalid order for function {path} call {execute_first} before calling this function')
+        super(InvalidOrderException, self).__init__(f'Invalid order for function {function} call {execute_first} before calling this function')
 
 
 class InvalidCsvFileException(Exception):
