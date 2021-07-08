@@ -55,10 +55,10 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
       - name: Debugging on Windows
         run: |
-            fastr trace "D:\a\WORC\WORC\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks features_train_CT_0_predict --samples HN1331
-            fastr trace "D:\a\WORC\WORC\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks classification --samples all
-            fastr trace "D:\a\WORC\WORC\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks performance --samples all
-            fastr trace "D:\a\WORC\WORC\WORCTutorial\GS\DEBUG_0\tmp\__sink_data__.json" --sinks output --samples id_0__0000__0000
+            fastr trace "C:\Users\RUNNER~1\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks features_train_CT_0_predict --samples HN1331
+            fastr trace "C:\Users\RUNNER~1\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks classification --samples all
+            fastr trace "C:\Users\RUNNER~1\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks performance --samples all
+            fastr trace "C:\Users\RUNNER~1\AppData\Local\Temp\GS\DEBUG_0\tmp\__sink_data__.json" --sinks output --samples id_0__0000__0000
         if: matrix.os == 'windows-latest'
       - name: Debugging on MaxOSX
         run: |
