@@ -26,11 +26,12 @@ from WORC.exampledata.datadownloader import download_HeadAndNeck
 script_path = os.path.dirname(os.path.abspath(__file__))
 
 # Determine whether you would like to use WORC for classification or regression
-modus = 'regression'
+modus = 'multiclass_classification'
 
 
 def main():
     """Execute WORC Tutorial experiment."""
+    print(f"Running in folder: {script_path}.")
     # ---------------------------------------------------------------------------
     # Input
     # ---------------------------------------------------------------------------
@@ -60,8 +61,8 @@ def main():
 
     nsubjects = 20  # use "all" to download all patients
     # NOTE: already downloaded for classification, so simply set the data path
-    if 'travis' in script_path:
-        data_path = '/home/travis/build/MStarmans91/WORC/WORCTutorial/Data'
+    if 'runner' in script_path:
+        data_path = '/home/runner/work/WORC/WORC/WORCTutorial/Data'
     elif '/home/martijn' in script_path:
         data_path = '/home/martijn/git/WORCTutorial/Data'
     elif 'Martijn Starmans' in script_path:
@@ -98,11 +99,12 @@ def main():
     coarse = True
 
     # Give your experiment a name
-    experiment_name = 'Example_STWStrategyHN_Regression'
+    experiment_name = 'Example_STWStrategyHN_Multiclass'
 
     # Instead of the default tempdir, let's but the temporary output in a subfolder
     # in the same folder as this script
     tmpdir = os.path.join(script_path, 'WORC_' + experiment_name)
+    print(f"Temporary folder: {tmpdir}.")
 
     # Remove temp and output folders
     outputfolder = fastr.config.mounts['output']
@@ -131,6 +133,7 @@ def main():
     # Locate output folder
     classification_experiment_folder =\
         os.path.join(outputfolder, 'WORC_Example_STWStrategyHN')
+
     feature_files = glob.glob(os.path.join(classification_experiment_folder,
                                            'Features',
                                            'features_*.hdf5'))
@@ -141,11 +144,13 @@ def main():
     experiment.labels_from_this_file(label_file)
     experiment.predict_labels(label_name)
 
-    # Use the standard workflow for binary classification
-    if modus == 'classification':
+    # Use the standard workflow for your specific modus
+    if modus == 'binary_classification':
         experiment.binary_classification(coarse=coarse)
     elif modus == 'regression':
         experiment.regression(coarse=coarse)
+    elif modus == 'multiclass_classification':
+        experiment.multiclass_classification(coarse=coarse)
 
     # Set the temporary directory
     experiment.set_tmpdir(tmpdir)

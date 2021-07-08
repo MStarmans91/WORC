@@ -101,8 +101,8 @@ Below an example on how to create such a series.
 
   # Dummy variables
   feature_values = [1, 1.5, 25, 8]
-  feature_labels ['label_feature_1', 'label_feature_2', 'label_feature_3',
-                  'label_feature_4']
+  feature_labels = ['label_feature_1', 'label_feature_2', 'label_feature_3',
+                    'label_feature_4']
 
   # Output filename
   output = 'test.hdf5'
