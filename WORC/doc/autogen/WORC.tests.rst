@@ -1,19 +1,19 @@
 tests Package
 =============
 
-:mod:`WORCTutorialSimple_travis_multiclass` Module
---------------------------------------------------
+:mod:`WORCTutorialSimple_unittest_multiclass` Module
+----------------------------------------------------
 
-.. automodule:: WORC.tests.WORCTutorialSimple_travis_multiclass
+.. automodule:: WORC.tests.WORCTutorialSimple_unittest_multiclass
     :members:
     :undoc-members:
     :show-inheritance:
     :special-members:
 
-:mod:`WORCTutorialSimple_travis_regression` Module
---------------------------------------------------
+:mod:`WORCTutorialSimple_unittest_regression` Module
+----------------------------------------------------
 
-.. automodule:: WORC.tests.WORCTutorialSimple_travis_regression
+.. automodule:: WORC.tests.WORCTutorialSimple_unittest_regression
     :members:
     :undoc-members:
     :show-inheritance:

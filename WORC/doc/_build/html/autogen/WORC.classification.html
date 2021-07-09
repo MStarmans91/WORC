@@ -111,12 +111,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classification</span></code> Package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.AdvancedSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">AdvancedSampler</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.ObjectSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.RankedSVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.SearchCV"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.construct_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">construct_classifier</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.createfixedsplits"><code class="xref py py-mod docutils literal notranslate"><span class="pre">createfixedsplits</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.crossval"><code class="xref py py-mod docutils literal notranslate"><span class="pre">crossval</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.estimators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">estimators</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.fitandscore"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitandscore</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">metrics</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.parameter_optimization"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_optimization</span></code> Module</a></li>
@@ -535,75 +533,6 @@ IEEE Transactions on Knowledge &amp; Data Engineering 9 (2008): 1263-1284.</p>
 </dd></dl>
 
 </dd></dl>
-
-</div>
-<div class="section" id="module-WORC.classification.RankedSVM">
-<span id="rankedsvm-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module<a class="headerlink" href="#module-WORC.classification.RankedSVM" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="WORC.classification.RankedSVM.RankSVM_test">
-<code class="descclassname">WORC.classification.RankedSVM.</code><code class="descname">RankSVM_test</code><span class="sig-paren">(</span><em>test_data</em>, <em>num_class</em>, <em>Weights</em>, <em>Bias</em>, <em>SVs</em>, <em>svm='Poly'</em>, <em>gamma=0.05</em>, <em>coefficient=0.05</em>, <em>degree=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/RankedSVM.html#RankSVM_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.RankedSVM.RankSVM_test" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="WORC.classification.RankedSVM.RankSVM_test_original">
-<code class="descclassname">WORC.classification.RankedSVM.</code><code class="descname">RankSVM_test_original</code><span class="sig-paren">(</span><em>test_data</em>, <em>test_target</em>, <em>Weights</em>, <em>Bias</em>, <em>SVs</em>, <em>svm='Poly'</em>, <em>gamma=0.05</em>, <em>coefficient=0.05</em>, <em>degree=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/RankedSVM.html#RankSVM_test_original"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.RankedSVM.RankSVM_test_original" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="WORC.classification.RankedSVM.RankSVM_train">
-<code class="descclassname">WORC.classification.RankedSVM.</code><code class="descname">RankSVM_train</code><span class="sig-paren">(</span><em>train_data</em>, <em>train_target</em>, <em>cost=1</em>, <em>lambda_tol=1e-06</em>, <em>norm_tol=0.0001</em>, <em>max_iter=500</em>, <em>svm='Poly'</em>, <em>gamma=0.05</em>, <em>coefficient=0.05</em>, <em>degree=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/RankedSVM.html#RankSVM_train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.RankedSVM.RankSVM_train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="WORC.classification.RankedSVM.RankSVM_train_old">
-<code class="descclassname">WORC.classification.RankedSVM.</code><code class="descname">RankSVM_train_old</code><span class="sig-paren">(</span><em>train_data</em>, <em>train_target</em>, <em>cost=1</em>, <em>lambda_tol=1e-06</em>, <em>norm_tol=0.0001</em>, <em>max_iter=500</em>, <em>svm='Poly'</em>, <em>gamma=0.05</em>, <em>coefficient=0.05</em>, <em>degree=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/RankedSVM.html#RankSVM_train_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.RankedSVM.RankSVM_train_old" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Weights,Bias,SVs = RankSVM_train(train_data,train_target,cost,lambda_tol,norm_tol,max_iter,svm,gamma,coefficient,degree)</p>
-</div></blockquote>
-<p>Description</p>
-<blockquote>
-<div><blockquote>
-<div><dl>
-<dt>RankSVM_train takes,</dt><dd><p>train_data   - An MxN array, the ith instance of training instance is stored in train_data[i,:]
-train_target - A QxM array, if the ith training instance belongs to the jth class, then train_target[j,i] equals +1, otherwise train_target(j,i) equals -1</p>
-<blockquote>
-<div><dl>
-<dt>svm          - svm gives the type of svm used in training, which can take the value of ‘RBF’, ‘Poly’ or ‘Linear’; svm.para gives the corresponding parameters used for the svm:</dt><dd><blockquote>
-<div><ol class="arabic simple">
-<li><p>if svm is ‘RBF’, then gamma gives the value of gamma, where the kernel is exp(-Gamma*|x[i]-x[j]|^2)</p></li>
-</ol>
-</div></blockquote>
-<ol class="arabic simple" start="2">
-<li><p>if svm is ‘Poly’, then three values are used gamma, coefficient, and degree respectively, where the kernel is (gamma*&lt;x[i],x[j]&gt;+coefficient)^degree.</p></li>
-<li><p>if svm is ‘Linear’, then svm is [].</p></li>
-</ol>
-</dd>
-</dl>
-</div></blockquote>
-<p>cost         - The value of ‘C’ used in the SVM, default=1
-lambda_tol   - The tolerance value for lambda described in the appendix of [1]; default value is 1e-6
-norm_tol     - The tolerance value for difference between alpha(p+1) and alpha(p) described in the appendix of [1]; default value is 1e-4
-max_iter     - The maximum number of iterations for RankSVM, default=500</p>
-</dd>
-<dt>and returns,</dt><dd><p>Weights          - The value for beta[ki] as described in the appendix of [1] is stored in Weights[k,i]
-Bias             - The value for b[i] as described in the appendix of [1] is stored in Bias[1,i]
-SVs              - The ith support vector is stored in SVs[:,i]</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>For more details,please refer to [1] and [2].</p>
-</div></blockquote>
-</dd></dl>
-
-<dl class="function">
-<dt id="WORC.classification.RankedSVM.is_empty">
-<code class="descclassname">WORC.classification.RankedSVM.</code><code class="descname">is_empty</code><span class="sig-paren">(</span><em>any_structure</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/RankedSVM.html#is_empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.RankedSVM.is_empty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="WORC.classification.RankedSVM.neg_dual_func">
-<code class="descclassname">WORC.classification.RankedSVM.</code><code class="descname">neg_dual_func</code><span class="sig-paren">(</span><em>Lambda</em>, <em>Alpha_old</em>, <em>Alpha_new</em>, <em>c_value</em>, <em>kernel</em>, <em>num_training</em>, <em>num_class</em>, <em>Label</em>, <em>not_Label</em>, <em>Label_size</em>, <em>size_alpha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/RankedSVM.html#neg_dual_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.RankedSVM.neg_dual_func" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 <div class="section" id="module-WORC.classification.SearchCV">
@@ -2137,83 +2066,6 @@ of the default scikit-learn object.</p>
 <p>This function is written for conducting a specific experiment from the
 WORC paper to test how the performance varies with varying random search
 and ensemble sizes. We do not recommend usage in general of this part.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-WORC.classification.estimators">
-<span id="estimators-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">estimators</span></code> Module<a class="headerlink" href="#module-WORC.classification.estimators" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="WORC.classification.estimators.RankedSVM">
-<em class="property">class </em><code class="descclassname">WORC.classification.estimators.</code><code class="descname">RankedSVM</code><span class="sig-paren">(</span><em>cost=1</em>, <em>lambda_tol=1e-06</em>, <em>norm_tol=0.0001</em>, <em>max_iter=500</em>, <em>svm='Poly'</em>, <em>gamma=0.05</em>, <em>coefficient=0.05</em>, <em>degree=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/estimators.html#RankedSVM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.estimators.RankedSVM" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
-<p>An example classifier which implements a 1-NN algorithm.</p>
-<dl class="simple">
-<dt>demo_param<span class="classifier">str, optional</span></dt><dd><p>A parameter used for demonstation of how to pass and store paramters.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt><a href="#id62"><span class="problematic" id="id63">X_</span></a><span class="classifier">array, shape = [n_samples, n_features]</span></dt><dd><p>The input passed during <a class="reference internal" href="#WORC.classification.estimators.RankedSVM.fit" title="WORC.classification.estimators.RankedSVM.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a></p>
-</dd>
-<dt><a href="#id64"><span class="problematic" id="id65">y_</span></a><span class="classifier">array, shape = [n_samples]</span></dt><dd><p>The labels passed during <a class="reference internal" href="#WORC.classification.estimators.RankedSVM.fit" title="WORC.classification.estimators.RankedSVM.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a></p>
-</dd>
-</dl>
-<dl class="method">
-<dt id="WORC.classification.estimators.RankedSVM.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>cost=1</em>, <em>lambda_tol=1e-06</em>, <em>norm_tol=0.0001</em>, <em>max_iter=500</em>, <em>svm='Poly'</em>, <em>gamma=0.05</em>, <em>coefficient=0.05</em>, <em>degree=3</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/estimators.html#RankedSVM.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.estimators.RankedSVM.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="WORC.classification.estimators.RankedSVM.__module__">
-<code class="descname">__module__</code><em class="property"> = 'WORC.classification.estimators'</em><a class="headerlink" href="#WORC.classification.estimators.RankedSVM.__module__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.estimators.RankedSVM.fit">
-<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/estimators.html#RankedSVM.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.estimators.RankedSVM.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>A reference implementation of a fitting function for a classifier.</p>
-<dl class="simple">
-<dt>X<span class="classifier">array-like, shape = [n_samples, n_features]</span></dt><dd><p>The training input samples.</p>
-</dd>
-<dt>y<span class="classifier">array-like, shape = [n_samples]</span></dt><dd><p>The target values. An array of int.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>self<span class="classifier">object</span></dt><dd><p>Returns self.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.estimators.RankedSVM.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/estimators.html#RankedSVM.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.estimators.RankedSVM.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>A reference implementation of a prediction for a classifier.</p>
-<dl class="simple">
-<dt>X<span class="classifier">array-like of shape = [n_samples, n_features]</span></dt><dd><p>The input samples.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>y<span class="classifier">array of int of shape = [n_samples]</span></dt><dd><p>The label for each sample is the label of the closest sample
-seen udring fit.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="WORC.classification.estimators.RankedSVM.predict_proba">
-<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>X</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/estimators.html#RankedSVM.predict_proba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.estimators.RankedSVM.predict_proba" title="Permalink to this definition">¶</a></dt>
-<dd><p>A reference implementation of a prediction for a classifier.</p>
-<dl class="simple">
-<dt>X<span class="classifier">array-like of shape = [n_samples, n_features]</span></dt><dd><p>The input samples.</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>y<span class="classifier">array of int of shape = [n_samples]</span></dt><dd><p>The label for each sample is the label of the closest sample
-seen udring fit.</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </div>

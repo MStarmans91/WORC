@@ -191,7 +191,6 @@
 <span class="kn">from</span> <span class="nn">sklearn.discriminant_analysis</span> <span class="k">import</span> <span class="n">LinearDiscriminantAnalysis</span> <span class="k">as</span> <span class="n">LDA</span>
 <span class="kn">from</span> <span class="nn">sklearn.discriminant_analysis</span> <span class="k">import</span> <span class="n">QuadraticDiscriminantAnalysis</span> <span class="k">as</span> <span class="n">QDA</span>
 <span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.estimators</span> <span class="k">import</span> <span class="n">RankedSVM</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">log_uniform</span><span class="p">,</span> <span class="n">discrete_uniform</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
 <span class="kn">from</span> <span class="nn">xgboost</span> <span class="k">import</span> <span class="n">XGBClassifier</span><span class="p">,</span> <span class="n">XGBRegressor</span>
@@ -398,15 +397,6 @@
     <span class="n">clf</span><span class="o">.</span><span class="n">degree</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMdegree&#39;</span><span class="p">]</span>
     <span class="n">clf</span><span class="o">.</span><span class="n">coef0</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMcoef0&#39;</span><span class="p">]</span>
     <span class="n">clf</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMgamma&#39;</span><span class="p">]</span>
-
-    <span class="c1"># Check if we need to use a ranked SVM</span>
-    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;RankedSVM&#39;</span><span class="p">:</span>
-        <span class="n">clf</span> <span class="o">=</span> <span class="n">RankedSVM</span><span class="p">()</span>
-        <span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;svm&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Poly&#39;</span><span class="p">],</span>
-                      <span class="s1">&#39;degree&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
-                      <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>  <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">),</span>
-                      <span class="s1">&#39;coefficient&#39;</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">),</span>
-                      <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">clf</span></div>
 

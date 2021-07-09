@@ -127,12 +127,3 @@ plotting Package
     :show-inheritance:
     :special-members:
 
-:mod:`scatterplot` Module
--------------------------
-
-.. automodule:: WORC.plotting.scatterplot
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :special-members:
-
