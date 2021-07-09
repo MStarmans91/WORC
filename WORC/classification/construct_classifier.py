@@ -26,7 +26,6 @@ from sklearn.naive_bayes import GaussianNB, ComplementNB
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 import scipy
-from WORC.classification.estimators import RankedSVM
 from WORC.classification.AdvancedSampler import log_uniform, discrete_uniform
 import WORC.addexceptions as ae
 from xgboost import XGBClassifier, XGBRegressor
@@ -233,15 +232,6 @@ def construct_SVM(config, regression=False):
     clf.degree = config['SVMdegree']
     clf.coef0 = config['SVMcoef0']
     clf.gamma = config['SVMgamma']
-
-    # Check if we need to use a ranked SVM
-    if config['classifiers'] == 'RankedSVM':
-        clf = RankedSVM()
-        param_grid = {'svm': ['Poly'],
-                      'degree': [2, 3, 4, 5],
-                      'gamma':  scipy.stats.uniform(loc=0, scale=1e-3),
-                      'coefficient': scipy.stats.uniform(loc=0, scale=1e-2),
-                      }
 
     return clf
 

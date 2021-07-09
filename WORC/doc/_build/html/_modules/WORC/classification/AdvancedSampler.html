@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.AdvancedSampler &mdash; WORC 3.4.4 documentation</title>
+  <title>WORC.classification.AdvancedSampler &mdash; WORC 3.4.5 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.4
+                3.4.5
               </div>
             
           
@@ -327,8 +327,10 @@
         <span class="c1"># Generate the sequence generator</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;Halton&#39;</span><span class="p">:</span>
             <span class="n">sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Halton</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;Sobol&#39;</span><span class="p">:</span>
-            <span class="n">sequence</span> <span class="o">=</span> <span class="n">Sobol</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_distributions</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span><span class="p">)</span>
+            <span class="c1"># elif self.method == &#39;Sobol&#39;:</span>
+            <span class="c1">#     sequence = Sobol(len(self.param_distributions.keys()), self.n_iter)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Methods </span><span class="si">{self.method}</span><span class="s1"> not known!&#39;</span><span class="p">)</span>
 
         <span class="c1"># Always sort the keys of a dictionary, for reproducibility</span>
         <span class="n">items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_distributions</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
@@ -371,7 +373,7 @@
 
     <span class="n">n_iter</span> <span class="o">=</span> <span class="mi">6</span>
 
-    <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;Sobol&#39;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;Halton&#39;</span>
     <span class="n">sampled_params</span> <span class="o">=</span> <span class="n">AdvancedSampler</span><span class="p">(</span><span class="n">param_distributions</span><span class="p">,</span>
                                      <span class="n">n_iter</span><span class="p">,</span>
                                      <span class="n">random_state</span><span class="p">)</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>plotting Package &mdash; WORC 3.4.4 documentation</title>
+  <title>plotting Package &mdash; WORC 3.4.5 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.4.4
+                3.4.5
               </div>
             
           
@@ -128,7 +128,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_pvalues_features"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_pvalues_features</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.plotminmaxresponse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-WORC.plotting.scatterplot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scatterplot</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
@@ -413,7 +412,7 @@ the first label from the prediction file will be used.</p>
 <span id="plot-estimator-performance-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_estimator_performance</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_estimator_performance" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.plotting.plot_estimator_performance.combine_multiple_estimators">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">combine_multiple_estimators</code><span class="sig-paren">(</span><em>predictions</em>, <em>label_data</em>, <em>multilabel_type</em>, <em>label_types</em>, <em>ensemble=1</em>, <em>strategy='argmax'</em>, <em>alpha=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#combine_multiple_estimators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.combine_multiple_estimators" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">combine_multiple_estimators</code><span class="sig-paren">(</span><em>predictions</em>, <em>label_data</em>, <em>N_1</em>, <em>N_2</em>, <em>multilabel_type</em>, <em>label_types</em>, <em>ensemble=1</em>, <em>strategy='argmax'</em>, <em>alpha=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#combine_multiple_estimators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.combine_multiple_estimators" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine multiple estimators in a single model.</p>
 <p>Note: the multilabel_type labels should correspond to the ordering in label_types.
 Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
@@ -427,7 +426,7 @@ Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_estimator_performance.fit_thresholds">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">fit_thresholds</code><span class="sig-paren">(</span><em>thresholds</em>, <em>estimator</em>, <em>X_train</em>, <em>Y_train</em>, <em>ensemble</em>, <em>ensemble_scoring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#fit_thresholds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.fit_thresholds" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">fit_thresholds</code><span class="sig-paren">(</span><em>thresholds</em>, <em>estimator</em>, <em>label_type</em>, <em>X_train</em>, <em>Y_train</em>, <em>ensemble</em>, <em>ensemble_scoring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#fit_thresholds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.fit_thresholds" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -631,19 +630,6 @@ zip file.</p>
 <dl class="function">
 <dt id="WORC.plotting.plotminmaxresponse.main">
 <code class="descclassname">WORC.plotting.plotminmaxresponse.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plotminmaxresponse.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plotminmaxresponse.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-WORC.plotting.scatterplot">
-<span id="scatterplot-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">scatterplot</span></code> Module<a class="headerlink" href="#module-WORC.plotting.scatterplot" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="WORC.plotting.scatterplot.main">
-<code class="descclassname">WORC.plotting.scatterplot.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/scatterplot.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.scatterplot.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="WORC.plotting.scatterplot.make_scatterplot">
-<code class="descclassname">WORC.plotting.scatterplot.</code><code class="descname">make_scatterplot</code><span class="sig-paren">(</span><em>features</em>, <em>label_file</em>, <em>feature_label_1</em>, <em>feature_label_2</em>, <em>output</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/scatterplot.html#make_scatterplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.scatterplot.make_scatterplot" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>

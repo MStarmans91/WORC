@@ -27,6 +27,7 @@ from WORC.plotting import plot_images as pi
 import SimpleITK as sitk
 from WORC.addexceptions import WORCKeyError
 import zipfile
+from sys import platform
 
 
 # NOTE: Need to add thresholds of plot_ranked_images to arguments
@@ -219,8 +220,11 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
             score = abs(int(score))
 
         fname = str(score) + '_' + pid + '_TrueLabel_' + str(ranked_truths[idx]) + '_slice.png'
-        if int(ranked_scores[idx]) < 0:
-            fname = 'min' + fname
+        if 'win' in platform:
+            # Windows has issues with sorting based on '-', so replace with
+            # 'min'
+            if float(ranked_scores[idx]) < 0:
+                fname = 'min' + fname[1:]
 
         if output_zip is not None:
             output_name = os.path.join(os.path.dirname(output_zip), fname)
@@ -229,8 +233,10 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
             output_name = None
             output_name_zoom = None
 
-        imslice, maskslice = pi.slicer(im, seg, output_name,
-                                       output_name_zoom, output_itk)
+        imslice, maskslice = pi.slicer(image=im,
+                                       mask=seg,
+                                       output_name=output_name,
+                                       output_name_zoom=output_name_zoom)
 
         if output_zip is not None:
             # Print PNGs and comine in ZIP
@@ -456,25 +462,26 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
 
     if output_zip is not None or output_itk is not None:
         # FIXME: check for multilabel by checking type
-        if type(ranked_scores) == list():
-            # Rerank the scores split per ground truth class: negative for 0, positive for 1
-            ranked_scores_temp = list()
-            for l, p in zip(ranked_truths, ranked_scores):
-                if l == 0:
-                    ranked_scores_temp.append(-p)
-                else:
-                    ranked_scores_temp.append(p)
-
-            ranked_scores = ranked_scores_temp
-            ranking = np.argsort(ranked_scores)
-            ranked_scores = [ranked_scores[r] for r in ranking]
-            ranked_truths = [ranked_truths[r] for r in ranking]
-            ranked_PIDs = [ranked_PIDs[r] for r in ranking]
-
-            # Convert to lower to later on overcome matching errors
-            ranked_PIDs = [i.lower() for i in ranked_PIDs]
-
+        if isinstance(ranked_scores, list):
             if images:
+                # Rerank the scores split per ground truth class: negative for 0, positive for 1
+                ranked_scores_temp = list()
+                for l, p in zip(ranked_truths, ranked_scores):
+                    if l == 0:
+                        ranked_scores_temp.append(-p)
+                    else:
+                        ranked_scores_temp.append(p)
+
+                ranked_scores = ranked_scores_temp
+                ranking = np.argsort(ranked_scores)
+                ranked_scores = [ranked_scores[r] for r in ranking]
+                ranked_truths = [ranked_truths[r] for r in ranking]
+                ranked_PIDs = [ranked_PIDs[r] for r in ranking]
+
+                # Convert to lower to later on overcome matching errors
+                ranked_PIDs = [i.lower() for i in ranked_PIDs]
+
+                # Plot the ranked images
                 plot_ranked_images(pinfo=pinfo,
                                    label_type=label_type,
                                    images=images,
@@ -485,11 +492,19 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
                                    output_zip=output_zip,
                                    output_itk=output_itk,
                                    scores=scores)
+
+            else:
+                # Make dummy
+                if output_zip is not None:
+                    zipfile.ZipFile(output_zip,
+                                    'w', zipfile.ZIP_DEFLATED, allowZip64=True)
+
         else:
             # Make dummy
             if output_zip is not None:
                 zipfile.ZipFile(output_zip,
                                 'w', zipfile.ZIP_DEFLATED, allowZip64=True)
+
 
 def example():
     case = 'MESFIB'

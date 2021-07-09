@@ -28,15 +28,6 @@ classification Package
     :show-inheritance:
     :special-members:
 
-:mod:`RankedSVM` Module
------------------------
-
-.. automodule:: WORC.classification.RankedSVM
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :special-members:
-
 :mod:`SearchCV` Module
 ----------------------
 
@@ -68,15 +59,6 @@ classification Package
 ----------------------
 
 .. automodule:: WORC.classification.crossval
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :special-members:
-
-:mod:`estimators` Module
-------------------------
-
-.. automodule:: WORC.classification.estimators
     :members:
     :undoc-members:
     :show-inheritance:

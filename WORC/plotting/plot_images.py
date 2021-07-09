@@ -70,7 +70,6 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
         figsize = (imsize[1]*spacing[1]/100.0, imsize[2]*spacing[2]/100.0)
 
     # Convert images to numpy arrays
-    figsize = (30, 1)
     image = sitk.GetArrayFromImage(image)
     if mask is not None:
         mask = sitk.GetArrayFromImage(mask)
@@ -216,7 +215,7 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
 
             # NOTE: As these zoomed images get small, we double the spacing
             spacing = spacing * zoomfactor
-            figsize = (imsize[0]*spacing/100.0, imsize[1]*spacing/100.0)
+            figsize = (imsize[0]*spacing[0]/100.0, imsize[1]*spacing[1]/100.0)
             fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize, alpha=alpha)
             fig.savefig(output_name_zoom, bbox_inches='tight', pad_inches=0, dpi=dpi)
             plt.close('all')

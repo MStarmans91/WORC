@@ -1,4 +1,4 @@
-WORC v3.4.4
+WORC v3.4.5
 ===========
 
 Workflow for Optimal Radiomics Classification
@@ -7,12 +7,11 @@ Workflow for Optimal Radiomics Classification
 Information
 -----------
 
-+-----------------+-----------------+-----------------+-----------------+------------+
-| Linux           | Windows         | Documentation   | PyPi            | Citing     |
-|                 |                 |                 |                 | WORC       |
-+=================+=================+=================+=================+============+
-| |image0|        | |image1|        | |image2|        | |image3|        | |image4|   |
-+-----------------+-----------------+-----------------+-----------------+------------+
++---------------------+---------------------+---------------------+---------------+
+| Unit test           | Documentation       | PyPi                | Citing WORC   |
++=====================+=====================+=====================+===============+
+| |image0|            | |image1|            | |image2|            | |image3|      |
++---------------------+---------------------+---------------------+---------------+
 
 Introduction
 ============
@@ -38,7 +37,7 @@ When using WORC, please cite this repository as following:
 
 ``Martijn P.A. Starmans, Sebastian R. van der Voort, Thomas Phil and Stefan Klein. Workflow for Optimal Radiomics Classification (WORC). Zenodo (2018). Available from:  https://github.com/MStarmans91/WORC. DOI: http://doi.org/10.5281/zenodo.3840534.``
 
-For the DOI, visit |image5|.
+For the DOI, visit |image4|.
 
 Disclaimer
 ----------
@@ -60,10 +59,11 @@ The official documentation can be found at https://worc.readthedocs.io.
 Installation
 ------------
 
-WORC currently only supports Unix with Python 3.6+ (tested on 3.7.2 -
-3.7.4) systems and has been tested on Ubuntu 16.04 and 18.04, and
-Windows 10. For detailed installation instructions, please check `the
-ReadTheDocs installation
+WORC supports Unix and Windows systems with Python 3.6+: the `unit
+tests <https://github.com/MStarmans91/WORC/actions?query=workflow%3A%22Unit+test%22>`__
+are performed on the latest Ubuntu and Windows versions with Python 3.7.
+For detailed installation instructions, please check `the ReadTheDocs
+installation
 guidelines <https://worc.readthedocs.io/en/latest/static/quick_start.html#installation>`__.
 
 The package can be installed through pip:
@@ -83,13 +83,6 @@ Make sure you install the requirements first:
 ::
 
       pip install -r requirements.txt
-
-NOTE: The version of PyRadiomics which WORC currently uses requires
-numpy to be installed beforehand. Make sure you do so, e.g.
-
-::
-
-      pip install numpy
 
 3rd-party packages used in WORC:
 --------------------------------
@@ -182,15 +175,13 @@ to XNAT. We advise you to specify your account settings in a .netrc file
 when using this feature for your own datasets, such that you do not need
 to input them on every request.
 
-.. |image0| image:: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=1
-   :target: https://travis-ci.com/MStarmans91/WORC
-.. |image1| image:: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=2
-   :target: https://travis-ci.com/MStarmans91/WORC
-.. |image2| image:: https://readthedocs.org/projects/worc/badge/?version=latest
+.. |image0| image:: https://github.com/MStarmans91/WORC/workflows/Unit%20test/badge.svg
+   :target: https://github.com/MStarmans91/WORC/actions?query=workflow%3A%22Unit+test%22
+.. |image1| image:: https://readthedocs.org/projects/worc/badge/?version=latest
    :target: https://worc.readthedocs.io/en/latest/?badge=latest
-.. |image3| image:: https://badge.fury.io/py/WORC.svg
+.. |image2| image:: https://badge.fury.io/py/WORC.svg
    :target: https://badge.fury.io/py/WORC
-.. |image4| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg
+.. |image3| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg
    :target: https://zenodo.org/badge/latestdoi/92295542
-.. |image5| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg
+.. |image4| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3840534.svg
    :target: https://zenodo.org/badge/latestdoi/92295542

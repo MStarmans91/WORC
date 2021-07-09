@@ -1352,10 +1352,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 base_estimator = clone(base_estimator)
 
                 # # Check if we need to create a multiclass estimator
-                # if Y_train.shape[1] > 1 and type(base_estimator) != RankedSVM:
-                #     # Multiclass, hence employ a multiclass classifier for SVM
-                #     base_estimator = OneVsRestClassifier(base_estimator)
-
                 base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                train, train,
                                                verbose=False)

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.4.4 documentation</title>
+  <title>WORC.plotting.plot_ranked_scores &mdash; WORC 3.4.5 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.4
+                3.4.5
               </div>
             
           
@@ -192,6 +192,7 @@
 <span class="kn">import</span> <span class="nn">SimpleITK</span> <span class="k">as</span> <span class="nn">sitk</span>
 <span class="kn">from</span> <span class="nn">WORC.addexceptions</span> <span class="k">import</span> <span class="n">WORCKeyError</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">platform</span>
 
 
 <span class="c1"># NOTE: Need to add thresholds of plot_ranked_images to arguments</span>
@@ -384,8 +385,11 @@
             <span class="n">score</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">score</span><span class="p">))</span>
 
         <span class="n">fname</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">score</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">pid</span> <span class="o">+</span> <span class="s1">&#39;_TrueLabel_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ranked_truths</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_slice.png&#39;</span>
-        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span> <span class="o">+</span> <span class="n">fname</span>
+        <span class="k">if</span> <span class="s1">&#39;win&#39;</span> <span class="ow">in</span> <span class="n">platform</span><span class="p">:</span>
+            <span class="c1"># Windows has issues with sorting based on &#39;-&#39;, so replace with</span>
+            <span class="c1"># &#39;min&#39;</span>
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span> <span class="o">+</span> <span class="n">fname</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
         <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">output_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_zip</span><span class="p">),</span> <span class="n">fname</span><span class="p">)</span>
@@ -394,8 +398,10 @@
             <span class="n">output_name</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">output_name_zoom</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span> <span class="o">=</span> <span class="n">pi</span><span class="o">.</span><span class="n">slicer</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">seg</span><span class="p">,</span> <span class="n">output_name</span><span class="p">,</span>
-                                       <span class="n">output_name_zoom</span><span class="p">,</span> <span class="n">output_itk</span><span class="p">)</span>
+        <span class="n">imslice</span><span class="p">,</span> <span class="n">maskslice</span> <span class="o">=</span> <span class="n">pi</span><span class="o">.</span><span class="n">slicer</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">im</span><span class="p">,</span>
+                                       <span class="n">mask</span><span class="o">=</span><span class="n">seg</span><span class="p">,</span>
+                                       <span class="n">output_name</span><span class="o">=</span><span class="n">output_name</span><span class="p">,</span>
+                                       <span class="n">output_name_zoom</span><span class="o">=</span><span class="n">output_name_zoom</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Print PNGs and comine in ZIP</span>
@@ -621,25 +627,26 @@
 
     <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">output_itk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># FIXME: check for multilabel by checking type</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">():</span>
-            <span class="c1"># Rerank the scores split per ground truth class: negative for 0, positive for 1</span>
-            <span class="n">ranked_scores_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_scores</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">p</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-
-            <span class="n">ranked_scores</span> <span class="o">=</span> <span class="n">ranked_scores_temp</span>
-            <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">)</span>
-            <span class="n">ranked_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
-            <span class="n">ranked_truths</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_truths</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
-            <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_PIDs</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
-
-            <span class="c1"># Convert to lower to later on overcome matching errors</span>
-            <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
-
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">images</span><span class="p">:</span>
+                <span class="c1"># Rerank the scores split per ground truth class: negative for 0, positive for 1</span>
+                <span class="n">ranked_scores_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ranked_truths</span><span class="p">,</span> <span class="n">ranked_scores</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">p</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ranked_scores_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+                <span class="n">ranked_scores</span> <span class="o">=</span> <span class="n">ranked_scores_temp</span>
+                <span class="n">ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">ranked_scores</span><span class="p">)</span>
+                <span class="n">ranked_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_scores</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+                <span class="n">ranked_truths</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_truths</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+                <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranked_PIDs</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ranking</span><span class="p">]</span>
+
+                <span class="c1"># Convert to lower to later on overcome matching errors</span>
+                <span class="n">ranked_PIDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranked_PIDs</span><span class="p">]</span>
+
+                <span class="c1"># Plot the ranked images</span>
                 <span class="n">plot_ranked_images</span><span class="p">(</span><span class="n">pinfo</span><span class="o">=</span><span class="n">pinfo</span><span class="p">,</span>
                                    <span class="n">label_type</span><span class="o">=</span><span class="n">label_type</span><span class="p">,</span>
                                    <span class="n">images</span><span class="o">=</span><span class="n">images</span><span class="p">,</span>
@@ -650,11 +657,19 @@
                                    <span class="n">output_zip</span><span class="o">=</span><span class="n">output_zip</span><span class="p">,</span>
                                    <span class="n">output_itk</span><span class="o">=</span><span class="n">output_itk</span><span class="p">,</span>
                                    <span class="n">scores</span><span class="o">=</span><span class="n">scores</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Make dummy</span>
+                <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">output_zip</span><span class="p">,</span>
+                                    <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_DEFLATED</span><span class="p">,</span> <span class="n">allowZip64</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Make dummy</span>
             <span class="k">if</span> <span class="n">output_zip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">output_zip</span><span class="p">,</span>
                                 <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZIP_DEFLATED</span><span class="p">,</span> <span class="n">allowZip64</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="example"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ranked_scores.example">[docs]</a><span class="k">def</span> <span class="nf">example</span><span class="p">():</span>
     <span class="n">case</span> <span class="o">=</span> <span class="s1">&#39;MESFIB&#39;</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.fitandscore &mdash; WORC 3.4.4 documentation</title>
+  <title>WORC.classification.fitandscore &mdash; WORC 3.4.5 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.4
+                3.4.5
               </div>
             
           
@@ -190,7 +190,6 @@
 <span class="kn">from</span> <span class="nn">WORC.classification.ObjectSampler</span> <span class="k">import</span> <span class="n">ObjectSampler</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.metaestimators</span> <span class="k">import</span> <span class="n">_safe_split</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils.validation</span> <span class="k">import</span> <span class="n">_num_samples</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.estimators</span> <span class="k">import</span> <span class="n">RankedSVM</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.metrics</span> <span class="k">import</span> <span class="n">check_multimetric_scoring</span>
 <span class="kn">from</span> <span class="nn">WORC.featureprocessing.Relief</span> <span class="k">import</span> <span class="n">SelectMulticlassRelief</span>
@@ -992,8 +991,7 @@
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="n">labellength</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="k">if</span> <span class="n">labellength</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">RankedSVM</span><span class="p">,</span>
-                                                   <span class="n">RandomForestClassifier</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">labellength</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">RandomForestClassifier</span><span class="p">]:</span>
         <span class="c1"># Multiclass, hence employ a multiclass classifier for e.g. SVM, LR</span>
         <span class="n">estimator</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span><span class="o">**</span><span class="n">para_estimator</span><span class="p">)</span>
         <span class="n">estimator</span> <span class="o">=</span> <span class="n">OneVsRestClassifier</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>

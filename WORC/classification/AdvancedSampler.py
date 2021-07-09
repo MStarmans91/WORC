@@ -162,8 +162,10 @@ class AdvancedSampler(object):
         # Generate the sequence generator
         if self.method == 'Halton':
             sequence = self.Halton.get(self.n_iter)
-        elif self.method == 'Sobol':
-            sequence = Sobol(len(self.param_distributions.keys()), self.n_iter)
+            # elif self.method == 'Sobol':
+            #     sequence = Sobol(len(self.param_distributions.keys()), self.n_iter)
+        else:
+            raise KeyError(f'Methods {self.method} not known!')
 
         # Always sort the keys of a dictionary, for reproducibility
         items = sorted(self.param_distributions.items())
@@ -206,7 +208,7 @@ if __name__ == '__main__':
 
     n_iter = 6
 
-    method = 'Sobol'
+    method = 'Halton'
     sampled_params = AdvancedSampler(param_distributions,
                                      n_iter,
                                      random_state)

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.SearchCV &mdash; WORC 3.4.4 documentation</title>
+  <title>WORC.classification.SearchCV &mdash; WORC 3.4.5 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.4
+                3.4.5
               </div>
             
           
@@ -1517,10 +1517,6 @@
                 <span class="n">base_estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
 
                 <span class="c1"># # Check if we need to create a multiclass estimator</span>
-                <span class="c1"># if Y_train.shape[1] &gt; 1 and type(base_estimator) != RankedSVM:</span>
-                <span class="c1">#     # Multiclass, hence employ a multiclass classifier for SVM</span>
-                <span class="c1">#     base_estimator = OneVsRestClassifier(base_estimator)</span>
-
                 <span class="n">base_estimator</span><span class="o">.</span><span class="n">refit_and_score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">p_all</span><span class="p">,</span>
                                                <span class="n">train</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span>
                                                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
