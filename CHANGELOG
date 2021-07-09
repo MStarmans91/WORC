@@ -9,6 +9,7 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 3.4.5 - Unreleased
 ------------------
+ Unit tests moved from Travis to Github Workflow from this verion on.
 
 Fixed
 ~~~~~
@@ -18,7 +19,6 @@ Fixed
 Changed
 ~~~~~~~
 - Removed deprecated scatterplot, RankedSVM functions.
-- Unit tests moved to Github Workflow.
 
 3.4.4 - 2021-07-01
 ------------------
