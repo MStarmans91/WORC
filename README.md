@@ -3,15 +3,12 @@
 
 ## Information
 
-| Linux                          | Windows                       | Documentation                 | PyPi                          |Citing WORC          |
-|--------------------------------|-------------------------------|-------------------------------|-------------------------------|---------------------|
-| [![][tci-linx]][tci-linx-lnk]  | [![][tci-wind]][tci-wind-lnk] | [![][doc]][doc-lnk]           | [![][pypi]][pypi-lnk]         | [![][DOI]][DOI-lnk] |
+| Unit test                      | Documentation                 | PyPi                          |Citing WORC          |
+|--------------------------------|-------------------------------|-------------------------------|---------------------|
+| [![][gi-workflow]][gi-workflow-lnk]  | [![][doc]][doc-lnk]           | [![][pypi]][pypi-lnk]         | [![][DOI]][DOI-lnk] |
 
-[tci-linx]: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=1
-[tci-linx-lnk]: https://travis-ci.com/MStarmans91/WORC
-
-[tci-wind]: https://travis-ci.com/MStarmans91/WORC.svg?token=qyvaeq7Cpwu7hJGB98Gp&branch=master&job=2
-[tci-wind-lnk]: https://travis-ci.com/MStarmans91/WORC
+[gi-workflow]: https://github.com/MStarmans91/WORC/workflows/Unit%20test/badge.svg
+[gi-workflow-lnk]: https://github.com/MStarmans91/WORC/actions?query=workflow%3A%22Unit+test%22
 
 [doc]:https://readthedocs.org/projects/worc/badge/?version=latest
 [doc-lnk]: https://worc.readthedocs.io/en/latest/?badge=latest
@@ -54,8 +51,8 @@ The official documentation can be found at [https://worc.readthedocs.io](https:/
 
 ## Installation
 
-WORC currently only supports Unix with Python 3.6+ (tested on 3.7.2 - 3.7.4) systems and
-has been tested on Ubuntu 16.04 and 18.04, and Windows 10. For detailed installation
+WORC supports Unix and Windows systems with Python 3.6+: the [unit tests](https://github.com/MStarmans91/WORC/actions?query=workflow%3A%22Unit+test%22)
+are performed on the latest Ubuntu and Windows versions with Python 3.7. For detailed installation
 instructions, please check  [the ReadTheDocs installation guidelines](https://worc.readthedocs.io/en/latest/static/quick_start.html#installation).
 
 The package can be installed through pip:
@@ -69,10 +66,6 @@ Alternatively, you can directly install WORC from this repository:
 Make sure you install the requirements first:
 
       pip install -r requirements.txt
-
-NOTE: The version of PyRadiomics which WORC currently uses requires numpy to be installed beforehand. Make sure you do so, e.g.
-
-      pip install numpy
 
 ## 3rd-party packages used in WORC:
 
