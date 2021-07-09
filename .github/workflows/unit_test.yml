@@ -71,8 +71,8 @@ jobs:
         run: |
             rm -r /tmp/GS/DEBUG_0
             python WORC/tests/WORCTutorialSimple_unittest_regression.py
-            fastr trace /home/runner/work/WORC/WORC/WORC/tests/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks classification --samples all
-            fastr trace /home/runner/work/WORC/WORC/WORC/tests/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks performance --samples all
+            fastr trace /tmp/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks classification --samples all
+            fastr trace /tmp/WORC_Example_STWStrategyHN_Regression/__sink_data__.json --sinks performance --samples all
             fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
         env:
           WORCDEBUG: true
@@ -81,8 +81,8 @@ jobs:
         run: |
             rm -r /tmp/GS/DEBUG_0
             python WORC/tests/WORCTutorialSimple_unittest_multiclass.py
-            fastr trace /home/runner/work/WORC/WORC/WORC/tests/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks classification --samples all
-            fastr trace /home/runner/work/WORC/WORC/WORC/tests/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks performance --samples all
+            fastr trace /tmp/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks classification --samples all
+            fastr trace /tmp/WORC_Example_STWStrategyHN_Multiclass/__sink_data__.json --sinks performance --samples all
             fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
         env:
           WORCDEBUG: true
