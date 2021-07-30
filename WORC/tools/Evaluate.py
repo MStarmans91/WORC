@@ -429,8 +429,8 @@ class Evaluate(object):
                 self.links_STest_Features[name] =\
                     self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_STest.inputs['features'])
 
-            self.links_decomposition_Features[name] =\
-                self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_decomposition.inputs['features'])
+                self.links_decomposition_Features[name] =\
+                    self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_decomposition.inputs['features'])
 
             self.links_Boxplots_Features[name] =\
                 self.network.create_link(self.parent.ComBat.outputs['features_train_out'], self.node_Boxplots_Features.inputs['features'])
@@ -438,8 +438,8 @@ class Evaluate(object):
             # All features should be input at once
             if 'classification' in self.modus:
                 self.links_STest_Features[name].collapse = 'ComBat'
+                self.links_decomposition_Features[name].collapse = 'ComBat'
 
-            self.links_decomposition_Features[name].collapse = 'ComBat'
             self.links_Boxplots_Features[name].collapse = 'ComBat'
 
         else:
@@ -454,8 +454,8 @@ class Evaluate(object):
                                 self.links_STest_Features[name] =\
                                     self.node_STest.inputs['features'][name] << node.outputs['feat_out']
 
-                            self.links_decomposition_Features[name] =\
-                                self.node_decomposition.inputs['features'][name] << node.outputs['feat_out']
+                                self.links_decomposition_Features[name] =\
+                                    self.node_decomposition.inputs['features'][name] << node.outputs['feat_out']
 
                             self.links_Boxplots_Features[name] =\
                                 self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
@@ -463,8 +463,8 @@ class Evaluate(object):
                             # All features should be input at once
                             if 'classification' in self.modus:
                                 self.links_STest_Features[name].collapse = 'train'
+                                self.links_decomposition_Features[name].collapse = 'train'
 
-                            self.links_decomposition_Features[name].collapse = 'train'
                             self.links_Boxplots_Features[name].collapse = 'train'
                     else:
                         # Feature are precomputed and given as sources
@@ -474,16 +474,17 @@ class Evaluate(object):
                                 self.links_STest_Features[name] =\
                                     self.node_STest.inputs['features'][name] << node.output
 
-                            self.links_decomposition_Features[name] =\
-                                self.node_decomposition.inputs['features'][name] << node.output
+                                self.links_decomposition_Features[name] =\
+                                    self.node_decomposition.inputs['features'][name] << node.output
+
                             self.links_Boxplots_Features[name] =\
                                 self.node_Boxplots_Features.inputs['features'][name] << node.output
 
                             # All features should be input at once
                             if 'classification' in self.modus:
                                 self.links_STest_Features[name].collapse = 'train'
+                                self.links_decomposition_Features[name].collapse = 'train'
 
-                            self.links_decomposition_Features[name].collapse = 'train'
                             self.links_Boxplots_Features[name].collapse = 'train'
 
                 else:

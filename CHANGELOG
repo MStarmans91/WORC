@@ -13,6 +13,7 @@ Unreleased
 Fixed
 ~~~~~
 - Bug in plotting 2D images when ranking the posteriors or percentages.
+- Bug in Evaluate for Regression.
 
 
 3.4.5 - 2021-07-09
