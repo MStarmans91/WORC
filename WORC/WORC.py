@@ -31,7 +31,8 @@ import WORC.addexceptions as WORCexceptions
 import WORC.IOparser.config_WORC as config_io
 from WORC.detectors.detectors import DebugDetector
 from WORC.export.hyper_params_exporter import export_hyper_params_to_latex
-from urllib.parse import unquote_plus, urlparse
+from urllib.parse import urlparse
+from urllib.request import url2pathname
 
 
 class WORC(object):
@@ -1756,7 +1757,7 @@ class WORC(object):
 
         # export hyper param. search space to LaTeX table
         for config in self.fastrconfigs:
-            config_path = Path(unquote_plus(urlparse(config).path))
+            config_path = Path(url2pathname(urlparse(config).path))
             tex_path = f'{config_path.parent.absolute() / config_path.stem}_hyperparams_space.tex'
             export_hyper_params_to_latex(config_path, tex_path)
 
