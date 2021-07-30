@@ -107,6 +107,7 @@ def random_split_cross_validation(image_features, feature_labels, classes,
                 for n_patient in range(0, classes.shape[1]):
                     for n_label in range(0, classes.shape[0]):
                         classes_temp[n_patient, n_label] = classes[n_label, n_patient]
+
             else:
                 raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
 
@@ -525,7 +526,11 @@ def crossval(config, label_data, image_features,
     # Check if we need to use fixedsplits:
     if fixedsplits is not None and '.csv' in fixedsplits:
         fixedsplits = pd.read_csv(fixedsplits, header=0)
-        crossval_type = 'random_split'  # random split crossvalidator handles fixed splits as expected, while LOO crossvalidator does not support this
+
+        # Fixedsplits need to be performed in random split fashion, makes no sense for LOO
+        if crossval_type == 'LOO':
+            print('[WORC WARNING] Fixedsplits need to be performed in random split fashion, makes no sense for LOO.')
+            crossval_type = 'random_split'
 
     if modus == 'singlelabel':
         print('Performing single-class classification.')

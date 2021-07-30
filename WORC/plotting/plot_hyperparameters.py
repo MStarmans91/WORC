@@ -56,6 +56,10 @@ def plot_hyperparameters(prediction, label_type=None, estsize=50,
     keys = prediction.keys()
     if label_type is None:
         label_type = keys[0]
+    elif len(label_type.split(',')) != 1:
+        # Multiclass, just take the prediction label
+        label_type = keys[0]
+
     prediction = prediction[label_type]
 
     # Loop over classifiers

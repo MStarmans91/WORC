@@ -1,40 +1,39 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.tools.Evaluate &mdash; WORC 3.4.0 documentation</title>
+  <title>WORC.tools.Evaluate &mdash; WORC 3.4.5 documentation</title>
   
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
 
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -50,7 +49,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> WORC
+            <a href="../../../index.html" class="icon icon-home"> WORC
           
 
           
@@ -63,7 +62,7 @@
             
             
               <div class="version">
-                3.4.0
+                3.4.5
               </div>
             
           
@@ -80,7 +79,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -107,7 +105,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -146,7 +143,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -168,7 +165,7 @@
   <h1>Source code for WORC.tools.Evaluate</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -185,7 +182,7 @@
 
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
 <span class="kn">import</span> <span class="nn">fastr</span>
-<span class="kn">from</span> <span class="nn">fastr.api</span> <span class="kn">import</span> <span class="n">ResourceLimit</span>
+<span class="kn">from</span> <span class="nn">fastr.api</span> <span class="k">import</span> <span class="n">ResourceLimit</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">graphviz</span>
 
@@ -193,7 +190,8 @@
 <div class="viewcode-block" id="Evaluate"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate">[docs]</a><span class="k">class</span> <span class="nc">Evaluate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Build a network that evaluates the performance of an estimator.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Evaluate.__init__"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label_type</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">scores</span><span class="o">=</span><span class="s1">&#39;percentages&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="Evaluate.__init__"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label_type</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;binary_classification&#39;</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                 <span class="n">scores</span><span class="o">=</span><span class="s1">&#39;percentages&#39;</span><span class="p">,</span>
                  <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">fastr_plugin</span><span class="o">=</span><span class="s1">&#39;LinearExecution&#39;</span><span class="p">,</span>
                  <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Example&#39;</span><span class="p">):</span>
@@ -224,6 +222,7 @@
         <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="s1">&#39;Either features as input or a WORC network is required for the Evaluate network.&#39;</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">modus</span> <span class="o">=</span> <span class="n">modus</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">features</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">label_type</span> <span class="o">=</span> <span class="n">label_type</span>
@@ -233,11 +232,12 @@
 <div class="viewcode-block" id="Evaluate.create_network"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate.create_network">[docs]</a>    <span class="k">def</span> <span class="nf">create_network</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Add evaluate components to network.&quot;&quot;&quot;</span>
         <span class="c1"># Create all nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotROC:1.0&#39;</span><span class="p">,</span> <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
-                                     <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_ROC&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotROC:1.0&#39;</span><span class="p">,</span> <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_ROC&#39;</span><span class="p">,</span>
+                                         <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span> <span class="o">=</span>\
@@ -257,32 +257,35 @@
                                      <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;6G&#39;</span><span class="p">),</span>
                                      <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/StatisticalTestFeatures:1.0&#39;</span><span class="p">,</span>
-                                     <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
-                                     <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;statistical_test_features&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/StatisticalTestFeatures:1.0&#39;</span><span class="p">,</span>
+                                         <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;statistical_test_features&#39;</span><span class="p">,</span>
+                                         <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/Decomposition:1.0&#39;</span><span class="p">,</span>
-                                     <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
-                                     <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;decomposition&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/Decomposition:1.0&#39;</span><span class="p">,</span>
+                                         <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;decomposition&#39;</span><span class="p">,</span>
+                                         <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;12G&#39;</span><span class="p">),</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotRankedScores:1.0&#39;</span><span class="p">,</span>
-                                     <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
-                                     <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_ranked_percentages&#39;</span><span class="p">,</span>
-                                     <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;20G&#39;</span><span class="p">),</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotRankedScores:1.0&#39;</span><span class="p">,</span>
+                                         <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_ranked_percentages&#39;</span><span class="p">,</span>
+                                         <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;20G&#39;</span><span class="p">),</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotRankedScores:1.0&#39;</span><span class="p">,</span>
                                      <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
                                      <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;plot_ranked_posteriors&#39;</span><span class="p">,</span>
                                      <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;20G&#39;</span><span class="p">),</span>
                                      <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/PlotBoxplotFeatures:1.0&#39;</span><span class="p">,</span>
                                      <span class="n">tool_version</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
@@ -291,15 +294,26 @@
                                      <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;Evaluation&#39;</span><span class="p">)</span>
 
         <span class="c1"># Create sinks</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_PNG</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;PNGFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;ROC_PNG&#39;</span><span class="p">,</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_Tex</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;TexFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;ROC_Tex&#39;</span><span class="p">,</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_CSV</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;CSVFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;ROC_CSV&#39;</span><span class="p">,</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_PNG</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;PNGFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;ROC_PNG&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_Tex</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;TexFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;ROC_Tex&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_CSV</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;CSVFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;ROC_CSV&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_PRC_PNG</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;PNGFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;PRC_PNG&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_PRC_Tex</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;TexFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;PRC_Tex&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_PRC_CSV</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;CSVFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;PRC_CSV&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sink_Estimator_Json</span> <span class="o">=</span>\
@@ -318,32 +332,33 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;CSVFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;Hyperparameters_CSV&#39;</span><span class="p">,</span>
                                      <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_CSV</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;CSVFile&#39;</span><span class="p">,</span>
-                                     <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;StatisticalTestFeatures_CSV&#39;</span><span class="p">,</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_CSV</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;CSVFile&#39;</span><span class="p">,</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;StatisticalTestFeatures_CSV&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_PNG</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;PNGFile&#39;</span><span class="p">,</span>
-                                     <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;StatisticalTestFeatures_PNG&#39;</span><span class="p">,</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_PNG</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;PNGFile&#39;</span><span class="p">,</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;StatisticalTestFeatures_PNG&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_Tex</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;TexFile&#39;</span><span class="p">,</span>
-                                     <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;StatisticalTestFeatures_Tex&#39;</span><span class="p">,</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_Tex</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;TexFile&#39;</span><span class="p">,</span>
+                                         <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;StatisticalTestFeatures_Tex&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_decomposition_PNG</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;PNGFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;Decomposition_PNG&#39;</span><span class="p">,</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_decomposition_PNG</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;PNGFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;Decomposition_PNG&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Percentages_Zip</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;ZipFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;RankedPercentages_Zip&#39;</span><span class="p">,</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Percentages_Zip</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;ZipFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;RankedPercentages_Zip&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Percentages_CSV</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;CSVFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;RankedPercentages_CSV&#39;</span><span class="p">,</span>
-                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Percentages_CSV</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;CSVFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;RankedPercentages_CSV&#39;</span><span class="p">,</span>
+                                         <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Posteriors_Zip</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;ZipFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;RankedPosteriors_Zip&#39;</span><span class="p">,</span>
@@ -358,9 +373,14 @@
                                      <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
 
         <span class="c1"># Create links to sinks</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_PNG</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_png&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_Tex</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_tex&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_CSV</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_csv&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_PNG</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;ROC_png&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_Tex</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;ROC_tex&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_ROC_CSV</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;ROC_csv&#39;</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_PRC_PNG</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;PRC_png&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_PRC_Tex</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;PRC_tex&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_PRC_CSV</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;PRC_csv&#39;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sink_Estimator_Json</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_json&#39;</span><span class="p">]</span>
@@ -370,15 +390,20 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_Hyperparameters_CSV</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Hyperparameters</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_csv&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_CSV</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_csv&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_PNG</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_png&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_Tex</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_tex&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_decomposition_PNG</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_CSV</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_csv&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_PNG</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_png&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_STest_Tex</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_tex&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Percentages_Zip</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_zip&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Percentages_CSV</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_csv&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_decomposition_PNG</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Percentages_Zip</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_zip&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Percentages_CSV</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_csv&#39;</span><span class="p">]</span>
+
+            <span class="c1"># Create constant node</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;percentages&#39;</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_Ranked_Posteriors_Zip</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_zip&#39;</span><span class="p">]</span>
@@ -388,8 +413,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sink_Boxplots_Features_Zip</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_zip&#39;</span><span class="p">]</span>
 
-        <span class="c1"># Create two constant nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;percentages&#39;</span><span class="p">]</span>
+        <span class="c1"># Create constant node</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;scores&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;posteriors&#39;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;StandAlone&#39;</span><span class="p">:</span>
@@ -433,8 +457,9 @@
 <div class="viewcode-block" id="Evaluate.create_links_Standalone"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.Evaluate.Evaluate.create_links_Standalone">[docs]</a>    <span class="k">def</span> <span class="nf">create_links_Standalone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create links in network between nodes when using standalone.&quot;&quot;&quot;</span>
         <span class="c1"># Sources from the Evaluate network are used</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Estimator</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Estimator</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Estimator</span><span class="o">.</span><span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
@@ -443,34 +468,38 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Hyperparameters</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Estimator</span><span class="o">.</span><span class="n">output</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;features&#39;</span>
+            <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;features&#39;</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;features&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;features&#39;</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)]</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;features&#39;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Config</span><span class="o">.</span><span class="n">output</span>
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Config</span><span class="o">.</span><span class="n">output</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Config</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Config</span><span class="o">.</span><span class="n">output</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Estimator</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_Images</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;patients&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_Segmentations</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;patients&#39;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Config</span><span class="o">.</span><span class="n">output</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Estimator</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_Images</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;patients&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_Segmentations</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;patients&#39;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Estimator</span><span class="o">.</span><span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_PatientInfo</span><span class="o">.</span><span class="n">output</span>
@@ -479,8 +508,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_post</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_Segmentations</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_post</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;patients&#39;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
+
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Estimator</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
@@ -490,11 +526,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Hyperparameters</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Hyperparameters</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
@@ -520,8 +551,15 @@
                 <span class="n">segmentations</span> <span class="o">=</span>\
                     <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sources_segmentations_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
+
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
@@ -529,24 +567,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Hyperparameters</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimators&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Hyperparameters</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
-            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ensemble&#39;</span><span class="p">]</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_Ensemble</span><span class="o">.</span><span class="n">output</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;label_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
             <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">source_LabelType</span><span class="o">.</span><span class="n">output</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_ROC</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Barchart</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Hyperparameters</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
@@ -554,8 +590,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
             <span class="c1"># Take features from ComBat</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                    <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                 <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
@@ -564,7 +601,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
 
             <span class="c1"># All features should be input at once</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
+            <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
 
@@ -576,8 +615,9 @@
                         <span class="c1"># Take features directly from feature computation toolboxes</span>
                         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">featureconverter_train</span><span class="p">[</span><span class="n">label</span><span class="p">]:</span>
                             <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">id</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                                <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
 
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                                 <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
@@ -586,22 +626,28 @@
                                 <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
 
                             <span class="c1"># All features should be input at once</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                            <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># Feature are precomputed and given as sources</span>
                         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sources_features_train</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                             <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">id</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                                <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
+                            <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
+
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                                 <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                                 <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
 
                             <span class="c1"># All features should be input at once</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                            <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
@@ -609,29 +655,35 @@
                     <span class="c1"># Feature are precomputed and given as sources</span>
                     <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sources_features_train</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
                         <span class="n">name</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">id</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                            <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                            <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
+                        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                                <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                                <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
+
                         <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                             <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
 
                         <span class="c1"># All features should be input at once</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+
                         <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;patientclass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prediction</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;pinfo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pinfo</span>
 
@@ -639,12 +691,14 @@
             <span class="n">images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sources_images_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
             <span class="n">segmentations</span> <span class="o">=</span>\
                 <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sources_segmentations_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">output</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span> <span class="o">=</span>\
-                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span> <span class="o">=</span>\
-                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">segmentations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations&#39;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+
+            <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span> <span class="o">=</span>\
+                    <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span> <span class="o">=</span>\
+                    <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">segmentations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">link_images_post</span> <span class="o">=</span>\
                 <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span>
@@ -655,12 +709,13 @@
 
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="s1">&#39;sources_images_train&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sources_images_train</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span> <span class="o">=</span>\
-                    <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span> <span class="o">=</span>\
-                    <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">segmentations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations&#39;</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span> <span class="o">=</span>\
+                        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">link_images_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span> <span class="o">=</span>\
+                        <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">segmentations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Percentages</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">link_segmentations_perc</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">link_images_post</span> <span class="o">=</span>\
                     <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Ranked_Posteriors</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span>
@@ -690,12 +745,19 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">sink_data</span>
 
-        <span class="k">if</span> <span class="s1">&#39;ROC_PNG&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;ROC_PNG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;ROC_Tex&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;ROC_Tex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;ROC_CSV&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;ROC_CSV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;ROC_PNG&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;ROC_PNG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;ROC_Tex&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;ROC_Tex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;ROC_CSV&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;ROC_CSV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/ROC_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;PRC_PNG&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;PRC_PNG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/PRC_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;PRC_Tex&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;PRC_Tex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/PRC_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;PRC_CSV&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;PRC_CSV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/PRC_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s1">&#39;Estimator_Json&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;Estimator_Json&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/performance_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -708,22 +770,23 @@
         <span class="k">if</span> <span class="s1">&#39;Hyperparameters_CSV&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;Hyperparameters_CSV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/Hyperparameters_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;StatisticalTestFeatures_CSV&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;StatisticalTestFeatures_CSV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;StatisticalTestFeatures_CSV&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;StatisticalTestFeatures_CSV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;StatisticalTestFeatures_PNG&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;StatisticalTestFeatures_PNG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;StatisticalTestFeatures_PNG&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;StatisticalTestFeatures_PNG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;StatisticalTestFeatures_Tex&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;StatisticalTestFeatures_Tex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;StatisticalTestFeatures_Tex&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;StatisticalTestFeatures_Tex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/StatisticalTestFeatures_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;Decomposition_PNG&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;Decomposition_PNG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/Decomposition_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;Decomposition_PNG&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;Decomposition_PNG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/Decomposition_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="s1">&#39;RankedPercentages_Zip&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;RankedPercentages_Zip&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/RankedPercentages_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;RankedPercentages_CSV&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;RankedPercentages_CSV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/RankedPercentages_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;RankedPercentages_Zip&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;RankedPercentages_Zip&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/RankedPercentages_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;RankedPercentages_CSV&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;RankedPercentages_CSV&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/RankedPercentages_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s1">&#39;RankedPosteriors_Zip&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sink_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sink_data</span><span class="p">[</span><span class="s1">&#39;RankedPosteriors_Zip&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vfs://output/</span><span class="si">{}</span><span class="s2">/Evaluation/RankedPosteriors_{{sample_id}}_{{cardinality}}{{ext}}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -756,19 +819,11 @@
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -779,6 +834,7 @@
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {

@@ -80,10 +80,7 @@ When using ComBat, the following configurations should be done:
     straight after the feature extraction, thus before the actual hyperoptimization.
     Hence, to avoid serious overfitting, we advice to **NEVER** use the variable
     you are trying to predict as the moderation variable.
-
-ICC
-----
-Documentation WIP.
+    
 
 Additional classifiers
 -----------------------

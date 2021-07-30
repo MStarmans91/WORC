@@ -7,7 +7,77 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 
-3.4.1 - Unreleased
+Unreleased
+------------
+
+Fixed
+~~~~~
+- Bug in plotting 2D images when ranking the posteriors or percentages.
+- Bug in Evaluate for Regression.
+
+
+3.4.5 - 2021-07-09
+------------------
+ Unit tests moved from Travis to Github Workflow from this verion on.
+
+Fixed
+~~~~~
+- Bug in plotting images when ranking the posteriors or percentages.
+- Linting issues.
+
+Changed
+~~~~~~~
+- Removed deprecated scatterplot, RankedSVM functions.
+
+3.4.4 - 2021-07-01
+------------------
+
+Fixed
+~~~~~
+- Bug where most recent added estimators were not valid in SimpleWORC.
+- SelectorMixin is now imported directly from sklearn.feature_selection,
+  as sklearn.feature_selection.base is deprecated and will be removed.
+
+Changed
+~~~~~~~
+- Apply variance threshold selection before feature scaling, otherwise
+  variance is always the same for all features.
+- RELIEF, selection using a model, PCA, and univariate testing default
+  use changed from 0.20 to 0.275.
+
+Added
+~~~~~~~
+- Functionality in plotting images functions.
+- Documentation on how to use your own features.
+
+3.4.3 - 2021-06-02
+------------------
+
+Fixed
+~~~~~
+- SimpleWORC and BasicWORC now support multilabel workflows.
+- SimpleWORC and BasicWORC now support use of masks.
+
+Added
+~~~~~~~
+- Unit testing for multilabel workflows.
+
+3.4.2 - 2021-05-27
+------------------
+
+Fixed
+~~~~~
+- Bug in flattening of plot_ranked_posteriors function.
+- Bug in plot_images: could not handle 2D images when applying slicing.
+- Bug in precision-recall curve.
+- Bug in performance estimation plotting.
+- Preflighcheck now also accepts labels from txt or XNAT.
+
+Added
+~~~~~~~
+- Label file can now also be separated by semicolons.
+
+3.4.1 - 2021-05-18
 ------------------
 
 Fixed
@@ -17,11 +87,16 @@ Fixed
 - Fix XGboost verson, as newest version automatically uses multihreading,
   which is unsuitable for clusters.
 - Bug in decomposition for Evaluation.
+- RankedPosteriors naming of images was rounded to an integer, now unrounded
+- Several fixes for regression.
+- Regression in unit test.
+- Several fixes for using 2D images.
 
 Changed
 ~~~~~~~
 - Reverted back to weighted f1-score without predictproba for optimization,
   more stable.
+- Updated regressors in SimpleWORC.
 
 Added
 ~~~~~~~
@@ -29,6 +104,8 @@ Added
   e.g. by averaging or taking the maximum.
 - Logarithmic z-score scaler to be more robust to non-normal distributions
   and outliers.
+- Linear and Ridge regression.
+- Precision-recall curves.
 
 3.4.0 - 2021-02-02
 ------------------

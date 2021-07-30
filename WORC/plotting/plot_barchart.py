@@ -67,7 +67,11 @@ def plot_barchart(prediction, estimators=10, label_type=None, output_tex=None,
     if label_type is None:
         label_type = keys[0]
 
-    prediction = prediction[label_type]
+    try:
+        prediction = prediction[label_type]
+    except KeyError:
+        # Multiclass reroute
+        prediction = prediction[keys[0]]
 
     # Extract the parameter settings:
     parameters = dict()

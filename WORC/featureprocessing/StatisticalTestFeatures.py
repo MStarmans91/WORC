@@ -108,7 +108,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
     header = list()
     subheader = list()
     for i_name in label_name:
-        header.append(str(i_name[0]))
+        header.append(str(i_name))
         header.append('')
         header.append('')
         header.append('')

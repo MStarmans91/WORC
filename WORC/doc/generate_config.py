@@ -319,7 +319,7 @@ def generate_config_options():
     config['Classification'] = dict()
     config['Classification']['fastr'] = 'True, False'
     config['Classification']['fastr_plugin'] = 'Any `fastr execution plugin <https://fastr.readthedocs.io/en/develop/_autogen/fastr.reference.html#executionplugin-reference/>`_ .'
-    config['Classification']['classifiers'] = 'SVM , SVR, SGD, SGDR, RF, LDA, QDA, ComplementND, GaussianNB, LR, RFR, Lasso, ElasticNet. All are estimators from `sklearn <https://scikit-learn.org/stable//>`_ '
+    config['Classification']['classifiers'] = 'SVM , SVR, SGD, SGDR, RF, LDA, QDA, ComplementND, GaussianNB, AdaBoostClassifier, XGBClassifier, LR, RFR, Lasso, ElasticNet, LinR, Ridge, AdaBoostRegressor, XGBRegressor. All are estimators from `sklearn <https://scikit-learn.org/stable//>`_ '
     config['Classification']['max_iter'] = 'Integer'
     config['Classification']['SVMKernel'] = 'poly, linear, rbf'
     config['Classification']['SVMC'] = 'Two Integers: loc and scale'
@@ -615,7 +615,7 @@ def generate_config_descriptions():
     config['Classification'] = dict()
     config['Classification']['fastr'] = 'Use fastr for the optimization gridsearch (recommended on clusters, default) or if set to False , joblib (recommended for PCs but not on Windows).'
     config['Classification']['fastr_plugin'] = 'Name of execution plugin to be used. Default use the same as the self.fastr_plugin for the WORC object.'
-    config['Classification']['classifiers'] = "Select the estimator(s) to use. Most are implemented using `sklearn <https://scikit-learn.org/stable/>`_. For abbreviations, see above."
+    config['Classification']['classifiers'] = "Select the estimator(s) to use. Most are implemented using `sklearn <https://scikit-learn.org/stable/>`_. For abbreviations, see the options: LR = logistic regression."
     config['Classification']['max_iter'] = 'Maximum number of iterations to use in training an estimator. Only for specific estimators, see `sklearn <https://scikit-learn.org/stable/>`_.'
     config['Classification']['SVMKernel'] = 'When using a SVM, specify the kernel type.'
     config['Classification']['SVMC'] = 'Range of the SVM slack parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'

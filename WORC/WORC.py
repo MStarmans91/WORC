@@ -355,16 +355,16 @@ class WORC(object):
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = '1.0'
         config['Featsel']['GroupwiseSearch'] = 'True'
-        config['Featsel']['SelectFromModel'] = '0.2'
+        config['Featsel']['SelectFromModel'] = '0.275'
         config['Featsel']['SelectFromModel_estimator'] = 'Lasso, LR, RF'
         config['Featsel']['SelectFromModel_lasso_alpha'] = '0.1, 1.4'
         config['Featsel']['SelectFromModel_n_trees'] = '10, 90'
-        config['Featsel']['UsePCA'] = '0.2'
+        config['Featsel']['UsePCA'] = '0.275'
         config['Featsel']['PCAType'] = '95variance, 10, 50, 100'
-        config['Featsel']['StatisticalTestUse'] = '0.2'
+        config['Featsel']['StatisticalTestUse'] = '0.275'
         config['Featsel']['StatisticalTestMetric'] = 'MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '-3, 2.5'
-        config['Featsel']['ReliefUse'] = '0.2'
+        config['Featsel']['ReliefUse'] = '0.275'
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '0.75, 0.2'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
@@ -409,7 +409,7 @@ class WORC(object):
             'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
             'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
             'SMOTEENN, SMOTETomek'
-        config['Resampling']['sampling_strategy'] = 'majority, not minority, not majority, all'
+        config['Resampling']['sampling_strategy'] = 'auto, majority, minority, not minority, not majority, all'
         config['Resampling']['n_neighbors'] = '3, 12'
         config['Resampling']['k_neighbors'] = '5, 15'
         config['Resampling']['threshold_cleaning'] = '0.25, 0.5'
@@ -419,12 +419,7 @@ class WORC(object):
         config['Classification']['fastr'] = 'True'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
         config['Classification']['classifiers'] =\
-            'SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, ' +\
-            'RF, RF, RF, ' +\
-            'LR, LR, LR, ' +\
-            'LDA, LDA, LDA, ' +\
-            'QDA, QDA, QDA, ' +\
-            'GaussianNB, GaussianNB, GaussianNB, ' +\
+            'SVM, RF, LR, LDA, QDA, GaussianNB, ' +\
             'AdaBoostClassifier, ' +\
             'XGBClassifier'
         config['Classification']['max_iter'] = '100000'
@@ -455,10 +450,11 @@ class WORC(object):
 
         # Based on https://towardsdatascience.com/doing-xgboost-hyper-parameter-tuning-the-smart-way-part-1-of-2-f6d255a45dde
         # and https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/
+        # and https://medium.com/data-design/xgboost-hi-im-gamma-what-can-i-do-for-you-and-the-tuning-of-regularization-a42ea17e6ab6
         config['Classification']['XGB_boosting_rounds'] = config['Classification']['RFn_estimators']
         config['Classification']['XGB_max_depth'] = '3, 12'
         config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
-        config['Classification']['XGB_gamma'] = '0.01, 0.99'
+        config['Classification']['XGB_gamma'] = '0.01, 9.99'
         config['Classification']['XGB_min_child_weight'] = '1, 6'
         config['Classification']['XGB_colsample_bytree'] = '0.3, 0.7'
 
@@ -472,7 +468,7 @@ class WORC(object):
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
-        config['HyperOptimization']['test_size'] = '0.15'
+        config['HyperOptimization']['test_size'] = '0.2'
         config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '1000'
         config['HyperOptimization']['n_jobspercore'] = '500'  # only relevant when using fastr in classification
@@ -981,6 +977,7 @@ class WORC(object):
                             # Add the features from this modality to the classifier node input
                             self.links_C1_test[label] = self.classify.inputs['features_test'][str(label)] << self.sources_features_test[label].output
                             self.links_C1_test[label].collapse = 'test'
+
 
             else:
                 raise WORCexceptions.WORCIOError("Please provide labels.")
@@ -1769,7 +1766,7 @@ class WORC(object):
 
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 
-    def add_evaluation(self, label_type):
+    def add_evaluation(self, label_type, modus='binary_classification'):
         """Add branch for evaluation of performance to network.
 
         Note: should be done after build, before set:
@@ -1779,7 +1776,8 @@ class WORC(object):
         WORC.execute()
 
         """
-        self.Evaluate = Evaluate(label_type=label_type, parent=self)
+        self.Evaluate =\
+            Evaluate(label_type=label_type, parent=self, modus=modus)
         self._add_evaluation = True
 
     def save_config(self):

@@ -132,3 +132,4 @@ WORC/external/*
 WORC/exampledata/ICCvalues.csv
 WORC/tests/*.png
 WORC/tests/*.mat
+WORC/tests/WORC_Example_STWStrategyHN_*

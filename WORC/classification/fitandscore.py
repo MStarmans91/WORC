@@ -25,7 +25,6 @@ from sklearn.ensemble import RandomForestClassifier
 from WORC.classification.ObjectSampler import ObjectSampler
 from sklearn.utils.metaestimators import _safe_split
 from sklearn.utils.validation import _num_samples
-from WORC.classification.estimators import RankedSVM
 from WORC.classification import construct_classifier as cc
 from WORC.classification.metrics import check_multimetric_scoring
 from WORC.featureprocessing.Relief import SelectMulticlassRelief
@@ -199,6 +198,7 @@ def fit_and_score(X, y, scoring,
         print("\n")
         print('#######################################')
         print('Starting fit and score of new workflow.')
+
     para_estimator = parameters.copy()
     estimator = cc.construct_classifier(para_estimator)
 
@@ -406,37 +406,6 @@ def fit_and_score(X, y, scoring,
         else:
             return ret
 
-    # ------------------------------------------------------------------------
-    # Feature scaling
-    if verbose and para_estimator['FeatureScaling'] != 'None':
-        print(f'Fitting scaler and transforming features, method ' +
-              f'{para_estimator["FeatureScaling"]}.')
-
-    scaling_method = para_estimator['FeatureScaling']
-    if scaling_method == 'None':
-        scaler = None
-    else:
-        skip_features = para_estimator['FeatureScaling_skip_features']
-        n_skip_feat = len([i for i in feature_labels[0] if any(e in i for e in skip_features)])
-        if n_skip_feat == len(X_train[0]):
-            # Don't need to scale any features
-            if verbose:
-                print('[WORC Warning] Skipping scaling, only skip features selected.')
-            scaler = None
-        else:
-            scaler = WORCScaler(method=scaling_method, skip_features=skip_features)
-            scaler.fit(X_train, feature_labels[0])
-
-    if scaler is not None:
-        X_train = scaler.transform(X_train)
-        X_test = scaler.transform(X_test)
-
-    del para_estimator['FeatureScaling']
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del scaler
-
     # --------------------------------------------------------------------
     # Feature selection based on variance
     if para_estimator['Featsel_Variance'] == 'True':
@@ -472,6 +441,39 @@ def fit_and_score(X, y, scoring,
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
             return ret
+
+    # ------------------------------------------------------------------------
+    # Feature scaling
+    if verbose and para_estimator['FeatureScaling'] != 'None':
+        print(f'Fitting scaler and transforming features, method ' +
+              f'{para_estimator["FeatureScaling"]}.')
+
+    scaling_method = para_estimator['FeatureScaling']
+    if scaling_method == 'None':
+        scaler = None
+    else:
+        skip_features = para_estimator['FeatureScaling_skip_features']
+        n_skip_feat = len([i for i in feature_labels[0] if any(e in i for e in skip_features)])
+        if n_skip_feat == len(X_train[0]):
+            # Don't need to scale any features
+            if verbose:
+                print('[WORC Warning] Skipping scaling, only skip features selected.')
+            scaler = None
+        else:
+            scaler = WORCScaler(method=scaling_method, skip_features=skip_features)
+            scaler.fit(X_train, feature_labels[0])
+
+    if scaler is not None:
+        X_train = scaler.transform(X_train)
+        X_test = scaler.transform(X_test)
+
+    del para_estimator['FeatureScaling']
+    del para_estimator['FeatureScaling_skip_features']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del scaler
+
 
     # --------------------------------------------------------------------
     # Relief feature selection, possibly multi classself.
@@ -540,18 +542,24 @@ def fit_and_score(X, y, scoring,
         if model == 'Lasso':
             # Use lasso model for feature selection
             alpha = para_estimator['SelectFromModel_lasso_alpha']
-            selectestimator = Lasso(alpha=alpha)
+            selectestimator = Lasso(alpha=alpha, random_state=random_seed)
 
         elif model == 'LR':
             # Use logistic regression model for feature selection
-            selectestimator = LogisticRegression()
+            selectestimator = LogisticRegression(random_state=random_seed)
 
         elif model == 'RF':
             # Use random forest model for feature selection
             n_estimators = para_estimator['SelectFromModel_n_trees']
-            selectestimator = RandomForestClassifier(n_estimators=n_estimators)
+            selectestimator = RandomForestClassifier(n_estimators=n_estimators,
+                                                     random_state=random_seed)
         else:
             raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
+
+        if len(y_train.shape) >= 2:
+            # Multilabel or regression. Regression: second dimension has length 1
+            if y_train.shape[1] > 1 and model != 'RF':
+                raise ae.WORCValueError(f'Model {model} is not suitable for multiclass classification. Please use RF or do not use SelectFromModel.')
 
         # Prefit model
         selectestimator.fit(X_train, y_train)
@@ -735,7 +743,8 @@ def fit_and_score(X, y, scoring,
                               n_neighbors=para_estimator['Resampling_n_neighbors'],
                               k_neighbors=para_estimator['Resampling_k_neighbors'],
                               threshold_cleaning=para_estimator['Resampling_threshold_cleaning'],
-                              verbose=verbose)
+                              verbose=verbose,
+                              random_seed=random_seed)
 
             try:
                 Sampler.fit(X_train, y_train)
@@ -817,8 +826,7 @@ def fit_and_score(X, y, scoring,
         except IndexError:
             labellength = 1
 
-    if labellength > 1 and type(estimator) not in [RankedSVM,
-                                                   RandomForestClassifier]:
+    if labellength > 1 and type(estimator) not in [RandomForestClassifier]:
         # Multiclass, hence employ a multiclass classifier for e.g. SVM, LR
         estimator.set_params(**para_estimator)
         estimator = OneVsRestClassifier(estimator)
@@ -993,6 +1001,8 @@ def delete_cc_para(para):
                   'RFmin_samples_split',
                   'RFmax_depth',
                   'LRpenalty',
+                  'LR_l1_ratio',
+                  'LR_solver',
                   'LRC',
                   'LDA_solver',
                   'LDA_shrinkage',
