@@ -26,7 +26,7 @@ class CrossvalStats(object):
             else:
                 self._logger.info(f'CrossValidation {j + 1} / {n} started at {self._dateformatter(self._iter[j]["timeit_start"])}')
 
-            yield i
+            yield j
 
             self._iter[j]['timeit_end'] = pd.to_datetime('now')
             self._iter[j]['timeit_seconds'] = (self._iter[j]['timeit_end'] - self._iter[j]['timeit_start']).total_seconds()
