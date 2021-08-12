@@ -689,6 +689,11 @@ class SimpleWORC():
         # Create configuration files
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
 
+        from pprint import pprint
+        pprint(self._worc.configs[0])
+
+        return
+
         # Build the fastr network
         self._worc.build()
         if self._add_evaluation:
