@@ -12,19 +12,26 @@ class CrossvalStats(object):
     def reset(self):
         self._iter = {}
 
-    def cviter(self, i, n):
-        self._i = i
-        self._n = n
+    def cviter(self, start, stop):
+        """
+        CrossVal iter with fancy progress reports!
+        This acts as a simple range-iter but reports on how long each iter took and ETA until completion.
+
+        @param start: start-value see python range doc: https://www.w3schools.com/python/ref_func_range.asp
+        @param stop: stop-value see python range doc: https://www.w3schools.com/python/ref_func_range.asp
+        """
+        self._i = start
+        self._n = stop
         self._eta_iter = None
 
-        for j in range(i, n):
+        for j in range(start, stop):
             self._i = j
             self._iter[j] = {'timeit_start': pd.to_datetime('now')}
 
             if self._eta_iter:
-                self._logger.info(f'CrossValidation {j+1} / {n} started at {self._dateformatter(self._iter[j]["timeit_start"])} ETA: {self._dateformatter(self._eta_iter)}')
+                self._logger.info(f'CrossValidation {j+1} / {stop} started at {self._dateformatter(self._iter[j]["timeit_start"])} ETA: {self._dateformatter(self._eta_iter)}')
             else:
-                self._logger.info(f'CrossValidation {j + 1} / {n} started at {self._dateformatter(self._iter[j]["timeit_start"])}')
+                self._logger.info(f'CrossValidation {j + 1} / {stop} started at {self._dateformatter(self._iter[j]["timeit_start"])}')
 
             yield j
 
@@ -32,10 +39,10 @@ class CrossvalStats(object):
             self._iter[j]['timeit_seconds'] = (self._iter[j]['timeit_end'] - self._iter[j]['timeit_start']).total_seconds()
 
             self._dostats()
-            self._logger.info(f'CrossValidation {j+1} / {n} ended at {self._dateformatter(self._iter[j]["timeit_end"])}')
+            self._logger.info(f'CrossValidation {j+1} / {stop} ended at {self._dateformatter(self._iter[j]["timeit_end"])}')
 
             minutes = np.ceil(self._iter[j]['timeit_seconds'] / 60).astype(int)
-            self._logger.info(f'CrossValidation {j+1} / {n} took {minutes} minutes to complete')
+            self._logger.info(f'CrossValidation {j+1} / {stop} took {minutes} minutes to complete')
             self._logger.info(str(self))
 
     def _dostats(self):

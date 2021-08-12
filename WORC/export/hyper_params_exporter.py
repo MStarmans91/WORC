@@ -23,6 +23,7 @@ printer_types = tuple(printers.keys())
 
 
 def export_hyper_params_to_latex(config_file_path, output_file_path):
+
     config = load_config(config_file_path)
     param_grid = create_param_grid(config)
     params = add_parameters_to_grid(param_grid, config)
