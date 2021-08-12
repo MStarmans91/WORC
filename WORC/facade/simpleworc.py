@@ -690,7 +690,7 @@ class SimpleWORC():
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
 
         from pprint import pprint
-        pprint(self._worc.configs[0])
+        pprint(self._worc.configs[0]._sections)
 
         return
 
