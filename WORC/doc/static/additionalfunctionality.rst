@@ -1,4 +1,4 @@
-..  additonalfunctionality-chapter:
+.. _additonalfunctionality-chapter:
 
 Additional functionality
 ========================
@@ -64,12 +64,6 @@ of z-scoring. Additional options include:
 4. A combination of z-scoring with a logarithmic transform and a correction
    term to better cope with outliers and non-normally distributed features [CIT1]_.
 
-.. [CIT1] Chen, Jianan, et al. *AMINN: Autoencoder-based Multiple Instance
-  Neural Network for Outcome Prediction of Multifocal Liver Metastases.*
-  arXiv preprint arXiv:2012.06875 (2020).
-
-
-
 Image Registration
 -------------------
 
@@ -101,9 +95,6 @@ of the list should be a list of its own, including the filenames
 of ``elastix``. In the example, we provided two files, resulting
 in first a rigid registration being performed, followed by a bspline registration.
 Examples of ``elastix`` parameter files can be found at https://github.com/SuperElastix/ElastixModelZoo/tree/master/models/default
-
-.. [CIT2] Klein, Stefan, et al. *Elastix: a toolbox for intensity-based medical
-   image registration.* IEEE transactions on medical imaging 29.1 (2009): 196-205.
 
 ComBat
 --------
@@ -162,11 +153,7 @@ support binary classification (i.e., LDA, QDA, Naive Bayes, SVM, logistic
 regression), and are therefore also performed per class in a one-vs-rest
 approach and combined in a single multilabel model. In the evaluation,
 the same metrics as in the binary classification are evaluated per class.
-Additionally, the multiclass AUC [CITRN662]_. and multiclass BCR are computed.
-
-.. [CITRN662] Hand, David J., and Robert J. Till. *A simple generalisation
-  of the area under the ROC curve for multiple class classification problems.*
-  Machine learning 45.2 (2001): 171-186.
+Additionally, the multiclass AUC [CIT3]_. and multiclass BCR are computed.
 
 In regression, a continuous label is predicted. As there are no classes,
 all class-based feature and sample preprocessing methods
@@ -186,3 +173,16 @@ The optimization is by default based on the R2-score. Performance metrics
 computed are the rw-score, mean squared error, inter-class correlation
 coefficient, Pearson coefficient and p-value, and Spearman coefficient
 and p-value.
+
+References
+------------
+.. [CIT1] Chen, Jianan, et al. *AMINN: Autoencoder-based Multiple Instance
+  Neural Network for Outcome Prediction of Multifocal Liver Metastases.*
+  arXiv preprint arXiv:2012.06875 (2020).
+
+.. [CIT2] Klein, Stefan, et al. *Elastix: a toolbox for intensity-based medical
+   image registration.* IEEE transactions on medical imaging 29.1 (2009): 196-205.
+
+.. [CIT3] Hand, David J., and Robert J. Till. *A simple generalisation
+  of the area under the ROC curve for multiple class classification problems.*
+  Machine learning 45.2 (2001): 171-186.
