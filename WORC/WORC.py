@@ -148,7 +148,7 @@ class WORC(object):
         self.fixedsplits = list()
 
         # Set some defaults, name
-        self.fastr_plugin = None
+        self.fastr_plugin = 'LinearExecution'
         if name == '':
             name = [randint(0, 9) for p in range(0, 5)]
         self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
