@@ -12,7 +12,9 @@ a radiomics study is effectively reduced to a black box with a push button, wher
 your data and WORC will adapt the workflow to your application. Thus, WORC is especially suitable
 for the fast development of signatures and probing datasets for new biomarkers.
 
-.. note:: Despite the name, besides classification, WORC can actually also be used for regression and multilabel classification. Survival is WIP.
+.. note:: Despite the name, besides classification, WORC can actually also be
+   used for regression and multilabel classification. See for more details the
+   :ref:`additonalfunctionality-chapter` chapter.
 
 We aim to establish a general radiomics platform supporting easy
 integration of other tools. With our modular build and support of
