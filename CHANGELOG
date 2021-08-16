@@ -7,13 +7,14 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 
-Unreleased
+3.5.0 - Unreleased
 ------------
 
 Fixed
 ~~~~~
 - Bug in plotting 2D images when ranking the posteriors or percentages.
 - Bug in Evaluate for Regression.
+- Bug in BasicWORC for supplying label files.
 
 
 3.4.5 - 2021-07-09
