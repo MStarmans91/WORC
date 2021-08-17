@@ -72,13 +72,13 @@ class ConfigBuilder():
                             'Joblib_backend': 'threading'},
                 'Classification': {'fastr': 'True',
                                    'fastr_plugin': 'DRMAAExecution'},
-                'HyperOptimization': {'n_jobspercore': '1000'}
+                'HyperOptimization': {'n_jobspercore': '200'}
             }
         elif CartesiusClusterDetector().do_detection():
             overrides = {
                 'Classification': {'fastr': 'True',
                                    'fastr_plugin': 'ProcessPoolExecution'},
-                'HyperOptimization': {'n_jobspercore': '2000'}
+                'HyperOptimization': {'n_jobspercore': '200'}
             }
         else:
             overrides = {}  # not a cluster or unsupported
