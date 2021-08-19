@@ -78,7 +78,7 @@ class ConfigBuilder():
             overrides = {
                 'Classification': {'fastr': 'True',
                                    'fastr_plugin': 'ProcessPoolExecution'},
-                'HyperOptimization': {'n_jobspercore': '200'}
+                'HyperOptimization': {'n_jobspercore': '500'}
             }
         else:
             overrides = {}  # not a cluster or unsupported

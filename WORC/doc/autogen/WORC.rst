@@ -37,6 +37,7 @@ Subpackages
     WORC.classification
     WORC.detectors
     WORC.exampledata
+    WORC.export
     WORC.facade
     WORC.fastrconfig
     WORC.featureprocessing
