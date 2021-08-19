@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.WORC &mdash; WORC 3.4.5 documentation</title>
+  <title>WORC.WORC &mdash; WORC 3.5.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.5
+                3.5.0
               </div>
             
           
@@ -195,6 +195,9 @@
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.config_WORC</span> <span class="k">as</span> <span class="nn">config_io</span>
 <span class="kn">from</span> <span class="nn">WORC.detectors.detectors</span> <span class="k">import</span> <span class="n">DebugDetector</span>
+<span class="kn">from</span> <span class="nn">WORC.export.hyper_params_exporter</span> <span class="k">import</span> <span class="n">export_hyper_params_to_latex</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="n">urlparse</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="k">import</span> <span class="n">url2pathname</span>
 
 
 <div class="viewcode-block" id="WORC"><a class="viewcode-back" href="../../autogen/WORC.html#WORC.WORC.WORC">[docs]</a><span class="k">class</span> <span class="nc">WORC</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -636,7 +639,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;test_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0.2&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;n_splits&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1000&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;n_jobspercore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;500&#39;</span>  <span class="c1"># only relevant when using fastr in classification</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;n_jobspercore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;200&#39;</span>  <span class="c1"># only relevant when using fastr in classification</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;maxlen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;ranking_score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;test_score&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;memory&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;3G&#39;</span>
@@ -1916,6 +1919,12 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC WARNING] Graphviz executable not found: not drawing network diagram. Make sure the Graphviz executables are on your systems PATH.&#39;</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">graphviz</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WORC WARNING] Graphviz executable gave an error: not drawing network diagram. Original error: </span><span class="si">{e}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># export hyper param. search space to LaTeX table</span>
+        <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fastrconfigs</span><span class="p">:</span>
+            <span class="n">config_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">url2pathname</span><span class="p">(</span><span class="n">urlparse</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="n">path</span><span class="p">))</span>
+            <span class="n">tex_path</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;{config_path.parent.absolute() / config_path.stem}_hyperparams_space.tex&#39;</span>
+            <span class="n">export_hyper_params_to_latex</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="n">tex_path</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">DebugDetector</span><span class="p">()</span><span class="o">.</span><span class="n">do_detection</span><span class="p">():</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Source Data:&quot;</span><span class="p">)</span>

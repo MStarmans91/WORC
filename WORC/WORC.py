@@ -30,6 +30,9 @@ from WORC.tools.Evaluate import Evaluate
 import WORC.addexceptions as WORCexceptions
 import WORC.IOparser.config_WORC as config_io
 from WORC.detectors.detectors import DebugDetector
+from WORC.export.hyper_params_exporter import export_hyper_params_to_latex
+from urllib.parse import urlparse
+from urllib.request import url2pathname
 
 
 class WORC(object):
@@ -471,7 +474,7 @@ class WORC(object):
         config['HyperOptimization']['test_size'] = '0.2'
         config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '1000'
-        config['HyperOptimization']['n_jobspercore'] = '500'  # only relevant when using fastr in classification
+        config['HyperOptimization']['n_jobspercore'] = '200'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['memory'] = '3G'
@@ -1751,6 +1754,12 @@ class WORC(object):
             print('[WORC WARNING] Graphviz executable not found: not drawing network diagram. Make sure the Graphviz executables are on your systems PATH.')
         except graphviz.backend.CalledProcessError as e:
             print(f'[WORC WARNING] Graphviz executable gave an error: not drawing network diagram. Original error: {e}')
+
+        # export hyper param. search space to LaTeX table
+        for config in self.fastrconfigs:
+            config_path = Path(url2pathname(urlparse(config).path))
+            tex_path = f'{config_path.parent.absolute() / config_path.stem}_hyperparams_space.tex'
+            export_hyper_params_to_latex(config_path, tex_path)
 
         if DebugDetector().do_detection():
             print("Source Data:")

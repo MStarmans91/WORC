@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.tools.Evaluate &mdash; WORC 3.4.5 documentation</title>
+  <title>WORC.tools.Evaluate &mdash; WORC 3.5.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.4.5
+                3.5.0
               </div>
             
           
@@ -594,8 +594,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                     <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                    <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                 <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ComBat</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;features_train_out&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">])</span>
@@ -603,8 +603,8 @@
             <span class="c1"># All features should be input at once</span>
             <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;ComBat&#39;</span>
 
         <span class="k">else</span><span class="p">:</span>
@@ -619,8 +619,8 @@
                                 <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                                     <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
 
-                            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                                <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
 
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                                 <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;feat_out&#39;</span><span class="p">]</span>
@@ -628,8 +628,8 @@
                             <span class="c1"># All features should be input at once</span>
                             <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
-                            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># Feature are precomputed and given as sources</span>
@@ -639,16 +639,17 @@
                                 <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                                     <span class="bp">self</span><span class="o">.</span><span class="n">node_STest</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
 
-                            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
-                                <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">node_decomposition</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
+
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span>\
                                 <span class="bp">self</span><span class="o">.</span><span class="n">node_Boxplots_Features</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;features&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">node</span><span class="o">.</span><span class="n">output</span>
 
                             <span class="c1"># All features should be input at once</span>
                             <span class="k">if</span> <span class="s1">&#39;classification&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modus</span><span class="p">:</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">links_STest_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
-                            <span class="bp">self</span><span class="o">.</span><span class="n">links_decomposition_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">links_Boxplots_Features</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
                 <span class="k">else</span><span class="p">:</span>

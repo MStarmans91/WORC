@@ -53,21 +53,29 @@ def extract_boundary(contour, radius=2):
 def slicer(image, mask=None, output_name=None, output_name_zoom=None,
            thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False,
            expand=False, boundary=False, square=False, flip=True, rot90=0,
-           alpha=0.40, axis='axial', index=None, color='cyan'):
+           alpha=0.40, axis='axial', index=None, color='cyan', radius=2):
     """Plot slice of image where mask is largest, with mask as overlay.
 
     image and mask should both be arrays
     """
     # Determine figure size by spacing
-    spacing = [float(image.GetSpacing()[0]), float(image.GetSpacing()[1]), float(image.GetSpacing()[2])]
-    imsize = [float(image.GetSize()[0]), float(image.GetSize()[1]), float(image.GetSize()[2])]
-
-    if axis == 'axial':
+    if len(image.GetSize()) == 2:
+        # 2D Image
+        spacing = [float(image.GetSpacing()[0]), float(image.GetSpacing()[1])]
+        imsize = [float(image.GetSize()[0]), float(image.GetSize()[1])]
         figsize = (imsize[0]*spacing[0]/100.0, imsize[1]*spacing[1]/100.0)
-    elif axis == 'coronal':
-        figsize = (imsize[0]*spacing[0]/100.0, imsize[2]*spacing[2]/100.0)
-    elif axis == 'transversal':
-        figsize = (imsize[1]*spacing[1]/100.0, imsize[2]*spacing[2]/100.0)
+    else:
+        # 3D Image
+        # Determine figure size by spacing
+        spacing = [float(image.GetSpacing()[0]), float(image.GetSpacing()[1]), float(image.GetSpacing()[2])]
+        imsize = [float(image.GetSize()[0]), float(image.GetSize()[1]), float(image.GetSize()[2])]
+
+        if axis == 'axial':
+            figsize = (imsize[0]*spacing[0]/100.0, imsize[1]*spacing[1]/100.0)
+        elif axis == 'coronal':
+            figsize = (imsize[0]*spacing[0]/100.0, imsize[2]*spacing[2]/100.0)
+        elif axis == 'transversal':
+            figsize = (imsize[1]*spacing[1]/100.0, imsize[2]*spacing[2]/100.0)
 
     # Convert images to numpy arrays
     image = sitk.GetArrayFromImage(image)
@@ -134,7 +142,7 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
     if mask is not None:
         if boundary:
             print('\t Extracting boundary.')
-            maskslice = extract_boundary(maskslice)
+            maskslice = extract_boundary(maskslice, radius)
 
     if normalize:
         print('\t Normalizing.')

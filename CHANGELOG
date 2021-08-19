@@ -7,6 +7,26 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 
+3.5.0 - 2021-08-18
+------------
+
+Fixed
+~~~~~
+- Bug in plotting 2D images when ranking the posteriors or percentages.
+- Bug in Evaluate for Regression.
+- Bug in BasicWORC for supplying label files.
+- There is a bug in SimpleITK 2.1.0, which leads it to not be able
+  to read certain NIFTI files. See: https://github.com/InsightSoftwareConsortium/ITK/issues/2674
+  Reverting to SimpleITK 2.0.2 for now
+
+Changed
+~~~~~~~
+- Defaults for splitting jobs in hyperoptimization: now more parallelized.
+
+Added
+~~~~~~~
+- Documentation on additional functionality.
+
 3.4.5 - 2021-07-09
 ------------------
  Unit tests moved from Travis to Github Workflow from this verion on.

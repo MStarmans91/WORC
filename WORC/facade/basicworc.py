@@ -108,7 +108,7 @@ class BasicWORC(SimpleWORC):
             self._worc.masks_train = self._masks_train
 
         if self.labels_file_train:
-            self._worc.labels_train = self.labels_train
+            self._worc.labels_train = self.labels_file_train
         elif self._labels_file_train:
             self._worc.labels_train = self._labels_file_train
 
@@ -139,7 +139,7 @@ class BasicWORC(SimpleWORC):
             self._worc.masks_test = self._masks_test
 
         if self.labels_file_test:
-            self._worc.labels_test = self.labels_test
+            self._worc.labels_test = self.labels_file_test
         elif self._labels_file_test:
             self._worc.labels_test = self._labels_file_test
 
