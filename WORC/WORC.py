@@ -225,7 +225,7 @@ class WORC(object):
 
         # Segmentix
         config['Segmentix'] = dict()
-        config['Segmentix']['mask'] = 'subtract'
+        config['Segmentix']['mask'] = 'None'
         config['Segmentix']['segtype'] = 'None'
         config['Segmentix']['segradius'] = '5'
         config['Segmentix']['N_blobs'] = '1'
