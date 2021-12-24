@@ -133,11 +133,4 @@ WORC/external/*
 WORC/exampledata/ICCvalues.csv
 WORC/tests/*.png
 WORC/tests/*.mat
->>>>>>> 27b0c7c767990d079e59a5c7f143961497f3100f
-
-Experiments/
-run_script.py
-result_processing.py
-cartesius.py
-vanilla_script.py
-result_processing_cartesius.py
+WORC/tests/WORC_Example_STWStrategyHN_*

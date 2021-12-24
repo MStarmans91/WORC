@@ -1,40 +1,39 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.plotting.plot_ROC &mdash; WORC 3.4.0 documentation</title>
+  <title>WORC.plotting.plot_ROC &mdash; WORC 3.5.0 documentation</title>
   
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
 
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -50,7 +49,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home" alt="Documentation Home"> WORC
+            <a href="../../../index.html" class="icon icon-home"> WORC
           
 
           
@@ -63,7 +62,7 @@
             
             
               <div class="version">
-                3.4.0
+                3.5.0
               </div>
             
           
@@ -80,7 +79,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -107,7 +105,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -146,7 +143,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -168,7 +165,7 @@
   <h1>Source code for WORC.plotting.plot_ROC</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -190,11 +187,12 @@
 <span class="kn">import</span> <span class="nn">tikzplotlib</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">from</span> <span class="nn">WORC.plotting.compute_CI</span> <span class="kn">import</span> <span class="n">compute_confidence</span> <span class="k">as</span> <span class="n">CI</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting.compute_CI</span> <span class="k">import</span> <span class="n">compute_confidence</span> <span class="k">as</span> <span class="n">CI</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">auc</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">auc</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">precision_recall_curve</span>
 <span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">from</span> <span class="nn">WORC.plotting.plot_estimator_performance</span> <span class="kn">import</span> <span class="n">plot_estimator_performance</span>
+<span class="kn">from</span> <span class="nn">WORC.plotting.plot_estimator_performance</span> <span class="k">import</span> <span class="n">plot_estimator_performance</span>
 
 
 <div class="viewcode-block" id="plot_single_ROC"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ROC.plot_single_ROC">[docs]</a><span class="k">def</span> <span class="nf">plot_single_ROC</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">returnplot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -256,7 +254,7 @@
                 <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ROC curve (area = </span><span class="si">%0.2f</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">roc_auc</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Receiver operating characteristic example&#39;</span><span class="p">)</span>
@@ -268,10 +266,69 @@
         <span class="k">return</span> <span class="n">fpr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">tpr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">thresholds</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span></div>
 
 
-<div class="viewcode-block" id="ROC_thresholding"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ROC.ROC_thresholding">[docs]</a><span class="k">def</span> <span class="nf">ROC_thresholding</span><span class="p">(</span><span class="n">fprt</span><span class="p">,</span> <span class="n">tprt</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">nsamples</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_single_PRC"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ROC.plot_single_PRC">[docs]</a><span class="k">def</span> <span class="nf">plot_single_PRC</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">returnplot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Construct FPR and TPR ratios at different thresholds for the scores of an</span>
-<span class="sd">    estimator.</span>
+<span class="sd">    Get the precision and recall (=true positive rate)</span>
+<span class="sd">    for the ground truth and score of a single estimator. These ratios</span>
+<span class="sd">    can be used to plot a Precision Recall Curve (ROC).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Sort both lists based on the scores</span>
+    <span class="n">y_truth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_truth</span><span class="p">)</span>
+    <span class="n">y_truth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int_</span><span class="p">(</span><span class="n">y_truth</span><span class="p">)</span>
+    <span class="n">y_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y_score</span><span class="p">)</span>
+    <span class="n">inds</span> <span class="o">=</span> <span class="n">y_score</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+    <span class="n">y_truth_sorted</span> <span class="o">=</span> <span class="n">y_truth</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span>
+    <span class="n">y_score</span> <span class="o">=</span> <span class="n">y_score</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span>
+
+    <span class="c1"># Compute the TPR and FPR for all possible thresholds</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">y_truth</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">y_truth</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># No class = 1 present.</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">y_truth</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] No negative class samples found, cannot determine PRC. Skipping iteration.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(),</span> <span class="nb">list</span><span class="p">(),</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">P</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] No positive class samples found, cannot determine PRC. Skipping iteration.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(),</span> <span class="nb">list</span><span class="p">(),</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="n">precision</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span>\
+        <span class="n">precision_recall_curve</span><span class="p">(</span><span class="n">y_truth_sorted</span><span class="p">,</span> <span class="n">y_score</span><span class="p">)</span>
+
+    <span class="c1"># Convert to lists</span>
+    <span class="n">precision</span> <span class="o">=</span> <span class="n">precision</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">tpr</span> <span class="o">=</span> <span class="n">tpr</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">thresholds</span> <span class="o">=</span> <span class="n">thresholds</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">or</span> <span class="n">returnplot</span><span class="p">:</span>
+        <span class="n">prc_auc</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">tpr</span><span class="p">,</span> <span class="n">precision</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tpr</span><span class="p">,</span> <span class="n">precision</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span>
+                <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PR curve (area = </span><span class="si">%0.2f</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">prc_auc</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Recall&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Precision&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Precision-Recall curve&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">returnplot</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tpr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">precision</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">thresholds</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tpr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">precision</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">thresholds</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span></div>
+
+
+<div class="viewcode-block" id="curve_thresholding"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ROC.curve_thresholding">[docs]</a><span class="k">def</span> <span class="nf">curve_thresholding</span><span class="p">(</span><span class="n">metric1t</span><span class="p">,</span> <span class="n">metric2t</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">nsamples</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Construct metric1 and metric2 (either FPR and TPR, or TPR and Precision)</span>
+<span class="sd">    ratios at different thresholds for the scores of an estimator.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># Combine all found thresholds in a list and create samples</span>
     <span class="n">T</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -280,10 +337,10 @@
     <span class="n">T</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
     <span class="n">tsamples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nsamples</span><span class="p">)</span>
 
-    <span class="c1"># Compute the fprs and tprs at the sample points</span>
-    <span class="n">nrocs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fprt</span><span class="p">)</span>
-    <span class="n">fpr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">nrocs</span><span class="p">))</span>
-    <span class="n">tpr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">nrocs</span><span class="p">))</span>
+    <span class="c1"># Compute the metric1s and metric2s at the sample points</span>
+    <span class="n">nrocs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">metric1t</span><span class="p">)</span>
+    <span class="n">metric1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">nrocs</span><span class="p">))</span>
+    <span class="n">metric2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nsamples</span><span class="p">,</span> <span class="n">nrocs</span><span class="p">))</span>
 
     <span class="n">th</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">n_sample</span><span class="p">,</span> <span class="n">tidx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tsamples</span><span class="p">):</span>
@@ -293,10 +350,10 @@
             <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">while</span> <span class="nb">float</span><span class="p">(</span><span class="n">thresholds</span><span class="p">[</span><span class="n">i_roc</span><span class="p">][</span><span class="n">idx</span><span class="p">])</span> <span class="o">&gt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="n">tidx</span><span class="p">])</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">thresholds</span><span class="p">[</span><span class="n">i_roc</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">fpr</span><span class="p">[</span><span class="n">n_sample</span><span class="p">,</span> <span class="n">i_roc</span><span class="p">]</span> <span class="o">=</span> <span class="n">fprt</span><span class="p">[</span><span class="n">i_roc</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
-            <span class="n">tpr</span><span class="p">[</span><span class="n">n_sample</span><span class="p">,</span> <span class="n">i_roc</span><span class="p">]</span> <span class="o">=</span> <span class="n">tprt</span><span class="p">[</span><span class="n">i_roc</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">metric1</span><span class="p">[</span><span class="n">n_sample</span><span class="p">,</span> <span class="n">i_roc</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric1t</span><span class="p">[</span><span class="n">i_roc</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">metric2</span><span class="p">[</span><span class="n">n_sample</span><span class="p">,</span> <span class="n">i_roc</span><span class="p">]</span> <span class="o">=</span> <span class="n">metric2t</span><span class="p">[</span><span class="n">i_roc</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">th</span></div>
+    <span class="k">return</span> <span class="n">metric1</span><span class="p">,</span> <span class="n">metric2</span><span class="p">,</span> <span class="n">th</span></div>
 
 
 <div class="viewcode-block" id="plot_ROC_CIc"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ROC.plot_ROC_CIc">[docs]</a><span class="k">def</span> <span class="nf">plot_ROC_CIc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">N_1</span><span class="p">,</span> <span class="n">N_2</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
@@ -321,7 +378,7 @@
             <span class="n">thresholds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thresholds_temp</span><span class="p">)</span>
 
     <span class="c1"># Sample FPR and TPR at numerous points</span>
-    <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="n">ROC_thresholding</span><span class="p">(</span><span class="n">fprt</span><span class="p">,</span> <span class="n">tprt</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">tsamples</span><span class="p">)</span>
+    <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="n">curve_thresholding</span><span class="p">(</span><span class="n">fprt</span><span class="p">,</span> <span class="n">tprt</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">tsamples</span><span class="p">)</span>
 
     <span class="c1"># Compute the confidence intervals for the ROC</span>
     <span class="n">CIs_tpr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -400,7 +457,7 @@
 
     <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate (1 - Specificity)&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate (Sensitivity)&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Receiver operating characteristic&#39;</span><span class="p">)</span>
@@ -455,13 +512,183 @@
 
         <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate (1 - Specificity)&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate (Sensitivity)&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Receiver operating characteristic&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">CIs_fpr</span><span class="p">,</span> <span class="n">CIs_tpr</span></div>
+
+
+<div class="viewcode-block" id="plot_PRC_CIc"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ROC.plot_PRC_CIc">[docs]</a><span class="k">def</span> <span class="nf">plot_PRC_CIc</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">,</span> <span class="n">N_1</span><span class="p">,</span> <span class="n">N_2</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">DEBUG</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tsamples</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Plot a Precision-Recall curve with confidence intervals.</span>
+
+<span class="sd">    tsamples: number of sample points on which to determine the confidence intervals.</span>
+<span class="sd">              The sample pointsare used on the thresholds for y_score.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Compute PR curve and PR area for each class</span>
+    <span class="n">tprt</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">precisiont</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">prc_auc</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">thresholds</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">yt</span><span class="p">,</span> <span class="n">ys</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y_truth</span><span class="p">,</span> <span class="n">y_score</span><span class="p">):</span>
+        <span class="n">tpr_temp</span><span class="p">,</span> <span class="n">precision_temp</span><span class="p">,</span> <span class="n">thresholds_temp</span> <span class="o">=</span> <span class="n">plot_single_PRC</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tpr_temp</span><span class="p">:</span>
+            <span class="n">prc_auc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">auc</span><span class="p">(</span><span class="n">tpr_temp</span><span class="p">,</span> <span class="n">precision_temp</span><span class="p">))</span>
+            <span class="n">tprt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tpr_temp</span><span class="p">)</span>
+            <span class="n">precisiont</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">precision_temp</span><span class="p">)</span>
+            <span class="n">thresholds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">thresholds_temp</span><span class="p">)</span>
+
+    <span class="c1"># Sample TPR and precision at numerous points</span>
+    <span class="n">tpr</span><span class="p">,</span> <span class="n">precisionr</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="n">curve_thresholding</span><span class="p">(</span><span class="n">tprt</span><span class="p">,</span> <span class="n">precisiont</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">,</span> <span class="n">tsamples</span><span class="p">)</span>
+
+    <span class="c1"># Compute the confidence intervals for the ROC</span>
+    <span class="n">CIs_precisionr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">CIs_tpr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tsamples</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Point (0, 0) is always in there, but shows as (nan, nan)</span>
+            <span class="n">CIs_tpr</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">CIs_precisionr</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cit_tpr</span> <span class="o">=</span> <span class="n">CI</span><span class="p">(</span><span class="n">tpr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">N_1</span><span class="p">,</span> <span class="n">N_2</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="n">CIs_tpr</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">cit_tpr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cit_tpr</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+            <span class="n">cit_precisionr</span> <span class="o">=</span> <span class="n">CI</span><span class="p">(</span><span class="n">precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">N_1</span><span class="p">,</span> <span class="n">N_2</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="n">CIs_precisionr</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">cit_precisionr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cit_precisionr</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="c1"># The point (0, 1) is also always there but not computed</span>
+    <span class="n">CIs_tpr</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">CIs_precisionr</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Calculate also means of CIs after converting to array</span>
+    <span class="n">CIs_precisionr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">CIs_precisionr</span><span class="p">)</span>
+    <span class="n">CIs_tpr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">CIs_tpr</span><span class="p">)</span>
+    <span class="n">CIs_precisionr_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">CIs_precisionr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">CIs_tpr_means</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">CIs_tpr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+    <span class="c1"># compute AUC CI</span>
+    <span class="n">prc_auc</span> <span class="o">=</span> <span class="n">CI</span><span class="p">(</span><span class="n">prc_auc</span><span class="p">,</span> <span class="n">N_1</span><span class="p">,</span> <span class="n">N_2</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">subplot</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">CIs_tpr_means</span><span class="p">,</span> <span class="n">CIs_precisionr_means</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span>
+                 <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PR curve (AUC = (</span><span class="si">%0.2f</span><span class="s1">, </span><span class="si">%0.2f</span><span class="s1">))&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prc_auc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prc_auc</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">CIs_tpr_means</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ymin</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ymin</span> <span class="o">=</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">CIs_precisionr_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ymean</span> <span class="o">=</span> <span class="n">CIs_precisionr_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ymean</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">CIs_tpr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="n">CIs_tpr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">CIs_tpr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="n">CIs_tpr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">CIs_tpr_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">xmean</span> <span class="o">=</span> <span class="n">CIs_tpr_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xmean</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymean</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">xmean</span><span class="p">)</span>
+
+        <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">],</span>
+                     <span class="p">[</span><span class="n">ymean</span><span class="p">,</span> <span class="n">ymean</span><span class="p">],</span>
+                     <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+        <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">xmean</span><span class="p">,</span> <span class="n">xmean</span><span class="p">],</span>
+                     <span class="p">[</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span>
+                     <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+
+    <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Recall&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Precision&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Precision-Recall curve&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="n">f</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">subplot</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">CIs_tpr_means</span><span class="p">,</span> <span class="n">CIs_precisionr_means</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span>
+                     <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PRC curve (AUC = (</span><span class="si">%0.2f</span><span class="s1">, </span><span class="si">%0.2f</span><span class="s1">))&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prc_auc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prc_auc</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">CIs_tpr_means</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">ymax</span> <span class="o">=</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ymax</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ymin</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ymin</span> <span class="o">=</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">ymean</span> <span class="o">=</span> <span class="n">CIs_precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ymean</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">CIs_tpr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">xmax</span> <span class="o">=</span> <span class="n">CIs_tpr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">xmax</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">CIs_tpr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">xmin</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">xmin</span> <span class="o">=</span> <span class="n">CIs_tpr</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">CIs_tpr_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">xmean</span> <span class="o">=</span> <span class="n">CIs_tpr_means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">xmean</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">DEBUG</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymean</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">xmean</span><span class="p">)</span>
+
+            <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">],</span>
+                         <span class="p">[</span><span class="n">ymean</span><span class="p">,</span> <span class="n">ymean</span><span class="p">],</span>
+                         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+            <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">xmean</span><span class="p">,</span> <span class="n">xmean</span><span class="p">],</span>
+                         <span class="p">[</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span>
+                         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+
+        <span class="n">subplot</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Recall&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Precision&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Precision-Recall curve&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">CIs_tpr</span><span class="p">,</span> <span class="n">CIs_precisionr</span></div>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ROC.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -478,28 +705,41 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-label_type&#39;</span><span class="p">,</span> <span class="s1">&#39;--label_type&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;label_type&#39;</span><span class="p">,</span>
                         <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;label_type&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Label name that is predicted (string)&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-output_png&#39;</span><span class="p">,</span> <span class="s1">&#39;--output_png&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;output_png&#39;</span><span class="p">,</span>
-                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;output_png&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to write output to (PNG)&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-output_csv&#39;</span><span class="p">,</span> <span class="s1">&#39;--output_csv&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;output_csv&#39;</span><span class="p">,</span>
-                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;output_csv&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to write output to (csv)&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-output_tex&#39;</span><span class="p">,</span> <span class="s1">&#39;--output_tex&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;output_tex&#39;</span><span class="p">,</span>
-                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;output_tex&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to write output to (tex)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-ROC_png&#39;</span><span class="p">,</span> <span class="s1">&#39;--ROC_png&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;ROC_png&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;ROC_png&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to write ROC to (PNG)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-ROC_csv&#39;</span><span class="p">,</span> <span class="s1">&#39;--ROC_csv&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;ROC_csv&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;ROC_csv&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to write ROC to (csv)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-ROC_tex&#39;</span><span class="p">,</span> <span class="s1">&#39;--ROC_tex&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;ROC_tex&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;ROC_tex&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to write ROC to (tex)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-PRC_png&#39;</span><span class="p">,</span> <span class="s1">&#39;--PRC_png&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;PRC_png&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;PRC_png&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to write PR to (PNG)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-PRC_csv&#39;</span><span class="p">,</span> <span class="s1">&#39;--PRC_csv&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;PRC_csv&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;PRC_csv&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to write PR to (csv)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-PRC_tex&#39;</span><span class="p">,</span> <span class="s1">&#39;--PRC_tex&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;PRC_tex&#39;</span><span class="p">,</span>
+                        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;PRC_tex&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;File to write PR to (tex)&#39;</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 
     <span class="n">plot_ROC</span><span class="p">(</span><span class="n">prediction</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">prediction</span><span class="p">,</span>
              <span class="n">pinfo</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">pinfo</span><span class="p">,</span>
              <span class="n">ensemble</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">ensemble</span><span class="p">,</span>
              <span class="n">label_type</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">label_type</span><span class="p">,</span>
-             <span class="n">output_png</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_png</span><span class="p">,</span>
-             <span class="n">output_tex</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_tex</span><span class="p">,</span>
-             <span class="n">output_csv</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_csv</span><span class="p">)</span></div>
+             <span class="n">ROC_png</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">ROC_png</span><span class="p">,</span>
+             <span class="n">ROC_tex</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">ROC_tex</span><span class="p">,</span>
+             <span class="n">ROC_csv</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">ROC_csv</span><span class="p">,</span>
+             <span class="n">PRC_png</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">PRC_png</span><span class="p">,</span>
+             <span class="n">PRC_tex</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">PRC_tex</span><span class="p">,</span>
+             <span class="n">PRC_csv</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">PRC_csv</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="plot_ROC"><a class="viewcode-back" href="../../../autogen/WORC.plotting.html#WORC.plotting.plot_ROC.plot_ROC">[docs]</a><span class="k">def</span> <span class="nf">plot_ROC</span><span class="p">(</span><span class="n">prediction</span><span class="p">,</span> <span class="n">pinfo</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-             <span class="n">output_png</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_csv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+             <span class="n">ROC_png</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ROC_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ROC_csv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">PRC_png</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">PRC_tex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">PRC_csv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="c1"># Convert the inputs to the correct format</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
         <span class="n">prediction</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
@@ -509,16 +749,24 @@
 
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ensemble</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
         <span class="n">ensemble</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ensemble</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="c1"># ensemble = &#39;&#39;.join(ensemble)</span>
 
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_png</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="n">output_png</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_png</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ROC_png</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">ROC_png</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROC_png</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_csv</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="n">output_csv</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_csv</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ROC_csv</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">ROC_csv</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROC_csv</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="n">output_tex</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">ROC_tex</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">ROC_tex</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ROC_tex</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">PRC_png</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">PRC_png</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PRC_png</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">PRC_csv</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">PRC_csv</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PRC_csv</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">PRC_tex</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">PRC_tex</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">PRC_tex</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">label_type</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
         <span class="n">label_type</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">label_type</span><span class="p">)</span>
@@ -528,6 +776,10 @@
     <span class="k">if</span> <span class="n">label_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Assume we want to have the first key</span>
         <span class="n">label_type</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Multiclass, just take the prediction label</span>
+        <span class="n">label_type</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
     <span class="n">N_1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="n">label_type</span><span class="p">]</span><span class="o">.</span><span class="n">Y_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">N_2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">prediction</span><span class="p">[</span><span class="n">label_type</span><span class="p">]</span><span class="o">.</span><span class="n">Y_test</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
@@ -542,11 +794,12 @@
     <span class="n">config</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="n">label_type</span><span class="p">]</span><span class="o">.</span><span class="n">config</span>
     <span class="n">crossval_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span>
 
+    <span class="c1"># --------------------------------------------------------------</span>
+    <span class="c1"># ROC Curve</span>
     <span class="k">if</span> <span class="n">crossval_type</span> <span class="o">==</span> <span class="s1">&#39;LOO&#39;</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LOO: Plotting the ROC without confidence intervals.&quot;</span><span class="p">)</span>
         <span class="n">y_truths</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y_truths</span><span class="p">]</span>
         <span class="n">y_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y_scores</span><span class="p">]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">y_truths</span><span class="p">)</span>
         <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">plot_single_ROC</span><span class="p">(</span><span class="n">y_truths</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">,</span> <span class="n">returnplot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Plot the ROC with confidence intervals</span>
@@ -554,24 +807,48 @@
         <span class="n">f</span><span class="p">,</span> <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span> <span class="o">=</span> <span class="n">plot_ROC_CIc</span><span class="p">(</span><span class="n">y_truths</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">,</span> <span class="n">N_1</span><span class="p">,</span> <span class="n">N_2</span><span class="p">)</span>
 
     <span class="c1"># Save the outputs</span>
-    <span class="k">if</span> <span class="n">output_png</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">output_png</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;ROC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_png</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">ROC_png</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">ROC_png</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;ROC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ROC_png</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="n">output_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">tikzplotlib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">output_tex</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;ROC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_tex</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">ROC_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tikzplotlib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">ROC_tex</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;ROC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ROC_tex</span><span class="p">))</span>
 
-    <span class="c1"># Save ROC values as JSON</span>
-    <span class="k">if</span> <span class="n">output_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">ROC_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ROC_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
             <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
             <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;FPR&#39;</span><span class="p">,</span> <span class="s1">&#39;TPR&#39;</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fpr</span><span class="p">)):</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">fpr</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">tpr</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span>
                 <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;ROC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">output_csv</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;ROC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ROC_csv</span><span class="p">))</span>
+
+    <span class="c1"># --------------------------------------------------------------</span>
+    <span class="c1"># PR Curve</span>
+    <span class="k">if</span> <span class="n">crossval_type</span> <span class="o">==</span> <span class="s1">&#39;LOO&#39;</span><span class="p">:</span>
+        <span class="n">tpr</span><span class="p">,</span> <span class="n">precisionr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">plot_single_PRC</span><span class="p">(</span><span class="n">y_truths</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">,</span> <span class="n">returnplot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">precisionr</span> <span class="o">=</span> <span class="n">plot_PRC_CIc</span><span class="p">(</span><span class="n">y_truths</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">,</span> <span class="n">N_1</span><span class="p">,</span> <span class="n">N_2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">PRC_png</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">PRC_png</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;PRC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PRC_png</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">PRC_tex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tikzplotlib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">PRC_tex</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;PRC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PRC_tex</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">PRC_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">PRC_csv</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Recall&#39;</span><span class="p">,</span> <span class="s1">&#39;Precision&#39;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tpr</span><span class="p">)):</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">tpr</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="nb">str</span><span class="p">(</span><span class="n">precisionr</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;PRC saved as </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PRC_csv</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">f</span><span class="p">,</span> <span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span></div>
 
@@ -590,19 +867,11 @@
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -613,6 +882,7 @@
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {

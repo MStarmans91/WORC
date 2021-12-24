@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,13 @@ def ExtractNLargestBlobsn(binaryImage, numberToExtract=1):
     """
 
     # Get all the blob properties.
-    labeledImage = label(binaryImage, connectivity=3)
+    connectivity = binaryImage.ndim
+
+    if connectivity == 3 and binaryImage.shape[2] == 1:
+        # Oh no! Its a 2D image disguised as a 3D image! We must change connectivity to 2
+        connectivity = 2
+
+    labeledImage = label(binaryImage, connectivity=connectivity)
     blobMeasurements = regionprops(labeledImage)
 
     if len(blobMeasurements) == 1:
@@ -65,6 +71,9 @@ def ExtractNLargestBlobsn(binaryImage, numberToExtract=1):
             nblob = abs(nblob)
             coords = allCoords[indices[nblob]]
             for coord in coords:
-                binaryImage[coord[0], coord[1], coord[2]] = 1
+                if len(binaryImage.shape) == 2:
+                    binaryImage[coord[0], coord[1]] = 1
+                else:
+                    binaryImage[coord[0], coord[1], coord[2]] = 1
 
     return binaryImage

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -100,6 +100,8 @@ def mask_contour(contour, mask, method='multiply'):
         contour = np.bitwise_xor(contour, mask)
     elif method == "multiply":
         contour = np.multiply(contour, mask)
+    else:
+        raise ae.WORCKeyError(f"Masking method {method} is not valid, should be subtract or multiply.")
 
     return contour
 
@@ -185,11 +187,12 @@ def segmentix(parameters, image=None, segmentation=None,
         contour = dilate_contour(contour, radius)
 
     # Mask the segmentation if necessary
-    if mask is not None:
-        method = config['Segmentix']['mask']
+    method = config['Segmentix']['mask']
+    if mask is not None and method != "None":
         print('[Segmentix] Masking contour.')
         if type(mask) is list:
             mask = ''.join(mask)
+
         new_contour = mask_contour(contour, mask, method)
         if np.sum(new_contour) == 0:
             print('\t [WARNING] Contour after masking sums to zero: not applying masking.')
@@ -228,7 +231,7 @@ def segmentix(parameters, image=None, segmentation=None,
                 pixel_spacing = metadata[0x28, 0x30].value
             else:
                 pixel_spacing = [1.0, 1.0]
-                
+
             spacing = (float(pixel_spacing[0]),
                        float(pixel_spacing[1]),
                        float(slice_thickness))

@@ -1,5 +1,5 @@
 <tool id="TrainClassifier" name="TrainClassifier" version="1.0">
-    <description>A wrapper around PREDICT's Radiomics patient classification.</description>
+    <description>A wrapper around WORC's Radiomics patient classification.</description>
     <authors>
       <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
     </authors>
@@ -24,7 +24,7 @@
         <input id="patientclass_train" name="patientclass" datatype="PatientInfoFile" prefix="--pc_train" cardinality="1" repeat_prefix="false" required="true" />
         <input id="patientclass_test" name="patientclass" datatype="PatientInfoFile" prefix="--pc_test" cardinality="1" repeat_prefix="false" required="false" />
         <input id="config" name="config" datatype="ParameterFile" prefix="--conf" cardinality="1-*" repeat_prefix="false" required="true" />
-        <input id="fixedsplits" name="File containing fixed splits for cross validation" datatype="XlsxFile" prefix="--fs" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="fixedsplits" name="File containing fixed splits for cross validation" datatype="CSVFile" prefix="--fs" cardinality="1" repeat_prefix="false" required="false" />
      </inputs>
     <outputs>
       <output id="classification" name="Radiomics classification" datatype="HDF5" cardinality="as:config" nospace="False" order="0" prefix="--class" required="true"/>

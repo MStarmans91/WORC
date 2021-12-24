@@ -61,6 +61,12 @@ def random_split_cross_validation(image_features, feature_labels, classes,
         # Start from zero, thus empty list of previos data
         save_data = list()
 
+    # If we are using fixed splits, set the n_iterations to the number of splits
+    if fixedsplits is not None:
+        n_iterations = int(fixedsplits.columns.shape[0] / 2)
+        print(f'Fixedsplits detected, adjusting n_iterations to {n_iterations}')
+        logging.debug(f'Fixedsplits detected, adjusting n_iterations to {n_iterations}')
+
     for i in range(start, n_iterations):
         print(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
         logging.debug(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))
@@ -78,6 +84,7 @@ def random_split_cross_validation(image_features, feature_labels, classes,
         # label is maintained
         if any(clf in regressors for clf in param_grid['classifiers']):
             # We cannot do a stratified shuffle split with regression
+            classes_temp = classes
             stratify = None
         else:
             if modus == 'singlelabel':
@@ -99,6 +106,7 @@ def random_split_cross_validation(image_features, feature_labels, classes,
                 for n_patient in range(0, classes.shape[1]):
                     for n_label in range(0, classes.shape[0]):
                         classes_temp[n_patient, n_label] = classes[n_label, n_patient]
+
             else:
                 raise ae.WORCKeyError('{} is not a valid modus!').format(modus)
 
@@ -162,8 +170,8 @@ def random_split_cross_validation(image_features, feature_labels, classes,
 
         else:
             # Use pre defined splits
-            train = fixedsplits[str(i) + '_train'].values
-            test = fixedsplits[str(i) + '_test'].values
+            train = fixedsplits[str(i) + '_train'].dropna().values
+            test = fixedsplits[str(i) + '_test'].dropna().values
 
             # Convert the numbers to the correct indices
             ind_train = list()
@@ -536,6 +544,11 @@ def crossval(config, label_data, image_features,
     # Check if we need to use fixedsplits:
     if fixedsplits is not None and '.csv' in fixedsplits:
         fixedsplits = pd.read_csv(fixedsplits, header=0)
+
+        # Fixedsplits need to be performed in random split fashion, makes no sense for LOO
+        if crossval_type == 'LOO':
+            print('[WORC WARNING] Fixedsplits need to be performed in random split fashion, makes no sense for LOO.')
+            crossval_type = 'random_split'
 
     if modus == 'singlelabel':
         print('Performing single-class classification.')

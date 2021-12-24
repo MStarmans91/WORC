@@ -72,13 +72,13 @@ class ConfigBuilder():
                             'Joblib_backend': 'threading'},
                 'Classification': {'fastr': 'True',
                                    'fastr_plugin': 'DRMAAExecution'},
-                'HyperOptimization': {'n_jobspercore': '1000'}
+                'HyperOptimization': {'n_jobspercore': '200'}
             }
         elif CartesiusClusterDetector().do_detection():
             overrides = {
                 'Classification': {'fastr': 'True',
                                    'fastr_plugin': 'ProcessPoolExecution'},
-                'HyperOptimization': {'n_jobspercore': '2000'}
+                'HyperOptimization': {'n_jobspercore': '500'}
             }
         else:
             overrides = {}  # not a cluster or unsupported
@@ -180,26 +180,23 @@ class ConfigBuilder():
                     'feature_labels_tofit': 'NGTDM'
                     },
                 'Resampling': {
-                    'Use': '0.5',
+                    'Use': '0.2',
                     },
                 'CrossValidation': {
                     'N_iterations': '2',
                     'fixed_seed': 'True'
-                    },
-                'Classification': {
-                    'classifiers': 'SVM, RF, LR, LDA, QDA, GaussianNB'
                     },
                 'HyperOptimization': {
                     'N_iterations': '10',
                     'n_jobspercore': '10',
                     'n_splits': '2'
                     },
-                'Ensemble': {'Use': '1'}
+                'Ensemble': {'Use': '2'}
             }
 
             # Additionally, turn queue reporting system on
             fastr.config.queue_report_interval = 120
         else:
-            overrides = {} # not a cluster or unsupported
+            overrides = {}  # not a cluster or unsupported
 
         return overrides

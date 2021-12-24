@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -119,14 +119,18 @@ def trainclassifier(feat_train, patientinfo_train, config,
     config = config_io.load_config(config)
     label_type = config['Labels']['label_names']
     modus = config['Labels']['modus']
+    combine_features = config['FeatPreProcess']['Combine']
+    combine_method = config['FeatPreProcess']['Combine_method']
 
     # Load the feature files and match to label data
     label_data_train, image_features_train =\
-        load_features(feat_train, patientinfo_train, label_type)
+        load_features(feat_train, patientinfo_train, label_type,
+                      combine_features, combine_method)
 
     if feat_test:
         label_data_test, image_features_test =\
-            load_features(feat_test, patientinfo_test, label_type)
+            load_features(feat_test, patientinfo_test, label_type,
+                          combine_features, combine_method)
 
     # Create tempdir name from patientinfo file name
     basename = os.path.basename(patientinfo_train)

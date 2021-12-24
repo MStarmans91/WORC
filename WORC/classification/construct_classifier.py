@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,12 +20,12 @@ from sklearn.svm import SVR as SVMR
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
 from sklearn.linear_model import SGDClassifier, ElasticNet, SGDRegressor
-from sklearn.linear_model import LogisticRegression, Lasso
+from sklearn.linear_model import LogisticRegression, LinearRegression, Lasso
+from sklearn.linear_model import Ridge
 from sklearn.naive_bayes import GaussianNB, ComplementNB
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as QDA
 import scipy
-from WORC.classification.estimators import RankedSVM
 from WORC.classification.AdvancedSampler import log_uniform, discrete_uniform
 import WORC.addexceptions as ae
 from xgboost import XGBClassifier, XGBRegressor
@@ -145,7 +145,7 @@ def construct_classifier(config):
 
     elif config['classifiers'] == 'SGDR':
         # Stochastic Gradient Descent regressor
-        classifier = SGDRegressor(n_iter=config['max_iter'],
+        classifier = SGDRegressor(max_iter=config['max_iter'],
                                   alpha=config['SGD_alpha'],
                                   l1_ratio=config['SGD_l1_ratio'],
                                   loss=config['SGD_loss'],
@@ -168,6 +168,17 @@ def construct_classifier(config):
                                         l1_ratio=config['LR_l1_ratio'],
                                         C=config['LRC'],
                                         random_state=config['random_seed'])
+
+    elif config['classifiers'] == 'LinR':
+        # Linear Regression
+        classifier = LinearRegression()
+
+    elif config['classifiers'] == 'Ridge':
+        # Ridge Regression
+        classifier = Ridge(alpha=config['ElasticNet_alpha'],
+                           max_iter=max_iter,
+                           random_state=config['random_seed'])
+
     elif config['classifiers'] == 'GaussianNB':
         # Naive Bayes classifier using Gaussian distributions
         classifier = GaussianNB()
@@ -214,7 +225,7 @@ def construct_SVM(config, regression=False):
         clf = SVC(class_weight='balanced', probability=True, max_iter=max_iter,
                   random_state=config['random_seed'])
     else:
-        clf = SVMR(max_iter=max_iter, random_state=config['random_seed'])
+        clf = SVMR(max_iter=max_iter)
 
     clf.kernel = str(config['SVMKernel'])
     clf.C = config['SVMC']
@@ -225,15 +236,6 @@ def construct_SVM(config, regression=False):
         clf.coef0 = config['SVMcoef0']
     if 'SVMgamma' in config:
         clf.gamma = config['SVMgamma']
-
-    # Check if we need to use a ranked SVM
-    if config['classifiers'] == 'RankedSVM':
-        clf = RankedSVM()
-        param_grid = {'svm': ['Poly'],
-                      'degree': [2, 3, 4, 5],
-                      'gamma':  scipy.stats.uniform(loc=0, scale=1e-3),
-                      'coefficient': scipy.stats.uniform(loc=0, scale=1e-2),
-                      }
 
     return clf
 
@@ -317,8 +319,8 @@ def create_param_grid(config):
                          scale=config['AdaBoost_n_estimators'][1])
 
     param_grid['AdaBoost_learning_rate'] =\
-        scipy.stats.uniform(loc=config['AdaBoost_learning_rate'][0],
-                            scale=config['AdaBoost_learning_rate'][1])
+        log_uniform(loc=config['AdaBoost_learning_rate'][0],
+                    scale=config['AdaBoost_learning_rate'][1])
 
     # XGDBoost parameters
     param_grid['XGB_boosting_rounds'] =\
@@ -330,8 +332,8 @@ def create_param_grid(config):
                          scale=config['XGB_max_depth'][1])
 
     param_grid['XGB_learning_rate'] =\
-        scipy.stats.uniform(loc=config['XGB_learning_rate'][0],
-                            scale=config['XGB_learning_rate'][1])
+        log_uniform(loc=config['XGB_learning_rate'][0],
+                    scale=config['XGB_learning_rate'][1])
 
     param_grid['XGB_gamma'] =\
         scipy.stats.uniform(loc=config['XGB_gamma'][0],

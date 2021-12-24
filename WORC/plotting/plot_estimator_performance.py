@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,14 +30,14 @@ from WORC.plotting.compute_CI import compute_confidence
 from WORC.plotting.compute_CI import compute_confidence_bootstrap
 
 
-def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble_method, ensemble_size, ensemble_scoring):
+def fit_thresholds(thresholds, estimator, label_type, X_train, Y_train,
+                   ensemble_method, ensemble, ensemble_scoring):
     print('Fitting thresholds on validation set')
     if not hasattr(estimator, 'cv_iter'):
         cv_iter = list(estimator.cv.split(X_train, Y_train))
         estimator.cv_iter = cv_iter
 
     p_all = estimator.cv_results_['params'][0]
-    n_iter = len(estimator.cv_iter)
 
     thresholds_low = list()
     thresholds_high = list()
@@ -45,8 +45,8 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble_method, ens
         print(' - iteration {it + 1} / {n_iter}.')
         # NOTE: Explicitly exclude validation set, elso refit and score
         # somehow still seems to use it.
-        X_train_temp = [prediction[label_type]['X_train'][i] for i in train]
-        Y_train_temp = [prediction[label_type]['Y_train'][i] for i in train]
+        X_train_temp = [estimator[label_type]['X_train'][i] for i in train]
+        Y_train_temp = [estimator[label_type]['Y_train'][i] for i in train]
         train_temp = range(0, len(train))
 
         # Refit a SearchCV object with the provided parameters
@@ -60,7 +60,7 @@ def fit_thresholds(thresholds, estimator, X_train, Y_train, ensemble_method, ens
                                       verbose=False)
 
         # Predict and save scores
-        X_train_values = [x[0] for x in X_train] # Throw away labels
+        X_train_values = [x[0] for x in X_train]  # Throw away labels
         X_train_values_valid = [X_train_values[i] for i in valid]
         Y_valid_score_temp = estimator.predict_proba(X_train_values_valid)
 
@@ -91,7 +91,6 @@ def compute_statistics(y_truth, y_score, y_prediction, modus, regression):
                                                    y_prediction,
                                                    y_score,
                                                    regression)
-            return
 
     elif modus == 'multilabel':
         # Convert class objects to single label per patient
@@ -135,7 +134,7 @@ def compute_statistics(y_truth, y_score, y_prediction, modus, regression):
                 for num, metric in enumerate(predictions_singlelabel_temp):
                     predictions_singlelabel[num].append(metric)
 
-        output = predictions_multilabel + predictions_singlelabel
+        output = list(predictions_multilabel) + predictions_singlelabel
         return output
 
     else:
@@ -239,6 +238,9 @@ def plot_estimator_performance(prediction, label_data, label_type,
             if type(label_type) is not list:
                 # Singlelabel: convert to list
                 label_type = [[label_type]]
+            elif len(label_type) == 1:
+                label_type = label_type[0].split(', ')
+
             label_data = lp.load_labels(label_data, label_type)
         else:
             raise ae.WORCValueError(f"Label data {label_data} incorrect: not a dictionary, or file does not exist.")
@@ -292,14 +294,14 @@ def plot_estimator_performance(prediction, label_data, label_type,
             acc_av = list()
 
             # Also add scoring measures for all single label scores
-            sensitivity_single = [list() for j in n_labels]
-            specificity_single = [list() for j in n_labels]
-            precision_single = [list() for j in n_labels]
-            npv_single = [list() for j in n_labels]
-            accuracy_single = [list() for j in n_labels]
-            bca_single = [list() for j in n_labels]
-            auc_single = [list() for j in n_labels]
-            f1_score_list_single = [list() for j in n_labels]
+            sensitivity_single = [list() for j in range(n_labels)]
+            specificity_single = [list() for j in range(n_labels)]
+            precision_single = [list() for j in range(n_labels)]
+            npv_single = [list() for j in range(n_labels)]
+            accuracy_single = [list() for j in range(n_labels)]
+            bca_single = [list() for j in range(n_labels)]
+            auc_single = [list() for j in range(n_labels)]
+            f1_score_list_single = [list() for j in range(n_labels)]
 
     else:
         r2score = list()
@@ -312,6 +314,13 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
     patient_classification_list = dict()
     percentages_selected = list()
+
+    if bootstrap:
+        # To be compatible with flake8, initialize some variables
+        y_truth_all = None
+        y_prediction_all = None
+        y_score_all = None
+        test_patient_IDs_or = None
 
     if output in ['scores', 'decision'] or crossval_type == 'LOO':
         # Keep track of all groundth truths and scores
@@ -459,14 +468,17 @@ def plot_estimator_performance(prediction, label_data, label_type,
                     y_truth_temp = list()
                     test_patient_IDs_temp = list()
 
-                thresholds_val = fit_thresholds(thresholds, fitted_model, X_train_temp, Y_train_temp,
-                                                ensemble_method, ensemble_size, ensemble_scoring)
-                for pnum in range(len(y_score)):
-                    if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
-                        y_score_temp.append(y_score[pnum])
-                        y_prediction_temp.append(y_prediction[pnum])
-                        y_truth_temp.append(y_truth[pnum])
-                        test_patient_IDs_temp.append(test_patient_IDs[pnum])
+                    thresholds_val = fit_thresholds(thresholds, fitted_model,
+                                                    label_type, X_train_temp,
+                                                    Y_train_temp, esemble_method,
+                                                    ensemble_size,
+                                                    ensemble_scoring)
+                    for pnum in range(len(y_score)):
+                        if y_score[pnum] <= thresholds_val[0] or y_score[pnum] > thresholds_val[1]:
+                            y_score_temp.append(y_score[pnum])
+                            y_prediction_temp.append(y_prediction[pnum])
+                            y_truth_temp.append(y_truth[pnum])
+                            test_patient_IDs_temp.append(test_patient_IDs[pnum])
 
                     perc = float(len(y_prediction_temp))/float(len(y_prediction))
                     percentages_selected.append(perc)
@@ -478,11 +490,16 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 else:
                     raise ae.WORCValueError(f"Need None, one or two thresholds on the posterior; got {len(thresholds)}.")
 
-            # If all scores are NaN, the classifier cannot do probabilities, thus
-            # use hard predictions
-            if np.sum(np.isnan(y_score)) == len(y_prediction):
-                print('[WORC Warning] All scores NaN, replacing with prediction.')
-                y_score = y_prediction
+            if crossval_type != 'LOO' and type(y_prediction) is np.ndarray:
+                if y_prediction.shape == 1 or y_prediction.shape[0] == 1:
+                    # Convert to list for compatability
+                    y_prediction = [y_prediction.tolist()]
+
+                # If all scores are NaN, the classifier cannot do probabilities, thus
+                # use hard predictions
+                if np.sum(np.isnan(y_score)) == len(y_prediction):
+                    print('[WORC Warning] All scores NaN, replacing with prediction.')
+                    y_score = y_prediction
 
         if bootstrap and i == 0:
             # Save objects for re-use
@@ -541,7 +558,9 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
                 # Append performance to lists for all cross validations
                 accuracy.append(accuracy_temp)
-                bca.append(bca_temp)
+                if modus == 'singlelabel':
+                    bca.append(bca_temp)
+
                 sensitivity.append(sensitivity_temp)
                 specificity.append(specificity_temp)
                 auc.append(auc_temp)
@@ -552,7 +571,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
                 if modus == 'multilabel':
                     acc_av.append(acc_av_temp)
-                    for j in n_labels:
+                    for j in range(n_labels):
                         accuracy_single[j].append(accuracy_temp_single[j])
                         bca_single[j].append(bca_temp_single[j])
                         sensitivity_single[j].append(sensitivity_temp_single[j])
@@ -593,6 +612,24 @@ def plot_estimator_performance(prediction, label_data, label_type,
         return y_truths, y_scores, y_predictions, pids
 
     elif output == 'stats':
+        if not regression:
+            metric_names_single = ['Accuracy', 'BCA', 'Sensitivity',
+                                   'Specificity', 'Precision', 'NPV',
+                                   'F1-score', 'AUC']
+            if modus == 'singlelabel':
+                metric_names = metric_names_single
+            elif modus == 'multilabel':
+                metric_names_multi = ['Accuracy', 'Sensitivity',
+                                      'Specificity', 'Precision', 'NPV',
+                                      'F1-score', 'AUC',
+                                      'Average Accuracy']
+                metric_names = metric_names_multi + metric_names_single
+
+        else:
+            # Regression
+            metric_names = ['R2-score', 'MSE', 'ICC', 'PearsonC',
+                            'PearsonP', 'SpearmanC', 'SpearmanP']
+
         # Compute statistics
         stats = dict()
         output = dict()
@@ -601,24 +638,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
             performances = compute_statistics(y_truths, y_scores,
                                               y_predictions,
                                               modus, regression)
-
-            if not regression:
-                metric_names_single = ['Accuracy', 'BCA', 'Sensitivity',
-                                       'Specificity', 'Precision', 'NPV',
-                                       'F1-score', 'AUC']
-                if modus == 'singlelabel':
-                    metric_names = metric_names_single
-                elif modus == 'multilabel':
-                    metric_names_multi = ['Accuracy', 'Sensitivity',
-                                          'Specificity', 'Precision', 'NPV',
-                                          'F1-score', 'AUC',
-                                          'Average Accuracy']
-                    metric_names = metric_names_multi + metric_names_single
-
-            else:
-                # Regression
-                metric_names = ['R2-score', 'MSE', 'ICC', 'PearsonC',
-                                'PearsonP', 'SpearmanC', 'SpearmanP']
 
             # Put all metrics with their names in the statistics dict
             for k, v in zip(metric_names, performances):
@@ -638,9 +657,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
             # FIXME: bootstrap not done in regression
             all_performances = dict()
             if not regression:
-                metric_names_single = ['Accuracy', 'BCA', 'Sensitivity',
-                                       'Specificity', 'Precision', 'NPV',
-                                       'F1-score', 'AUC']
 
                 if bootstrap:
                     # Compute once for the real test set the performance
@@ -668,25 +684,53 @@ def plot_estimator_performance(prediction, label_data, label_type,
                         all_performances[metric_names_single[p]] = perf
 
                 else:
-                    names = ['Accuracy', 'BCA', 'AUC', 'F1-score', 'Precision',
-                             'NPV', 'Sensitivity', 'Specificity', 'Validation-score']
-                    performances = [accuracy, bca, auc, f1_score_list,
-                                    precision, npv, sensitivity, specificity, val_score]
-                    for name, perf in zip(names, performances):
-                        all_performances[name] = perf
-
-                    stats["Accuracy 95%:"] = f"{np.nanmean(accuracy)} {str(compute_confidence(accuracy, N_1, N_2, alpha))}"
-                    stats["BCA 95%:"] = f"{np.nanmean(bca)} {str(compute_confidence(bca, N_1, N_2, alpha))}"
-                    stats["AUC 95%:"] = f"{np.nanmean(auc)} {str(compute_confidence(auc, N_1, N_2, alpha))}"
-                    stats["F1-score 95%:"] = f"{np.nanmean(f1_score_list)} {str(compute_confidence(f1_score_list, N_1, N_2, alpha))}"
-                    stats["Precision 95%:"] = f"{np.nanmean(precision)} {str(compute_confidence(precision, N_1, N_2, alpha))}"
-                    stats["NPV 95%:"] = f"{np.nanmean(npv)} {str(compute_confidence(npv, N_1, N_2, alpha))}"
-                    stats["Sensitivity 95%:"] = f"{np.nanmean(sensitivity)} {str(compute_confidence(sensitivity, N_1, N_2, alpha))}"
-                    stats["Specificity 95%:"] = f"{np.nanmean(specificity)} {str(compute_confidence(specificity, N_1, N_2, alpha))}"
-                    stats["Validation 95%:"] = f"{np.nanmean(val_score)} {str(compute_confidence(val_score, N_1, N_2, alpha))}"
+                    # From SMAC
+                    # names = ['Accuracy', 'BCA', 'AUC', 'F1-score', 'Precision',
+                    #          'NPV', 'Sensitivity', 'Specificity', 'Validation-score']
+                    # performances = [accuracy, bca, auc, f1_score_list,
+                    #                 precision, npv, sensitivity, specificity, val_score]
+                    # for name, perf in zip(names, performances):
+                    #     all_performances[name] = perf
+                    #
+                    # stats["Accuracy 95%:"] = f"{np.nanmean(accuracy)} {str(compute_confidence(accuracy, N_1, N_2, alpha))}"
+                    # stats["BCA 95%:"] = f"{np.nanmean(bca)} {str(compute_confidence(bca, N_1, N_2, alpha))}"
+                    # stats["AUC 95%:"] = f"{np.nanmean(auc)} {str(compute_confidence(auc, N_1, N_2, alpha))}"
+                    # stats["F1-score 95%:"] = f"{np.nanmean(f1_score_list)} {str(compute_confidence(f1_score_list, N_1, N_2, alpha))}"
+                    # stats["Precision 95%:"] = f"{np.nanmean(precision)} {str(compute_confidence(precision, N_1, N_2, alpha))}"
+                    # stats["NPV 95%:"] = f"{np.nanmean(npv)} {str(compute_confidence(npv, N_1, N_2, alpha))}"
+                    # stats["Sensitivity 95%:"] = f"{np.nanmean(sensitivity)} {str(compute_confidence(sensitivity, N_1, N_2, alpha))}"
+                    # stats["Specificity 95%:"] = f"{np.nanmean(specificity)} {str(compute_confidence(specificity, N_1, N_2, alpha))}"
+                    # stats["Validation 95%:"] = f"{np.nanmean(val_score)} {str(compute_confidence(val_score, N_1, N_2, alpha))}"
 
                     if modus == 'multilabel':
-                        stats["Average Accuracy 95%:"] = f"{np.nanmean(acc_av)} {str(compute_confidence(acc_av, N_1, N_2, alpha))}"
+                        # Multiclass
+                        # First gather overall performances
+                        performances = [accuracy, sensitivity, specificity,
+                                        precision, npv, f1_score_list, auc,
+                                        acc_av]
+
+                        for name, perf in zip(metric_names_multi, performances):
+                            all_performances[name] = perf
+                            stats[f"{name} 95%:"] = f"{np.nanmean(perf)} {str(compute_confidence(perf, N_1, N_2, alpha))}"
+
+                        # Performance per label
+                        performances = [accuracy_single, bca_single,
+                                        sensitivity_single, specificity_single,
+                                        auc_single, f1_score_list_single,
+                                        precision_single, npv_single]
+
+                        print(sensitivity_single)
+                        for name, perf in zip(metric_names_single, performances):
+                            for nlabel, label in enumerate(label_type.split(',')):
+                                all_performances[f"{name}_{label}"] = perf[nlabel]
+                                stats[f"{name}_{label} 95%:"] = f"{np.nanmean(perf[nlabel])} {str(compute_confidence(perf, N_1, N_2, alpha))}"
+                    else:
+                        # Singleclass
+                        performances = [accuracy, bca, sensitivity, specificity,
+                                        precision, npv, f1_score_list, auc]
+                        for name, perf in zip(metric_names_single, performances):
+                            all_performances[name] = perf
+                            stats[f"{name} 95%:"] = f"{np.nanmean(perf)} {str(compute_confidence(perf, N_1, N_2, alpha))}"
 
                 if thresholds is not None:
                     if len(thresholds) == 2:
@@ -702,11 +746,20 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 for i_ID in patient_classification_list:
                     percentage_right = patient_classification_list[i_ID]['N_correct'] / float(patient_classification_list[i_ID]['N_test'])
 
-                    if i_ID in patient_IDs:
-                        label = labels[0][np.where(i_ID == patient_IDs)]
+                    # Check if this is exactly the label of the patient within the label file
+                    check_id = i_ID
+                    if check_id not in patient_IDs:
+                        print(f'[WORC WARNING] Patient {check_id} is not found the patient labels, removing underscore.')
+                        check_id = check_id.split("_")[0]
+                        if check_id not in patient_IDs:
+                            print(f'[WORC WARNING] Did not help, excluding patient {check_id}.')
+                            continue
+
+                    if check_id in patient_IDs:
+                        label = labels[0][np.where(check_id == patient_IDs)]
                     else:
                         # Multiple instance of one patient
-                        label = labels[0][np.where(i_ID.split('_')[0] == patient_IDs)]
+                        label = labels[0][np.where(check_id.split('_')[0] == patient_IDs)]
 
                     label = label[0][0]
                     percentages[i_ID] = str(label) + ': ' + str(round(percentage_right, 2) * 100) + '%'
@@ -757,7 +810,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
         return output
 
 
-def combine_multiple_estimators(predictions, label_data, multilabel_type, label_types,
+def combine_multiple_estimators(predictions, label_data, N_1, N_2,
+                                multilabel_type, label_types,
                                 ensemble=1, strategy='argmax', alpha=0.95):
     '''
     Combine multiple estimators in a single model.
@@ -827,7 +881,7 @@ def combine_multiple_estimators(predictions, label_data, multilabel_type, label_
         # Compute multilabel performance metrics
         y_truth = np.argmax(y_truth, axis=0)
         accuracy_temp, sensitivity_temp, specificity_temp, \
-            precision_temp, npv_temp, f1_score_temp, auc_temp, accav_temp = \
+            precision_temp, npv_temp, f1_score_temp, auc_temp, acc_av_temp = \
             metrics.performance_multilabel(y_truth,
                                            y_prediction,
                                            y_score)
@@ -845,10 +899,6 @@ def combine_multiple_estimators(predictions, label_data, multilabel_type, label_
         precision.append(precision_temp)
         npv.append(npv_temp)
         acc_av.append(acc_av_temp)
-
-    # Extract sample size
-    N_1 = float(len(train_patient_IDs))
-    N_2 = float(len(test_patient_IDs))
 
     # Compute confidence intervals
     stats = dict()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,9 @@ from WORC.tools.Evaluate import Evaluate
 import WORC.addexceptions as WORCexceptions
 import WORC.IOparser.config_WORC as config_io
 from WORC.detectors.detectors import DebugDetector
+from WORC.export.hyper_params_exporter import export_hyper_params_to_latex
+from urllib.parse import urlparse
+from urllib.request import url2pathname
 
 
 class WORC(object):
@@ -142,6 +145,8 @@ class WORC(object):
         self.Elastix_Para = list()
         self.label_names = 'Label1, Label2'
 
+        self.fixedsplits = list()
+
         # Set some defaults, name
         self.fastr_plugin = 'LinearExecution'
         if name == '':
@@ -220,7 +225,7 @@ class WORC(object):
 
         # Segmentix
         config['Segmentix'] = dict()
-        config['Segmentix']['mask'] = 'subtract'
+        config['Segmentix']['mask'] = 'None'
         config['Segmentix']['segtype'] = 'None'
         config['Segmentix']['segradius'] = '5'
         config['Segmentix']['N_blobs'] = '1'
@@ -343,24 +348,26 @@ class WORC(object):
         config['FeatureScaling']['scaling_method'] = 'robust_z_score'
         config['FeatureScaling']['skip_features'] = 'semf_, pf_'
 
-        # Feature preprocessing before all below takes place
+        # Feature preprocessing before the whole HyperOptimization
         config['FeatPreProcess'] = dict()
         config['FeatPreProcess']['Use'] = 'False'
+        config['FeatPreProcess']['Combine'] = 'False'
+        config['FeatPreProcess']['Combine_method'] = 'mean'
 
         # Feature selection
         config['Featsel'] = dict()
         config['Featsel']['Variance'] = '1.0'
         config['Featsel']['GroupwiseSearch'] = 'True'
-        config['Featsel']['SelectFromModel'] = '0.2'
+        config['Featsel']['SelectFromModel'] = '0.275'
         config['Featsel']['SelectFromModel_estimator'] = 'Lasso, LR, RF'
         config['Featsel']['SelectFromModel_lasso_alpha'] = '0.1, 1.4'
         config['Featsel']['SelectFromModel_n_trees'] = '10, 90'
-        config['Featsel']['UsePCA'] = '0.2'
+        config['Featsel']['UsePCA'] = '0.275'
         config['Featsel']['PCAType'] = '95variance, 10, 50, 100'
-        config['Featsel']['StatisticalTestUse'] = '0.2'
+        config['Featsel']['StatisticalTestUse'] = '0.275'
         config['Featsel']['StatisticalTestMetric'] = 'MannWhitneyU'
         config['Featsel']['StatisticalTestThreshold'] = '-3, 2.5'
-        config['Featsel']['ReliefUse'] = '0.2'
+        config['Featsel']['ReliefUse'] = '0.275'
         config['Featsel']['ReliefNN'] = '2, 4'
         config['Featsel']['ReliefSampleSize'] = '0.75, 0.2'
         config['Featsel']['ReliefDistanceP'] = '1, 3'
@@ -405,7 +412,7 @@ class WORC(object):
             'RandomUnderSampling, RandomOverSampling, NearMiss, ' +\
             'NeighbourhoodCleaningRule, ADASYN, BorderlineSMOTE, SMOTE, ' +\
             'SMOTEENN, SMOTETomek'
-        config['Resampling']['sampling_strategy'] = 'majority, not minority, not majority, all'
+        config['Resampling']['sampling_strategy'] = 'auto, majority, minority, not minority, not majority, all'
         config['Resampling']['n_neighbors'] = '3, 12'
         config['Resampling']['k_neighbors'] = '5, 15'
         config['Resampling']['threshold_cleaning'] = '0.25, 0.5'
@@ -415,12 +422,7 @@ class WORC(object):
         config['Classification']['fastr'] = 'True'
         config['Classification']['fastr_plugin'] = self.fastr_plugin
         config['Classification']['classifiers'] =\
-            'SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, SVM, ' +\
-            'RF, RF, RF, ' +\
-            'LR, LR, LR, ' +\
-            'LDA, LDA, LDA, ' +\
-            'QDA, QDA, QDA, ' +\
-            'GaussianNB, GaussianNB, GaussianNB, ' +\
+            'SVM, RF, LR, LDA, QDA, GaussianNB, ' +\
             'AdaBoostClassifier, ' +\
             'XGBClassifier'
         config['Classification']['max_iter'] = '100000'
@@ -443,7 +445,7 @@ class WORC(object):
         config['Classification']['ElasticNet_l1_ratio'] = '0, 1'
         config['Classification']['SGD_alpha'] = '-5, 5'
         config['Classification']['SGD_l1_ratio'] = '0, 1'
-        config['Classification']['SGD_loss'] = 'hinge, squared_hinge, modified_huber'
+        config['Classification']['SGD_loss'] = 'squared_loss, huber, epsilon_insensitive, squared_epsilon_insensitive'
         config['Classification']['SGD_penalty'] = 'none, l2, l1'
         config['Classification']['CNB_alpha'] = '0, 1'
         config['Classification']['AdaBoost_n_estimators'] = config['Classification']['RFn_estimators']
@@ -451,10 +453,11 @@ class WORC(object):
 
         # Based on https://towardsdatascience.com/doing-xgboost-hyper-parameter-tuning-the-smart-way-part-1-of-2-f6d255a45dde
         # and https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/
+        # and https://medium.com/data-design/xgboost-hi-im-gamma-what-can-i-do-for-you-and-the-tuning-of-regularization-a42ea17e6ab6
         config['Classification']['XGB_boosting_rounds'] = config['Classification']['RFn_estimators']
         config['Classification']['XGB_max_depth'] = '3, 12'
         config['Classification']['XGB_learning_rate'] = config['Classification']['AdaBoost_learning_rate']
-        config['Classification']['XGB_gamma'] = '0.01, 0.99'
+        config['Classification']['XGB_gamma'] = '0.01, 9.99'
         config['Classification']['XGB_min_child_weight'] = '1, 6'
         config['Classification']['XGB_colsample_bytree'] = '0.3, 0.7'
 
@@ -467,11 +470,11 @@ class WORC(object):
 
         # Hyperparameter optimization options
         config['HyperOptimization'] = dict()
-        config['HyperOptimization']['scoring_method'] = 'f1_weighted_predictproba'
-        config['HyperOptimization']['test_size'] = '0.15'
+        config['HyperOptimization']['scoring_method'] = 'f1_weighted'
+        config['HyperOptimization']['test_size'] = '0.2'
         config['HyperOptimization']['n_splits'] = '5'
         config['HyperOptimization']['N_iterations'] = '1000' # represents either wallclock time limit or nr of evaluations when using SMAC
-        config['HyperOptimization']['n_jobspercore'] = '500'  # only relevant when using fastr in classification
+        config['HyperOptimization']['n_jobspercore'] = '200'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['memory'] = '3G'
@@ -499,7 +502,7 @@ class WORC(object):
         # Bootstrap options
         config['Bootstrap'] = dict()
         config['Bootstrap']['Use'] = 'False'
-        config['Bootstrap']['N_iterations'] = '1000'
+        config['Bootstrap']['N_iterations'] = '10000'
 
         return config
 
@@ -566,14 +569,20 @@ class WORC(object):
                                                          resources=ResourceLimit(memory=memory),
                                                          step_id='WorkflowOptimization')
 
+                if self.fixedsplits:
+                    self.fixedsplits_node = self.network.create_source('CSVFile', id='fixedsplits_source', node_group='conf', step_id='general_sources')
+                    self.classify.inputs['fixedsplits'] = self.fixedsplits_node.output
+
                 self.source_ensemble_method =\
                     self.network.create_constant('String', [self.configs[0]['Ensemble']['Method']],
                                                  id='ensemble_method',
                                                  step_id='Evaluation')
+
                 self.source_ensemble_size =\
                     self.network.create_constant('String', [self.configs[0]['Ensemble']['Size']],
                                                  id='ensemble_size',
                                                  step_id='Evaluation')
+                                                 
                 self.source_LabelType =\
                     self.network.create_constant('String', [self.configs[0]['Labels']['label_names']],
                                                  id='LabelType',
@@ -994,6 +1003,7 @@ class WORC(object):
                             # Add the features from this modality to the classifier node input
                             self.links_C1_test[label] = self.classify.inputs['features_test'][str(label)] << self.sources_features_test[label].output
                             self.links_C1_test[label].collapse = 'test'
+
 
             else:
                 raise WORCexceptions.WORCIOError("Please provide labels.")
@@ -1653,6 +1663,10 @@ class WORC(object):
         # Save the configurations as files
         self.save_config()
 
+        # fixed splits
+        if self.fixedsplits:
+          self.source_data['fixedsplits_source'] = self.fixedsplits
+
         # Generate gridsearch parameter files if required
         self.source_data['config_classification_source'] = self.fastrconfigs[0]
 
@@ -1666,6 +1680,8 @@ class WORC(object):
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_test_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+
+
 
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):
@@ -1763,6 +1779,12 @@ class WORC(object):
         except graphviz.backend.CalledProcessError as e:
             print(f'[WORC WARNING] Graphviz executable gave an error: not drawing network diagram. Original error: {e}')
 
+        # export hyper param. search space to LaTeX table
+        for config in self.fastrconfigs:
+            config_path = Path(url2pathname(urlparse(config).path))
+            tex_path = f'{config_path.parent.absolute() / config_path.stem}_hyperparams_space.tex'
+            export_hyper_params_to_latex(config_path, tex_path)
+
         if DebugDetector().do_detection():
             print("Source Data:")
             for k in self.source_data.keys():
@@ -1777,7 +1799,7 @@ class WORC(object):
 
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 
-    def add_evaluation(self, label_type):
+    def add_evaluation(self, label_type, modus='binary_classification'):
         """Add branch for evaluation of performance to network.
 
         Note: should be done after build, before set:
@@ -1787,7 +1809,8 @@ class WORC(object):
         WORC.execute()
 
         """
-        self.Evaluate = Evaluate(label_type=label_type, parent=self)
+        self.Evaluate =\
+            Evaluate(label_type=label_type, parent=self, modus=modus)
         self._add_evaluation = True
 
     def save_config(self):

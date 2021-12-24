@@ -1,40 +1,39 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC: Workflow for Optimal Radiomics Classification &mdash; WORC 3.4.0 documentation</title>
+  <title>WORC: Workflow for Optimal Radiomics Classification &mdash; WORC 3.5.0 documentation</title>
   
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
 
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Introduction" href="static/introduction.html" /> 
@@ -51,7 +50,7 @@
           
 
           
-            <a href="#" class="icon icon-home" alt="Documentation Home"> WORC
+            <a href="#" class="icon icon-home"> WORC
           
 
           
@@ -64,7 +63,7 @@
             
             
               <div class="version">
-                3.4.0
+                3.5.0
               </div>
             
           
@@ -81,7 +80,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -108,7 +106,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -147,7 +144,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="#">Docs</a> &raquo;</li>
         
       <li>WORC: Workflow for Optimal Radiomics Classification</li>
     
@@ -172,15 +169,17 @@
 <h1>WORC: Workflow for Optimal Radiomics Classification<a class="headerlink" href="#worc-workflow-for-optimal-radiomics-classification" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="welcome-to-the-worc-documentation">
 <h2>Welcome to the WORC documentation!<a class="headerlink" href="#welcome-to-the-worc-documentation" title="Permalink to this headline">¶</a></h2>
-<p>WORC is an open-source python package for the easy execution of end-to-end
-radiomics pipelines. Using automatic algorithm optimization, WORC automatically determines the optimal combination
-from a wide variety of radiomics methods to develop a signature on your dataset. Thereby, performing
+<p>WORC is an open-source python package for the fully automatic execution of end-to-end
+radiomics pipelines. Using automated machine learning, WORC automatically determines the optimal combination
+from a wide variety of radiomics methods and parameters to develop a radiomics model on your dataset. Thereby, performing
 a radiomics study is effectively reduced to a black box with a push button, where you simply have to input
 your data and WORC will adapt the workflow to your application. Thus, WORC is especially suitable
-for the fast development of signatures and thus probing datasets for new biomarkers.</p>
+for the fast development of signatures and probing datasets for new biomarkers.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Despite the name, besides classification, WORC can actually also be used for regression and survival signatures!</p>
+<p>Despite the name, besides classification, WORC can actually also be
+used for regression and multilabel classification. See for more details the
+<a class="reference internal" href="static/additionalfunctionality.html#additonalfunctionality-chapter"><span class="std std-ref">Additional functionality</span></a> chapter.</p>
 </div>
 <p>We aim to establish a general radiomics platform supporting easy
 integration of other tools. With our modular build and support of
@@ -199,41 +198,26 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 <blockquote>
 <div><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/B9780128161760000235/">M. P. A. Starmans, S. R. van der Voort, J. M. Castillo T., J. F. Veenland, S. Klein, W. J. Niessen. “Radiomics: Data mining using quantitative medical image features” Handbook of Medical Image Computing and Computer Assisted Intervention (MICCAI) 2020</a></p>
 </div></blockquote>
-<p>The article on WORC is currently in preparation. WORC has been presented in the following:</p>
+<p>The article on WORC is currently in preparation. WORC among others has been
+presented at the following conferences:</p>
 <blockquote>
-<div><p><a class="reference external" href="https://connect.myesr.org/course/radiomics-principles-and-applications/">M. P. A. Starmans. “Multicentre studies for more robust radiomics signatures.” European Congress of Radiology (ECR) 2020: E3 420-4 Radiomics: principles and applications.</a></p>
+<div><p><a class="reference external" href="https://connect.myesr.org/course/radiomics-principles-and-applications-2/">M. P. A. Starmans. “Multicentre studies for more robust radiomics signatures.” European Congress of Radiology (ECR) 2021: E³ 422 - Radiomics: principles and applications.</a></p>
+<p><a class="reference external" href="https://connect.myesr.org/course/radiomics-principles-and-applications/">M. P. A. Starmans. “Multicentre studies for more robust radiomics signatures.” European Congress of Radiology (ECR) 2020: E3 420-4 Radiomics: principles and applications.</a></p>
 <p><a class="reference external" href="https://youtu.be/iDUCIxw0D4I/">M. P. A. Starmans, S. R. van der Voort, M. Vos, F. Incekara, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen and S. Klein. “Fully automatic construction of optimal radiomics workflows.” European Congress of Radiology (ECR) 2019.</a></p>
-<p><a class="reference external" href="https://www.eusomii.org/events/eusomii-annual-meeting-2018/">M. P. A. Starmans, S. R. van der Voort, R. L. Miclea, M. Vos, F. Incekara, M. J. M. Timbergen, M. M. J. Wijnenga, G. A. Padmos, G. H. J. van Leenders, G. Kapsas, M. J. van den Bent, A. J.P.E. Vincent, D. J. Grünhagen, C. Verhoef, S. Sleijfer, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen, S. Klein. “Harmonizing radiomics among applications through adaptive workflow optimization.” European Society of Medical Imaging Informatics (EuSoMII) Annual Meeting 2019.</a></p>
-</div></blockquote>
-<p>WORC has been used in the following studies:</p>
-<blockquote>
-<div><p><a class="reference external" href="https://doi.org/10.1016/j.ejrad.2020.109266">M. J. M. Timbergen, M. P. A. Starmans, M. Vos, G. A. Padmos, D. J. Grünhagen, G. J. L. H. van Leenders, D. Hanff, C. Verhoef, W. J. Niessen, S. Sleijfer, S. Klein, J. J. Visser. “Differential diagnosis and mutation stratification of desmoid-type fibromatosis on MRI using radiomics.” European Journal of Radiology 2020, https://doi.org/10.1016/j.ejrad.2020.109266</a></p>
-<p><a class="reference external" href="https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/">M. P. A. Starmans, C. J. Els, F. Fiduzi, W. J. Niessen, S.Klein, R. S. Dwarkasing. “Radiomics model to predict hepatocellular carcinoma on liver MRI of high-risk patients in surveillance: a proof-of-concept study.” European Congress of Radiology (ECR) 2020</a></p>
-<p><a class="reference external" href="https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/">M. P. A. Starmans, M. Vos, M. J. M. Timbergen, S. R. van der Voort, D. J. Grünhagen, S. Sleijfer, C. Verhoef, J.J. Visser, S.Klein. “Distinguishing well-differentiated liposarcomas from lipomas on MR images using a radiomics approach.” European Congress of Radiology (ECR) 2020</a></p>
-<p><a class="reference external" href="https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/">M. P. A. Starmans, M. J. M. Timbergen, G. A. Padmos, D. J. Grünhagen, G. J. van Leenders, D. Hanff, S. Sleijfer, J.J. Visser, S.Klein. “Distinguishing desmoid-type fibromatosis from soft tissue sarcoma on MRI using a radiomics approach.” European Congress of Radiology (ECR) 2020</a></p>
-<p><a class="reference external" href="https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/">M. P. A. Starmans, M. J. M. Timbergen, M. Renckens, D. J. Grünhagen, G. J. van Leenders, S. Sleijfer, J.J. Visser, S.Klein. “Differential diagnosis and mutation stratification of gastrointestinal stromal tumours on CT images using a radiomics approach.” European Congress of Radiology (ECR) 2020</a></p>
-<p><a class="reference external" href="https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/">M. P. A. Starmans, F. E. Buisman, S. R. van der Voort, D. J. Grünhagen, P. B. Vermeulen, C. Verhoef, S.Klein, J.J. Visser. “Prediction of histopathological growth patterns by radiomics and CT-imaging in patients with operable colorectal liver metastases: a proof-of-concept study.” European Congress of Radiology (ECR) 2020</a></p>
-<p><a class="reference external" href="https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/">J. M. Castillo, M. P. A. Starmans, M. Arif, W. J. Niessen, S.Klein, I. G. Schoots, J. Veenland. “A multicentre-multivendor study to evaluate the generalisability of a radiomics model for classifying prostate cancer.” European Congress of Radiology (ECR) 2020</a></p>
-<p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0748798319309345/">M. J. M. Timbergen, M. P. A. Starmans, M. Vos, M. Renckens, D. J. Grünhagen, G. J. L. H. van Leenders, W. J. Niessen, C. Verhoef, S. Sleijfer, S. Klein, J. J. Visser. “Radiomics of Gastrointestinal Stromal Tumors; Risk Classification Based on Computed Tomography Images–A Pilot Study.” European Journal of Surgical Oncology 2020</a></p>
-<p><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6899528/">M. Vos, M. P. A. Starmans, M. J. M Timbergen, S. R. van der Voort, G. A. Padmos, W. Kessels, W. J. Niessen, G. J. L. H. van Leenders, D. J. Grünhagen, S. Sleijfer, C. Verhoef, S. Klein, J. J. Visser. “Radiomics approach to distinguish between well differentiated liposarcomas and lipomas on MRI” British Journal of Surgery 2019</a></p>
-<p><a class="reference external" href="https://www.bme2019.nl/mobview/presentation/58/">M. P. A. Starmans, S. R. van der Voort, R. L. Miclea, M. Vos, F. Incekara, M. J. M. Timbergen, Maarten M. J. Wijnenga, G. A. Padmos, W. Kessels, G. H. J. van Leenders, G. Kapsas, M. J. van den Bent, A. J. P. E. Vincent, D. J. Grünhagen, C. Verhoef, S. Sleijfer, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen, S. Klein. “Fully Automatic Construction of Optimal Radiomics Workflows .” Bio-Medical Engineering (BME) Conference 2019.</a></p>
 <p><a class="reference external" href="https://youtu.be/69hK59w28Gw/">M. P. A. Starmans, R. Miclea, S. R. van der Voort, W. J. Niessen, S. Klein and M. G. Thomeer. “Classification of malignant and benign liver tumours using a radiomics approach.” European Congress of Radiology (ECR) 2019.</a></p>
 <p><a class="reference external" href="https://youtu.be/8GkBBPQ4UxA/">M. P. A. Starmans, A. Blazevic, S. R. van der Voort, T. Brabander, J. Hofland, W. J. Niessen, W. W. de Herder and S. Klein. “Prediction of surgery requirement in mesenteric fibrosis on CT using a radiomics approach.” European Congress of Radiology (ECR) 2019.</a></p>
+<p><a class="reference external" href="https://www.eusomii.org/events/eusomii-annual-meeting-2018/">M. P. A. Starmans, S. R. van der Voort, R. L. Miclea, M. Vos, F. Incekara, M. J. M. Timbergen, M. M. J. Wijnenga, G. A. Padmos, G. H. J. van Leenders, G. Kapsas, M. J. van den Bent, A. J.P.E. Vincent, D. J. Grünhagen, C. Verhoef, S. Sleijfer, J. J. Visser, M. Smits, M. G. Thomeer, W. J. Niessen, S. Klein. “Harmonizing radiomics among applications through adaptive workflow optimization.” European Society of Medical Imaging Informatics (EuSoMII) Annual Meeting 2019.</a></p>
+</div></blockquote>
+<p>WORC has among others been used in the following studies:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://www.mdpi.com/1056234">L. Angus, M. P. A. Starmans, A. Rajicic, A. E. Odink, M. Jalving, W. J. Niessen, J. J. Visser, S. Sleijfer, S. Klein, A. A. M. van der Veldt. “The BRAF P. V600E Mutation Status of Melanoma Lung Metastases Cannot Be Discriminated on Computed Tomography by LIDC Criteria nor Radiomics Using Machine Learning.” Journal of Personalized Medicine 2021</a></p>
+<p><a class="reference external" href="https://www.mdpi.com/2075-4418/11/2/369">J. M. Castillo T., M. Arif, W. J. Niessen, S. Klein, C. H. Bangma, I. G. Schoots, J. F. Veenland. “A Multi-Center, Multi-Vendor Study to Evaluate the Generalizability of a Radiomics Model for Classifying Prostate Cancer: High Grade vs. Low Grade.” Diagnostics 2021</a></p>
+<p><a class="reference external" href="https://arxiv.org/abs/2010.06824">M. P. A. Starmans, M. J. M. Timbergen, M. Vos, M. Renckens, D. J. Grünhagen, G. J. L. H. van Leenders, R. S. Dwarkasing, F. J. A. Willemssen, W. J. Niessen, C. Verhoef, S. Sleijfer, J. J. Visser,  S. Klein. “Differential diagnosis and molecular stratification of gastrointestinal stromal tumors on CT images using a radiomics approach”. arXiv preprint arXiv:2010.06824</a></p>
+<p><a class="reference external" href="https://doi.org/10.1016/j.ejrad.2020.109266">M. J. M. Timbergen, M. P. A. Starmans, M. Vos, G. A. Padmos, D. J. Grünhagen, G. J. L. H. van Leenders, D. Hanff, C. Verhoef, W. J. Niessen, S. Sleijfer, S. Klein, J. J. Visser. “Differential diagnosis and mutation stratification of desmoid-type fibromatosis on MRI using radiomics.” European Journal of Radiology 2020</a></p>
+<p><a class="reference external" href="https://insightsimaging.springeropen.com/articles/supplements/volume-11-supplement-1/">M. P. A. Starmans, F. E. Buisman, S. R. van der Voort, D. J. Grünhagen, P. B. Vermeulen, C. Verhoef, S.Klein, J.J. Visser. “Prediction of histopathological growth patterns by radiomics and CT-imaging in patients with operable colorectal liver metastases: a proof-of-concept study.” European Congress of Radiology (ECR) 2020</a></p>
+<p><a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6899528/">M. Vos, M. P. A. Starmans, M. J. M Timbergen, S. R. van der Voort, G. A. Padmos, W. Kessels, W. J. Niessen, G. J. L. H. van Leenders, D. J. Grünhagen, S. Sleijfer, C. Verhoef, S. Klein, J. J. Visser. “Radiomics approach to distinguish between well differentiated liposarcomas and lipomas on MRI” British Journal of Surgery 2019</a></p>
 <p><a class="reference external" href="https://embs.papercept.net/conferences/conferences/ISBI19/program/ISBI19_ContentListWeb_3.html">J. M. Castillo T., M. P. A. Starmans, I. Schoots, W. J. Niessen, S. Klein, J. F. Veenland. “CLASSIFICATION OF PROSTATE CANCER: HIGH GRADE VERSUS LOW GRADE USING A RADIOMICS APPROACH.” IEEE International Symposium on Biomedical Imaging (ISBI) 2019.</a></p>
 <p><a class="reference external" href="https://doi.org/10.1117/12.2293609">M. P. A. Starmans, R. Miclea, S. R. van der Voort, W. J. Niessen, M. G. Thomeer and S. Klein. “Classification of malignant and benign liver tumors using a radiomics approach.” Proceedings Volume 10574, Medical Imaging 2018: Image Processing; 105741D (2018) .</a></p>
-<p><a class="reference external" href="https://dtrf.org/wp-content/uploads/2018/10/Timbergen-2018.pdf">M. J. M. Timbergen, M. P. A. Starmans, M. Vos, S. R. van der Voort, G. A. Padmos, W. Kessels, W. J. Niessen, G. J. L. H. van Leenders, D. J. Grünhagen, S. Sleijfer, C. Verhoef, S. Klein, J. J. Visser. “Mutation stratification of desmoid-type fibromatosis using a Radiomics approach.” Desmoid Tumor Research Foundation (DTRF) 2018.</a></p>
-<ol class="upperalpha simple" start="13">
-<li><p>Vos, M. P. A. Starmans, M. J.M. Timbergen, S. R. van der Voort, G. A. Padmos, W. Kessels, W. J. Niessen, G. J. L. H. van Leenders, D. J. Grünhagen, S. Sleijfer, C. Verhoef, S. Klein, J. J. Visser. “Differentiating well-differentiated liposarcomas from lipomas using a Radiomics approach.” Connective Tissue Oncology Society (CTOS) conference 2018.</p></li>
-</ol>
-<ol class="upperalpha simple" start="13">
-<li><ol class="upperalpha simple" start="10">
-<li><ol class="upperalpha simple" start="13">
-<li><p>Timbergen, M. P. A. Starmans, M. Vos, S. R. van der Voort, G. A. Padmos, W. Kessels, W. J. Niessen, G. J. L. H. van Leenders, D. J. Grünhagen, S. Sleijfer, C. Verhoef, S. Klein, J. J. Visser. “Mutation stratification of desmoid-type fibromatosis using a Radiomics approach.” Connective Tissue Oncology Society (CTOS) conference 2018.</p></li>
-</ol>
-</li>
-</ol>
-</li>
-</ol>
 </div></blockquote>
 <p>WORC is made possible by contributions from the following people: Martijn P. A. Starmans, Sebastian R. van der Voort, Thomas Phil, and Stefan Klein</p>
 <div class="section" id="worc-documentation">
@@ -332,10 +316,11 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/additionalfunctionality.html">Additional functionality</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#image-preprocessing">Image Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#feature-scaling">Feature scaling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#image-registration">Image Registration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#combat">ComBat</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#icc">ICC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#additional-classifiers">Additional classifiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#multilabel-classification-and-regression">Multilabel classification and regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/additionalfunctionality.html#references">References</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/faq.html">FAQ</a><ul>
@@ -343,11 +328,16 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-modulenotfounderror-no-module-named-numpy">Error: <code class="docutils literal notranslate"><span class="pre">ModuleNotFoundError:</span> <span class="pre">No</span> <span class="pre">module</span> <span class="pre">named</span> <span class="pre">'numpy'</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/faq.html#execution">Execution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/faq.html#execution-errors">Execution errors</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#my-experiment-crashed-where-to-begin-looking-for-errors">My experiment crashed, where to begin looking for errors?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-worc-addexceptions-worcvalueerror-first-column-in-the-file-given-to-simpleworc-labels-from-this-file-needs-to-be-named-patient">Error: <code class="docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCValueError:</span> <span class="pre">First</span> <span class="pre">column</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">file</span></code> <code class="docutils literal notranslate"><span class="pre">given</span> <span class="pre">to</span> <span class="pre">SimpleWORC().labels_from_this_file(**)</span> <span class="pre">needs</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">named</span> <span class="pre">Patient.</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-worc-addexceptions-worckeyerror-no-entry-found-in-labeling-for-feature-file-feat-out-0-hdf5">Error: <code class="docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCKeyError:</span> <span class="pre">'No</span> <span class="pre">entry</span> <span class="pre">found</span> <span class="pre">in</span> <span class="pre">labeling</span></code> <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">feature</span> <span class="pre">file</span> <span class="pre">.../feat_out_0.hdf5.'</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-file-lib-site-packages-numpy-lib-function-base-py-line-4406-in-delete-keep-obj-false-indexerror-arrays-used-as-indices-must-be-of-integer-or-boolean-type">Error: <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&quot;...\lib\site-packages\numpy\lib\function_base.py&quot;,</span> <span class="pre">line</span> <span class="pre">4406,</span></code> `` in delete keep[obj,] = False`` <code class="docutils literal notranslate"><span class="pre">IndexError:</span> <span class="pre">arrays</span> <span class="pre">used</span> <span class="pre">as</span> <span class="pre">indices</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">of</span> <span class="pre">integer</span> <span class="pre">(or</span> <span class="pre">boolean)</span> <span class="pre">type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/faq.html#other">Other</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/faq.html#i-am-working-on-the-bigr-cluster-and-would-like-some-jobs-to-be-submitted-to-different-queues">I am working on the BIGR cluster and would like some jobs to be submitted to different queues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/faq.html#can-i-use-my-own-features-instead-of-the-standard-worc-features">Can I use my own features instead of the standard <code class="docutils literal notranslate"><span class="pre">WORC</span></code> features?</a></li>
 </ul>
 </li>
 </ul>
@@ -360,127 +350,160 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id1">3.4.0 - 2021-02-02</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id1">3.5.0 - 2021-08-18</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#fixed">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#added">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id2">3.3.5 - 2020-10-21</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id2">3.4.5 - 2021-07-09</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id3">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id4">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id5">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id6">3.3.4 - 2020-10-06</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id7">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id8">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id9">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id5">3.4.4 - 2021-07-01</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id6">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id7">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id8">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id10">3.3.3 - 2020-09-11</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id11">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id14">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id15">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id9">3.4.3 - 2021-06-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id10">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id11">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id16">3.3.2 - 2020-08-19</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id17">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id12">3.4.2 - 2021-05-27</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id13">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id14">Added</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id15">3.4.1 - 2021-05-18</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id16">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id17">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id18">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id19">Changed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id20">3.3.1 - 2020-07-31</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id19">3.4.0 - 2021-02-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id20">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id21">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id22">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id22">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id23">3.3.0 - 2020-07-28</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id24">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id23">3.3.5 - 2020-10-21</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id24">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id25">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id26">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id26">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id27">3.2.2 - 2020-07-14</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id28">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id27">3.3.4 - 2020-10-06</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id28">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id29">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id30">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id30">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id31">3.2.1 - 2020-07-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id32">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id33">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id34">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id35">3.2.0 - 2020-06-26</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id31">3.3.3 - 2020-09-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id32">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id35">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id36">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id37">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id37">3.3.2 - 2020-08-19</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id38">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id39">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id40">Changed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id39">3.1.4 - 2020-05-26</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id40">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id41">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id42">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id41">3.3.1 - 2020-07-31</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id42">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id43">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id43">3.1.3 - 2020-01-24</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id44">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id45">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id46">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id44">3.3.0 - 2020-07-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id45">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id46">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id47">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id47">3.1.2 - 2019-12-09</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id48">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id49">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id50">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id48">3.2.2 - 2020-07-14</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id49">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id50">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id51">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id51">3.1.1 - 2019-11-28</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id52">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id53">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id54">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id52">3.2.1 - 2020-07-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id53">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id54">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id55">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id55">3.1.0 - 2019-10-16</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id56">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id57">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id58">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id56">3.2.0 - 2020-06-26</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id57">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id58">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id59">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id59">3.0.0 - 2019-05-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id60">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id61">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id62">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id60">3.1.4 - 2020-05-26</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id61">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id62">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id63">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id63">2.1.3 - 2019-04-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id64">Changed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id64">3.1.3 - 2020-01-24</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id65">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id66">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id67">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id65">2.1.2 - 2019-04-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id66">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id67">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id68">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id68">3.1.2 - 2019-12-09</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id69">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id70">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id71">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id69">2.1.1 - 2019-02-15</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id70">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id71">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id72">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id72">3.1.1 - 2019-11-28</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id73">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id74">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id75">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id73">2.1.0 - 2018-08-09</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id74">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id75">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id76">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id76">3.1.0 - 2019-10-16</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id77">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id78">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id79">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id77">2.0.0 - 2018-02-13</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id78">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id79">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id80">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id80">3.0.0 - 2019-05-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id81">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id82">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id83">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id84">2.1.3 - 2019-04-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id85">Changed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id86">2.1.2 - 2019-04-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id87">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id88">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id89">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id90">2.1.1 - 2019-02-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id91">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id92">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id93">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id94">2.1.0 - 2018-08-09</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id95">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id96">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id97">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id98">2.0.0 - 2018-02-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id99">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id100">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id101">Fixed</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="static/changelog.html#rc1-2017-05-08">1.0.0rc1 - 2017-05-08</a></li>
@@ -517,12 +540,10 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">classification</span></code> Package</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.AdvancedSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">AdvancedSampler</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.ObjectSampler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ObjectSampler</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.RankedSVM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">RankedSVM</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.SearchCV"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.construct_classifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">construct_classifier</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.createfixedsplits"><code class="xref py py-mod docutils literal notranslate"><span class="pre">createfixedsplits</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.crossval"><code class="xref py py-mod docutils literal notranslate"><span class="pre">crossval</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.estimators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">estimators</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.fitandscore"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitandscore</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">metrics</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.classification.html#module-WORC.classification.parameter_optimization"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_optimization</span></code> Module</a></li>
@@ -537,6 +558,10 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.exampledata.html">exampledata Package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.exampledata.html#module-WORC.exampledata.create_example_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">create_example_data</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.exampledata.html#module-WORC.exampledata.datadownloader"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datadownloader</span></code> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="autogen/WORC.export.html">export Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.export.html#module-WORC.export.hyper_params_exporter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hyper_params_exporter</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.facade.html">facade Package</a><ul>
@@ -583,7 +608,6 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_pvalues_features"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_pvalues_features</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plot_ranked_scores"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.plotminmaxresponse"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.plotting.html#module-WORC.plotting.scatterplot"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scatterplot</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.processing.html">processing Package</a><ul>
@@ -604,11 +628,13 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.tests.html">tests Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.WORCTutorialSimple_unittest_multiclass"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORCTutorialSimple_unittest_multiclass</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.WORCTutorialSimple_unittest_regression"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORCTutorialSimple_unittest_regression</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_combat"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_combat</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_helpers</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_iccthreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_iccthreshold</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_plot_errors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_plot_errors</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#test-validators-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_validators</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_validators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_validators</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="autogen/WORC.tools.html">tools Package</a><ul>
@@ -660,19 +686,11 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -683,6 +701,7 @@ see our Tutorial repository <a class="reference external" href="https://github.c
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {

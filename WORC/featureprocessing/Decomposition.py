@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -141,19 +141,24 @@ def Decomposition(features, patientinfo, config, output, label_type=None,
         # Fit Kernel PCA
         fnum = 3
         for kernel in ['linear', 'poly', 'rbf']:
-            pca = KernelPCA(n_components=n_components, kernel=kernel)
-            pca.fit(feature_values)
-            class1_pca = pca.transform(class1)
-            class2_pca = pca.transform(class2)
+            try:
+                pca = KernelPCA(n_components=n_components, kernel=kernel)
+                pca.fit(feature_values)
+                class1_pca = pca.transform(class1)
+                class2_pca = pca.transform(class2)
 
-            # Plot Sparse PCA
-            ax = plt.subplot(2, 3, fnum)
+                # Plot Sparse PCA
+                ax = plt.subplot(2, 3, fnum)
 
-            plt.subplots_adjust(hspace=0.3, wspace=0.2)
-            ax.scatter(class1_pca[:, 0], class1_pca[:, 1], color='blue')
-            ax.scatter(class2_pca[:, 0], class2_pca[:, 1], color='green')
-            ax.set_title(('Kernel PCA: {} .').format(kernel))
-            fnum += 1
+                plt.subplots_adjust(hspace=0.3, wspace=0.2)
+                ax.scatter(class1_pca[:, 0], class1_pca[:, 1], color='blue')
+                ax.scatter(class2_pca[:, 0], class2_pca[:, 1], color='green')
+                ax.set_title(('Kernel PCA: {} .').format(kernel))
+                fnum += 1
+            except ValueError as e:
+                # Sometimes, a specific kernel does not work, just continue
+                print(f'[Error] {e}: skipping kernel {kernel}.')
+                continue
 
         # -------------------------------------------------------
         # Fit t-SNE

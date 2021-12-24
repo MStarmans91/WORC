@@ -118,7 +118,7 @@ def generate_config_options():
 
     # Segmentix
     config['Segmentix'] = dict()
-    config['Segmentix']['mask'] = 'subtract, multiply'
+    config['Segmentix']['mask'] = 'None, subtract, multiply'
     config['Segmentix']['segtype'] = 'None, Ring, Dilate'
     config['Segmentix']['segradius'] = 'Integer > 0'
     config['Segmentix']['N_blobs'] = 'Integer > 0'
@@ -240,11 +240,9 @@ def generate_config_options():
 
     # Feature preprocessing before all below takes place
     config['FeatPreProcess'] = dict()
-    config['FeatPreProcess']['Use'] = 'True, False'
-
-    # Feature preprocessing before all below takes place
-    config['FeatPreProcess'] = dict()
     config['FeatPreProcess']['Use'] = 'Boolean'
+    config['FeatPreProcess']['Combine'] = 'Boolean'
+    config['FeatPreProcess']['Combine_method'] = 'mean or max'
 
     # Feature selection
     config['Featsel'] = dict()
@@ -321,7 +319,7 @@ def generate_config_options():
     config['Classification'] = dict()
     config['Classification']['fastr'] = 'True, False'
     config['Classification']['fastr_plugin'] = 'Any `fastr execution plugin <https://fastr.readthedocs.io/en/develop/_autogen/fastr.reference.html#executionplugin-reference/>`_ .'
-    config['Classification']['classifiers'] = 'SVM , SVR, SGD, SGDR, RF, LDA, QDA, ComplementND, GaussianNB, LR, RFR, Lasso, ElasticNet. All are estimators from `sklearn <https://scikit-learn.org/stable//>`_ '
+    config['Classification']['classifiers'] = 'SVM , SVR, SGD, SGDR, RF, LDA, QDA, ComplementND, GaussianNB, AdaBoostClassifier, XGBClassifier, LR, RFR, Lasso, ElasticNet, LinR, Ridge, AdaBoostRegressor, XGBRegressor. All are estimators from `sklearn <https://scikit-learn.org/stable//>`_ '
     config['Classification']['max_iter'] = 'Integer'
     config['Classification']['SVMKernel'] = 'poly, linear, rbf'
     config['Classification']['SVMC'] = 'Two Integers: loc and scale'
@@ -381,7 +379,7 @@ def generate_config_options():
     # Feature scaling options
     config['FeatureScaling'] = dict()
     config['FeatureScaling']['skip_features'] = 'Comma separated list of strings'
-    config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, None'
+    config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, log_z_score, None'
 
     config['SMAC'] = dict()
     config['SMAC']['use'] = 'True, False'
@@ -428,7 +426,7 @@ def generate_config_descriptions():
 
     # Segmentix
     config['Segmentix'] = dict()
-    config['Segmentix']['mask'] = 'If a mask is supplied, should the mask be subtracted from the contour or multiplied.'
+    config['Segmentix']['mask'] = 'If None, masks will not be used by segmentix. If a mask is supplied, should the mask be subtracted from the contour or multiplied.'
     config['Segmentix']['segtype'] = 'If Ring, then a ring around the segmentation will be used as contour. If Dilate, the segmentation will be dilated per 2-D axial slice with a disc.'
     config['Segmentix']['segradius'] = 'Define the radius of the ring or disc used if segtype is Ring or Dilate, respectively.'
     config['Segmentix']['N_blobs'] = 'How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.'
@@ -552,6 +550,8 @@ def generate_config_descriptions():
     # Feature preprocessing before all below takes place
     config['FeatPreProcess'] = dict()
     config['FeatPreProcess']['Use'] = 'If True, use feature preprocessor in the classify node. Currently excluded features with >80% NaNs.'
+    config['FeatPreProcess']['Combine'] = 'If True, features of multiple objects (e.g. lesions) of the same patient are combined.'
+    config['FeatPreProcess']['Combine_method'] = 'If features of multiple objects are combined, this determines the method. Currently included options are mean and max.'
 
     # Feature selection
     config['Featsel'] = dict()
@@ -624,7 +624,7 @@ def generate_config_descriptions():
     config['Classification'] = dict()
     config['Classification']['fastr'] = 'Use fastr for the optimization gridsearch (recommended on clusters, default) or if set to False , joblib (recommended for PCs but not on Windows).'
     config['Classification']['fastr_plugin'] = 'Name of execution plugin to be used. Default use the same as the self.fastr_plugin for the WORC object.'
-    config['Classification']['classifiers'] = "Select the estimator(s) to use. Most are implemented using `sklearn <https://scikit-learn.org/stable/>`_. For abbreviations, see above."
+    config['Classification']['classifiers'] = "Select the estimator(s) to use. Most are implemented using `sklearn <https://scikit-learn.org/stable/>`_. For abbreviations, see the options: LR = logistic regression."
     config['Classification']['max_iter'] = 'Maximum number of iterations to use in training an estimator. Only for specific estimators, see `sklearn <https://scikit-learn.org/stable/>`_.'
     config['Classification']['SVMKernel'] = 'When using a SVM, specify the kernel type.'
     config['Classification']['SVMC'] = 'Range of the SVM slack parameter. We sample on a uniform log scale: the parameters specify the range of the exponent (loc, loc + scale).'

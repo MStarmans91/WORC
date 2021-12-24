@@ -294,7 +294,7 @@ Within these evaluation settings, the following performance evaluation methods a
     In bootstrapping, 95% confidence intervals are created using the ''standard'' method according to a normal distribution: see Table 6, method 1 in  `Efron B., Tibshirani R. Bootstrap Methods for Standard Errors,
     Confidence Intervals, and Other Measures of Statistical Accuracy, Statistical Science Vol.1, No,1, 54-77, 1986`.
 
-2. ROC curve with 95% confidence intervals using the fixed-width bands method, see `Macskassy S. A., Provost F., Rosset S. ROC Confidence Bands: An Empirical Evaluation. In: Proceedings of the 22nd international conference on Machine learning. 2005.`
+2. ROC and PRC curves with 95% confidence intervals using the fixed-width bands method, see `Macskassy S. A., Provost F., Rosset S. ROC Confidence Bands: An Empirical Evaluation. In: Proceedings of the 22nd international conference on Machine learning. 2005.`
 
 3. Univariate statistical testing of the features using:
 

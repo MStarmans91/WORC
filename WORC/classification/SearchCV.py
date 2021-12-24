@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -599,6 +599,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if self.best_groupsel is not None:
             X = self.best_groupsel.transform(X)
 
+        if self.best_varsel is not None:
+            X = self.best_varsel.transform(X)
+
         if not training and hasattr(self, 'overfit_scaler') and self.overfit_scaler:
             # Overfit the feature scaling on the test set
             # NOTE: Never use this in an actual model, only to assess how
@@ -614,9 +617,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         else:
             if self.best_scaler is not None:
                 X = self.best_scaler.transform(X)
-
-        if self.best_varsel is not None:
-            X = self.best_varsel.transform(X)
 
         if self.best_reliefsel is not None:
             X = self.best_reliefsel.transform(X)
@@ -1425,6 +1425,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 print(f"Refitting estimator {enum + 1} / {nest}.")
                 base_estimator = clone(base_estimator)
 
+                # Check if we need to create a multiclass estimator
                 base_estimator.refit_and_score(X_train, Y_train, p_all,
                                                train, train,
                                                verbose=False)

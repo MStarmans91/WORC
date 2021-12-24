@@ -1,6 +1,24 @@
 tests Package
 =============
 
+:mod:`WORCTutorialSimple_unittest_multiclass` Module
+----------------------------------------------------
+
+.. automodule:: WORC.tests.WORCTutorialSimple_unittest_multiclass
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
+:mod:`WORCTutorialSimple_unittest_regression` Module
+----------------------------------------------------
+
+.. automodule:: WORC.tests.WORCTutorialSimple_unittest_regression
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`test_combat` Module
 -------------------------
 
