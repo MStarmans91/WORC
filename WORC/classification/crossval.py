@@ -64,6 +64,7 @@ def random_split_cross_validation(image_features, feature_labels, classes,
     if fixedsplits is not None:
         n_iterations = int(fixedsplits.columns.shape[0] / 2)
         print(f'Fixedsplits detected, adjusting n_iterations to {n_iterations}')
+        logging.debug(f'Fixedsplits detected, adjusting n_iterations to {n_iterations}')
 
     for i in range(start, n_iterations):
         print(('Cross-validation iteration {} / {} .').format(str(i + 1), str(n_iterations)))

@@ -492,7 +492,7 @@ class WORC(object):
         # Bootstrap options
         config['Bootstrap'] = dict()
         config['Bootstrap']['Use'] = 'False'
-        config['Bootstrap']['N_iterations'] = '1000'
+        config['Bootstrap']['N_iterations'] = '10000'
 
         return config
 
