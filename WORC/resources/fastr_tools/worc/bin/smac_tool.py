@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,14 +74,13 @@ def main():
     elif data['budget_type'] == 'time':
         scenario_settings['wallclock-limit'] = data['budget']
     else:
-        message = 'No valid smac budget_type specified'
+        message = f'No valid smac budget_type specified. Should be evals or time, but you gave {data['budget_type']}.'
         raise WORCexceptions.WORCValueError(message)
 
     scenario = Scenario(scenario_settings)
 
     def score_cfg(cfg):
         # Construct a new dictionary with parameters from the input configuration
-
         if cfg is not None:
             parameters = convert_cfg(cfg.get_dictionary())
         else:
@@ -103,6 +102,7 @@ def main():
                                 error_score=data['error_score'],
                                 verbose=data['verbose'],
                                 return_all=False, use_smac=True)
+
             # If the run failed because no features were left, report a score of 0
             # (SMAC will use the max integer value internally to steer away from crashing runs)
             if np.isnan(ret[0]['score']):
@@ -133,25 +133,28 @@ def main():
 
     # Prepare the SMAC instance
     if data['init_method'] == 'sobol':
-        initial_design = SobolDesign # Apparently does not work for more than 40 dimensions
+        initial_design = SobolDesign  # Apparently does not work for more than 40 dimensions
     elif data['init_method'] == 'random':
         initial_design = RandomConfigurations
     else:
         message = 'No valid smac initialization method specified'
         raise WORCexceptions.WORCValueError(message)
+
     initial_design_kwargs = {'init_budget': data['init_budget']}
 
     smac = SMAC4HPO(scenario=scenario, rng=run_info['run_rng'],
                     tae_runner=score_cfg, run_id=run_info['run_id'],
                     initial_design=initial_design,
                     initial_design_kwargs=initial_design_kwargs)
-    opt_config = smac.optimize()
+
+    smac.optimize()
 
     # Read in the stats from the SMAC output
     stats_file_location = os.path.join(run_info['tempfolder'],
                                        'SMAC_output', run_info['run_name'],
                                        'run_' + str(run_info['run_id']),
                                        'stats.json')
+
     with open(stats_file_location, 'r') as statsfile:
         smac_stats = json.load(statsfile)
 
@@ -215,19 +218,30 @@ def main():
 
 
 def convert_cfg(cfg):
+    '''If a component is not used at all, pop the main parameter from the cfg.'''
     parameters = cfg
 
     # fit_and_score requires a flag but only if it is true
     if parameters['Imputation'] == 'False':
         parameters.pop('Imputation')
+
     if parameters['StatisticalTestUse'] == 'False':
         parameters.pop('StatisticalTestUse')
+
     if parameters['ReliefUse'] == 'False':
         parameters.pop('ReliefUse')
+
+    if parameters['SelectFromModel'] == 'False':
+        parameters.pop('SelectFromModel')
+
+    if parameters['Resampling_Use'] == 'False':
+        parameters.pop('Resampling_Use')
+
     # 'PCAType' is either '95variance' or an int
     if parameters['UsePCA'] == 'True' and \
             parameters['PCAType'] == 'n_components':
         parameters['PCAType'] = parameters.pop('n_components')
+
     # Add a dummy value for lr_l1_ratio when it is not active;
     # fit_and_score expects it
     if parameters['classifiers'] == 'LR':

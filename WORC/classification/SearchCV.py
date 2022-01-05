@@ -3009,30 +3009,6 @@ class BaseSearchCVSMAC(BaseSearchCV):
 
         return self
 
-    def convert_cfg(self, cfg):
-        parameters = cfg
-        # Add some parameters that are used for fitting, but are not part of the optimization
-        parameters['random_seed'] = self.random_state
-        parameters['max_iter'] = self.param_distributions['Classification']['max_iter'][0]
-
-        # No featureScaling flag is accepted in fit_and_score,
-        # so remove it
-        parameters.pop('use_featureScaling')
-        # fit_and_score requires a flag but only if it is true
-        if parameters['Imputation'] == 'False':
-            parameters.pop('Imputation')
-        # Delete four more flags from the config if they are false
-        if parameters['StatisticalTestUse'] == 'False':
-            parameters.pop('StatisticalTestUse')
-        if parameters['SampleProcessing_SMOTE'] == 'False':
-            parameters.pop('SampleProcessing_SMOTE')
-        if parameters['UsePCA'] == 'True' and \
-                parameters['PCAType'] == 'n_components':
-            parameters['PCAType'] = parameters.pop('n_components')
-
-        return parameters
-
-
 
 class GuidedSearchCVSMAC(BaseSearchCVSMAC):
     """Guided search on hyperparameters.

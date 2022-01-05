@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -566,57 +566,56 @@ def fit_and_score(X, y, scoring,
 
     # ------------------------------------------------------------------------
     # Perform feature selection using a model
-    para_estimator['SelectFromModel'] = 'True'
-    if 'SelectFromModel' in para_estimator.keys() and para_estimator['SelectFromModel'] == 'True':
-        model = para_estimator['SelectFromModel_estimator']
-        if verbose:
-            print(f"Selecting features using model {model}.")
-
-        if model == 'Lasso':
-            # Use lasso model for feature selection
-            alpha = para_estimator['SelectFromModel_lasso_alpha']
-            selectestimator = Lasso(alpha=alpha, random_state=random_seed)
-
-        elif model == 'LR':
-            # Use logistic regression model for feature selection
-            selectestimator = LogisticRegression(random_state=random_seed)
-
-        elif model == 'RF':
-            # Use random forest model for feature selection
-            n_estimators = para_estimator['SelectFromModel_n_trees']
-            selectestimator = RandomForestClassifier(n_estimators=n_estimators,
-                                                     random_state=random_seed)
-        else:
-            raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
-
-        if len(y_train.shape) >= 2:
-            # Multilabel or regression. Regression: second dimension has length 1
-            if y_train.shape[1] > 1 and model != 'RF':
-                raise ae.WORCValueError(f'Model {model} is not suitable for multiclass classification. Please use RF or do not use SelectFromModel.')
-
-        # Prefit model
-        selectestimator.fit(X_train, y_train)
-
-        # Use fit to select optimal features
-        SelectModel = SelectFromModel(selectestimator, prefit=True)
-        if verbose:
-            print("\t Original Length: " + str(len(X_train[0])))
-
-        X_train_temp = SelectModel.transform(X_train)
-        if len(X_train_temp[0]) == 0:
-            if verbose:
-                print('[WORC WARNING]: No features are selected! Probably your data is too noisy or the selection too strict. Skipping SelectFromModel.')
-            SelectModel = None
-            parameters['SelectFromModel'] = 'False'
-        else:
-            X_train = SelectModel.transform(X_train)
-            X_test = SelectModel.transform(X_test)
-            feature_labels = SelectModel.transform(feature_labels)
-
-            if verbose:
-                print("\t New Length: " + str(len(X_train[0])))
-
     if 'SelectFromModel' in para_estimator.keys():
+        if para_estimator['SelectFromModel'] == 'True':
+            model = para_estimator['SelectFromModel_estimator']
+            if verbose:
+                print(f"Selecting features using model {model}.")
+
+            if model == 'Lasso':
+                # Use lasso model for feature selection
+                alpha = para_estimator['SelectFromModel_lasso_alpha']
+                selectestimator = Lasso(alpha=alpha, random_state=random_seed)
+
+            elif model == 'LR':
+                # Use logistic regression model for feature selection
+                selectestimator = LogisticRegression(random_state=random_seed)
+
+            elif model == 'RF':
+                # Use random forest model for feature selection
+                n_estimators = para_estimator['SelectFromModel_n_trees']
+                selectestimator = RandomForestClassifier(n_estimators=n_estimators,
+                                                         random_state=random_seed)
+            else:
+                raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
+
+            if len(y_train.shape) >= 2:
+                # Multilabel or regression. Regression: second dimension has length 1
+                if y_train.shape[1] > 1 and model != 'RF':
+                    raise ae.WORCValueError(f'Model {model} is not suitable for multiclass classification. Please use RF or do not use SelectFromModel.')
+
+            # Prefit model
+            selectestimator.fit(X_train, y_train)
+
+            # Use fit to select optimal features
+            SelectModel = SelectFromModel(selectestimator, prefit=True)
+            if verbose:
+                print("\t Original Length: " + str(len(X_train[0])))
+
+            X_train_temp = SelectModel.transform(X_train)
+            if len(X_train_temp[0]) == 0:
+                if verbose:
+                    print('[WORC WARNING]: No features are selected! Probably your data is too noisy or the selection too strict. Skipping SelectFromModel.')
+                SelectModel = None
+                parameters['SelectFromModel'] = 'False'
+            else:
+                X_train = SelectModel.transform(X_train)
+                X_test = SelectModel.transform(X_test)
+                feature_labels = SelectModel.transform(feature_labels)
+
+                if verbose:
+                    print("\t New Length: " + str(len(X_train[0])))
+
         del para_estimator['SelectFromModel']
         if 'SelectFromModel_lasso_alpha' in para_estimator.keys():
             del para_estimator['SelectFromModel_lasso_alpha']
@@ -697,7 +696,7 @@ def fit_and_score(X, y, scoring,
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
                 pca = None
-                
+
                 # Update the runtime
                 end_time = time.time()
                 runtime = end_time - start_time
@@ -791,9 +790,13 @@ def fit_and_score(X, y, scoring,
             if verbose:
                 print("\t New Length: " + str(len(X_train[0])))
 
+        # Delete the statistical test keys
         del para_estimator['StatisticalTestUse']
-        del para_estimator['StatisticalTestMetric']
-        del para_estimator['StatisticalTestThreshold']
+        if 'StatisticalTestMetric' in para_estimator.keys():
+            del para_estimator['StatisticalTestMetric']
+
+        if 'StatisticalTestThreshold' in para_estimator.keys():
+            del para_estimator['StatisticalTestThreshold']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -809,8 +812,21 @@ def fit_and_score(X, y, scoring,
             neg_initial = int(len(y_train) - pos_initial)
             len_in = len(y_train)
 
+            # If SMAC has removed a certain parameter, add a dummy altough
+            # it's not actually used
+            if 'Resampling_sampling_strategy' not in para_estimator.keys():
+                para_estimator['Resampling_sampling_strategy'] = None
+
+            if 'Resampling_n_neighbors' not in para_estimator.keys():
+                para_estimator['Resampling_n_neighbors'] = None
+
+            if 'Resampling_k_neighbors' not in para_estimator.keys():
+                para_estimator['Resampling_k_neighbors'] = None
+
+            if 'Resampling_threshold_cleaning' not in para_estimator.keys():
+                para_estimator['Resampling_threshold_cleaning'] = None
+
             # Fit ObjectSampler and transform dataset
-            # NOTE: need to save random state for this one as well!
             Sampler =\
                 ObjectSampler(method=para_estimator['Resampling_Method'],
                               sampling_strategy=para_estimator['Resampling_sampling_strategy'],
@@ -878,13 +894,25 @@ def fit_and_score(X, y, scoring,
                     train = np.arange(0, len(y_train))
                     test = np.arange(len(y_train), len(y_train) + len(y_test))
 
+        # Delete the resampling parameters
         del para_estimator['Resampling_Use']
-        del para_estimator['Resampling_Method']
-        del para_estimator['Resampling_sampling_strategy']
-        del para_estimator['Resampling_n_neighbors']
-        del para_estimator['Resampling_k_neighbors']
-        del para_estimator['Resampling_threshold_cleaning']
-        del para_estimator['Resampling_n_cores']
+        if 'Resampling_Method' in para_estimator.keys():
+            del para_estimator['Resampling_Method']
+
+        if 'Resampling_sampling_strategy' in para_estimator.keys():
+            del para_estimator['Resampling_sampling_strategy']
+
+        if 'Resampling_n_neighbors' in para_estimator.keys():
+            del para_estimator['Resampling_n_neighbors']
+
+        if 'Resampling_k_neighbors' in para_estimator.keys():
+            del para_estimator['Resampling_k_neighbors']
+
+        if 'Resampling_threshold_cleaning' in para_estimator.keys():
+            del para_estimator['Resampling_threshold_cleaning']
+
+        if 'Resampling_n_cores' in para_estimator.keys():
+            del para_estimator['Resampling_n_cores']
 
     # Delete the object if we do not need to return it
     if not return_all:

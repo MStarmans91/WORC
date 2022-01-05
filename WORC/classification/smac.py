@@ -45,8 +45,7 @@ def build_smac_config(parameters):
 
     # The first argument to parse is the choice of classifier
     classifier = CategoricalHyperparameter('classifiers',
-                                           choices=['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB',
-                                                    'AdaBoostClassifier', 'XGBClassifier'])
+                                           choices=cf['classifiers'])
     cs.add_hyperparameter(classifier)
 
     # SVM
