@@ -74,7 +74,7 @@ def main():
     elif data['budget_type'] == 'time':
         scenario_settings['wallclock-limit'] = data['budget']
     else:
-        message = f'No valid smac budget_type specified. Should be evals or time, but you gave {data['budget_type']}.'
+        message = f'No valid smac budget_type specified. Should be evals or time, but you gave {data["budget_type"]}.'
         raise WORCexceptions.WORCValueError(message)
 
     scenario = Scenario(scenario_settings)
