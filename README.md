@@ -1,4 +1,4 @@
-# WORC v3.5.0
+# WORC v3.6.0
 ## Workflow for Optimal Radiomics Classification
 
 ## Information
