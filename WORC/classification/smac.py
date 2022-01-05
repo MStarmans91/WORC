@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ try:
         Constant
     from smac.configspace import ConfigurationSpace
 except:
-    print("SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.")
+    print("[INFO] Bayesian optimization through SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.")
 
 
 
@@ -355,8 +355,6 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(statistical_test_threshold)
     cs.add_condition(InCondition(child=statistical_test_threshold, parent=statistical_test,
                                  values=['True']))
-    
-    # RESAMPLING CURRENTLY NOT COMPATIBLE!
 
     # Groupwise feature selection
     groupwise_search = CategoricalHyperparameter('SelectGroups', choices=parameters['Featsel']['GroupwiseSearch'])
@@ -369,14 +367,67 @@ def build_smac_config(parameters):
         cs.add_condition(InCondition(child=group_parameter, parent=groupwise_search,
                                      values=['True']))
 
-    # Other parameters not part of the optimization
+    # Resampling
+    # 2 hyperparameters:
+    #     1. method
+    #     2. sampling_strategy | conditional on method
+    #     3. n_neighbors | conditional on method
+    #     4. k_neighbors | conditional on method
+    #     5. threshold_cleaning | conditional on method
+
+    resampling = CategoricalHyperparameter('Resampling_Use', choices=['True', 'False'])
+    cs.add_hyperparameter(resampling)
+
+    resampling_method = CategoricalHyperparameter('Resampling_Method',
+                                                    choices=parameters['Resampling']['Method'])
+    cs.add_hyperparameter(resampling_method)
+    cs.add_condition(InCondition(child=resampling_method, parent=resampling,
+                                 values=['True']))
+
+    resampling_strategy = CategoricalHyperparameter('Resampling_sampling_strategy',
+                                                    choices=parameters['Resampling']['sampling_strategy'])
+    cs.add_hyperparameter(resampling_strategy)
+    cs.add_condition(InCondition(child=resampling_strategy, parent=resampling_method,
+                                 values=['RandomUnderSampling', 'NearMiss',
+                                         'NeighbourhoodCleaningRule',
+                                         'RandomOverSampling',
+                                         'ADASYN',
+                                         'SMOTEENN',
+                                         'SMOTETomek']))
+
+    resampling_n_neighbors = UniformIntegerHyperparameter('Resampling_n_neighbors',
+                                                          lower=parameters['Resampling']['n_neighbors'][0],
+                                                          upper=parameters['Resampling']['n_neighbors'][0] +
+                                                                parameters['Resampling']['n_neighbors'][1])
+    cs.add_hyperparameter(resampling_n_neighbors)
+    cs.add_condition(InCondition(child=resampling_n_neighbors, parent=resampling_method,
+                                 values=['NeighbourhoodCleaningRule', 'ADASYN']))
+
+    resampling_k_neighbors = UniformIntegerHyperparameter('Resampling_k_neighbors',
+                                                          lower=parameters['Resampling']['k_neighbors'][0],
+                                                          upper=parameters['Resampling']['k_neighbors'][0] +
+                                                                parameters['Resampling']['k_neighbors'][1])
+    cs.add_hyperparameter(resampling_k_neighbors)
+    cs.add_condition(InCondition(child=resampling_k_neighbors, parent=resampling_method,
+                                 values=['BorderlineSMOTE']))
+
+    resampling_threshold_cleaning = UniformFloatHyperparameter('Resampling_threshold_cleaning',
+                                                            lower=parameters['Resampling']['threshold_cleaning'][0],
+                                                            upper=parameters['Resampling']['threshold_cleaning'][0] +
+                                                                  parameters['Resampling']['threshold_cleaning'][1])
+    cs.add_hyperparameter(resampling_threshold_cleaning)
+    cs.add_condition(InCondition(child=resampling_threshold_cleaning, parent=resampling_method,
+                                 values=['NeighbourhoodCleaningRule']))
+
+    # Other parameters not part of the optimization but are needed in
+    # fit_and_score workflow execution function
     random_seed = Constant('random_seed', value=parameters['Other']['random_seed'])
     cs.add_hyperparameter(random_seed)
 
     max_iter = Constant('max_iter', value=cf['max_iter'][0])
     cs.add_hyperparameter(max_iter)
 
+    n_cores = Constant('Resampling_n_cores', value=parameters['General']['Joblib_ncores'])
+    cs.add_hyperparameter(n_cores)
+
     return cs
-
-
-

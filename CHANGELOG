@@ -7,6 +7,17 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
 
+3.6.0 - Unreleased
+------------
+
+Added
+~~~~~~~
+- Bayesian optimization through SMAC as alternative to random search. Due
+  to specific requirements for SMAC, this is not by default installed.
+  Instructions to install this component are provided in the documentation.
+- Besides Top_N ensembling, various other methods are added:
+  'ForwardSelection', 'Caruana', and 'Bagging'
+
 3.5.0 - 2021-08-18
 ------------
 

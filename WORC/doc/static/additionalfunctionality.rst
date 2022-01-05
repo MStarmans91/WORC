@@ -137,7 +137,7 @@ Bayesian optimization with SMAC instead of random search
 --------------------------------------------------------
 .. note:: The SMAC algorithm only works on Linux, because of its random forest surrogate model
     implementation. Make sure to use ``swig3.0``. To circumvent ``pyrfr`` issues
-    with SMAC, we use a custom SMAC package that needs to be installed separately.
+    with SMAC, we use a custom fork of the original SMAC package that needs to be installed separately.
 
 Steps to take in order to use SMAC within WORC:
 

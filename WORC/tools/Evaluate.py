@@ -25,8 +25,10 @@ import graphviz
 class Evaluate(object):
     """Build a network that evaluates the performance of an estimator."""
 
-    def __init__(self, label_type, modus='binary_classification', ensemble=50,
+    def __init__(self, label_type, modus='binary_classification',
                  scores='percentages',
+                 ensemble_method='top_N',
+                 ensemble_size=100,
                  parent=None, features=None,
                  fastr_plugin='LinearExecution',
                  name='Example'):
@@ -45,14 +47,14 @@ class Evaluate(object):
             self.network = parent.network
             self.mode = 'WORC'
             self.name = parent.network.id
-            self.ensemble = parent.configs[0]['Ensemble']['Use']
         else:
             self.mode = 'StandAlone'
             self.fastr_plugin = fastr_plugin
             self.name = 'WORC_Evaluate_' + name
             self.network = fastr.create_network(id=self.name)
             self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
-            self.ensemble = ensemble
+            self.ensemble_method = ensemble_method
+            self.ensemble_size = ensemble_size
 
         if features is None and self.mode == 'StandAlone':
             raise WORCexceptions.WORCIOError('Either features as input or a WORC network is required for the Evaluate network.')
@@ -256,9 +258,14 @@ class Evaluate(object):
                 self.network.create_constant('String', [self.label_type],
                                              id='LabelType',
                                              step_id='Evaluation')
-            self.source_Ensemble =\
-                self.network.create_constant('String', [self.ensemble],
-                                             id='Ensemble',
+            self.source_ensemble_method =\
+                self.network.create_constant('String', [self.ensemble_method],
+                                             id='ensemble_method',
+                                             step_id='Evaluation')
+
+            self.source_ensemble_size =\
+                self.network.create_constant('String', [self.ensemble_size],
+                                             id='ensemble_size',
                                              step_id='Evaluation')
 
         # Create sources if not supplied by a WORC network
@@ -344,26 +351,32 @@ class Evaluate(object):
         self.link_segmentations_post.collapse = 'patients'
 
         if self.modus == 'binary_classification':
-            self.node_ROC.inputs['ensemble'] = self.source_Ensemble.output
+            self.node_ROC.inputs['ensemble_method'] = self.source_ensemble_method.output
+            self.node_ROC.inputs['ensemble_size'] = self.source_ensemble_size.output
             self.node_ROC.inputs['label_type'] = self.source_LabelType.output
 
         if 'classification' in self.modus:
-            self.node_Ranked_Percentages.inputs['ensemble'] =\
-                self.source_Ensemble.output
+            self.node_Ranked_Percentages.inputs['ensemble_method'] =\
+                self.source_ensemble_method.output
+            self.node_Ranked_Percentages.inputs['ensemble_size'] =\
+                self.source_ensemble_size.output
             self.node_Ranked_Percentages.inputs['label_type'] =\
                 self.source_LabelType.output
 
-        self.node_Estimator.inputs['ensemble'] = self.source_Ensemble.output
+        self.node_Estimator.inputs['ensemble_method'] = self.source_ensemble_method.output
+        self.node_Estimator.inputs['ensemble_size'] = self.source_ensemble_size.output
         self.node_Estimator.inputs['label_type'] = self.source_LabelType.output
 
-        self.node_Barchart.inputs['estimators'] = self.source_Ensemble.output
+        self.node_Barchart.inputs['estimators'] = self.source_ensemble_size.output
         self.node_Barchart.inputs['label_type'] = self.source_LabelType.output
 
-        self.node_Hyperparameters.inputs['estimators'] = self.source_Ensemble.output
+        self.node_Hyperparameters.inputs['estimators'] = self.source_ensemble_size.output
         self.node_Hyperparameters.inputs['label_type'] = self.source_LabelType.output
 
-        self.node_Ranked_Posteriors.inputs['ensemble'] =\
-            self.source_Ensemble.output
+        self.node_Ranked_Posteriors.inputs['ensemble_method'] =\
+            self.source_ensemble_method.output
+        self.node_Ranked_Posteriors.inputs['ensemble_size'] =\
+            self.source_ensemble_size.output
         self.node_Ranked_Posteriors.inputs['label_type'] =\
             self.source_LabelType.output
 
@@ -387,23 +400,28 @@ class Evaluate(object):
                     self.parent.sources_segmentations_train[label].output
 
         if self.modus == 'binary_classification':
-            self.node_ROC.inputs['ensemble'] = self.parent.source_Ensemble.output
+            self.node_ROC.inputs['ensemble_method'] = self.parent.source_ensemble_method.output
+            self.node_ROC.inputs['ensemble_size'] = self.parent.source_ensemble_size.output
             self.node_ROC.inputs['label_type'] = self.parent.source_LabelType.output
 
         if 'classification' in self.modus:
-            self.node_Ranked_Percentages.inputs['ensemble'] =\
-                self.parent.source_Ensemble.output
+            self.node_Ranked_Percentages.inputs['ensemble_method'] =\
+                self.parent.source_ensemble_method.output
+            self.node_Ranked_Percentages.inputs['ensemble_size'] =\
+                self.parent.source_ensemble_size.output
             self.node_Ranked_Percentages.inputs['label_type'] =\
                 self.parent.source_LabelType.output
 
-        self.node_Barchart.inputs['estimators'] = self.parent.source_Ensemble.output
+        self.node_Barchart.inputs['estimators'] = self.parent.source_ensemble_size.output
         self.node_Barchart.inputs['label_type'] = self.parent.source_LabelType.output
 
-        self.node_Hyperparameters.inputs['estimators'] = self.parent.source_Ensemble.output
+        self.node_Hyperparameters.inputs['estimators'] = self.parent.source_ensemble_size.output
         self.node_Hyperparameters.inputs['label_type'] = self.parent.source_LabelType.output
 
-        self.node_Ranked_Posteriors.inputs['ensemble'] =\
-            self.parent.source_Ensemble.output
+        self.node_Ranked_Posteriors.inputs['ensemble_method'] =\
+            self.parent.source_ensemble_method.output
+        self.node_Ranked_Posteriors.inputs['ensemble_size'] =\
+            self.parent.source_ensemble_size.output
         self.node_Ranked_Posteriors.inputs['label_type'] =\
             self.parent.source_LabelType.output
 
@@ -574,7 +592,8 @@ class Evaluate(object):
             self.source_data['Segmentations'] = segmentations
             self.source_data['Config'] = config
             self.source_data['LabelType'] = self.label_type
-            self.source_data['Ensemble'] = self.ensemble
+            self.source_data['ensemble_method'] = self.ensemble_method
+            self.source_data['ensemble_size'] = self.ensemble_size
 
             for feature, label in zip(features, self.labels):
                 self.source_data[label] = feature

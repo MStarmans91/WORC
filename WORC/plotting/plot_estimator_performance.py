@@ -144,7 +144,7 @@ def compute_statistics(y_truth, y_score, y_prediction, modus, regression):
 def plot_estimator_performance(prediction, label_data, label_type,
                                crossval_type=None, alpha=0.95,
                                ensemble_method='top_N',
-                               ensemble_size=50, verbose=True,
+                               ensemble_size=100, verbose=True,
                                ensemble_scoring=None,
                                output=None, modus=None,
                                thresholds=None, survival=False,
@@ -719,7 +719,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
                                         auc_single, f1_score_list_single,
                                         precision_single, npv_single]
 
-                        print(sensitivity_single)
                         for name, perf in zip(metric_names_single, performances):
                             for nlabel, label in enumerate(label_type.split(',')):
                                 all_performances[f"{name}_{label}"] = perf[nlabel]

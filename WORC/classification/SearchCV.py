@@ -1009,7 +1009,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Get settings for best 100 estimators
         parameters_all = self.cv_results_['params']
-        print(self.cv_results_)
         n_classifiers = len(parameters_all)
         n_iter = len(self.cv_iter)
 

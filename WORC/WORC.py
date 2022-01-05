@@ -582,7 +582,7 @@ class WORC(object):
                     self.network.create_constant('String', [self.configs[0]['Ensemble']['Size']],
                                                  id='ensemble_size',
                                                  step_id='Evaluation')
-                                                 
+
                 self.source_LabelType =\
                     self.network.create_constant('String', [self.configs[0]['Labels']['label_names']],
                                                  id='LabelType',

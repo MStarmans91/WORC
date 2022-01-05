@@ -19,7 +19,8 @@
     <inputs>
         <input id="prediction" name="Radiomics estimator object from PREDICT Trainclassifier function" datatype="HDF5" prefix="--prediction" cardinality="1" repeat_prefix="false" required="true" />
         <input id="pinfo" name="Text file containing labels from patients" datatype="PatientInfoFile" prefix="--pinfo" cardinality="1" repeat_prefix="false" required="true" />
-        <input id="ensemble" name="Ensemble size or ensembling method." datatype="String" prefix="--ensemble" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="ensemble_method" name="Ensemble method." datatype="String" prefix="--ensemble_method" cardinality="1" repeat_prefix="false" required="false" />
+        <input id="ensemble_size" name="Ensemble size." datatype="String" prefix="--ensemble_size" cardinality="1" repeat_prefix="false" required="false" />
         <input id="label_type" name="Name of label predicted by the estimator to plot ROC for." datatype="String" prefix="--label_type" cardinality="1" repeat_prefix="false" required="false" />
      </inputs>
     <outputs>

@@ -534,8 +534,11 @@ def main():
     parser.add_argument('-pinfo', '--pinfo', metavar='pinfo',
                         nargs='+', dest='pinfo', type=str, required=True,
                         help='Patient Info File (txt)')
-    parser.add_argument('-ensemble', '--ensemble', metavar='ensemble',
-                        nargs='+', dest='ensemble', type=str, required=True,
+    parser.add_argument('-ensemble_method', '--ensemble_method', metavar='ensemble_method',
+                        nargs='+', dest='ensemble_method', type=str, required=True,
+                        help='Method for creating ensemble (string)')
+    parser.add_argument('-ensemble_size', '--ensemble_size', metavar='ensemble_size',
+                        nargs='+', dest='ensemble_size', type=str, required=False,
                         help='Length of ensemble (int)')
     parser.add_argument('-label_type', '--label_type', metavar='label_type',
                         nargs='+', dest='label_type', type=str, required=True,
@@ -562,7 +565,8 @@ def main():
 
     plot_ROC(prediction=args.prediction,
              pinfo=args.pinfo,
-             ensemble=args.ensemble,
+             ensemble_method=args.ensemble_method,
+             ensemble_size=args.ensemble_size,
              label_type=args.label_type,
              ROC_png=args.ROC_png,
              ROC_tex=args.ROC_tex,
@@ -572,7 +576,8 @@ def main():
              PRC_csv=args.PRC_csv)
 
 
-def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
+def plot_ROC(prediction, pinfo, ensemble_method='top_N',
+             ensemble_size=1, label_type=None,
              ROC_png=None, ROC_tex=None, ROC_csv=None,
              PRC_png=None, PRC_tex=None, PRC_csv=None):
     # Convert the inputs to the correct format
@@ -582,8 +587,11 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
     if type(pinfo) is list:
         pinfo = ''.join(pinfo)
 
-    if type(ensemble) is list:
-        ensemble = int(ensemble[0])
+    if type(ensemble_method) is list:
+        ensemble_method = ''.join(ensemble_method)
+
+    if type(ensemble_size) is list:
+        ensemble_size = int(ensemble_size[0])
 
     if type(ROC_png) is list:
         ROC_png = ''.join(ROC_png)
@@ -622,7 +630,8 @@ def plot_ROC(prediction, pinfo, ensemble=1, label_type=None,
     print('Determining score per patient.')
     y_truths, y_scores, _, _ =\
         plot_estimator_performance(prediction, pinfo, [label_type],
-                                   alpha=0.95, ensemble=ensemble,
+                                   alpha=0.95, ensemble_method=ensemble_method,
+                                   ensemble_size=ensemble_size,
                                    output='decision')
 
     # Check if we can compute confidence intervals

@@ -50,7 +50,6 @@ def main():
         args.pinfo = ''.join(args.pinfo)
 
     if type(args.ensemble_method) is list:
-        #args.ensemble = int(args.ensemble[0])
         args.ensemble_method = ''.join(args.ensemble_method)
 
     if type(args.ensemble_size) is list:

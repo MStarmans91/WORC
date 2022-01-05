@@ -47,9 +47,12 @@ def main():
     parser.add_argument('-segmentations', '--segmentations', metavar='segmentations',
                         nargs='+', dest='segs', type=str, required=True,
                         help='Segmentations of patients (ITK Image files)')
-    parser.add_argument('-ensemble', '--ensemble', metavar='ensemble',
-                        nargs='+', dest='ens', type=str, required=True,
-                        help='Either length of ensemble (int) or Caruana (string)')
+    parser.add_argument('-ensemble_method', '--ensemble_method', metavar='ensemble_method',
+                        nargs='+', dest='ens_method', type=str, required=True,
+                        help='Method to be used for ensembling (string)')
+    parser.add_argument('-ensemble_size', '--ensemble_size', metavar='ensemble_size',
+                        nargs='+', dest='ens_size', type=str, required=True,
+                        help='If ensembling method is top_N, size to be used (int)')
     parser.add_argument('-label_type', '--label_type', metavar='label_type',
                         nargs='+', dest='label_type', type=str, required=True,
                         help='Label name that is predicted by estimator (string)')
@@ -73,9 +76,13 @@ def main():
     if type(estimator) is list:
         estimator = ''.join(estimator)
 
-    ensemble = args.ens
-    if type(ensemble) is list:
-        ensemble = ''.join(ensemble)
+    ensemble_method = args.ens_method
+    if type(ensemble_method) is list:
+        ensemble_method = ''.join(ensemble_method)
+
+    ensemble_size = args.ens_size
+    if type(ensemble_size) is list:
+        ensemble_size = int(ensemble_size[0])
 
     label_type = args.label_type
     if type(label_type) is list:
@@ -99,7 +106,8 @@ def main():
                        scores=scores,
                        images=args.ims,
                        segmentations=args.segs,
-                       ensemble=ensemble,
+                       ensemble_method=ensemble_method,
+                       ensemble_size=ensemble_size,
                        output_csv=output_csv,
                        output_zip=output_zip)
 
@@ -117,7 +125,8 @@ def flatten_object(input):
 
 
 def plot_ranked_percentages(estimator, pinfo, label_type=None,
-                            ensemble=50, output_csv=None):
+                            ensemble_method='top_N', ensemble_size=100,
+                            output_csv=None):
 
     # Read the inputs
     prediction = pd.read_hdf(estimator)
@@ -129,7 +138,8 @@ def plot_ranked_percentages(estimator, pinfo, label_type=None,
                                    pinfo,
                                    [label_type],
                                    alpha=0.95,
-                                   ensemble=ensemble,
+                                   ensemble_method=ensemble_method,
+                                   ensemble_size=ensemble_size,
                                    output='stats')
 
     percentages = stats['Rankings']['Percentages']
@@ -253,7 +263,8 @@ def plot_ranked_images(pinfo, label_type, images, segmentations, ranked_truths,
 
 
 def plot_ranked_posteriors(estimator, pinfo, label_type=None,
-                           ensemble=50, output_csv=None):
+                           ensemble_method='top_N', ensemble_size=100,
+                           output_csv=None):
     # Read the inputs
     prediction = pd.read_hdf(estimator)
     if label_type is None:
@@ -267,7 +278,8 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
                                    pinfo,
                                    [label_type],
                                    alpha=0.95,
-                                   ensemble=ensemble,
+                                   ensemble_method=ensemble_method,
+                                   ensemble_size=ensemble_size,
                                    output='scores')
 
     # Extract all scores for each patient
@@ -381,7 +393,8 @@ def plot_ranked_posteriors(estimator, pinfo, label_type=None,
 
 
 def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
-                       images=[], segmentations=[], ensemble=50,
+                       images=[], segmentations=[], ensemble_method='top_N',
+                       ensemble_size=100,
                        output_csv=None, output_zip=None, output_itk=None):
     '''
     Rank the patients according to their average score. The score can either
@@ -414,10 +427,11 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
         List containing the filepaths to the ITKImage segmentation files of
         the patients.
 
-    ensemble: integer or string, optional
-        Method to be used for ensembling. Either an integer for a fixed size
-        or 'Caruana' for the Caruana method, see the SearchCV function for more
-        details.
+    ensemble_method: string, optional
+        Method to be used for ensembling.
+
+    ensemble_size: int, optional
+        If top_N method is used, number of workflows to be included in ensemble.
 
     output_csv: filepath, optional
         If given, the scores will be written to this csv file.
@@ -440,8 +454,10 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
             plot_ranked_posteriors(estimator=estimator,
                                    pinfo=pinfo,
                                    label_type=label_type,
-                                   ensemble=ensemble,
+                                   ensemble_method=ensemble_method,
+                                   ensemble_size=ensemble_size,
                                    output_csv=output_csv)
+
     elif scores == 'percentages':
         if prediction[prediction.keys()[0]].config['CrossValidation']['Type'] == 'LOO':
             print('Cannot rank percentages for LOO, returning dummies.')
@@ -454,7 +470,8 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
                 plot_ranked_percentages(estimator=estimator,
                                         pinfo=pinfo,
                                         label_type=label_type,
-                                        ensemble=ensemble,
+                                        ensemble_method=ensemble_method,
+                                        ensemble_size=ensemble_size,
                                         output_csv=output_csv)
     else:
         message = ('{} is not a valid scoring method!').format(str(scores))
@@ -499,113 +516,6 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
                     zipfile.ZipFile(output_zip,
                                     'w', zipfile.ZIP_DEFLATED, allowZip64=True)
 
-        else:
-            # Make dummy
-            if output_zip is not None:
-                zipfile.ZipFile(output_zip,
-                                'w', zipfile.ZIP_DEFLATED, allowZip64=True)
-
-
-def example():
-    case = 'MESFIB'
-    if case == 'CLM':
-        label_type = None
-        estimator = '/media/martijn/DATA/tmp/classification_0_nonewfeat.hdf5'
-        ensemble = 50
-        scores = 'percentages'
-        pinfo = '/home/martijn/git/RadTools/CLM/pinfo_CLM_KM.txt'
-        images_temp = glob.glob('/media/martijn/DATA/CLM/*/*/*/image.nii.gz')
-        segmentations = list()
-        images = list()
-        for i in images_temp:
-            segs = glob.glob(os.path.dirname(i) + '/seg_*session2*.nii.gz')
-            if len(segs) == 1:
-                segmentations.append(segs[0])
-                images.append(i)
-            elif len(segs) > 1:
-                segmentations.append(segs[0])
-                images.append(i)
-            else:
-                segs = glob.glob(os.path.dirname(i) + '/seg_*session1*.nii.gz')
-                if len(segs) == 1:
-                    segmentations.append(segs[0])
-                    images.append(i)
-                elif len(segs) > 1:
-                    segmentations.append(segs[0])
-                    images.append(i)
-                else:
-                    print(i)
-
-        output_csv = '/media/martijn/DATA/tmp/classification_0_nonewfeat_percentages.csv'
-        output_zip = '/media/martijn/DATA/tmp/classification_0_nonewfeat_percentages.zip'
-    elif case == 'MESFIB':
-        label_type = None
-        estimator = '/media/martijn/DATA/MESFIB/Results_0704/classification_100crossval_nonewfeat.hdf5'
-        ensemble = 50
-        scores = 'percentages'
-        pinfo = '/home/martijn/git/RadTools/MESFIB/pinfo_MESFIB.txt'
-        images_temp = glob.glob('/media/martijn/DATA/MESFIB/*/*/*/image.nii.gz')
-        segmentations = list()
-        images = list()
-        for i in images_temp:
-            segs = glob.glob(os.path.dirname(i) + '/seg*Mass*.nii.gz')
-            if len(segs) == 1:
-                segmentations.append(segs[0])
-                images.append(i)
-            elif len(segs) > 1:
-                segmentations.append(segs[0])
-                images.append(i)
-            else:
-                segs = glob.glob(os.path.dirname(i) + '/seg_*mass*.nii.gz')
-                if len(segs) == 1:
-                    segmentations.append(segs[0])
-                    images.append(i)
-                elif len(segs) > 1:
-                    segmentations.append(segs[0])
-                    images.append(i)
-                else:
-                    print(i)
-
-        output_csv = '/media/martijn/DATA/MESFIB/Results_0704/classification_100crossval_nonewfeat_percentages.csv'
-        output_zip = '/media/martijn/DATA/MESFIB/Results_0704/classification_100crossval_nonewfeat_percentages.zip'
-
-    prediction = pd.read_hdf(estimator)
-    if label_type is None:
-        # Assume we want to have the first key
-        label_type = prediction.keys()[0]
-
-    if scores == 'posteriors':
-        ranked_scores, ranked_truths, ranked_PIDs =\
-            plot_ranked_posteriors(estimator=estimator,
-                                   pinfo=pinfo,
-                                   label_type=label_type,
-                                   ensemble=ensemble,
-                                   output_csv=output_csv)
-    elif scores == 'percentages':
-        ranked_scores, ranked_truths, ranked_PIDs =\
-            plot_ranked_percentages(estimator=estimator,
-                                    pinfo=pinfo,
-                                    label_type=label_type,
-                                    ensemble=ensemble,
-                                    output_csv=output_csv)
-    else:
-        message = ('{} is not a valid scoring method!').format(str(scores))
-        raise WORCKeyError(message)
-
-    if output_zip is not None:
-        # Convert to lower to later on overcome matching errors
-        ranked_PIDs = [i.lower() for i in ranked_PIDs]
-
-        if images:
-            plot_ranked_images(pinfo=pinfo,
-                               label_type=label_type,
-                               images=images,
-                               segmentations=segmentations,
-                               ranked_truths=ranked_truths,
-                               ranked_scores=ranked_scores,
-                               ranked_PIDs=ranked_PIDs,
-                               output_zip=output_zip,
-                               scores=scores)
         else:
             # Make dummy
             if output_zip is not None:
