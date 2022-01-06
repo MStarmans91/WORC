@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -994,7 +994,13 @@ def delete_cc_para(para):
                   'XGB_learning_rate',
                   'XGB_gamma',
                   'XGB_min_child_weight',
-                  'XGB_colsample_bytree']
+                  'XGB_colsample_bytree',
+                  'LightGBM_num_leaves',
+                  'LightGBM_max_depth',
+                  'LightGBM_min_child_samples',
+                  'LightGBM_reg_alpha',
+                  'LightGBM_reg_lambda',
+                  'LightGBM_min_child_weight']
 
     for k in deletekeys:
         if k in para.keys():

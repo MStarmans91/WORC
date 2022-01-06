@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -424,7 +424,7 @@ class WORC(object):
         config['Classification']['classifiers'] =\
             'SVM, RF, LR, LDA, QDA, GaussianNB, ' +\
             'AdaBoostClassifier, ' +\
-            'XGBClassifier'
+            'XGBClassifier, LightGBMClassifier'
         config['Classification']['max_iter'] = '100000'
         config['Classification']['SVMKernel'] = 'linear, poly, rbf'
         config['Classification']['SVMC'] = '0, 6'
@@ -460,6 +460,14 @@ class WORC(object):
         config['Classification']['XGB_gamma'] = '0.01, 9.99'
         config['Classification']['XGB_min_child_weight'] = '1, 6'
         config['Classification']['XGB_colsample_bytree'] = '0.3, 0.7'
+
+        # https://lightgbm.readthedocs.io/en/latest/Parameters-Tuning.html. Mainly prevent overfitting
+        config['Classification']['LightGBM_num_leaves'] = '5, 95'  # Default 31 so search around that
+        config['Classification']['LightGBM_max_depth'] = config['Classification']['XGB_max_depth'] # Good to limit explicitly to decrease compuytation time and limit overfitting
+        config['Classification']['LightGBM_min_child_samples'] = '5, 45'  # = min_data_in_leaf. Default 20
+        config['Classification']['LightGBM_reg_alpha'] = config['Classification']['LRC']
+        config['Classification']['LightGBM_reg_lambda'] = config['Classification']['LRC']
+        config['Classification']['LightGBM_min_child_weight'] = '-7, 4' # Default 1e-3
 
         # CrossValidation
         config['CrossValidation'] = dict()

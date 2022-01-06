@@ -1,4 +1,20 @@
 #!/usr/bin/env python
+
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import os
 
 import WORC
@@ -351,6 +367,12 @@ def generate_config_options():
     config['Classification']['XGB_gamma'] = 'Two Floats: loc and scale'
     config['Classification']['XGB_min_child_weight'] = 'Two Integers: loc and scale'
     config['Classification']['XGB_colsample_bytree'] = 'Two Floats: loc and scale'
+    config['Classification']['LightGBM_num_leaves'] = 'Two Integers: loc and scale'
+    config['Classification']['LightGBM_max_depth'] = 'Two Integers: loc and scale'
+    config['Classification']['LightGBM_min_child_samples'] = 'Two Integers: loc and scale'
+    config['Classification']['LightGBM_reg_alpha'] = 'Two Floats: loc and scale'
+    config['Classification']['LightGBM_reg_lambda'] = 'Two Floats: loc and scale'
+    config['Classification']['LightGBM_min_child_weight'] = 'Two Integers: loc and scale'
 
     # CrossValidation
     config['CrossValidation'] = dict()
@@ -647,6 +669,12 @@ def generate_config_descriptions():
     config['Classification']['XGB_gamma'] = 'Gamma of XGB.'
     config['Classification']['XGB_min_child_weight'] = 'Minimum child weights in XGB.'
     config['Classification']['XGB_colsample_bytree'] = 'Col sample by tree in XGB.'
+    config['Classification']['LightGBM_num_leaves'] = 'Maximum tree leaves for base learners. See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_max_depth'] = 'Maximum tree depth for base learners. See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_min_child_samples'] = 'Minimum number of data needed in a child (leaf). See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_reg_alpha'] = 'L1 regularization term on weights. See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_reg_lambda'] = 'L2 regularization term on weights. See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_min_child_weight'] = 'Minimum sum of instance weight (hessian) needed in a child (leaf). See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
 
     # CrossValidation
     config['CrossValidation'] = dict()

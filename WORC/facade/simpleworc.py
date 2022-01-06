@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -395,7 +395,7 @@ class SimpleWORC():
         """
         # validate
         if 'classification' in method:
-            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier']
+            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'LightGBMClassifier']
         elif method == 'regression':
             valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR', 'XGBRegressor', 'AdaBoostRegressor', 'LinR', 'Ridge']
         else:
@@ -474,7 +474,7 @@ class SimpleWORC():
         if coarse and estimators is None:
             estimators = ['SVM']
         elif estimators is None:
-            estimators = ['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB', 'AdaBoostClassifier', 'XGBClassifier']
+            estimators = ['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB', 'AdaBoostClassifier', 'XGBClassifier', 'LightGBMClassifier']
 
         self._set_and_validate_estimators(estimators, scoring_method, 'binary_classification', coarse)
 
@@ -501,7 +501,7 @@ class SimpleWORC():
         if coarse and estimators is None:
             estimators = ['SVM']
         elif estimators is None:
-            estimators = ['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB', 'AdaBoostClassifier', 'XGBClassifier']
+            estimators = ['SVM', 'RF', 'LR', 'LDA', 'QDA', 'GaussianNB', 'AdaBoostClassifier', 'XGBClassifier', 'LightGBMClassifier']
 
         self._set_and_validate_estimators(estimators, scoring_method, 'multiclass_classification', coarse)
 
