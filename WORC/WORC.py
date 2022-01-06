@@ -225,7 +225,7 @@ class WORC(object):
 
         # Segmentix
         config['Segmentix'] = dict()
-        config['Segmentix']['mask'] = 'subtract'
+        config['Segmentix']['mask'] = 'None'
         config['Segmentix']['segtype'] = 'None'
         config['Segmentix']['segradius'] = '5'
         config['Segmentix']['N_blobs'] = '1'
@@ -492,7 +492,7 @@ class WORC(object):
         # Bootstrap options
         config['Bootstrap'] = dict()
         config['Bootstrap']['Use'] = 'False'
-        config['Bootstrap']['N_iterations'] = '1000'
+        config['Bootstrap']['N_iterations'] = '10000'
 
         return config
 

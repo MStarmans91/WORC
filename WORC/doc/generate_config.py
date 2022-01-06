@@ -118,7 +118,7 @@ def generate_config_options():
 
     # Segmentix
     config['Segmentix'] = dict()
-    config['Segmentix']['mask'] = 'subtract, multiply'
+    config['Segmentix']['mask'] = 'None, subtract, multiply'
     config['Segmentix']['segtype'] = 'None, Ring, Dilate'
     config['Segmentix']['segradius'] = 'Integer > 0'
     config['Segmentix']['N_blobs'] = 'Integer > 0'
@@ -417,7 +417,7 @@ def generate_config_descriptions():
 
     # Segmentix
     config['Segmentix'] = dict()
-    config['Segmentix']['mask'] = 'If a mask is supplied, should the mask be subtracted from the contour or multiplied.'
+    config['Segmentix']['mask'] = 'If None, masks will not be used by segmentix. If a mask is supplied, should the mask be subtracted from the contour or multiplied.'
     config['Segmentix']['segtype'] = 'If Ring, then a ring around the segmentation will be used as contour. If Dilate, the segmentation will be dilated per 2-D axial slice with a disc.'
     config['Segmentix']['segradius'] = 'Define the radius of the ring or disc used if segtype is Ring or Dilate, respectively.'
     config['Segmentix']['N_blobs'] = 'How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.'
