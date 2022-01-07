@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ from matplotlib.ticker import NullLocator
 import matplotlib.colors as colors
 import SimpleITK as sitk
 from skimage import morphology
+import WORC.addexceptions as ae
 
 
 def extract_boundary(contour, radius=2):
@@ -51,9 +52,10 @@ def extract_boundary(contour, radius=2):
 
 
 def slicer(image, mask=None, output_name=None, output_name_zoom=None,
-           thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False,
+           thresholds=[-5, 5], zoomfactor=4, dpi=500, normalize=True,
            expand=False, boundary=False, square=False, flip=True, rot90=0,
-           alpha=0.40, axis='axial', index=None, color='cyan', radius=2):
+           alpha=0.40, axis='axial', index=None, color='cyan', radius=2,
+           colormap='gray'):
     """Plot slice of image where mask is largest, with mask as overlay.
 
     image and mask should both be arrays
@@ -206,7 +208,7 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
 
     # Plot the image and overlay the mask
     fig = plot_im_and_overlay(imslice, maskslice, figsize=figsize, alpha=alpha,
-                              color=color)
+                              color=color, colormap=colormap)
 
     # Save Output
     print('\t Saving output.')
@@ -235,8 +237,13 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
 
 
 def plot_im_and_overlay(image, mask=None, figsize=(3, 3), alpha=0.40,
-                        color='cyan'):
+                        color='cyan', colormap='gray', colorbar=False):
     """Plot an image in a matplotlib figure and overlay with a mask."""
+    # Define colormap
+    validmaps = ['gray', 'turbo', 'jet']
+    if colormap not in validmaps:
+        raise ae.WORCKeyError(f'Colormap {colormap} is not valid. Should be one of {validmaps}.')
+
     # Create a normalized colormap for the image and mask
     imin = np.min(image)
     imax = np.max(image)
@@ -250,9 +257,13 @@ def plot_im_and_overlay(image, mask=None, figsize=(3, 3), alpha=0.40,
     # Plot and save the full image
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(1, 1, 1)
-    ax.imshow(image, cmap=plt.cm.gray, norm=norm_im, interpolation="bilinear")
+    mappable = ax.imshow(image, cmap=colormap, norm=norm_im, interpolation="bilinear")
     if mask is not None:
         ax.imshow(mask, cmap=cmap, norm=normO, alpha=alpha, interpolation="bilinear")
+
+    # Add colorbar
+    if colorbar:
+        fig.colorbar(mappable)
 
     # Alter aspect ratio according to figure size
     aspect = figsize[0]/figsize[1]
