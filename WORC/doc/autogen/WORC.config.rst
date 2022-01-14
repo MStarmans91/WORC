@@ -10,6 +10,7 @@ Evaluation        :ref:`Evaluation <config-Evaluation>`
 FeatPreProcess    :ref:`FeatPreProcess <config-FeatPreProcess>`      
 Featsel           :ref:`Featsel <config-Featsel>`                    
 FeatureScaling    :ref:`FeatureScaling <config-FeatureScaling>`      
+Fingerprinting    :ref:`Fingerprinting <config-Fingerprinting>`      
 General           :ref:`General <config-General>`                    
 HyperOptimization :ref:`HyperOptimization <config-HyperOptimization>`
 ImageFeatures     :ref:`ImageFeatures <config-ImageFeatures>`        

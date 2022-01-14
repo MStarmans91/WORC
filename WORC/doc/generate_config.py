@@ -19,9 +19,11 @@ import os
 
 import WORC
 from fastr.helpers.rest_generation import create_rest_table
+from WORC.tools.fingerprinting import quantitative_modalities, qualitative_modalities
 
 
 def generate_config():
+    """Generate documentation for the WORC config in rst format."""
     field_key = []
     field_subkey = []
     field_default = []
@@ -131,6 +133,11 @@ def generate_config_options():
     config['General']['tempsave'] = 'True, False'
     config['General']['AssumeSameImageAndMaskMetadata'] = 'True, False'
     config['General']['ComBat'] = 'True, False'
+    config['General']['Fingerprint'] = 'True, False'
+
+    # Fingerprinting
+    config['Fingerprinting'] = dict()
+    config['Fingerprinting']['max_num_image'] = 'Integer'
 
     # Segmentix
     config['Segmentix'] = dict()
@@ -180,7 +187,10 @@ def generate_config_options():
 
     # Parameter settings for PREDICT feature calculation
     # Defines what should be done with the images
-    config['ImageFeatures']['image_type'] = 'CT'
+    config['ImageFeatures']['image_type'] = 'String'
+
+    # How to extract the features in different dimension
+    config['ImageFeatures']['extraction_mode'] = 'String: 2D, 2.5D or 3D'
 
     # Define frequencies for gabor filter in pixels
     config['ImageFeatures']['gabor_frequencies'] = 'Float(s)'
@@ -436,6 +446,11 @@ def generate_config_descriptions():
     config['General']['tempsave'] = 'Determines whether after every cross validation iteration the result will be saved, in addition to the result after all iterations. Especially useful for debugging.'
     config['General']['AssumeSameImageAndMaskMetadata'] = 'Make the assumption that the image and mask have the same metadata. If True and there is a mismatch, metadata from the image will be copied to the mask.'
     config['General']['ComBat'] = 'Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See <https://github.com/Jfortin1/ComBatHarmonization for more information./>`_ .'
+    config['General']['Fingerprint'] = 'Whether to use Fingerprinting or not.'
+
+    # Fingerprinting
+    config['Fingerprinting'] = dict()
+    config['Fingerprinting']['max_num_image'] = 'Maximum number of images and segmentations to evaluate during fingerprinting to limit the workload.'
 
     # Segmentix
     config['Segmentix'] = dict()
@@ -472,7 +487,7 @@ def generate_config_descriptions():
     config['ImageFeatures']['histogram'] = 'Determine whether histogram features are computed or not.'
     config['ImageFeatures']['orientation'] = 'Determine whether orientation features are computed or not.'
     config['ImageFeatures']['texture_Gabor'] = 'Determine whether Gabor texture features are computed or not.'
-    config['ImageFeatures']['texture_LBP'] ='Determine whether LBP texture features are computed or not.'
+    config['ImageFeatures']['texture_LBP'] = 'Determine whether LBP texture features are computed or not.'
     config['ImageFeatures']['texture_GLCM'] = 'Determine whether GLCM texture features are computed or not.'
     config['ImageFeatures']['texture_GLCMMS'] = 'Determine whether GLCM Multislice texture features are computed or not.'
     config['ImageFeatures']['texture_GLDM'] = 'Determine whether GLDM texture features are computed or not.'
@@ -486,7 +501,10 @@ def generate_config_descriptions():
 
     # Parameter settings for PREDICT feature calculation
     # Defines what should be done with the images
-    config['ImageFeatures']['image_type'] = 'Modality of images supplied. Determines how the image is loaded.'
+    config['ImageFeatures']['image_type'] = f'Modality of images supplied. Determines how the image is loaded. Mandatory to supply by user. Should be one of the valid quantitative modalities {quantitative_modalities} or qualitative modalities {qualitative_modalities}.'
+
+    # How to extract the features in different dimension
+    config['ImageFeatures']['extraction_mode'] = 'Determine how to extract the features: 2D if your masks and/or images have only one 2D slice, 3D for tru 3D images, 2.5D for 3D images but in a slice-by-slice stacked 2D manner. The latter is recommended when the slice thickness is much larger (>2) than the pixel spacing.'
 
     # Define frequencies for gabor filter in pixels
     config['ImageFeatures']['gabor_frequencies'] = 'Frequencies of Gabor filters used: can be a single float or a list.'

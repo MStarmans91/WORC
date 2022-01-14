@@ -376,7 +376,10 @@ class Evaluate(object):
         else:
             pinfo = self.parent.source_patientclass_train.output
 
-        config = self.parent.source_class_config.output
+        if self.parent.configs[0]['General']['Fingerprint'] == 'True':
+            config = self.parent.node_fingerprinters['classification'].outputs['config']
+        else:
+            config = self.parent.source_class_config.output
 
         if hasattr(self.parent, 'sources_images_train'):
             if self.parent.sources_images_train:

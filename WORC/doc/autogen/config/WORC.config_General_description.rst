@@ -12,4 +12,5 @@ Joblib_backend                 Type of backend to be used by joblib for multicor
 tempsave                       Determines whether after every cross validation iteration the result will be saved, in addition to the result after all iterations. Especially useful for debugging.                
 AssumeSameImageAndMaskMetadata Make the assumption that the image and mask have the same metadata. If True and there is a mismatch, metadata from the image will be copied to the mask.                            
 ComBat                         Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See <https://github.com/Jfortin1/ComBatHarmonization for more information./>`_ .
+Fingerprint                    Whether to use Fingerprinting or not.                                                                                                                                               
 ============================== ====================================================================================================================================================================================

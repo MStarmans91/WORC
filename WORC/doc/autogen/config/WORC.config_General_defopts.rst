@@ -12,4 +12,5 @@ Joblib_backend                 threading                                        
 tempsave                       False                                                   True, False                                                                                                   
 AssumeSameImageAndMaskMetadata False                                                   True, False                                                                                                   
 ComBat                         False                                                   True, False                                                                                                   
+Fingerprint                    True                                                    True, False                                                                                                   
 ============================== ======================================================= ==============================================================================================================
