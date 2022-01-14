@@ -118,10 +118,12 @@ def main():
         df = pd.DataFrame(all_scores, columns=['train_score', 'test_score',
                                              'test_sample_counts', 'fit_time',
                                              'score_time', 'para_estimator', 'para'])
+
         fname = os.path.join(run_info['tempfolder'],
                              'tested_configs',
                              run_info['run_name'],
                              str(run_info['run_id']) + '.csv')
+
         if not os.path.exists(os.path.dirname(fname)):
             os.makedirs(os.path.dirname(fname))
         with open(fname, 'a') as f:
@@ -190,8 +192,10 @@ def main():
                                     'tested_configs',
                                     run_info['run_name'],
                                     'smac_stats_' + str(run_info['run_id']) + '.json')
+
     if not os.path.exists(os.path.dirname(result_file_name)):
         os.makedirs(os.path.dirname(result_file_name))
+
     with open(result_file_name, 'a') as file:
         smac_results = {run_info['run_id']: smac_stats}
         json.dump(smac_results, file, indent=4)
@@ -203,6 +207,7 @@ def main():
                                          run_info['run_name'],
                                          str(run_info['run_id']) + '.csv'))
     output = output_df.values.tolist()
+
     # Convert strings and floats to dict:
     for ret in output:
         ret[0] = {'score': ret[0]}

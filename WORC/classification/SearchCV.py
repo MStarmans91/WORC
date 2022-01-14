@@ -1049,13 +1049,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                         train, valid, p_all,
                                         return_all=True)
                     (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
-                     Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
+                     encoders, Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
                     new_estimator.best_groupsel = GroupSel
                     new_estimator.best_scaler = scalers
                     new_estimator.best_varsel = VarSel
                     new_estimator.best_modelsel = SelectModel
                     new_estimator.best_preprocessor = None
                     new_estimator.best_imputer = Imputers
+                    new_estimator.best_encoder = encoders
                     new_estimator.best_pca = PCAs
                     new_estimator.best_featlab = feature_labels
                     new_estimator.best_statisticalsel = StatisticalSel
@@ -2861,6 +2862,7 @@ class BaseSearchCVSMAC(BaseSearchCV):
                                     self.smac_result_file],
                                    index=estimator_labels,
                                    name='estimator Data')
+
         fname = 'estimatordata.hdf5'
         estimatorname = os.path.join(tempfolder, fname)
         estimator_data.to_hdf(estimatorname, 'Estimator Data')
