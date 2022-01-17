@@ -15,7 +15,8 @@ coliage              False                True, False
 vessel               True                 True, False                                         
 log                  True                 True, False                                         
 phase                True                 True, False                                         
-image_type           CT                   CT                                                  
+image_type                                String                                              
+extraction_mode      2.5D                 String: 2D, 2.5D or 3D                              
 gabor_frequencies    0.05, 0.2, 0.5       Float(s)                                            
 gabor_angles         0, 45, 90, 135       Integer(s)                                          
 GLCM_angles          0, 0.79, 1.57, 2.36  Float(s)                                            

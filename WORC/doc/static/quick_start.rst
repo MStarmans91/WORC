@@ -183,6 +183,11 @@ After defining the inputs, the following code can be used to run your first expe
     experiment.labels_from_this_file(label_file)
     experiment.predict_labels(label_name)
 
+    # Set the types of images WORC has to process. Used in fingerprinting
+    # Valid quantitative types are ['CT', 'PET', 'Thermography', 'ADC']
+    # Valid qualitative types are ['MRI', 'DWI', 'US']
+    experiment.set_image_types(['CT'])
+    
     # Use the standard workflow for your specific modus
     if modus == 'binary_classification':
         experiment.binary_classification(coarse=coarse)

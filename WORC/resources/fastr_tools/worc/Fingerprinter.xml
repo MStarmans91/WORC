@@ -1,0 +1,39 @@
+<tool id="Fingerprinter" name="Fingerprinter" version="1.0">
+    <description>A wrapper around WORC's fingerprinting object.</description>
+    <authors>
+      <author name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  <command version="1.0" url="" >
+    <targets>
+      <target os="*" arch="*" interpreter="python" paths='bin/' bin="Fingerprinter.py" />
+    </targets>
+    <description>
+      To Do
+    </description>
+    <authors>
+      <author  name="Martijn Starmans" email="m.starmans@erasmusmc.nl" url="http://www.bigr.nl/people/MartijnStarmans" />
+    </authors>
+  </command>
+  <repository />
+  <interface>
+    <inputs>
+        <input id="images_train" name="Input images files of one modality" datatype="ITKImageFile" prefix="--images_train" cardinality="1-*" repeat_prefix="false" required="false" />
+        <input id="segmentations_train" name="Input feature files of one modality" datatype="ITKImageFile" prefix="--segmentations_train" cardinality="1-*" repeat_prefix="false" required="false" />
+        <input id="features_train" name="Input feature files of one modality" datatype="HDF5" prefix="--features_train" cardinality="1-*" repeat_prefix="false" required="false" />
+        <input id="patientclass_train" name="patientclass" datatype="PatientInfoFile" prefix="--pc_train" cardinality="1" repeat_prefix="false" required="true" />
+        <input id="config" name="WORC configuration file" datatype="ParameterFile" prefix="--conf_in" cardinality="1-*" repeat_prefix="false" required="true" />
+        <input id="type" name="Type of fingerpring to extract" datatype="String" prefix="--type" cardinality="1-*" repeat_prefix="false" required="true" />
+     </inputs>
+    <outputs>
+      <output id="config" name="WORC configuration file" datatype="ParameterFile" cardinality="as:config" nospace="False" order="0" prefix="--conf_out" required="true"/>
+      <output id="config_pyradiomics" name="PyRadiomics configuration file" datatype="YamlFile" cardinality="as:config" nospace="False" order="0" prefix="--conf_out_pyradiomics" required="false"/>
+    </outputs>
+  </interface>
+  <requirements />
+  <tests />
+  <help> usage: To Do
+  </help>
+  <cite>
+  </cite>
+  <references />
+</tool>

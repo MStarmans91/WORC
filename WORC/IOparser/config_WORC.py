@@ -22,7 +22,7 @@ import WORC.addexceptions as ae
 
 
 def load_config(config_file_path):
-    """ Parse a WORC configuration file.
+    """Parse a WORC configuration file.
 
     Arguments:
         config_file_path: path to the configuration file to be parsed.

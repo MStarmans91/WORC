@@ -1121,7 +1121,13 @@ def delete_cc_para(para):
                   'XGB_learning_rate',
                   'XGB_gamma',
                   'XGB_min_child_weight',
-                  'XGB_colsample_bytree']
+                  'XGB_colsample_bytree',
+                  'LightGBM_num_leaves',
+                  'LightGBM_max_depth',
+                  'LightGBM_min_child_samples',
+                  'LightGBM_reg_alpha',
+                  'LightGBM_reg_lambda',
+                  'LightGBM_min_child_weight']
 
     for k in deletekeys:
         if k in para.keys():

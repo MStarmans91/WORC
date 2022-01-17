@@ -160,7 +160,11 @@ class BasicWORC(SimpleWORC):
         else:
             nmod = len(self.features_train)
 
+        # Create configuration files
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
+        for cnum, _ in enumerate(self._worc.configs):
+            self._worc.configs[cnum]['ImageFeatures']['image_type'] = self._image_types[cnum]
+
         self._worc.build()
         if self._add_evaluation:
             self._worc.add_evaluation(label_type=self._label_names[self._selected_label],

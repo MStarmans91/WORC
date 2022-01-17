@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -330,6 +330,31 @@ def load_config(config_file_path):
     settings_dict['Classification']['XGB_colsample_bytree'] =\
         [float(str(item).strip()) for item in
          settings['Classification']['XGB_colsample_bytree'].split(',')]
+
+    # Light GBM
+    settings_dict['Classification']['LightGBM_num_leaves'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['LightGBM_num_leaves'].split(',')]
+
+    settings_dict['Classification']['LightGBM_max_depth'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['LightGBM_max_depth'].split(',')]
+
+    settings_dict['Classification']['LightGBM_min_child_samples'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['LightGBM_min_child_samples'].split(',')]
+
+    settings_dict['Classification']['LightGBM_reg_alpha'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['LightGBM_reg_alpha'].split(',')]
+
+    settings_dict['Classification']['LightGBM_reg_lambda'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['LightGBM_reg_lambda'].split(',')]
+
+    settings_dict['Classification']['LightGBM_min_child_weight'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['LightGBM_min_child_weight'].split(',')]
 
     # Cross validation settings
     settings_dict['CrossValidation']['Type'] =\
