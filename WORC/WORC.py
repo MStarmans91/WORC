@@ -1050,7 +1050,7 @@ class WORC(object):
                         # Add input to fingerprinting for classification
                         if self.configs[0]['General']['Fingerprint'] == 'True':
                             if num == 0:
-                                self.links_fingerprinting['classification'] = self.network.create_link(self.sources_features_train[label].output, self.node_fingerprinters['classification'].inputs['images_train'])
+                                self.links_fingerprinting['classification'] = self.network.create_link(self.sources_features_train[label].output, self.node_fingerprinters['classification'].inputs['features_train'])
                                 self.links_fingerprinting['classification'].collapse = 'train'
 
             else:

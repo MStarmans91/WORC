@@ -243,7 +243,8 @@ def construct_SVM(config, regression=False):
         clf = SVC(class_weight='balanced', probability=True, max_iter=max_iter,
                   random_state=config['random_seed'])
     else:
-        clf = SVMR(max_iter=max_iter, random_state=config['random_seed'])
+        # NOTE: SVMR has no random state
+        clf = SVMR(max_iter=max_iter)
 
     clf.kernel = str(config['SVMKernel'])
     clf.C = config['SVMC']

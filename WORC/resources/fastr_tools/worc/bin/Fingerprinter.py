@@ -29,8 +29,8 @@ def main():
     parser.add_argument('-segmentations_train', '--segmentations_train', metavar='segmentations_train',
                         nargs='+', dest='segmentations_train', type=str, required=False,
                         help='Input segmentations of one modality (ITK Image)')
-    parser.add_argument('-feat_train', '--feat_train', metavar='features_train',
-                        nargs='+', dest='feat_train', type=str, required=False,
+    parser.add_argument('-features_train', '--features_train', metavar='features_train',
+                        nargs='+', dest='features_train', type=str, required=False,
                         help='Patient features input of first modality (HDF)')
     parser.add_argument('-pc_train', '--pc_train', metavar='Patientinfo',
                         dest='pc_train',
@@ -70,7 +70,7 @@ def main():
     fp = Fingerprinter()
     fp.images = args.images_train
     fp.segmentations = args.segmentations_train
-    fp.features = args.feat_train
+    fp.features = args.features_train
     fp.labels = args.pc_train
     fp.configuration = args.conf_in
     fp.type = args.type
