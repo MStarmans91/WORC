@@ -206,6 +206,48 @@ def build_smac_config(parameters):
                        InCondition(child=min_child_weight, parent=classifier, values=['XGBClassifier']),
                        InCondition(child=colsample_bytree, parent=classifier, values=['XGBClassifier'])])
 
+    # LightGBMclassifier
+    # 5 hyperparameters:
+    #   1) num_leaves           | conditional on classifier: LightGBM
+    #   2) max_depth            | conditional on classifier: LightGBM
+    #   3) min_child_samples    | conditional on classifier: LightGBM
+    #   4) reg_alpha            | conditional on classifier: LightGBM
+    #   5) reg_lambda           | conditional on classifier: LightGBM
+    #   6) min_child_weight     | conditional on classifier: LightGBM
+    # LightGBM_num_leaves = UniformIntegerHyperparameter('LightGBM_num_leaves',
+    #                                                lower=cf['LightGBM_num_leaves'][0],
+    #                                                upper=cf['LightGBM_num_leaves'][0] +
+    #                                                      cf['LightGBM_num_leaves'][1])
+    # LightGBM_max_depth = UniformIntegerHyperparameter('LightGBM_max_depth',
+    #                                              lower=cf['LightGBM_max_depth'][0],
+    #                                              upper=cf['LightGBM_max_depth'][0] +
+    #                                                    cf['LightGBM_max_depth'][1])
+    # LightGBM_min_child_samples = UniformIntegerHyperparameter('LightGBM_min_child_samples',
+    #                                                lower=cf['LightGBM_min_child_samples'][0],
+    #                                                upper=cf['LightGBM_min_child_samples'][0] +
+    #                                                      cf['LightGBM_min_child_samples'][1])
+    #
+    # LightGBM_reg_alpha = UniformFloatHyperparameter('LightGBM_reg_alpha',
+    #                                        lower=cf['LightGBM_reg_alpha'][0],
+    #                                        upper=cf['LightGBM_reg_alpha'][0] +
+    #                                              cf['LightGBM_reg_alpha'][1])
+    # LightGBM_reg_lambda = UniformFloatHyperparameter('LightGBM_reg_lambda',
+    #                                                 lower=cf['LightGBM_reg_lambda'][0],
+    #                                                 upper=cf['LightGBM_reg_lambda'][0] +
+    #                                                       cf['LightGBM_reg_lambda'][1])
+    # LightGBM_min_child_weight = UniformFloatHyperparameter('LightGBM_min_child_weight',
+    #                                        lower=pow(10, cf['LightGBM_min_child_weight'][0]),
+    #                                        upper=pow(10, cf['LightGBM_min_child_weight'][0] + cf['LightGBM_min_child_weight'][1]),
+    #                                        log=True)
+    #
+    # cs.add_hyperparameters([LightGBM_num_leaves, LightGBM_max_depth, LightGBM_min_child_samples,
+    #                         LightGBM_reg_alpha, LightGBM_reg_lambda, LightGBM_min_child_weight])
+    # cs.add_conditions([InCondition(child=LightGBM_num_leaves, parent=classifier, values=['LightGBMClassifier']),
+    #                    InCondition(child=LightGBM_max_depth, parent=classifier, values=['LightGBMClassifier']),
+    #                    InCondition(child=LightGBM_min_child_samples, parent=classifier, values=['LightGBMClassifier']),
+    #                    InCondition(child=LightGBM_reg_alpha, parent=classifier, values=['LightGBMClassifier']),
+    #                    InCondition(child=LightGBM_reg_lambda, parent=classifier, values=['LightGBMClassifier']),
+    #                    InCondition(child=LightGBM_min_child_weight, parent=classifier, values=['LightGBMClassifier'])])
 
     ### Preprocessing ###
     # 9 preprocessing steps are included:

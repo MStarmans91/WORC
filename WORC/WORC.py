@@ -33,7 +33,7 @@ from WORC.detectors.detectors import DebugDetector
 from WORC.export.hyper_params_exporter import export_hyper_params_to_latex
 from urllib.parse import urlparse
 from urllib.request import url2pathname
-from WORC.tools.fingerprinting import quantitative_modalities, qualitative_modalities
+from WORC.tools.fingerprinting import quantitative_modalities, qualitative_modalities, all_modalities
 
 
 class WORC(object):
@@ -171,6 +171,7 @@ class WORC(object):
         self.fastr_memory_parameters['Segmentix'] = '6G'
         self.fastr_memory_parameters['ComBat'] = '12G'
         self.fastr_memory_parameters['PlotEstimator'] = '12G'
+        self.fastr_memory_parameters['Fingerprinter'] = '12G'
 
         if DebugDetector().do_detection():
             print(fastr.config)
@@ -195,7 +196,7 @@ class WORC(object):
         config['General']['TransformationNode'] = "elastix4.8/Transformix:4.8"
         config['General']['Joblib_ncores'] = '1'
         config['General']['Joblib_backend'] = 'threading'
-        config['General']['tempsave'] = 'False'
+        config['General']['tempsave'] = 'True'
         config['General']['AssumeSameImageAndMaskMetadata'] = 'False'
         config['General']['ComBat'] = 'False'
         config['General']['Fingerprint'] = 'True'
@@ -433,7 +434,7 @@ class WORC(object):
         config['Classification']['classifiers'] =\
             'SVM, RF, LR, LDA, QDA, GaussianNB, ' +\
             'AdaBoostClassifier, ' +\
-            'XGBClassifier, LightGBMClassifier'
+            'XGBClassifier'
         config['Classification']['max_iter'] = '100000'
         config['Classification']['SVMKernel'] = 'linear, poly, rbf'
         config['Classification']['SVMC'] = '0, 6'
@@ -572,8 +573,7 @@ class WORC(object):
                         self.configs[c] = config_io.load_config(self.configs[c])
                     image_types.append(self.configs[c]['ImageFeatures']['image_type'])
 
-                all_valid_modalities = quantitative_modalities + qualitative_modalities
-                if self.configs[0]['General']['Fingerprint'] == 'True' and any(imt not in all_valid_modalities for imt in image_types):
+                if self.configs[0]['General']['Fingerprint'] == 'True' and any(imt not in all_modalities for imt in image_types):
                     m = f'One of your image types {image_types} is not one of the valid image types {quantitative_modalities + qualitative_modalities}. This is mandatory to set when performing fingerprinting, see the WORC Documentation (https://worc.readthedocs.io/en/latest/static/configuration.html#imagefeatures).'
                     raise WORCexceptions.WORCValueError(m)
 
@@ -829,7 +829,7 @@ class WORC(object):
                             self.converters_masks_test[label].inputs['image'] = self.sources_masks_test[label].output
 
                         # First convert the images
-                        if any(modality in mod for modality in ['MR', 'CT', 'MG', 'PET']):
+                        if any(modality in mod for modality in all_modalities):
                             # Use WORC PXCastConvet for converting image formats
                             memory = self.fastr_memory_parameters['WORCCastConvert']
                             self.converters_im_train[label] =\
@@ -1088,10 +1088,11 @@ class WORC(object):
         images are present.
         """
         # Add fingerprinting tool
+        memory = self.fastr_memory_parameters['Fingerprinter']
         fingerprinter_node = self.network.create_node('worc/Fingerprinter:1.0',
                                                       tool_version='1.0',
                                                       id=f'fingerprinter_{id}',
-                                                      resources=ResourceLimit(memory='4G'),
+                                                      resources=ResourceLimit(memory=memory),
                                                       step_id='FingerPrinting')
 
         # Add general sources to fingerprinting node

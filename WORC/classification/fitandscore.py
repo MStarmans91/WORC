@@ -42,9 +42,14 @@ import time
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from numpy.linalg import LinAlgError
 
-# Suppress sklearn warnings
+# Suppress some sklearn warnings. These occur when unused hyperparameters are
+# supplied, when estimators that are refitted do not converge, or parts
+# are deprecated
 import warnings
+from sklearn.exceptions import ConvergenceWarning
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=ConvergenceWarning)
 
 
 def fit_and_score(X, y, scoring,
@@ -54,7 +59,7 @@ def fit_and_score(X, y, scoring,
                   return_n_test_samples=True,
                   return_times=True, return_parameters=False,
                   return_estimator=False,
-                  error_score='raise', verbose=True,
+                  error_score='raise', verbose=False,
                   return_all=True, refit_workflows=False,
                   use_smac=False):
     """Fit an estimator to a dataset and score the performance.
@@ -499,9 +504,8 @@ def fit_and_score(X, y, scoring,
     if not return_all:
         del scaler
 
-
     # --------------------------------------------------------------------
-    # Relief feature selection, possibly multi classself.
+    # Relief feature selection, possibly multi class.
     # Needs to be done after scaling!
     # para_estimator['ReliefUse'] = 'True'
     if 'ReliefUse' in para_estimator.keys():
@@ -777,8 +781,9 @@ def fit_and_score(X, y, scoring,
                 else:
                     ret[2] = runtime
                 if return_all:
-                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], \
-                           scaler, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    return ret, GroupSel, VarSel, SelectModel,\
+                           feature_labels[0], scaler, encoder, imputer, pca,\
+                           StatisticalSel, ReliefSel, Sampler
                 else:
                     return ret
 
@@ -1011,60 +1016,41 @@ def delete_nonestimator_parameters(parameters):
     Delete all parameters in a parameter dictionary that are not used for the
     actual estimator.
     """
-    if 'Number' in parameters.keys():
-        del parameters['Number']
+    deletekeys = ['Number',
+                  'UsePCA',
+                  'PCAType',
+                  'ReliefUse',
+                  'ReliefNN',
+                  'ReliefSampleSize',
+                  'ReliefNumFeatures',
+                  'OneHotEncoding',
+                  'OneHotEncoding_feature_labels_tofit',
+                  'Imputation',
+                  'ImputationMethod',
+                  'ImputationNeighbours',
+                  'SelectFromModel',
+                  'SelectFromModel_lasso_alpha',
+                  'SelectFromModel_estimator',
+                  'SelectFromModel_n_trees',
+                  'Featsel_Variance',
+                  'FeatPreProcess',
+                  'FeatureScaling',
+                  'StatisticalTestUse',
+                  'StatisticalTestMetric',
+                  'StatisticalTestThreshold',
+                  'Resampling_Use',
+                  'Resampling_Method',
+                  'Resampling_sampling_strategy',
+                  'Resampling_n_cores',
+                  'Resampling_n_neighbors',
+                  'Resampling_k_neighbors',
+                  'Resampling_threshold_cleaning',
+                  'random_seed'
+                ]
 
-    if 'UsePCA' in parameters.keys():
-        del parameters['UsePCA']
-        del parameters['PCAType']
-
-    if 'ReliefUse' in parameters.keys():
-        del parameters['ReliefUse']
-        del parameters['ReliefNN']
-        del parameters['ReliefSampleSize']
-        del parameters['ReliefDistanceP']
-        del parameters['ReliefNumFeatures']
-
-    if 'OneHotEncoding' in parameters.keys():
-        del parameters['OneHotEncoding']
-        del parameters['OneHotEncoding_feature_labels_tofit']
-
-    if 'Imputation' in parameters.keys():
-        del parameters['Imputation']
-        del parameters['ImputationMethod']
-        del parameters['ImputationNeighbours']
-
-    if 'SelectFromModel' in parameters.keys():
-        del parameters['SelectFromModel']
-        del parameters['SelectFromModel_lasso_alpha']
-        del parameters['SelectFromModel_estimator']
-        del parameters['SelectFromModel_n_trees']
-
-    if 'Featsel_Variance' in parameters.keys():
-        del parameters['Featsel_Variance']
-
-    if 'FeatPreProcess' in parameters.keys():
-        del parameters['FeatPreProcess']
-
-    if 'FeatureScaling' in parameters.keys():
-        del parameters['FeatureScaling']
-
-    if 'StatisticalTestUse' in parameters.keys():
-        del parameters['StatisticalTestUse']
-        del parameters['StatisticalTestMetric']
-        del parameters['StatisticalTestThreshold']
-
-    if 'Resampling_Use' in parameters.keys():
-        del parameters['Resampling_Use']
-        del parameters['Resampling_Method']
-        del parameters['Resampling_sampling_strategy']
-        del parameters['Resampling_n_neighbors']
-        del parameters['Resampling_k_neighbors']
-        del parameters['Resampling_threshold_cleaning']
-        del parameters['Resampling_n_cores']
-
-    if 'random_seed' in parameters.keys():
-        del parameters['random_seed']
+    for k in deletekeys:
+        if k in parameters.keys():
+            del parameters[k]
 
     return parameters
 

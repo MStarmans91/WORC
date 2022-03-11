@@ -21,8 +21,8 @@ import SimpleITK as sitk
 from WORC.addexceptions import WORCKeyError, WORCValueError
 from WORC.processing.label_processing import findlabeldata
 
-quantitative_modalities = ['CT', 'PET', 'Thermography', 'ADC']
-qualitative_modalities = ['MRI', 'DWI', 'US']
+quantitative_modalities = ['CT', 'PET', 'Thermography', 'ADC', 'MG']
+qualitative_modalities = ['MRI', 'MR', 'DWI', 'US']
 all_modalities = quantitative_modalities + qualitative_modalities
 
 

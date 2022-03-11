@@ -457,7 +457,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         """
         self._check_is_fitted('predict')
 
-
         if self.ensemble:
             return self.ensemble.predict(X)
         else:
@@ -1023,10 +1022,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if method == 'Single':
             # Do not refit all the classifiers if we only need the best one
             ensemble = [0]
+        elif method == 'top_N':
+            # Do not refit all the classifiers if we only need the best N
+            ensemble = range(0, size)
         else:
             # Refit the models and compute the predictions on the validation sets
             if verbose:
-                print('Precomputing scores on training and validation set.')
+                print('Precomputing scores on training and validation set for ensembling.')
             Y_valid_truth = list()
             performances = list()
             all_predictions = list()
@@ -1093,8 +1095,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                                                      Y_train[valid],
                                                                      predictions))
 
-                        print('fitandscore: ' + str(out[0][1]) + ' and computed: ' +
-                              str(compute_performance(scoring, Y_train[valid], predictions)) + '\n')
+                        # print('fitandscore: ' + str(out[0][1]) + ' and computed: ' +
+                        #       str(compute_performance(scoring, Y_train[valid], predictions)) + '\n')
 
                         # At the end of the last iteration, store the results of this pipeline
                         if it == (n_iter - 1):
@@ -1125,15 +1127,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             single_estimator_performance = max(performances)
             iteration = 0
 
-            if method == 'top_N':
-                # Add the fixed number of best estimators to the ensemble, using the scores
-                # calculated using predict_proba
-                sortedindices = np.argsort(performances)[::-1]
-                final_size = int(min(len(sortedindices), size))
-                for est_index in range(0, final_size):
-                    ensemble.append(sortedindices[est_index])
-
-            elif method == 'FitNumber':
+            if method == 'FitNumber':
                 sortedindices = np.argsort(performances)[::-1]
                 performances_n_class = list()
 
@@ -1366,6 +1360,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         # If we only want the best solution, we use the score from cv_results_
         if method == 'Single':
             self.ensemble_validation_score = self.cv_results_['mean_test_score'][0]
+        elif method == 'top_N':
+            self.ensemble_validation_score = [self.cv_results_['mean_test_score'][i] for i in ensemble]
         else:
             selected_params = [parameters_all[i] for i in ensemble]
             val_split_scores = []
@@ -1414,6 +1410,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                               parameters_all[i],
                                               train, train,
                                               verbose=False)
+
                     estimators.append(estimator)
         else:
             # Create the ensemble trained on the full training set
@@ -1433,7 +1430,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 # Determine whether to overfit the feature scaling on the test set
                 base_estimator.overfit_scaler = overfit_scaler
 
-                estimators.append(base_estimator)
+                try:
+                    # Try a prediction to see if estimator is truly fitted
+                    base_estimator.predict(np.asarray([X_train[0][0], X_train[1][0]]))
+                    estimators.append(base_estimator)
+                except (NotFittedError, ValueError):
+                    print(f'\t\t - Estimator {enum} could not be fitted (correctly), do not include in ensemble.')
+                    pass
 
         self.ensemble = Ensemble(estimators)
         self.best_estimator_ = self.ensemble

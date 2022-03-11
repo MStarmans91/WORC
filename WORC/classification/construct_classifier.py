@@ -29,7 +29,12 @@ import scipy
 from WORC.classification.AdvancedSampler import log_uniform, discrete_uniform
 import WORC.addexceptions as ae
 from xgboost import XGBClassifier, XGBRegressor
-from lightgbm import LGBMClassifier
+
+try:
+    from lightgbm import LGBMClassifier
+except:
+    print("[INFO] LightGCM classifier currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.")
+
 
 
 def construct_classifier(config):
