@@ -31,7 +31,7 @@ from WORC.plotting.compute_CI import compute_confidence_bootstrap
 
 
 def fit_thresholds(thresholds, estimator, label_type, X_train, Y_train,
-                   ensemble_method, ensemble, ensemble_scoring):
+                   ensemble_method, ensemble_size, ensemble_scoring):
     print('Fitting thresholds on validation set')
     if not hasattr(estimator, 'cv_iter'):
         cv_iter = list(estimator.cv.split(X_train, Y_train))
