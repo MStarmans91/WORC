@@ -33,7 +33,7 @@ from WORC.detectors.detectors import DebugDetector
 from WORC.export.hyper_params_exporter import export_hyper_params_to_latex
 from urllib.parse import urlparse
 from urllib.request import url2pathname
-from WORC.tools.fingerprinting import quantitative_modalities, qualitative_modalities
+from WORC.tools.fingerprinting import quantitative_modalities, qualitative_modalities, all_modalities
 
 
 class WORC(object):
@@ -171,6 +171,7 @@ class WORC(object):
         self.fastr_memory_parameters['Segmentix'] = '6G'
         self.fastr_memory_parameters['ComBat'] = '12G'
         self.fastr_memory_parameters['PlotEstimator'] = '12G'
+        self.fastr_memory_parameters['Fingerprinter'] = '12G'
 
         if DebugDetector().do_detection():
             print(fastr.config)
@@ -195,7 +196,7 @@ class WORC(object):
         config['General']['TransformationNode'] = "elastix4.8/Transformix:4.8"
         config['General']['Joblib_ncores'] = '1'
         config['General']['Joblib_backend'] = 'threading'
-        config['General']['tempsave'] = 'False'
+        config['General']['tempsave'] = 'True'
         config['General']['AssumeSameImageAndMaskMetadata'] = 'False'
         config['General']['ComBat'] = 'False'
         config['General']['Fingerprint'] = 'True'
@@ -433,7 +434,7 @@ class WORC(object):
         config['Classification']['classifiers'] =\
             'SVM, RF, LR, LDA, QDA, GaussianNB, ' +\
             'AdaBoostClassifier, ' +\
-            'XGBClassifier, LightGBMClassifier'
+            'XGBClassifier'
         config['Classification']['max_iter'] = '100000'
         config['Classification']['SVMKernel'] = 'linear, poly, rbf'
         config['Classification']['SVMC'] = '0, 6'
@@ -490,16 +491,26 @@ class WORC(object):
         config['HyperOptimization']['scoring_method'] = 'f1_weighted'
         config['HyperOptimization']['test_size'] = '0.2'
         config['HyperOptimization']['n_splits'] = '5'
-        config['HyperOptimization']['N_iterations'] = '1000'
+        config['HyperOptimization']['N_iterations'] = '1000' # represents either wallclock time limit or nr of evaluations when using SMAC
         config['HyperOptimization']['n_jobspercore'] = '200'  # only relevant when using fastr in classification
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['memory'] = '3G'
         config['HyperOptimization']['refit_workflows'] = 'False'
 
+        # SMAC options
+        config['SMAC'] = dict()
+        config['SMAC']['use'] = 'False'
+        config['SMAC']['n_smac_cores'] = '1'
+        config['SMAC']['budget_type'] = 'evals' # ['evals', 'time']
+        config['SMAC']['budget'] = '100' # Nr of evals or time in seconds
+        config['SMAC']['init_method'] = 'random' # ['sobol', 'random']
+        config['SMAC']['init_budget'] = '20' # Nr of evals
+
         # Ensemble options
         config['Ensemble'] = dict()
-        config['Ensemble']['Use'] = '100'
+        config['Ensemble']['Method'] = 'top_N' # ['Single', 'top_N', 'FitNumber', 'ForwardSelection', 'Caruana', 'Bagging']
+        config['Ensemble']['Size'] = '100' # Size of ensemble in top_N, or number of bags in Bagging
         config['Ensemble']['Metric'] = 'Default'
 
         # Evaluation options
@@ -562,8 +573,7 @@ class WORC(object):
                         self.configs[c] = config_io.load_config(self.configs[c])
                     image_types.append(self.configs[c]['ImageFeatures']['image_type'])
 
-                all_valid_modalities = quantitative_modalities + qualitative_modalities
-                if self.configs[0]['General']['Fingerprint'] == 'True' and any(imt not in all_valid_modalities for imt in image_types):
+                if self.configs[0]['General']['Fingerprint'] == 'True' and any(imt not in all_modalities for imt in image_types):
                     m = f'One of your image types {image_types} is not one of the valid image types {quantitative_modalities + qualitative_modalities}. This is mandatory to set when performing fingerprinting, see the WORC Documentation (https://worc.readthedocs.io/en/latest/static/configuration.html#imagefeatures).'
                     raise WORCexceptions.WORCValueError(m)
 
@@ -602,10 +612,16 @@ class WORC(object):
                     self.fixedsplits_node = self.network.create_source('CSVFile', id='fixedsplits_source', node_group='conf', step_id='general_sources')
                     self.classify.inputs['fixedsplits'] = self.fixedsplits_node.output
 
-                self.source_Ensemble =\
-                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Use']],
-                                                 id='Ensemble',
+                self.source_ensemble_method =\
+                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Method']],
+                                                 id='ensemble_method',
                                                  step_id='Evaluation')
+
+                self.source_ensemble_size =\
+                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Size']],
+                                                 id='ensemble_size',
+                                                 step_id='Evaluation')
+
                 self.source_LabelType =\
                     self.network.create_constant('String', [self.configs[0]['Labels']['label_names']],
                                                  id='LabelType',
@@ -632,7 +648,8 @@ class WORC(object):
                 self.link_class_2 = self.network.create_link(self.source_patientclass_train.output, self.classify.inputs['patientclass_train'])
                 self.link_class_2.collapse = 'pctrain'
 
-                self.plot_estimator.inputs['ensemble'] = self.source_Ensemble.output
+                self.plot_estimator.inputs['ensemble_method'] = self.source_ensemble_method.output
+                self.plot_estimator.inputs['ensemble_size'] = self.source_ensemble_size.output
                 self.plot_estimator.inputs['label_type'] = self.source_LabelType.output
 
                 if self.labels_test:
@@ -642,6 +659,12 @@ class WORC(object):
 
                 self.plot_estimator.inputs['prediction'] = self.classify.outputs['classification']
                 self.plot_estimator.inputs['pinfo'] = pinfo
+
+                # Optional SMAC output
+                if self.configs[0]['SMAC']['use'] == 'True':
+                   self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results',
+                                                                     step_id='general_sinks')
+                   self.sink_smac_results.input = self.classify.outputs['smac_results']
 
                 if self.TrainTest:
                     # FIXME: the naming here is ugly
@@ -806,7 +829,7 @@ class WORC(object):
                             self.converters_masks_test[label].inputs['image'] = self.sources_masks_test[label].output
 
                         # First convert the images
-                        if any(modality in mod for modality in ['MR', 'CT', 'MG', 'PET']):
+                        if any(modality in mod for modality in all_modalities):
                             # Use WORC PXCastConvet for converting image formats
                             memory = self.fastr_memory_parameters['WORCCastConvert']
                             self.converters_im_train[label] =\
@@ -1065,10 +1088,11 @@ class WORC(object):
         images are present.
         """
         # Add fingerprinting tool
+        memory = self.fastr_memory_parameters['Fingerprinter']
         fingerprinter_node = self.network.create_node('worc/Fingerprinter:1.0',
                                                       tool_version='1.0',
                                                       id=f'fingerprinter_{id}',
-                                                      resources=ResourceLimit(memory='4G'),
+                                                      resources=ResourceLimit(memory=memory),
                                                       step_id='FingerPrinting')
 
         # Add general sources to fingerprinting node
@@ -1804,6 +1828,7 @@ class WORC(object):
 
         self.sink_data['classification'] = ("vfs://output/{}/estimator_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
+        self.sink_data['smac_results'] = ("vfs://output/{}/smac_results_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['config_classification_sink'] = ("vfs://output/{}/config_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_test_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)

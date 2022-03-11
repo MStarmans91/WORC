@@ -5,7 +5,6 @@ ghalton>=0.6.1
 imbalanced-learn==0.7.0
 jsonschema>=3.0.0,<4.0
 lifelines>=0.21.1
-lightgbm>=3.3.1
 natsort>=5.0.1
 neuroCombat>=0.2.3
 nose-parameterized>=0.5.0

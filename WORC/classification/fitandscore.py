@@ -36,14 +36,20 @@ from WORC.featureprocessing.SelectGroups import SelectGroups
 from WORC.featureprocessing.OneHotEncoderWrapper import OneHotEncoderWrapper
 import WORC
 import WORC.addexceptions as ae
+import time
 
 # Specific imports for error management
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from numpy.linalg import LinAlgError
 
-# Suppress sklearn warnings
+# Suppress some sklearn warnings. These occur when unused hyperparameters are
+# supplied, when estimators that are refitted do not converge, or parts
+# are deprecated
 import warnings
+from sklearn.exceptions import ConvergenceWarning
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=ConvergenceWarning)
 
 
 def fit_and_score(X, y, scoring,
@@ -53,9 +59,9 @@ def fit_and_score(X, y, scoring,
                   return_n_test_samples=True,
                   return_times=True, return_parameters=False,
                   return_estimator=False,
-                  error_score='raise', verbose=True,
-                  return_all=True,
-                  refit_workflows=False):
+                  error_score='raise', verbose=False,
+                  return_all=True, refit_workflows=False,
+                  use_smac=False):
     """Fit an estimator to a dataset and score the performance.
 
     The following
@@ -288,6 +294,9 @@ def fit_and_score(X, y, scoring,
     if not return_all:
         del encoder
 
+    # Start the timing
+    start_time = time.time()
+
     # ------------------------------------------------------------------------
     # Feature imputation
     if 'Imputation' in para_estimator.keys():
@@ -295,7 +304,11 @@ def fit_and_score(X, y, scoring,
             imp_type = para_estimator['ImputationMethod']
             if verbose:
                 print(f'Imputing NaN with {imp_type}.')
-            imp_nn = para_estimator['ImputationNeighbours']
+            # Only used with KNN in SMAC, otherwise assign default
+            if 'ImputationNeighbours' in para_estimator.keys():
+                imp_nn = para_estimator['ImputationNeighbours']
+            else:
+                imp_nn = 8
 
             imputer = Imputer(missing_values=np.nan, strategy=imp_type,
                               n_neighbors=imp_nn)
@@ -312,7 +325,8 @@ def fit_and_score(X, y, scoring,
 
         del para_estimator['Imputation']
         del para_estimator['ImputationMethod']
-        del para_estimator['ImputationNeighbours']
+        if 'ImputationNeighbours' in para_estimator.keys():
+            del para_estimator['ImputationNeighbours']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -401,6 +415,14 @@ def fit_and_score(X, y, scoring,
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
@@ -436,6 +458,14 @@ def fit_and_score(X, y, scoring,
             print('[WARNING]: No features are selected! Probably your features have too little variance. Parameters:')
             print(parameters)
         para_estimator = delete_nonestimator_parameters(para_estimator)
+
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
 
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
@@ -474,9 +504,8 @@ def fit_and_score(X, y, scoring,
     if not return_all:
         del scaler
 
-
     # --------------------------------------------------------------------
-    # Relief feature selection, possibly multi classself.
+    # Relief feature selection, possibly multi class.
     # Needs to be done after scaling!
     # para_estimator['ReliefUse'] = 'True'
     if 'ReliefUse' in para_estimator.keys():
@@ -526,6 +555,14 @@ def fit_and_score(X, y, scoring,
             print(parameters)
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
+
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
         else:
@@ -533,61 +570,63 @@ def fit_and_score(X, y, scoring,
 
     # ------------------------------------------------------------------------
     # Perform feature selection using a model
-    para_estimator['SelectFromModel'] = 'True'
-    if 'SelectFromModel' in para_estimator.keys() and para_estimator['SelectFromModel'] == 'True':
-        model = para_estimator['SelectFromModel_estimator']
-        if verbose:
-            print(f"Selecting features using model {model}.")
-
-        if model == 'Lasso':
-            # Use lasso model for feature selection
-            alpha = para_estimator['SelectFromModel_lasso_alpha']
-            selectestimator = Lasso(alpha=alpha, random_state=random_seed)
-
-        elif model == 'LR':
-            # Use logistic regression model for feature selection
-            selectestimator = LogisticRegression(random_state=random_seed)
-
-        elif model == 'RF':
-            # Use random forest model for feature selection
-            n_estimators = para_estimator['SelectFromModel_n_trees']
-            selectestimator = RandomForestClassifier(n_estimators=n_estimators,
-                                                     random_state=random_seed)
-        else:
-            raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
-
-        if len(y_train.shape) >= 2:
-            # Multilabel or regression. Regression: second dimension has length 1
-            if y_train.shape[1] > 1 and model != 'RF':
-                raise ae.WORCValueError(f'Model {model} is not suitable for multiclass classification. Please use RF or do not use SelectFromModel.')
-
-        # Prefit model
-        selectestimator.fit(X_train, y_train)
-
-        # Use fit to select optimal features
-        SelectModel = SelectFromModel(selectestimator, prefit=True)
-        if verbose:
-            print("\t Original Length: " + str(len(X_train[0])))
-
-        X_train_temp = SelectModel.transform(X_train)
-        if len(X_train_temp[0]) == 0:
-            if verbose:
-                print('[WORC WARNING]: No features are selected! Probably your data is too noisy or the selection too strict. Skipping SelectFromModel.')
-            SelectModel = None
-            parameters['SelectFromModel'] = 'False'
-        else:
-            X_train = SelectModel.transform(X_train)
-            X_test = SelectModel.transform(X_test)
-            feature_labels = SelectModel.transform(feature_labels)
-
-            if verbose:
-                print("\t New Length: " + str(len(X_train[0])))
-
     if 'SelectFromModel' in para_estimator.keys():
+        if para_estimator['SelectFromModel'] == 'True':
+            model = para_estimator['SelectFromModel_estimator']
+            if verbose:
+                print(f"Selecting features using model {model}.")
+
+            if model == 'Lasso':
+                # Use lasso model for feature selection
+                alpha = para_estimator['SelectFromModel_lasso_alpha']
+                selectestimator = Lasso(alpha=alpha, random_state=random_seed)
+
+            elif model == 'LR':
+                # Use logistic regression model for feature selection
+                selectestimator = LogisticRegression(random_state=random_seed)
+
+            elif model == 'RF':
+                # Use random forest model for feature selection
+                n_estimators = para_estimator['SelectFromModel_n_trees']
+                selectestimator = RandomForestClassifier(n_estimators=n_estimators,
+                                                         random_state=random_seed)
+            else:
+                raise ae.WORCKeyError(f'Model {model} is not known for SelectFromModel. Use Lasso, LR, or RF.')
+
+            if len(y_train.shape) >= 2:
+                # Multilabel or regression. Regression: second dimension has length 1
+                if y_train.shape[1] > 1 and model != 'RF':
+                    raise ae.WORCValueError(f'Model {model} is not suitable for multiclass classification. Please use RF or do not use SelectFromModel.')
+
+            # Prefit model
+            selectestimator.fit(X_train, y_train)
+
+            # Use fit to select optimal features
+            SelectModel = SelectFromModel(selectestimator, prefit=True)
+            if verbose:
+                print("\t Original Length: " + str(len(X_train[0])))
+
+            X_train_temp = SelectModel.transform(X_train)
+            if len(X_train_temp[0]) == 0:
+                if verbose:
+                    print('[WORC WARNING]: No features are selected! Probably your data is too noisy or the selection too strict. Skipping SelectFromModel.')
+                SelectModel = None
+                parameters['SelectFromModel'] = 'False'
+            else:
+                X_train = SelectModel.transform(X_train)
+                X_test = SelectModel.transform(X_test)
+                feature_labels = SelectModel.transform(feature_labels)
+
+                if verbose:
+                    print("\t New Length: " + str(len(X_train[0])))
+
         del para_estimator['SelectFromModel']
-        del para_estimator['SelectFromModel_lasso_alpha']
-        del para_estimator['SelectFromModel_estimator']
-        del para_estimator['SelectFromModel_n_trees']
+        if 'SelectFromModel_lasso_alpha' in para_estimator.keys():
+            del para_estimator['SelectFromModel_lasso_alpha']
+        if 'SelectFromModel_estimator' in para_estimator.keys():
+            del para_estimator['SelectFromModel_estimator']
+        if 'SelectFromModel_n_trees' in para_estimator.keys():
+            del para_estimator['SelectFromModel_n_trees']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -600,6 +639,14 @@ def fit_and_score(X, y, scoring,
             print('[WARNING]: No features are selected! Probably SelectFromModel could not properly select features. Parameters:')
             print(parameters)
         para_estimator = delete_nonestimator_parameters(para_estimator)
+
+        # Update the runtime
+        end_time = time.time()
+        runtime = end_time - start_time
+        if return_train_score:
+            ret[3] = runtime
+        else:
+            ret[2] = runtime
 
         if return_all:
             return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
@@ -623,6 +670,15 @@ def fit_and_score(X, y, scoring,
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
                 pca = None
+
+                # Update the runtime
+                end_time = time.time()
+                runtime = end_time - start_time
+                if return_train_score:
+                    ret[3] = runtime
+                else:
+                    ret[2] = runtime
+
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
@@ -644,6 +700,15 @@ def fit_and_score(X, y, scoring,
                     print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
 
                 pca = None
+
+                # Update the runtime
+                end_time = time.time()
+                runtime = end_time - start_time
+                if return_train_score:
+                    ret[3] = runtime
+                else:
+                    ret[2] = runtime
+
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
                 else:
@@ -686,7 +751,8 @@ def fit_and_score(X, y, scoring,
 
     if 'UsePCA' in para_estimator.keys():
         del para_estimator['UsePCA']
-        del para_estimator['PCAType']
+        if 'PCAType' in para_estimator.keys():
+            del para_estimator['PCAType']
 
     # --------------------------------------------------------------------
     # Feature selection based on a statistical test
@@ -706,8 +772,21 @@ def fit_and_score(X, y, scoring,
             if len(X_train_temp[0]) == 0:
                 if verbose:
                     print('[WORC WARNING]: No features are selected! Probably your statistical test feature selection was too strict. Skipping thresholding.')
-                StatisticalSel = None
-                parameters['StatisticalTestUse'] = 'False'
+                para_estimator = delete_nonestimator_parameters(para_estimator)
+                # Update the runtime
+                end_time = time.time()
+                runtime = end_time - start_time
+                if return_train_score:
+                    ret[3] = runtime
+                else:
+                    ret[2] = runtime
+                if return_all:
+                    return ret, GroupSel, VarSel, SelectModel,\
+                           feature_labels[0], scaler, encoder, imputer, pca,\
+                           StatisticalSel, ReliefSel, Sampler
+                else:
+                    return ret
+
             else:
                 X_train = StatisticalSel.transform(X_train)
                 X_test = StatisticalSel.transform(X_test)
@@ -716,9 +795,13 @@ def fit_and_score(X, y, scoring,
             if verbose:
                 print("\t New Length: " + str(len(X_train[0])))
 
+        # Delete the statistical test keys
         del para_estimator['StatisticalTestUse']
-        del para_estimator['StatisticalTestMetric']
-        del para_estimator['StatisticalTestThreshold']
+        if 'StatisticalTestMetric' in para_estimator.keys():
+            del para_estimator['StatisticalTestMetric']
+
+        if 'StatisticalTestThreshold' in para_estimator.keys():
+            del para_estimator['StatisticalTestThreshold']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -734,8 +817,21 @@ def fit_and_score(X, y, scoring,
             neg_initial = int(len(y_train) - pos_initial)
             len_in = len(y_train)
 
+            # If SMAC has removed a certain parameter, add a dummy altough
+            # it's not actually used
+            if 'Resampling_sampling_strategy' not in para_estimator.keys():
+                para_estimator['Resampling_sampling_strategy'] = None
+
+            if 'Resampling_n_neighbors' not in para_estimator.keys():
+                para_estimator['Resampling_n_neighbors'] = None
+
+            if 'Resampling_k_neighbors' not in para_estimator.keys():
+                para_estimator['Resampling_k_neighbors'] = None
+
+            if 'Resampling_threshold_cleaning' not in para_estimator.keys():
+                para_estimator['Resampling_threshold_cleaning'] = None
+
             # Fit ObjectSampler and transform dataset
-            # NOTE: need to save random state for this one as well!
             Sampler =\
                 ObjectSampler(method=para_estimator['Resampling_Method'],
                               sampling_strategy=para_estimator['Resampling_sampling_strategy'],
@@ -764,6 +860,14 @@ def fit_and_score(X, y, scoring,
                         print(f'[WARNING]: {e}. Returning dummies. Parameters: ')
                         print(parameters)
                     para_estimator = delete_nonestimator_parameters(para_estimator)
+
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
 
                     if return_all:
                         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
@@ -795,13 +899,25 @@ def fit_and_score(X, y, scoring,
                     train = np.arange(0, len(y_train))
                     test = np.arange(len(y_train), len(y_train) + len(y_test))
 
+        # Delete the resampling parameters
         del para_estimator['Resampling_Use']
-        del para_estimator['Resampling_Method']
-        del para_estimator['Resampling_sampling_strategy']
-        del para_estimator['Resampling_n_neighbors']
-        del para_estimator['Resampling_k_neighbors']
-        del para_estimator['Resampling_threshold_cleaning']
-        del para_estimator['Resampling_n_cores']
+        if 'Resampling_Method' in para_estimator.keys():
+            del para_estimator['Resampling_Method']
+
+        if 'Resampling_sampling_strategy' in para_estimator.keys():
+            del para_estimator['Resampling_sampling_strategy']
+
+        if 'Resampling_n_neighbors' in para_estimator.keys():
+            del para_estimator['Resampling_n_neighbors']
+
+        if 'Resampling_k_neighbors' in para_estimator.keys():
+            del para_estimator['Resampling_k_neighbors']
+
+        if 'Resampling_threshold_cleaning' in para_estimator.keys():
+            del para_estimator['Resampling_threshold_cleaning']
+
+        if 'Resampling_n_cores' in para_estimator.keys():
+            del para_estimator['Resampling_n_cores']
 
     # Delete the object if we do not need to return it
     if not return_all:
@@ -855,6 +971,14 @@ def fit_and_score(X, y, scoring,
             if verbose:
                 print(f'[WARNING]: skipping this setting due to LDA Error: {e}.')
 
+            # Update the runtime
+            end_time = time.time()
+            runtime = end_time - start_time
+            if return_train_score:
+                ret[3] = runtime
+            else:
+                ret[2] = runtime
+
             if return_all:
                 return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
             else:
@@ -872,6 +996,14 @@ def fit_and_score(X, y, scoring,
                                   train=indices, test=indices)
         ret.append(estimator)
 
+    # End the timing and store the fit_time
+    end_time = time.time()
+    runtime = end_time - start_time
+    if return_train_score:
+        ret[3] = runtime
+    else:
+        ret[2] = runtime
+
     if return_all:
         return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
     else:
@@ -884,60 +1016,41 @@ def delete_nonestimator_parameters(parameters):
     Delete all parameters in a parameter dictionary that are not used for the
     actual estimator.
     """
-    if 'Number' in parameters.keys():
-        del parameters['Number']
+    deletekeys = ['Number',
+                  'UsePCA',
+                  'PCAType',
+                  'ReliefUse',
+                  'ReliefNN',
+                  'ReliefSampleSize',
+                  'ReliefNumFeatures',
+                  'OneHotEncoding',
+                  'OneHotEncoding_feature_labels_tofit',
+                  'Imputation',
+                  'ImputationMethod',
+                  'ImputationNeighbours',
+                  'SelectFromModel',
+                  'SelectFromModel_lasso_alpha',
+                  'SelectFromModel_estimator',
+                  'SelectFromModel_n_trees',
+                  'Featsel_Variance',
+                  'FeatPreProcess',
+                  'FeatureScaling',
+                  'StatisticalTestUse',
+                  'StatisticalTestMetric',
+                  'StatisticalTestThreshold',
+                  'Resampling_Use',
+                  'Resampling_Method',
+                  'Resampling_sampling_strategy',
+                  'Resampling_n_cores',
+                  'Resampling_n_neighbors',
+                  'Resampling_k_neighbors',
+                  'Resampling_threshold_cleaning',
+                  'random_seed'
+                ]
 
-    if 'UsePCA' in parameters.keys():
-        del parameters['UsePCA']
-        del parameters['PCAType']
-
-    if 'ReliefUse' in parameters.keys():
-        del parameters['ReliefUse']
-        del parameters['ReliefNN']
-        del parameters['ReliefSampleSize']
-        del parameters['ReliefDistanceP']
-        del parameters['ReliefNumFeatures']
-
-    if 'OneHotEncoding' in parameters.keys():
-        del parameters['OneHotEncoding']
-        del parameters['OneHotEncoding_feature_labels_tofit']
-
-    if 'Imputation' in parameters.keys():
-        del parameters['Imputation']
-        del parameters['ImputationMethod']
-        del parameters['ImputationNeighbours']
-
-    if 'SelectFromModel' in parameters.keys():
-        del parameters['SelectFromModel']
-        del parameters['SelectFromModel_lasso_alpha']
-        del parameters['SelectFromModel_estimator']
-        del parameters['SelectFromModel_n_trees']
-
-    if 'Featsel_Variance' in parameters.keys():
-        del parameters['Featsel_Variance']
-
-    if 'FeatPreProcess' in parameters.keys():
-        del parameters['FeatPreProcess']
-
-    if 'FeatureScaling' in parameters.keys():
-        del parameters['FeatureScaling']
-
-    if 'StatisticalTestUse' in parameters.keys():
-        del parameters['StatisticalTestUse']
-        del parameters['StatisticalTestMetric']
-        del parameters['StatisticalTestThreshold']
-
-    if 'Resampling_Use' in parameters.keys():
-        del parameters['Resampling_Use']
-        del parameters['Resampling_Method']
-        del parameters['Resampling_sampling_strategy']
-        del parameters['Resampling_n_neighbors']
-        del parameters['Resampling_k_neighbors']
-        del parameters['Resampling_threshold_cleaning']
-        del parameters['Resampling_n_cores']
-
-    if 'random_seed' in parameters.keys():
-        del parameters['random_seed']
+    for k in deletekeys:
+        if k in parameters.keys():
+            del parameters[k]
 
     return parameters
 

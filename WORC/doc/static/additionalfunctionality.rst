@@ -133,6 +133,34 @@ When using ComBat, the following configurations should be done:
     Hence, to avoid serious overfitting, we advice to **NEVER** use the variable
     you are trying to predict as the moderation variable.
 
+Bayesian optimization with SMAC instead of random search
+--------------------------------------------------------
+.. note:: The SMAC algorithm only works on Linux, because of its random forest surrogate model
+    implementation. Make sure to use ``swig3.0``. To circumvent ``pyrfr`` issues
+    with SMAC, we use a custom fork of the original SMAC package that needs to be installed separately.
+
+Steps to take in order to use SMAC within WORC:
+
+1. ``sudo apt-get remove swig``
+2. ``sudo apt-get install swig3.0``
+3. ``sudo ln -s /usr/bin/swig3.0 /usr/bin/swig``
+4. ``pip install pyrfr==0.8.0``
+5. ``pip install git+https://github.com/mitchelldeen/SMAC3.git``
+
+The SMAC algorithm, using Bayesian optimization, can be used for the hyperparameter optimization by
+setting the ``config['SMAC']['use']`` parameter to ``'True'``. For details on which SMAC parameters
+can be modified, see :ref:`Config chapter <config-chapter>`.
+
+The core functionality of SMAC within WORC is implemented in
+:py:mod:`WORC.resources.fastr_tools.worc.bin.smac_tool`. The configuration space of SMAC is specified
+in :py:mod:`WORC.classification.smac`, which is also where new methods can be added to the search space.
+
+There is additional output when using SMAC. The final output file ``smac_results_all_0.json``
+is added along with the regular performance file in the output folder. It contains information on the
+optimization procedure for each cross-validation split, with statistics on the performance and all
+intermediate best found configurations.The end of the file contains a summary of the average statistics
+over all train-test cross-validations.
+
 Multilabel classification and regression
 ----------------------------------------
 While ``WORC`` was primarily designed for binary classification, as also

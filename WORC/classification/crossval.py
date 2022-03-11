@@ -22,7 +22,7 @@ import os
 import time
 from time import gmtime, strftime
 from sklearn.model_selection import train_test_split, LeaveOneOut
-from .parameter_optimization import random_search_parameters
+from .parameter_optimization import random_search_parameters, guided_search_parameters
 import WORC.addexceptions as ae
 from WORC.classification.regressors import regressors
 import glob
@@ -40,7 +40,8 @@ def random_split_cross_validation(image_features, feature_labels, classes,
                                   fixedsplits=None,
                                   fixed_seed=False, use_fastr=None,
                                   fastr_plugin=None,
-                                  do_test_RS_Ensemble=False):
+                                  do_test_RS_Ensemble=False,
+                                  use_SMAC=False, smac_result_file=None):
     """Cross-validation in which data is randomly split in each iteration.
 
     Due to options of doing single-label and multi-label classification,
@@ -212,12 +213,21 @@ def random_split_cross_validation(image_features, feature_labels, classes,
         config['HyperOptimization']['use_fastr'] = use_fastr
         config['HyperOptimization']['fastr_plugin'] = fastr_plugin
         n_cores = config['General']['Joblib_ncores']
-        trained_classifier = random_search_parameters(features=X_train,
-                                                      labels=Y_train,
-                                                      param_grid=param_grid,
-                                                      n_cores=n_cores,
-                                                      random_seed=random_seed,
-                                                      **config['HyperOptimization'])
+        if use_SMAC:
+            trained_classifier = guided_search_parameters(features=X_train,
+                                                          labels=Y_train,
+                                                          parameters=config,
+                                                          n_cores=n_cores,
+                                                          random_seed=random_seed,
+                                                          smac_result_file=smac_result_file,
+                                                          **config['HyperOptimization'])
+        else:
+            trained_classifier = random_search_parameters(features=X_train,
+                                                          labels=Y_train,
+                                                          param_grid=param_grid,
+                                                          n_cores=n_cores,
+                                                          random_seed=random_seed,
+                                                          **config['HyperOptimization'])
 
         # We only want to save the feature values and one label array
         X_train = [x[0] for x in X_train]
@@ -278,7 +288,8 @@ def LOO_cross_validation(image_features, feature_labels, classes, patient_ids,
                          modus, test_size, start=0, save_data=None,
                          tempsave=False, tempfolder=None, fixedsplits=None,
                          fixed_seed=False, use_fastr=None,
-                         fastr_plugin=None):
+                         fastr_plugin=None,
+                         use_SMAC=False, smac_result_file=None):
     """Cross-validation in which each sample is once used as the test set.
 
     Mostly based on the default sklearn object.
@@ -347,12 +358,21 @@ def LOO_cross_validation(image_features, feature_labels, classes, patient_ids,
         config['HyperOptimization']['use_fastr'] = use_fastr
         config['HyperOptimization']['fastr_plugin'] = fastr_plugin
         n_cores = config['General']['Joblib_ncores']
-        trained_classifier = random_search_parameters(features=X_train,
-                                                      labels=Y_train,
-                                                      param_grid=param_grid,
-                                                      n_cores=n_cores,
-                                                      random_seed=random_seed,
-                                                      **config['HyperOptimization'])
+        if use_SMAC:
+            trained_classifier = guided_search_parameters(features=X_train,
+                                                          labels=Y_train,
+                                                          parameters=config,
+                                                          n_cores=n_cores,
+                                                          random_seed=random_seed,
+                                                          smac_result_file=smac_result_file,
+                                                          **config['HyperOptimization'])
+        else:
+            trained_classifier = random_search_parameters(features=X_train,
+                                                          labels=Y_train,
+                                                          param_grid=param_grid,
+                                                          n_cores=n_cores,
+                                                          random_seed=random_seed,
+                                                          **config['HyperOptimization'])
 
         # We only want to save the feature values and one label array
         X_train = [x[0] for x in X_train]
@@ -399,7 +419,7 @@ def crossval(config, label_data, image_features,
              param_grid=None, use_fastr=False,
              fastr_plugin=None, tempsave=False,
              fixedsplits=None, ensemble={'Use': False}, outputfolder=None,
-             modus='singlelabel'):
+             modus='singlelabel', use_SMAC=False, smac_result_file=None):
     """Constructs multiple individual classifiers based on the label settings.
 
     Parameters
@@ -567,7 +587,9 @@ def crossval(config, label_data, image_features,
                                               fixedsplits=fixedsplits,
                                               fixed_seed=fixed_seed,
                                               use_fastr=use_fastr,
-                                              fastr_plugin=fastr_plugin)
+                                              fastr_plugin=fastr_plugin,
+                                              use_SMAC=use_SMAC,
+                                              smac_result_file=smac_result_file)
         elif crossval_type == 'LOO':
             print('Performing leave-one-out cross-validations.')
             logging.debug('Performing leave-one-out cross-validations.')
@@ -587,7 +609,9 @@ def crossval(config, label_data, image_features,
                                      fixedsplits=fixedsplits,
                                      fixed_seed=fixed_seed,
                                      use_fastr=use_fastr,
-                                     fastr_plugin=fastr_plugin)
+                                     fastr_plugin=fastr_plugin,
+                                     use_SMAC=use_SMAC,
+                                     smac_result_file=smac_result_file)
         else:
             raise ae.WORCKeyError(f'{crossval_type} is not a recognized cross-validation type.')
 

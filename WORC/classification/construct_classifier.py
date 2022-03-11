@@ -29,7 +29,12 @@ import scipy
 from WORC.classification.AdvancedSampler import log_uniform, discrete_uniform
 import WORC.addexceptions as ae
 from xgboost import XGBClassifier, XGBRegressor
-from lightgbm import LGBMClassifier
+
+try:
+    from lightgbm import LGBMClassifier
+except:
+    print("[INFO] LightGCM classifier currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.")
+
 
 
 def construct_classifier(config):
@@ -248,9 +253,13 @@ def construct_SVM(config, regression=False):
 
     clf.kernel = str(config['SVMKernel'])
     clf.C = config['SVMC']
-    clf.degree = config['SVMdegree']
-    clf.coef0 = config['SVMcoef0']
-    clf.gamma = config['SVMgamma']
+    # Only add the following parameters if they are defined
+    if 'SVMdegree' in config:
+        clf.degree = config['SVMdegree']
+    if 'SVMcoef0' in config:
+        clf.coef0 = config['SVMcoef0']
+    if 'SVMgamma' in config:
+        clf.gamma = config['SVMgamma']
 
     return clf
 
