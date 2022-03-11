@@ -470,7 +470,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
                     thresholds_val = fit_thresholds(thresholds, fitted_model,
                                                     label_type, X_train_temp,
-                                                    Y_train_temp, esemble_method,
+                                                    Y_train_temp, ensemble_method,
                                                     ensemble_size,
                                                     ensemble_scoring)
                     for pnum in range(len(y_score)):

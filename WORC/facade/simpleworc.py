@@ -28,7 +28,7 @@ from .helpers.exceptions import PathNotFoundException, NoImagesFoundException, \
 from WORC.addexceptions import WORCKeyError, WORCValueError, WORCAssertionError
 from .helpers.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
-    CartesiusClusterDetector
+    SnelliusClusterDetector
 
 from WORC.validators.preflightcheck import ValidatorsFactory
 from functools import wraps
@@ -115,7 +115,7 @@ class SimpleWORC():
         # Detect wether we are on a cluster
         if BigrClusterDetector().do_detection():
             self._worc.fastr_plugin = 'DRMAAExecution'
-        elif CartesiusClusterDetector().do_detection():
+        elif SnelliusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
 
     def set_fixed_splits(self, fixed_splits_csv):
@@ -633,7 +633,7 @@ class SimpleWORC():
         is enabled, jobs are parallellized over all available cores, which majorly speeds
         up the computation.
 
-        Note: SimpleWORC has an automatic detector for the BIGR and Cartesius cluster. Hence,
+        Note: SimpleWORC has an automatic detector for the BIGR and Snellius cluster. Hence,
         on those clusters, do not use the multicore execution, as this will overwrite
         the changes applied by the detectors.
         """

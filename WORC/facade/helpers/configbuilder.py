@@ -16,7 +16,7 @@
 # limitations under the License.
 
 from WORC import WORC
-from WORC.detectors.detectors import BigrClusterDetector, CartesiusClusterDetector, DebugDetector
+from WORC.detectors.detectors import BigrClusterDetector, SnelliusClusterDetector, DebugDetector
 import configparser
 import fastr
 import collections.abc
@@ -74,7 +74,7 @@ class ConfigBuilder():
                                    'fastr_plugin': 'DRMAAExecution'},
                 'HyperOptimization': {'n_jobspercore': '200'}
             }
-        elif CartesiusClusterDetector().do_detection():
+        elif SnelliusClusterDetector().do_detection():
             overrides = {
                 'Classification': {'fastr': 'True',
                                    'fastr_plugin': 'ProcessPoolExecution'},
