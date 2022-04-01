@@ -1436,7 +1436,33 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     estimators.append(base_estimator)
                 except (NotFittedError, ValueError):
                     print(f'\t\t - Estimator {enum} could not be fitted (correctly), do not include in ensemble.')
-                    pass
+                    if enum + 1 == nest and not estimators:
+                        print(f'\t\t - Reached end of ensemble ({enum + 1}), but ensemble is empty, thus go on untill we find an estimator that works')
+                        while not estimators:
+                            # We cannot have an empy ensemble, thus go on untill we find an estimator that works
+                            enum += 1
+                            p_all = self.cv_results_['params'][enum]
+
+                            # Refit a SearchCV object with the provided parameters
+                            base_estimator = clone(base_estimator)
+
+                            # Check if we need to create a multiclass estimator
+                            base_estimator.refit_and_score(X_train, Y_train, p_all,
+                                                           train, train,
+                                                           verbose=False)
+
+                            # Determine whether to overfit the feature scaling on the test set
+                            base_estimator.overfit_scaler = overfit_scaler
+
+                            try:
+                                # Try a prediction to see if estimator is truly fitted
+                                base_estimator.predict(np.asarray([X_train[0][0], X_train[1][0]]))
+                                estimators.append(base_estimator)
+                            except (NotFittedError, ValueError):
+                                pass
+                        print(f'\t\t - Needed estimator {enum}.')
+                    else:
+                        pass
 
         self.ensemble = Ensemble(estimators)
         self.best_estimator_ = self.ensemble

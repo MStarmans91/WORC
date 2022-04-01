@@ -6,16 +6,8 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-3.6.0 - Unreleased
-------------
-
-Added
-~~~~~~~
-- LightGBM classifier
-- Fingerprinting
-
-3.6.0 - Unreleased
-------------
+3.6.0 - 2022-03-31
+------------------
 
 Added
 ~~~~~~~
@@ -24,9 +16,16 @@ Added
   Instructions to install this component are provided in the documentation.
 - Besides Top_N ensembling, various other methods are added:
   'ForwardSelection', 'Caruana', and 'Bagging'
+- LightGBM classifier
+- Light fingerprinting approach to adjust config based on dataset.
+
+Fixed
+~~~~~
+- When none of the workflows to be included in the workflow converges during
+  retraining, add the next best performing workflows.
 
 3.5.0 - 2021-08-18
-------------
+------------------
 
 Fixed
 ~~~~~
