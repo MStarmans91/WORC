@@ -403,6 +403,23 @@ Specify the hyperparameter optimization procedure here.
 .. include:: ../autogen/config/WORC.config_HyperOptimization_defopts.rst
 
 
+.. _config-SMAC:
+
+SMAC
+~~~~
+WORC enables the use of the SMAC algorithm for the hyperparameter optimization.
+SMAC uses the same parameter options as the default random search, except for
+resampling which is currently not compatible with SMAC.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_SMAC_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_SMAC_defopts.rst
+
+
 .. _config-Ensemble:
 
 Ensemble

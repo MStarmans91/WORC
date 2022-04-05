@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>tools Package &mdash; WORC 3.5.0 documentation</title>
+  <title>tools Package &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -126,6 +126,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Slicer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Slicer</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.Transformix"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Transformix</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.createfixedsplits"><code class="xref py py-mod docutils literal notranslate"><span class="pre">createfixedsplits</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.tools.fingerprinting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fingerprinting</span></code> Module</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
@@ -263,7 +264,7 @@ with a certain padding</p>
 <span id="evaluate-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">Evaluate</span></code> Module<a class="headerlink" href="#module-WORC.tools.Evaluate" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WORC.tools.Evaluate.Evaluate">
-<em class="property">class </em><code class="descclassname">WORC.tools.Evaluate.</code><code class="descname">Evaluate</code><span class="sig-paren">(</span><em>label_type</em>, <em>modus='binary_classification'</em>, <em>ensemble=50</em>, <em>scores='percentages'</em>, <em>parent=None</em>, <em>features=None</em>, <em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.tools.Evaluate.</code><code class="descname">Evaluate</code><span class="sig-paren">(</span><em>label_type</em>, <em>modus='binary_classification'</em>, <em>scores='percentages'</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>parent=None</em>, <em>features=None</em>, <em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Build a network that evaluates the performance of an estimator.</p>
 <dl class="attribute">
@@ -273,7 +274,7 @@ with a certain padding</p>
 
 <dl class="method">
 <dt id="WORC.tools.Evaluate.Evaluate.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>label_type</em>, <em>modus='binary_classification'</em>, <em>ensemble=50</em>, <em>scores='percentages'</em>, <em>parent=None</em>, <em>features=None</em>, <em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>label_type</em>, <em>modus='binary_classification'</em>, <em>scores='percentages'</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>parent=None</em>, <em>features=None</em>, <em>fastr_plugin='LinearExecution'</em>, <em>name='Example'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/Evaluate.html#Evaluate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.Evaluate.Evaluate.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize object.</p>
 <dl class="simple">
 <dt>network: fastr network, default None</dt><dd><p>If you input a network, the evaluate network is added
@@ -470,6 +471,48 @@ to the existing network.</p>
 <dt id="WORC.tools.createfixedsplits.createfixedsplits">
 <code class="descclassname">WORC.tools.createfixedsplits.</code><code class="descname">createfixedsplits</code><span class="sig-paren">(</span><em>label_file=None</em>, <em>label_type=None</em>, <em>patient_IDs=None</em>, <em>test_size=0.2</em>, <em>N_iterations=1</em>, <em>regression=False</em>, <em>stratify=None</em>, <em>modus='singlelabel'</em>, <em>output=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/createfixedsplits.html#createfixedsplits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.createfixedsplits.createfixedsplits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create fixed splits for a cross validation.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-WORC.tools.fingerprinting">
+<span id="fingerprinting-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">fingerprinting</span></code> Module<a class="headerlink" href="#module-WORC.tools.fingerprinting" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WORC.tools.fingerprinting.Fingerprinter">
+<em class="property">class </em><code class="descclassname">WORC.tools.fingerprinting.</code><code class="descname">Fingerprinter</code><a class="reference internal" href="../_modules/WORC/tools/fingerprinting.html#Fingerprinter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.fingerprinting.Fingerprinter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Fingerprinting object for WORC configuration.</p>
+<dl class="attribute">
+<dt id="WORC.tools.fingerprinting.Fingerprinter.__dict__">
+<code class="descname">__dict__</code><em class="property"> = mappingproxy({'__module__': 'WORC.tools.fingerprinting', '__doc__': 'Fingerprinting object for WORC configuration.', '__init__': &lt;function Fingerprinter.__init__&gt;, 'execute': &lt;function Fingerprinter.execute&gt;, '__dict__': &lt;attribute '__dict__' of 'Fingerprinter' objects&gt;, '__weakref__': &lt;attribute '__weakref__' of 'Fingerprinter' objects&gt;})</em><a class="headerlink" href="#WORC.tools.fingerprinting.Fingerprinter.__dict__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.fingerprinting.Fingerprinter.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/fingerprinting.html#Fingerprinter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.fingerprinting.Fingerprinter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.fingerprinting.Fingerprinter.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.tools.fingerprinting'</em><a class="headerlink" href="#WORC.tools.fingerprinting.Fingerprinter.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.tools.fingerprinting.Fingerprinter.__weakref__">
+<code class="descname">__weakref__</code><a class="headerlink" href="#WORC.tools.fingerprinting.Fingerprinter.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WORC.tools.fingerprinting.Fingerprinter.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/tools/fingerprinting.html#Fingerprinter.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.tools.fingerprinting.Fingerprinter.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine fingerprint of dataset.</p>
+<dl class="simple">
+<dt>worcobject: WORC object</dt><dd><p>WORC object to fingerprint</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>

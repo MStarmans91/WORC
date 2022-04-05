@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.5.0 documentation</title>
+  <title>Configuration &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -113,6 +113,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#classification">Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#crossvalidation">CrossValidation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hyperoptimization">HyperOptimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#smac">SMAC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ensemble">Ensemble</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bootstrap">Bootstrap</a></li>
@@ -292,32 +293,38 @@ list can be created by using commas for separation, e.g.
 <tr class="row-even"><td><p>FeatureScaling</p></td>
 <td><p><a class="reference internal" href="#config-featurescaling"><span class="std std-ref">FeatureScaling</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>General</p></td>
+<tr class="row-odd"><td><p>Fingerprinting</p></td>
+<td><p><span class="xref std std-ref">Fingerprinting</span></p></td>
+</tr>
+<tr class="row-even"><td><p>General</p></td>
 <td><p><a class="reference internal" href="#config-general"><span class="std std-ref">General</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>HyperOptimization</p></td>
+<tr class="row-odd"><td><p>HyperOptimization</p></td>
 <td><p><a class="reference internal" href="#config-hyperoptimization"><span class="std std-ref">HyperOptimization</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>ImageFeatures</p></td>
+<tr class="row-even"><td><p>ImageFeatures</p></td>
 <td><p><a class="reference internal" href="#config-imagefeatures"><span class="std std-ref">ImageFeatures</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>Imputation</p></td>
+<tr class="row-odd"><td><p>Imputation</p></td>
 <td><p><a class="reference internal" href="#config-imputation"><span class="std std-ref">Imputation</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>Labels</p></td>
+<tr class="row-even"><td><p>Labels</p></td>
 <td><p><a class="reference internal" href="#config-labels"><span class="std std-ref">Labels</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>OneHotEncoding</p></td>
+<tr class="row-odd"><td><p>OneHotEncoding</p></td>
 <td><p><a class="reference internal" href="#config-onehotencoding"><span class="std std-ref">OneHotEncoding</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>Preprocessing</p></td>
+<tr class="row-even"><td><p>Preprocessing</p></td>
 <td><p><a class="reference internal" href="#config-preprocessing"><span class="std std-ref">Preprocessing</span></a></p></td>
 </tr>
-<tr class="row-even"><td><p>PyRadiomics</p></td>
+<tr class="row-odd"><td><p>PyRadiomics</p></td>
 <td><p><a class="reference internal" href="#config-pyradiomics"><span class="std std-ref">PyRadiomics</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>Resampling</p></td>
+<tr class="row-even"><td><p>Resampling</p></td>
 <td><p><a class="reference internal" href="#config-resampling"><span class="std std-ref">Resampling</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>SMAC</p></td>
+<td><p><a class="reference internal" href="#config-smac"><span class="std std-ref">SMAC</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>Segmentix</p></td>
 <td><p><a class="reference internal" href="#config-segmentix"><span class="std std-ref">Segmentix</span></a></p></td>
@@ -381,6 +388,9 @@ backend.</p>
 <tr class="row-even"><td><p>ComBat</p></td>
 <td><p>Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See &lt;<a class="reference external" href="https://github.com/Jfortin1/ComBatHarmonization">https://github.com/Jfortin1/ComBatHarmonization</a> for more information./&gt;`_ .</p></td>
 </tr>
+<tr class="row-odd"><td><p>Fingerprint</p></td>
+<td><p>Whether to use Fingerprinting or not.</p></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
@@ -430,7 +440,7 @@ backend.</p>
 <td><p>multiprocessing, threading</p></td>
 </tr>
 <tr class="row-even"><td><p>tempsave</p></td>
-<td><p>False</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-odd"><td><p>AssumeSameImageAndMaskMetadata</p></td>
@@ -439,6 +449,10 @@ backend.</p>
 </tr>
 <tr class="row-even"><td><p>ComBat</p></td>
 <td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fingerprint</p></td>
+<td><p>True</p></td>
 <td><p>True, False</p></td>
 </tr>
 </tbody>
@@ -704,7 +718,7 @@ tool in the general configuration.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>mask</p></td>
-<td><p>If a mask is supplied, should the mask be subtracted from the contour or multiplied.</p></td>
+<td><p>If None, masks will not be used by segmentix. If a mask is supplied, should the mask be subtracted from the contour or multiplied.</p></td>
 </tr>
 <tr class="row-odd"><td><p>segtype</p></td>
 <td><p>If Ring, then a ring around the segmentation will be used as contour. If Dilate, the segmentation will be dilated per 2-D axial slice with a disc.</p></td>
@@ -729,9 +743,9 @@ tool in the general configuration.</p>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 43%" />
-<col style="width: 17%" />
 <col style="width: 39%" />
+<col style="width: 14%" />
+<col style="width: 47%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -741,8 +755,8 @@ tool in the general configuration.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>mask</p></td>
-<td><p>subtract</p></td>
-<td><p>subtract, multiply</p></td>
+<td><p>None</p></td>
+<td><p>None, subtract, multiply</p></td>
 </tr>
 <tr class="row-odd"><td><p>segtype</p></td>
 <td><p>None</p></td>
@@ -780,8 +794,8 @@ are computed or not.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 12%" />
-<col style="width: 88%" />
+<col style="width: 7%" />
+<col style="width: 93%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -832,51 +846,54 @@ are computed or not.</p>
 <td><p>Determine whether local phase features are computed or not.</p></td>
 </tr>
 <tr class="row-even"><td><p>image_type</p></td>
-<td><p>Modality of images supplied. Determines how the image is loaded.</p></td>
+<td><p>Modality of images supplied. Determines how the image is loaded. Mandatory to supply by user. Should be one of the valid quantitative modalities [‘CT’, ‘PET’, ‘Thermography’, ‘ADC’, ‘MG’] or qualitative modalities [‘MRI’, ‘MR’, ‘DWI’, ‘US’].</p></td>
 </tr>
-<tr class="row-odd"><td><p>gabor_frequencies</p></td>
+<tr class="row-odd"><td><p>extraction_mode</p></td>
+<td><p>Determine how to extract the features: 2D if your masks and/or images have only one 2D slice, 3D for tru 3D images, 2.5D for 3D images but in a slice-by-slice stacked 2D manner. The latter is recommended when the slice thickness is much larger (&gt;2) than the pixel spacing.</p></td>
+</tr>
+<tr class="row-even"><td><p>gabor_frequencies</p></td>
 <td><p>Frequencies of Gabor filters used: can be a single float or a list.</p></td>
 </tr>
-<tr class="row-even"><td><p>gabor_angles</p></td>
+<tr class="row-odd"><td><p>gabor_angles</p></td>
 <td><p>Angles of Gabor filters in degrees: can be a single integer or a list.</p></td>
 </tr>
-<tr class="row-odd"><td><p>GLCM_angles</p></td>
+<tr class="row-even"><td><p>GLCM_angles</p></td>
 <td><p>Angles used in GLCM computation in radians: can be a single float or a list.</p></td>
 </tr>
-<tr class="row-even"><td><p>GLCM_levels</p></td>
+<tr class="row-odd"><td><p>GLCM_levels</p></td>
 <td><p>Number of grayscale levels used in discretization before GLCM computation.</p></td>
 </tr>
-<tr class="row-odd"><td><p>GLCM_distances</p></td>
+<tr class="row-even"><td><p>GLCM_distances</p></td>
 <td><p>Distance(s) used in GLCM computation in pixels: can be a single integer or a list.</p></td>
 </tr>
-<tr class="row-even"><td><p>LBP_radius</p></td>
+<tr class="row-odd"><td><p>LBP_radius</p></td>
 <td><p>Radii used for LBP computation: can be a single integer or a list.</p></td>
 </tr>
-<tr class="row-odd"><td><p>LBP_npoints</p></td>
+<tr class="row-even"><td><p>LBP_npoints</p></td>
 <td><p>Number(s) of points used in LBP computation: can be a single integer or a list.</p></td>
 </tr>
-<tr class="row-even"><td><p>phase_minwavelength</p></td>
+<tr class="row-odd"><td><p>phase_minwavelength</p></td>
 <td><p>Minimal wavelength in pixels used for phase features.</p></td>
 </tr>
-<tr class="row-odd"><td><p>phase_nscale</p></td>
+<tr class="row-even"><td><p>phase_nscale</p></td>
 <td><p>Number of scales used in phase feature computation.</p></td>
 </tr>
-<tr class="row-even"><td><p>log_sigma</p></td>
+<tr class="row-odd"><td><p>log_sigma</p></td>
 <td><p>Standard deviation(s) in pixels used in log feature computation: can be a single integer or a list.</p></td>
 </tr>
-<tr class="row-odd"><td><p>vessel_scale_range</p></td>
+<tr class="row-even"><td><p>vessel_scale_range</p></td>
 <td><p>Scale in pixels used for Frangi vessel filter. Given as a minimum and a maximum.</p></td>
 </tr>
-<tr class="row-even"><td><p>vessel_scale_step</p></td>
+<tr class="row-odd"><td><p>vessel_scale_step</p></td>
 <td><p>Step size used to go from minimum to maximum scale on Frangi vessel filter.</p></td>
 </tr>
-<tr class="row-odd"><td><p>vessel_radius</p></td>
+<tr class="row-even"><td><p>vessel_radius</p></td>
 <td><p>Radius to determine boundary of between inner part and edge in Frangi vessel filter.</p></td>
 </tr>
-<tr class="row-even"><td><p>dicom_feature_tags</p></td>
+<tr class="row-odd"><td><p>dicom_feature_tags</p></td>
 <td><p>DICOM tags to be extracted as features. See <a class="reference external" href="https://worc.readthedocs.io/en/latest/static/features.html">https://worc.readthedocs.io/en/latest/static/features.html</a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p>dicom_feature_labels</p></td>
+<tr class="row-even"><td><p>dicom_feature_labels</p></td>
 <td><p>For each of the DICOM tag values extracted, name that should be assigned to the feature. See <a class="reference external" href="https://worc.readthedocs.io/en/latest/static/features.html">https://worc.readthedocs.io/en/latest/static/features.html</a>.</p></td>
 </tr>
 </tbody>
@@ -952,66 +969,70 @@ are computed or not.</p>
 <td><p>True, False</p></td>
 </tr>
 <tr class="row-even"><td><p>image_type</p></td>
-<td><p>CT</p></td>
-<td><p>CT</p></td>
+<td></td>
+<td><p>String</p></td>
 </tr>
-<tr class="row-odd"><td><p>gabor_frequencies</p></td>
+<tr class="row-odd"><td><p>extraction_mode</p></td>
+<td><p>2.5D</p></td>
+<td><p>String: 2D, 2.5D or 3D</p></td>
+</tr>
+<tr class="row-even"><td><p>gabor_frequencies</p></td>
 <td><p>0.05, 0.2, 0.5</p></td>
 <td><p>Float(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>gabor_angles</p></td>
+<tr class="row-odd"><td><p>gabor_angles</p></td>
 <td><p>0, 45, 90, 135</p></td>
 <td><p>Integer(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>GLCM_angles</p></td>
+<tr class="row-even"><td><p>GLCM_angles</p></td>
 <td><p>0, 0.79, 1.57, 2.36</p></td>
 <td><p>Float(s)</p></td>
 </tr>
-<tr class="row-even"><td><p>GLCM_levels</p></td>
+<tr class="row-odd"><td><p>GLCM_levels</p></td>
 <td><p>16</p></td>
 <td><p>Integer &gt; 0</p></td>
 </tr>
-<tr class="row-odd"><td><p>GLCM_distances</p></td>
+<tr class="row-even"><td><p>GLCM_distances</p></td>
 <td><p>1, 3</p></td>
 <td><p>Integer(s) &gt; 0</p></td>
 </tr>
-<tr class="row-even"><td><p>LBP_radius</p></td>
+<tr class="row-odd"><td><p>LBP_radius</p></td>
 <td><p>3, 8, 15</p></td>
 <td><p>Integer(s) &gt; 0</p></td>
 </tr>
-<tr class="row-odd"><td><p>LBP_npoints</p></td>
+<tr class="row-even"><td><p>LBP_npoints</p></td>
 <td><p>12, 24, 36</p></td>
 <td><p>Integer(s) &gt; 0</p></td>
 </tr>
-<tr class="row-even"><td><p>phase_minwavelength</p></td>
+<tr class="row-odd"><td><p>phase_minwavelength</p></td>
 <td><p>3</p></td>
 <td><p>Integer &gt; 0</p></td>
 </tr>
-<tr class="row-odd"><td><p>phase_nscale</p></td>
+<tr class="row-even"><td><p>phase_nscale</p></td>
 <td><p>5</p></td>
 <td><p>Integer &gt; 0</p></td>
 </tr>
-<tr class="row-even"><td><p>log_sigma</p></td>
+<tr class="row-odd"><td><p>log_sigma</p></td>
 <td><p>1, 5, 10</p></td>
 <td><p>Integer(s)</p></td>
 </tr>
-<tr class="row-odd"><td><p>vessel_scale_range</p></td>
+<tr class="row-even"><td><p>vessel_scale_range</p></td>
 <td><p>1, 10</p></td>
 <td><p>Two integers: min and max.</p></td>
 </tr>
-<tr class="row-even"><td><p>vessel_scale_step</p></td>
+<tr class="row-odd"><td><p>vessel_scale_step</p></td>
 <td><p>2</p></td>
 <td><p>Integer &gt; 0</p></td>
 </tr>
-<tr class="row-odd"><td><p>vessel_radius</p></td>
+<tr class="row-even"><td><p>vessel_radius</p></td>
 <td><p>5</p></td>
 <td><p>Integer &gt; 0</p></td>
 </tr>
-<tr class="row-even"><td><p>dicom_feature_tags</p></td>
+<tr class="row-odd"><td><p>dicom_feature_tags</p></td>
 <td><p>0010 1010, 0010 0040</p></td>
 <td><p>DICOM tag keys, e.g. 0010 0010, separated by comma’s</p></td>
 </tr>
-<tr class="row-odd"><td><p>dicom_feature_labels</p></td>
+<tr class="row-even"><td><p>dicom_feature_labels</p></td>
 <td><p>age, sex</p></td>
 <td><p>List of strings</p></td>
 </tr>
@@ -1054,7 +1075,7 @@ feature computation here. For more information, see
 <td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
 </tr>
 <tr class="row-even"><td><p>binCount</p></td>
-<td><p>We advice to use a fixed bin count instead of a fixed bin width, as on imaging modalities such as MRI, the scale of the values varies a lot, which is incompatible with a fixed bin width. See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
+<td><p>We advice to use a fixed bin count instead of a fixed bin width, as on imaging modalities such as MR, the scale of the values varies a lot, which is incompatible with a fixed bin width. See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
 </tr>
 <tr class="row-odd"><td><p>binWidth</p></td>
 <td><p>See &lt;<a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.html/">https://pyradiomics.readthedocs.io/en/latest/customization.html/</a>&gt;`_ .</p></td>
@@ -1968,8 +1989,8 @@ are picked less often by default.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 12%" />
-<col style="width: 88%" />
+<col style="width: 13%" />
+<col style="width: 87%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2079,14 +2100,32 @@ are picked less often by default.</p>
 <tr class="row-odd"><td><p>XGB_colsample_bytree</p></td>
 <td><p>Col sample by tree in XGB.</p></td>
 </tr>
+<tr class="row-even"><td><p>LightGBM_num_leaves</p></td>
+<td><p>Maximum tree leaves for base learners. See also <a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/Parameters.html">https://lightgbm.readthedocs.io/en/latest/Parameters.html</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LightGBM_max_depth</p></td>
+<td><p>Maximum tree depth for base learners. See also <a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/Parameters.html">https://lightgbm.readthedocs.io/en/latest/Parameters.html</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>LightGBM_min_child_samples</p></td>
+<td><p>Minimum number of data needed in a child (leaf). See also <a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/Parameters.html">https://lightgbm.readthedocs.io/en/latest/Parameters.html</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LightGBM_reg_alpha</p></td>
+<td><p>L1 regularization term on weights. See also <a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/Parameters.html">https://lightgbm.readthedocs.io/en/latest/Parameters.html</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p>LightGBM_reg_lambda</p></td>
+<td><p>L2 regularization term on weights. See also <a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/Parameters.html">https://lightgbm.readthedocs.io/en/latest/Parameters.html</a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LightGBM_min_child_weight</p></td>
+<td><p>Minimum sum of instance weight (hessian) needed in a child (leaf). See also <a class="reference external" href="https://lightgbm.readthedocs.io/en/latest/Parameters.html">https://lightgbm.readthedocs.io/en/latest/Parameters.html</a>.</p></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 7%" />
-<col style="width: 21%" />
-<col style="width: 73%" />
+<col style="width: 8%" />
+<col style="width: 20%" />
+<col style="width: 72%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2230,6 +2269,30 @@ are picked less often by default.</p>
 <tr class="row-odd"><td><p>XGB_colsample_bytree</p></td>
 <td><p>0.3, 0.7</p></td>
 <td><p>Two Floats: loc and scale</p></td>
+</tr>
+<tr class="row-even"><td><p>LightGBM_num_leaves</p></td>
+<td><p>5, 95</p></td>
+<td><p>Two Integers: loc and scale</p></td>
+</tr>
+<tr class="row-odd"><td><p>LightGBM_max_depth</p></td>
+<td><p>3, 12</p></td>
+<td><p>Two Integers: loc and scale</p></td>
+</tr>
+<tr class="row-even"><td><p>LightGBM_min_child_samples</p></td>
+<td><p>5, 45</p></td>
+<td><p>Two Integers: loc and scale</p></td>
+</tr>
+<tr class="row-odd"><td><p>LightGBM_reg_alpha</p></td>
+<td><p>0.01, 0.99</p></td>
+<td><p>Two Floats: loc and scale</p></td>
+</tr>
+<tr class="row-even"><td><p>LightGBM_reg_lambda</p></td>
+<td><p>0.01, 0.99</p></td>
+<td><p>Two Floats: loc and scale</p></td>
+</tr>
+<tr class="row-odd"><td><p>LightGBM_min_child_weight</p></td>
+<td><p>-7, 4</p></td>
+<td><p>Two Integers: loc and scale</p></td>
 </tr>
 </tbody>
 </table>
@@ -2393,6 +2456,84 @@ are picked less often by default.</p>
 </tbody>
 </table>
 </div>
+<div class="section" id="smac">
+<span id="config-smac"></span><h3>SMAC<a class="headerlink" href="#smac" title="Permalink to this headline">¶</a></h3>
+<p>WORC enables the use of the SMAC algorithm for the hyperparameter optimization.
+SMAC uses the same parameter options as the default random search, except for
+resampling which is currently not compatible with SMAC.</p>
+<p><strong>Description:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 92%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>use</p></td>
+<td><p>If True, use SMAC as the optimization strategy.</p></td>
+</tr>
+<tr class="row-odd"><td><p>n_smac_cores</p></td>
+<td><p>Number of independent, parallel SMAC instances to use.</p></td>
+</tr>
+<tr class="row-even"><td><p>budget_type</p></td>
+<td><p>Type of budget to use for the SMAC optimization, either an evaluation limit or a time limit.</p></td>
+</tr>
+<tr class="row-odd"><td><p>budget</p></td>
+<td><p>Size of the budget, which depends on the type of budget. Number of evaluations for an evaluation limit, or wallclock seconds for a time limit.</p></td>
+</tr>
+<tr class="row-even"><td><p>init_method</p></td>
+<td><p>Initialization method of SMAC. Supported are a random initialization or a sobol sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p>init_budget</p></td>
+<td><p>Number of evaluations used for the initialization. Always an evaluation limit, regardless of the budget type choice of the optimization.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Defaults and Options:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 22%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Options</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>use</p></td>
+<td><p>False</p></td>
+<td><p>True, False</p></td>
+</tr>
+<tr class="row-odd"><td><p>n_smac_cores</p></td>
+<td><p>1</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>budget_type</p></td>
+<td><p>evals</p></td>
+<td><p>evals, time</p></td>
+</tr>
+<tr class="row-odd"><td><p>budget</p></td>
+<td><p>100</p></td>
+<td><p>Integer</p></td>
+</tr>
+<tr class="row-even"><td><p>init_method</p></td>
+<td><p>random</p></td>
+<td><p>random, sobol</p></td>
+</tr>
+<tr class="row-odd"><td><p>init_budget</p></td>
+<td><p>20</p></td>
+<td><p>Integer</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="ensemble">
 <span id="config-ensemble"></span><h3>Ensemble<a class="headerlink" href="#ensemble" title="Permalink to this headline">¶</a></h3>
 <p>WORC supports ensembling of workflows. This is not a default approach in
@@ -2410,10 +2551,13 @@ performing workflow.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Use</p></td>
-<td><p>Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.</p></td>
+<tr class="row-even"><td><p>Method</p></td>
+<td><p>Choose which ensemble method to use. If you do not wish to use an ensemble, use Single or top_N with size 1.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Metric</p></td>
+<tr class="row-odd"><td><p>Size</p></td>
+<td><p>Number of estimators to use in the ensemble for the top_N method, or the number of bags for the Bagging method.</p></td>
+</tr>
+<tr class="row-even"><td><p>Metric</p></td>
 <td><p>Metric used to determine ranking of estimators in ensemble. When using default, the metric that is used in the hyperoptimization is used.</p></td>
 </tr>
 </tbody>
@@ -2421,9 +2565,9 @@ performing workflow.</p>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 17%" />
-<col style="width: 19%" />
-<col style="width: 64%" />
+<col style="width: 8%" />
+<col style="width: 10%" />
+<col style="width: 82%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2432,11 +2576,15 @@ performing workflow.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Use</p></td>
+<tr class="row-even"><td><p>Method</p></td>
+<td><p>top_N</p></td>
+<td><p>Single, top_N, FitNumber, ForwardSelection, Caruana, Bagging</p></td>
+</tr>
+<tr class="row-odd"><td><p>Size</p></td>
 <td><p>100</p></td>
 <td><p>Integer</p></td>
 </tr>
-<tr class="row-odd"><td><p>Metric</p></td>
+<tr class="row-even"><td><p>Metric</p></td>
 <td><p>Default</p></td>
 <td><p>Default, generalization</p></td>
 </tr>
@@ -2526,7 +2674,7 @@ performing workflow.</p>
 <td><p>Boolean</p></td>
 </tr>
 <tr class="row-odd"><td><p>N_iterations</p></td>
-<td><p>1000</p></td>
+<td><p>10000</p></td>
 <td><p>Integer</p></td>
 </tr>
 </tbody>

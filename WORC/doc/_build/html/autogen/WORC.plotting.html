@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>plotting Package &mdash; WORC 3.5.0 documentation</title>
+  <title>plotting Package &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -283,7 +283,7 @@ ratios at different thresholds for the scores of an estimator.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_ROC.plot_ROC">
-<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">plot_ROC</code><span class="sig-paren">(</span><em>prediction</em>, <em>pinfo</em>, <em>ensemble=1</em>, <em>label_type=None</em>, <em>ROC_png=None</em>, <em>ROC_tex=None</em>, <em>ROC_csv=None</em>, <em>PRC_png=None</em>, <em>PRC_tex=None</em>, <em>PRC_csv=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_ROC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_ROC" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">plot_ROC</code><span class="sig-paren">(</span><em>prediction</em>, <em>pinfo</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=1</em>, <em>label_type=None</em>, <em>ROC_png=None</em>, <em>ROC_tex=None</em>, <em>ROC_csv=None</em>, <em>PRC_png=None</em>, <em>PRC_tex=None</em>, <em>PRC_csv=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_ROC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_ROC" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -427,7 +427,7 @@ Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_estimator_performance.fit_thresholds">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">fit_thresholds</code><span class="sig-paren">(</span><em>thresholds</em>, <em>estimator</em>, <em>label_type</em>, <em>X_train</em>, <em>Y_train</em>, <em>ensemble</em>, <em>ensemble_scoring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#fit_thresholds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.fit_thresholds" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">fit_thresholds</code><span class="sig-paren">(</span><em>thresholds</em>, <em>estimator</em>, <em>label_type</em>, <em>X_train</em>, <em>Y_train</em>, <em>ensemble_method</em>, <em>ensemble_size</em>, <em>ensemble_scoring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#fit_thresholds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.fit_thresholds" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -437,7 +437,7 @@ Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_estimator_performance.plot_estimator_performance">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">plot_estimator_performance</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_data</em>, <em>label_type</em>, <em>crossval_type=None</em>, <em>alpha=0.95</em>, <em>ensemble=None</em>, <em>verbose=True</em>, <em>ensemble_scoring=None</em>, <em>output=None</em>, <em>modus=None</em>, <em>thresholds=None</em>, <em>survival=False</em>, <em>shuffle_estimators=False</em>, <em>bootstrap=None</em>, <em>bootstrap_N=None</em>, <em>overfit_scaler=None</em>, <em>save_memory=True</em>, <em>refit_ensemble=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#plot_estimator_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.plot_estimator_performance" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">plot_estimator_performance</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_data</em>, <em>label_type</em>, <em>crossval_type=None</em>, <em>alpha=0.95</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>verbose=True</em>, <em>ensemble_scoring=None</em>, <em>output=None</em>, <em>modus=None</em>, <em>thresholds=None</em>, <em>survival=False</em>, <em>shuffle_estimators=False</em>, <em>bootstrap=None</em>, <em>bootstrap_N=None</em>, <em>overfit_scaler=None</em>, <em>save_memory=True</em>, <em>refit_ensemble=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#plot_estimator_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.plot_estimator_performance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the output of a single estimator, e.g. a SVM.</p>
 <dl class="simple">
 <dt>prediction: pandas dataframe or string, mandatory</dt><dd><p>output of trainclassifier function, either a pandas dataframe
@@ -452,11 +452,10 @@ estimator on.</p>
 </dd>
 <dt>alpha: float, default 0.95</dt><dd><p>Significance of confidence intervals.</p>
 </dd>
-<dt>ensemble: False, integer or ‘Caruana’</dt><dd><p>Determine whether an ensemble will be created. If so,
-either provide an integer to determine how many of the
-top performing classifiers should be in the ensemble, or use
-the string “Caruana” to use smart ensembling based on
-Caruana et al. 2004.</p>
+<dt>ensemble_method: string, default ‘top_N’</dt><dd><p>Determine which method to use for creating the ensemble.
+Choices: top_N or Caruana</p>
+</dd>
+<dt>ensemble_size: int, default 50</dt><dd><p>Determine the size of the ensemble. Only relevant for top_N</p>
 </dd>
 <dt>verbose: boolean, default True</dt><dd><p>Plot intermedate messages.</p>
 </dd>
@@ -533,13 +532,13 @@ value in all workflows.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_images.plot_im_and_overlay">
-<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">plot_im_and_overlay</code><span class="sig-paren">(</span><em>image</em>, <em>mask=None</em>, <em>figsize=(3</em>, <em>3)</em>, <em>alpha=0.4</em>, <em>color='cyan'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#plot_im_and_overlay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.plot_im_and_overlay" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">plot_im_and_overlay</code><span class="sig-paren">(</span><em>image</em>, <em>mask=None</em>, <em>figsize=(3</em>, <em>3)</em>, <em>alpha=0.4</em>, <em>color='cyan'</em>, <em>colormap='gray'</em>, <em>colorbar=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#plot_im_and_overlay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.plot_im_and_overlay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot an image in a matplotlib figure and overlay with a mask.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_images.slicer">
-<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">slicer</code><span class="sig-paren">(</span><em>image, mask=None, output_name=None, output_name_zoom=None, thresholds=[-240, 160], zoomfactor=4, dpi=500, normalize=False, expand=False, boundary=False, square=False, flip=True, rot90=0, alpha=0.4, axis='axial', index=None, color='cyan', radius=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#slicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.slicer" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">slicer</code><span class="sig-paren">(</span><em>image, mask=None, output_name=None, output_name_zoom=None, thresholds=[-5, 5], zoomfactor=4, dpi=500, normalize=True, expand=False, boundary=False, square=False, flip=True, rot90=0, alpha=0.4, axis='axial', index=None, color='cyan', radius=2, colormap='gray'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#slicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.slicer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot slice of image where mask is largest, with mask as overlay.</p>
 <p>image and mask should both be arrays</p>
 </dd></dl>
@@ -555,11 +554,6 @@ value in all workflows.</p>
 </div>
 <div class="section" id="module-WORC.plotting.plot_ranked_scores">
 <span id="plot-ranked-scores-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_ranked_scores" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="WORC.plotting.plot_ranked_scores.example">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.example" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="function">
 <dt id="WORC.plotting.plot_ranked_scores.flatten_object">
 <code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">flatten_object</code><span class="sig-paren">(</span><em>input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#flatten_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.flatten_object" title="Permalink to this definition">¶</a></dt>
@@ -578,17 +572,17 @@ value in all workflows.</p>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_ranked_scores.plot_ranked_percentages">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_percentages</code><span class="sig-paren">(</span><em>estimator</em>, <em>pinfo</em>, <em>label_type=None</em>, <em>ensemble=50</em>, <em>output_csv=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_percentages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_percentages" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_percentages</code><span class="sig-paren">(</span><em>estimator</em>, <em>pinfo</em>, <em>label_type=None</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>output_csv=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_percentages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_percentages" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_ranked_scores.plot_ranked_posteriors">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_posteriors</code><span class="sig-paren">(</span><em>estimator</em>, <em>pinfo</em>, <em>label_type=None</em>, <em>ensemble=50</em>, <em>output_csv=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_posteriors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_posteriors" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_posteriors</code><span class="sig-paren">(</span><em>estimator</em>, <em>pinfo</em>, <em>label_type=None</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>output_csv=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_posteriors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_posteriors" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="WORC.plotting.plot_ranked_scores.plot_ranked_scores">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_scores</code><span class="sig-paren">(</span><em>estimator</em>, <em>pinfo</em>, <em>label_type</em>, <em>scores='percentages'</em>, <em>images=[]</em>, <em>segmentations=[]</em>, <em>ensemble=50</em>, <em>output_csv=None</em>, <em>output_zip=None</em>, <em>output_itk=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_scores" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_scores</code><span class="sig-paren">(</span><em>estimator</em>, <em>pinfo</em>, <em>label_type</em>, <em>scores='percentages'</em>, <em>images=[]</em>, <em>segmentations=[]</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>output_csv=None</em>, <em>output_zip=None</em>, <em>output_itk=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rank the patients according to their average score. The score can either
 be the average posterior or the percentage of times the patient was
 classified correctly in the cross validations. Additionally,
@@ -611,9 +605,9 @@ patients.</p>
 <dt>segmentations: list, optional</dt><dd><p>List containing the filepaths to the ITKImage segmentation files of
 the patients.</p>
 </dd>
-<dt>ensemble: integer or string, optional</dt><dd><p>Method to be used for ensembling. Either an integer for a fixed size
-or ‘Caruana’ for the Caruana method, see the SearchCV function for more
-details.</p>
+<dt>ensemble_method: string, optional</dt><dd><p>Method to be used for ensembling.</p>
+</dd>
+<dt>ensemble_size: int, optional</dt><dd><p>If top_N method is used, number of workflows to be included in ensemble.</p>
 </dd>
 <dt>output_csv: filepath, optional</dt><dd><p>If given, the scores will be written to this csv file.</p>
 </dd>

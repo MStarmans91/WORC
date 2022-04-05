@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.crossval &mdash; WORC 3.5.0 documentation</title>
+  <title>WORC.classification.crossval &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -187,7 +187,7 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">gmtime</span><span class="p">,</span> <span class="n">strftime</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">LeaveOneOut</span>
-<span class="kn">from</span> <span class="nn">.parameter_optimization</span> <span class="k">import</span> <span class="n">random_search_parameters</span>
+<span class="kn">from</span> <span class="nn">.parameter_optimization</span> <span class="k">import</span> <span class="n">random_search_parameters</span><span class="p">,</span> <span class="n">guided_search_parameters</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.regressors</span> <span class="k">import</span> <span class="n">regressors</span>
 <span class="kn">import</span> <span class="nn">glob</span>
@@ -205,7 +205,8 @@
                                   <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                   <span class="n">fixed_seed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                   <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                  <span class="n">do_test_RS_Ensemble</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                                  <span class="n">do_test_RS_Ensemble</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">use_SMAC</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">smac_result_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Cross-validation in which data is randomly split in each iteration.</span>
 
 <span class="sd">    Due to options of doing single-label and multi-label classification,</span>
@@ -229,6 +230,7 @@
     <span class="k">if</span> <span class="n">fixedsplits</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">n_iterations</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fixedsplits</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Fixedsplits detected, adjusting n_iterations to </span><span class="si">{n_iterations}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Fixedsplits detected, adjusting n_iterations to </span><span class="si">{n_iterations}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">n_iterations</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;Cross-validation iteration </span><span class="si">{}</span><span class="s1"> / </span><span class="si">{}</span><span class="s1"> .&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_iterations</span><span class="p">)))</span>
@@ -376,12 +378,21 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;use_fastr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_fastr</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fastr_plugin</span>
         <span class="n">n_cores</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Joblib_ncores&#39;</span><span class="p">]</span>
-        <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">random_search_parameters</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
-                                                      <span class="n">labels</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
-                                                      <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
-                                                      <span class="n">n_cores</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
-                                                      <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
-                                                      <span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">use_SMAC</span><span class="p">:</span>
+            <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">guided_search_parameters</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+                                                          <span class="n">labels</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
+                                                          <span class="n">parameters</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+                                                          <span class="n">n_cores</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
+                                                          <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+                                                          <span class="n">smac_result_file</span><span class="o">=</span><span class="n">smac_result_file</span><span class="p">,</span>
+                                                          <span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">random_search_parameters</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+                                                          <span class="n">labels</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
+                                                          <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+                                                          <span class="n">n_cores</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
+                                                          <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+                                                          <span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">])</span>
 
         <span class="c1"># We only want to save the feature values and one label array</span>
         <span class="n">X_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">]</span>
@@ -442,7 +453,8 @@
                          <span class="n">modus</span><span class="p">,</span> <span class="n">test_size</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">save_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                          <span class="n">tempsave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tempfolder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                          <span class="n">fixed_seed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                         <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                         <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                         <span class="n">use_SMAC</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">smac_result_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Cross-validation in which each sample is once used as the test set.</span>
 
 <span class="sd">    Mostly based on the default sklearn object.</span>
@@ -511,12 +523,21 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;use_fastr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">use_fastr</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;fastr_plugin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fastr_plugin</span>
         <span class="n">n_cores</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Joblib_ncores&#39;</span><span class="p">]</span>
-        <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">random_search_parameters</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
-                                                      <span class="n">labels</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
-                                                      <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
-                                                      <span class="n">n_cores</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
-                                                      <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
-                                                      <span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">use_SMAC</span><span class="p">:</span>
+            <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">guided_search_parameters</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+                                                          <span class="n">labels</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
+                                                          <span class="n">parameters</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+                                                          <span class="n">n_cores</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
+                                                          <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+                                                          <span class="n">smac_result_file</span><span class="o">=</span><span class="n">smac_result_file</span><span class="p">,</span>
+                                                          <span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">random_search_parameters</span><span class="p">(</span><span class="n">features</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+                                                          <span class="n">labels</span><span class="o">=</span><span class="n">Y_train</span><span class="p">,</span>
+                                                          <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+                                                          <span class="n">n_cores</span><span class="o">=</span><span class="n">n_cores</span><span class="p">,</span>
+                                                          <span class="n">random_seed</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+                                                          <span class="o">**</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">])</span>
 
         <span class="c1"># We only want to save the feature values and one label array</span>
         <span class="n">X_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">]</span>
@@ -563,7 +584,7 @@
              <span class="n">param_grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tempsave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Use&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="n">outputfolder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-             <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">):</span>
+             <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">,</span> <span class="n">use_SMAC</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">smac_result_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Constructs multiple individual classifiers based on the label settings.</span>
 
 <span class="sd">    Parameters</span>
@@ -731,7 +752,9 @@
                                               <span class="n">fixedsplits</span><span class="o">=</span><span class="n">fixedsplits</span><span class="p">,</span>
                                               <span class="n">fixed_seed</span><span class="o">=</span><span class="n">fixed_seed</span><span class="p">,</span>
                                               <span class="n">use_fastr</span><span class="o">=</span><span class="n">use_fastr</span><span class="p">,</span>
-                                              <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">)</span>
+                                              <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">,</span>
+                                              <span class="n">use_SMAC</span><span class="o">=</span><span class="n">use_SMAC</span><span class="p">,</span>
+                                              <span class="n">smac_result_file</span><span class="o">=</span><span class="n">smac_result_file</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">crossval_type</span> <span class="o">==</span> <span class="s1">&#39;LOO&#39;</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Performing leave-one-out cross-validations.&#39;</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Performing leave-one-out cross-validations.&#39;</span><span class="p">)</span>
@@ -751,7 +774,9 @@
                                      <span class="n">fixedsplits</span><span class="o">=</span><span class="n">fixedsplits</span><span class="p">,</span>
                                      <span class="n">fixed_seed</span><span class="o">=</span><span class="n">fixed_seed</span><span class="p">,</span>
                                      <span class="n">use_fastr</span><span class="o">=</span><span class="n">use_fastr</span><span class="p">,</span>
-                                     <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">)</span>
+                                     <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">,</span>
+                                     <span class="n">use_SMAC</span><span class="o">=</span><span class="n">use_SMAC</span><span class="p">,</span>
+                                     <span class="n">smac_result_file</span><span class="o">=</span><span class="n">smac_result_file</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{crossval_type}</span><span class="s1"> is not a recognized cross-validation type.&#39;</span><span class="p">)</span>
 

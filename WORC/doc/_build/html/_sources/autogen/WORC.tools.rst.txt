@@ -55,3 +55,12 @@ tools Package
     :show-inheritance:
     :special-members:
 
+:mod:`fingerprinting` Module
+----------------------------
+
+.. automodule:: WORC.tools.fingerprinting
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+

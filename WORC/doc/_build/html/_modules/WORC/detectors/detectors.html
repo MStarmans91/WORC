@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.detectors.detectors &mdash; WORC 3.5.0 documentation</title>
+  <title>WORC.detectors.detectors &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -229,11 +229,11 @@
             <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="CartesiusClusterDetector"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.CartesiusClusterDetector">[docs]</a><span class="k">class</span> <span class="nc">CartesiusClusterDetector</span><span class="p">(</span><span class="n">AbstractDetector</span><span class="p">):</span>
+<div class="viewcode-block" id="SnelliusClusterDetector"><a class="viewcode-back" href="../../../autogen/WORC.detectors.html#WORC.detectors.detectors.SnelliusClusterDetector">[docs]</a><span class="k">class</span> <span class="nc">SnelliusClusterDetector</span><span class="p">(</span><span class="n">AbstractDetector</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">_is_detected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">LinuxDetector</span><span class="p">()</span><span class="o">.</span><span class="n">_is_detected</span><span class="p">():</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">if</span> <span class="s1">&#39;cartesius&#39;</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/etc/hosts&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">():</span>
+                <span class="k">if</span> <span class="s1">&#39;localhost6.localdomain6&#39;</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/etc/hosts&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">():</span>
                     <span class="k">return</span> <span class="kc">True</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">False</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quick start guide &mdash; WORC 3.5.0 documentation</title>
+  <title>Quick start guide &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -346,6 +346,11 @@ a subset of 20 patients in this folder. You can change this settings if you like
                                     <span class="n">segmentation_file_name</span><span class="o">=</span><span class="n">segmentation_file_name</span><span class="p">)</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">labels_from_this_file</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">predict_labels</span><span class="p">(</span><span class="n">label_name</span><span class="p">)</span>
+
+<span class="c1"># Set the types of images WORC has to process. Used in fingerprinting</span>
+<span class="c1"># Valid quantitative types are [&#39;CT&#39;, &#39;PET&#39;, &#39;Thermography&#39;, &#39;ADC&#39;]</span>
+<span class="c1"># Valid qualitative types are [&#39;MRI&#39;, &#39;DWI&#39;, &#39;US&#39;]</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">set_image_types</span><span class="p">([</span><span class="s1">&#39;CT&#39;</span><span class="p">])</span>
 
 <span class="c1"># Use the standard workflow for your specific modus</span>
 <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;binary_classification&#39;</span><span class="p">:</span>

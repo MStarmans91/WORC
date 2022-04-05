@@ -20,7 +20,7 @@ OneHotEncoding    :ref:`OneHotEncoding <config-OneHotEncoding>`
 Preprocessing     :ref:`Preprocessing <config-Preprocessing>`        
 PyRadiomics       :ref:`PyRadiomics <config-PyRadiomics>`            
 Resampling        :ref:`Resampling <config-Resampling>`              
+SMAC              :ref:`SMAC <config-SMAC>`                          
 Segmentix         :ref:`Segmentix <config-Segmentix>`                
-SelectFeatGroup   :ref:`SelectFeatGroup <config-SelectFeatGroup>`
-SMAC              :ref:`SMAC <config-SMAC>`
+SelectFeatGroup   :ref:`SelectFeatGroup <config-SelectFeatGroup>`    
 ================= ===================================================

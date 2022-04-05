@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.IOparser.config_io_classifier &mdash; WORC 3.5.0 documentation</title>
+  <title>WORC.IOparser.config_io_classifier &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -165,7 +165,7 @@
   <h1>Source code for WORC.IOparser.config_io_classifier</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -210,7 +210,7 @@
                      <span class="s1">&#39;Resampling&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;Imputation&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
                      <span class="s1">&#39;Ensemble&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;Bootstrap&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
                      <span class="s1">&#39;FeatPreProcess&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;Evaluation&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
-                     <span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">()}</span>
+                     <span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;SMAC&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">()}</span>
 
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;cross_validation&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;cross_validation&#39;</span><span class="p">)</span>
@@ -496,6 +496,31 @@
         <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
          <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
+    <span class="c1"># Light GBM</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_num_leaves&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_num_leaves&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_max_depth&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_max_depth&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_min_child_samples&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_min_child_samples&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_reg_alpha&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_reg_alpha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_reg_lambda&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_reg_lambda&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_min_child_weight&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Classification&#39;</span><span class="p">][</span><span class="s1">&#39;LightGBM_min_child_weight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
     <span class="c1"># Cross validation settings</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">])</span>
@@ -537,9 +562,26 @@
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;memory&#39;</span><span class="p">]</span> <span class="o">=</span> \
         <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;memory&#39;</span><span class="p">])</span>
 
+    <span class="c1"># Settings for SMAC</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;use&#39;</span><span class="p">)</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;n_smac_cores&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">int</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;n_smac_cores&#39;</span><span class="p">])</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;budget_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;budget_type&#39;</span><span class="p">])</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;budget&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">int</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;budget&#39;</span><span class="p">])</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;init_method&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;init_method&#39;</span><span class="p">])</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;init_budget&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">int</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;init_budget&#39;</span><span class="p">])</span>
+
     <span class="c1"># Settings for ensembling</span>
-    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;Use&#39;</span><span class="p">)</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">])</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Size&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">int</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Size&#39;</span><span class="p">])</span>
+        <span class="c1">#settings[&#39;Ensemble&#39;].getint(&#39;Use&#39;)</span>
 
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Metric&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Metric&#39;</span><span class="p">]</span>

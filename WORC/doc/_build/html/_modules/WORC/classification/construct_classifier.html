@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.construct_classifier &mdash; WORC 3.5.0 documentation</title>
+  <title>WORC.classification.construct_classifier &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -165,7 +165,7 @@
   <h1>Source code for WORC.classification.construct_classifier</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -194,6 +194,12 @@
 <span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">log_uniform</span><span class="p">,</span> <span class="n">discrete_uniform</span>
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
 <span class="kn">from</span> <span class="nn">xgboost</span> <span class="k">import</span> <span class="n">XGBClassifier</span><span class="p">,</span> <span class="n">XGBRegressor</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">lightgbm</span> <span class="k">import</span> <span class="n">LGBMClassifier</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[INFO] LightGCM classifier currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.&quot;</span><span class="p">)</span>
+
 
 
 <div class="viewcode-block" id="construct_classifier"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.construct_classifier.construct_classifier">[docs]</a><span class="k">def</span> <span class="nf">construct_classifier</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
@@ -269,6 +275,23 @@
                                   <span class="n">n_estimators</span><span class="o">=</span><span class="n">boosting_rounds</span><span class="p">,</span>
                                   <span class="n">colsample_bytree</span><span class="o">=</span><span class="n">colsample_bytree</span><span class="p">,</span>
                                   <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
+
+    <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;LightGBMClassifier&#39;</span><span class="p">:</span>
+        <span class="c1"># LightGBM Classifier</span>
+        <span class="n">num_leaves</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_num_leaves&#39;</span><span class="p">]</span>
+        <span class="n">max_depth</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_max_depth&#39;</span><span class="p">]</span>
+        <span class="n">min_child_samples</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_min_child_samples&#39;</span><span class="p">]</span>
+        <span class="n">reg_alpha</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_reg_alpha&#39;</span><span class="p">]</span>
+        <span class="n">reg_lambda</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_reg_lambda&#39;</span><span class="p">]</span>
+        <span class="n">min_child_weight</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_min_child_weight&#39;</span><span class="p">]</span>
+
+        <span class="n">classifier</span> <span class="o">=</span> <span class="n">LGBMClassifier</span><span class="p">(</span><span class="n">num_leaves</span><span class="o">=</span><span class="n">num_leaves</span><span class="p">,</span>
+                                    <span class="n">max_depth</span><span class="o">=</span><span class="n">max_depth</span><span class="p">,</span>
+                                    <span class="n">min_child_samples</span><span class="o">=</span><span class="n">min_child_samples</span><span class="p">,</span>
+                                    <span class="n">reg_alpha</span><span class="o">=</span><span class="n">reg_alpha</span><span class="p">,</span>
+                                    <span class="n">reg_lambda</span><span class="o">=</span><span class="n">reg_lambda</span><span class="p">,</span>
+                                    <span class="n">min_child_weight</span><span class="o">=</span><span class="n">min_child_weight</span><span class="p">,</span>
+                                    <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;RF&#39;</span><span class="p">:</span>
         <span class="c1"># Random forest kernel</span>
@@ -390,13 +413,18 @@
         <span class="n">clf</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">(</span><span class="n">class_weight</span><span class="o">=</span><span class="s1">&#39;balanced&#39;</span><span class="p">,</span> <span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
                   <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># NOTE: SVMR has no random state</span>
         <span class="n">clf</span> <span class="o">=</span> <span class="n">SVMR</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">)</span>
 
     <span class="n">clf</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMKernel&#39;</span><span class="p">])</span>
     <span class="n">clf</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMC&#39;</span><span class="p">]</span>
-    <span class="n">clf</span><span class="o">.</span><span class="n">degree</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMdegree&#39;</span><span class="p">]</span>
-    <span class="n">clf</span><span class="o">.</span><span class="n">coef0</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMcoef0&#39;</span><span class="p">]</span>
-    <span class="n">clf</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMgamma&#39;</span><span class="p">]</span>
+    <span class="c1"># Only add the following parameters if they are defined</span>
+    <span class="k">if</span> <span class="s1">&#39;SVMdegree&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">clf</span><span class="o">.</span><span class="n">degree</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMdegree&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;SVMcoef0&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">clf</span><span class="o">.</span><span class="n">coef0</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMcoef0&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;SVMgamma&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">clf</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SVMgamma&#39;</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">clf</span></div>
 
@@ -507,6 +535,31 @@
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
                             <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_colsample_bytree&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># LightGBM</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LightGBM_num_leaves&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_num_leaves&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_num_leaves&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LightGBM_max_depth&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_max_depth&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_max_depth&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LightGBM_min_child_samples&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_min_child_samples&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_min_child_samples&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LightGBM_reg_alpha&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_reg_alpha&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_reg_alpha&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LightGBM_reg_lambda&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_reg_lambda&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_reg_lambda&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;LightGBM_min_child_weight&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">log_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_min_child_weight&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LightGBM_min_child_weight&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">param_grid</span></div>
 </pre></div>

@@ -9,7 +9,7 @@ RegistrationNode               elastix4.8/Elastix:4.8                           
 TransformationNode             elastix4.8/Transformix:4.8                              'elastix4.8/Transformix:4.8', your own tool reference                                                         
 Joblib_ncores                  1                                                       Integer > 0                                                                                                   
 Joblib_backend                 threading                                               multiprocessing, threading                                                                                    
-tempsave                       False                                                   True, False                                                                                                   
+tempsave                       True                                                    True, False                                                                                                   
 AssumeSameImageAndMaskMetadata False                                                   True, False                                                                                                   
 ComBat                         False                                                   True, False                                                                                                   
 Fingerprint                    True                                                    True, False                                                                                                   

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>classification Package &mdash; WORC 3.5.0 documentation</title>
+  <title>classification Package &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -119,6 +119,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.metrics"><code class="xref py py-mod docutils literal notranslate"><span class="pre">metrics</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.parameter_optimization"><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_optimization</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.regressors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">regressors</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.smac"><code class="xref py py-mod docutils literal notranslate"><span class="pre">smac</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-WORC.classification.trainclassifier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">trainclassifier</span></code> Module</a></li>
 </ul>
 </li>
@@ -540,7 +541,7 @@ IEEE Transactions on Knowledge &amp; Data Engineering 9 (2008): 1263-1284.</p>
 <span id="searchcv-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">SearchCV</span></code> Module<a class="headerlink" href="#module-WORC.classification.SearchCV" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WORC.classification.SearchCV.BaseSearchCV">
-<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">BaseSearchCV</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>ranking_score='test_score'</em>, <em>refit_workflows=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">BaseSearchCV</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>ranking_score='test_score'</em>, <em>refit_workflows=False</em>, <em>ensemble_validation_score=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.MetaEstimatorMixin</span></code></p>
 <p>Base class for hyper parameter search with cross-validation.</p>
 <dl class="attribute">
@@ -550,7 +551,7 @@ IEEE Transactions on Knowledge &amp; Data Engineering 9 (2008): 1263-1284.</p>
 
 <dl class="method">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>ranking_score='test_score'</em>, <em>refit_workflows=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>ranking_score='test_score'</em>, <em>refit_workflows=False</em>, <em>ensemble_validation_score=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize SearchCV Object.</p>
 </dd></dl>
 
@@ -561,30 +562,34 @@ IEEE Transactions on Knowledge &amp; Data Engineering 9 (2008): 1263-1284.</p>
 
 <dl class="method">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.create_ensemble">
-<code class="descname">create_ensemble</code><span class="sig-paren">(</span><em>X_train</em>, <em>Y_train</em>, <em>verbose=None</em>, <em>initialize=True</em>, <em>scoring=None</em>, <em>method=50</em>, <em>overfit_scaler=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.create_ensemble"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.create_ensemble" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create ensemble of multiple workflows.</p>
-<p>Create an (optimal) ensemble of a combination of hyperparameter settings
+<code class="descname">create_ensemble</code><span class="sig-paren">(</span><em>X_train</em>, <em>Y_train</em>, <em>verbose=None</em>, <em>initialize=False</em>, <em>scoring=None</em>, <em>method='top_N'</em>, <em>size=50</em>, <em>overfit_scaler=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.create_ensemble"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.create_ensemble" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an (optimal) ensemble of a combination of hyperparameter settings
 and the associated groupsels, PCAs, estimators etc.</p>
-<p>Based on Caruana et al. 2004, but a little different:</p>
-<ol class="arabic simple">
-<li><p>Recreate the training/validation splits for a n-fold cross validation.</p></li>
-<li><dl class="simple">
-<dt>For each fold:</dt><dd><ol class="loweralpha simple">
-<li><p>Start with an empty ensemble</p></li>
-<li><p>Create starting ensemble by adding N individually best performing
-models on the validation set. N is tuned on the validation set.</p></li>
-<li><p>Add model that improves ensemble performance on validation set the most, with replacement.</p></li>
-<li><p>Repeat (c) untill performance does not increase</p></li>
-</ol>
+<dl class="simple">
+<dt># The following ensemble methods are supported:</dt><dd><p>#   Single:
+#       only use the single best classifier. Performance is computed
+#       using the same predict function as during the optimization
+#   top_N:
+#       make an ensemble of the best N individual classifiers, where N is
+#       given as an input. If N==1, then only the single best classifier is
+#       used, but it is evaluated using predict_proba.
+#   FitNumber:
+#       make an ensemble of the best N individual classifiers, choosing N
+#       that gives the highest performance
+#   ForwardSelection:
+#       add the model that optimizes the total ensemble performance,
+#       then repeat with replacement until there is no more improvement
+#       in performance
+#   Caruana:
+#       for a fixed number of iterations, add the model that optimizes
+#       the total ensemble performance, then choose the ensemble size
+#       which gave the best performance
+#   Bagging:
+#       same as Caruana method, but the final ensemble is a weighted average
+#       of a number of ensembles that each use only a subset of the available
+#       models</p>
 </dd>
 </dl>
-</li>
-</ol>
-<p>The performance metric is the same as for the original hyperparameter
-search, i.e. probably the F1-score for classification and r2-score
-for regression. However, we recommend using the SAR score, as this is
-more universal.</p>
-<p>Method: top50 or Caruana</p>
 </dd></dl>
 
 <dl class="method">
@@ -660,7 +665,7 @@ underlying estimator.</p>
 
 <dl class="method">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.process_fit">
-<code class="descname">process_fit</code><span class="sig-paren">(</span><em>n_splits</em>, <em>parameters_all</em>, <em>test_sample_counts</em>, <em>test_score_dicts</em>, <em>train_score_dicts</em>, <em>fit_time</em>, <em>score_time</em>, <em>cv_iter</em>, <em>X</em>, <em>y</em>, <em>fitted_workflows=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.process_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.process_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">process_fit</code><span class="sig-paren">(</span><em>n_splits</em>, <em>parameters_all</em>, <em>test_sample_counts</em>, <em>test_score_dicts</em>, <em>train_score_dicts</em>, <em>fit_time</em>, <em>score_time</em>, <em>cv_iter</em>, <em>X</em>, <em>y</em>, <em>fitted_workflows=None</em>, <em>use_smac=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.process_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.process_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process a fit.</p>
 <p>Process the outcomes of a SearchCV fit and find the best settings
 over all cross validations from all hyperparameters tested</p>
@@ -722,7 +727,7 @@ underlying estimator.</p>
 
 <dl class="class">
 <dt id="WORC.classification.SearchCV.BaseSearchCVJoblib">
-<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">BaseSearchCVJoblib</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>ranking_score='test_score'</em>, <em>refit_workflows=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCVJoblib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCVJoblib" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">BaseSearchCVJoblib</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>ranking_score='test_score'</em>, <em>refit_workflows=False</em>, <em>ensemble_validation_score=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCVJoblib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCVJoblib" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#WORC.classification.SearchCV.BaseSearchCV" title="WORC.classification.SearchCV.BaseSearchCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.classification.SearchCV.BaseSearchCV</span></code></a></p>
 <p>Base class for hyper parameter search with cross-validation.</p>
 <dl class="attribute">
@@ -738,8 +743,25 @@ underlying estimator.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="WORC.classification.SearchCV.BaseSearchCVSMAC">
+<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">BaseSearchCVSMAC</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>ranking_score='test_score'</em>, <em>refit_workflows=False</em>, <em>ensemble_validation_score=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCVSMAC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCVSMAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.classification.SearchCV.BaseSearchCV" title="WORC.classification.SearchCV.BaseSearchCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.classification.SearchCV.BaseSearchCV</span></code></a></p>
+<p>Base class for Bayesian hyper parameter search with cross-validation.</p>
+<dl class="attribute">
+<dt id="WORC.classification.SearchCV.BaseSearchCVSMAC.__abstractmethods__">
+<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({'__init__'})</em><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCVSMAC.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.classification.SearchCV.BaseSearchCVSMAC.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.classification.SearchCV'</em><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCVSMAC.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="WORC.classification.SearchCV.BaseSearchCVfastr">
-<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">BaseSearchCVfastr</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>ranking_score='test_score'</em>, <em>refit_workflows=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCVfastr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCVfastr" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">BaseSearchCVfastr</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>ranking_score='test_score'</em>, <em>refit_workflows=False</em>, <em>ensemble_validation_score=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCVfastr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCVfastr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#WORC.classification.SearchCV.BaseSearchCV" title="WORC.classification.SearchCV.BaseSearchCV"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.classification.SearchCV.BaseSearchCV</span></code></a></p>
 <p>Base class for hyper parameter search with cross-validation.</p>
 <dl class="attribute">
@@ -1394,39 +1416,31 @@ train/test set.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="WORC.classification.SearchCV.RandomizedSearchCVJoblib">
-<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">RandomizedSearchCVJoblib</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#RandomizedSearchCVJoblib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.RandomizedSearchCVJoblib" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#WORC.classification.SearchCV.BaseSearchCVJoblib" title="WORC.classification.SearchCV.BaseSearchCVJoblib"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.classification.SearchCV.BaseSearchCVJoblib</span></code></a></p>
-<p>Randomized search on hyper parameters.</p>
-<p>RandomizedSearchCV implements a “fit” and a “score” method.
+<dt id="WORC.classification.SearchCV.GuidedSearchCVSMAC">
+<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">GuidedSearchCVSMAC</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>fastr_plugin=None</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em>, <em>features=None</em>, <em>labels=None</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#GuidedSearchCVSMAC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.GuidedSearchCVSMAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.classification.SearchCV.BaseSearchCVSMAC" title="WORC.classification.SearchCV.BaseSearchCVSMAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.classification.SearchCV.BaseSearchCVSMAC</span></code></a></p>
+<p>Guided search on hyperparameters.</p>
+<p>GuidedSearchCV implements a “fit” and a “score” method.
 It also implements “predict”, “predict_proba”, “decision_function”,
 “transform” and “inverse_transform” if they are implemented in the
 estimator used.</p>
 <p>The parameters of the estimator used to apply these methods are optimized
 by cross-validated search over parameter settings.</p>
-<p>In contrast to GridSearchCV, not all parameter values are tried out, but
-rather a fixed number of parameter settings is sampled from the specified
-distributions. The number of parameter settings that are tried is
-given by n_iter.</p>
+<p>The optimization is performed using the Sequential Model-based Algorithm
+Configuration (SMAC) method. A probabilistic model of the objective function
+is constructed and updated with each function evaluation.</p>
 <p>If all parameters are presented as a list,
 sampling without replacement is performed. If at least one parameter
 is given as a distribution, sampling with replacement is used.
 It is highly recommended to use continuous distributions for continuous
 parameters.</p>
-<p>Read more in the sklearn user guide.</p>
 <dl>
-<dt>estimator<span class="classifier">estimator object.</span></dt><dd><p>A object of that type is instantiated for each grid point.
-This is assumed to implement the scikit-learn estimator interface.
-Either estimator needs to provide a <code class="docutils literal notranslate"><span class="pre">score</span></code> function,
-or <code class="docutils literal notranslate"><span class="pre">scoring</span></code> must be passed.</p>
+<dt>param_distributions<span class="classifier">dict</span></dt><dd><p>Dictionary with parameter names (string) as keys and details of their
+domains as values. From this dictionary the complete search space
+will later be constructed.</p>
 </dd>
-<dt>param_distributions<span class="classifier">dict</span></dt><dd><p>Dictionary with parameters names (string) as keys and distributions
-or lists of parameters to try. Distributions must provide a <code class="docutils literal notranslate"><span class="pre">rvs</span></code>
-method for sampling (such as those from scipy.stats.distributions).
-If a list is given, it is sampled uniformly.</p>
-</dd>
-<dt>n_iter<span class="classifier">int, default=10</span></dt><dd><p>Number of parameter settings that are sampled. n_iter trades
-off runtime vs quality of the solution.</p>
+<dt>n_iter<span class="classifier">int, default=10</span></dt><dd><p>Number of function evaluations allowed in each optimization sequence
+of SMAC.</p>
 </dd>
 <dt>scoring<span class="classifier">string, callable or None, default=None</span></dt><dd><p>A string (see model evaluation documentation) or
 a scorer callable object / function with signature
@@ -1471,7 +1485,7 @@ Possible inputs for cv are:</p>
 <p>For integer/None inputs, if the estimator is a classifier and <code class="docutils literal notranslate"><span class="pre">y</span></code> is
 either binary or multiclass, <code class="xref py py-class docutils literal notranslate"><span class="pre">StratifiedKFold</span></code> is used. In all
 other cases, <code class="xref py py-class docutils literal notranslate"><span class="pre">KFold</span></code> is used.</p>
-<p>Refer sklearn user guide for the various
+<p>Refer <span class="xref std std-ref">User Guide</span> for the various
 cross-validation strategies that can be used here.</p>
 </dd>
 <dt>refit<span class="classifier">boolean, default=True</span></dt><dd><p>Refit the best estimator with the entire dataset.
@@ -1578,6 +1592,244 @@ mean score (<code class="docutils literal notranslate"><span class="pre">search.
 parameters for the model.</p>
 </dd>
 <dt><a href="#id46"><span class="problematic" id="id47">n_splits_</span></a><span class="classifier">int</span></dt><dd><p>The number of cross-validation splits (folds/iterations).</p>
+</dd>
+</dl>
+<p>The parameters selected are those that maximize the score of the held-out
+data, according to the scoring parameter.</p>
+<p>If <cite>n_jobs</cite> was set to a value higher than one, the data is copied for each
+parameter setting(and not <cite>n_jobs</cite> times). This is done for efficiency
+reasons if individual jobs take very little time, but may raise errors if
+the dataset is large and not enough memory is available.  A workaround in
+this case is to set <cite>pre_dispatch</cite>. Then, the memory is copied only
+<cite>pre_dispatch</cite> many times. A reasonable value for <cite>pre_dispatch</cite> is <cite>2 *
+n_jobs</cite>.</p>
+<dl class="simple">
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">GridSearchCV</span></code>:</dt><dd><p>Does exhaustive search over a grid of parameters.</p>
+</dd>
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterSampler</span></code>:</dt><dd><p>A generator over parameter settings, constructed from
+param_distributions.</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="WORC.classification.SearchCV.GuidedSearchCVSMAC.__abstractmethods__">
+<code class="descname">__abstractmethods__</code><em class="property"> = frozenset({})</em><a class="headerlink" href="#WORC.classification.SearchCV.GuidedSearchCVSMAC.__abstractmethods__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.classification.SearchCV.GuidedSearchCVSMAC.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>fastr_plugin=None</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em>, <em>features=None</em>, <em>labels=None</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#GuidedSearchCVSMAC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.GuidedSearchCVSMAC.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize SearchCV Object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="WORC.classification.SearchCV.GuidedSearchCVSMAC.__module__">
+<code class="descname">__module__</code><em class="property"> = 'WORC.classification.SearchCV'</em><a class="headerlink" href="#WORC.classification.SearchCV.GuidedSearchCVSMAC.__module__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="WORC.classification.SearchCV.GuidedSearchCVSMAC.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>X</em>, <em>y=None</em>, <em>groups=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#GuidedSearchCVSMAC.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.GuidedSearchCVSMAC.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run fit on the estimator with randomly drawn parameters.</p>
+<dl class="simple">
+<dt>X<span class="classifier">array-like, shape = [n_samples, n_features]</span></dt><dd><p>Training vector, where n_samples in the number of samples and
+n_features is the number of features.</p>
+</dd>
+<dt>y<span class="classifier">array-like, shape = [n_samples] or [n_samples, n_output], optional</span></dt><dd><p>Target relative to X for classification or regression;
+None for unsupervised learning.</p>
+</dd>
+<dt>groups<span class="classifier">array-like, with shape (n_samples,), optional</span></dt><dd><p>Group labels for the samples used while splitting the dataset into
+train/test set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="WORC.classification.SearchCV.RandomizedSearchCVJoblib">
+<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">RandomizedSearchCVJoblib</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#RandomizedSearchCVJoblib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.RandomizedSearchCVJoblib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.classification.SearchCV.BaseSearchCVJoblib" title="WORC.classification.SearchCV.BaseSearchCVJoblib"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.classification.SearchCV.BaseSearchCVJoblib</span></code></a></p>
+<p>Randomized search on hyper parameters.</p>
+<p>RandomizedSearchCV implements a “fit” and a “score” method.
+It also implements “predict”, “predict_proba”, “decision_function”,
+“transform” and “inverse_transform” if they are implemented in the
+estimator used.</p>
+<p>The parameters of the estimator used to apply these methods are optimized
+by cross-validated search over parameter settings.</p>
+<p>In contrast to GridSearchCV, not all parameter values are tried out, but
+rather a fixed number of parameter settings is sampled from the specified
+distributions. The number of parameter settings that are tried is
+given by n_iter.</p>
+<p>If all parameters are presented as a list,
+sampling without replacement is performed. If at least one parameter
+is given as a distribution, sampling with replacement is used.
+It is highly recommended to use continuous distributions for continuous
+parameters.</p>
+<p>Read more in the sklearn user guide.</p>
+<dl>
+<dt>estimator<span class="classifier">estimator object.</span></dt><dd><p>A object of that type is instantiated for each grid point.
+This is assumed to implement the scikit-learn estimator interface.
+Either estimator needs to provide a <code class="docutils literal notranslate"><span class="pre">score</span></code> function,
+or <code class="docutils literal notranslate"><span class="pre">scoring</span></code> must be passed.</p>
+</dd>
+<dt>param_distributions<span class="classifier">dict</span></dt><dd><p>Dictionary with parameters names (string) as keys and distributions
+or lists of parameters to try. Distributions must provide a <code class="docutils literal notranslate"><span class="pre">rvs</span></code>
+method for sampling (such as those from scipy.stats.distributions).
+If a list is given, it is sampled uniformly.</p>
+</dd>
+<dt>n_iter<span class="classifier">int, default=10</span></dt><dd><p>Number of parameter settings that are sampled. n_iter trades
+off runtime vs quality of the solution.</p>
+</dd>
+<dt>scoring<span class="classifier">string, callable or None, default=None</span></dt><dd><p>A string (see model evaluation documentation) or
+a scorer callable object / function with signature
+<code class="docutils literal notranslate"><span class="pre">scorer(estimator,</span> <span class="pre">X,</span> <span class="pre">y)</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the <code class="docutils literal notranslate"><span class="pre">score</span></code> method of the estimator is used.</p>
+</dd>
+<dt>fit_params<span class="classifier">dict, optional</span></dt><dd><p>Parameters to pass to the fit method.</p>
+</dd>
+<dt>n_jobs<span class="classifier">int, default=1</span></dt><dd><p>Number of jobs to run in parallel.</p>
+</dd>
+<dt>pre_dispatch<span class="classifier">int, or string, optional</span></dt><dd><p>Controls the number of jobs that get dispatched during parallel
+execution. Reducing this number can be useful to avoid an
+explosion of memory consumption when more jobs get dispatched
+than CPUs can process. This parameter can be:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>None, in which case all the jobs are immediately
+created and spawned. Use this for lightweight and
+fast-running jobs, to avoid delays due to on-demand
+spawning of the jobs</p></li>
+<li><p>An int, giving the exact number of total jobs that are
+spawned</p></li>
+<li><p>A string, giving an expression as a function of n_jobs,
+as in ‘2*n_jobs’</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>iid<span class="classifier">boolean, default=True</span></dt><dd><p>If True, the data is assumed to be identically distributed across
+the folds, and the loss minimized is the total loss per sample,
+and not the mean loss across the folds.</p>
+</dd>
+<dt>cv<span class="classifier">int, cross-validation generator or an iterable, optional</span></dt><dd><p>Determines the cross-validation splitting strategy.
+Possible inputs for cv are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>None, to use the default 3-fold cross validation,</p></li>
+<li><p>integer, to specify the number of folds in a <cite>(Stratified)KFold</cite>,</p></li>
+<li><p>An object to be used as a cross-validation generator.</p></li>
+<li><p>An iterable yielding train, test splits.</p></li>
+</ul>
+</div></blockquote>
+<p>For integer/None inputs, if the estimator is a classifier and <code class="docutils literal notranslate"><span class="pre">y</span></code> is
+either binary or multiclass, <code class="xref py py-class docutils literal notranslate"><span class="pre">StratifiedKFold</span></code> is used. In all
+other cases, <code class="xref py py-class docutils literal notranslate"><span class="pre">KFold</span></code> is used.</p>
+<p>Refer sklearn user guide for the various
+cross-validation strategies that can be used here.</p>
+</dd>
+<dt>refit<span class="classifier">boolean, default=True</span></dt><dd><p>Refit the best estimator with the entire dataset.
+If “False”, it is impossible to make predictions using
+this RandomizedSearchCV instance after fitting.</p>
+</dd>
+<dt>verbose<span class="classifier">integer</span></dt><dd><p>Controls the verbosity: the higher, the more messages.</p>
+</dd>
+<dt>random_state<span class="classifier">int or RandomState</span></dt><dd><p>Pseudo random number generator state used for random uniform sampling
+from lists of possible values instead of scipy.stats distributions.</p>
+</dd>
+<dt>error_score<span class="classifier">‘raise’ (default) or numeric</span></dt><dd><p>Value to assign to the score if an error occurs in estimator fitting.
+If set to ‘raise’, the error is raised. If a numeric value is given,
+FitFailedWarning is raised. This parameter does not affect the refit
+step, which will always raise the error.</p>
+</dd>
+<dt>return_train_score<span class="classifier">boolean, default=True</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">'False'</span></code>, the <code class="docutils literal notranslate"><span class="pre">cv_results_</span></code> attribute will not include training
+scores.</p>
+</dd>
+</dl>
+<dl>
+<dt><a href="#id48"><span class="problematic" id="id49">cv_results_</span></a><span class="classifier">dict of numpy (masked) ndarrays</span></dt><dd><p>A dict with keys as column headers and values as columns, that can be
+imported into a pandas <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>.</p>
+<p>For instance the below given table</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 20%" />
+<col style="width: 30%" />
+<col style="width: 5%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>param_kernel</p></th>
+<th class="head"><p>param_gamma</p></th>
+<th class="head"><p>split0_test_score</p></th>
+<th class="head"><p>…</p></th>
+<th class="head"><p>rank_test_score</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>‘rbf’</p></td>
+<td><p>0.1</p></td>
+<td><p>0.8</p></td>
+<td><p>…</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>‘rbf’</p></td>
+<td><p>0.2</p></td>
+<td><p>0.9</p></td>
+<td><p>…</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>‘rbf’</p></td>
+<td><p>0.3</p></td>
+<td><p>0.7</p></td>
+<td><p>…</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+<p>will be represented by a <code class="docutils literal notranslate"><span class="pre">cv_results_</span></code> dict of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="s1">&#39;param_kernel&#39;</span> <span class="p">:</span> <span class="n">masked_array</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">],</span>
+                              <span class="n">mask</span> <span class="o">=</span> <span class="kc">False</span><span class="p">),</span>
+<span class="s1">&#39;param_gamma&#39;</span>  <span class="p">:</span> <span class="n">masked_array</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span> <span class="mf">0.2</span> <span class="mf">0.3</span><span class="p">],</span> <span class="n">mask</span> <span class="o">=</span> <span class="kc">False</span><span class="p">),</span>
+<span class="s1">&#39;split0_test_score&#39;</span>  <span class="p">:</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+<span class="s1">&#39;split1_test_score&#39;</span>  <span class="p">:</span> <span class="p">[</span><span class="mf">0.82</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+<span class="s1">&#39;mean_test_score&#39;</span>    <span class="p">:</span> <span class="p">[</span><span class="mf">0.81</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+<span class="s1">&#39;std_test_score&#39;</span>     <span class="p">:</span> <span class="p">[</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+<span class="s1">&#39;rank_test_score&#39;</span>    <span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="s1">&#39;split0_train_score&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+<span class="s1">&#39;split1_train_score&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.82</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+<span class="s1">&#39;mean_train_score&#39;</span>   <span class="p">:</span> <span class="p">[</span><span class="mf">0.81</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span>
+<span class="s1">&#39;std_train_score&#39;</span>    <span class="p">:</span> <span class="p">[</span><span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">],</span>
+<span class="s1">&#39;mean_fit_time&#39;</span>      <span class="p">:</span> <span class="p">[</span><span class="mf">0.73</span><span class="p">,</span> <span class="mf">0.63</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">,</span> <span class="mf">0.49</span><span class="p">],</span>
+<span class="s1">&#39;std_fit_time&#39;</span>       <span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span>
+<span class="s1">&#39;mean_score_time&#39;</span>    <span class="p">:</span> <span class="p">[</span><span class="mf">0.007</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">],</span>
+<span class="s1">&#39;std_score_time&#39;</span>     <span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.002</span><span class="p">,</span> <span class="mf">0.003</span><span class="p">,</span> <span class="mf">0.005</span><span class="p">],</span>
+<span class="s1">&#39;params&#39;</span> <span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;kernel&#39;</span> <span class="p">:</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;gamma&#39;</span> <span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span> <span class="o">...</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>NOTE that the key <code class="docutils literal notranslate"><span class="pre">'params'</span></code> is used to store a list of parameter
+settings dict for all the parameter candidates.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mean_fit_time</span></code>, <code class="docutils literal notranslate"><span class="pre">std_fit_time</span></code>, <code class="docutils literal notranslate"><span class="pre">mean_score_time</span></code> and
+<code class="docutils literal notranslate"><span class="pre">std_score_time</span></code> are all in seconds.</p>
+</dd>
+<dt><a href="#id50"><span class="problematic" id="id51">best_estimator_</span></a><span class="classifier">estimator</span></dt><dd><p>Estimator that was chosen by the search, i.e. estimator
+which gave highest score (or smallest loss if specified)
+on the left out data. Not available if refit=False.</p>
+</dd>
+<dt><a href="#id52"><span class="problematic" id="id53">best_score_</span></a><span class="classifier">float</span></dt><dd><p>Score of best_estimator on the left out data.</p>
+</dd>
+<dt><a href="#id54"><span class="problematic" id="id55">best_params_</span></a><span class="classifier">dict</span></dt><dd><p>Parameter setting that gave the best results on the hold out data.</p>
+</dd>
+<dt><a href="#id56"><span class="problematic" id="id57">best_index_</span></a><span class="classifier">int</span></dt><dd><p>The index (of the <code class="docutils literal notranslate"><span class="pre">cv_results_</span></code> arrays) which corresponds to the best
+candidate parameter setting.</p>
+<p>The dict at <code class="docutils literal notranslate"><span class="pre">search.cv_results_['params'][search.best_index_]</span></code> gives
+the parameter setting for the best model, that gives the highest
+mean score (<code class="docutils literal notranslate"><span class="pre">search.best_score_</span></code>).</p>
+</dd>
+<dt><a href="#id58"><span class="problematic" id="id59">scorer_</span></a><span class="classifier">function</span></dt><dd><p>Scorer function used on the held out data to choose the best
+parameters for the model.</p>
+</dd>
+<dt><a href="#id60"><span class="problematic" id="id61">n_splits_</span></a><span class="classifier">int</span></dt><dd><p>The number of cross-validation splits (folds/iterations).</p>
 </dd>
 </dl>
 <p>The parameters selected are those that maximize the score of the held-out
@@ -1731,7 +1983,7 @@ scores.</p>
 </dd>
 </dl>
 <dl>
-<dt><a href="#id48"><span class="problematic" id="id49">cv_results_</span></a><span class="classifier">dict of numpy (masked) ndarrays</span></dt><dd><p>A dict with keys as column headers and values as columns, that can be
+<dt><a href="#id62"><span class="problematic" id="id63">cv_results_</span></a><span class="classifier">dict of numpy (masked) ndarrays</span></dt><dd><p>A dict with keys as column headers and values as columns, that can be
 imported into a pandas <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>.</p>
 <p>For instance the below given table</p>
 <table class="docutils align-center">
@@ -1798,24 +2050,24 @@ settings dict for all the parameter candidates.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">mean_fit_time</span></code>, <code class="docutils literal notranslate"><span class="pre">std_fit_time</span></code>, <code class="docutils literal notranslate"><span class="pre">mean_score_time</span></code> and
 <code class="docutils literal notranslate"><span class="pre">std_score_time</span></code> are all in seconds.</p>
 </dd>
-<dt><a href="#id50"><span class="problematic" id="id51">best_estimator_</span></a><span class="classifier">estimator</span></dt><dd><p>Estimator that was chosen by the search, i.e. estimator
+<dt><a href="#id64"><span class="problematic" id="id65">best_estimator_</span></a><span class="classifier">estimator</span></dt><dd><p>Estimator that was chosen by the search, i.e. estimator
 which gave highest score (or smallest loss if specified)
 on the left out data. Not available if refit=False.</p>
 </dd>
-<dt><a href="#id52"><span class="problematic" id="id53">best_score_</span></a><span class="classifier">float</span></dt><dd><p>Score of best_estimator on the left out data.</p>
+<dt><a href="#id66"><span class="problematic" id="id67">best_score_</span></a><span class="classifier">float</span></dt><dd><p>Score of best_estimator on the left out data.</p>
 </dd>
-<dt><a href="#id54"><span class="problematic" id="id55">best_params_</span></a><span class="classifier">dict</span></dt><dd><p>Parameter setting that gave the best results on the hold out data.</p>
+<dt><a href="#id68"><span class="problematic" id="id69">best_params_</span></a><span class="classifier">dict</span></dt><dd><p>Parameter setting that gave the best results on the hold out data.</p>
 </dd>
-<dt><a href="#id56"><span class="problematic" id="id57">best_index_</span></a><span class="classifier">int</span></dt><dd><p>The index (of the <code class="docutils literal notranslate"><span class="pre">cv_results_</span></code> arrays) which corresponds to the best
+<dt><a href="#id70"><span class="problematic" id="id71">best_index_</span></a><span class="classifier">int</span></dt><dd><p>The index (of the <code class="docutils literal notranslate"><span class="pre">cv_results_</span></code> arrays) which corresponds to the best
 candidate parameter setting.</p>
 <p>The dict at <code class="docutils literal notranslate"><span class="pre">search.cv_results_['params'][search.best_index_]</span></code> gives
 the parameter setting for the best model, that gives the highest
 mean score (<code class="docutils literal notranslate"><span class="pre">search.best_score_</span></code>).</p>
 </dd>
-<dt><a href="#id58"><span class="problematic" id="id59">scorer_</span></a><span class="classifier">function</span></dt><dd><p>Scorer function used on the held out data to choose the best
+<dt><a href="#id72"><span class="problematic" id="id73">scorer_</span></a><span class="classifier">function</span></dt><dd><p>Scorer function used on the held out data to choose the best
 parameters for the model.</p>
 </dd>
-<dt><a href="#id60"><span class="problematic" id="id61">n_splits_</span></a><span class="classifier">int</span></dt><dd><p>The number of cross-validation splits (folds/iterations).</p>
+<dt><a href="#id74"><span class="problematic" id="id75">n_splits_</span></a><span class="classifier">int</span></dt><dd><p>The number of cross-validation splits (folds/iterations).</p>
 </dd>
 </dl>
 <p>The parameters selected are those that maximize the score of the held-out
@@ -1950,14 +2202,14 @@ all available fields.</p>
 <span id="crossval-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">crossval</span></code> Module<a class="headerlink" href="#module-WORC.classification.crossval" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WORC.classification.crossval.LOO_cross_validation">
-<code class="descclassname">WORC.classification.crossval.</code><code class="descname">LOO_cross_validation</code><span class="sig-paren">(</span><em>image_features</em>, <em>feature_labels</em>, <em>classes</em>, <em>patient_ids</em>, <em>param_grid</em>, <em>config</em>, <em>modus</em>, <em>test_size</em>, <em>start=0</em>, <em>save_data=None</em>, <em>tempsave=False</em>, <em>tempfolder=None</em>, <em>fixedsplits=None</em>, <em>fixed_seed=False</em>, <em>use_fastr=None</em>, <em>fastr_plugin=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/crossval.html#LOO_cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.crossval.LOO_cross_validation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.classification.crossval.</code><code class="descname">LOO_cross_validation</code><span class="sig-paren">(</span><em>image_features</em>, <em>feature_labels</em>, <em>classes</em>, <em>patient_ids</em>, <em>param_grid</em>, <em>config</em>, <em>modus</em>, <em>test_size</em>, <em>start=0</em>, <em>save_data=None</em>, <em>tempsave=False</em>, <em>tempfolder=None</em>, <em>fixedsplits=None</em>, <em>fixed_seed=False</em>, <em>use_fastr=None</em>, <em>fastr_plugin=None</em>, <em>use_SMAC=False</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/crossval.html#LOO_cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.crossval.LOO_cross_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cross-validation in which each sample is once used as the test set.</p>
 <p>Mostly based on the default sklearn object.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="WORC.classification.crossval.crossval">
-<code class="descclassname">WORC.classification.crossval.</code><code class="descname">crossval</code><span class="sig-paren">(</span><em>config</em>, <em>label_data</em>, <em>image_features</em>, <em>param_grid=None</em>, <em>use_fastr=False</em>, <em>fastr_plugin=None</em>, <em>tempsave=False</em>, <em>fixedsplits=None</em>, <em>ensemble={'Use': False}</em>, <em>outputfolder=None</em>, <em>modus='singlelabel'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/crossval.html#crossval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.crossval.crossval" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.classification.crossval.</code><code class="descname">crossval</code><span class="sig-paren">(</span><em>config</em>, <em>label_data</em>, <em>image_features</em>, <em>param_grid=None</em>, <em>use_fastr=False</em>, <em>fastr_plugin=None</em>, <em>tempsave=False</em>, <em>fixedsplits=None</em>, <em>ensemble={'Use': False}</em>, <em>outputfolder=None</em>, <em>modus='singlelabel'</em>, <em>use_SMAC=False</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/crossval.html#crossval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.crossval.crossval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs multiple individual classifiers based on the label settings.</p>
 <dl>
 <dt>config: dict, mandatory</dt><dd><p>Dictionary with config settings. See the Github Wiki for the
@@ -2053,7 +2305,7 @@ classification is performed (‘multilabel’).</p>
 
 <dl class="function">
 <dt id="WORC.classification.crossval.random_split_cross_validation">
-<code class="descclassname">WORC.classification.crossval.</code><code class="descname">random_split_cross_validation</code><span class="sig-paren">(</span><em>image_features</em>, <em>feature_labels</em>, <em>classes</em>, <em>patient_ids</em>, <em>n_iterations</em>, <em>param_grid</em>, <em>config</em>, <em>modus</em>, <em>test_size</em>, <em>start=0</em>, <em>save_data=None</em>, <em>tempsave=False</em>, <em>tempfolder=None</em>, <em>fixedsplits=None</em>, <em>fixed_seed=False</em>, <em>use_fastr=None</em>, <em>fastr_plugin=None</em>, <em>do_test_RS_Ensemble=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/crossval.html#random_split_cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.crossval.random_split_cross_validation" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.classification.crossval.</code><code class="descname">random_split_cross_validation</code><span class="sig-paren">(</span><em>image_features</em>, <em>feature_labels</em>, <em>classes</em>, <em>patient_ids</em>, <em>n_iterations</em>, <em>param_grid</em>, <em>config</em>, <em>modus</em>, <em>test_size</em>, <em>start=0</em>, <em>save_data=None</em>, <em>tempsave=False</em>, <em>tempfolder=None</em>, <em>fixedsplits=None</em>, <em>fixed_seed=False</em>, <em>use_fastr=None</em>, <em>fastr_plugin=None</em>, <em>do_test_RS_Ensemble=False</em>, <em>use_SMAC=False</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/crossval.html#random_split_cross_validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.crossval.random_split_cross_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cross-validation in which data is randomly split in each iteration.</p>
 <p>Due to options of doing single-label and multi-label classification,
 stratified splitting, and regression, we use a manual loop instead
@@ -2088,7 +2340,7 @@ actual estimator.</p>
 
 <dl class="function">
 <dt id="WORC.classification.fitandscore.fit_and_score">
-<code class="descclassname">WORC.classification.fitandscore.</code><code class="descname">fit_and_score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>scoring</em>, <em>train</em>, <em>test</em>, <em>parameters</em>, <em>fit_params=None</em>, <em>return_train_score=True</em>, <em>return_n_test_samples=True</em>, <em>return_times=True</em>, <em>return_parameters=False</em>, <em>return_estimator=False</em>, <em>error_score='raise'</em>, <em>verbose=True</em>, <em>return_all=True</em>, <em>refit_workflows=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/fitandscore.html#fit_and_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.fitandscore.fit_and_score" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.classification.fitandscore.</code><code class="descname">fit_and_score</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>scoring</em>, <em>train</em>, <em>test</em>, <em>parameters</em>, <em>fit_params=None</em>, <em>return_train_score=True</em>, <em>return_n_test_samples=True</em>, <em>return_times=True</em>, <em>return_parameters=False</em>, <em>return_estimator=False</em>, <em>error_score='raise'</em>, <em>verbose=False</em>, <em>return_all=True</em>, <em>refit_workflows=False</em>, <em>use_smac=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/fitandscore.html#fit_and_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.fitandscore.fit_and_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit an estimator to a dataset and score the performance.</p>
 <p>The following
 methods can currently be applied as preprocessing before fitting, in
@@ -2309,6 +2561,43 @@ Calculation of Multi Class AUC according to classpy: <a class="reference externa
 <div class="section" id="module-WORC.classification.parameter_optimization">
 <span id="parameter-optimization-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">parameter_optimization</span></code> Module<a class="headerlink" href="#module-WORC.classification.parameter_optimization" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="WORC.classification.parameter_optimization.guided_search_parameters">
+<code class="descclassname">WORC.classification.parameter_optimization.</code><code class="descname">guided_search_parameters</code><span class="sig-paren">(</span><em>features</em>, <em>labels</em>, <em>N_iter</em>, <em>test_size</em>, <em>parameters</em>, <em>scoring_method</em>, <em>n_splits=5</em>, <em>n_jobspercore=200</em>, <em>use_fastr=False</em>, <em>n_cores=1</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em>, <em>random_seed=None</em>, <em>refit_workflows=False</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/parameter_optimization.html#guided_search_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.parameter_optimization.guided_search_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train a classifier and simultaneously optimizes hyperparameters using a
+Bayesian optimization approach.</p>
+<dl>
+<dt>Arguments:</dt><dd><p>features: numpy array containing the training features.
+labels: list containing the object labels to be trained on.
+N_iter: integer listing the number of iterations to be used in the</p>
+<blockquote>
+<div><p>hyperparameter optimization.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>test_size: float listing the test size percentage used in the cross</dt><dd><p>validation.</p>
+</dd>
+</dl>
+<p>classifier: sklearn classifier to be tested
+param_grid: dictionary containing all possible hyperparameters and their</p>
+<blockquote>
+<div><p>values or distrubitions.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>scoring_method: string defining scoring method used in optimization,</dt><dd><p>e.g. f1_weighted for a SVM.</p>
+</dd>
+<dt>n_jobsperscore: integer listing the number of jobs that are ran on a</dt><dd><p>single core when using the fastr randomized search.</p>
+</dd>
+<dt>use_fastr: Boolean determining of either fastr or joblib should be used</dt><dd><p>for the opimization.</p>
+</dd>
+<dt>fastr_plugin: determines which plugin is used for fastr executions.</dt><dd><p>When None, uses the default plugin from the fastr config.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>guided_search: object containing the results</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="WORC.classification.parameter_optimization.random_search_parameters">
 <code class="descclassname">WORC.classification.parameter_optimization.</code><code class="descname">random_search_parameters</code><span class="sig-paren">(</span><em>features</em>, <em>labels</em>, <em>N_iter</em>, <em>test_size</em>, <em>param_grid</em>, <em>scoring_method</em>, <em>n_splits=5</em>, <em>n_jobspercore=200</em>, <em>use_fastr=False</em>, <em>n_cores=1</em>, <em>fastr_plugin=None</em>, <em>memory='2G'</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em>, <em>random_seed=None</em>, <em>refit_workflows=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/parameter_optimization.html#random_search_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.parameter_optimization.random_search_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Train a classifier and simultaneously optimizes hyperparameters using a
@@ -2349,6 +2638,27 @@ param_grid: dictionary containing all possible hyperparameters and their</p>
 <div class="section" id="module-WORC.classification.regressors">
 <span id="regressors-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">regressors</span></code> Module<a class="headerlink" href="#module-WORC.classification.regressors" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="module-WORC.classification.smac">
+<span id="smac-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">smac</span></code> Module<a class="headerlink" href="#module-WORC.classification.smac" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="WORC.classification.smac.build_smac_config">
+<code class="descclassname">WORC.classification.smac.</code><code class="descname">build_smac_config</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/smac.html#build_smac_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.smac.build_smac_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a parameter dictionary and constructs a SMAC configuration object
+from it, to be used as input for the Bayesian optimization</p>
+<blockquote>
+<div><dl class="simple">
+<dt>parameters: dict, mandatory</dt><dd><p>Contains the required config settings</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>ConfigurationSpace object that defines the search space of the hyperparameter
+optimization</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 <div class="section" id="module-WORC.classification.trainclassifier">
 <span id="trainclassifier-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">trainclassifier</span></code> Module<a class="headerlink" href="#module-WORC.classification.trainclassifier" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
@@ -2359,7 +2669,7 @@ param_grid: dictionary containing all possible hyperparameters and their</p>
 
 <dl class="function">
 <dt id="WORC.classification.trainclassifier.trainclassifier">
-<code class="descclassname">WORC.classification.trainclassifier.</code><code class="descname">trainclassifier</code><span class="sig-paren">(</span><em>feat_train</em>, <em>patientinfo_train</em>, <em>config</em>, <em>output_hdf</em>, <em>feat_test=None</em>, <em>patientinfo_test=None</em>, <em>fixedsplits=None</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/trainclassifier.html#trainclassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.trainclassifier.trainclassifier" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WORC.classification.trainclassifier.</code><code class="descname">trainclassifier</code><span class="sig-paren">(</span><em>feat_train</em>, <em>patientinfo_train</em>, <em>config</em>, <em>output_hdf</em>, <em>feat_test=None</em>, <em>patientinfo_test=None</em>, <em>fixedsplits=None</em>, <em>output_smac=None</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/trainclassifier.html#trainclassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.trainclassifier.trainclassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Train a classifier using machine learning from features.</p>
 <p>By default, if no
 split in training and test is supplied, a cross validation
