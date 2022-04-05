@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +45,7 @@ def load_config(config_file_path):
                      'Resampling': dict(), 'Imputation': dict(),
                      'Ensemble': dict(), 'Bootstrap': dict(),
                      'FeatPreProcess': dict(), 'Evaluation': dict(),
-                     'OneHotEncoding': dict()}
+                     'OneHotEncoding': dict(), 'SMAC': dict()}
 
     settings_dict['General']['cross_validation'] =\
         settings['General'].getboolean('cross_validation')
@@ -331,6 +331,31 @@ def load_config(config_file_path):
         [float(str(item).strip()) for item in
          settings['Classification']['XGB_colsample_bytree'].split(',')]
 
+    # Light GBM
+    settings_dict['Classification']['LightGBM_num_leaves'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['LightGBM_num_leaves'].split(',')]
+
+    settings_dict['Classification']['LightGBM_max_depth'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['LightGBM_max_depth'].split(',')]
+
+    settings_dict['Classification']['LightGBM_min_child_samples'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['LightGBM_min_child_samples'].split(',')]
+
+    settings_dict['Classification']['LightGBM_reg_alpha'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['LightGBM_reg_alpha'].split(',')]
+
+    settings_dict['Classification']['LightGBM_reg_lambda'] =\
+        [float(str(item).strip()) for item in
+         settings['Classification']['LightGBM_reg_lambda'].split(',')]
+
+    settings_dict['Classification']['LightGBM_min_child_weight'] =\
+        [int(str(item).strip()) for item in
+         settings['Classification']['LightGBM_min_child_weight'].split(',')]
+
     # Cross validation settings
     settings_dict['CrossValidation']['Type'] =\
         str(settings['CrossValidation']['Type'])
@@ -372,9 +397,26 @@ def load_config(config_file_path):
     settings_dict['HyperOptimization']['memory'] = \
         str(settings['HyperOptimization']['memory'])
 
+    # Settings for SMAC
+    settings_dict['SMAC']['use'] =\
+        settings['SMAC'].getboolean('use')
+    settings_dict['SMAC']['n_smac_cores'] =\
+        int(settings['SMAC']['n_smac_cores'])
+    settings_dict['SMAC']['budget_type'] =\
+        str(settings['SMAC']['budget_type'])
+    settings_dict['SMAC']['budget'] =\
+        int(settings['SMAC']['budget'])
+    settings_dict['SMAC']['init_method'] =\
+        str(settings['SMAC']['init_method'])
+    settings_dict['SMAC']['init_budget'] =\
+        int(settings['SMAC']['init_budget'])
+
     # Settings for ensembling
-    settings_dict['Ensemble']['Use'] =\
-        settings['Ensemble'].getint('Use')
+    settings_dict['Ensemble']['Method'] =\
+        str(settings['Ensemble']['Method'])
+    settings_dict['Ensemble']['Size'] =\
+        int(settings['Ensemble']['Size'])
+        #settings['Ensemble'].getint('Use')
 
     settings_dict['Ensemble']['Metric'] =\
         settings['Ensemble']['Metric']

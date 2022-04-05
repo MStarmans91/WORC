@@ -49,35 +49,42 @@ Adding methods to hyperoptimization
    the documentation, see https://github.com/MStarmans91/WORC/blob/master/WORC/doc/generate_config.py.
 
 2. Make sure these fields are adequately parsed by adding parsing to
-   :py:mod:`WORC.WORC.IOparser.config_io_classifier.load_config`.
+   :py:mod:`WORC.IOparser.config_io_classifier.load_config`.
 
 3. Define how the parameters you just added are added to the search space
-   in :py:mod:`WORC.WORC.classification.trainclassifier.trainclassifier`. For
+   in :py:mod:`WORC.classification.trainclassifier.trainclassifier`, or
+   :py:mod:`WORC.classification.construct_classifier` both  the
+   ``construct_classifier`` and ``create_param_grid`` functions for machine
+   learning estimators (e.g. classifiers). For
    example, your parameters may define the actual options, or the min-max of
    a distribution (e.g. uniform, log-uniform). See the referred function
    for some examples. Make sure that the object is iterable.
 
 4. These parameters will end up in the function fitting the workflow:
-   :py:mod:`WORC.WORC.classification.fitandscore.fit_and_score`. Hence,
+   :py:mod:`WORC.classification.fitandscore.fit_and_score`. Hence,
    add a part to that function to embed your method in the workflow. We advice
    you to embed your method in a sklearn compatible class, having init,
    fit and transform functions. See for example
-   py:mod:`WORC.WORC.featureprocessing.Preprocessor.Preprocessor`.
+   py:mod:`WORC.featureprocessing.Preprocessor.Preprocessor`.
 
    In
-   :py:mod:`WORC.WORC.classification.fitandscore.fit_and_score`, make sure
+   :py:mod:`WORC.classification.fitandscore.fit_and_score`, make sure
    that after fitting your object, the parameters used are deleted from the
    config, as is done for the other methods as well.
 
-   Lastly, in :py:mod:`WORC.WORC.classification.fitandscore.fit_and_score`,
+   Lastly, in :py:mod:`WORC.classification.fitandscore.fit_and_score`,
    make sure the fitted object is returned. We recommend looking at the
    ``imputer`` object and similarly including your object.
 
    This is given to various objects
-   in the :py:mod:`WORC.WORC.classification.SearchCV` module. Therefore,
+   in the :py:mod:`WORC.classification.SearchCV` module. Therefore,
    add the returned object to all the parts were fitted objects are used: we
    recommend looking everywhere the ``imputer`` is stated in
-   :py:mod:`WORC.WORC.classification.SearchCV`, copying those five statements
+   :py:mod:`WORC.classification.SearchCV`, copying those five statements
    and replace ``imputer`` with however you called your methods. You can see
    that this is also similar to e.g. the ``scaler``, ``pca``, and ``groupsel``
    objects.
+
+5. If you want your new method to be used by the ``SimpleWORC`` or a child
+   facade, check :py:mod:`WORC.facade.SimpleWORC` to see if you need to add it,
+   e.g. whitelist a classifier.

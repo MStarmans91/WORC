@@ -64,11 +64,11 @@ class CsvDetector(AbstractDetector):
             return False
 
 
-class CartesiusClusterDetector(AbstractDetector):
+class SnelliusClusterDetector(AbstractDetector):
     def _is_detected(self):
         if LinuxDetector()._is_detected():
             try:
-                if 'cartesius' in Path('/etc/hosts').read_text():
+                if 'localhost6.localdomain6' in Path('/etc/hosts').read_text():
                     return True
             except:
                 return False

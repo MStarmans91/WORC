@@ -27,8 +27,11 @@ def main():
     parser.add_argument('-pinfo', '--pinfo', metavar='pinfo',
                         nargs='+', dest='pinfo', type=str, required=True,
                         help='Patient Info File (txt)')
-    parser.add_argument('-ensemble', '--ensemble', metavar='ensemble',
-                        nargs='+', dest='ensemble', type=str, required=True,
+    parser.add_argument('-ensemble_method', '--ensemble_method', metavar='ensemble_method',
+                        nargs='+', dest='ensemble_method', type=str, required=True,
+                        help='Method for creating ensemble (string)')
+    parser.add_argument('-ensemble_size', '--ensemble_size', metavar='ensemble_size',
+                        nargs='+', dest='ensemble_size', type=str, required=False,
                         help='Length of ensemble (int)')
     parser.add_argument('-label_type', '--label_type', metavar='label_type',
                         nargs='+', dest='label_type', type=str, required=True,
@@ -55,7 +58,8 @@ def main():
 
     plot_ROC(prediction=args.prediction,
              pinfo=args.pinfo,
-             ensemble=args.ensemble,
+             ensemble_method=args.ensemble_method,
+             ensemble_size=args.ensemble_size,
              label_type=args.label_type,
              ROC_png=args.ROC_png,
              ROC_tex=args.ROC_tex,

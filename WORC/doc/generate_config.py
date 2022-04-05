@@ -1,11 +1,29 @@
 #!/usr/bin/env python
+
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import os
 
 import WORC
 from fastr.helpers.rest_generation import create_rest_table
+from WORC.tools.fingerprinting import quantitative_modalities, qualitative_modalities
 
 
 def generate_config():
+    """Generate documentation for the WORC config in rst format."""
     field_key = []
     field_subkey = []
     field_default = []
@@ -115,10 +133,15 @@ def generate_config_options():
     config['General']['tempsave'] = 'True, False'
     config['General']['AssumeSameImageAndMaskMetadata'] = 'True, False'
     config['General']['ComBat'] = 'True, False'
+    config['General']['Fingerprint'] = 'True, False'
+
+    # Fingerprinting
+    config['Fingerprinting'] = dict()
+    config['Fingerprinting']['max_num_image'] = 'Integer'
 
     # Segmentix
     config['Segmentix'] = dict()
-    config['Segmentix']['mask'] = 'subtract, multiply'
+    config['Segmentix']['mask'] = 'None, subtract, multiply'
     config['Segmentix']['segtype'] = 'None, Ring, Dilate'
     config['Segmentix']['segradius'] = 'Integer > 0'
     config['Segmentix']['N_blobs'] = 'Integer > 0'
@@ -164,7 +187,10 @@ def generate_config_options():
 
     # Parameter settings for PREDICT feature calculation
     # Defines what should be done with the images
-    config['ImageFeatures']['image_type'] = 'CT'
+    config['ImageFeatures']['image_type'] = 'String'
+
+    # How to extract the features in different dimension
+    config['ImageFeatures']['extraction_mode'] = 'String: 2D, 2.5D or 3D'
 
     # Define frequencies for gabor filter in pixels
     config['ImageFeatures']['gabor_frequencies'] = 'Float(s)'
@@ -351,6 +377,12 @@ def generate_config_options():
     config['Classification']['XGB_gamma'] = 'Two Floats: loc and scale'
     config['Classification']['XGB_min_child_weight'] = 'Two Integers: loc and scale'
     config['Classification']['XGB_colsample_bytree'] = 'Two Floats: loc and scale'
+    config['Classification']['LightGBM_num_leaves'] = 'Two Integers: loc and scale'
+    config['Classification']['LightGBM_max_depth'] = 'Two Integers: loc and scale'
+    config['Classification']['LightGBM_min_child_samples'] = 'Two Integers: loc and scale'
+    config['Classification']['LightGBM_reg_alpha'] = 'Two Floats: loc and scale'
+    config['Classification']['LightGBM_reg_lambda'] = 'Two Floats: loc and scale'
+    config['Classification']['LightGBM_min_child_weight'] = 'Two Integers: loc and scale'
 
     # CrossValidation
     config['CrossValidation'] = dict()
@@ -381,9 +413,18 @@ def generate_config_options():
     config['FeatureScaling']['skip_features'] = 'Comma separated list of strings'
     config['FeatureScaling']['scaling_method'] = 'robust_z_score, z_score, robust, minmax, log_z_score, None'
 
+    config['SMAC'] = dict()
+    config['SMAC']['use'] = 'True, False'
+    config['SMAC']['n_smac_cores'] = 'Integer'
+    config['SMAC']['budget_type'] = 'evals, time'
+    config['SMAC']['budget'] = 'Integer'
+    config['SMAC']['init_method'] = 'random, sobol'
+    config['SMAC']['init_budget'] = 'Integer'
+
     # Ensemble options
     config['Ensemble'] = dict()
-    config['Ensemble']['Use'] = 'Integer'
+    config['Ensemble']['Method'] = 'Single, top_N, FitNumber, ForwardSelection, Caruana, Bagging'
+    config['Ensemble']['Size'] = 'Integer'
     config['Ensemble']['Metric'] = 'Default, generalization'
 
     # Evaluation options
@@ -414,10 +455,15 @@ def generate_config_descriptions():
     config['General']['tempsave'] = 'Determines whether after every cross validation iteration the result will be saved, in addition to the result after all iterations. Especially useful for debugging.'
     config['General']['AssumeSameImageAndMaskMetadata'] = 'Make the assumption that the image and mask have the same metadata. If True and there is a mismatch, metadata from the image will be copied to the mask.'
     config['General']['ComBat'] = 'Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See <https://github.com/Jfortin1/ComBatHarmonization for more information./>`_ .'
+    config['General']['Fingerprint'] = 'Whether to use Fingerprinting or not.'
+
+    # Fingerprinting
+    config['Fingerprinting'] = dict()
+    config['Fingerprinting']['max_num_image'] = 'Maximum number of images and segmentations to evaluate during fingerprinting to limit the workload.'
 
     # Segmentix
     config['Segmentix'] = dict()
-    config['Segmentix']['mask'] = 'If a mask is supplied, should the mask be subtracted from the contour or multiplied.'
+    config['Segmentix']['mask'] = 'If None, masks will not be used by segmentix. If a mask is supplied, should the mask be subtracted from the contour or multiplied.'
     config['Segmentix']['segtype'] = 'If Ring, then a ring around the segmentation will be used as contour. If Dilate, the segmentation will be dilated per 2-D axial slice with a disc.'
     config['Segmentix']['segradius'] = 'Define the radius of the ring or disc used if segtype is Ring or Dilate, respectively.'
     config['Segmentix']['N_blobs'] = 'How many of the largest blobs are extracted from the segmentation. If None, no blob extraction is used.'
@@ -450,7 +496,7 @@ def generate_config_descriptions():
     config['ImageFeatures']['histogram'] = 'Determine whether histogram features are computed or not.'
     config['ImageFeatures']['orientation'] = 'Determine whether orientation features are computed or not.'
     config['ImageFeatures']['texture_Gabor'] = 'Determine whether Gabor texture features are computed or not.'
-    config['ImageFeatures']['texture_LBP'] ='Determine whether LBP texture features are computed or not.'
+    config['ImageFeatures']['texture_LBP'] = 'Determine whether LBP texture features are computed or not.'
     config['ImageFeatures']['texture_GLCM'] = 'Determine whether GLCM texture features are computed or not.'
     config['ImageFeatures']['texture_GLCMMS'] = 'Determine whether GLCM Multislice texture features are computed or not.'
     config['ImageFeatures']['texture_GLDM'] = 'Determine whether GLDM texture features are computed or not.'
@@ -464,7 +510,10 @@ def generate_config_descriptions():
 
     # Parameter settings for PREDICT feature calculation
     # Defines what should be done with the images
-    config['ImageFeatures']['image_type'] = 'Modality of images supplied. Determines how the image is loaded.'
+    config['ImageFeatures']['image_type'] = f'Modality of images supplied. Determines how the image is loaded. Mandatory to supply by user. Should be one of the valid quantitative modalities {quantitative_modalities} or qualitative modalities {qualitative_modalities}.'
+
+    # How to extract the features in different dimension
+    config['ImageFeatures']['extraction_mode'] = 'Determine how to extract the features: 2D if your masks and/or images have only one 2D slice, 3D for tru 3D images, 2.5D for 3D images but in a slice-by-slice stacked 2D manner. The latter is recommended when the slice thickness is much larger (>2) than the pixel spacing.'
 
     # Define frequencies for gabor filter in pixels
     config['ImageFeatures']['gabor_frequencies'] = 'Frequencies of Gabor filters used: can be a single float or a list.'
@@ -508,7 +557,7 @@ def generate_config_descriptions():
     config['PyRadiomics']['resampledPixelSpacing'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['interpolator'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html?highlight=sitkbspline#feature-extractor-level/>`_ .'
     config['PyRadiomics']['preCrop'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
-    config['PyRadiomics']['binCount'] = 'We advice to use a fixed bin count instead of a fixed bin width, as on imaging modalities such as MRI, the scale of the values varies a lot, which is incompatible with a fixed bin width. See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
+    config['PyRadiomics']['binCount'] = 'We advice to use a fixed bin count instead of a fixed bin width, as on imaging modalities such as MR, the scale of the values varies a lot, which is incompatible with a fixed bin width. See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['binWidth'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['force2D'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
     config['PyRadiomics']['force2Ddimension'] = 'See <https://pyradiomics.readthedocs.io/en/latest/customization.html/>`_ .'
@@ -647,6 +696,12 @@ def generate_config_descriptions():
     config['Classification']['XGB_gamma'] = 'Gamma of XGB.'
     config['Classification']['XGB_min_child_weight'] = 'Minimum child weights in XGB.'
     config['Classification']['XGB_colsample_bytree'] = 'Col sample by tree in XGB.'
+    config['Classification']['LightGBM_num_leaves'] = 'Maximum tree leaves for base learners. See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_max_depth'] = 'Maximum tree depth for base learners. See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_min_child_samples'] = 'Minimum number of data needed in a child (leaf). See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_reg_alpha'] = 'L1 regularization term on weights. See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_reg_lambda'] = 'L2 regularization term on weights. See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
+    config['Classification']['LightGBM_min_child_weight'] = 'Minimum sum of instance weight (hessian) needed in a child (leaf). See also https://lightgbm.readthedocs.io/en/latest/Parameters.html.'
 
     # CrossValidation
     config['CrossValidation'] = dict()
@@ -677,9 +732,18 @@ def generate_config_descriptions():
     config['FeatureScaling']['skip_features'] = 'Determine which features should be skipped. This field should contain a comma separated list of substrings: when one or more of these are in a feature name, the feature is skipped.'
     config['FeatureScaling']['scaling_method'] = 'Determine the scaling method.'
 
+    config['SMAC'] = dict()
+    config['SMAC']['use'] = 'If True, use SMAC as the optimization strategy.'
+    config['SMAC']['n_smac_cores'] = 'Number of independent, parallel SMAC instances to use.'
+    config['SMAC']['budget_type'] = 'Type of budget to use for the SMAC optimization, either an evaluation limit or a time limit.'
+    config['SMAC']['budget'] = 'Size of the budget, which depends on the type of budget. Number of evaluations for an evaluation limit, or wallclock seconds for a time limit.'
+    config['SMAC']['init_method'] = 'Initialization method of SMAC. Supported are a random initialization or a sobol sequence.'
+    config['SMAC']['init_budget'] = 'Number of evaluations used for the initialization. Always an evaluation limit, regardless of the budget type choice of the optimization.'
+
     # Ensemble options
     config['Ensemble'] = dict()
-    config['Ensemble']['Use'] = 'Determine whether to use ensembling or not. Provide an integer to state how many estimators to include: 1 equals no ensembling.'
+    config['Ensemble']['Method'] = 'Choose which ensemble method to use. If you do not wish to use an ensemble, use Single or top_N with size 1.'
+    config['Ensemble']['Size'] = 'Number of estimators to use in the ensemble for the top_N method, or the number of bags for the Bagging method.'
     config['Ensemble']['Metric'] = 'Metric used to determine ranking of estimators in ensemble. When using default, the metric that is used in the hyperoptimization is used.'
 
     # Evaluation options

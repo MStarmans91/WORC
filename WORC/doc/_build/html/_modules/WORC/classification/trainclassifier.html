@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.trainclassifier &mdash; WORC 3.5.0 documentation</title>
+  <title>WORC.classification.trainclassifier &mdash; WORC 3.6.0 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.5.0
+                3.6.0
               </div>
             
           
@@ -165,7 +165,7 @@
   <h1>Source code for WORC.classification.trainclassifier</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -181,6 +181,7 @@
 <span class="c1"># limitations under the License.</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">uniform</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
 <span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
@@ -188,12 +189,13 @@
 <span class="kn">import</span> <span class="nn">WORC.IOparser.config_io_classifier</span> <span class="k">as</span> <span class="nn">config_io</span>
 <span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> \
     <span class="n">log_uniform</span><span class="p">,</span> <span class="n">boolean_uniform</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 
 <div class="viewcode-block" id="trainclassifier"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.trainclassifier.trainclassifier">[docs]</a><span class="k">def</span> <span class="nf">trainclassifier</span><span class="p">(</span><span class="n">feat_train</span><span class="p">,</span> <span class="n">patientinfo_train</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span>
                     <span class="n">output_hdf</span><span class="p">,</span>
                     <span class="n">feat_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">patientinfo_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                    <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_smac</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Train a classifier using machine learning from features.</span>
 
 <span class="sd">    By default, if no</span>
@@ -270,6 +272,14 @@
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">fixedsplits</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
         <span class="n">fixedsplits</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fixedsplits</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">output_smac</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_smac</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">output_smac</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_smac</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># FIXME</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[WORC Warning] You provided multiple output json files: only the first one will be used!&#39;</span><span class="p">)</span>
+            <span class="n">output_smac</span> <span class="o">=</span> <span class="n">output_smac</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
     <span class="c1"># Load variables from the config file</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">config_io</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
     <span class="n">label_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;label_names&#39;</span><span class="p">]</span>
@@ -306,6 +316,7 @@
 
     <span class="c1"># For N_iter, perform k-fold crossvalidation</span>
     <span class="n">outputfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)</span>
+    <span class="n">smac_result_file</span> <span class="o">=</span> <span class="n">output_smac</span>
     <span class="k">if</span> <span class="n">feat_test</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">crossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
                                          <span class="n">image_features_train</span><span class="p">,</span>
@@ -316,7 +327,9 @@
                                          <span class="n">fixedsplits</span><span class="o">=</span><span class="n">fixedsplits</span><span class="p">,</span>
                                          <span class="n">ensemble</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">],</span>
                                          <span class="n">outputfolder</span><span class="o">=</span><span class="n">outputfolder</span><span class="p">,</span>
-                                         <span class="n">tempsave</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;tempsave&#39;</span><span class="p">])</span>
+                                         <span class="n">tempsave</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;tempsave&#39;</span><span class="p">],</span>
+                                         <span class="n">use_SMAC</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">],</span>
+                                         <span class="n">smac_result_file</span><span class="o">=</span><span class="n">smac_result_file</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">trained_classifier</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">nocrossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span>
                                            <span class="n">label_data_test</span><span class="p">,</span>

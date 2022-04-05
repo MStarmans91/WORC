@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
 # limitations under the License.
 
 import os
+import numpy as np
 from scipy.stats import uniform
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
@@ -23,12 +24,13 @@ from WORC.IOparser.file_io import load_features
 import WORC.IOparser.config_io_classifier as config_io
 from WORC.classification.AdvancedSampler import discrete_uniform, \
     log_uniform, boolean_uniform
+import json
 
 
 def trainclassifier(feat_train, patientinfo_train, config,
                     output_hdf,
                     feat_test=None, patientinfo_test=None,
-                    fixedsplits=None, verbose=True):
+                    fixedsplits=None, output_smac=None, verbose=True):
     """Train a classifier using machine learning from features.
 
     By default, if no
@@ -105,6 +107,14 @@ def trainclassifier(feat_train, patientinfo_train, config,
     if type(fixedsplits) is list:
         fixedsplits = ''.join(fixedsplits)
 
+    if type(output_smac) is list:
+        if len(output_smac) == 1:
+            output_smac = ''.join(output_smac)
+        else:
+            # FIXME
+            print('[WORC Warning] You provided multiple output json files: only the first one will be used!')
+            output_smac = output_smac[0]
+
     # Load variables from the config file
     config = config_io.load_config(config)
     label_type = config['Labels']['label_names']
@@ -141,6 +151,7 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
+    smac_result_file = output_smac
     if feat_test is None:
         trained_classifier = cv.crossval(config, label_data_train,
                                          image_features_train,
@@ -151,7 +162,9 @@ def trainclassifier(feat_train, patientinfo_train, config,
                                          fixedsplits=fixedsplits,
                                          ensemble=config['Ensemble'],
                                          outputfolder=outputfolder,
-                                         tempsave=config['General']['tempsave'])
+                                         tempsave=config['General']['tempsave'],
+                                         use_SMAC=config['SMAC']['use'],
+                                         smac_result_file=smac_result_file)
     else:
         trained_classifier = cv.nocrossval(config, label_data_train,
                                            label_data_test,

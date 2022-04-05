@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,12 @@ import scipy
 from WORC.classification.AdvancedSampler import log_uniform, discrete_uniform
 import WORC.addexceptions as ae
 from xgboost import XGBClassifier, XGBRegressor
+
+try:
+    from lightgbm import LGBMClassifier
+except:
+    print("[INFO] LightGCM classifier currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.")
+
 
 
 def construct_classifier(config):
@@ -104,6 +110,23 @@ def construct_classifier(config):
                                   n_estimators=boosting_rounds,
                                   colsample_bytree=colsample_bytree,
                                   random_state=config['random_seed'])
+
+    elif config['classifiers'] == 'LightGBMClassifier':
+        # LightGBM Classifier
+        num_leaves = config['LightGBM_num_leaves']
+        max_depth = config['LightGBM_max_depth']
+        min_child_samples = config['LightGBM_min_child_samples']
+        reg_alpha = config['LightGBM_reg_alpha']
+        reg_lambda = config['LightGBM_reg_lambda']
+        min_child_weight = config['LightGBM_min_child_weight']
+
+        classifier = LGBMClassifier(num_leaves=num_leaves,
+                                    max_depth=max_depth,
+                                    min_child_samples=min_child_samples,
+                                    reg_alpha=reg_alpha,
+                                    reg_lambda=reg_lambda,
+                                    min_child_weight=min_child_weight,
+                                    random_state=config['random_seed'])
 
     elif config['classifiers'] == 'RF':
         # Random forest kernel
@@ -225,13 +248,18 @@ def construct_SVM(config, regression=False):
         clf = SVC(class_weight='balanced', probability=True, max_iter=max_iter,
                   random_state=config['random_seed'])
     else:
+        # NOTE: SVMR has no random state
         clf = SVMR(max_iter=max_iter)
 
     clf.kernel = str(config['SVMKernel'])
     clf.C = config['SVMC']
-    clf.degree = config['SVMdegree']
-    clf.coef0 = config['SVMcoef0']
-    clf.gamma = config['SVMgamma']
+    # Only add the following parameters if they are defined
+    if 'SVMdegree' in config:
+        clf.degree = config['SVMdegree']
+    if 'SVMcoef0' in config:
+        clf.coef0 = config['SVMcoef0']
+    if 'SVMgamma' in config:
+        clf.gamma = config['SVMgamma']
 
     return clf
 
@@ -342,5 +370,30 @@ def create_param_grid(config):
     param_grid['XGB_colsample_bytree'] =\
         scipy.stats.uniform(loc=config['XGB_colsample_bytree'][0],
                             scale=config['XGB_colsample_bytree'][1])
+
+    # LightGBM
+    param_grid['LightGBM_num_leaves'] =\
+        discrete_uniform(loc=config['LightGBM_num_leaves'][0],
+                         scale=config['LightGBM_num_leaves'][1])
+
+    param_grid['LightGBM_max_depth'] =\
+        discrete_uniform(loc=config['LightGBM_max_depth'][0],
+                         scale=config['LightGBM_max_depth'][1])
+
+    param_grid['LightGBM_min_child_samples'] =\
+        discrete_uniform(loc=config['LightGBM_min_child_samples'][0],
+                         scale=config['LightGBM_min_child_samples'][1])
+
+    param_grid['LightGBM_reg_alpha'] =\
+        scipy.stats.uniform(loc=config['LightGBM_reg_alpha'][0],
+                            scale=config['LightGBM_reg_alpha'][1])
+
+    param_grid['LightGBM_reg_lambda'] =\
+        scipy.stats.uniform(loc=config['LightGBM_reg_lambda'][0],
+                            scale=config['LightGBM_reg_lambda'][1])
+
+    param_grid['LightGBM_min_child_weight'] =\
+        log_uniform(loc=config['LightGBM_min_child_weight'][0],
+                    scale=config['LightGBM_min_child_weight'][1])
 
     return param_grid

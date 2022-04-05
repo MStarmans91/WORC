@@ -100,6 +100,8 @@ def mask_contour(contour, mask, method='multiply'):
         contour = np.bitwise_xor(contour, mask)
     elif method == "multiply":
         contour = np.multiply(contour, mask)
+    else:
+        raise ae.WORCKeyError(f"Masking method {method} is not valid, should be subtract or multiply.")
 
     return contour
 
@@ -185,11 +187,12 @@ def segmentix(parameters, image=None, segmentation=None,
         contour = dilate_contour(contour, radius)
 
     # Mask the segmentation if necessary
-    if mask is not None:
-        method = config['Segmentix']['mask']
+    method = config['Segmentix']['mask']
+    if mask is not None and method != "None":
         print('[Segmentix] Masking contour.')
         if type(mask) is list:
             mask = ''.join(mask)
+
         new_contour = mask_contour(contour, mask, method)
         if np.sum(new_contour) == 0:
             print('\t [WARNING] Contour after masking sums to zero: not applying masking.')

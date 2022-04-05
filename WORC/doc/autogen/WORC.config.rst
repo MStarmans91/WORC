@@ -10,6 +10,7 @@ Evaluation        :ref:`Evaluation <config-Evaluation>`
 FeatPreProcess    :ref:`FeatPreProcess <config-FeatPreProcess>`      
 Featsel           :ref:`Featsel <config-Featsel>`                    
 FeatureScaling    :ref:`FeatureScaling <config-FeatureScaling>`      
+Fingerprinting    :ref:`Fingerprinting <config-Fingerprinting>`      
 General           :ref:`General <config-General>`                    
 HyperOptimization :ref:`HyperOptimization <config-HyperOptimization>`
 ImageFeatures     :ref:`ImageFeatures <config-ImageFeatures>`        
@@ -19,6 +20,7 @@ OneHotEncoding    :ref:`OneHotEncoding <config-OneHotEncoding>`
 Preprocessing     :ref:`Preprocessing <config-Preprocessing>`        
 PyRadiomics       :ref:`PyRadiomics <config-PyRadiomics>`            
 Resampling        :ref:`Resampling <config-Resampling>`              
+SMAC              :ref:`SMAC <config-SMAC>`                          
 Segmentix         :ref:`Segmentix <config-Segmentix>`                
 SelectFeatGroup   :ref:`SelectFeatGroup <config-SelectFeatGroup>`    
 ================= ===================================================

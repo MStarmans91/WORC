@@ -123,7 +123,7 @@ def load_label_csv(input_file):
         label_status (numpy array): The status of the different labels
          for each patient
     """
-    data = pd.read_csv(input_file, sep=None, header=0)
+    data = pd.read_csv(input_file, sep=None, header=0, engine='python')
 
     # Load and check the header
     header = data.keys()

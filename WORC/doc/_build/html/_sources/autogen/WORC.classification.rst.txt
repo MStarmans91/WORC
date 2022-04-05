@@ -100,6 +100,15 @@ classification Package
     :show-inheritance:
     :special-members:
 
+:mod:`smac` Module
+------------------
+
+.. automodule:: WORC.classification.smac
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`trainclassifier` Module
 -----------------------------
 

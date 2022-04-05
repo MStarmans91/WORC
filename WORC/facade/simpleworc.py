@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,10 +28,11 @@ from .helpers.exceptions import PathNotFoundException, NoImagesFoundException, \
 from WORC.addexceptions import WORCKeyError, WORCValueError, WORCAssertionError
 from .helpers.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
-    CartesiusClusterDetector
+    SnelliusClusterDetector
 
 from WORC.validators.preflightcheck import ValidatorsFactory
 from functools import wraps
+from WORC.tools.fingerprinting import quantitative_modalities, qualitative_modalities
 
 
 def _for_all_methods(decorator):
@@ -102,6 +103,7 @@ class SimpleWORC():
         self._labels_file_train = None
         self._labels_file_test = None
         self._label_names = []
+        self._image_types = ['']
 
         self._method = None
 
@@ -113,10 +115,18 @@ class SimpleWORC():
         # Detect wether we are on a cluster
         if BigrClusterDetector().do_detection():
             self._worc.fastr_plugin = 'DRMAAExecution'
-        elif CartesiusClusterDetector().do_detection():
+        elif SnelliusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
 
     def set_fixed_splits(self, fixed_splits_csv):
+        """Provide CSV with fixed splits for cross-validation.
+
+        Parameters
+        ----------
+        fixed_splits_csv: string
+            Path of CSV file
+
+        """
         if not Path(fixed_splits_csv).is_file():
             raise PathNotFoundException(fixed_splits_csv)
 
@@ -124,6 +134,22 @@ class SimpleWORC():
             print('WARN: set_fixed_splits already set. Please check your script to make sure this is ok!')
 
         self._fixed_splits = fixed_splits_csv
+
+    def set_image_types(self, image_types):
+        """Set the type of images to be processed.
+
+        Parameters
+        ----------
+        image_types: list of strings
+            Names of types of images that are provided to WORC.
+
+        """
+        all_valid_modalities = quantitative_modalities + qualitative_modalities
+        if any(imt not in all_valid_modalities for imt in image_types):
+            m = f'One of your image types {image_types} is not one of the valid image types {quantitative_modalities + qualitative_modalities}. This is mandatory to set when performing fingerprinting, see the WORC Documentation (https://worc.readthedocs.io/en/latest/static/configuration.html#imagefeatures).'
+            raise WORCValueError(m)
+
+        self._image_types = image_types
 
     def features_from_this_directory(self, directory,
                                      feature_file_name='features.hdf5',
@@ -395,7 +421,7 @@ class SimpleWORC():
         """
         # validate
         if 'classification' in method:
-            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier']
+            valid_estimators = ['SVM', 'RF', 'SGD', 'LR', 'LDA', 'QDA', 'GaussianNB', 'ComplementNB', 'AdaBoostClassifier', 'XGBClassifier', 'LightGBMClassifier']
         elif method == 'regression':
             valid_estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'SGDR', 'XGBRegressor', 'AdaBoostRegressor', 'LinR', 'Ridge']
         else:
@@ -607,7 +633,7 @@ class SimpleWORC():
         is enabled, jobs are parallellized over all available cores, which majorly speeds
         up the computation.
 
-        Note: SimpleWORC has an automatic detector for the BIGR and Cartesius cluster. Hence,
+        Note: SimpleWORC has an automatic detector for the BIGR and Snellius cluster. Hence,
         on those clusters, do not use the multicore execution, as this will overwrite
         the changes applied by the detectors.
         """
@@ -688,6 +714,8 @@ class SimpleWORC():
 
         # Create configuration files
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
+        for cnum, _ in enumerate(self._worc.configs):
+            self._worc.configs[cnum]['ImageFeatures']['image_type'] = self._image_types[cnum]
 
         # Build the fastr network
         self._worc.build()
