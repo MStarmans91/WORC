@@ -187,7 +187,7 @@ After defining the inputs, the following code can be used to run your first expe
     # Valid quantitative types are ['CT', 'PET', 'Thermography', 'ADC']
     # Valid qualitative types are ['MRI', 'DWI', 'US']
     experiment.set_image_types(['CT'])
-    
+
     # Use the standard workflow for your specific modus
     if modus == 'binary_classification':
         experiment.binary_classification(coarse=coarse)
@@ -225,12 +225,18 @@ named after your experiment name.
                                            'Features',
                                            'features_*.hdf5'))
 
+    if len(feature_files) == 0:
+        raise ValueError('No feature files found: your network has failed.')
+
     feature_files.sort()
     featurefile_p1 = feature_files[0]
     features_p1 = pd.read_hdf(featurefile_p1)
 
     # Read the overall peformance
     performance_file = os.path.join(experiment_folder, 'performance_all_0.json')
+    if not os.path.exists(performance_file):
+        raise ValueError(f'No performance file {performance_file} found: your network has failed.')
+
     with open(performance_file, 'r') as fp:
         performance = json.load(fp)
 

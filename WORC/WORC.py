@@ -1077,7 +1077,7 @@ class WORC(object):
                                 self.links_fingerprinting['classification'].collapse = 'train'
 
             else:
-                raise WORCexceptions.WORCIOError("Please provide labels.")
+                raise WORCexceptions.WORCIOError("Please provide labels for training, i.e., WORC.labels_train or SimpleWORC.labels_from_this_file.")
         else:
             raise WORCexceptions.WORCIOError("Please provide either images or features.")
 

@@ -19,7 +19,8 @@ import SimpleITK as sitk
 import numpy as np
 
 
-def resample_image(image, new_spacing, interpolator=sitk.sitkBSpline):
+def resample_image(image, new_spacing=None, new_size=None,
+                   interpolator=sitk.sitkBSpline):
     """Resample an image to another spacing.
 
     Parameters
@@ -34,6 +35,12 @@ def resample_image(image, new_spacing, interpolator=sitk.sitkBSpline):
     resampled_image : ITK Image
         Output image.
     """
+    if new_spacing is not None and new_size is not None:
+        raise ValueError('Either provide resample_spacing OR resample_size as input!')
+
+    if new_spacing is None and new_size is None:
+        raise ValueError('Either provide resample_spacing OR resample_size as input!')
+
     # Get original settings
     original_size = image.GetSize()
     original_spacing = image.GetSpacing()
@@ -44,10 +51,17 @@ def resample_image(image, new_spacing, interpolator=sitk.sitkBSpline):
     if len(original_spacing) == 2:
         original_spacing = original_spacing + (1.0, )
 
-    # Compute output size
-    new_size = [int(original_size[0]*original_spacing[0]/new_spacing[0]),
-                int(original_size[1]*original_spacing[1]/new_spacing[1]),
-                int(original_size[2]*original_spacing[2]/new_spacing[2])]
+    if new_size is None
+        # Compute output size
+        new_size = [int(original_size[0]*original_spacing[0]/new_spacing[0]),
+                    int(original_size[1]*original_spacing[1]/new_spacing[1]),
+                    int(original_size[2]*original_spacing[2]/new_spacing[2])]
+
+    if new_spacing is None
+        # Compute output spacing
+        new_spacing = [original_size[0]*original_spacing[0]/new_size[0],
+                       original_size[1]*original_spacing[1]/new_size[1],
+                       original_size[2]*original_spacing[2]/new_size[2]]
 
     # Set and execute the filter
     ResampleFilter = sitk.ResampleImageFilter()
