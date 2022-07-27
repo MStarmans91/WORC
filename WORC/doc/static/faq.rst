@@ -35,7 +35,7 @@ from your label file occurs in the filename of your inputs. For example,
 when using the example label file from the `WORC tutorial <https://github.com/MStarmans91/WORCTutorial/blob/master/Data/Examplefiles/pinfo_HN.csv/>`_,
 if your Patient ID is not listed in column 1, this error will occur.
 
-Error: ``File "...\lib\site-packages\numpy\lib\function_base.py", line 4406,`` `` in delete keep[obj,] = False`` ``IndexError: arrays used as indices must be of integer (or boolean) type``
+Error: ``File "...\lib\site-packages\numpy\lib\function_base.py", line 4406, in delete keep[obj,] = False IndexError: arrays used as indices must be of integer (or boolean) type``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 This is an error in PyRadiomics 3.0, see also
 `this issue <https://github.com/Radiomics/pyradiomics/issues/592/>`_. It has
@@ -146,3 +146,17 @@ Altneratively, when using ``BasicWORC``, you can append dictionaries to the
 the patient names, and as values the paths to the feature files, e.g.
 ``feature_dict = {'Patient1': '/path/to/featurespatient1.hdf5',
 'Patient2': '/path/to/someotherrandandomfolderwith/featurespatient2.hdf5'...}``.
+
+How to change the temporary and output folders?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``WORC`` makes use of the ``fastr`` workflow engine to manage and execute
+the experiment, and thus also to manage and produce the output. These folders
+can be configured in the ``fastr`` config (https://fastr.readthedocs.io/en/stable/static/file_description.html#config-file).
+The ``fastr`` config files can be found in a hidden folder .fastr in your home folder.
+``WORC`` adds an additional config file to the config.d folder of ``fastr``:
+https://github.com/MStarmans91/WORC/blob/master/WORC/fastrconfig/WORC_config.py.
+
+The two mounts that determine the temporary and output folders and thus which
+you have to change are:
+- Temporary output: ``mounts['tmp']`` in the ~/.fastr/config.py file
+- Final output: ``mounts['output']`` in the ~/.fastr/config.d/WORC_config.py file
