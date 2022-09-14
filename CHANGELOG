@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.6.1 - Unreleased
+------------------
+
+Fixed
+~~~~~
+- Bug when using elastix, dimensionality got wrong name in fastr network.
+
 3.6.0 - 2022-04-05
 ------------------
 

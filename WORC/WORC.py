@@ -662,9 +662,9 @@ class WORC(object):
 
                 # Optional SMAC output
                 if self.configs[0]['SMAC']['use'] == 'True':
-                   self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results',
-                                                                     step_id='general_sinks')
-                   self.sink_smac_results.input = self.classify.outputs['smac_results']
+                    self.sink_smac_results = self.network.create_sink('JsonFile', id='smac_results',
+                                                                      step_id='general_sinks')
+                    self.sink_smac_results.input = self.classify.outputs['smac_results']
 
                 if self.TrainTest:
                     # FIXME: the naming here is ugly
@@ -942,8 +942,14 @@ class WORC(object):
                         elif self.segmode == 'Register':
                             # ---------------------------------------------
                             # Registration nodes: Align segmentation of first
-                            # modality to others using registration ith Elastix
+                            # modality to others using registration with Elastix
                             self.add_elastix(label, nmod)
+
+                            # Add to fingerprinting if required
+                            if self.configs[0]['General']['Fingerprint'] == 'True':
+                                # Since there are no segmentations yet of this modality, just use those of the first, provided modality
+                                self.links_fingerprinting[f'{label}_segmentations'] = self.network.create_link(self.converters_seg_train[self.modlabels[0]].outputs['image'], self.node_fingerprinters[label].inputs['segmentations_train'])
+                                self.links_fingerprinting[f'{label}_segmentations'].collapse = 'train'
 
                         # -----------------------------------------------------
                         # Optionally, add segmentix, the in-house segmentation
@@ -1401,7 +1407,7 @@ class WORC(object):
             self.sources_segmentations_train[label] =\
                 self.network.create_source('ITKImageFile',
                                            id='segmentations_train_' + label,
-                                           node_group='input',
+                                           node_group='train',
                                            step_id='train_sources')
 
             self.converters_seg_train[label] =\
@@ -1418,7 +1424,7 @@ class WORC(object):
                 self.sources_segmentations_test[label] =\
                     self.network.create_source('ITKImageFile',
                                                id='segmentations_test_' + label,
-                                               node_group='input',
+                                               node_group='test',
                                                step_id='test_sources')
 
                 self.converters_seg_test[label] =\
@@ -1640,11 +1646,6 @@ class WORC(object):
                     if self.TrainTest:
                         self.calcfeatures_test[label][i_node].inputs['segmentation'] =\
                             self.transformix_seg_nodes_test[label].outputs['image']
-
-                # Add to fingerprinting if required
-                if self.configs[0]['General']['Fingerprint'] == 'True':
-                    self.links_fingerprinting[f'{label}_segmentations'] = self.network.create_link(self.transformix_seg_nodes_train[label].outputs['image'], self.node_fingerprinters[label].inputs['segmentations_train'])
-                    self.links_fingerprinting[f'{label}_segmentations'].collapse = 'train'
 
             # Save outputfor the training set
             self.sinks_transformations_train[label] =\
