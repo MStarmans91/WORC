@@ -51,13 +51,13 @@ def resample_image(image, new_spacing=None, new_size=None,
     if len(original_spacing) == 2:
         original_spacing = original_spacing + (1.0, )
 
-    if new_size is None
+    if new_size is None:
         # Compute output size
         new_size = [int(original_size[0]*original_spacing[0]/new_spacing[0]),
                     int(original_size[1]*original_spacing[1]/new_spacing[1]),
                     int(original_size[2]*original_spacing[2]/new_spacing[2])]
 
-    if new_spacing is None
+    if new_spacing is None:
         # Compute output spacing
         new_spacing = [original_size[0]*original_spacing[0]/new_size[0],
                        original_size[1]*original_spacing[1]/new_size[1],
