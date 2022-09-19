@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,7 +92,8 @@ def main():
                                  return_estimator=data['return_estimator'],
                                  error_score=data['error_score'],
                                  return_all=data['return_all'],
-                                 refit_workflows=data['refit_workflows'])
+                                 refit_training_workflows=data['refit_training_workflows'],
+                                 refit_validation_workflows=data['refit_validation_workflows'])
           for parameters in para.values())
 
         source_labels = ['RET', 'GroupSel', 'VarSel', 'SelectModel',
@@ -124,7 +125,8 @@ def main():
                                  return_estimator=data['return_estimator'],
                                  error_score=data['error_score'],
                                  return_all=data['return_all'],
-                                 refit_workflows=data['refit_workflows'])
+                                 refit_training_workflows=data['refit_training_workflows'],
+                                 refit_validation_workflows=data['refit_validation_workflows'])
           for parameters in para.values())
 
         source_labels = ['RET']

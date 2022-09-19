@@ -200,6 +200,7 @@ class WORC(object):
         config['General']['AssumeSameImageAndMaskMetadata'] = 'False'
         config['General']['ComBat'] = 'False'
         config['General']['Fingerprint'] = 'True'
+        config['General']['DoTestNRSNEns'] = 'False'
 
         # Fingerprinting
         config['Fingerprinting'] = dict()
@@ -496,7 +497,8 @@ class WORC(object):
         config['HyperOptimization']['maxlen'] = '100'
         config['HyperOptimization']['ranking_score'] = 'test_score'
         config['HyperOptimization']['memory'] = '3G'
-        config['HyperOptimization']['refit_workflows'] = 'False'
+        config['HyperOptimization']['refit_training_workflows'] = 'False'
+        config['HyperOptimization']['refit_validation_workflows'] = 'False'
 
         # SMAC options
         config['SMAC'] = dict()

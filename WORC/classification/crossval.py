@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@ from WORC.classification.regressors import regressors
 import glob
 import random
 import json
-from copy import copy
+import copy
 from sklearn.metrics import f1_score, roc_auc_score
 
 
@@ -40,7 +40,6 @@ def random_split_cross_validation(image_features, feature_labels, classes,
                                   fixedsplits=None,
                                   fixed_seed=False, use_fastr=None,
                                   fastr_plugin=None,
-                                  do_test_RS_Ensemble=False,
                                   use_SMAC=False, smac_result_file=None):
     """Cross-validation in which data is randomly split in each iteration.
 
@@ -239,7 +238,7 @@ def random_split_cross_validation(image_features, feature_labels, classes,
         save_data.append(temp_save_data)
 
         # Test performance for various RS and ensemble sizes
-        if do_test_RS_Ensemble:
+        if config['General']['DoTestNRSNEns']:
             output_json = os.path.join(tempfolder, f'performance_RS_Ens_crossval_{i}.json')
             test_RS_Ensemble(estimator_input=trained_classifier,
                              X_train=X_train, Y_train=Y_train,
@@ -250,7 +249,9 @@ def random_split_cross_validation(image_features, feature_labels, classes,
             # Save memory
             delattr(trained_classifier, 'fitted_workflows')
             trained_classifier.fitted_workflows = list()
-
+            delattr(trained_classifier, 'fitted_validation_workflows')
+            trained_classifier.fitted_validation_workflows = list()
+            
         # Create a temporary save
         if tempsave:
             panda_labels = ['trained_classifier', 'X_train', 'X_test',
@@ -655,7 +656,7 @@ def crossval(config, label_data, image_features,
 def nocrossval(config, label_data_train, label_data_test, image_features_train,
                image_features_test, param_grid=None, use_fastr=False,
                fastr_plugin=None, ensemble={'Use': False},
-               modus='singlelabel', do_test_RS_Ensemble=False):
+               modus='singlelabel'):
     """Constructs multiple individual classifiers based on the label settings.
 
     Arguments:
@@ -787,7 +788,7 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
         classifier_labelss[i_name] = panda_data_temp
 
         # Test performance for various RS and ensemble sizes
-        if do_test_RS_Ensemble:
+        if config['General']['DoTestNRSNEns']:
             # FIXME: Use home folder, as this function does not know
             # Where final or temporary output is located
             output_json = os.path.join(os.path.expanduser("~"),
@@ -802,6 +803,8 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
             # Save memory
             delattr(trained_classifier, 'fitted_workflows')
             trained_classifier.fitted_workflows = list()
+            delattr(trained_classifier, 'fitted_validation_workflows')
+            trained_classifier.fitted_validation_workflows = list()
 
     panda_data = pd.DataFrame(classifier_labelss)
 
@@ -809,7 +812,7 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
 
 
 def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
-                     feature_labels, output_json):
+                     feature_labels, output_json, verbose=False):
     """Test performance for different random search and ensemble sizes.
 
     This function is written for conducting a specific experiment from the
@@ -818,14 +821,14 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
     """
 
     # Process some input
-    estimator_original = copy(estimator_input)
+    estimator_original = copy.deepcopy(estimator_input)
     X_train_temp = [(x, feature_labels) for x in X_train]
     n_workflows = len(estimator_original.fitted_workflows)
 
     # Settings
-    RSs = [10, 50, 100, 1000, 10000] * 10 + [n_workflows]
-    ensembles = [1, 10, 50, 100]
-    maxlen = max(ensembles)
+    RSs = [10, 100, 1000, 10000] * 10 + [n_workflows]
+    ensembles = [1, 10, 100, 'FitNumber', 'Bagging']
+    maxlen = 100  # max ensembles numeric
 
     # Loop over the random searches and ensembles
     keys = list()
@@ -842,7 +845,7 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
 
             # Make a local copy of the estimator and select only subset of workflows
             print(f'\t Using RS {RS}.')
-            estimator = copy(estimator_original)
+            estimator = copy.deepcopy(estimator_original)
             workflow_num = np.arange(n_workflows).tolist()
 
             # Select only a specific set of workflows
@@ -855,12 +858,18 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             workflow_ranking = np.argsort(np.asarray(F1_validation)).tolist()[::-1]  # Normally, rank from smallest to largest, so reverse
             F1_validation = [F1_validation[i] for i in workflow_ranking]
 
-            # Only keep the number of RS required and resort based on ensemble
+            # Only keep the number of RS required and resort based on ranking
             estimator.fitted_workflows =\
                 [estimator.fitted_workflows[i] for i in selected_workflows]
             estimator.fitted_workflows =\
                 [estimator.fitted_workflows[i] for i in workflow_ranking]
-
+            
+            # For advanced ensembling methods, keep only the parameters of the selected RS workflows
+            estimator.cv_results_['params'] =\
+                [estimator.cv_results_['params'][i] for i in selected_workflows]
+            estimator.cv_results_['params'] =\
+                [estimator.cv_results_['params'][i] for i in workflow_ranking]
+                
             # Store train and validation AUC
             mean_val_F1 = F1_validation[0:maxlen]
             F1_training = estimator.cv_results_['mean_train_score']
@@ -872,25 +881,34 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             performances[f'Mean validation F1-score {key} top {maxlen}'] = mean_val_F1
 
             for ensemble in ensembles:
-                if ensemble <= RS:
-                    print(f'\t Using ensemble {ensemble}.')
+                if isinstance(ensemble, int):
+                    if ensemble > RS:
+                        continue
+                    else:
+                        print(f'\t Using ensemble {ensemble}.')
+                        # Create the ensemble
+                        estimator.create_ensemble(X_train_temp, Y_train, method='top_N',
+                                                  size=ensemble, verbose=verbose)
+                else:
+                    print(f'\t Using ensemble {ensemble}.')                  
                     # Create the ensemble
-                    estimator.create_ensemble(X_train_temp, Y_train, method=ensemble)
+                    estimator.create_ensemble(X_train_temp, Y_train, method=ensemble,
+                                              verbose=verbose)
 
-                    # Compute performance
-                    y_prediction = estimator.predict(X_test)
-                    y_score = estimator.predict_proba(X_test)[:, 1]
-                    auc = roc_auc_score(Y_test, y_score)
-                    f1_score_out = f1_score(Y_test, y_prediction, average='weighted')
-                    performances[f'Test F1-score Ensemble {ensemble} {key}'] = f1_score_out
-                    performances[f'Test AUC Ensemble {ensemble} {key}'] = auc
+                # Compute performance
+                y_prediction = estimator.predict(X_test)
+                y_score = estimator.predict_proba(X_test)[:, 1]
+                auc = roc_auc_score(Y_test, y_score)
+                f1_score_out = f1_score(Y_test, y_prediction, average='weighted')
+                performances[f'Test F1-score Ensemble {ensemble} {key}'] = f1_score_out
+                performances[f'Test AUC Ensemble {ensemble} {key}'] = auc
 
-                    y_prediction = estimator.predict(X_train)
-                    y_score = estimator.predict_proba(X_train)[:, 1]
-                    auc = roc_auc_score(Y_train, y_score)
-                    f1_score_out = f1_score(Y_train, y_prediction, average='weighted')
-                    performances[f'Train F1-score Ensemble {ensemble} {key}'] = f1_score_out
-                    performances[f'Train AUC Ensemble {ensemble} {key}'] = auc
+                y_prediction = estimator.predict(X_train)
+                y_score = estimator.predict_proba(X_train)[:, 1]
+                auc = roc_auc_score(Y_train, y_score)
+                f1_score_out = f1_score(Y_train, y_prediction, average='weighted')
+                performances[f'Train F1-score Ensemble {ensemble} {key}'] = f1_score_out
+                performances[f'Train AUC Ensemble {ensemble} {key}'] = auc
 
         # Write output
         with open(output_json, 'w') as fp:

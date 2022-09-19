@@ -292,5 +292,19 @@ Some things we would advice to always do:
 
       experiment.add_evaluation()
 
-For a complete overview of all functions, please look at the
+Changing fields in the configuration can be done with the add_config_overrides function, see below. 
+We recommend doing this after the modus part, as these also perform config_overrides.
+NOTE: all configuration fields have to be provided as strings.
+
+.. code-block:: python
+            
+        overrides = {
+                    'Classification': {
+                        'classifiers': 'SVM',
+                        },
+                    }
+
+        experiment.add_config_overrides(overrides)
+
+For a complete overview of all configuration functions, please look at the
 :ref:`Config chapter <config-chapter>`.

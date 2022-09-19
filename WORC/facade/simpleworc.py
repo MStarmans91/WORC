@@ -587,6 +587,19 @@ class SimpleWORC():
         For a full list of options, see the
         :ref:`WORC Config chapter <config-chapter>` for allowed options.
 
+        Example usage:
+
+        overrides = {
+            'Classification': {
+                'classifiers': 'SVM',
+            },
+            'Featsel': {
+                # Other estimators do not support multiclass
+                'SelectFromModel_estimator': 'RF'
+            }
+        }
+        self.add_config_overrides(overrides)
+
         Parameters
         ----------
         config: dictionary

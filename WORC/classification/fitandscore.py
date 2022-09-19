@@ -60,8 +60,9 @@ def fit_and_score(X, y, scoring,
                   return_times=True, return_parameters=False,
                   return_estimator=False,
                   error_score='raise', verbose=False,
-                  return_all=True, refit_workflows=False,
-                  use_smac=False):
+                  return_all=True, refit_training_workflows=False,
+                  refit_validation_workflows=False,
+                  skip=False):
     """Fit an estimator to a dataset and score the performance.
 
     The following
@@ -264,7 +265,10 @@ def fit_and_score(X, y, scoring,
     # Additional to sklearn defaults: return all parameters and refitted estimator
     ret.append(parameters)
 
-    if refit_workflows:
+    if refit_training_workflows:
+        ret.append(None)
+        
+    if refit_validation_workflows:
         ret.append(None)
 
     # ------------------------------------------------------------------------
@@ -304,6 +308,7 @@ def fit_and_score(X, y, scoring,
             imp_type = para_estimator['ImputationMethod']
             if verbose:
                 print(f'Imputing NaN with {imp_type}.')
+                
             # Only used with KNN in SMAC, otherwise assign default
             if 'ImputationNeighbours' in para_estimator.keys():
                 imp_nn = para_estimator['ImputationNeighbours']
@@ -441,7 +446,34 @@ def fit_and_score(X, y, scoring,
             X_test = VarSel.transform(X_test)
         except ValueError:
             if verbose:
-                print('[WARNING]: No features meet the selected Variance threshold! Skipping selection.')
+                print('[WARNING]: No features meet the selected variance threshold.')
+
+            VarSel = None
+            if skip:
+                if verbose:
+                    print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                parameters['Featsel_Variance'] = 'False'
+            else:
+                if verbose:
+                    print('[WARNING] Returning NaN as performance.')
+                
+                # return NaN as performance
+                para_estimator = delete_nonestimator_parameters(para_estimator)
+                
+                # Update the runtime
+                end_time = time.time()
+                runtime = end_time - start_time
+                if return_train_score:
+                    ret[3] = runtime
+                else:
+                    ret[2] = runtime
+                if return_all:
+                    return ret, GroupSel, VarSel, SelectModel,\
+                        feature_labels[0], scaler, encoder, imputer, pca,\
+                        StatisticalSel, ReliefSel, Sampler
+                else:
+                    return ret
+            
         if verbose:
             print("\t New Length: " + str(len(X_train[0])))
 
@@ -451,31 +483,10 @@ def fit_and_score(X, y, scoring,
     if not return_all:
         del VarSel
 
-    # Check whether there are any features left
-    if len(X_train[0]) == 0:
-        # TODO: Make a specific WORC exception for this warning.
-        if verbose:
-            print('[WARNING]: No features are selected! Probably your features have too little variance. Parameters:')
-            print(parameters)
-        para_estimator = delete_nonestimator_parameters(para_estimator)
-
-        # Update the runtime
-        end_time = time.time()
-        runtime = end_time - start_time
-        if return_train_score:
-            ret[3] = runtime
-        else:
-            ret[2] = runtime
-
-        if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
-        else:
-            return ret
-
     # ------------------------------------------------------------------------
     # Feature scaling
     if verbose and para_estimator['FeatureScaling'] != 'None':
-        print(f'Fitting scaler and transforming features, method ' +
+        print('Fitting scaler and transforming features, method ' +
               f'{para_estimator["FeatureScaling"]}.')
 
     scaling_method = para_estimator['FeatureScaling']
@@ -487,7 +498,7 @@ def fit_and_score(X, y, scoring,
         if n_skip_feat == len(X_train[0]):
             # Don't need to scale any features
             if verbose:
-                print('[WORC Warning] Skipping scaling, only skip features selected.')
+                print('[WARNING] Skipping scaling, only skip features selected.')
             scaler = None
         else:
             scaler = WORCScaler(method=scaling_method, skip_features=skip_features)
@@ -530,12 +541,43 @@ def fit_and_score(X, y, scoring,
                 print("\t Original Length: " + str(len(X_train[0])))
 
             # Transform all objects accordingly
-            X_train = ReliefSel.transform(X_train)
-            X_test = ReliefSel.transform(X_test)
+            X_train_temp = ReliefSel.transform(X_train)
+            if len(X_train_temp[0]) == 0:
+                if verbose:
+                    print('[WARNING]: No features are selected! Probably RELIEF could not properly select features.')
+            
+                ReliefSel = None
+                if skip:
+                    if verbose:
+                        print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                    parameters['ReliefUse'] = 'False'
+                else:
+                    if verbose:
+                        print('[WARNING] Returning NaN as performance.')
+                    
+                    # return NaN as performance
+                    para_estimator = delete_nonestimator_parameters(para_estimator)
+                    
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel,\
+                            feature_labels[0], scaler, encoder, imputer, pca,\
+                            StatisticalSel, ReliefSel, Sampler
+                    else:
+                        return ret
+            else:
+                X_train = X_train_temp
+                X_test = ReliefSel.transform(X_test)
 
-            if verbose:
-                print("\t New Length: " + str(len(X_train[0])))
-            feature_labels = ReliefSel.transform(feature_labels)
+                if verbose:
+                    print("\t New Length: " + str(len(X_train[0])))
+                feature_labels = ReliefSel.transform(feature_labels)
 
         del para_estimator['ReliefUse']
         del para_estimator['ReliefNN']
@@ -546,27 +588,6 @@ def fit_and_score(X, y, scoring,
     # Delete the object if we do not need to return it
     if not return_all:
         del ReliefSel
-
-    # Check whether there are any features left
-    if len(X_train[0]) == 0:
-        # TODO: Make a specific WORC exception for this warning.
-        if verbose:
-            print('[WARNING]: No features are selected! Probably RELIEF could not properly select features. Parameters:')
-            print(parameters)
-        para_estimator = delete_nonestimator_parameters(para_estimator)
-
-        # Update the runtime
-        end_time = time.time()
-        runtime = end_time - start_time
-        if return_train_score:
-            ret[3] = runtime
-        else:
-            ret[2] = runtime
-
-        if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
-        else:
-            return ret
 
     # ------------------------------------------------------------------------
     # Perform feature selection using a model
@@ -609,9 +630,34 @@ def fit_and_score(X, y, scoring,
             X_train_temp = SelectModel.transform(X_train)
             if len(X_train_temp[0]) == 0:
                 if verbose:
-                    print('[WORC WARNING]: No features are selected! Probably your data is too noisy or the selection too strict. Skipping SelectFromModel.')
+                    print('[WARNING]: No features are selected! Probably your data is too noisy or the selection too strict.')
+                
                 SelectModel = None
-                parameters['SelectFromModel'] = 'False'
+                if skip:
+                    if verbose:
+                        print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                    parameters['SelectFromModel'] = 'False'
+                else:
+                    if verbose:
+                        print('[WARNING] Returning NaN as performance.')
+                    
+                    # return NaN as performance
+                    para_estimator = delete_nonestimator_parameters(para_estimator)
+                    
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel,\
+                            feature_labels[0], scaler, encoder, imputer, pca,\
+                            StatisticalSel, ReliefSel, Sampler
+                    else:
+                        return ret
+                    
             else:
                 X_train = SelectModel.transform(X_train)
                 X_test = SelectModel.transform(X_test)
@@ -632,27 +678,6 @@ def fit_and_score(X, y, scoring,
     if not return_all:
         del SelectModel
 
-    # Check whether there are any features left
-    if len(X_train[0]) == 0:
-        # TODO: Make a specific WORC exception for this warning.
-        if verbose:
-            print('[WARNING]: No features are selected! Probably SelectFromModel could not properly select features. Parameters:')
-            print(parameters)
-        para_estimator = delete_nonestimator_parameters(para_estimator)
-
-        # Update the runtime
-        end_time = time.time()
-        runtime = end_time - start_time
-        if return_train_score:
-            ret[3] = runtime
-        else:
-            ret[2] = runtime
-
-        if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
-        else:
-            return ret
-
     # ----------------------------------------------------------------
     # PCA dimensionality reduction
     # Principle Component Analysis
@@ -667,55 +692,78 @@ def fit_and_score(X, y, scoring,
                 pca.fit(X_train)
             except (ValueError, LinAlgError) as e:
                 if verbose:
-                    print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+                    print(f'[WARNING] PCA Error: {e}.')
 
                 pca = None
-
-                # Update the runtime
-                end_time = time.time()
-                runtime = end_time - start_time
-                if return_train_score:
-                    ret[3] = runtime
+                if skip:
+                    if verbose:
+                        print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                    parameters['UsePCA'] = 'False'
                 else:
-                    ret[2] = runtime
+                    if verbose:
+                        print('[WARNING] Returning NaN as performance.')
+                    
+                    # return NaN as performance
+                    para_estimator = delete_nonestimator_parameters(para_estimator)
+                    
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel,\
+                            feature_labels[0], scaler, encoder, imputer, pca,\
+                            StatisticalSel, ReliefSel, Sampler
+                    else:
+                        return ret
 
-                if return_all:
-                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            else:
+                evariance = pca.explained_variance_ratio_
+                num = 0
+                sum = 0
+                while sum < 0.95:
+                    sum += evariance[num]
+                    num += 1
+
+                # Make a PCA based on the determined amound of components
+                pca = PCA(n_components=num, random_state=random_seed)
+                try:
+                    pca.fit(X_train)
+                except (ValueError, LinAlgError) as e:
+                    if verbose:
+                        print(f'[WARNING]: PCA Error: {e}.')
+
+                    pca = None
+                    if skip:
+                        if verbose:
+                            print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                        parameters['UsePCA'] = 'False'
+                    else:
+                        if verbose:
+                            print('[WARNING] Returning NaN as performance.')
+                        
+                        # return NaN as performance
+                        para_estimator = delete_nonestimator_parameters(para_estimator)
+                        
+                        # Update the runtime
+                        end_time = time.time()
+                        runtime = end_time - start_time
+                        if return_train_score:
+                            ret[3] = runtime
+                        else:
+                            ret[2] = runtime
+                        if return_all:
+                            return ret, GroupSel, VarSel, SelectModel,\
+                                feature_labels[0], scaler, encoder, imputer, pca,\
+                                StatisticalSel, ReliefSel, Sampler
+                        else:
+                            return ret
                 else:
-                    return ret
-
-            evariance = pca.explained_variance_ratio_
-            num = 0
-            sum = 0
-            while sum < 0.95:
-                sum += evariance[num]
-                num += 1
-
-            # Make a PCA based on the determined amound of components
-            pca = PCA(n_components=num, random_state=random_seed)
-            try:
-                pca.fit(X_train)
-            except (ValueError, LinAlgError) as e:
-                if verbose:
-                    print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
-
-                pca = None
-
-                # Update the runtime
-                end_time = time.time()
-                runtime = end_time - start_time
-                if return_train_score:
-                    ret[3] = runtime
-                else:
-                    ret[2] = runtime
-
-                if return_all:
-                    return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
-                else:
-                    return ret
-
-            X_train = pca.transform(X_train)
-            X_test = pca.transform(X_test)
+                    X_train = pca.transform(X_train)
+                    X_test = pca.transform(X_test)
 
         else:
             # Assume a fixed number of components: cannot be larger than
@@ -724,24 +772,43 @@ def fit_and_score(X, y, scoring,
 
             if n_components >= len(X_train[0]):
                 if verbose:
-                    print(f"[WORC WARNING] PCA n_components ({n_components})> n_features ({len(X_train[0])}): skipping PCA.")
+                    print(f"[WARNING] PCA n_components ({n_components})> n_features ({len(X_train[0])}): skipping PCA.")
             else:
                 pca = PCA(n_components=n_components, random_state=random_seed)
                 try:
                     pca.fit(X_train)
+                    X_train = pca.transform(X_train)
+                    X_test = pca.transform(X_test)
                 except (ValueError, LinAlgError) as e:
                     if verbose:
-                        print(f'[WARNING]: skipping this setting due to PCA Error: {e}.')
+                        print(f'[WARNING] PCA Error: {e}.')
 
                     pca = None
-                    if return_all:
-                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                    if skip:
+                        if verbose:
+                            print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                        parameters['UsePCA'] = 'False'
                     else:
-                        return ret
-
-                X_train = pca.transform(X_train)
-                X_test = pca.transform(X_test)
-
+                        if verbose:
+                            print('[WARNING] Returning NaN as performance.')
+                        
+                        # return NaN as performance
+                        para_estimator = delete_nonestimator_parameters(para_estimator)
+                        
+                        # Update the runtime
+                        end_time = time.time()
+                        runtime = end_time - start_time
+                        if return_train_score:
+                            ret[3] = runtime
+                        else:
+                            ret[2] = runtime
+                        if return_all:
+                            return ret, GroupSel, VarSel, SelectModel,\
+                                feature_labels[0], scaler, encoder, imputer, pca,\
+                                StatisticalSel, ReliefSel, Sampler
+                        else:
+                            return ret
+                        
         if verbose:
             print("\t New Length: " + str(len(X_train[0])))
 
@@ -769,24 +836,36 @@ def fit_and_score(X, y, scoring,
 
             StatisticalSel.fit(X_train, y)
             X_train_temp = StatisticalSel.transform(X_train)
-            if len(X_train_temp[0]) == 0:
+            if len(X_train_temp[0]) == 0:   
                 if verbose:
-                    print('[WORC WARNING]: No features are selected! Probably your statistical test feature selection was too strict. Skipping thresholding.')
-                para_estimator = delete_nonestimator_parameters(para_estimator)
-                # Update the runtime
-                end_time = time.time()
-                runtime = end_time - start_time
-                if return_train_score:
-                    ret[3] = runtime
+                    print('[WARNING] No features are selected! Probably your statistical test feature selection was too strict.')
+                         
+                StatisticalSel = None           
+                if skip:
+                    if verbose:
+                        print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                    parameters['StatisticalTestUse'] = 'False'
                 else:
-                    ret[2] = runtime
-                if return_all:
-                    return ret, GroupSel, VarSel, SelectModel,\
-                           feature_labels[0], scaler, encoder, imputer, pca,\
-                           StatisticalSel, ReliefSel, Sampler
-                else:
-                    return ret
-
+                    if verbose:
+                        print('[WARNING] Returning NaN as performance.')
+                    
+                    # return NaN as performance
+                    para_estimator = delete_nonestimator_parameters(para_estimator)
+                    
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel,\
+                            feature_labels[0], scaler, encoder, imputer, pca,\
+                            StatisticalSel, ReliefSel, Sampler
+                    else:
+                        return ret
+                        
             else:
                 X_train = StatisticalSel.transform(X_train)
                 X_test = StatisticalSel.transform(X_test)
@@ -849,7 +928,7 @@ def fit_and_score(X, y, scoring,
             except ae.WORCValueError as e:
                 message = str(e)
                 if verbose:
-                    print('[WORC WARNING] Skipping resampling: ' + message)
+                    print('[WARNING] Skipping resampling: ' + message)
                 Sampler = None
                 parameters['Resampling_Use'] = 'False'
 
@@ -880,7 +959,8 @@ def fit_and_score(X, y, scoring,
                 neg = int(len(y_train_temp) - pos)
                 if pos < 10 or neg < 10:
                     if verbose:
-                        print(f'[WORC WARNING] Skipping resampling: to few objects returned in one or both classes (pos: {pos}, neg: {neg}).')
+                        print(f'[WARNING] Skipping resampling: to few objects returned in one or both classes (pos: {pos}, neg: {neg}).')
+                        
                     Sampler = None
                     parameters['Resampling_Use'] = 'False'
                 else:
@@ -989,13 +1069,21 @@ def fit_and_score(X, y, scoring,
     # Add original parameters to return object
     ret.append(parameters)
 
-    if refit_workflows:
+    if refit_training_workflows:
+        # Refit estimator on train-test training dataset
         indices = np.arange(0, len(y))
         estimator = WORC.classification.SearchCV.RandomizedSearchCVfastr()
         estimator.refit_and_score(X, y, parameters,
                                   train=indices, test=indices)
         ret.append(estimator)
-
+        
+    if refit_validation_workflows:
+        # Refit estimator on train-validation training dataset
+        estimator = WORC.classification.SearchCV.RandomizedSearchCVfastr()
+        estimator.refit_and_score(X, y, parameters,
+                                  train=train, test=test)
+        ret.append(estimator)
+        
     # End the timing and store the fit_time
     end_time = time.time()
     runtime = end_time - start_time
@@ -1065,9 +1153,9 @@ def replacenan(image_features, verbose=True, feature_labels=None):
             if np.isnan(value):
                 if verbose:
                     if feature_labels is not None:
-                        print(f"[WORC WARNING] NaN found, patient {pnum}, label {feature_labels[fnum]}. Replacing with zero.")
+                        print(f"[WARNING] NaN found, patient {pnum}, label {feature_labels[fnum]}. Replacing with zero.")
                     else:
-                        print(f"[WORC WARNING] NaN found, patient {pnum}, label {fnum}. Replacing with zero.")
+                        print(f"[WARNING] NaN found, patient {pnum}, label {fnum}. Replacing with zero.")
                 # Note: X is a list of lists, hence we cannot index the element directly
                 image_features_temp[pnum, fnum] = 0
 

@@ -160,3 +160,15 @@ The two mounts that determine the temporary and output folders and thus which
 you have to change are:
 - Temporary output: ``mounts['tmp']`` in the ~/.fastr/config.py file
 - Final output: ``mounts['output']`` in the ~/.fastr/config.d/WORC_config.py file
+
+I want a specific cross-validation setup, e.g. specific patients in the train and test set, how can I do that?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+WIP
+
+How can I make sure all samples of a patient are either all in the training or all in the test set?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+WIP
+
+How can I get the performance on the validation dataset?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+WIP
