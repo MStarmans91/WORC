@@ -236,21 +236,6 @@ def random_split_cross_validation(image_features, feature_labels, classes,
                           Y_test, patient_ID_train, patient_ID_test, random_seed)
 
         save_data.append(temp_save_data)
-
-        # Test performance for various RS and ensemble sizes
-        if config['General']['DoTestNRSNEns']:
-            output_json = os.path.join(tempfolder, f'performance_RS_Ens_crossval_{i}.json')
-            test_RS_Ensemble(estimator_input=trained_classifier,
-                             X_train=X_train, Y_train=Y_train,
-                             X_test=X_test, Y_test=Y_test,
-                             feature_labels=feature_labels,
-                             output_json=output_json)
-
-            # Save memory
-            delattr(trained_classifier, 'fitted_workflows')
-            trained_classifier.fitted_workflows = list()
-            delattr(trained_classifier, 'fitted_validation_workflows')
-            trained_classifier.fitted_validation_workflows = list()
             
         # Create a temporary save
         if tempsave:
@@ -276,6 +261,21 @@ def random_split_cross_validation(image_features, feature_labels, classes,
             panda_data.to_hdf(filename, 'EstimatorData')
             del panda_data, panda_data_temp
 
+        # Test performance for various RS and ensemble sizes
+        if config['General']['DoTestNRSNEns']:
+            output_json = os.path.join(tempfolder, f'performance_RS_Ens_crossval_{i}.json')
+            test_RS_Ensemble(estimator_input=trained_classifier,
+                             X_train=X_train, Y_train=Y_train,
+                             X_test=X_test, Y_test=Y_test,
+                             feature_labels=feature_labels,
+                             output_json=output_json)
+
+            # Save memory
+            delattr(trained_classifier, 'fitted_workflows')
+            trained_classifier.fitted_workflows = list()
+            delattr(trained_classifier, 'fitted_validation_workflows')
+            trained_classifier.fitted_validation_workflows = list()
+            
         # Print elapsed time
         elapsed = int((time.time() - t) / 60.0)
         print(f'\t Fitting took {elapsed} minutes.')
@@ -824,7 +824,7 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
     estimator_original = copy.deepcopy(estimator_input)
     X_train_temp = [(x, feature_labels) for x in X_train]
     n_workflows = len(estimator_original.fitted_workflows)
-
+    
     # Settings
     RSs = [10, 100, 1000, 10000] * 10 + [n_workflows]
     ensembles = [1, 10, 100, 'FitNumber', 'Bagging']
@@ -846,8 +846,9 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             # Make a local copy of the estimator and select only subset of workflows
             print(f'\t Using RS {RS}.')
             estimator = copy.deepcopy(estimator_original)
+            estimator.maxlen = RS
             workflow_num = np.arange(n_workflows).tolist()
-
+    
             # Select only a specific set of workflows
             random.shuffle(workflow_num)
             selected_workflows = workflow_num[0:RS]
@@ -863,7 +864,16 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
                 [estimator.fitted_workflows[i] for i in selected_workflows]
             estimator.fitted_workflows =\
                 [estimator.fitted_workflows[i] for i in workflow_ranking]
-            
+                
+            selected_workflows_ranked_all = list()
+            for j in range(len(estimator.cv_iter)):
+                selected_workflows_ranked = [i + n_workflows * j for i in selected_workflows]
+                selected_workflows_ranked = [selected_workflows_ranked[i] for i in workflow_ranking]
+                selected_workflows_ranked_all.extend(selected_workflows_ranked)
+                
+            estimator.fitted_validation_workflows =\
+                [estimator.fitted_validation_workflows[i] for i in selected_workflows_ranked_all]
+                
             # For advanced ensembling methods, keep only the parameters of the selected RS workflows
             estimator.cv_results_['params'] =\
                 [estimator.cv_results_['params'][i] for i in selected_workflows]

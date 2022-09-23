@@ -395,6 +395,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.refit_training_workflows = refit_training_workflows
         self.refit_validation_workflows = refit_validation_workflows
         self.fitted_workflows = list()
+        self.fitted_validation_workflows = list()
 
         # Only for WORC Paper
         self.test_RS = True
@@ -1042,9 +1043,9 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         else:
             # Refit the models and compute the predictions on the validation sets
             if verbose:
-                print('Precomputing scores on training and validation set for ensembling.')
+                print('\t - Precomputing scores on training and validation set for ensembling.')
                 if self.fitted_validation_workflows:
-                    print('Detected already fitted train-val workflows.')
+                    print('\t - Detected already fitted train-val workflows.')
                             
             Y_valid_truth = list()
             performances = list()
@@ -1121,8 +1122,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
                     # Compute and store the performance on this split
                     performances_iter.append(compute_performance(scoring,
-                                                                Y_train[valid],
-                                                                predictions))
+                                                                 Y_train[valid],
+                                                                 predictions))
 
                     # print('fitandscore: ' + str(out[0][1]) + ' and computed: ' +
                     #       str(compute_performance(scoring, Y_train[valid], predictions)) + '\n')
@@ -1397,7 +1398,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if method == 'Single':
             self.ensemble_validation_score = self.cv_results_['mean_test_score'][0]
         elif method == 'top_N':
-            self.ensemble_validation_score = [self.cv_results_['mean_test_score'][i] for i in ensemble]
+            self.ensemble_validation_score = np.mean([self.cv_results_['mean_test_score'][i] for i in ensemble])
         else:
             selected_params = [parameters_all[i] for i in ensemble]
             val_split_scores = []
@@ -1433,7 +1434,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         train = np.arange(0, len(X_train))
         if self.fitted_workflows:
             # Simply select the required estimators
-            print('\t - Detected already fitted workflows.')
+            print('\t - Detected already fitted train-test workflows.')
             estimators = list()
             for i in ensemble:
                 try:
