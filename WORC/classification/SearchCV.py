@@ -821,7 +821,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         candidate_params_all = np.asarray(candidate_params_all)[bestindices].tolist()
         for k in results.keys():
             results[k] = results[k][bestindices]
-        n_candidates = len(candidate_params_all)
+            
         results['params'] = candidate_params_all
 
         # Calculate and store the total_fit_time of this train/test CV
@@ -868,7 +868,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 
             fitted_validation_workflows =\
                 [fitted_validation_workflows[i] for i in bestindices_all]
-                                       
+
             self.fitted_validation_workflows = fitted_validation_workflows
 
         return self
