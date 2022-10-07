@@ -225,8 +225,8 @@ def fit_and_score(X, y, scoring,
     # Split in train and testing
     X_train, y_train = _safe_split(estimator, feature_values, y, train)
     X_test, y_test = _safe_split(estimator, feature_values, y, test, train)
-    train = np.arange(0, len(y_train))
-    test = np.arange(len(y_train), len(y_train) + len(y_test))
+    new_train = np.arange(0, len(y_train))
+    new_test = np.arange(len(y_train), len(y_train) + len(y_test))
 
     # Set some defaults for if a part fails and we return a dummy
     fit_time = np.inf
@@ -976,8 +976,8 @@ def fit_and_score(X, y, scoring,
                         print(message)
 
                     # Also reset train and test indices
-                    train = np.arange(0, len(y_train))
-                    test = np.arange(len(y_train), len(y_train) + len(y_test))
+                    new_train = np.arange(0, len(y_train))
+                    new_test = np.arange(len(y_train), len(y_train) + len(y_test))
 
         # Delete the resampling parameters
         del para_estimator['Resampling_Use']
@@ -1037,8 +1037,8 @@ def fit_and_score(X, y, scoring,
 
     try:
         ret = _fit_and_score(estimator, feature_values, y_all,
-                             scorers, train,
-                             test, verbose,
+                             scorers, new_train,
+                             new_test, verbose,
                              para_estimator, fit_params,
                              return_train_score=return_train_score,
                              return_parameters=return_parameters,

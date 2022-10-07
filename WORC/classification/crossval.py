@@ -237,6 +237,22 @@ def random_split_cross_validation(image_features, feature_labels, classes,
 
         save_data.append(temp_save_data)
             
+        # Test performance for various RS and ensemble sizes
+        if config['General']['DoTestNRSNEns']:
+            output_json = os.path.join(tempfolder, f'performance_RS_Ens_crossval_{i}.json')
+            test_RS_Ensemble(estimator_input=trained_classifier,
+                             X_train=X_train, Y_train=Y_train,
+                             X_test=X_test, Y_test=Y_test,
+                             feature_labels=feature_labels,
+                             output_json=output_json)
+
+            # Save memory
+            delattr(trained_classifier, 'fitted_workflows')
+            trained_classifier.fitted_workflows = list()
+            delattr(trained_classifier, 'fitted_validation_workflows')
+            trained_classifier.fitted_validation_workflows = list()
+
+
         # Create a temporary save
         if tempsave:
             panda_labels = ['trained_classifier', 'X_train', 'X_test',
@@ -261,21 +277,6 @@ def random_split_cross_validation(image_features, feature_labels, classes,
             panda_data.to_hdf(filename, 'EstimatorData')
             del panda_data, panda_data_temp
 
-        # Test performance for various RS and ensemble sizes
-        if config['General']['DoTestNRSNEns']:
-            output_json = os.path.join(tempfolder, f'performance_RS_Ens_crossval_{i}.json')
-            test_RS_Ensemble(estimator_input=trained_classifier,
-                             X_train=X_train, Y_train=Y_train,
-                             X_test=X_test, Y_test=Y_test,
-                             feature_labels=feature_labels,
-                             output_json=output_json)
-
-            # Save memory
-            delattr(trained_classifier, 'fitted_workflows')
-            trained_classifier.fitted_workflows = list()
-            delattr(trained_classifier, 'fitted_validation_workflows')
-            trained_classifier.fitted_validation_workflows = list()
-            
         # Print elapsed time
         elapsed = int((time.time() - t) / 60.0)
         print(f'\t Fitting took {elapsed} minutes.')
@@ -821,9 +822,8 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
     """
 
     # Process some input
-    estimator_original = copy.deepcopy(estimator_input)
     X_train_temp = [(x, feature_labels) for x in X_train]
-    n_workflows = len(estimator_original.fitted_workflows)
+    n_workflows = len(estimator_input.fitted_workflows)
     
     # Settings
     RSs = [10, 100, 1000, 10000] * 10 + [n_workflows]
@@ -845,7 +845,7 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
 
             # Make a local copy of the estimator and select only subset of workflows
             print(f'\t Using RS {RS}.')
-            estimator = copy.deepcopy(estimator_original)
+            estimator = copy.deepcopy(estimator_input)
             estimator.maxlen = RS
             workflow_num = np.arange(n_workflows).tolist()
     
