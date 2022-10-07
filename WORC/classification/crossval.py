@@ -822,8 +822,9 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
     """
 
     # Process some input
+    estimator_original = copy.deepcopy(estimator_input)
     X_train_temp = [(x, feature_labels) for x in X_train]
-    n_workflows = len(estimator_input.fitted_workflows)
+    n_workflows = len(estimator_original.fitted_workflows)
     
     # Settings
     RSs = [10, 100, 1000, 10000] * 10 + [n_workflows]
@@ -845,7 +846,7 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
 
             # Make a local copy of the estimator and select only subset of workflows
             print(f'\t Using RS {RS}.')
-            estimator = copy.deepcopy(estimator_input)
+            estimator = copy.deepcopy(estimator_original)
             estimator.maxlen = RS
             workflow_num = np.arange(n_workflows).tolist()
     
