@@ -1046,8 +1046,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 print('\t - Precomputing scores on training and validation set for ensembling.')
                 if self.fitted_validation_workflows:
                     print('\t - Detected already fitted train-val workflows.')
-                            
+            
+            # Create the ground truth
             Y_valid_truth = list()
+            for it, (train, valid) in enumerate(self.cv_iter):
+                Y_valid_truth.append(Y_train[valid])
+
+            # Precompute the scores of all estimators
             performances = list()
             all_predictions = list()
             ensemble_configurations = list()
@@ -1057,22 +1062,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 predictions_iter = np.zeros((n_iter, prediction_length))
 
                 for it, (train, valid) in enumerate(self.cv_iter):
-                    predictions = list()
-                    # Start with storing the ground truth
-                    if num == 0:
-                        Y_valid_truth.append(Y_train[valid])
-
-                    if self.fitted_validation_workflows:
-                        # Use already fitted workflow
-                        estimator = self.fitted_validation_workflows[num + it * self.maxlen]
-                        if estimator is None:
-                            # Estimator is none, so do not consider this pipeline for ensemble
-                            break
-                        
-                        X_train_values = np.asarray([x[0] for x in X_train])
-                        predictions = estimator.predict_proba(X_train_values[valid])              
-                        
-                    else:
+                    def getpredictions():
                         new_estimator = clone(base_estimator)
 
                         # Fit the preprocessors of the pipeline
@@ -1105,14 +1095,33 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         if features_left == 0:
                             print('no features left' + '\n')
                             # No features are left; do not consider this pipeline for the ensemble
-                            break
+                            return None
                     
                         # Construct and fit the classifier
                         best_estimator = cc.construct_classifier(p_all)
                         best_estimator.fit(processed_X, processed_y)
                         new_estimator.best_estimator_ = best_estimator
                         predictions = new_estimator.predict_proba(X_train_values[valid])
+                        return predictions
 
+                    predictions = list()
+                    # Start with storing the ground truth
+                    if self.fitted_validation_workflows:
+                        # Use already fitted workflow
+                        estimator = self.fitted_validation_workflows[num + it * self.maxlen]
+                        if estimator is None:
+                            # Estimator is none, refit and get predictions
+                            predictions = getpredictions()
+                        else:
+                            X_train_values = np.asarray([x[0] for x in X_train])
+                            predictions = estimator.predict_proba(X_train_values[valid])              
+                        
+                    else:
+                        predictions = getpredictions()
+
+                    if predictions is None:
+                        break
+                    
                     # Only take the probabilities for the second class
                     predictions = predictions[:, 1]
 
@@ -1140,6 +1149,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Update the parameters
             parameters_all = ensemble_configurations
             n_classifiers = len(ensemble_configurations)
+
             # Construct the array of final predictions
             base_Y_valid_score = np.zeros((n_iter, n_classifiers, prediction_length))
             for iter in range(n_iter):
