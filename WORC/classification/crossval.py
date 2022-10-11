@@ -252,7 +252,6 @@ def random_split_cross_validation(image_features, feature_labels, classes,
             delattr(trained_classifier, 'fitted_validation_workflows')
             trained_classifier.fitted_validation_workflows = list()
 
-
         # Create a temporary save
         if tempsave:
             panda_labels = ['trained_classifier', 'X_train', 'X_test',
