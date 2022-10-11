@@ -30,6 +30,7 @@ Added
 - Documentation updates
 - Option to save the workflows trained on the train-validation training datasets, besides the option to save workflows
   trained on the full training dataset. Not an option for SMAC due to implementation of SMAC.
+- Validate function for fastr HDF5 datatype, as previously fastr deemed empty hdf5 types as valid.
 
 3.6.0 - 2022-04-05
 ------------------
