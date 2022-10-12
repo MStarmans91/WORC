@@ -21,15 +21,16 @@ import logging
 import os
 import time
 from time import gmtime, strftime
-from sklearn.model_selection import train_test_split, LeaveOneOut
-from .parameter_optimization import random_search_parameters, guided_search_parameters
-import WORC.addexceptions as ae
-from WORC.classification.regressors import regressors
 import glob
 import random
 import json
 import copy
 from sklearn.metrics import f1_score, roc_auc_score
+from sklearn.model_selection import train_test_split, LeaveOneOut
+from joblib import Parallel, delayed
+import WORC.addexceptions as ae
+from .parameter_optimization import random_search_parameters, guided_search_parameters
+from WORC.classification.regressors import regressors
 from WORC.classification.SearchCV import RandomizedSearchCVfastr
 
 
@@ -881,14 +882,21 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             # Refit validation estimators if required
             if not estimator.fitted_validation_workflows and estimator.refit_validation_workflows:
                 print('\t Refit all validation workflows so we dont have to do this for every ensembling method.')
-                for num, parameters in enumerate(estimator.cv_results_['params']):
-                    for cvnum, (train, valid) in enumerate(estimator.cv_iter):
-                        if verbose:
-                            print(f"\t -- Refitting estimator {num} on cross-validation {cvnum}.")
-                        new_estimator = RandomizedSearchCVfastr()
-                        new_estimator.refit_and_score(X_train_temp, Y_train, parameters,
-                                                      train=train, test=valid)
-                        estimator.fitted_validation_workflows.append(new_estimator)
+                
+                # Define function to fit a single estimator
+                def fitvalidationestimator(parameters, train, test):
+                    new_estimator = RandomizedSearchCVfastr()
+                    new_estimator.refit_and_score(X_train_temp, Y_train, parameters,
+                                                  train=train, test=test)
+                    return new_estimator
+                
+                # Use joblib to parallelize fitting
+                estimators =\
+                    Parallel(n_jobs=-1)(delayed(fitvalidationestimator)(
+                                 parameters, train, test)
+                        for parameters in estimator.cv_results_['params']
+                        for train, test in estimator.cv_iter)
+                estimator.fitted_validation_workflows = estimators
                         
             elif estimator.fitted_validation_workflows:
                 # Select the required already fitted validation workflows
