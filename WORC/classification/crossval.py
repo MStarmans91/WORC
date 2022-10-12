@@ -824,11 +824,10 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
     maxlen = 100  # max ensembles numeric
     
     """
-
     # Process some input
     estimator_original = copy.deepcopy(estimator_input)
     X_train_temp = [(x, feature_labels) for x in X_train]
-    n_workflows = len(estimator_original.fitted_workflows)
+    n_workflows = len(estimator_original.cv_results_['mean_test_score'])
     
     # Settings
     if RSs is None:
@@ -837,18 +836,6 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
     if ensembles is None:
         ensembles = [1, 10, 100, 'FitNumber', 'Bagging']
     
-    # Refit validation estimators if required
-    if not estimator_original.fitted_validation_workflows and estimator_original.refit_validation_workflows:
-        print('\t Refit all validation workflows so we dont have to do this for every ensembling method.')
-        for num, parameters in enumerate(estimator_original.cv_results_['params']):
-            for cvnum, (train, valid) in enumerate(estimator_original.cv_iter):
-                # if verbose:
-                #     print(f"\t-- Refitting estimator {num} on cross-validation {cvnum}.")
-                new_estimator = RandomizedSearchCVfastr()
-                new_estimator.refit_and_score(X_train_temp, Y_train, parameters,
-                                              train=train, test=valid)
-                estimator_original.fitted_validation_workflows.append(new_estimator)
-
     # Loop over the random searches and ensembles
     keys = list()
     performances = dict()
@@ -879,26 +866,40 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             F1_validation = [F1_validation[i] for i in workflow_ranking]
 
             # Only keep the number of RS required and resort based on ranking
-            estimator.fitted_workflows =\
-                [estimator.fitted_workflows[i] for i in selected_workflows]
-            estimator.fitted_workflows =\
-                [estimator.fitted_workflows[i] for i in workflow_ranking]
-                
-            # Select the required already fitted validation workflows
-            selected_workflows_ranked_all = list()
-            for j in range(len(estimator.cv_iter)):
-                selected_workflows_ranked = [i + n_workflows * j for i in selected_workflows]
-                selected_workflows_ranked = [selected_workflows_ranked[i] for i in workflow_ranking]
-                selected_workflows_ranked_all.extend(selected_workflows_ranked)
-            
-            estimator.fitted_validation_workflows =\
-                [estimator.fitted_validation_workflows[i] for i in selected_workflows_ranked_all]
-                
+            if estimator.fitted_workflows:
+                estimator.fitted_workflows =\
+                    [estimator.fitted_workflows[i] for i in selected_workflows]
+                estimator.fitted_workflows =\
+                    [estimator.fitted_workflows[i] for i in workflow_ranking]
+
             # For advanced ensembling methods, keep only the parameters of the selected RS workflows
             estimator.cv_results_['params'] =\
                 [estimator.cv_results_['params'][i] for i in selected_workflows]
             estimator.cv_results_['params'] =\
                 [estimator.cv_results_['params'][i] for i in workflow_ranking]
+                
+            # Refit validation estimators if required
+            if not estimator.fitted_validation_workflows and estimator.refit_validation_workflows:
+                print('\t Refit all validation workflows so we dont have to do this for every ensembling method.')
+                for num, parameters in enumerate(estimator.cv_results_['params']):
+                    for cvnum, (train, valid) in enumerate(estimator.cv_iter):
+                        if verbose:
+                            print(f"\t -- Refitting estimator {num} on cross-validation {cvnum}.")
+                        new_estimator = RandomizedSearchCVfastr()
+                        new_estimator.refit_and_score(X_train_temp, Y_train, parameters,
+                                                      train=train, test=valid)
+                        estimator.fitted_validation_workflows.append(new_estimator)
+                        
+            elif estimator.fitted_validation_workflows:
+                # Select the required already fitted validation workflows
+                selected_workflows_ranked_all = list()
+                for j in range(len(estimator.cv_iter)):
+                    selected_workflows_ranked = [i + n_workflows * j for i in selected_workflows]
+                    selected_workflows_ranked = [selected_workflows_ranked[i] for i in workflow_ranking]
+                    selected_workflows_ranked_all.extend(selected_workflows_ranked)
+                
+                estimator.fitted_validation_workflows =\
+                    [estimator.fitted_validation_workflows[i] for i in selected_workflows_ranked_all]
                 
             # Store train and validation AUC
             mean_val_F1 = F1_validation[0:maxlen]
