@@ -22,6 +22,7 @@ classification_data = classification_data[classification_data.keys()[0]]
 
 # For tempsave
 trained_classifier = classification_data.trained_classifier
+trained_classifier.fitted_validation_workflows = list()
 X_train = classification_data.X_train
 Y_train = classification_data.Y_train
 X_test = classification_data.X_test

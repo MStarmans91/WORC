@@ -30,6 +30,7 @@ import random
 import json
 import copy
 from sklearn.metrics import f1_score, roc_auc_score
+from WORC.classification.SearchCV import RandomizedSearchCVfastr
 
 
 def random_split_cross_validation(image_features, feature_labels, classes,
@@ -812,12 +813,16 @@ def nocrossval(config, label_data_train, label_data_test, image_features_train,
 
 
 def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
-                     feature_labels, output_json, verbose=False):
+                     feature_labels, output_json, verbose=False, RSs=None,
+                     ensembles=None, maxlen=100):
     """Test performance for different random search and ensemble sizes.
 
     This function is written for conducting a specific experiment from the
     WORC paper to test how the performance varies with varying random search
     and ensemble sizes. We do not recommend usage in general of this part.
+    
+    maxlen = 100  # max ensembles numeric
+    
     """
 
     # Process some input
@@ -826,9 +831,23 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
     n_workflows = len(estimator_original.fitted_workflows)
     
     # Settings
-    RSs = [10, 100, 1000, 10000] * 10 + [n_workflows]
-    ensembles = [1, 10, 100, 'FitNumber', 'Bagging']
-    maxlen = 100  # max ensembles numeric
+    if RSs is None:
+        RSs = [10, 100, 1000, 10000] * 10 + [n_workflows]
+        
+    if ensembles is None:
+        ensembles = [1, 10, 100, 'FitNumber', 'Bagging']
+    
+    # Refit validation estimators if required
+    if not estimator_original.fitted_validation_workflows and estimator_original.refit_validation_workflows:
+        print('\t Refit all validation workflows so we dont have to do this for every ensembling method.')
+        for num, parameters in enumerate(estimator_original.cv_results_['params']):
+            for cvnum, (train, valid) in enumerate(estimator_original.cv_iter):
+                # if verbose:
+                #     print(f"\t-- Refitting estimator {num} on cross-validation {cvnum}.")
+                new_estimator = RandomizedSearchCVfastr()
+                new_estimator.refit_and_score(X_train_temp, Y_train, parameters,
+                                              train=train, test=valid)
+                estimator_original.fitted_validation_workflows.append(new_estimator)
 
     # Loop over the random searches and ensembles
     keys = list()
@@ -865,12 +884,13 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             estimator.fitted_workflows =\
                 [estimator.fitted_workflows[i] for i in workflow_ranking]
                 
+            # Select the required already fitted validation workflows
             selected_workflows_ranked_all = list()
             for j in range(len(estimator.cv_iter)):
                 selected_workflows_ranked = [i + n_workflows * j for i in selected_workflows]
                 selected_workflows_ranked = [selected_workflows_ranked[i] for i in workflow_ranking]
                 selected_workflows_ranked_all.extend(selected_workflows_ranked)
-                
+            
             estimator.fitted_validation_workflows =\
                 [estimator.fitted_validation_workflows[i] for i in selected_workflows_ranked_all]
                 

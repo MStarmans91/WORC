@@ -1212,6 +1212,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 N_models = performances_n_class.index(new_performance) + 1  # +1 due to python indexing
                 ensemble = ensemble[0:N_models]
                 best_performance = new_performance
+                
+                self.ensemble_validation_score = best_performance
 
                 if verbose:
                     print(f"Ensembling best {scoring}: {best_performance}.")
@@ -1264,6 +1266,8 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     best_index = performances_temp.index(new_performance)
                     iteration += 1
 
+                self.ensemble_validation_score = best_performance
+                
                 if verbose:
                     # Print the performance gain
                     print(f"Ensembling best {scoring}: {best_performance}.")
@@ -1321,6 +1325,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                 optimal_N_models = best_ensemble_scores.index(optimal_ensemble_performance) + 1
                 ensemble = ensemble[0:optimal_N_models]
                 best_performance = optimal_ensemble_performance
+                self.ensemble_validation_score = best_performance
 
                 if verbose:
                     # Print the performance gain
@@ -1393,8 +1398,12 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         
                     best_performance = optimal_ensemble_performance
 
+                self.ensemble_validation_score = best_performance
+                
                 if verbose:
                     # Print the performance gain
+                    print(f"Ensembling best {scoring}: {best_performance}.")
+                    print(f"Single estimator best {scoring}: {single_estimator_performance}.")
                     print(f'Ensemble consists of {len(ensemble)} estimators {ensemble}.')
 
             else:
@@ -1405,37 +1414,11 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # First create and score the ensemble on the validation set
         # If we only want the best solution, we use the score from cv_results_
+        # For not Single or Top_N, the score has already been computed during fitting
         if method == 'Single':
             self.ensemble_validation_score = self.cv_results_['mean_test_score'][0]
         elif method == 'top_N':
             self.ensemble_validation_score = np.mean([self.cv_results_['mean_test_score'][i] for i in ensemble])
-        else:
-            selected_params = [parameters_all[i] for i in ensemble]
-            val_split_scores = []
-            for train, valid in self.cv_iter:
-                estimators = list()
-                for enum, p_all in enumerate(selected_params):
-                    new_estimator = clone(base_estimator)
-
-                    new_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                   train, valid,
-                                                   verbose=False)
-
-                    estimators.append(new_estimator)
-
-                new_estimator = clone(base_estimator)
-                new_estimator.ensemble = Ensemble(estimators)
-                new_estimator.best_estimator_ = new_estimator.ensemble
-                # Calculate and store the final performance of the ensemble
-                # on this validation split
-                X_train_values = np.asarray([x[0] for x in X_train])
-                predictions = new_estimator.predict(X_train_values[valid])
-                val_split_scores.append(compute_performance(scoring,
-                                                            Y_train[valid],
-                                                            predictions))
-
-            validation_score = np.mean(val_split_scores)
-            self.ensemble_validation_score = validation_score
 
         if verbose:
             print('Final ensemble validation score: ' + str(self.ensemble_validation_score))

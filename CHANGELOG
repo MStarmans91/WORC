@@ -24,6 +24,7 @@ Changed
   but during refitting skip that step. During optimization, if we skip it, the relation between
   the hyperparameter and performance gets disturbed. During refitting, we need to have a model,
   so best option is to skip the step. Previously, there was only skipping.
+- Set default of XGB estimator parallelization to single job.
 
 Added
 ~~~~~
