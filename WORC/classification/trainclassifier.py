@@ -226,6 +226,7 @@ def add_parameters_to_grid(param_grid, config):
 
     param_grid['Imputation'] = config['Imputation']['use']
     param_grid['ImputationMethod'] = config['Imputation']['strategy']
+    param_grid['ImputationSkipAllNaN'] = config['Imputation']['skipallNaN']
     param_grid['ImputationNeighbours'] =\
         discrete_uniform(loc=config['Imputation']['n_neighbors'][0],
                          scale=config['Imputation']['n_neighbors'][1])

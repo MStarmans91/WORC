@@ -157,6 +157,9 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Imputation']['n_neighbors'].split(',')]
 
+    settings_dict['Imputation']['skipallNaN'] =\
+        [str(settings['Imputation']['skipallNaN'])]        
+        
     # OneHotEncoding
     settings_dict['OneHotEncoding']['Use'] =\
         [str(item).strip() for item in

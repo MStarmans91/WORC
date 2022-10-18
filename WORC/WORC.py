@@ -353,6 +353,7 @@ class WORC(object):
         config['Imputation']['use'] = 'True'
         config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
         config['Imputation']['n_neighbors'] = '5, 5'
+        config['Imputation']['skipallNaN'] = 'True'
 
         # Feature scaling options
         config['FeatureScaling'] = dict()
