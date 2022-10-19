@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,10 @@
 # limitations under the License.
 
 import argparse
-from WORC.processing.segmentix import segmentix
 from shutil import copyfile
+import SimpleITK as sitk
+from WORC.processing.segmentix import segmentix
+import WORC.IOparser.config_segmentix as config_io
 
 
 def main():
@@ -63,9 +65,18 @@ def main():
 
     if 'Dummy' in str(args.im):
         # Image is a dummy, so we do not do anything with the segmentation but
-        # simply copy the input to the output
+        # simply copy the input to the output, except copy information
         if args.out is not None:
-            copyfile(str(args.seg), str(args.out))
+            config = config_io.load_config(args.para)
+            if config['Segmentix']['AssumeSameImageAndMaskMetadata']:
+                print('[Segmentix] Copy metadata information from image to mask.')
+                image = sitk.ReadImage(args.im)
+                seg = sitk.ReadImage(args.seg)
+                seg.CopyInformation(image)
+                sitk.WriteImage(seg, args.out)
+            else:
+                copyfile(str(args.seg), str(args.out))
+            
     else:
         segmentix(image=args.im, segmentation=args.seg, parameters=args.para,
                   output=args.out, metadata_file=args.md, mask=args.mask)

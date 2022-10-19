@@ -17,6 +17,8 @@ Fixed
   instead of returning NaN.
 - Createfixedsplits function was outdated, updates to newest conventions and added
   to documentation.
+- When using Dummy's, segmentix now still copies metadata information from image
+  to segmentation when required.
 
 Changed
 ~~~~~~~
@@ -32,6 +34,8 @@ Added
 - Option to save the workflows trained on the train-validation training datasets, besides the option to save workflows
   trained on the full training dataset. Not an option for SMAC due to implementation of SMAC.
 - Validate function for fastr HDF5 datatype, as previously fastr deemed empty hdf5 types as valid.
+- Option to eliminate features which are all NaN during imputation.
+
 
 3.6.0 - 2022-04-05
 ------------------

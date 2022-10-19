@@ -326,8 +326,12 @@ def fit_and_score(X, y, scoring,
 
             if original_shape != imputed_shape:
                 removed_features = original_shape[1] - imputed_shape[1]
-                raise ae.WORCValueError(f'Several features ({removed_features}) were np.NaN for all objects. Hence, imputation was not possible. Either make sure this is correct and turn of imputation, or correct the feature.')
+                if para_estimator['ImputationSkipAllNaN'] == 'True':
+                    print(f"[WARNING]: Several features ({removed_features}) were np.NaN for all objects. config['Imputation']['skipallNaN'] set to True, so simply eliminate these features.")
+                else:
+                    raise ae.WORCValueError(f'Several features ({removed_features}) were np.NaN for all objects. Hence, imputation was not possible. Either make sure this is correct and turn of imputation, or correct the feature.')
 
+        del para_estimator['ImputationSkipAllNaN']
         del para_estimator['Imputation']
         del para_estimator['ImputationMethod']
         if 'ImputationNeighbours' in para_estimator.keys():
@@ -1116,6 +1120,7 @@ def delete_nonestimator_parameters(parameters):
                   'Imputation',
                   'ImputationMethod',
                   'ImputationNeighbours',
+                  'ImputationSkipAllNaN',
                   'SelectFromModel',
                   'SelectFromModel_lasso_alpha',
                   'SelectFromModel_estimator',
