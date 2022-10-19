@@ -255,7 +255,9 @@ Outputs and evaluation of your network
 General remark: when we talk about a sample, we mean one sample that has a set of features associated with it and is thus used as such in the model training or evaluation.
 A sample can correspond with a single patient, but if you have multiple tumors per patient for which features are separately extracted per tumor, these can be treated as separate sample.
 
-The following outputs and evaluation methods are always generated.
+The following outputs and evaluation methods are always generated:
+
+.. note:: For every output file, fastr generates a provenance file (``...prov.json``) stating how a file was generated, see https://fastr.readthedocs.io/en/stable/static/user_manual.html#provenance.
 
 1. Performance of your models (main output).
 
@@ -333,8 +335,6 @@ The following outputs and evaluation methods are always generated.
     - feature_values: the value of the features. Each element corresponds with the same element from the feature_labels attribute.
     - parameters: the parameters used in the feature extraction. Originate from the WORC config.
     - image_type: the type of the image that was used, which you as user provided. Used in the feature labels to distinguish between features extracted from different images.
-
-.. note:: For every output file, fastr generates a provenance file (``...prov.json``) stating how a file was generated, see https://fastr.readthedocs.io/en/stable/static/user_manual.html#provenance.
 
 The following outputs and evaluation methods are only created when ``WORC.add_evaluation()`` is used (similar for ``SimpleWORC`` and ``BasicWORC``),
 and are stored in the ``Evaluation`` in the output folder of your experiment.
@@ -450,6 +450,16 @@ Or in the ``SimpleWORC`` or ``BasicWORC`` facades:
     experiment = SimpleWORC('somename')
     ...
     experiment.add_evaluation()
+
+The following outputs are only generated if certain configuration settings are used:
+
+1. Adjusted segmentations.
+
+    Stored in the ``Segmentations`` folder, in the files ``seg__{image_type}_{num}_{howsegmentationwasgenerated}_{sample_id}.hdf5``.
+    Only generated when the original segmentations were modified, e.g. using WORC's internal program segmentix 
+    (see relevant section of the :ref:`configuration chapter <config-chapter>`) or when registration was 
+    performed to warp the segmentations from one sequence to another.
+
 
 Debugging
 ---------
