@@ -65,7 +65,7 @@ Adding methods to hyperoptimization
    add a part to that function to embed your method in the workflow. We advice
    you to embed your method in a sklearn compatible class, having init,
    fit and transform functions. See for example
-   py:mod:`WORC.featureprocessing.Preprocessor.Preprocessor`.
+   :py:mod:`WORC.featureprocessing.Preprocessor.Preprocessor`.
 
    In
    :py:mod:`WORC.classification.fitandscore.fit_and_score`, make sure

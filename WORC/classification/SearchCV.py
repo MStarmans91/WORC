@@ -855,9 +855,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Sort according to best indices
             fitted_workflows = [fitted_workflows[i] for i in bestindices]
 
-            # Remove None workflows
-            fitted_workflows = [f for f in fitted_workflows if f is not None]
-
             self.fitted_workflows = fitted_workflows
             
         if self.refit_validation_workflows:

@@ -120,7 +120,6 @@ in the classification.
 
 Images and segmentations
 ^^^^^^^^^^^^^^^^^^^^^^^^
-
 The minimal input for a Radiomics pipeline consists of either images
 plus segmentations, or features, plus a label file (and a configuration,
 but you can just use the default one).
@@ -172,7 +171,6 @@ your segmentation, e.g. using dilation, then use a mask to make sure it
 is still valid. See the :ref:`config chapter <config-chapter>` for all segmentix options.
 
 
-
 Features
 ^^^^^^^^
 If you already computed your features, e.g. from a previous run, you can
@@ -188,7 +186,6 @@ features, e.g. patient age and sex. In this case, this source should
 contain a single DICOM per patient from which the tags that are read.
 Check the PREDICT.imagefeatures.patient_feature module for the currently
 implemented tags.
-
 
 
 Elastix_Para
@@ -250,29 +247,28 @@ assuming you have created the relevant objects as listed above:
     network.set()
     network.execute()
 
+.. _um-evaluation:
 
-Evaluation of your network
---------------------------
+Outputs and evaluation of your network
+---------------------------------------
 
-In WORC, there are two options for testing your fitted models:
+The following outputs and evaluation methods are always generated:
 
-1. Single dataset: cross-validation (currently only random-split)
-2. Separate train and test dataset: bootstrapping on test dataset
+1. Performance of your model (main output).
 
-Within these evaluation settings, the following performance evaluation methods are used:
-
-1. Confidence intervals on several metrics:
-
+    Stored in file ``performance_all_{num}.json``. If you created multiple models to predict multiple labels, or did multilabel classification, the ``{num}`` corresponds
+    to the label. Contains 95% Confidence intervals on several metrics. 
+ 
     For classification:
 
     a. Area under the curve (AUC) of the receiver operating characteristic (ROC) curve. In a multiclass setting, weuse the multiclass AUC from the `TADPOLE Challenge <https://tadpole.grand-challenge.org/>`_.
     b. Accuracy.
-    c. Balanced Classification Accuracy (BCA) as defined by the `TADPOLE Challenge <https://tadpole.grand-challenge.org/>`_.
+    c. Balanced Classification Accuracy (BCA), based on Balanced Classification Rate by `Tharwat, A., 2021. Classification assessment methods. Applied Computing and Informatics 17, 168–192.`.
     d. F1-score
-    e. Sensitivity, aka recall or true positive rate
-    f. Specificity, aka true negative rate
+    e. Sensitivity or recall or true positive rate
+    f. Specificity or true negative rate
     g. Negative predictive value (NPV)
-    h. Precision, aka Positive predictive value (PPV)
+    h. Precision or Positive predictive value (PPV)
 
     For regression:
 
@@ -294,36 +290,103 @@ Within these evaluation settings, the following performance evaluation methods a
     In bootstrapping, 95% confidence intervals are created using the ''standard'' method according to a normal distribution: see Table 6, method 1 in  `Efron B., Tibshirani R. Bootstrap Methods for Standard Errors,
     Confidence Intervals, and Other Measures of Statistical Accuracy, Statistical Science Vol.1, No,1, 54-77, 1986`.
 
-2. ROC and PRC curves with 95% confidence intervals using the fixed-width bands method, see `Macskassy S. A., Provost F., Rosset S. ROC Confidence Bands: An Empirical Evaluation. In: Proceedings of the 22nd international conference on Machine learning. 2005.`
+2. The configuration used by WORC.
 
-3. Univariate statistical testing of the features using:
+    Stored in files ``config_{type}_{num}.ini``. These are the result of the fingerprinting of your dataset. The ``config_all_{num}.ini`` config is used in classification, the other types
+    are used for feature extraction and are named after the image types you provided. For example, if you provided two image types, ``['MRI', 'CT']``, you will get
+    ``config_MRI_0.ini`` and ``config_CT_0.ini``. If you provide multiple of the same types, the numbers will change.
+
+3. The fitted models.
+
+    Stored in files ``estimator_all_{num}.hdf5``.
+
+4. The extracted features.
+
+    Stored in the ``Features`` folder, in the files ``features_{featuretoolboxname}_{image_type}_{num}_{sample_id}.hdf5``.
+
+.. note:: For every output file, fastr generates a provenance file (``...prov.json``) stating how a file was generated, see https://fastr.readthedocs.io/en/stable/static/user_manual.html#provenance.
+
+The following outputs and evaluation methods are only created when ``WORC.add_evaluation()`` is used (similar for ``SimpleWORC`` and ``BasicWORC``),
+and are stored in the ``Evaluation`` in the output folder of your experiment.
+
+1. Receiver Operating Characteristic (ROC) and Precision-Recall (PR) curves.
+   
+   Stored in files ``ROC_all_{num}.{ext}`` and ``PRC_all_{num}.{ext}``. For each curve, a ``.png`` is generated for previewing, a ``.tex`` with tikzplotlib
+   which can be used to plot the figure in LateX in high quality, and a ``.csv`` with the confidence intervals so you can easily check these.
+
+    95% confidence bands are constructured using the fixed-width bands method from `Macskassy S. A., Provost F., Rosset S. ROC Confidence Bands: An Empirical Evaluation. In: Proceedings of the 22nd international conference on Machine learning. 2005.`
+
+2. Univariate statistical testing of the features.
+
+    Stored in files ``StatisticalTestFeatures_all_{num}.{ext}``. A ``.png`` is generated for previewing, a ``.tex`` with tikzplotlib
+    which can be used to plot the figure in LateX in high quality, and a ``.csv`` with the p-values. 
+
+    The following statistical tests are used:
 
     a. A student t-test
     b. A Welch test
     c. A Wilcoxon test
     d. A Mann-Whitney U test
 
-    The uncorrected p-values for all these tests are reported in a single excel sheet. Pick the right test and significance
-    level based on your assumptions. Normally, we make use of the Mann-Whitney U test, as our features do not have to be normally
-    distributed, it's nonparametric, and assumes independent samples.
+    The uncorrected p-values for all these tests are reported in a the .csv. Pick the right test and significance
+    level based on your assumptions. 
+    
+    Normally, we make use of the Mann-Whitney U test, as our features do not have to be normally
+    distributed, it's nonparametric, and assumes independent samples. Additionally, generally correction should be done
+    for multiple testing, which we always do with Bonferonni correction. Hence, .png and .tex files contain the 
+    p-values of the Mann-Whitney U; the p-value of the magenta statistical significance has been corrected with 
+    Bonferonni correction.
 
-4. Ranking patients from typical to atypical as determined by the model, based on either:
+3. Overview of hyperparameters used in the top ranked models.
+   
+    Stored in file ``Hyperparameters_all_{num}.csv``. 
+
+    Each row corresponds with the hyperparameters of one workflow. The following information is displayed in the respective columns:
+
+    A. The cross-validation iteration.
+    B. The rank of that workflow in that cross-validation.
+    C. The metric on which the ranking in column B was based.
+    D. The mean score on the validation datasets in the nested cross-validation of the metric in column C.
+    E. The mean score on the training datasets in the nested cross-validation of the metric in column C.
+    F. The mean time it took to fit that workflow in the validation datasets.
+    G. and further: the actual hyperparameters.
+
+    For how many of the top ranked workflows the hyperparameters are included in this file depends on the ``config["Ensemble"]["Size"]``, see :ref:`configuration chapter <config-chapter>`.
+
+4. Boxplots of the features.
+
+    Stored in ``BoxplotsFeatures_all_{num}.zip``. The .zip files contains multiple .png files, each with maximum 25 boxplots of features.
+
+    For the full **training** dataset (i.e., if a separate test-set is provided, this is not included in these plots.), per features, one boxplot
+    is generated depicting the distribution of features for all samples (blue), and for binary classification, also only for the samples
+    with label 0 (green) and for the samples with label 1 (red). Hence, this gives an impression whether some features show major differences
+    in the distribution among the different classes, and thus could be useful in the classification to separate them.     
+
+5. Ranking patients from typical to atypical as determined by the model.
+
+    Stored in files ``RankedPosteriors_all_{num}.{ext}`` and ``RankedPercentages_all_{num}.{ext}``. 
+
+    Two types of rankings are done:
 
     a. The percentage of times a patient was classified correctly when occuring in the test set. Patients always correctly classified
     can be seen as typical examples; patients always classified incorrectly as atypical.
     b. The mean posterior of the patient when occuring in the test set.
 
-    These measures can only be used in classification. Besides an Excel with the rankings, snapshots of the middle slice
-    of the image + segmentation are saved with the ground truth label and the percentage/posterior in the filename. In
-    this way, one can scroll through the patients from typical to atypical to distinguish a pattern.
+    These measures can only be used in classification. Besides a .csv with the rankings, snapshots of the middle slice
+    of the image + segmentation are saved with the ground truth label and the percentage/posterior in the filename in 
+    a .zip file. In this way, one can scroll through the patients from typical to atypical to distinguish a pattern.
 
-5. A barchart of how often certain features groups were selected in the optimal methods. Only useful when using
-   groupwise feature selection.
+6. A barchart of how often certain features groups or feature selection groups were selected in the optimal methods.
 
-    By default, only the first evaluation method, e.g. metric computation, is used. The other methods can simply be added
-    to WORC by using the ``add_evaluation()`` function, either directly in WORC or through the facade:
+    Stored in files ``Barchart_all_{num}.{ext}``. A ``.png`` is generated for previewing, a ``.tex`` with tikzplotlib
+    which can be used to plot the figure in LateX in high quality.
 
-6. Decomposition of your feature space.
+    Gives an idea of which features are most relevant for the predictions of the model, and which feature methods are often succesful.
+    The overview of the hyperparameters, see above, is more quantitative and useful however.
+
+7. Decomposition of your feature space.
+
+    Stored in file ``Decomposition_all_{num}.png``.
 
     The following decompositions are performed:
 
@@ -338,6 +401,7 @@ Within these evaluation settings, the following performance evaluation methods a
     regular PCA shows good separation of your classes, your classes can be split using linear combinations
     of your features.
 
+
 To add the evaluation workflow, simply use the ``add_evaluation`` function:
 
 .. code-block:: python
@@ -348,9 +412,10 @@ To add the evaluation workflow, simply use the ``add_evaluation`` function:
    ...
    experiment.add_evaluation(label_type)
 
+Or in the ``SimpleWORC`` or ``BasicWORC`` facades:
+
 .. code-block:: python
 
-    import WORC
     from WORC import SimpleWORC
     experiment = SimpleWORC('somename')
     ...
