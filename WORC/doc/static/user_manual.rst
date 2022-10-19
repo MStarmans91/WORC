@@ -254,10 +254,12 @@ Outputs and evaluation of your network
 
 The following outputs and evaluation methods are always generated:
 
-1. Performance of your model (main output).
+1. Performance of your models (main output).
 
     Stored in file ``performance_all_{num}.json``. If you created multiple models to predict multiple labels, or did multilabel classification, the ``{num}`` corresponds
-    to the label. Contains 95% Confidence intervals on several metrics. 
+    to the label. The file consists of three parts.
+    
+    **Mean and 95% confidence intervals of several performance metrics.**
  
     For classification:
 
@@ -289,6 +291,14 @@ The following outputs and evaluation methods are always generated:
 
     In bootstrapping, 95% confidence intervals are created using the ''standard'' method according to a normal distribution: see Table 6, method 1 in  `Efron B., Tibshirani R. Bootstrap Methods for Standard Errors,
     Confidence Intervals, and Other Measures of Statistical Accuracy, Statistical Science Vol.1, No,1, 54-77, 1986`.
+
+    **Rankings of your samples**
+    In thid dictionary, the "Percentages" part shows how often a sample was classified correctly
+    when that sample was in the test set. The number of times the sample was in in the test set is also listed.
+    Those samples that were always classified correctly or always classified incorrecty are also named, including their ground truth label. 
+
+    **The metric values for each train-test cross-validation iteration**
+    These are where the confidence intervals are based upon.
 
 2. The configuration used by WORC.
 
