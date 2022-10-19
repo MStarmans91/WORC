@@ -252,7 +252,10 @@ assuming you have created the relevant objects as listed above:
 Outputs and evaluation of your network
 ---------------------------------------
 
-The following outputs and evaluation methods are always generated:
+General remark: when we talk about a sample, we mean one sample that has a set of features associated with it and is thus used as such in the model training or evaluation.
+A sample can correspond with a single patient, but if you have multiple tumors per patient for which features are separately extracted per tumor, these can be treated as separate sample.
+
+The following outputs and evaluation methods are always generated.
 
 1. Performance of your models (main output).
 
@@ -304,15 +307,32 @@ The following outputs and evaluation methods are always generated:
 
     Stored in files ``config_{type}_{num}.ini``. These are the result of the fingerprinting of your dataset. The ``config_all_{num}.ini`` config is used in classification, the other types
     are used for feature extraction and are named after the image types you provided. For example, if you provided two image types, ``['MRI', 'CT']``, you will get
-    ``config_MRI_0.ini`` and ``config_CT_0.ini``. If you provide multiple of the same types, the numbers will change.
+    ``config_MRI_0.ini`` and ``config_CT_0.ini``. If you provide multiple of the same types, the numbers will change. The fields correspond with those from :ref:`configuration chapter <config-chapter>`.
 
 3. The fitted models.
 
-    Stored in files ``estimator_all_{num}.hdf5``.
+    Stored in file ``estimator_all_{num}.hdf5``. Contains a pandas dataframe, with inside a pandas series per label for which WORC fitted a model, commonly just one.
+    The series contains the following attributes:
+
+    - classifiers: a list with per train-test cross-validation, the fitted model on the training set. These are thus the actually fitted models.
+    - X_train: a list with per train-test cross-validation, a list with for each sample in the training set all feature values. These can be used in re-fitting.
+    - Y_train: a list with per train-test cross-validation, a list with for each sample in the training set the ground truth labels. These can be used in re-fitting.
+    - patient_ID_train: a list with per train-test cross-validation, a list with the labels of all samples included in the training set.
+    - X_test: a list with per train-test cross-validation, a list with for each sample in the test set all feature values. These can be used in re-fitting.
+    - X_test: a list with per train-test cross-validation, a list with for each sample in the test set the ground truth labels. These can be used in re-fitting.
+    - patient_ID_test: a list with per train-test cross-validation, a list with the labels of all samples included in the test set.
+    - config: the WORC config used. Corresponds to the ``config_all_{num}.ini`` file mentioned above.
+    - random-seed: a list with per train-test cross-validation, the random seed used in splitting the train and test dataset. 
+    - feature_labels: the names of the features. As these are the same for all samples, only one set is provided.
 
 4. The extracted features.
 
-    Stored in the ``Features`` folder, in the files ``features_{featuretoolboxname}_{image_type}_{num}_{sample_id}.hdf5``.
+    Stored in the ``Features`` folder, in the files ``features_{featuretoolboxname}_{image_type}_{num}_{sample_id}.hdf5``. Contains a panas series wih the following attributes:
+
+    - feature_labels: the labels or names of the features.
+    - feature_values: the value of the features. Each element corresponds with the same element from the feature_labels attribute.
+    - parameters: the parameters used in the feature extraction. Originate from the WORC config.
+    - image_type: the type of the image that was used, which you as user provided. Used in the feature labels to distinguish between features extracted from different images.
 
 .. note:: For every output file, fastr generates a provenance file (``...prov.json``) stating how a file was generated, see https://fastr.readthedocs.io/en/stable/static/user_manual.html#provenance.
 
