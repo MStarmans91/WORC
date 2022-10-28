@@ -29,7 +29,7 @@ from sklearn.metrics import f1_score, roc_auc_score
 from sklearn.model_selection import train_test_split, LeaveOneOut
 from joblib import Parallel, delayed
 import WORC.addexceptions as ae
-from .parameter_optimization import random_search_parameters, guided_search_parameters
+from WORC.classification.parameter_optimization import random_search_parameters, guided_search_parameters
 from WORC.classification.regressors import regressors
 from WORC.classification.SearchCV import RandomizedSearchCVfastr
 

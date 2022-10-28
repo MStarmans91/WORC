@@ -855,9 +855,6 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Sort according to best indices
             fitted_workflows = [fitted_workflows[i] for i in bestindices]
 
-            # Remove None workflows
-            fitted_workflows = [f for f in fitted_workflows if f is not None]
-
             self.fitted_workflows = fitted_workflows
             
         if self.refit_validation_workflows:
@@ -1429,16 +1426,20 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
             # Simply select the required estimators
             print('\t - Detected already fitted train-test workflows.')
             estimators = list()
-            for i in ensemble:
+            for enum in ensemble:
                 try:
                     # Try a prediction to see if estimator is truly fitted
-                    self.fitted_workflows[i].predict(np.asarray([X_train[0][0], X_train[1][0]]))
-                    estimators.append(self.fitted_workflows[i])
-                except (NotFittedError, ValueError):
-                    print(f'\t\t - Estimator {i} not fitted (correctly) yet, refit.')
-                    estimator = self.fitted_workflows[i]
+                    self.fitted_workflows[enum].predict(np.asarray([X_train[0][0], X_train[1][0]]))
+                    estimators.append(self.fitted_workflows[enum])
+                except (NotFittedError, ValueError, AttributeError):
+                    print(f'\t\t - Estimator {enum} not fitted (correctly) yet, refit.')
+                    if self.fitted_workflows[enum] is not None:
+                        estimator = self.fitted_workflows[enum]
+                    else:
+                        estimator = clone(base_estimator)
+                        
                     estimator.refit_and_score(X_train, Y_train,
-                                              parameters_all[i],
+                                              parameters_all[enum],
                                               train, train)
 
                     estimators.append(estimator)
@@ -1467,33 +1468,32 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                     estimators.append(base_estimator)
                 except (NotFittedError, ValueError):
                     print(f'\t\t - Estimator {enum} could not be fitted (correctly), do not include in ensemble.')
-                    if enum + 1 == nest and not estimators:
-                        print(f'\t\t - Reached end of ensemble ({enum + 1}), but ensemble is empty, thus go on untill we find an estimator that works')
-                        while not estimators:
-                            # We cannot have an empy ensemble, thus go on untill we find an estimator that works
-                            enum += 1
-                            p_all = self.cv_results_['params'][enum]
+                    
+        if not estimators:
+            print(f'\t\t - Ensemble is empty, thus go on untill we find an estimator that works and that is the final ensemble.')
+            while not estimators:
+                # We cannot have an empy ensemble, thus go on untill we find an estimator that works
+                enum += 1
+                p_all = self.cv_results_['params'][enum]
 
-                            # Refit a SearchCV object with the provided parameters
-                            base_estimator = clone(base_estimator)
+                # Refit a SearchCV object with the provided parameters
+                base_estimator = clone(base_estimator)
 
-                            # Check if we need to create a multiclass estimator
-                            base_estimator.refit_and_score(X_train, Y_train, p_all,
-                                                           train, train,
-                                                           verbose=False)
+                # Check if we need to create a multiclass estimator
+                base_estimator.refit_and_score(X_train, Y_train, p_all,
+                                                train, train,
+                                                verbose=False)
 
-                            # Determine whether to overfit the feature scaling on the test set
-                            base_estimator.overfit_scaler = overfit_scaler
+                # Determine whether to overfit the feature scaling on the test set
+                base_estimator.overfit_scaler = overfit_scaler
 
-                            try:
-                                # Try a prediction to see if estimator is truly fitted
-                                base_estimator.predict(np.asarray([X_train[0][0], X_train[1][0]]))
-                                estimators.append(base_estimator)
-                            except (NotFittedError, ValueError):
-                                pass
-                        print(f'\t\t - Needed estimator {enum}.')
-                    else:
-                        pass
+                try:
+                    # Try a prediction to see if estimator is truly fitted
+                    base_estimator.predict(np.asarray([X_train[0][0], X_train[1][0]]))
+                    estimators.append(base_estimator)
+                except (NotFittedError, ValueError):
+                    pass
+            print(f'\t\t - Needed estimator {enum}.')
 
         self.ensemble = Ensemble(estimators)
         self.best_estimator_ = self.ensemble
@@ -1663,10 +1663,10 @@ class BaseSearchCVfastr(BaseSearchCV):
 
         # Create the fastr network
         network = fastr.create_network('WORC_GridSearch_' + name)
-        estimator_data = network.create_source('HDF5', id='estimator_source')
-        traintest_data = network.create_source('HDF5', id='traintest')
-        parameter_data = network.create_source('JsonFile', id='parameters')
-        sink_output = network.create_sink('HDF5', id='output')
+        estimator_data = network.create_source('HDF5', id='estimator_source', resources=ResourceLimit(memory='4G'))
+        traintest_data = network.create_source('HDF5', id='traintest', resources=ResourceLimit(memory='4G'))
+        parameter_data = network.create_source('JsonFile', id='parameters', resources=ResourceLimit(memory='4G'))
+        sink_output = network.create_sink('HDF5', id='output', resources=ResourceLimit(memory='6G'))
 
         fitandscore =\
             network.create_node('worc/fitandscore:1.0',
