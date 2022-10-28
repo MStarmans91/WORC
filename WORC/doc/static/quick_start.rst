@@ -252,7 +252,7 @@ named after your experiment name.
     for k, v in stats.items():
         print(f"\t {k} {v}.")
 
-.. note:: the performance is probably horrible, which is expected as we ran the experiment on coarse settings. These settings are recommended to only use for testing: see also below.
+.. note:: The performance is probably horrible, which is expected as we ran the experiment on coarse settings. These settings are recommended to only use for testing: see also below.
 
 
 Tips and Tricks
@@ -269,10 +269,10 @@ Some things we would advice to always do:
 
 * Run actual experiments on the full settings (coarse=False):
 
-.. code-block:: python
+    .. code-block:: python
 
-      coarse = False
-      experiment.binary_classification(coarse=coarse)
+        coarse = False
+        experiment.binary_classification(coarse=coarse)
 
 .. note:: This will result in more computation time. We therefore recommmend
   to run this script on either a cluster or high performance PC. If so,
@@ -281,30 +281,33 @@ Some things we would advice to always do:
 
     .. code-block:: python
 
-          experiment.set_multicore_execution()
+        experiment.set_multicore_execution()
 
   This is not required when running WORC on the BIGR or SURFSara Cartesius cluster,
   as automatic detectors for these clusters have been built into SimpleWORC and BasicWORC.
 
 * Add extensive evaluation: ``experiment.add_evaluation()`` before ``experiment.execute()``:
 
-.. code-block:: python
+    .. code-block:: python
 
-      experiment.add_evaluation()
+        experiment.add_evaluation()
 
-Changing fields in the configuration can be done with the add_config_overrides function, see below. 
-We recommend doing this after the modus part, as these also perform config_overrides.
-NOTE: all configuration fields have to be provided as strings.
+  See the "Evaluation of your network" section in the :ref:`User Manual <usermanual-chapter>`
+  chapter for more details on the evaluation outputs.
 
-.. code-block:: python
+* Changing fields in the configuration can be done with the add_config_overrides function, see below. 
+  We recommend doing this after the modus part, as these also perform config_overrides.
+  NOTE: all configuration fields have to be provided as strings.
+
+    .. code-block:: python
             
         overrides = {
-                    'Classification': {
-                        'classifiers': 'SVM',
-                        },
-                    }
+                'Classification': {
+                    'classifiers': 'SVM',
+                    },
+                }
 
         experiment.add_config_overrides(overrides)
 
-For a complete overview of all configuration functions, please look at the
-:ref:`Config chapter <config-chapter>`.
+  For a complete overview of all configuration functions, please look at the
+  :ref:`Config chapter <config-chapter>`.
