@@ -320,16 +320,30 @@ def fit_and_score(X, y, scoring,
             imputer.fit(X_train)
 
             original_shape = X_train.shape
-            X_train = imputer.transform(X_train)
-            imputed_shape = X_train.shape
-            X_test = imputer.transform(X_test)
-
+            imputed_shape = imputer.transform(X_train).shape
+            
             if original_shape != imputed_shape:
                 removed_features = original_shape[1] - imputed_shape[1]
                 if para_estimator['ImputationSkipAllNaN'] == 'True':
                     print(f"[WARNING]: Several features ({removed_features}) were np.NaN for all objects. config['Imputation']['skipallNaN'] set to True, so simply eliminate these features.")
+                    if hasattr(imputer.Imputer, 'statistics_'):
+                        X_train = imputer.transform(X_train)
+                        X_test = imputer.transform(X_test)
+                        feature_labels_zero = [fl for fnum, fl in enumerate(feature_labels[0]) if not np.isnan(imputer.Imputer.statistics_[fnum])]
+                        feature_labels = [feature_labels_zero for i in X_train]
+                    else:
+                        # Fit a mean imputer to transform the labels
+                        temp_imputer = Imputer(missing_values=np.nan, strategy='mean')
+                        temp_imputer.fit(X_train)
+                        X_train = imputer.transform(X_train)
+                        X_test = imputer.transform(X_test)
+                        feature_labels_zero = [fl for fnum, fl in enumerate(feature_labels[0]) if not np.isnan(temp_imputer.Imputer.statistics_[fnum])]
+                        feature_labels = [feature_labels_zero for i in X_train]
                 else:
                     raise ae.WORCValueError(f'Several features ({removed_features}) were np.NaN for all objects. Hence, imputation was not possible. Either make sure this is correct and turn of imputation, or correct the feature.')
+            else:
+                X_train = imputer.transform(X_train)
+                X_test = imputer.transform(X_test)
 
         del para_estimator['ImputationSkipAllNaN']
         del para_estimator['Imputation']

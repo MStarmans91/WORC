@@ -20,6 +20,16 @@ The ``fastr`` toolbox has a method to trace back errors. For more details,
 see the `fastr documentation <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors/>`_.
 
 
+Error: ``File "H5FDsec2.c", line 941, in H5FD_sec2_lock unable to lock file, errno = 37, error message = 'No locks available'``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Known HDF5 error, see also https://github.com/h5py/h5py/issues/1101.
+Can be solved by setting the HDF5_USE_FILE_LOCKING environment variable to 'FALSE',
+e.g. adding export HDF5_USE_FILE_LOCKING='FALSE' to your ~..bashrc on Linux.
+
+Error: ``Failed building wheel for cryptography``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This bug can be caused when using pyOpenSSL 22.1.0, we know version 20.0.1 at least works.
+
 Error: ``WORC.addexceptions.WORCValueError: First column in the file`` ``given to SimpleWORC().labels_from_this_file(**) needs to be named Patient.``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 This means that your label file, i.e. in which the label to be predicted for
@@ -161,14 +171,16 @@ you have to change are:
 - Temporary output: ``mounts['tmp']`` in the ~/.fastr/config.py file
 - Final output: ``mounts['output']`` in the ~/.fastr/config.d/WORC_config.py file
 
-I want a specific cross-validation setup, e.g. specific patients in the train and test set, how can I do that?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-WIP
-
-How can I make sure all samples of a patient are either all in the training or all in the test set?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-WIP
-
 How can I get the performance on the validation dataset?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-WIP
+The performance of the top 1 workflow is stored in the fitted estimators in the estimator_all_0.hdf5 file:
+
+.. code-block:: python
+
+      data = pd.read_hdf("estimator_all_0.hdf5")
+      data = data[list(data.keys())[0]]
+
+      validation_performance = list()
+      # Iterate over all train-test cross validations
+      for clf in data.classifiers:
+          validation_performance.append(clf.best_score_)

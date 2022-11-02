@@ -1442,7 +1442,13 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                               parameters_all[enum],
                                               train, train)
 
-                    estimators.append(estimator)
+                    try:
+                        # Try a prediction to see if estimator is truly fitted
+                        estimator.predict(np.asarray([X_train[0][0], X_train[1][0]]))
+                        estimators.append(estimator)
+                    except (NotFittedError, ValueError):
+                        print(f'\t\t - Estimator {enum} could not be fitted (correctly), do not include in ensemble.')
+                        
         else:
             # Create the ensemble trained on the full training set
             parameters_all = [parameters_all[i] for i in ensemble]

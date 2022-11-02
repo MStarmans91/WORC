@@ -9,210 +9,73 @@ and describe the more advanced features.
 
 .. _tools:
 
-Interacting with WORC
----------------------
-The WORC toolbox is build around of one main object, the WORC object. This object provides all functionality
+WORC object and facades
+------------------------
+
+The WORC toolbox is build around of one main object, the ``WORC`` object. This object provides all functionality
 of the toolbox. However, to make certain functionalities easier to use and limit the complexity,
-we have constructed two facades. The ``SimpleWORC`` facade is the simplest to interact with and provides
-all functionality required for conducting basic experiments. The ``BasicWORC`` object is based on the ``SimpleWORC``
-object and provides several more advances functions. The specific functionalities of these two facades and the
-``WORC`` object itself can be found in this section.
+we have constructed two facades: ``SimpleWORC`` and ``BasicWORC``. We advice new users to start with ``SimpleWORC``,
+more advanced users ``BasicWORC``, and only use ``WORC`` for development purposes. Additionally, we advice you to take a look at the :ref:`configuration chapter <config-chapter>`
+for all the settings that can be adjusted in WORC.
 
-For documentation on ``SimpleWORC`` and ``BasicWORC``, please look at the documentation
-within those modules: :py:mod:`WORC.facade.simpleworc` and :py:mod:`WORC.facade.basicworc`. Many of the functions are actually wrappers to interact with the WORC
-object, and therefore use the functionality described below. For basic usage, only using
-``SimpleWORC``, it's respective documentation and the
-`WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_ should be sufficient.
+The specific functionalities of these two facades and the ``WORC`` object itself can be found in this section.
 
-Additionally, we advice you to take a look at the :ref:`configuration chapter <config-chapter>`
-for all the settings that can be adjusted in ``WORC``.
-
-The WORC Object
+SimpleWORC
 ~~~~~~~~~~~~~~~~
+The ``SimpleWORC`` facade is the simplest to interact with and provides
+all functionality required for conducting basic experiments. 
+Much of the documentation of ``SimpleWORC`` can be found in its tutorial (https://github.com/MStarmans91/WORCtutorial and
+:ref:`the quick start <quickstart-chapter>`) and the docstrings of the functions in the object (:py:mod:`WORC.facade.simpleworc`).
+Many of the functions are  wrappers to interact with the ``WORC`` object, and therefore in the background use the functionality described below.
+
+BasicWORC
+~~~~~~~~~~~~~~~~
+The ``BasicWORC`` object is based on the ``SimpleWORC`` object, and thus provides exactly the same functionality,
+plus several more advances functions. Much of the documentation of ``BasicWORC`` can be found in its tutorial (WIP) 
+and the docstrings of the functions in the object (:py:mod:`WORC.facade.basicworc`).
+
+One of the functionalities that ``BasicWORC`` provides over ``SimpleWORC`` is that you can also directly provide
+your data to ``WORC`` (e.g. ``images_train``) instead of using one of the wrapping functions of
+``SimpleWORC`` (e.g. ``images_from_this_directory)
+
+.. _WORC:
+
+WORC
+~~~~~~~~~~~~~~~
+The ``WORC`` object can directly be assessed in the following way:
 .. code-block:: python
 
    import WORC
    network = WORC.WORC('somename')
 
 It's attributes are split in a couple of categories. We will not discuss
-the WORC.defaultconfig() function here, which generates the default
+the ``WORC.defaultconfig()`` function here, which generates the default
 configuration, as it is listed in a separate page, see the :ref:`Config chapter <config-chapter>`.
 More detailed documentation of the various functions can be found in the docstrings of :py:mod:`WORC.WORC`:
 we will mostly focus on the attributes, inputs, outputs and workflows here.
 
-
-Input file definitions
-----------------------
-
-Attributes: Sources
-~~~~~~~~~~~~~~~~~~~
-
-There are numerous WORC attributes which serve as source nodes for the
+There are numerous ``WORC`` attributes which serve as source nodes (i.e. inputs) for the
 FASTR network. These are:
 
+-  ``images_train`` and ``images_test``
+-  ``segmentations_train`` and ``segmentations_test``
+-  ``semantics_train`` and ``semantics_test``
+-  ``labels_train`` and ``labels_test``
+-  ``masks_train`` and ``masks_test``
+-  ``features_train`` and ``features_test``
+-  ``metadata_train`` and ``metadata_test``
+-  ``Elastix_Para``
+-  ``fastrconfigs``
 
--  images_train and images_test
--  segmentations_train and segmentations_test
--  semantics_train and semantics_test
--  labels_train and labels_test
--  masks_train and masks_test
--  features_train and features_test
--  metadata_train and metadata_test
--  Elastix_Para
--  fastrconfigs
+These directly correspond to the :ref:`input file definitions discussed below <inputs>`
+How to provide your data to ``WORC`` is also described in this section.
 
-
-When using a single dataset for both training and evaluation, you should
-supply all sources in train objects. By default, performance on a single
-dataset will be evaluated using cross-validation. Optionally, you can supply
-a separate training and test set.
-
-Each source should be given as a dictionary of strings corresponding to
-the source filenames. Each element should correspond to a single object for the classification,
-e.g. a patient. The keys are used to match the features to the
-label and semantics sources, so make sure these correspond to the label
-file.
-
-You can off course have multiple images or ROIs per object, e.g. a liver
-ROI and a tumor ROI. This can be easily done by appending to the
-sources. For example:
-
-.. code-block:: python
-
-   images1 = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
-   segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
-   segmentations2 = {'patient1': '/data/Patient1/seg_liver_MR.nii.gz', 'patient2': '/data/Patient2/seg_liver_MR.nii.gz'}
-
-   network.images_train.append(images1)
-   network.images_train.append(images1)
-
-   network.segmentations_train.append(segmentations1)
-   network.segmentations_train.append(segmentations2)
-
-When using multiple sequences per patients (e.g. T1 and T2), the same
-appending procedure can be used.
-
-If you want to use multiple ROIs independently per patient, e.g. multiple tumors, you can do so
-by simply adding them to the dictionary. To make sure the data is still split per patient in the
-cross-validation, please add a sample number after an underscore to the key, e.g.
-
-.. code-block:: python
-
-   images1 = {'patient1_0': '/data/Patient1/image_MR.nii.gz', 'patient1_1': '/data/Patient1/image_MR.nii.gz'}
-   segmentations1 = {'patient1_0': '/data/Patient1/seg_tumor1_MR.nii.gz', 'patient1_1': '/data/Patient1/seg_tumor2_MR.nii.gz'}
-
-If your label file (see below) contains the label ''patient1'', both samples will get this label
-in the classification.
-
-.. note:: You have to make sure the images and segmentation sources match in size.
-
-.. note:: You have to supply a configuration file for each image or feature source you append.
-          Thus, in the first example above, you need to append two configurations!
-
-.. note:: When you use
-          multiple image sequences, you can supply a ROI for each sequence by
-          appending to to segmentations object. Alternatively, when you do not
-          supply a segmentation for a specific sequence, WORC will use Elastix to
-          align this sequence to another through image registration. It will then
-          warp the segmentation from this sequence to the sequence for which you
-          did not supply a segmentation. **WORC will always align these sequences with no segmentations to the first sequence, i.e. the first object in the images_train list.**
-          Hence make sure you supply the sequence for which you have a ROI as the first object.
-
-Images and segmentations
-^^^^^^^^^^^^^^^^^^^^^^^^
-The minimal input for a Radiomics pipeline consists of either images
-plus segmentations, or features, plus a label file (and a configuration,
-but you can just use the default one).
-
-If you supply images and segmentations, features will be computed within the segmentations
-on the images. They are read out using SimpleITK, which supports various
-image formats such as DICOM, NIFTI, TIFF, NRRD and MHD.
-
-.. _um-labels:
-
-Labels
-^^^^^^
-The labels are predicted in the classification: should be a .txt or .csv file.
-The first column should head ``Patient`` and contain the patient ID. The next columns
-can contain labels you want to predict, e.g. tumor type, risk, genetics. For example:
-
-+----------+--------+--------+
-| Patient  | Label1 | Label2 |
-+==========+========+========+
-| patient1 | 1      | 0      |
-+----------+--------+--------+
-| patient2 | 2      | 1      |
-+----------+--------+--------+
-| patient3 | 1      | 5      |
-+----------+--------+--------+
-
-
-These labels are matched to the correct image/features by the sample names of the image/features. So in this
-case, your sources should look as following:
-
-
-.. code-block:: python
-
-   images_train = {'patient1': ..., 'patient2': ..., ...}
-   segmentations_train = {'patient1': ..., 'patient2': ..., ...}
-
-Semantics
-^^^^^^^^^
-Semantic features are non-computational features and are extracted using PREDICT. Examples include
-using the age and sex of the patients in the classification. You can
-supply these as a .csv listing your features per patient, similar to the :ref:`label file <um-labels>`
-
-
-Masks
-^^^^^
-WORC contains a segmentation preprocessing tool, called segmentix.
-The idea is that you can manipulate
-your segmentation, e.g. using dilation, then use a mask to make sure it
-is still valid. See the :ref:`config chapter <config-chapter>` for all segmentix options.
-
-
-Features
-^^^^^^^^
-If you already computed your features, e.g. from a previous run, you can
-directly supply the features instead of the images and segmentations and
-skip the feature computation step. These should be stored in .hdf5 files
-matching the WORC format.
-
-
-Metadata
-^^^^^^^^
-This source can be used if you want to use tags from the DICOM header as
-features, e.g. patient age and sex. In this case, this source should
-contain a single DICOM per patient from which the tags that are read.
-Check the PREDICT.imagefeatures.patient_feature module for the currently
-implemented tags.
-
-
-Elastix_Para
-^^^^^^^^^^^^
-If you have multiple images for each patient, e.g. T1 and T2, but only a
-single segmentation, you can use image registration to align and
-transform the segmentation to the other modality. This is done in WORC
-using Elastix http://elastix.isi.uu.nl/. In this source, you can supply
-a parameter file for Elastix to be used in the registration in .txt.
-format. Alternatively, you can use SimpleElastix to generate a parameter
-map and pass this object to ``WORC``.
-
-.. note:: ``WORC`` assumes your segmentation is made on the first
-    ``WORC.images_train`` (or test) source you supply. The segmentation
-    will be alligned to all other image sources.
-
-
-
-Construction and execution commands
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 After supplying your sources as described above, you need to build the FASTR network. This
 can be done through the ``WORC.build()`` command. Depending on your sources,
 several nodes will be added and linked. This creates the ``WORC.network``
 object, which is a ``fastr.network`` object. You can edit this network
 freely, e.g. add another source or node. You can print the network with
 the ``WORC.network.draw_network`` command.
-
 
 Next, we have to tell the network which sources should be used in the
 source nodes. This can be done through the ``WORC.set()`` function. This will
@@ -247,11 +110,258 @@ assuming you have created the relevant objects as listed above:
     network.set()
     network.execute()
 
+
+.. _inputs:
+
+Input file definitions and how to provide them to WORC
+-------------------------------------------------------
+
+Providing your inputs to WORC and data flows
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Let's first start on how to provide any of the below mentioned types of input data to  ``WORC``.
+``WORC`` facilitates different data flows (or networks or pipelines), which are automatically 
+constructed based on the inputs and configuration you provide. We here 
+discuss how the data can be set in ``BasicWORC`` and ``WORC``: 
+``SimpleWORC`` provides several wrappers to more easily provide data, which interact with 
+thee objects.
+
+As an example, we here show how to provide images and segmentations to ``BasicWORC`` and ``WORC``. 
+
+.. code-block:: python
+
+   images1 = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
+   segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
+
+   network.images_train.append(images1)
+   network.segmentations_train.append(segmentations1)
+
+Here ``network`` can be a ``BasicWORC`` or ``WORC`` object. Each source is a list, to which you can provide
+dictionaries containing the actual sources. In these dictionaries, each element should correspond to a single
+object for classification, e.g., a patient or a lesions. The keys indicate
+the ID of the element, e.g. the patient name, while the values should be strings corresponding to
+the source filenames. The keys are used to match the images and segmentations to the
+label and semantics sources, so make sure these correspond to the label file.
+
+.. note:: You have to make sure the images and segmentation (and other) sources match in size,
+           i.e., that the same keys are present.
+
+.. note:: You have to supply a configuration file for each image or feature source you append.
+          Thus, in the first example above, you need to append two configurations!
+
+Using multiple sources per patient
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If you want to provide multiple sources, e.g. images, per patient, simply append another dictionary
+to the source list, e.g.:
+
+.. code-block:: python
+
+   images1 = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
+   images2 = {'patient1': '/data/Patient1/image_CT.nii.gz', 'patient2': '/data/Patient2/image_CT.nii.gz'}
+   segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
+   segmentations2 = {'patient1': '/data/Patient1/seg_tumor_CT.nii.gz', 'patient2': '/data/Patient2/seg_tumor_CT.nii.gz'}
+
+   network.images_train.append(images1)
+   network.images_train.append(images2)
+
+   network.segmentations_train.append(segmentations1)
+   network.segmentations_train.append(segmentations2)
+
+
+``WORC`` will use the keys of the dictionaries to match the features from the same object or patient and combine
+them for the machine learning part.
+
+Mutiple ROIs or segmentations per object/patient
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You can off course have multiple images or ROIs per object, e.g. a liver
+ROI and a tumor ROI. This can be easily done by appending to the
+sources. For example:
+
+.. code-block:: python
+
+   images1 = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
+   segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
+   segmentations2 = {'patient1': '/data/Patient1/seg_liver_MR.nii.gz', 'patient2': '/data/Patient2/seg_liver_MR.nii.gz'}
+
+   network.images_train.append(images1)
+   network.images_train.append(images1)
+
+   network.segmentations_train.append(segmentations1)
+   network.segmentations_train.append(segmentations2)
+
+``WORC`` will use the keys of the dictionaries to match the features from the same object or patient and combine
+them for the machine learning part.
+
+If you want to use multiple ROIs independently per patient, e.g. multiple tumors, you can do so
+by simply adding them to the dictionary. To make sure the data is still split per patient in the
+cross-validation, please add a sample number after an underscore to the key, e.g.
+
+.. code-block:: python
+
+   images1 = {'patient1_0': '/data/Patient1/image_MR.nii.gz', 'patient1_1': '/data/Patient1/image_MR.nii.gz'}
+   segmentations1 = {'patient1_0': '/data/Patient1/seg_tumor1_MR.nii.gz', 'patient1_1': '/data/Patient1/seg_tumor2_MR.nii.gz'}
+
+If your label file (see below) contains the label ''patient1'', both samples will get this label
+in the classification.
+
+.. note:: ``WORC`` will automatically group all samples from a patient either all in the training
+          or all in the test set.
+
+Training and test sets
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When using a single dataset for both training and evaluation, you should
+only supply "training" datasets. By default, performance on a single
+dataset will be evaluated using cross-validation (default random split, but leave-one-out can also be configured). 
+Alternatively, you can supply a separate training and test set, by which you tell 
+``WORC`` to use this single train-test split. To distinguish between these, for every source, we have a 
+train and test object which you can set:
+
+.. code-block:: python
+
+   images_train = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
+   segmentations_train = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
+
+   network.images_train.append(images_train)
+   network.segmentations_train.append(segmentations_train)
+
+   images_test = {'patient3': '/data/Patient3/image_MR.nii.gz', 'patient4': '/data/Patient4/image_MR.nii.gz'}
+   segmentations_test = {'patient3': '/data/Patient3/seg_tumor_MR.nii.gz', 'patient4': '/data/Patient4/seg_tumor_MR.nii.gz'}
+
+   network.images_test.append(images_test)
+   network.segmentations_test.append(segmentations_test)
+
+Another alternative is to only provide training objects, but also a .csv defining fixed training and test splits to be used for the 
+evaluation, e.g. ``network.fixed_splits = '/data/fixedsplits.csv``. See the https://github.com/MStarmans91/WORCtutorial repository for an example. ``SimpleWORC`` has the ``set_fixed_splits`` to set this object.
+
+Missing data and dummy's
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Suppose you are missing a specific image for a specific patient. ``WORC`` can impute the features of this patient. 
+The underlying package we use for workflow execution (fastr) can however handle missing data. Therefore, to tell ``WORC`` to 
+do so, you still have to provide a source but can add ''Dummy'' to the key:
+
+.. code-block:: python
+
+   images1 = {'patient1': '/data/Patientc/image_MR.nii.gz', 'patient2_Dummy': '/data/Patient1/image_MR.nii.gz'}
+   segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2_Dummy': '/data/Patient1/seg_tumor_MR.nii.gz'}
+
+   network.images_train.append(images1)
+   network.segmentations_train.append(segmentations1)
+
+``WORC``  will process the sources normally up till the imputation part, so you have to provide valid data. As you see in the example above,
+we simply provided data from another patient.
+
+Segmentation on the first image, but not on the others
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When you use multiple image sequences, you can supply a ROI for each sequence by
+appending to to segmentations object as above. Alternatively, when you do not
+supply a segmentation for a specific sequence, ``WORC`` will use Elastix to
+align this sequence to another through image registration. It will then
+warp the segmentation from this sequence to the sequence for which you
+did not supply a segmentation. **WORC will always align these sequences with no segmentations to the first sequence, i.e. the first object in the images_train list.**
+Hence make sure you supply the sequence for which you have a ROI as the first object:
+
+.. code-block:: python
+
+   images1 = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
+   images2 = {'patient1': '/data/Patient1/image_CT.nii.gz', 'patient2': '/data/Patient2/image_CT.nii.gz'}
+   segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
+
+   network.images_train.append(images1)
+   network.images_train.append(images2)
+
+   network.segmentations_train.append(segmentations1)
+
+When providing only a segmentation for the first image in this way, ``WORC`` will automatically
+recognize that it needs to use registration.
+
+Images and segmentations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The minimal input for a radiomics pipeline consists of either images
+plus segmentations, or features, plus a label file (and a configuration,
+but you can just use the default one).
+
+If you supply images and segmentations, features will be computed within the segmentations
+on the images. They are read out using SimpleITK, which supports various
+image formats such as DICOM, NIFTI, TIFF, NRRD and MHD.
+
+.. _um-labels:
+
+Labels
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The labels are predicted in the classification: should be a .txt or .csv file.
+The first column should head ``Patient`` and contain the patient ID. The next columns
+can contain labels you want to predict, e.g. tumor type, risk, genetics. For example:
+
++----------+--------+--------+
+| Patient  | Label1 | Label2 |
++==========+========+========+
+| patient1 | 1      | 0      |
++----------+--------+--------+
+| patient2 | 2      | 1      |
++----------+--------+--------+
+| patient3 | 1      | 5      |
++----------+--------+--------+
+
+
+These labels are matched to the correct image/features by the sample names of the image/features. So in this
+case, your sources should look as following:
+
+.. code-block:: python
+
+   images_train = {'patient1': ..., 'patient2': ..., ...}
+   segmentations_train = {'patient1': ..., 'patient2': ..., ...}
+
+.. note:: ``WORC`` will automatically group all samples from a patient either all in the training
+            or all in the test set.
+
+Semantics or non-radiomics features
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Semantic features are non-computational features, thus features that you supply instead of extract. Examples include
+using the age and sex of the patients in the classification. You can
+supply these as a .csv listing your features per patient, similar to the :ref:`label file <um-labels>`
+
+Masks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+WORC contains a segmentation preprocessing tool, called segmentix.
+The idea is that you can manipulate
+your segmentation, e.g. using dilation, then use a mask to make sure it
+is still valid. See the :ref:`config chapter <config-chapter>` for all segmentix options.
+
+
+Features
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you already computed your features, e.g. from a previous run, you can
+directly supply the features instead of the images and segmentations and
+skip the feature computation step. These should be stored in .hdf5 files
+matching the WORC format.
+
+
+Metadata
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This source can be used if you want to use tags from the DICOM header as
+features, e.g. patient age and sex. In this case, this source should
+contain a single DICOM per patient from which the tags that are read.
+Check the PREDICT.imagefeatures.patient_feature module for the currently
+implemented tags.
+
+
+Elastix_Para
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you have multiple images for each patient, e.g. T1 and T2, but only a
+single segmentation, you can use image registration to align and
+transform the segmentation to the other modality. This is done in WORC
+using Elastix http://elastix.isi.uu.nl/. In this source, you can supply
+a parameter file for Elastix to be used in the registration in .txt.
+format. Alternatively, you can use SimpleElastix to generate a parameter
+map and pass this object to ``WORC``.
+
+.. note:: ``WORC`` assumes your segmentation is made on the first
+    ``WORC.images_train`` (or test) source you supply. The segmentation
+    will be alligned to all other image sources.
+
 .. _um-evaluation:
 
 Outputs and evaluation of your network
 ---------------------------------------
-
 General remark: when we talk about a sample, we mean one sample that has a set of features associated with it and is thus used as such in the model training or evaluation.
 A sample can correspond with a single patient, but if you have multiple tumors per patient for which features are separately extracted per tumor, these can be treated as separate sample.
 

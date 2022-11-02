@@ -292,12 +292,12 @@ Some things we would advice to always do:
 
         experiment.add_evaluation()
 
-  See the "Evaluation of your network" section in the :ref:`User Manual <usermanual-chapter>`
+  See the "Outputs and evaluation of your network" section in the :ref:`User Manual <usermanual-chapter>`
   chapter for more details on the evaluation outputs.
 
-* Changing fields in the configuration can be done with the add_config_overrides function, see below. 
-  We recommend doing this after the modus part, as these also perform config_overrides.
-  NOTE: all configuration fields have to be provided as strings.
+Changing fields in the configuration can be done with the add_config_overrides function, see below. 
+We recommend doing this after the modus part, as these also perform config_overrides.
+NOTE: all configuration fields have to be provided as strings.
 
     .. code-block:: python
             
