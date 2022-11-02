@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>facade Package &mdash; WORC 3.6.0 documentation</title>
+  <title>facade Package &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -282,6 +282,23 @@ made error are caught before running the experiment.</p>
 <dd><p>Add manual overrides for the WORC configuration.</p>
 <p>For a full list of options, see the
 <a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
+<p>Example usage:</p>
+<dl>
+<dt>overrides = {</dt><dd><dl class="simple">
+<dt>‘Classification’: {</dt><dd><p>‘classifiers’: ‘SVM’,</p>
+</dd>
+</dl>
+<p>},
+‘Featsel’: {</p>
+<blockquote>
+<div><p># Other estimators do not support multiclass
+‘SelectFromModel_estimator’: ‘RF’</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}
+self.add_config_overrides(overrides)</p>
 <dl class="simple">
 <dt>config: dictionary</dt><dd><p>Determine which options to override with which values.</p>
 </dd>

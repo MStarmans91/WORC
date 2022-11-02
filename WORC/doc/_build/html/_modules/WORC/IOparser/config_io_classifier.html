@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.IOparser.config_io_classifier &mdash; WORC 3.6.0 documentation</title>
+  <title>WORC.IOparser.config_io_classifier &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -224,6 +224,9 @@
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;tempsave&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;tempsave&#39;</span><span class="p">)</span>
 
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;DoTestNRSNEns&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;DoTestNRSNEns&#39;</span><span class="p">)</span>
+        
     <span class="c1"># Feature Scaling</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">][</span><span class="s1">&#39;scale_features&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;scale_features&#39;</span><span class="p">)</span>
@@ -319,6 +322,9 @@
         <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
          <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;skipallNaN&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;skipallNaN&#39;</span><span class="p">])]</span>        
+        
     <span class="c1"># OneHotEncoding</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;OneHotEncoding&#39;</span><span class="p">][</span><span class="s1">&#39;Use&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
@@ -557,11 +563,13 @@
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s1">&#39;maxlen&#39;</span><span class="p">)</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;ranking_score&#39;</span><span class="p">]</span> <span class="o">=</span> \
         <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;ranking_score&#39;</span><span class="p">])</span>
-    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;refit_workflows&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;refit_workflows&#39;</span><span class="p">)</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;refit_training_workflows&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;refit_training_workflows&#39;</span><span class="p">)</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;refit_validation_workflows&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;refit_validation_workflows&#39;</span><span class="p">)</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;memory&#39;</span><span class="p">]</span> <span class="o">=</span> \
         <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;memory&#39;</span><span class="p">])</span>
-
+        
     <span class="c1"># Settings for SMAC</span>
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;use&#39;</span><span class="p">)</span>

@@ -329,7 +329,8 @@ def generate_config_options():
     config['Imputation']['use'] = 'Boolean(s)'
     config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
     config['Imputation']['n_neighbors'] = 'Two Integers: loc and scale'
-
+    config['Imputation']['skipallNaN'] = 'Boolean(s)'
+    
     # Resampling options
     config['Resampling'] = dict()
     config['Resampling']['Use'] = 'Float'
@@ -653,7 +654,8 @@ def generate_config_descriptions():
     config['Imputation']['use'] = 'If True, use feature imputation methods to replace NaN values. If False, all NaN features will be set to zero.'
     config['Imputation']['strategy'] = 'Method to be used for imputation.'
     config['Imputation']['n_neighbors'] = 'When using k-Nearest Neighbors (kNN) for feature imputation, determines the number of neighbors used for imputation. Can be a single integer or a list.'
-
+    config['Imputation']['skipallNaN'] = 'When True, if a feature is NaN for all objects/patients, simply remove this features for all patients.'
+    
     # Resampling options
     config['Resampling'] = dict()
     config['Resampling']['Use'] = 'Percentage of times Object (e.g. patient) resampling is used.'

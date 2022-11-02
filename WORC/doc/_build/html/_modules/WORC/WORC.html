@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.WORC &mdash; WORC 3.6.0 documentation</title>
+  <title>WORC.WORC &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -365,6 +365,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;AssumeSameImageAndMaskMetadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;DoTestNRSNEns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
 
         <span class="c1"># Fingerprinting</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Fingerprinting&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -517,6 +518,7 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mean, median, most_frequent, constant, knn&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;5, 5&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;skipallNaN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
 
         <span class="c1"># Feature scaling options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatureScaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -661,7 +663,8 @@
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;maxlen&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;100&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;ranking_score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;test_score&#39;</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;memory&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;3G&#39;</span>
-        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;refit_workflows&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;refit_training_workflows&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;refit_validation_workflows&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;False&#39;</span>
 
         <span class="c1"># SMAC options</span>
         <span class="n">config</span><span class="p">[</span><span class="s1">&#39;SMAC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
@@ -827,9 +830,9 @@
 
                 <span class="c1"># Optional SMAC output</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;SMAC&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">sink_smac_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;JsonFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;smac_results&#39;</span><span class="p">,</span>
-                                                                     <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">sink_smac_results</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;smac_results&#39;</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sink_smac_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;JsonFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;smac_results&#39;</span><span class="p">,</span>
+                                                                      <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;general_sinks&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sink_smac_results</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classify</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;smac_results&#39;</span><span class="p">]</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TrainTest</span><span class="p">:</span>
                     <span class="c1"># FIXME: the naming here is ugly</span>
@@ -1107,8 +1110,14 @@
                         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">segmode</span> <span class="o">==</span> <span class="s1">&#39;Register&#39;</span><span class="p">:</span>
                             <span class="c1"># ---------------------------------------------</span>
                             <span class="c1"># Registration nodes: Align segmentation of first</span>
-                            <span class="c1"># modality to others using registration ith Elastix</span>
+                            <span class="c1"># modality to others using registration with Elastix</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">add_elastix</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">nmod</span><span class="p">)</span>
+
+                            <span class="c1"># Add to fingerprinting if required</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+                                <span class="c1"># Since there are no segmentations yet of this modality, just use those of the first, provided modality</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_fingerprinting</span><span class="p">[</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">_segmentations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">converters_seg_train</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">modlabels</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_fingerprinters</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations_train&#39;</span><span class="p">])</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">links_fingerprinting</span><span class="p">[</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">_segmentations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
                         <span class="c1"># -----------------------------------------------------</span>
                         <span class="c1"># Optionally, add segmentix, the in-house segmentation</span>
@@ -1242,7 +1251,7 @@
                                 <span class="bp">self</span><span class="o">.</span><span class="n">links_fingerprinting</span><span class="p">[</span><span class="s1">&#39;classification&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="s2">&quot;Please provide labels.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="s2">&quot;Please provide labels for training, i.e., WORC.labels_train or SimpleWORC.labels_from_this_file.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="s2">&quot;Please provide either images or features.&quot;</span><span class="p">)</span></div>
 
@@ -1566,7 +1575,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">sources_segmentations_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span>\
                 <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span>
                                            <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;segmentations_train_&#39;</span> <span class="o">+</span> <span class="n">label</span><span class="p">,</span>
-                                           <span class="n">node_group</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">,</span>
+                                           <span class="n">node_group</span><span class="o">=</span><span class="s1">&#39;train&#39;</span><span class="p">,</span>
                                            <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;train_sources&#39;</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">converters_seg_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span>\
@@ -1583,7 +1592,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">sources_segmentations_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span>\
                     <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;ITKImageFile&#39;</span><span class="p">,</span>
                                                <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;segmentations_test_&#39;</span> <span class="o">+</span> <span class="n">label</span><span class="p">,</span>
-                                               <span class="n">node_group</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">,</span>
+                                               <span class="n">node_group</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span>
                                                <span class="n">step_id</span><span class="o">=</span><span class="s1">&#39;test_sources&#39;</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">converters_seg_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span>\
@@ -1805,11 +1814,6 @@
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TrainTest</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">calcfeatures_test</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">i_node</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentation&#39;</span><span class="p">]</span> <span class="o">=</span>\
                             <span class="bp">self</span><span class="o">.</span><span class="n">transformix_seg_nodes_test</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span>
-
-                <span class="c1"># Add to fingerprinting if required</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">links_fingerprinting</span><span class="p">[</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">_segmentations&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">network</span><span class="o">.</span><span class="n">create_link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transformix_seg_nodes_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_fingerprinters</span><span class="p">[</span><span class="n">label</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;segmentations_train&#39;</span><span class="p">])</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">links_fingerprinting</span><span class="p">[</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{label}</span><span class="s1">_segmentations&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">collapse</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
 
             <span class="c1"># Save outputfor the training set</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">sinks_transformations_train</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span>\

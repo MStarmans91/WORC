@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.construct_classifier &mdash; WORC 3.6.0 documentation</title>
+  <title>WORC.classification.construct_classifier &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -258,10 +258,11 @@
                                    <span class="n">min_child_weight</span><span class="o">=</span><span class="n">min_child_weight</span><span class="p">,</span>
                                    <span class="n">n_estimators</span><span class="o">=</span><span class="n">boosting_rounds</span><span class="p">,</span>
                                    <span class="n">colsample_bytree</span><span class="o">=</span><span class="n">colsample_bytree</span><span class="p">,</span>
-                                   <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
+                                   <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">],</span>
+                                   <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;XGBRegressor&#39;</span><span class="p">:</span>
-        <span class="c1"># XGB Classifier</span>
+        <span class="c1"># XGB Regressor</span>
         <span class="n">max_depth</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_max_depth&#39;</span><span class="p">]</span>
         <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_learning_rate&#39;</span><span class="p">]</span>
         <span class="n">gamma</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;XGB_gamma&#39;</span><span class="p">]</span>
@@ -274,7 +275,8 @@
                                   <span class="n">min_child_weight</span><span class="o">=</span><span class="n">min_child_weight</span><span class="p">,</span>
                                   <span class="n">n_estimators</span><span class="o">=</span><span class="n">boosting_rounds</span><span class="p">,</span>
                                   <span class="n">colsample_bytree</span><span class="o">=</span><span class="n">colsample_bytree</span><span class="p">,</span>
-                                  <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">])</span>
+                                  <span class="n">random_state</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">],</span>
+                                  <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;classifiers&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;LightGBMClassifier&#39;</span><span class="p">:</span>
         <span class="c1"># LightGBM Classifier</span>

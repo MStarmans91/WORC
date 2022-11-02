@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.6.0 documentation</title>
+  <title>Configuration &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -391,6 +391,9 @@ backend.</p>
 <tr class="row-odd"><td><p>Fingerprint</p></td>
 <td><p>Whether to use Fingerprinting or not.</p></td>
 </tr>
+<tr class="row-even"><td><p>DoTestNRSNEns</p></td>
+<td><p>If True, repeat the experiments from the WORC paper to check the performance of various N_RS, N_Ens and advanced ensembling combinations.</p></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
@@ -454,6 +457,10 @@ backend.</p>
 <tr class="row-odd"><td><p>Fingerprint</p></td>
 <td><p>True</p></td>
 <td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>DoTestNRSNEns</p></td>
+<td><p>False</p></td>
+<td><p>Boolean</p></td>
 </tr>
 </tbody>
 </table>
@@ -1457,6 +1464,9 @@ selected.</p>
 <tr class="row-even"><td><p>n_neighbors</p></td>
 <td><p>When using k-Nearest Neighbors (kNN) for feature imputation, determines the number of neighbors used for imputation. Can be a single integer or a list.</p></td>
 </tr>
+<tr class="row-odd"><td><p>skipallNaN</p></td>
+<td><p>When True, if a feature is NaN for all objects/patients, simply remove this features for all patients.</p></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
@@ -1484,6 +1494,10 @@ selected.</p>
 <tr class="row-even"><td><p>n_neighbors</p></td>
 <td><p>5, 5</p></td>
 <td><p>Two Integers: loc and scale</p></td>
+</tr>
+<tr class="row-odd"><td><p>skipallNaN</p></td>
+<td><p>True</p></td>
+<td><p>Boolean(s)</p></td>
 </tr>
 </tbody>
 </table>
@@ -2365,8 +2379,8 @@ are picked less often by default.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 7%" />
-<col style="width: 93%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2398,17 +2412,20 @@ are picked less often by default.</p>
 <tr class="row-odd"><td><p>memory</p></td>
 <td><p>When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + “G”.</p></td>
 </tr>
-<tr class="row-even"><td><p>refit_workflows</p></td>
-<td><p>If True, refit all workflows in the ensemble automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.</p></td>
+<tr class="row-even"><td><p>refit_training_workflows</p></td>
+<td><p>If True, refit all workflows trained on the full training dataset automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.</p></td>
+</tr>
+<tr class="row-odd"><td><p>refit_validation_workflows</p></td>
+<td><p>If True, refit all workflows trained on the train-validation training dataset automatically during training. This will save time while performing validation evaluation, but will take more time during training and make the saved model much larger.</p></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 6%" />
+<col style="width: 10%" />
 <col style="width: 4%" />
-<col style="width: 90%" />
+<col style="width: 86%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2449,7 +2466,11 @@ are picked less often by default.</p>
 <td><p>3G</p></td>
 <td><p>String consisting of integer + “G”</p></td>
 </tr>
-<tr class="row-even"><td><p>refit_workflows</p></td>
+<tr class="row-even"><td><p>refit_training_workflows</p></td>
+<td><p>False</p></td>
+<td><p>Boolean</p></td>
+</tr>
+<tr class="row-odd"><td><p>refit_validation_workflows</p></td>
 <td><p>False</p></td>
 <td><p>Boolean</p></td>
 </tr>

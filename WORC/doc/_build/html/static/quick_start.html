@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quick start guide &mdash; WORC 3.6.0 documentation</title>
+  <title>Quick start guide &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -390,12 +390,18 @@ named after your experiment name.</p>
                                        <span class="s1">&#39;Features&#39;</span><span class="p">,</span>
                                        <span class="s1">&#39;features_*.hdf5&#39;</span><span class="p">))</span>
 
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No feature files found: your network has failed.&#39;</span><span class="p">)</span>
+
 <span class="n">feature_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 <span class="n">featurefile_p1</span> <span class="o">=</span> <span class="n">feature_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">features_p1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">featurefile_p1</span><span class="p">)</span>
 
 <span class="c1"># Read the overall peformance</span>
 <span class="n">performance_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">experiment_folder</span><span class="p">,</span> <span class="s1">&#39;performance_all_0.json&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">performance_file</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;No performance file {performance_file} found: your network has failed.&#39;</span><span class="p">)</span>
+
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">performance_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
     <span class="n">performance</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
 
@@ -414,7 +420,7 @@ named after your experiment name.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>the performance is probably horrible, which is expected as we ran the experiment on coarse settings. These settings are recommended to only use for testing: see also below.</p>
+<p>The performance is probably horrible, which is expected as we ran the experiment on coarse settings. These settings are recommended to only use for testing: see also below.</p>
 </div>
 </div>
 <div class="section" id="tips-and-tricks">
@@ -426,13 +432,16 @@ We advice you to look at the docstrings of the SimpleWORC functions
 introduced in this tutorial, and explore the other SimpleWORC functions,
 s SimpleWORC offers much more functionality than presented here.</p>
 <p>Some things we would advice to always do:</p>
-<ul class="simple">
-<li><p>Run actual experiments on the full settings (coarse=False):</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="bp">False</span>
+<ul>
+<li><p>Run actual experiments on the full settings (coarse=False):</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
 </pre></div>
 </div>
+</div></blockquote>
+</li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This will result in more computation time. We therefore recommmend
@@ -447,14 +456,35 @@ just before before <code class="docutils literal notranslate"><span class="pre">
 <p>This is not required when running WORC on the BIGR or SURFSara Cartesius cluster,
 as automatic detectors for these clusters have been built into SimpleWORC and BasicWORC.</p>
 </div>
-<ul class="simple">
-<li><p>Add extensive evaluation: <code class="docutils literal notranslate"><span class="pre">experiment.add_evaluation()</span></code> before <code class="docutils literal notranslate"><span class="pre">experiment.execute()</span></code>:</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">()</span>
+<ul>
+<li><p>Add extensive evaluation: <code class="docutils literal notranslate"><span class="pre">experiment.add_evaluation()</span></code> before <code class="docutils literal notranslate"><span class="pre">experiment.execute()</span></code>:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>For a complete overview of all functions, please look at the
+</div></blockquote>
+<p>See the “Outputs and evaluation of your network” section in the <span class="xref std std-ref">User Manual</span>
+chapter for more details on the evaluation outputs.</p>
+</li>
+</ul>
+<p>Changing fields in the configuration can be done with the add_config_overrides function, see below.
+We recommend doing this after the modus part, as these also perform config_overrides.
+NOTE: all configuration fields have to be provided as strings.</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">overrides</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Classification&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;classifiers&#39;</span><span class="p">:</span> <span class="s1">&#39;SVM&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_config_overrides</span><span class="p">(</span><span class="n">overrides</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For a complete overview of all configuration functions, please look at the
 <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">Config chapter</span></a>.</p>
+</div></blockquote>
 </div>
 </div>
 </div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.trainclassifier &mdash; WORC 3.6.0 documentation</title>
+  <title>WORC.classification.trainclassifier &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -391,6 +391,7 @@
 
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;use&#39;</span><span class="p">]</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ImputationMethod&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span>
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ImputationSkipAllNaN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;skipallNaN&#39;</span><span class="p">]</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;ImputationNeighbours&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
                          <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Imputation&#39;</span><span class="p">][</span><span class="s1">&#39;n_neighbors&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
