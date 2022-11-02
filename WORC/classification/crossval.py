@@ -934,6 +934,8 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
                     estimator.create_ensemble(X_train_temp, Y_train, method=ensemble,
                                               verbose=verbose)
 
+                performances[f'Validation F1-score Ensemble {ensemble} {key}'] = estimator.ensemble_validation_score
+                
                 # Compute performance
                 y_prediction = estimator.predict(X_test)
                 y_score = estimator.predict_proba(X_test)[:, 1]
