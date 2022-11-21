@@ -1111,19 +1111,23 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                             predictions = getpredictions()
                         else:
                             X_train_values = np.asarray([x[0] for x in X_train])
-                            predictions = estimator.predict_proba(X_train_values[valid])              
+                            try:
+                                predictions = estimator.predict_proba(X_train_values[valid])     
+                            except (NotFittedError, ValueError, AttributeError):
+                                # Estimator cannot be fitted properly, hence skip it
+                                predictions = None         
                         
                     else:
                         predictions = getpredictions()
 
                     if predictions is None:
+                        # Estimator cannot be fitted properly, hence skip it
                         break
                     
                     # Only take the probabilities for the second class
                     predictions = predictions[:, 1]
 
                     # Store the predictions on this split
-                    #predictions_iter.append(predictions)
                     predictions_iter[it, :] = predictions
 
                     # Compute and store the performance on this split

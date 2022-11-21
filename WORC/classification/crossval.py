@@ -853,7 +853,8 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             # Make a local copy of the estimator and select only subset of workflows
             print(f'\t Using RS {RS}.')
             estimator = copy.deepcopy(estimator_original)
-            estimator.maxlen = RS
+            # estimator.maxlen = RS  # Why is this needed? This will only lead to a lot of extra workflows on top of the top 100 being fitted
+            estimator.maxlen = min(RS, maxlen)
             workflow_num = np.arange(n_workflows).tolist()
     
             # Select only a specific set of workflows
@@ -864,6 +865,7 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             F1_validation = estimator.cv_results_['mean_test_score']
             F1_validation = [F1_validation[i] for i in selected_workflows]
             workflow_ranking = np.argsort(np.asarray(F1_validation)).tolist()[::-1]  # Normally, rank from smallest to largest, so reverse
+            workflow_ranking = workflow_ranking[0:maxlen]  # only maxlen estimators needed for ensembling tests
             F1_validation = [F1_validation[i] for i in workflow_ranking]
 
             # Only keep the number of RS required and resort based on ranking
@@ -910,14 +912,12 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
                     [estimator.fitted_validation_workflows[i] for i in selected_workflows_ranked_all]
                 
             # Store train and validation AUC
-            mean_val_F1 = F1_validation[0:maxlen]
             F1_training = estimator.cv_results_['mean_train_score']
             F1_training = [F1_training[i] for i in selected_workflows]
             F1_training = [F1_training[i] for i in workflow_ranking]
-            mean_train_F1 = F1_training[0:maxlen]
 
-            performances[f'Mean training F1-score {key} top {maxlen}'] = mean_train_F1
-            performances[f'Mean validation F1-score {key} top {maxlen}'] = mean_val_F1
+            performances[f'Mean training F1-score {key} top {maxlen}'] = F1_validation
+            performances[f'Mean validation F1-score {key} top {maxlen}'] = F1_training
 
             for ensemble in ensembles:
                 if isinstance(ensemble, int):
