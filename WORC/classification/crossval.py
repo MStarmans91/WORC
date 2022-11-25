@@ -270,12 +270,13 @@ def random_split_cross_validation(image_features, feature_labels, classes,
 
             panda_data = pd.DataFrame(panda_data_temp)
             n = 0
-            filename = os.path.join(tempfolder, 'tempsave_' + str(i) + '.hdf5')
+            filename = os.path.join(tempfolder, 'tempsave_' + str(i) + '.pkl')
             while os.path.exists(filename):
                 n += 1
-                filename = os.path.join(tempfolder, 'tempsave_' + str(i + n) + '.hdf5')
+                filename = os.path.join(tempfolder, 'tempsave_' + str(i + n) + '.pkl')
 
-            panda_data.to_hdf(filename, 'EstimatorData')
+            # panda_data.to_hdf(filename, 'EstimatorData')
+            panda_data.to_pickle(filename)
             del panda_data, panda_data_temp
 
         # Print elapsed time
@@ -513,13 +514,13 @@ def crossval(config, label_data, image_features,
             os.makedirs(tempfolder)
         else:
             # Previous tempsaves, start where we left of
-            tempsaves = glob.glob(os.path.join(tempfolder, 'tempsave_*.hdf5'))
+            tempsaves = glob.glob(os.path.join(tempfolder, 'tempsave_*.pkl'))
             start = len(tempsaves)
 
             # Load previous tempsaves and add to save data
             tempsaves.sort()
             for t in tempsaves:
-                t = pd.read_hdf(t)
+                t = pd.read_pickle(t)
                 t = t['Constructed crossvalidation']
                 temp_save_data = (t.trained_classifier, t.X_train, t.X_test,
                                   t.Y_train, t.Y_test, t.patient_ID_train,

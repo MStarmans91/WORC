@@ -345,7 +345,9 @@ def fit_and_score(X, y, scoring,
                 X_train = imputer.transform(X_train)
                 X_test = imputer.transform(X_test)
 
-        del para_estimator['ImputationSkipAllNaN']
+        if 'ImputationSkipAllNaN' in para_estimator.keys():
+            del para_estimator['ImputationSkipAllNaN']
+            
         del para_estimator['Imputation']
         del para_estimator['ImputationMethod']
         if 'ImputationNeighbours' in para_estimator.keys():

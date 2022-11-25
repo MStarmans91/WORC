@@ -641,7 +641,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
     def process_fit(self, n_splits, parameters_all,
                     test_sample_counts, test_score_dicts,
                     train_score_dicts, fit_time, score_time, cv_iter,
-                    X, y, fitted_workflows=None, fitted_validation_workflows=None,
+                    X, y, fitted_workflows=list(), fitted_validation_workflows=list(),
                     use_smac=False):
         """Process a fit.
 
@@ -848,7 +848,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.scorer_ = scorers if self.multimetric_ else scorers['score']
 
         # Refit the top performing workflows on the full training dataset
-        if self.refit_training_workflows:
+        if self.refit_training_workflows and fitted_workflows:
             # Select only from one train-val split, as they are identical
             fitted_workflows = fitted_workflows[:pipelines_per_split]
 
@@ -857,7 +857,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
             self.fitted_workflows = fitted_workflows
             
-        if self.refit_validation_workflows:
+        if self.refit_validation_workflows and fitted_validation_workflows:
             # Select from all train-val splits the best indices
             bestindices_all = list()
             for j in range(len(cv_iter)):
@@ -3362,6 +3362,7 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
                  error_score='raise', return_train_score=True,
                  n_jobspercore=100, fastr_plugin=None, maxlen=100,
                  ranking_score='test_score', features=None, labels=None,
+                 refit_training_workflows=False, refit_validation_workflows=False,
                  smac_result_file=None):
         super(GuidedSearchCVSMAC, self).__init__(
              param_distributions=param_distributions, scoring=scoring, fit_params=fit_params,
@@ -3369,7 +3370,8 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
              pre_dispatch=pre_dispatch, error_score=error_score,
              return_train_score=return_train_score,
              n_jobspercore=n_jobspercore, fastr_plugin=fastr_plugin,
-             maxlen=maxlen, ranking_score=ranking_score)
+             maxlen=maxlen, ranking_score=ranking_score, refit_training_workflows=refit_training_workflows,
+             refit_validation_workflows=refit_validation_workflows)
         self.features = features
         self.labels = labels
         self.smac_result_file = smac_result_file
