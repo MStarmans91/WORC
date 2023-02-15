@@ -176,9 +176,11 @@ After defining the inputs, the following code can be used to run your first expe
 
     # Set the input data according to the variables we defined earlier
     experiment.images_from_this_directory(imagedatadir,
-                                 image_file_name=image_file_name)
+                                 image_file_name=image_file_name,
+                                 is_training=True)
     experiment.segmentations_from_this_directory(imagedatadir,
-                                        segmentation_file_name=segmentation_file_name)
+                                        segmentation_file_name=segmentation_file_name,
+                                        is_training=True) 
     experiment.labels_from_this_file(label_file)
     experiment.predict_labels(label_name)
 
@@ -259,10 +261,22 @@ Tips and Tricks
 
 For tips and tricks on running a full experiment instead of this simple
 example, adding more evaluation options, debugging a crashed network etcetera,
-please go to :ref:`User Manual <usermanual-chapter>` chapter.
+please go to 
 We advice you to look at the docstrings of the SimpleWORC functions
 introduced in this tutorial, and explore the other SimpleWORC functions,
 s SimpleWORC offers much more functionality than presented here.
+
+For tips and tricks on running a full experiment instead of this simple
+example, adding more evaluation options, debugging a crashed network etcetera,
+please go to :ref:`User Manual <usermanual-chapter>` chapter or
+the :ref:`Additional functionality <additonalfunctionality-chapter>` chapter. If you
+run into any issues, check the :ref:`FAQ <faq-chapter>`,
+make an issue on the WORC Github, or feel free to mail me.
+
+We advice you to look at the docstrings of the SimpleWORC functions
+introduced in this tutorial, and explore the other SimpleWORC functions,
+as SimpleWORC offers much more functionality than presented here, see
+the documentation: https://worc.readthedocs.io/en/latest/autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC
 
 Some things we would advice to always do:
 
