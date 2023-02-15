@@ -3,9 +3,6 @@
 Quick start guide
 =================
 
-This manual will show users how to install WORC, configure WORC and construct and run a simple experiment.
-It's exactly the same as the `WORC Tutorial <https://github.com/MStarmans91/WORCTutorial>`_.
-
 .. _installation-chapter:
 
 Installation
@@ -49,15 +46,17 @@ Tutorials
 ---------
 To start out using WORC, we strongly recommend you to follow the tutorials located in the
 `WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_. This repository
-contains tutorials for an introduction to WORC, as well as more advanced workflows.
+contains tutorials for an introduction to WORC, as well as more advanced workflows. We recommend
+starting with the WORCTutorialSimple, of which the part below is an exact copy.
 
 If you run into any issue, you can first debug your network using
 `the fastr trace tool <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors/>`_.
-If you're stuck, feel free to post an issue on the `WORC Github <https://github.com/MStarmans91/WORC/>`_.
+If you're stuck, check out the FAQ first at https://worc.readthedocs.io/en/latest/static/faq.html,
+or feel free to post an issue on the `WORC Github <https://github.com/MStarmans91/WORC/>`_.
 
 
 Running an experiment
----------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We strongly recommend you to follow the tutorials, see the section above. In this section,
 a point by point description of the tutorial is given.

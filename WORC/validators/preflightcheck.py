@@ -75,6 +75,10 @@ class SimpleValidator(AbstractValidator):
                 for num, (ims, segs) in enumerate(zip(simpleworc.images_train, simpleworc.segmentations_train)):
                     if ims.keys() != segs.keys():
                         raise ae.WORCValueError(f'Subjects in images_train and segmentations_train are not the same for modality {num}.')
+                    
+        if simpleworc._worc.images_train:
+            if len(simpleworc._worc.images_train) != len(simpleworc._image_types):
+                raise ae.WORCValueError(f'Number of image types you said you would provide (image_types: {len(simpleworc._image_types)}) is not the same as the actual number of image types provided (images_train: {len(simpleworc._worc.images_train)}).')
 
 
 class MinSubjectsValidator(AbstractValidator):

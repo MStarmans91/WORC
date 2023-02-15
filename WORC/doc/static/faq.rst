@@ -17,7 +17,9 @@ Execution errors
 My experiment crashed, where to begin looking for errors?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The ``fastr`` toolbox has a method to trace back errors. For more details,
-see the `fastr documentation <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors/>`_.
+see the `fastr documentation <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors>`_.
+If you want to know the exact error that occured in a job, make sure you trace back to a single sink and single sample,
+e.g. ``fastr trace $RUNDIR/__sink_data__.json --sinks sink_5 --sample sample_1_1 ``.
 
 
 Error: ``File "H5FDsec2.c", line 941, in H5FD_sec2_lock unable to lock file, errno = 37, error message = 'No locks available'``
@@ -26,9 +28,10 @@ Known HDF5 error, see also https://github.com/h5py/h5py/issues/1101.
 Can be solved by setting the HDF5_USE_FILE_LOCKING environment variable to 'FALSE',
 e.g. adding export HDF5_USE_FILE_LOCKING='FALSE' to your ~..bashrc on Linux.
 
-Error: ``Failed building wheel for cryptography``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-This bug can be caused when using pyOpenSSL 22.1.0, we know version 20.0.1 at least works.
+Error: ``Failed building wheel for cryptography`` (occurs often on BIGR cluster)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This bug can be caused when using pyOpenSSL 22.1.0 or recent cryptography versions on the BIGR cluster.
+Cryptography 3.4.7 and PyOpenSSL 20.0.1 should work, so install those (in that order) before installing WORC.
 
 Error: ``WORC.addexceptions.WORCValueError: First column in the file`` ``given to SimpleWORC().labels_from_this_file(**) needs to be named Patient.``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -184,3 +187,10 @@ The performance of the top 1 workflow is stored in the fitted estimators in the 
       # Iterate over all train-test cross validations
       for clf in data.classifiers:
           validation_performance.append(clf.best_score_)
+
+
+My jobs on the BIGR cluster get cancelled due to memory errors
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You can adjust the memory for various jobs through changing the values in the ``WORC.fastr_memory_parameters`` dictionary 
+(accesible in ``SimpleWORC`` and ``BasicWORC`` through ``_worc.fastr_memory_parameters``.) The fit_and_score job
+memory can be adjusted through the WORC HyperOptimization config, see :ref:`Configuration chapter <config-chapter>`.

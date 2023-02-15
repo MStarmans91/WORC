@@ -628,7 +628,7 @@ class SimpleWORC():
 
         """
         self._add_evaluation = True
-        self._selected_label = 0
+        self._selected_label = selected_label
         self._worc.modus = self._method
 
     def set_tmpdir(self, tmpdir):

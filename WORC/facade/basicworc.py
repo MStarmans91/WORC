@@ -63,8 +63,8 @@ class BasicWORC(SimpleWORC):
         and check the provided setup to make sure some of the most common
         made error are caught before running the experiment.
         """
-        # this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well
-        self._validate()  # do some final sanity checking before we execute the thing
+        # Run some sanity checks before starting the execution
+        self._validate() 
 
         if self._fixed_splits:
             self._worc.fixedsplits = self._fixed_splits
