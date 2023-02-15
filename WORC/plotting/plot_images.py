@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ import matplotlib.colors as colors
 import SimpleITK as sitk
 from skimage import morphology
 import WORC.addexceptions as ae
+import scipy.ndimage as nd
 
 
 def extract_boundary(contour, radius=2):
@@ -55,7 +56,7 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
            thresholds=[-5, 5], zoomfactor=4, dpi=500, normalize=True,
            expand=False, boundary=False, square=False, flip=True, rot90=0,
            alpha=0.40, axis='axial', index=None, color='cyan', radius=2,
-           colormap='gray'):
+           colormap='gray', fill=False):
     """Plot slice of image where mask is largest, with mask as overlay.
 
     image and mask should both be arrays
@@ -140,6 +141,11 @@ def slicer(image, mask=None, output_name=None, output_name_zoom=None,
         imslice = np.flipud(imslice)
         if mask is not None:
             maskslice = np.flipud(maskslice)
+
+    if fill:
+        print('\t Filling holes.')
+        maskslice = nd.binary_fill_holes(maskslice)
+        maskslice = maskslice.astype(np.uint8)
 
     if mask is not None:
         if boundary:
