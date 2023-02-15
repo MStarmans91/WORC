@@ -96,7 +96,6 @@
 <li class="toctree-l1"><a class="reference internal" href="static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a></li>
 </ul>
 <ul>
@@ -194,6 +193,12 @@ can address various problems.</p>
 <p>The official documentation can be found at <a class="reference external" href="http://WORC.readthedocs.io">WORC.readthedocs.io</a>.</p>
 <p>For Tutorials on WORC, both for beginner and advanced WORCflows, please
 see our Tutorial repository <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial">https://github.com/MStarmans91/WORCTutorial</a>.</p>
+<p>The preprint of the WORC article, the WORC database, and my PhD thesis in which I developped WORC can be found here:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://doi.org/10.48550/arXiv.2108.08618">M. P. A. Starmans, et al. “Reproducible radiomics through automated machine learning validated on twelve clinical applications.” arXiv preprint arXiv:2108.08618 (2021)</a></p>
+<p><a class="reference external" href="https://doi.org/10.1101/2021.08.19.21262238">M. P. A. Starmans, et al. “The WORC database: MRI and CT scans, segmentations, and clinical labels for 930 patients from six radiomics studies.” medRxiv preprint https://doi.org/10.1101/2021.08.19.21262238 (2021)</a></p>
+<p><a class="reference external" href="http://hdl.handle.net/1765/137089">M. P. A. Starmans “Streamlined Quantitative Imaging Biomarker Development: Generalization of radiomics through automated machine learning “. PhD thesis, 2022, February. Erasmus University Rotterdam. Retrieved from http://hdl.handle.net/1765/137089</a></p>
+</div></blockquote>
 <p>For more information regarding radiomics, we recommend the following book chapter:</p>
 <blockquote>
 <div><p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/B9780128161760000235/">M. P. A. Starmans, S. R. van der Voort, J. M. Castillo T., J. F. Veenland, S. Klein, W. J. Niessen. “Radiomics: Data mining using quantitative medical image features” Handbook of Medical Image Computing and Computer Assisted Intervention (MICCAI) 2020</a></p>
@@ -232,13 +237,8 @@ presented at the following conferences:</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/quick_start.html">Quick start guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#tutorials">Tutorials</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#running-an-experiment">Running an experiment</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#import-packages">Import packages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#input">Input</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#the-actual-experiment">The actual experiment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#analysis-of-the-results">Analysis of the results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#tips-and-tricks">Tips and Tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/quick_start.html#tutorials">Tutorials</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/quick_start.html#running-an-experiment">Running an experiment</a></li>
 </ul>
 </li>
 </ul>
@@ -272,6 +272,7 @@ presented at the following conferences:</p>
 <li class="toctree-l2"><a class="reference internal" href="static/configuration.html#contents">Contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#general">General</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#labels">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/configuration.html#fingerprinting">Fingerprinting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#preprocessing">Preprocessing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#segmentix">Segmentix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/configuration.html#imagefeatures">ImageFeatures</a></li>
@@ -341,7 +342,7 @@ presented at the following conferences:</p>
 <li class="toctree-l2"><a class="reference internal" href="static/faq.html#execution-errors">Execution errors</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#my-experiment-crashed-where-to-begin-looking-for-errors">My experiment crashed, where to begin looking for errors?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-file-h5fdsec2-c-line-941-in-h5fd-sec2-lock-unable-to-lock-file-errno-37-error-message-no-locks-available">Error: <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&quot;H5FDsec2.c&quot;,</span> <span class="pre">line</span> <span class="pre">941,</span> <span class="pre">in</span> <span class="pre">H5FD_sec2_lock</span> <span class="pre">unable</span> <span class="pre">to</span> <span class="pre">lock</span> <span class="pre">file,</span> <span class="pre">errno</span> <span class="pre">=</span> <span class="pre">37,</span> <span class="pre">error</span> <span class="pre">message</span> <span class="pre">=</span> <span class="pre">'No</span> <span class="pre">locks</span> <span class="pre">available'</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-failed-building-wheel-for-cryptography">Error: <code class="docutils literal notranslate"><span class="pre">Failed</span> <span class="pre">building</span> <span class="pre">wheel</span> <span class="pre">for</span> <span class="pre">cryptography</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-failed-building-wheel-for-cryptography-occurs-often-on-bigr-cluster">Error: <code class="docutils literal notranslate"><span class="pre">Failed</span> <span class="pre">building</span> <span class="pre">wheel</span> <span class="pre">for</span> <span class="pre">cryptography</span></code> (occurs often on BIGR cluster)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-worc-addexceptions-worcvalueerror-first-column-in-the-file-given-to-simpleworc-labels-from-this-file-needs-to-be-named-patient">Error: <code class="docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCValueError:</span> <span class="pre">First</span> <span class="pre">column</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">file</span></code> <code class="docutils literal notranslate"><span class="pre">given</span> <span class="pre">to</span> <span class="pre">SimpleWORC().labels_from_this_file(**)</span> <span class="pre">needs</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">named</span> <span class="pre">Patient.</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-worc-addexceptions-worckeyerror-no-entry-found-in-labeling-for-feature-file-feat-out-0-hdf5">Error: <code class="docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCKeyError:</span> <span class="pre">'No</span> <span class="pre">entry</span> <span class="pre">found</span> <span class="pre">in</span> <span class="pre">labeling</span></code> <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">feature</span> <span class="pre">file</span> <span class="pre">.../feat_out_0.hdf5.'</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-file-lib-site-packages-numpy-lib-function-base-py-line-4406-in-delete-keep-obj-false-indexerror-arrays-used-as-indices-must-be-of-integer-or-boolean-type">Error: <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&quot;...\lib\site-packages\numpy\lib\function_base.py&quot;,</span> <span class="pre">line</span> <span class="pre">4406,</span> <span class="pre">in</span> <span class="pre">delete</span> <span class="pre">keep[obj,]</span> <span class="pre">=</span> <span class="pre">False</span> <span class="pre">IndexError:</span> <span class="pre">arrays</span> <span class="pre">used</span> <span class="pre">as</span> <span class="pre">indices</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">of</span> <span class="pre">integer</span> <span class="pre">(or</span> <span class="pre">boolean)</span> <span class="pre">type</span></code></a></li>
@@ -352,6 +353,7 @@ presented at the following conferences:</p>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#can-i-use-my-own-features-instead-of-the-standard-worc-features">Can I use my own features instead of the standard <code class="docutils literal notranslate"><span class="pre">WORC</span></code> features?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#how-to-change-the-temporary-and-output-folders">How to change the temporary and output folders?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#how-can-i-get-the-performance-on-the-validation-dataset">How can I get the performance on the validation dataset?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/faq.html#my-jobs-on-the-bigr-cluster-get-cancelled-due-to-memory-errors">My jobs on the BIGR cluster get cancelled due to memory errors</a></li>
 </ul>
 </li>
 </ul>
@@ -362,9 +364,8 @@ presented at the following conferences:</p>
 <li class="toctree-l2"><a class="reference internal" href="static/developerdocumentation.html#adding-methods-to-hyperoptimization">Adding methods to hyperoptimization</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id1">3.6.1 - 2022-11-02</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id1">3.6.1 - 2023-02-15</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#fixed">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#added">Added</a></li>
@@ -714,7 +715,7 @@ presented at the following conferences:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

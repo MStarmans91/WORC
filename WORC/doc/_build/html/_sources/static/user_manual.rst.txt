@@ -31,7 +31,7 @@ Many of the functions are  wrappers to interact with the ``WORC`` object, and th
 BasicWORC
 ~~~~~~~~~~~~~~~~
 The ``BasicWORC`` object is based on the ``SimpleWORC`` object, and thus provides exactly the same functionality,
-plus several more advances functions. Much of the documentation of ``BasicWORC`` can be found in its tutorial (WIP) 
+plus several more advances functions. Much of the documentation of ``BasicWORC`` can be found in its tutorial (https://github.com/MStarmans91/WORCtutorial) 
 and the docstrings of the functions in the object (:py:mod:`WORC.facade.basicworc`).
 
 One of the functionalities that ``BasicWORC`` provides over ``SimpleWORC`` is that you can also directly provide

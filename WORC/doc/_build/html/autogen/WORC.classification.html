@@ -97,7 +97,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
 </ul>
 <ul class="current">
@@ -665,7 +664,7 @@ underlying estimator.</p>
 
 <dl class="method">
 <dt id="WORC.classification.SearchCV.BaseSearchCV.process_fit">
-<code class="descname">process_fit</code><span class="sig-paren">(</span><em>n_splits</em>, <em>parameters_all</em>, <em>test_sample_counts</em>, <em>test_score_dicts</em>, <em>train_score_dicts</em>, <em>fit_time</em>, <em>score_time</em>, <em>cv_iter</em>, <em>X</em>, <em>y</em>, <em>fitted_workflows=None</em>, <em>fitted_validation_workflows=None</em>, <em>use_smac=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.process_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.process_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">process_fit</code><span class="sig-paren">(</span><em>n_splits</em>, <em>parameters_all</em>, <em>test_sample_counts</em>, <em>test_score_dicts</em>, <em>train_score_dicts</em>, <em>fit_time</em>, <em>score_time</em>, <em>cv_iter</em>, <em>X</em>, <em>y</em>, <em>fitted_workflows=[]</em>, <em>fitted_validation_workflows=[]</em>, <em>use_smac=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#BaseSearchCV.process_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.BaseSearchCV.process_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process a fit.</p>
 <p>Process the outcomes of a SearchCV fit and find the best settings
 over all cross validations from all hyperparameters tested</p>
@@ -1417,7 +1416,7 @@ train/test set.</p>
 
 <dl class="class">
 <dt id="WORC.classification.SearchCV.GuidedSearchCVSMAC">
-<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">GuidedSearchCVSMAC</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>fastr_plugin=None</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em>, <em>features=None</em>, <em>labels=None</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#GuidedSearchCVSMAC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.GuidedSearchCVSMAC" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WORC.classification.SearchCV.</code><code class="descname">GuidedSearchCVSMAC</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>fastr_plugin=None</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em>, <em>features=None</em>, <em>labels=None</em>, <em>refit_training_workflows=False</em>, <em>refit_validation_workflows=False</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#GuidedSearchCVSMAC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.GuidedSearchCVSMAC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#WORC.classification.SearchCV.BaseSearchCVSMAC" title="WORC.classification.SearchCV.BaseSearchCVSMAC"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.classification.SearchCV.BaseSearchCVSMAC</span></code></a></p>
 <p>Guided search on hyperparameters.</p>
 <p>GuidedSearchCV implements a “fit” and a “score” method.
@@ -1617,7 +1616,7 @@ param_distributions.</p>
 
 <dl class="method">
 <dt id="WORC.classification.SearchCV.GuidedSearchCVSMAC.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>fastr_plugin=None</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em>, <em>features=None</em>, <em>labels=None</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#GuidedSearchCVSMAC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.GuidedSearchCVSMAC.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>param_distributions={}</em>, <em>n_iter=10</em>, <em>scoring=None</em>, <em>fit_params=None</em>, <em>n_jobs=1</em>, <em>iid=True</em>, <em>refit=True</em>, <em>cv=None</em>, <em>verbose=0</em>, <em>pre_dispatch='2*n_jobs'</em>, <em>random_state=None</em>, <em>error_score='raise'</em>, <em>return_train_score=True</em>, <em>n_jobspercore=100</em>, <em>fastr_plugin=None</em>, <em>maxlen=100</em>, <em>ranking_score='test_score'</em>, <em>features=None</em>, <em>labels=None</em>, <em>refit_training_workflows=False</em>, <em>refit_validation_workflows=False</em>, <em>smac_result_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/classification/SearchCV.html#GuidedSearchCVSMAC.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.classification.SearchCV.GuidedSearchCVSMAC.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize SearchCV Object.</p>
 </dd></dl>
 
@@ -2735,7 +2734,7 @@ for the format.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

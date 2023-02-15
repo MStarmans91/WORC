@@ -95,7 +95,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
 <ul>
@@ -435,12 +434,13 @@
 
             <span class="n">panda_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">panda_data_temp</span><span class="p">)</span>
             <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tempsave_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.hdf5&#39;</span><span class="p">)</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tempsave_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">)</span>
             <span class="k">while</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
                 <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tempsave_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.hdf5&#39;</span><span class="p">)</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tempsave_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">)</span>
 
-            <span class="n">panda_data</span><span class="o">.</span><span class="n">to_hdf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;EstimatorData&#39;</span><span class="p">)</span>
+            <span class="c1"># panda_data.to_hdf(filename, &#39;EstimatorData&#39;)</span>
+            <span class="n">panda_data</span><span class="o">.</span><span class="n">to_pickle</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
             <span class="k">del</span> <span class="n">panda_data</span><span class="p">,</span> <span class="n">panda_data_temp</span>
 
         <span class="c1"># Print elapsed time</span>
@@ -678,13 +678,13 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Previous tempsaves, start where we left of</span>
-            <span class="n">tempsaves</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tempsave_*.hdf5&#39;</span><span class="p">))</span>
+            <span class="n">tempsaves</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfolder</span><span class="p">,</span> <span class="s1">&#39;tempsave_*.pkl&#39;</span><span class="p">))</span>
             <span class="n">start</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tempsaves</span><span class="p">)</span>
 
             <span class="c1"># Load previous tempsaves and add to save data</span>
             <span class="n">tempsaves</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tempsaves</span><span class="p">:</span>
-                <span class="n">t</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
                 <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s1">&#39;Constructed crossvalidation&#39;</span><span class="p">]</span>
                 <span class="n">temp_save_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">trained_classifier</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">X_test</span><span class="p">,</span>
                                   <span class="n">t</span><span class="o">.</span><span class="n">Y_train</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">Y_test</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">patient_ID_train</span><span class="p">,</span>
@@ -1018,7 +1018,8 @@
             <span class="c1"># Make a local copy of the estimator and select only subset of workflows</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Using RS </span><span class="si">{RS}</span><span class="s1">.&#39;</span><span class="p">)</span>
             <span class="n">estimator</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">estimator_original</span><span class="p">)</span>
-            <span class="n">estimator</span><span class="o">.</span><span class="n">maxlen</span> <span class="o">=</span> <span class="n">RS</span>
+            <span class="c1"># estimator.maxlen = RS  # Why is this needed? This will only lead to a lot of extra workflows on top of the top 100 being fitted</span>
+            <span class="n">estimator</span><span class="o">.</span><span class="n">maxlen</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">RS</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">)</span>
             <span class="n">workflow_num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_workflows</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
     
             <span class="c1"># Select only a specific set of workflows</span>
@@ -1029,6 +1030,7 @@
             <span class="n">F1_validation</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_score&#39;</span><span class="p">]</span>
             <span class="n">F1_validation</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_validation</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_workflows</span><span class="p">]</span>
             <span class="n">workflow_ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">F1_validation</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Normally, rank from smallest to largest, so reverse</span>
+            <span class="n">workflow_ranking</span> <span class="o">=</span> <span class="n">workflow_ranking</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">maxlen</span><span class="p">]</span>  <span class="c1"># only maxlen estimators needed for ensembling tests</span>
             <span class="n">F1_validation</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_validation</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">workflow_ranking</span><span class="p">]</span>
 
             <span class="c1"># Only keep the number of RS required and resort based on ranking</span>
@@ -1075,14 +1077,12 @@
                     <span class="p">[</span><span class="n">estimator</span><span class="o">.</span><span class="n">fitted_validation_workflows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_workflows_ranked_all</span><span class="p">]</span>
                 
             <span class="c1"># Store train and validation AUC</span>
-            <span class="n">mean_val_F1</span> <span class="o">=</span> <span class="n">F1_validation</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">maxlen</span><span class="p">]</span>
             <span class="n">F1_training</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_train_score&#39;</span><span class="p">]</span>
             <span class="n">F1_training</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_training</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_workflows</span><span class="p">]</span>
             <span class="n">F1_training</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_training</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">workflow_ranking</span><span class="p">]</span>
-            <span class="n">mean_train_F1</span> <span class="o">=</span> <span class="n">F1_training</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">maxlen</span><span class="p">]</span>
 
-            <span class="n">performances</span><span class="p">[</span><span class="n">f</span><span class="s1">&#39;Mean training F1-score </span><span class="si">{key}</span><span class="s1"> top </span><span class="si">{maxlen}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_train_F1</span>
-            <span class="n">performances</span><span class="p">[</span><span class="n">f</span><span class="s1">&#39;Mean validation F1-score </span><span class="si">{key}</span><span class="s1"> top </span><span class="si">{maxlen}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_val_F1</span>
+            <span class="n">performances</span><span class="p">[</span><span class="n">f</span><span class="s1">&#39;Mean training F1-score </span><span class="si">{key}</span><span class="s1"> top </span><span class="si">{maxlen}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">F1_validation</span>
+            <span class="n">performances</span><span class="p">[</span><span class="n">f</span><span class="s1">&#39;Mean validation F1-score </span><span class="si">{key}</span><span class="s1"> top </span><span class="si">{maxlen}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">F1_training</span>
 
             <span class="k">for</span> <span class="n">ensemble</span> <span class="ow">in</span> <span class="n">ensembles</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ensemble</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -1131,7 +1131,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

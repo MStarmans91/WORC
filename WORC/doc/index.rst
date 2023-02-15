@@ -35,6 +35,14 @@ The official documentation can be found at `WORC.readthedocs.io <http://WORC.rea
 For Tutorials on WORC, both for beginner and advanced WORCflows, please
 see our Tutorial repository https://github.com/MStarmans91/WORCTutorial.
 
+The preprint of the WORC article, the WORC database, and my PhD thesis in which I developped WORC can be found here:
+
+    `M. P. A. Starmans, et al. "Reproducible radiomics through automated machine learning validated on twelve clinical applications." arXiv preprint arXiv:2108.08618 (2021) <https://doi.org/10.48550/arXiv.2108.08618>`_
+
+    `M. P. A. Starmans, et al. "The WORC database: MRI and CT scans, segmentations, and clinical labels for 930 patients from six radiomics studies." medRxiv preprint https://doi.org/10.1101/2021.08.19.21262238 (2021) <https://doi.org/10.1101/2021.08.19.21262238>`_
+
+    `M. P. A. Starmans "Streamlined Quantitative Imaging Biomarker Development: Generalization of radiomics through automated machine learning ". PhD thesis, 2022, February. Erasmus University Rotterdam. Retrieved from http://hdl.handle.net/1765/137089 <http://hdl.handle.net/1765/137089>`_
+
 For more information regarding radiomics, we recommend the following book chapter:
 
     `M. P. A. Starmans, S. R. van der Voort, J. M. Castillo T., J. F. Veenland, S. Klein, W. J. Niessen. "Radiomics: Data mining using quantitative medical image features" Handbook of Medical Image Computing and Computer Assisted Intervention (MICCAI) 2020 <https://www.sciencedirect.com/science/article/pii/B9780128161760000235/>`_
@@ -89,7 +97,6 @@ WORC Documentation
     static/additionalfunctionality.rst
     static/faq.rst
     static/developerdocumentation.rst
-    static/file_description.rst
     static/changelog.rst
 
 WORC User reference

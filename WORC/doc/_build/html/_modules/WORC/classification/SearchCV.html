@@ -95,7 +95,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
 <ul>
@@ -806,7 +805,7 @@
 <div class="viewcode-block" id="BaseSearchCV.process_fit"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.process_fit">[docs]</a>    <span class="k">def</span> <span class="nf">process_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_splits</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
                     <span class="n">test_sample_counts</span><span class="p">,</span> <span class="n">test_score_dicts</span><span class="p">,</span>
                     <span class="n">train_score_dicts</span><span class="p">,</span> <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">cv_iter</span><span class="p">,</span>
-                    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fitted_validation_workflows</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">fitted_validation_workflows</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span>
                     <span class="n">use_smac</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Process a fit.</span>
 
@@ -1013,7 +1012,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scorer_</span> <span class="o">=</span> <span class="n">scorers</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multimetric_</span> <span class="k">else</span> <span class="n">scorers</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span>
 
         <span class="c1"># Refit the top performing workflows on the full training dataset</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_training_workflows</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_training_workflows</span> <span class="ow">and</span> <span class="n">fitted_workflows</span><span class="p">:</span>
             <span class="c1"># Select only from one train-val split, as they are identical</span>
             <span class="n">fitted_workflows</span> <span class="o">=</span> <span class="n">fitted_workflows</span><span class="p">[:</span><span class="n">pipelines_per_split</span><span class="p">]</span>
 
@@ -1022,7 +1021,7 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span> <span class="o">=</span> <span class="n">fitted_workflows</span>
             
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span> <span class="ow">and</span> <span class="n">fitted_validation_workflows</span><span class="p">:</span>
             <span class="c1"># Select from all train-val splits the best indices</span>
             <span class="n">bestindices_all</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cv_iter</span><span class="p">)):</span>
@@ -1276,19 +1275,23 @@
                             <span class="n">predictions</span> <span class="o">=</span> <span class="n">getpredictions</span><span class="p">()</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">X_train_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">])</span>
-                            <span class="n">predictions</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train_values</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>              
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">predictions</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train_values</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>     
+                            <span class="k">except</span> <span class="p">(</span><span class="n">NotFittedError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                                <span class="c1"># Estimator cannot be fitted properly, hence skip it</span>
+                                <span class="n">predictions</span> <span class="o">=</span> <span class="kc">None</span>         
                         
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">predictions</span> <span class="o">=</span> <span class="n">getpredictions</span><span class="p">()</span>
 
                     <span class="k">if</span> <span class="n">predictions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="c1"># Estimator cannot be fitted properly, hence skip it</span>
                         <span class="k">break</span>
                     
                     <span class="c1"># Only take the probabilities for the second class</span>
                     <span class="n">predictions</span> <span class="o">=</span> <span class="n">predictions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
                     <span class="c1"># Store the predictions on this split</span>
-                    <span class="c1">#predictions_iter.append(predictions)</span>
                     <span class="n">predictions_iter</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">predictions</span>
 
                     <span class="c1"># Compute and store the performance on this split</span>
@@ -3523,6 +3526,7 @@
                  <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">n_jobspercore</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
                  <span class="n">ranking_score</span><span class="o">=</span><span class="s1">&#39;test_score&#39;</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">refit_training_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">smac_result_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GuidedSearchCVSMAC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
              <span class="n">param_distributions</span><span class="o">=</span><span class="n">param_distributions</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_params</span><span class="p">,</span>
@@ -3530,7 +3534,8 @@
              <span class="n">pre_dispatch</span><span class="o">=</span><span class="n">pre_dispatch</span><span class="p">,</span> <span class="n">error_score</span><span class="o">=</span><span class="n">error_score</span><span class="p">,</span>
              <span class="n">return_train_score</span><span class="o">=</span><span class="n">return_train_score</span><span class="p">,</span>
              <span class="n">n_jobspercore</span><span class="o">=</span><span class="n">n_jobspercore</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">,</span>
-             <span class="n">maxlen</span><span class="o">=</span><span class="n">maxlen</span><span class="p">,</span> <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">)</span>
+             <span class="n">maxlen</span><span class="o">=</span><span class="n">maxlen</span><span class="p">,</span> <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">,</span> <span class="n">refit_training_workflows</span><span class="o">=</span><span class="n">refit_training_workflows</span><span class="p">,</span>
+             <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="n">refit_validation_workflows</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">smac_result_file</span> <span class="o">=</span> <span class="n">smac_result_file</span></div>
@@ -3569,7 +3574,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

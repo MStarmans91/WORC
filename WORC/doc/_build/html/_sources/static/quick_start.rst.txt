@@ -3,9 +3,6 @@
 Quick start guide
 =================
 
-This manual will show users how to install WORC, configure WORC and construct and run a simple experiment.
-It's exactly the same as the `WORC Tutorial <https://github.com/MStarmans91/WORCTutorial>`_.
-
 .. _installation-chapter:
 
 Installation
@@ -49,15 +46,17 @@ Tutorials
 ---------
 To start out using WORC, we strongly recommend you to follow the tutorials located in the
 `WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_. This repository
-contains tutorials for an introduction to WORC, as well as more advanced workflows.
+contains tutorials for an introduction to WORC, as well as more advanced workflows. We recommend
+starting with the WORCTutorialSimple, of which the part below is an exact copy.
 
 If you run into any issue, you can first debug your network using
 `the fastr trace tool <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors/>`_.
-If you're stuck, feel free to post an issue on the `WORC Github <https://github.com/MStarmans91/WORC/>`_.
+If you're stuck, check out the FAQ first at https://worc.readthedocs.io/en/latest/static/faq.html,
+or feel free to post an issue on the `WORC Github <https://github.com/MStarmans91/WORC/>`_.
 
 
 Running an experiment
----------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We strongly recommend you to follow the tutorials, see the section above. In this section,
 a point by point description of the tutorial is given.
@@ -177,9 +176,11 @@ After defining the inputs, the following code can be used to run your first expe
 
     # Set the input data according to the variables we defined earlier
     experiment.images_from_this_directory(imagedatadir,
-                                 image_file_name=image_file_name)
+                                 image_file_name=image_file_name,
+                                 is_training=True)
     experiment.segmentations_from_this_directory(imagedatadir,
-                                        segmentation_file_name=segmentation_file_name)
+                                        segmentation_file_name=segmentation_file_name,
+                                        is_training=True) 
     experiment.labels_from_this_file(label_file)
     experiment.predict_labels(label_name)
 
@@ -260,10 +261,22 @@ Tips and Tricks
 
 For tips and tricks on running a full experiment instead of this simple
 example, adding more evaluation options, debugging a crashed network etcetera,
-please go to :ref:`User Manual <usermanual-chapter>` chapter.
+please go to 
 We advice you to look at the docstrings of the SimpleWORC functions
 introduced in this tutorial, and explore the other SimpleWORC functions,
 s SimpleWORC offers much more functionality than presented here.
+
+For tips and tricks on running a full experiment instead of this simple
+example, adding more evaluation options, debugging a crashed network etcetera,
+please go to :ref:`User Manual <usermanual-chapter>` chapter or
+the :ref:`Additional functionality <additonalfunctionality-chapter>` chapter. If you
+run into any issues, check the :ref:`FAQ <faq-chapter>`,
+make an issue on the WORC Github, or feel free to mail me.
+
+We advice you to look at the docstrings of the SimpleWORC functions
+introduced in this tutorial, and explore the other SimpleWORC functions,
+as SimpleWORC offers much more functionality than presented here, see
+the documentation: https://worc.readthedocs.io/en/latest/autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC
 
 Some things we would advice to always do:
 
