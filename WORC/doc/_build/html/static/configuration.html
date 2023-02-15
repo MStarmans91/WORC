@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Configuration &mdash; WORC 3.6.0 documentation</title>
+  <title>Configuration &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -98,6 +98,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#contents">Contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#general">General</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#labels">Labels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fingerprinting">Fingerprinting</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#preprocessing">Preprocessing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#segmentix">Segmentix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#imagefeatures">ImageFeatures</a></li>
@@ -125,7 +126,6 @@
 <li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 <ul>
@@ -206,8 +206,7 @@ to locate your input and output folders and how much you want to parallelize the
 will be ignored. Additionally, .py files from the <code class="docutils literal notranslate"><span class="pre">$FASTRHOME/config.d</span></code> folder will be parsed
 as well. You will see that upon installation, WORC has already put a <code class="docutils literal notranslate"><span class="pre">WORC_config.py</span></code> file in the
 <code class="docutils literal notranslate"><span class="pre">config.d</span></code> folder.</p>
-<p>% Note: Above was originally from quick start
-As <code class="docutils literal notranslate"><span class="pre">WORC</span></code> and the default tools used are mostly Python based, we’ve chosen
+<p>As <code class="docutils literal notranslate"><span class="pre">WORC</span></code> and the default tools used are mostly Python based, we’ve chosen
 to put our configuration in a <code class="docutils literal notranslate"><span class="pre">configparser</span></code> object. This has several
 advantages:</p>
 <ol class="arabic simple">
@@ -294,7 +293,7 @@ list can be created by using commas for separation, e.g.
 <td><p><a class="reference internal" href="#config-featurescaling"><span class="std std-ref">FeatureScaling</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>Fingerprinting</p></td>
-<td><p><span class="xref std std-ref">Fingerprinting</span></p></td>
+<td><p><a class="reference internal" href="#config-fingerprinting"><span class="std std-ref">Fingerprinting</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>General</p></td>
 <td><p><a class="reference internal" href="#config-general"><span class="std std-ref">General</span></a></p></td>
@@ -343,6 +342,11 @@ Parallel function, see <a class="reference external" href="https://pythonhosted.
 WORC on a cluster with nodes supporting only a single core to be used
 per node, e.g. the BIGR cluster, use only 1 core and threading as a
 backend.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you want to override configuration fields that are fingerprinted, e.g.
+the preprocessing, turn the fingerprinting off.</p>
+</div>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
@@ -390,6 +394,9 @@ backend.</p>
 </tr>
 <tr class="row-odd"><td><p>Fingerprint</p></td>
 <td><p>Whether to use Fingerprinting or not.</p></td>
+</tr>
+<tr class="row-even"><td><p>DoTestNRSNEns</p></td>
+<td><p>If True, repeat the experiments from the WORC paper to check the performance of various N_RS, N_Ens and advanced ensembling combinations.</p></td>
 </tr>
 </tbody>
 </table>
@@ -454,6 +461,10 @@ backend.</p>
 <tr class="row-odd"><td><p>Fingerprint</p></td>
 <td><p>True</p></td>
 <td><p>True, False</p></td>
+</tr>
+<tr class="row-even"><td><p>DoTestNRSNEns</p></td>
+<td><p>False</p></td>
+<td><p>Boolean</p></td>
 </tr>
 </tbody>
 </table>
@@ -558,6 +569,49 @@ set: <code class="docutils literal notranslate"><span class="pre">config[Labels]
 </tbody>
 </table>
 </div>
+<div class="section" id="fingerprinting">
+<span id="config-fingerprinting"></span><h3>Fingerprinting<a class="headerlink" href="#fingerprinting" title="Permalink to this headline">¶</a></h3>
+<p>The fingerprinting nodes are the first computational nodes to create
+a fingerprint of your dataset and accordingly adjust some configuration
+settings, see the  <a class="reference external" href="https://doi.org/10.48550/arXiv.2108.08618">WORC paper</a>.</p>
+<p><strong>Description:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 88%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>max_num_image</p></td>
+<td><p>Maximum number of images and segmentations to evaluate during fingerprinting to limit the workload.</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Defaults and Options:</strong></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 48%" />
+<col style="width: 26%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Subkey</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Options</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>max_num_image</p></td>
+<td><p>100</p></td>
+<td><p>Integer</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="preprocessing">
 <span id="config-preprocessing"></span><h3>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">¶</a></h3>
 <p>The preprocessing node acts before the feature extraction on the image.
@@ -565,6 +619,12 @@ Additionally, scans with imagetype CT (see later in the tutorial) provided
 as DICOM are scaled to Hounsfield Units. For more details on the preprocessing
 options, please see
 <a class="reference internal" href="additionalfunctionality.html#additonalfunctionality-chapter"><span class="std std-ref">the additional functionality chapter</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As several preprocessing functions are fingerprinted, if you want to edit
+these configuration settings yourself, please turn of the fingerprinting,
+see the <a class="reference internal" href="#config-general"><span class="std std-ref">General section of the config</span></a>.</p>
+</div>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
@@ -1457,6 +1517,9 @@ selected.</p>
 <tr class="row-even"><td><p>n_neighbors</p></td>
 <td><p>When using k-Nearest Neighbors (kNN) for feature imputation, determines the number of neighbors used for imputation. Can be a single integer or a list.</p></td>
 </tr>
+<tr class="row-odd"><td><p>skipallNaN</p></td>
+<td><p>When True, if a feature is NaN for all objects/patients, simply remove this features for all patients.</p></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
@@ -1484,6 +1547,10 @@ selected.</p>
 <tr class="row-even"><td><p>n_neighbors</p></td>
 <td><p>5, 5</p></td>
 <td><p>Two Integers: loc and scale</p></td>
+</tr>
+<tr class="row-odd"><td><p>skipallNaN</p></td>
+<td><p>True</p></td>
+<td><p>Boolean(s)</p></td>
 </tr>
 </tbody>
 </table>
@@ -2365,8 +2432,8 @@ are picked less often by default.</p>
 <p><strong>Description:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 7%" />
-<col style="width: 93%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2398,17 +2465,20 @@ are picked less often by default.</p>
 <tr class="row-odd"><td><p>memory</p></td>
 <td><p>When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + “G”.</p></td>
 </tr>
-<tr class="row-even"><td><p>refit_workflows</p></td>
-<td><p>If True, refit all workflows in the ensemble automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.</p></td>
+<tr class="row-even"><td><p>refit_training_workflows</p></td>
+<td><p>If True, refit all workflows trained on the full training dataset automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.</p></td>
+</tr>
+<tr class="row-odd"><td><p>refit_validation_workflows</p></td>
+<td><p>If True, refit all workflows trained on the train-validation training dataset automatically during training. This will save time while performing validation evaluation, but will take more time during training and make the saved model much larger.</p></td>
 </tr>
 </tbody>
 </table>
 <p><strong>Defaults and Options:</strong></p>
 <table class="docutils align-center">
 <colgroup>
-<col style="width: 6%" />
+<col style="width: 10%" />
 <col style="width: 4%" />
-<col style="width: 90%" />
+<col style="width: 86%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
@@ -2449,7 +2519,11 @@ are picked less often by default.</p>
 <td><p>3G</p></td>
 <td><p>String consisting of integer + “G”</p></td>
 </tr>
-<tr class="row-even"><td><p>refit_workflows</p></td>
+<tr class="row-even"><td><p>refit_training_workflows</p></td>
+<td><p>False</p></td>
+<td><p>Boolean</p></td>
+</tr>
+<tr class="row-odd"><td><p>refit_validation_workflows</p></td>
 <td><p>False</p></td>
 <td><p>Boolean</p></td>
 </tr>
@@ -2703,7 +2777,7 @@ performing workflow.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

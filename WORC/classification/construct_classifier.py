@@ -93,10 +93,11 @@ def construct_classifier(config):
                                    min_child_weight=min_child_weight,
                                    n_estimators=boosting_rounds,
                                    colsample_bytree=colsample_bytree,
-                                   random_state=config['random_seed'])
+                                   random_state=config['random_seed'],
+                                   n_jobs=1)
 
     elif config['classifiers'] == 'XGBRegressor':
-        # XGB Classifier
+        # XGB Regressor
         max_depth = config['XGB_max_depth']
         learning_rate = config['XGB_learning_rate']
         gamma = config['XGB_gamma']
@@ -109,7 +110,8 @@ def construct_classifier(config):
                                   min_child_weight=min_child_weight,
                                   n_estimators=boosting_rounds,
                                   colsample_bytree=colsample_bytree,
-                                  random_state=config['random_seed'])
+                                  random_state=config['random_seed'],
+                                  n_jobs=1)
 
     elif config['classifiers'] == 'LightGBMClassifier':
         # LightGBM Classifier

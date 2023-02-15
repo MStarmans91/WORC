@@ -1,4 +1,4 @@
-WORC v3.6.0
+WORC v3.6.1
 ===========
 
 Workflow for Optimal Radiomics Classification
@@ -16,8 +16,8 @@ Information
 Introduction
 ============
 
-WORC is an open-source python package for the easy execution of full
-radiomics pipelines.
+WORC is an open-source python package for the easy execution and fully
+automatic construction and optimization of radiomics workflows.
 
 We aim to establish a general radiomics platform supporting easy
 integration of other tools. With our modular build and support of
@@ -33,9 +33,28 @@ License
 This package is covered by the open source `APACHE 2.0
 License <APACHE-LICENSE-2.0>`__.
 
-When using WORC, please cite this repository as following:
+When using WORC, please cite this repository and the paper describing
+WORC as as follows:
 
-``Martijn P.A. Starmans, Sebastian R. van der Voort, Thomas Phil and Stefan Klein. Workflow for Optimal Radiomics Classification (WORC). Zenodo (2018). Available from:  https://github.com/MStarmans91/WORC. DOI: http://doi.org/10.5281/zenodo.3840534.``
+.. code:: bibtex
+
+    @article{starmans2021reproducible,
+       title={Reproducible radiomics through automated machine learning validated on twelve clinical applications}, 
+       author={Martijn P. A. Starmans and Sebastian R. van der Voort and Thomas Phil and Milea J. M. Timbergen and Melissa Vos and Guillaume A. Padmos and Wouter Kessels and David    Hanff and Dirk J. Grunhagen and Cornelis Verhoef and Stefan Sleijfer and Martin J. van den Bent and Marion Smits and Roy S. Dwarkasing and Christopher J. Els and Federico Fiduzi and Geert J. L. H. van Leenders and Anela Blazevic and Johannes Hofland and Tessa Brabander and Renza A. H. van Gils and Gaston J. H. Franssen and Richard A. Feelders and Wouter W. de Herder and Florian E. Buisman and Francois E. J. A. Willemssen and Bas Groot Koerkamp and Lindsay Angus and Astrid A. M. van der Veldt and Ana Rajicic and Arlette E. Odink and Mitchell Deen and Jose M. Castillo T. and Jifke Veenland and Ivo Schoots and Michel Renckens and Michail Doukas and Rob A. de Man and Jan N. M. IJzermans and Razvan L. Miclea and Peter B. Vermeulen and Esther E. Bron and Maarten G. Thomeer and Jacob J. Visser and Wiro J. Niessen and Stefan Klein},
+       year={2021},
+       eprint={2108.08618},
+       archivePrefix={arXiv},
+       primaryClass={eess.IV}
+    }
+
+    @software{starmans2018worc,
+      author       = {Martijn P. A. Starmans and Thomas Phil and Sebastian R. van der Voort and Stefan Klein},
+      title        = {Workflow for Optimal Radiomics Classification (WORC)},
+      year         = {2018},
+      publisher    = {Zenodo},
+      doi          = {10.5281/zenodo.3840534},
+      url          = {https://github.com/MStarmans91/WORC}
+    }
 
 For the DOI, visit |image4|.
 
@@ -48,13 +67,31 @@ occur. Please contact us through the channels below if you find any and
 we will try to fix them as soon as possible, or create an issue on this
 Github.
 
-Tutorial and Documentation
---------------------------
+Tutorial, documentation and dataset
+-----------------------------------
 
-The WORC tutorial is hosted in a `separate
-repository <https://github.com/MStarmans91/WORCTutorial>`__.
+The WORC tutorial is hosted at
+https://github.com/MStarmans91/WORCTutorial.
 
 The official documentation can be found at https://worc.readthedocs.io.
+
+The publicly released WORC database is described in the following paper:
+
+.. code:: bibtex
+
+    @article {Starmans2021WORCDatabase,
+        author = {Starmans, Martijn P.A. and Timbergen, Milea J.M. and Vos, Melissa and Padmos, Guillaume A. and Gr{\"u}nhagen, Dirk J. and Verhoef, Cornelis and Sleijfer, Stefan and van Leenders, Geert J.L.H. and Buisman, Florian E. and Willemssen, Francois E.J.A. and Koerkamp, Bas Groot and Angus, Lindsay and van der Veldt, Astrid A.M. and Rajicic, Ana and Odink, Arlette E. and Renckens, Michel and Doukas, Michail and de Man, Rob A. and IJzermans, Jan N.M. and Miclea, Razvan L. and Vermeulen, Peter B. and Thomeer, Maarten G. and Visser, Jacob J. and Niessen, Wiro J. and Klein, Stefan},
+        title = {The WORC database: MRI and CT scans, segmentations, and clinical labels for 930 patients from six radiomics studies},
+        elocation-id = {2021.08.19.21262238},
+        year = {2021},
+        doi = {10.1101/2021.08.19.21262238},
+        URL = {https://www.medrxiv.org/content/early/2021/08/25/2021.08.19.21262238},
+        eprint = {https://www.medrxiv.org/content/early/2021/08/25/2021.08.19.21262238.full.pdf},
+        journal = {medRxiv}
+    }
+
+The code to download the WORC database and reproduce our experiments can
+be found at https://github.com/MStarmans91/WORCDatabase.
 
 Installation
 ------------
@@ -108,13 +145,6 @@ We suggest you start with the `WORC
 Tutorial <https://github.com/MStarmans91/WORCTutorial>`__. Besides a
 Jupyter notebook with instructions, we provide there also an example
 script for you to get started with.
-
-WIP
----
-
--  We are writing the paper on WORC.
--  We are expanding the example experiments of WORC with open source
-   datasets.
 
 Contact
 -------

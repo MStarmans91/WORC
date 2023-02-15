@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,8 +63,8 @@ class BasicWORC(SimpleWORC):
         and check the provided setup to make sure some of the most common
         made error are caught before running the experiment.
         """
-        # this function is kind of like the build()-function in a builder, except it peforms execute on the object being built as well
-        self._validate()  # do some final sanity checking before we execute the thing
+        # Run some sanity checks before starting the execution
+        self._validate() 
 
         if self._fixed_splits:
             self._worc.fixedsplits = self._fixed_splits
@@ -158,7 +158,7 @@ class BasicWORC(SimpleWORC):
         if self._worc.images_train:
             nmod = len(self._worc.images_train)
         else:
-            nmod = len(self.features_train)
+            nmod = len(self._worc.features_train)
 
         # Create configuration files
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod

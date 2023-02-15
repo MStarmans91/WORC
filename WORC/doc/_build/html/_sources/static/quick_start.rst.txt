@@ -3,9 +3,6 @@
 Quick start guide
 =================
 
-This manual will show users how to install WORC, configure WORC and construct and run a simple experiment.
-It's exactly the same as the `WORC Tutorial <https://github.com/MStarmans91/WORCTutorial>`_.
-
 .. _installation-chapter:
 
 Installation
@@ -49,15 +46,17 @@ Tutorials
 ---------
 To start out using WORC, we strongly recommend you to follow the tutorials located in the
 `WORCTutorial Github <https://github.com/MStarmans91/WORCTutorial/>`_. This repository
-contains tutorials for an introduction to WORC, as well as more advanced workflows.
+contains tutorials for an introduction to WORC, as well as more advanced workflows. We recommend
+starting with the WORCTutorialSimple, of which the part below is an exact copy.
 
 If you run into any issue, you can first debug your network using
 `the fastr trace tool <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors/>`_.
-If you're stuck, feel free to post an issue on the `WORC Github <https://github.com/MStarmans91/WORC/>`_.
+If you're stuck, check out the FAQ first at https://worc.readthedocs.io/en/latest/static/faq.html,
+or feel free to post an issue on the `WORC Github <https://github.com/MStarmans91/WORC/>`_.
 
 
 Running an experiment
----------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We strongly recommend you to follow the tutorials, see the section above. In this section,
 a point by point description of the tutorial is given.
@@ -177,9 +176,11 @@ After defining the inputs, the following code can be used to run your first expe
 
     # Set the input data according to the variables we defined earlier
     experiment.images_from_this_directory(imagedatadir,
-                                 image_file_name=image_file_name)
+                                 image_file_name=image_file_name,
+                                 is_training=True)
     experiment.segmentations_from_this_directory(imagedatadir,
-                                        segmentation_file_name=segmentation_file_name)
+                                        segmentation_file_name=segmentation_file_name,
+                                        is_training=True) 
     experiment.labels_from_this_file(label_file)
     experiment.predict_labels(label_name)
 
@@ -187,7 +188,7 @@ After defining the inputs, the following code can be used to run your first expe
     # Valid quantitative types are ['CT', 'PET', 'Thermography', 'ADC']
     # Valid qualitative types are ['MRI', 'DWI', 'US']
     experiment.set_image_types(['CT'])
-    
+
     # Use the standard workflow for your specific modus
     if modus == 'binary_classification':
         experiment.binary_classification(coarse=coarse)
@@ -225,12 +226,18 @@ named after your experiment name.
                                            'Features',
                                            'features_*.hdf5'))
 
+    if len(feature_files) == 0:
+        raise ValueError('No feature files found: your network has failed.')
+
     feature_files.sort()
     featurefile_p1 = feature_files[0]
     features_p1 = pd.read_hdf(featurefile_p1)
 
     # Read the overall peformance
     performance_file = os.path.join(experiment_folder, 'performance_all_0.json')
+    if not os.path.exists(performance_file):
+        raise ValueError(f'No performance file {performance_file} found: your network has failed.')
+
     with open(performance_file, 'r') as fp:
         performance = json.load(fp)
 
@@ -246,7 +253,7 @@ named after your experiment name.
     for k, v in stats.items():
         print(f"\t {k} {v}.")
 
-.. note:: the performance is probably horrible, which is expected as we ran the experiment on coarse settings. These settings are recommended to only use for testing: see also below.
+.. note:: The performance is probably horrible, which is expected as we ran the experiment on coarse settings. These settings are recommended to only use for testing: see also below.
 
 
 Tips and Tricks
@@ -254,19 +261,31 @@ Tips and Tricks
 
 For tips and tricks on running a full experiment instead of this simple
 example, adding more evaluation options, debugging a crashed network etcetera,
-please go to :ref:`User Manual <usermanual-chapter>` chapter.
+please go to 
 We advice you to look at the docstrings of the SimpleWORC functions
 introduced in this tutorial, and explore the other SimpleWORC functions,
 s SimpleWORC offers much more functionality than presented here.
+
+For tips and tricks on running a full experiment instead of this simple
+example, adding more evaluation options, debugging a crashed network etcetera,
+please go to :ref:`User Manual <usermanual-chapter>` chapter or
+the :ref:`Additional functionality <additonalfunctionality-chapter>` chapter. If you
+run into any issues, check the :ref:`FAQ <faq-chapter>`,
+make an issue on the WORC Github, or feel free to mail me.
+
+We advice you to look at the docstrings of the SimpleWORC functions
+introduced in this tutorial, and explore the other SimpleWORC functions,
+as SimpleWORC offers much more functionality than presented here, see
+the documentation: https://worc.readthedocs.io/en/latest/autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC
 
 Some things we would advice to always do:
 
 * Run actual experiments on the full settings (coarse=False):
 
-.. code-block:: python
+    .. code-block:: python
 
-      coarse = False
-      experiment.binary_classification(coarse=coarse)
+        coarse = False
+        experiment.binary_classification(coarse=coarse)
 
 .. note:: This will result in more computation time. We therefore recommmend
   to run this script on either a cluster or high performance PC. If so,
@@ -275,16 +294,33 @@ Some things we would advice to always do:
 
     .. code-block:: python
 
-          experiment.set_multicore_execution()
+        experiment.set_multicore_execution()
 
   This is not required when running WORC on the BIGR or SURFSara Cartesius cluster,
   as automatic detectors for these clusters have been built into SimpleWORC and BasicWORC.
 
 * Add extensive evaluation: ``experiment.add_evaluation()`` before ``experiment.execute()``:
 
-.. code-block:: python
+    .. code-block:: python
 
-      experiment.add_evaluation()
+        experiment.add_evaluation()
 
-For a complete overview of all functions, please look at the
-:ref:`Config chapter <config-chapter>`.
+  See the "Outputs and evaluation of your network" section in the :ref:`User Manual <usermanual-chapter>`
+  chapter for more details on the evaluation outputs.
+
+Changing fields in the configuration can be done with the add_config_overrides function, see below. 
+We recommend doing this after the modus part, as these also perform config_overrides.
+NOTE: all configuration fields have to be provided as strings.
+
+    .. code-block:: python
+            
+        overrides = {
+                'Classification': {
+                    'classifiers': 'SVM',
+                    },
+                }
+
+        experiment.add_config_overrides(overrides)
+
+  For a complete overview of all configuration functions, please look at the
+  :ref:`Config chapter <config-chapter>`.

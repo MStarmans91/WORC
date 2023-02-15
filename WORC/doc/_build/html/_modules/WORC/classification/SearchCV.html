@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.SearchCV &mdash; WORC 3.6.0 documentation</title>
+  <title>WORC.classification.SearchCV &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -95,7 +95,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
 <ul>
@@ -165,7 +164,7 @@
   <h1>Source code for WORC.classification.SearchCV</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -529,8 +528,8 @@
                  <span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pre_dispatch</span><span class="o">=</span><span class="s1">&#39;2*n_jobs&#39;</span><span class="p">,</span>
                  <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">n_jobspercore</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="s1">&#39;2G&#39;</span><span class="p">,</span>
-                 <span class="n">ranking_score</span><span class="o">=</span><span class="s1">&#39;test_score&#39;</span><span class="p">,</span> <span class="n">refit_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">ensemble_validation_score</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">ranking_score</span><span class="o">=</span><span class="s1">&#39;test_score&#39;</span><span class="p">,</span> <span class="n">refit_training_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">ensemble_validation_score</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize SearchCV Object.&quot;&quot;&quot;</span>
         <span class="c1"># Added for fastr and joblib executions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param_distributions</span> <span class="o">=</span> <span class="n">param_distributions</span>
@@ -557,8 +556,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">return_train_score</span> <span class="o">=</span> <span class="n">return_train_score</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span> <span class="o">=</span> <span class="n">maxlen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ranking_score</span> <span class="o">=</span> <span class="n">ranking_score</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">refit_workflows</span> <span class="o">=</span> <span class="n">refit_workflows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refit_training_workflows</span> <span class="o">=</span> <span class="n">refit_training_workflows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span> <span class="o">=</span> <span class="n">refit_validation_workflows</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitted_validation_workflows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 
         <span class="c1"># Only for WORC Paper</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">test_RS</span> <span class="o">=</span> <span class="kc">True</span></div>
@@ -804,7 +805,8 @@
 <div class="viewcode-block" id="BaseSearchCV.process_fit"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.BaseSearchCV.process_fit">[docs]</a>    <span class="k">def</span> <span class="nf">process_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_splits</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
                     <span class="n">test_sample_counts</span><span class="p">,</span> <span class="n">test_score_dicts</span><span class="p">,</span>
                     <span class="n">train_score_dicts</span><span class="p">,</span> <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">cv_iter</span><span class="p">,</span>
-                    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_smac</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">fitted_validation_workflows</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span>
+                    <span class="n">use_smac</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Process a fit.</span>
 
 <span class="sd">        Process the outcomes of a SearchCV fit and find the best settings</span>
@@ -983,7 +985,7 @@
         <span class="n">candidate_params_all</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">candidate_params_all</span><span class="p">)[</span><span class="n">bestindices</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">bestindices</span><span class="p">]</span>
-        <span class="n">n_candidates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">candidate_params_all</span><span class="p">)</span>
+            
         <span class="n">results</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">candidate_params_all</span>
 
         <span class="c1"># Calculate and store the total_fit_time of this train/test CV</span>
@@ -1010,17 +1012,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scorer_</span> <span class="o">=</span> <span class="n">scorers</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multimetric_</span> <span class="k">else</span> <span class="n">scorers</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span>
 
         <span class="c1"># Refit the top performing workflows on the full training dataset</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_workflows</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_training_workflows</span> <span class="ow">and</span> <span class="n">fitted_workflows</span><span class="p">:</span>
             <span class="c1"># Select only from one train-val split, as they are identical</span>
             <span class="n">fitted_workflows</span> <span class="o">=</span> <span class="n">fitted_workflows</span><span class="p">[:</span><span class="n">pipelines_per_split</span><span class="p">]</span>
 
             <span class="c1"># Sort according to best indices</span>
             <span class="n">fitted_workflows</span> <span class="o">=</span> <span class="p">[</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bestindices</span><span class="p">]</span>
 
-            <span class="c1"># Remove None workflows</span>
-            <span class="n">fitted_workflows</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fitted_workflows</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span> <span class="o">=</span> <span class="n">fitted_workflows</span>
+            
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span> <span class="ow">and</span> <span class="n">fitted_validation_workflows</span><span class="p">:</span>
+            <span class="c1"># Select from all train-val splits the best indices</span>
+            <span class="n">bestindices_all</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cv_iter</span><span class="p">)):</span>
+                <span class="n">bestindices_all</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">i</span> <span class="o">+</span> <span class="n">n_candidates</span> <span class="o">*</span> <span class="n">j</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bestindices</span><span class="p">])</span>
+                
+            <span class="n">fitted_validation_workflows</span> <span class="o">=</span>\
+                <span class="p">[</span><span class="n">fitted_validation_workflows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">bestindices_all</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">fitted_validation_workflows</span> <span class="o">=</span> <span class="n">fitted_validation_workflows</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -1081,7 +1091,8 @@
                             <span class="n">return_estimator</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">error_score</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">error_score</span><span class="p">,</span>
                             <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
-                            <span class="n">return_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                            <span class="n">return_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">skip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Associate best options with new fits</span>
         <span class="p">(</span><span class="n">save_data</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">scalers</span><span class="p">,</span>
@@ -1171,7 +1182,7 @@
         <span class="k">if</span> <span class="n">scoring</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">scoring</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scoring</span>
 
-        <span class="c1"># Get settings for best 100 estimators</span>
+        <span class="c1"># Get settings for best estimators</span>
         <span class="n">parameters_all</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
         <span class="n">n_classifiers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parameters_all</span><span class="p">)</span>
         <span class="n">n_iter</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_iter</span><span class="p">)</span>
@@ -1193,8 +1204,16 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Refit the models and compute the predictions on the validation sets</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Precomputing scores on training and validation set for ensembling.&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> - Precomputing scores on training and validation set for ensembling.&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_validation_workflows</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> - Detected already fitted train-val workflows.&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Create the ground truth</span>
             <span class="n">Y_valid_truth</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">it</span><span class="p">,</span> <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_iter</span><span class="p">):</span>
+                <span class="n">Y_valid_truth</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y_train</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>
+
+            <span class="c1"># Precompute the scores of all estimators</span>
             <span class="n">performances</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
             <span class="n">all_predictions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
             <span class="n">ensemble_configurations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -1204,77 +1223,98 @@
                 <span class="n">predictions_iter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_iter</span><span class="p">,</span> <span class="n">prediction_length</span><span class="p">))</span>
 
                 <span class="k">for</span> <span class="n">it</span><span class="p">,</span> <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_iter</span><span class="p">):</span>
-                    <span class="n">predictions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-                    <span class="c1"># Start with storing the ground truth</span>
-                    <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">Y_valid_truth</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y_train</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>
+                    <span class="k">def</span> <span class="nf">getpredictions</span><span class="p">():</span>
+                        <span class="n">new_estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
 
-                    <span class="n">new_estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
+                        <span class="c1"># Fit the preprocessors of the pipeline</span>
+                        <span class="n">out</span> <span class="o">=</span> <span class="n">fit_and_score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">scoring</span><span class="p">,</span>
+                                            <span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span> <span class="n">p_all</span><span class="p">,</span>
+                                            <span class="n">return_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="p">(</span><span class="n">save_data</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">scalers</span><span class="p">,</span>
+                        <span class="n">encoders</span><span class="p">,</span> <span class="n">Imputers</span><span class="p">,</span> <span class="n">PCAs</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span><span class="p">)</span> <span class="o">=</span> <span class="n">out</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_groupsel</span> <span class="o">=</span> <span class="n">GroupSel</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_scaler</span> <span class="o">=</span> <span class="n">scalers</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_varsel</span> <span class="o">=</span> <span class="n">VarSel</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_modelsel</span> <span class="o">=</span> <span class="n">SelectModel</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_preprocessor</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_imputer</span> <span class="o">=</span> <span class="n">Imputers</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_encoder</span> <span class="o">=</span> <span class="n">encoders</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_pca</span> <span class="o">=</span> <span class="n">PCAs</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_featlab</span> <span class="o">=</span> <span class="n">feature_labels</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_statisticalsel</span> <span class="o">=</span> <span class="n">StatisticalSel</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_reliefsel</span> <span class="o">=</span> <span class="n">ReliefSel</span>
+                        <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_Sampler</span> <span class="o">=</span> <span class="n">Sampler</span>
 
-                    <span class="c1"># Fit the preprocessors of the pipeline</span>
-                    <span class="n">out</span> <span class="o">=</span> <span class="n">fit_and_score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">scoring</span><span class="p">,</span>
-                                        <span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span> <span class="n">p_all</span><span class="p">,</span>
-                                        <span class="n">return_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                    <span class="p">(</span><span class="n">save_data</span><span class="p">,</span> <span class="n">GroupSel</span><span class="p">,</span> <span class="n">VarSel</span><span class="p">,</span> <span class="n">SelectModel</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">scalers</span><span class="p">,</span>
-                     <span class="n">encoders</span><span class="p">,</span> <span class="n">Imputers</span><span class="p">,</span> <span class="n">PCAs</span><span class="p">,</span> <span class="n">StatisticalSel</span><span class="p">,</span> <span class="n">ReliefSel</span><span class="p">,</span> <span class="n">Sampler</span><span class="p">)</span> <span class="o">=</span> <span class="n">out</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_groupsel</span> <span class="o">=</span> <span class="n">GroupSel</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_scaler</span> <span class="o">=</span> <span class="n">scalers</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_varsel</span> <span class="o">=</span> <span class="n">VarSel</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_modelsel</span> <span class="o">=</span> <span class="n">SelectModel</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_preprocessor</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_imputer</span> <span class="o">=</span> <span class="n">Imputers</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_encoder</span> <span class="o">=</span> <span class="n">encoders</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_pca</span> <span class="o">=</span> <span class="n">PCAs</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_featlab</span> <span class="o">=</span> <span class="n">feature_labels</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_statisticalsel</span> <span class="o">=</span> <span class="n">StatisticalSel</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_reliefsel</span> <span class="o">=</span> <span class="n">ReliefSel</span>
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_Sampler</span> <span class="o">=</span> <span class="n">Sampler</span>
-
-                    <span class="c1"># Use the fitted preprocessors to preprocess the features</span>
-                    <span class="n">X_train_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">])</span>
-                    <span class="n">processed_X</span><span class="p">,</span> <span class="n">processed_y</span> <span class="o">=</span> <span class="n">new_estimator</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">X_train_values</span><span class="p">[</span><span class="n">train</span><span class="p">],</span>
-                                                                         <span class="n">Y_train</span><span class="p">[</span><span class="n">train</span><span class="p">],</span>
-                                                                         <span class="n">training</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                    <span class="c1"># Check if there are features left</span>
-                    <span class="p">(</span><span class="n">patients</span><span class="p">,</span> <span class="n">features_left</span><span class="p">)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">processed_X</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">features_left</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;no features left&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-                        <span class="c1"># No features are left; do not consider this pipeline for the ensemble</span>
-                        <span class="k">break</span>
-                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Use the fitted preprocessors to preprocess the features</span>
+                        <span class="n">X_train_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">])</span>
+                        <span class="n">processed_X</span><span class="p">,</span> <span class="n">processed_y</span> <span class="o">=</span> <span class="n">new_estimator</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">X_train_values</span><span class="p">[</span><span class="n">train</span><span class="p">],</span>
+                                                                            <span class="n">Y_train</span><span class="p">[</span><span class="n">train</span><span class="p">],</span>
+                                                                            <span class="n">training</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    
+                        <span class="c1"># Check if there are features left</span>
+                        <span class="p">(</span><span class="n">patients</span><span class="p">,</span> <span class="n">features_left</span><span class="p">)</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">processed_X</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">features_left</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;no features left&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                            <span class="c1"># No features are left; do not consider this pipeline for the ensemble</span>
+                            <span class="k">return</span> <span class="kc">None</span>
+                    
                         <span class="c1"># Construct and fit the classifier</span>
                         <span class="n">best_estimator</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">construct_classifier</span><span class="p">(</span><span class="n">p_all</span><span class="p">)</span>
                         <span class="n">best_estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">processed_X</span><span class="p">,</span> <span class="n">processed_y</span><span class="p">)</span>
                         <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_estimator_</span> <span class="o">=</span> <span class="n">best_estimator</span>
                         <span class="n">predictions</span> <span class="o">=</span> <span class="n">new_estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train_values</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>
+                        <span class="k">return</span> <span class="n">predictions</span>
 
-                        <span class="c1"># Only take the probabilities for the second class</span>
-                        <span class="n">predictions</span> <span class="o">=</span> <span class="n">predictions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="n">predictions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="c1"># Start with storing the ground truth</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_validation_workflows</span><span class="p">:</span>
+                        <span class="c1"># Use already fitted workflow</span>
+                        <span class="n">estimator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_validation_workflows</span><span class="p">[</span><span class="n">num</span> <span class="o">+</span> <span class="n">it</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxlen</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">estimator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="c1"># Estimator is none, refit and get predictions</span>
+                            <span class="n">predictions</span> <span class="o">=</span> <span class="n">getpredictions</span><span class="p">()</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">X_train_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">])</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">predictions</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_train_values</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>     
+                            <span class="k">except</span> <span class="p">(</span><span class="n">NotFittedError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                                <span class="c1"># Estimator cannot be fitted properly, hence skip it</span>
+                                <span class="n">predictions</span> <span class="o">=</span> <span class="kc">None</span>         
+                        
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">predictions</span> <span class="o">=</span> <span class="n">getpredictions</span><span class="p">()</span>
 
-                        <span class="c1"># Store the predictions on this split</span>
-                        <span class="c1">#predictions_iter.append(predictions)</span>
-                        <span class="n">predictions_iter</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">predictions</span>
+                    <span class="k">if</span> <span class="n">predictions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="c1"># Estimator cannot be fitted properly, hence skip it</span>
+                        <span class="k">break</span>
+                    
+                    <span class="c1"># Only take the probabilities for the second class</span>
+                    <span class="n">predictions</span> <span class="o">=</span> <span class="n">predictions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
-                        <span class="c1"># Compute and store the performance on this split</span>
-                        <span class="n">performances_iter</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compute_performance</span><span class="p">(</span><span class="n">scoring</span><span class="p">,</span>
-                                                                     <span class="n">Y_train</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span>
-                                                                     <span class="n">predictions</span><span class="p">))</span>
+                    <span class="c1"># Store the predictions on this split</span>
+                    <span class="n">predictions_iter</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">predictions</span>
 
-                        <span class="c1"># print(&#39;fitandscore: &#39; + str(out[0][1]) + &#39; and computed: &#39; +</span>
-                        <span class="c1">#       str(compute_performance(scoring, Y_train[valid], predictions)) + &#39;\n&#39;)</span>
+                    <span class="c1"># Compute and store the performance on this split</span>
+                    <span class="n">performances_iter</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compute_performance</span><span class="p">(</span><span class="n">scoring</span><span class="p">,</span>
+                                                                 <span class="n">Y_train</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span>
+                                                                 <span class="n">predictions</span><span class="p">))</span>
 
-                        <span class="c1"># At the end of the last iteration, store the results of this pipeline</span>
-                        <span class="k">if</span> <span class="n">it</span> <span class="o">==</span> <span class="p">(</span><span class="n">n_iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-                            <span class="c1"># Add the pipeline to the list</span>
-                            <span class="n">ensemble_configurations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_all</span><span class="p">)</span>
-                            <span class="c1"># Store the predictions</span>
-                            <span class="n">all_predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">predictions_iter</span><span class="p">)</span>
-                            <span class="c1"># Store the performance</span>
-                            <span class="n">performances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">performances_iter</span><span class="p">))</span>
+                    <span class="c1"># print(&#39;fitandscore: &#39; + str(out[0][1]) + &#39; and computed: &#39; +</span>
+                    <span class="c1">#       str(compute_performance(scoring, Y_train[valid], predictions)) + &#39;\n&#39;)</span>
+
+                    <span class="c1"># At the end of the last iteration, store the results of this pipeline</span>
+                    <span class="k">if</span> <span class="n">it</span> <span class="o">==</span> <span class="p">(</span><span class="n">n_iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="c1"># Add the pipeline to the list</span>
+                        <span class="n">ensemble_configurations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_all</span><span class="p">)</span>
+                        <span class="c1"># Store the predictions</span>
+                        <span class="n">all_predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">predictions_iter</span><span class="p">)</span>
+                        <span class="c1"># Store the performance</span>
+                        <span class="n">performances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">performances_iter</span><span class="p">))</span>
 
             <span class="c1"># Update the parameters</span>
             <span class="n">parameters_all</span> <span class="o">=</span> <span class="n">ensemble_configurations</span>
             <span class="n">n_classifiers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ensemble_configurations</span><span class="p">)</span>
+
             <span class="c1"># Construct the array of final predictions</span>
             <span class="n">base_Y_valid_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_iter</span><span class="p">,</span> <span class="n">n_classifiers</span><span class="p">,</span> <span class="n">prediction_length</span><span class="p">))</span>
             <span class="k">for</span> <span class="nb">iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_iter</span><span class="p">):</span>
@@ -1326,7 +1366,7 @@
                         <span class="n">perf</span> <span class="o">=</span> <span class="n">compute_performance</span><span class="p">(</span><span class="n">scoring</span><span class="p">,</span> <span class="n">Y_valid_truth</span><span class="p">[</span><span class="n">n_crossval</span><span class="p">],</span> <span class="n">y_valid_score_new</span><span class="p">)</span>
                         <span class="n">performances_temp</span><span class="p">[</span><span class="n">n_crossval</span><span class="p">]</span> <span class="o">=</span> <span class="n">perf</span>
 
-                    <span class="c1"># Check which ensemble should be in the ensemble to maximally improve</span>
+                    <span class="c1"># Check which estimator should be in the ensemble to maximally improve</span>
                     <span class="n">new_performance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">performances_temp</span><span class="p">)</span>
                     <span class="n">performances_n_class</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_performance</span><span class="p">)</span>
                     <span class="n">best_index</span> <span class="o">=</span> <span class="n">sortedindices</span><span class="p">[</span><span class="n">iteration</span><span class="p">]</span>
@@ -1337,10 +1377,13 @@
                 <span class="n">N_models</span> <span class="o">=</span> <span class="n">performances_n_class</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">new_performance</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># +1 due to python indexing</span>
                 <span class="n">ensemble</span> <span class="o">=</span> <span class="n">ensemble</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N_models</span><span class="p">]</span>
                 <span class="n">best_performance</span> <span class="o">=</span> <span class="n">new_performance</span>
+                
+                <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span> <span class="o">=</span> <span class="n">best_performance</span>
 
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;ForwardSelection&#39;</span><span class="p">:</span>
 
@@ -1351,6 +1394,7 @@
                     <span class="n">Y_valid_score</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">base_Y_valid_score</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Iteration: </span><span class="si">{iteration}</span><span class="s2">, best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{new_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                        
                     <span class="n">best_performance</span> <span class="o">=</span> <span class="n">new_performance</span>
 
                     <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -1387,10 +1431,13 @@
                     <span class="n">best_index</span> <span class="o">=</span> <span class="n">performances_temp</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">new_performance</span><span class="p">)</span>
                     <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
 
-                <span class="c1"># Print the performance gain</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span> <span class="o">=</span> <span class="n">best_performance</span>
+                
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="c1"># Print the performance gain</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;Caruana&#39;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -1443,11 +1490,13 @@
                 <span class="n">optimal_N_models</span> <span class="o">=</span> <span class="n">best_ensemble_scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">optimal_ensemble_performance</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="n">ensemble</span> <span class="o">=</span> <span class="n">ensemble</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">optimal_N_models</span><span class="p">]</span>
                 <span class="n">best_performance</span> <span class="o">=</span> <span class="n">optimal_ensemble_performance</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span> <span class="o">=</span> <span class="n">best_performance</span>
 
-                <span class="c1"># Print the performance gain</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="c1"># Print the performance gain</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;Bagging&#39;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -1464,8 +1513,8 @@
 
                     <span class="k">while</span> <span class="n">iteration</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
                         <span class="n">Y_valid_score</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">base_Y_valid_score</span><span class="p">)</span>
-                        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Iteration: </span><span class="si">{iteration}</span><span class="s2">, best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{new_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                        <span class="c1"># if verbose:</span>
+                        <span class="c1">#     print(f&quot;Iteration: {iteration}, best {scoring}: {new_performance}.&quot;)</span>
 
                         <span class="k">if</span> <span class="n">iteration</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">):</span>
@@ -1506,14 +1555,21 @@
                     <span class="c1"># Select the optimal ensemble size</span>
                     <span class="n">optimal_ensemble_performance</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">best_ensemble_scores</span><span class="p">)</span>
                     <span class="n">optimal_N_models</span> <span class="o">=</span> <span class="n">best_ensemble_scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">optimal_ensemble_performance</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                    
                     <span class="c1"># Add the best ensemble of this bagging iteration to the final ensemble</span>
                     <span class="n">bag_ensemble</span> <span class="o">=</span> <span class="n">bag_ensemble</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">optimal_N_models</span><span class="p">]</span>
                     <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">bag_ensemble</span><span class="p">:</span>
                         <span class="n">ensemble</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+                        
                     <span class="n">best_performance</span> <span class="o">=</span> <span class="n">optimal_ensemble_performance</span>
 
-                <span class="c1"># Print the performance gain</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span> <span class="o">=</span> <span class="n">best_performance</span>
+                
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="c1"># Print the performance gain</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Ensembling best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{best_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Single estimator best </span><span class="si">{scoring}</span><span class="s2">: </span><span class="si">{single_estimator_performance}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Ensemble consists of {len(ensemble)} estimators </span><span class="si">{ensemble}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;[WORC WARNING] No valid ensemble method given: </span><span class="si">{method}</span><span class="s1">. Not ensembling&#39;</span><span class="p">)</span>
@@ -1523,60 +1579,44 @@
 
         <span class="c1"># First create and score the ensemble on the validation set</span>
         <span class="c1"># If we only want the best solution, we use the score from cv_results_</span>
+        <span class="c1"># For not Single or Top_N, the score has already been computed during fitting</span>
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;Single&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_score&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;top_N&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_score&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ensemble</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">selected_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">parameters_all</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ensemble</span><span class="p">]</span>
-            <span class="n">val_split_scores</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">train</span><span class="p">,</span> <span class="n">valid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_iter</span><span class="p">:</span>
-                <span class="n">estimators</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-                <span class="k">for</span> <span class="n">enum</span><span class="p">,</span> <span class="n">p_all</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">selected_params</span><span class="p">):</span>
-                    <span class="n">new_estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_score&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ensemble</span><span class="p">])</span>
 
-                    <span class="n">new_estimator</span><span class="o">.</span><span class="n">refit_and_score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">p_all</span><span class="p">,</span>
-                                                   <span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span>
-                                                   <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-                    <span class="n">estimators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_estimator</span><span class="p">)</span>
-
-                <span class="n">new_estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
-                <span class="n">new_estimator</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="n">Ensemble</span><span class="p">(</span><span class="n">estimators</span><span class="p">)</span>
-                <span class="n">new_estimator</span><span class="o">.</span><span class="n">best_estimator_</span> <span class="o">=</span> <span class="n">new_estimator</span><span class="o">.</span><span class="n">ensemble</span>
-                <span class="c1"># Calculate and store the final performance of the ensemble</span>
-                <span class="c1"># on this validation split</span>
-                <span class="n">X_train_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">X_train</span><span class="p">])</span>
-                <span class="n">predictions</span> <span class="o">=</span> <span class="n">new_estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train_values</span><span class="p">[</span><span class="n">valid</span><span class="p">])</span>
-                <span class="n">val_split_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compute_performance</span><span class="p">(</span><span class="n">scoring</span><span class="p">,</span>
-                                                            <span class="n">Y_train</span><span class="p">[</span><span class="n">valid</span><span class="p">],</span>
-                                                            <span class="n">predictions</span><span class="p">))</span>
-
-            <span class="n">validation_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">val_split_scores</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span> <span class="o">=</span> <span class="n">validation_score</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Final ensemble validation score: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Final ensemble validation score: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ensemble_validation_score</span><span class="p">))</span>
 
         <span class="c1"># Create the ensemble --------------------------------------------------</span>
         <span class="n">train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">:</span>
             <span class="c1"># Simply select the required estimators</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> - Detected already fitted workflows.&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> - Detected already fitted train-test workflows.&#39;</span><span class="p">)</span>
             <span class="n">estimators</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ensemble</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">enum</span> <span class="ow">in</span> <span class="n">ensemble</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="c1"># Try a prediction to see if estimator is truly fitted</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_train</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]))</span>
-                    <span class="n">estimators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="k">except</span> <span class="p">(</span><span class="n">NotFittedError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1"> - Estimator </span><span class="si">{i}</span><span class="s1"> not fitted (correctly) yet, refit.&#39;</span><span class="p">)</span>
-                    <span class="n">estimator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">enum</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_train</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]))</span>
+                    <span class="n">estimators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">enum</span><span class="p">])</span>
+                <span class="k">except</span> <span class="p">(</span><span class="n">NotFittedError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1"> - Estimator </span><span class="si">{enum}</span><span class="s1"> not fitted (correctly) yet, refit.&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">enum</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">estimator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_workflows</span><span class="p">[</span><span class="n">enum</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
+                        
                     <span class="n">estimator</span><span class="o">.</span><span class="n">refit_and_score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span>
-                                              <span class="n">parameters_all</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                              <span class="n">train</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span>
-                                              <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                                              <span class="n">parameters_all</span><span class="p">[</span><span class="n">enum</span><span class="p">],</span>
+                                              <span class="n">train</span><span class="p">,</span> <span class="n">train</span><span class="p">)</span>
 
-                    <span class="n">estimators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># Try a prediction to see if estimator is truly fitted</span>
+                        <span class="n">estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_train</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]))</span>
+                        <span class="n">estimators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">estimator</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="n">NotFittedError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1"> - Estimator </span><span class="si">{enum}</span><span class="s1"> could not be fitted (correctly), do not include in ensemble.&#39;</span><span class="p">)</span>
+                        
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Create the ensemble trained on the full training set</span>
             <span class="n">parameters_all</span> <span class="o">=</span> <span class="p">[</span><span class="n">parameters_all</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ensemble</span><span class="p">]</span>
@@ -1584,7 +1624,8 @@
             <span class="n">nest</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ensemble</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">enum</span><span class="p">,</span> <span class="n">p_all</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">parameters_all</span><span class="p">):</span>
                 <span class="c1"># Refit a SearchCV object with the provided parameters</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Refitting estimator {enum + 1} / </span><span class="si">{nest}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Refitting estimator {enum + 1} / </span><span class="si">{nest}</span><span class="s2">.&quot;</span><span class="p">)</span>
                 <span class="n">base_estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
 
                 <span class="c1"># Check if we need to create a multiclass estimator</span>
@@ -1601,33 +1642,32 @@
                     <span class="n">estimators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
                 <span class="k">except</span> <span class="p">(</span><span class="n">NotFittedError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
                     <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1"> - Estimator </span><span class="si">{enum}</span><span class="s1"> could not be fitted (correctly), do not include in ensemble.&#39;</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">enum</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">nest</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">estimators</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1"> - Reached end of ensemble ({enum + 1}), but ensemble is empty, thus go on untill we find an estimator that works&#39;</span><span class="p">)</span>
-                        <span class="k">while</span> <span class="ow">not</span> <span class="n">estimators</span><span class="p">:</span>
-                            <span class="c1"># We cannot have an empy ensemble, thus go on untill we find an estimator that works</span>
-                            <span class="n">enum</span> <span class="o">+=</span> <span class="mi">1</span>
-                            <span class="n">p_all</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="n">enum</span><span class="p">]</span>
+                    
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">estimators</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1"> - Ensemble is empty, thus go on untill we find an estimator that works and that is the final ensemble.&#39;</span><span class="p">)</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">estimators</span><span class="p">:</span>
+                <span class="c1"># We cannot have an empy ensemble, thus go on untill we find an estimator that works</span>
+                <span class="n">enum</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">p_all</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="n">enum</span><span class="p">]</span>
 
-                            <span class="c1"># Refit a SearchCV object with the provided parameters</span>
-                            <span class="n">base_estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
+                <span class="c1"># Refit a SearchCV object with the provided parameters</span>
+                <span class="n">base_estimator</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
 
-                            <span class="c1"># Check if we need to create a multiclass estimator</span>
-                            <span class="n">base_estimator</span><span class="o">.</span><span class="n">refit_and_score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">p_all</span><span class="p">,</span>
-                                                           <span class="n">train</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span>
-                                                           <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="c1"># Check if we need to create a multiclass estimator</span>
+                <span class="n">base_estimator</span><span class="o">.</span><span class="n">refit_and_score</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">p_all</span><span class="p">,</span>
+                                                <span class="n">train</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span>
+                                                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-                            <span class="c1"># Determine whether to overfit the feature scaling on the test set</span>
-                            <span class="n">base_estimator</span><span class="o">.</span><span class="n">overfit_scaler</span> <span class="o">=</span> <span class="n">overfit_scaler</span>
+                <span class="c1"># Determine whether to overfit the feature scaling on the test set</span>
+                <span class="n">base_estimator</span><span class="o">.</span><span class="n">overfit_scaler</span> <span class="o">=</span> <span class="n">overfit_scaler</span>
 
-                            <span class="k">try</span><span class="p">:</span>
-                                <span class="c1"># Try a prediction to see if estimator is truly fitted</span>
-                                <span class="n">base_estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_train</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]))</span>
-                                <span class="n">estimators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
-                            <span class="k">except</span> <span class="p">(</span><span class="n">NotFittedError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-                                <span class="k">pass</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1"> - Needed estimator </span><span class="si">{enum}</span><span class="s1">.&#39;</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">pass</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># Try a prediction to see if estimator is truly fitted</span>
+                    <span class="n">base_estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">X_train</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]]))</span>
+                    <span class="n">estimators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">base_estimator</span><span class="p">)</span>
+                <span class="k">except</span> <span class="p">(</span><span class="n">NotFittedError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                    <span class="k">pass</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1"> - Needed estimator </span><span class="si">{enum}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span> <span class="o">=</span> <span class="n">Ensemble</span><span class="p">(</span><span class="n">estimators</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_estimator_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ensemble</span>
@@ -1769,7 +1809,8 @@
                             <span class="s1">&#39;return_n_test_samples&#39;</span><span class="p">,</span>
                             <span class="s1">&#39;return_times&#39;</span><span class="p">,</span> <span class="s1">&#39;return_parameters&#39;</span><span class="p">,</span>
                             <span class="s1">&#39;return_estimator&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;error_score&#39;</span><span class="p">,</span> <span class="s1">&#39;return_all&#39;</span><span class="p">,</span> <span class="s1">&#39;refit_workflows&#39;</span><span class="p">]</span>
+                            <span class="s1">&#39;error_score&#39;</span><span class="p">,</span> <span class="s1">&#39;return_all&#39;</span><span class="p">,</span> <span class="s1">&#39;refit_training_workflows&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;refit_validation_workflows&#39;</span><span class="p">]</span>
 
         <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">return_n_test_samples</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1784,7 +1825,8 @@
                                     <span class="n">return_parameters</span><span class="p">,</span>
                                     <span class="n">return_estimator</span><span class="p">,</span>
                                     <span class="bp">self</span><span class="o">.</span><span class="n">error_score</span><span class="p">,</span>
-                                    <span class="n">return_all</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_workflows</span><span class="p">],</span>
+                                    <span class="n">return_all</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_training_workflows</span><span class="p">,</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">],</span>
                                    <span class="n">index</span><span class="o">=</span><span class="n">estimator_labels</span><span class="p">,</span>
                                    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;estimator Data&#39;</span><span class="p">)</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;estimatordata.hdf5&#39;</span>
@@ -1795,10 +1837,10 @@
 
         <span class="c1"># Create the fastr network</span>
         <span class="n">network</span> <span class="o">=</span> <span class="n">fastr</span><span class="o">.</span><span class="n">create_network</span><span class="p">(</span><span class="s1">&#39;WORC_GridSearch_&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
-        <span class="n">estimator_data</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;HDF5&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;estimator_source&#39;</span><span class="p">)</span>
-        <span class="n">traintest_data</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;HDF5&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;traintest&#39;</span><span class="p">)</span>
-        <span class="n">parameter_data</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;JsonFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;parameters&#39;</span><span class="p">)</span>
-        <span class="n">sink_output</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;HDF5&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+        <span class="n">estimator_data</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;HDF5&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;estimator_source&#39;</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;4G&#39;</span><span class="p">))</span>
+        <span class="n">traintest_data</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;HDF5&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;traintest&#39;</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;4G&#39;</span><span class="p">))</span>
+        <span class="n">parameter_data</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">create_source</span><span class="p">(</span><span class="s1">&#39;JsonFile&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;parameters&#39;</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;4G&#39;</span><span class="p">))</span>
+        <span class="n">sink_output</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">create_sink</span><span class="p">(</span><span class="s1">&#39;HDF5&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">ResourceLimit</span><span class="p">(</span><span class="n">memory</span><span class="o">=</span><span class="s1">&#39;6G&#39;</span><span class="p">))</span>
 
         <span class="n">fitandscore</span> <span class="o">=</span>\
             <span class="n">network</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="s1">&#39;worc/fitandscore:1.0&#39;</span><span class="p">,</span>
@@ -1848,25 +1890,53 @@
 
         <span class="c1"># if one choose to see train score, &quot;out&quot; will contain train score info</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_train_score</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_workflows</span><span class="p">:</span>
-                <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-                 <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="p">)</span> <span class="o">=</span>\
-                  <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_training_workflows</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
+                    <span class="n">fitted_workflows</span><span class="p">,</span> <span class="n">fitted_validation_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fitted_validation_workflows</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
+                    <span class="n">fitted_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">fitted_workflows</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-                 <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">)</span> <span class="o">=</span>\
-                    <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
+                    <span class="n">fitted_validation_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fitted_validation_workflows</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_workflows</span><span class="p">:</span>
-                <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-                 <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="p">)</span> <span class="o">=</span>\
-                  <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_training_workflows</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="p">,</span>
+                    <span class="n">fitted_validation_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fitted_validation_workflows</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">fitted_workflows</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-                 <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">)</span> <span class="o">=</span>\
-                    <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
+                    <span class="n">fitted_validation_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
 
         <span class="c1"># Remove the temporary folder used</span>
         <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;DEBUG_0&#39;</span><span class="p">:</span>
@@ -1883,7 +1953,8 @@
                          <span class="n">score_time</span><span class="o">=</span><span class="n">score_time</span><span class="p">,</span>
                          <span class="n">cv_iter</span><span class="o">=</span><span class="n">cv_iter</span><span class="p">,</span>
                          <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-                         <span class="n">fitted_workflows</span><span class="o">=</span><span class="n">fitted_workflows</span><span class="p">)</span></div>
+                         <span class="n">fitted_workflows</span><span class="o">=</span><span class="n">fitted_workflows</span><span class="p">,</span>
+                         <span class="n">fitted_validation_workflows</span><span class="o">=</span><span class="n">fitted_validation_workflows</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="RandomizedSearchCVfastr"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVfastr">[docs]</a><span class="k">class</span> <span class="nc">RandomizedSearchCVfastr</span><span class="p">(</span><span class="n">BaseSearchCVfastr</span><span class="p">):</span>
@@ -2100,7 +2171,8 @@
                  <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pre_dispatch</span><span class="o">=</span><span class="s1">&#39;2*n_jobs&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">n_jobspercore</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="s1">&#39;2G&#39;</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-                 <span class="n">ranking_score</span><span class="o">=</span><span class="s1">&#39;test_score&#39;</span><span class="p">,</span> <span class="n">refit_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">ranking_score</span><span class="o">=</span><span class="s1">&#39;test_score&#39;</span><span class="p">,</span> <span class="n">refit_training_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RandomizedSearchCVfastr</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
              <span class="n">param_distributions</span><span class="o">=</span><span class="n">param_distributions</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_params</span><span class="p">,</span>
              <span class="n">n_iter</span><span class="o">=</span><span class="n">n_iter</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">iid</span><span class="o">=</span><span class="n">iid</span><span class="p">,</span> <span class="n">refit</span><span class="o">=</span><span class="n">refit</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
@@ -2108,7 +2180,8 @@
              <span class="n">return_train_score</span><span class="o">=</span><span class="n">return_train_score</span><span class="p">,</span>
              <span class="n">n_jobspercore</span><span class="o">=</span><span class="n">n_jobspercore</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">,</span>
              <span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="n">maxlen</span><span class="p">,</span> <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">,</span>
-             <span class="n">refit_workflows</span><span class="o">=</span><span class="n">refit_workflows</span><span class="p">)</span></div>
+             <span class="n">refit_training_workflows</span><span class="o">=</span><span class="n">refit_training_workflows</span><span class="p">,</span>
+             <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="n">refit_validation_workflows</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RandomizedSearchCVfastr.fit"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.SearchCV.RandomizedSearchCVfastr.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Randomized model selection and hyperparameter search.</span>
@@ -2197,13 +2270,53 @@
 
         <span class="c1"># if one choose to see train score, &quot;out&quot; will contain train score info</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_train_score</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-             <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">)</span> <span class="o">=</span>\
-              <span class="n">save_data</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_training_workflows</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
+                    <span class="n">fitted_workflows</span><span class="p">,</span> <span class="n">fitted_validation_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fitted_validation_workflows</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
+                    <span class="n">fitted_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fitted_workflows</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
+                    <span class="n">fitted_validation_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fitted_validation_workflows</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="p">(</span><span class="n">train_scores</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
-             <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">)</span> <span class="o">=</span>\
-              <span class="n">save_data</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_training_workflows</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="p">,</span>
+                    <span class="n">fitted_validation_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fitted_validation_workflows</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span> <span class="n">fitted_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fitted_workflows</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">refit_validation_workflows</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">,</span>
+                    <span class="n">fitted_validation_workflows</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="p">(</span><span class="n">test_scores</span><span class="p">,</span> <span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="p">,</span> <span class="n">score_time</span><span class="p">,</span> <span class="n">parameters_all</span><span class="p">)</span> <span class="o">=</span>\
+                        <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">save_data</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process_fit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_splits</span><span class="p">,</span>
                          <span class="n">parameters_all</span><span class="o">=</span><span class="n">parameters_all</span><span class="p">,</span>
@@ -2213,7 +2326,9 @@
                          <span class="n">fit_time</span><span class="o">=</span><span class="n">fit_time</span><span class="p">,</span>
                          <span class="n">score_time</span><span class="o">=</span><span class="n">score_time</span><span class="p">,</span>
                          <span class="n">cv_iter</span><span class="o">=</span><span class="n">cv_iter</span><span class="p">,</span>
-                         <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+                         <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                         <span class="n">fitted_workflows</span><span class="o">=</span><span class="n">fitted_workflows</span><span class="p">,</span>
+                         <span class="n">fitted_validation_workflows</span><span class="o">=</span><span class="n">fitted_validation_workflows</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -3193,15 +3308,15 @@
 
         <span class="c1"># Process the results of the fitting procedure</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process_fit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n_splits</span><span class="p">,</span>
-                         <span class="n">parameters_all</span><span class="o">=</span><span class="n">parameters_all</span><span class="p">,</span>
-                         <span class="n">test_sample_counts</span><span class="o">=</span><span class="n">test_sample_counts</span><span class="p">,</span>
-                         <span class="n">test_score_dicts</span><span class="o">=</span><span class="n">test_scores</span><span class="p">,</span>
-                         <span class="n">train_score_dicts</span><span class="o">=</span><span class="n">train_scores</span><span class="p">,</span>
-                         <span class="n">fit_time</span><span class="o">=</span><span class="n">fit_time</span><span class="p">,</span>
-                         <span class="n">score_time</span><span class="o">=</span><span class="n">score_time</span><span class="p">,</span>
-                         <span class="n">cv_iter</span><span class="o">=</span><span class="n">cv_iter</span><span class="p">,</span>
-                         <span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span>
-                         <span class="n">use_smac</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">parameters_all</span><span class="o">=</span><span class="n">parameters_all</span><span class="p">,</span>
+                    <span class="n">test_sample_counts</span><span class="o">=</span><span class="n">test_sample_counts</span><span class="p">,</span>
+                    <span class="n">test_score_dicts</span><span class="o">=</span><span class="n">test_scores</span><span class="p">,</span>
+                    <span class="n">train_score_dicts</span><span class="o">=</span><span class="n">train_scores</span><span class="p">,</span>
+                    <span class="n">fit_time</span><span class="o">=</span><span class="n">fit_time</span><span class="p">,</span>
+                    <span class="n">score_time</span><span class="o">=</span><span class="n">score_time</span><span class="p">,</span>
+                    <span class="n">cv_iter</span><span class="o">=</span><span class="n">cv_iter</span><span class="p">,</span>
+                    <span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">,</span>
+                    <span class="n">use_smac</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -3411,6 +3526,7 @@
                  <span class="n">error_score</span><span class="o">=</span><span class="s1">&#39;raise&#39;</span><span class="p">,</span> <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">n_jobspercore</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
                  <span class="n">ranking_score</span><span class="o">=</span><span class="s1">&#39;test_score&#39;</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">refit_training_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">smac_result_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GuidedSearchCVSMAC</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
              <span class="n">param_distributions</span><span class="o">=</span><span class="n">param_distributions</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="n">fit_params</span><span class="o">=</span><span class="n">fit_params</span><span class="p">,</span>
@@ -3418,7 +3534,8 @@
              <span class="n">pre_dispatch</span><span class="o">=</span><span class="n">pre_dispatch</span><span class="p">,</span> <span class="n">error_score</span><span class="o">=</span><span class="n">error_score</span><span class="p">,</span>
              <span class="n">return_train_score</span><span class="o">=</span><span class="n">return_train_score</span><span class="p">,</span>
              <span class="n">n_jobspercore</span><span class="o">=</span><span class="n">n_jobspercore</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">,</span>
-             <span class="n">maxlen</span><span class="o">=</span><span class="n">maxlen</span><span class="p">,</span> <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">)</span>
+             <span class="n">maxlen</span><span class="o">=</span><span class="n">maxlen</span><span class="p">,</span> <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">,</span> <span class="n">refit_training_workflows</span><span class="o">=</span><span class="n">refit_training_workflows</span><span class="p">,</span>
+             <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="n">refit_validation_workflows</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">features</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">smac_result_file</span> <span class="o">=</span> <span class="n">smac_result_file</span></div>
@@ -3457,7 +3574,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

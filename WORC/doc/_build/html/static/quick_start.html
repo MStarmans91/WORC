@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quick start guide &mdash; WORC 3.6.0 documentation</title>
+  <title>Quick start guide &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -92,13 +92,15 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quick start guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#tutorials">Tutorials</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-an-experiment">Running an experiment</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#import-packages">Import packages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#input">Input</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-actual-experiment">The actual experiment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#analysis-of-the-results">Analysis of the results</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#tips-and-tricks">Tips and Tricks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tutorials">Tutorials</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#running-an-experiment">Running an experiment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#import-packages">Import packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#input">Input</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#the-actual-experiment">The actual experiment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#analysis-of-the-results">Analysis of the results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tips-and-tricks">Tips and Tricks</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -109,7 +111,6 @@
 <li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 <ul>
@@ -180,8 +181,6 @@
             
   <div class="section" id="quick-start-guide">
 <span id="quickstart-chapter"></span><h1>Quick start guide<a class="headerlink" href="#quick-start-guide" title="Permalink to this headline">¶</a></h1>
-<p>This manual will show users how to install WORC, configure WORC and construct and run a simple experiment.
-It’s exactly the same as the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial">WORC Tutorial</a>.</p>
 <div class="section" id="installation">
 <span id="installation-chapter"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>You can install WORC either using pip, or from the source code. We strongly advice you to install <code class="docutils literal notranslate"><span class="pre">WORC</span></code> in a <a class="reference external" href="http://docs.python-guide.org/en/latest/dev/virtualenvs/">virtualenv</a>.</p>
@@ -209,13 +208,14 @@ edition can be downloaded and installed for free.</p>
 <h2>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h2>
 <p>To start out using WORC, we strongly recommend you to follow the tutorials located in the
 <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>. This repository
-contains tutorials for an introduction to WORC, as well as more advanced workflows.</p>
+contains tutorials for an introduction to WORC, as well as more advanced workflows. We recommend
+starting with the WORCTutorialSimple, of which the part below is an exact copy.</p>
 <p>If you run into any issue, you can first debug your network using
 <a class="reference external" href="https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors/">the fastr trace tool</a>.
-If you’re stuck, feel free to post an issue on the <a class="reference external" href="https://github.com/MStarmans91/WORC/">WORC Github</a>.</p>
-</div>
+If you’re stuck, check out the FAQ first at <a class="reference external" href="https://worc.readthedocs.io/en/latest/static/faq.html">https://worc.readthedocs.io/en/latest/static/faq.html</a>,
+or feel free to post an issue on the <a class="reference external" href="https://github.com/MStarmans91/WORC/">WORC Github</a>.</p>
 <div class="section" id="running-an-experiment">
-<h2>Running an experiment<a class="headerlink" href="#running-an-experiment" title="Permalink to this headline">¶</a></h2>
+<h3>Running an experiment<a class="headerlink" href="#running-an-experiment" title="Permalink to this headline">¶</a></h3>
 <p>We strongly recommend you to follow the tutorials, see the section above. In this section,
 a point by point description of the tutorial is given.</p>
 <p>Below is the same script as found in the SimpleWORC tutorial found in the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.
@@ -224,7 +224,7 @@ Additional information on <code class="docutils literal notranslate"><span class
 <span class="xref std std-ref">User Manual</span>. This chapter also includes the documentation on using the <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code> facade,
 which is slightly more advanced, and the <code class="docutils literal notranslate"><span class="pre">WORC</span></code> object directly, which provides the most advanced options.</p>
 <div class="section" id="import-packages">
-<h3>Import packages<a class="headerlink" href="#import-packages" title="Permalink to this headline">¶</a></h3>
+<h4>Import packages<a class="headerlink" href="#import-packages" title="Permalink to this headline">¶</a></h4>
 <p>First, import WORC and some additional python packages.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">WORC</span> <span class="kn">import</span> <span class="n">SimpleWORC</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -249,7 +249,7 @@ which is slightly more advanced, and the <code class="docutils literal notransla
 </div>
 </div>
 <div class="section" id="input">
-<h3>Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h3>
+<h4>Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h4>
 <p>The minimal inputs to WORC are:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -334,16 +334,18 @@ a subset of 20 patients in this folder. You can change this settings if you like
 </div>
 </div>
 <div class="section" id="the-actual-experiment">
-<h3>The actual experiment<a class="headerlink" href="#the-actual-experiment" title="Permalink to this headline">¶</a></h3>
+<h4>The actual experiment<a class="headerlink" href="#the-actual-experiment" title="Permalink to this headline">¶</a></h4>
 <p>After defining the inputs, the following code can be used to run your first experiment.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Simple WORC object</span>
 <span class="n">experiment</span> <span class="o">=</span> <span class="n">SimpleWORC</span><span class="p">(</span><span class="n">experiment_name</span><span class="p">)</span>
 
 <span class="c1"># Set the input data according to the variables we defined earlier</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">images_from_this_directory</span><span class="p">(</span><span class="n">imagedatadir</span><span class="p">,</span>
-                             <span class="n">image_file_name</span><span class="o">=</span><span class="n">image_file_name</span><span class="p">)</span>
+                             <span class="n">image_file_name</span><span class="o">=</span><span class="n">image_file_name</span><span class="p">,</span>
+                             <span class="n">is_training</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">segmentations_from_this_directory</span><span class="p">(</span><span class="n">imagedatadir</span><span class="p">,</span>
-                                    <span class="n">segmentation_file_name</span><span class="o">=</span><span class="n">segmentation_file_name</span><span class="p">)</span>
+                                    <span class="n">segmentation_file_name</span><span class="o">=</span><span class="n">segmentation_file_name</span><span class="p">,</span>
+                                    <span class="n">is_training</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">labels_from_this_file</span><span class="p">(</span><span class="n">label_file</span><span class="p">)</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">predict_labels</span><span class="p">(</span><span class="n">label_name</span><span class="p">)</span>
 
@@ -373,7 +375,7 @@ a subset of 20 patients in this folder. You can change this settings if you like
 </div>
 </div>
 <div class="section" id="analysis-of-the-results">
-<h3>Analysis of the results<a class="headerlink" href="#analysis-of-the-results" title="Permalink to this headline">¶</a></h3>
+<h4>Analysis of the results<a class="headerlink" href="#analysis-of-the-results" title="Permalink to this headline">¶</a></h4>
 <p>There are two main outputs: the features for each patient/object, and the overall
 performance. These are stored as .hdf5 and .json files, respectively. By
 default, they are saved in the so-called “fastr output mount”, in a subfolder
@@ -390,12 +392,18 @@ named after your experiment name.</p>
                                        <span class="s1">&#39;Features&#39;</span><span class="p">,</span>
                                        <span class="s1">&#39;features_*.hdf5&#39;</span><span class="p">))</span>
 
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No feature files found: your network has failed.&#39;</span><span class="p">)</span>
+
 <span class="n">feature_files</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 <span class="n">featurefile_p1</span> <span class="o">=</span> <span class="n">feature_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">features_p1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="n">featurefile_p1</span><span class="p">)</span>
 
 <span class="c1"># Read the overall peformance</span>
 <span class="n">performance_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">experiment_folder</span><span class="p">,</span> <span class="s1">&#39;performance_all_0.json&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">performance_file</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;No performance file {performance_file} found: your network has failed.&#39;</span><span class="p">)</span>
+
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">performance_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
     <span class="n">performance</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
 
@@ -414,25 +422,38 @@ named after your experiment name.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>the performance is probably horrible, which is expected as we ran the experiment on coarse settings. These settings are recommended to only use for testing: see also below.</p>
+<p>The performance is probably horrible, which is expected as we ran the experiment on coarse settings. These settings are recommended to only use for testing: see also below.</p>
 </div>
 </div>
 <div class="section" id="tips-and-tricks">
-<h3>Tips and Tricks<a class="headerlink" href="#tips-and-tricks" title="Permalink to this headline">¶</a></h3>
+<h4>Tips and Tricks<a class="headerlink" href="#tips-and-tricks" title="Permalink to this headline">¶</a></h4>
 <p>For tips and tricks on running a full experiment instead of this simple
 example, adding more evaluation options, debugging a crashed network etcetera,
-please go to <span class="xref std std-ref">User Manual</span> chapter.
+please go to
 We advice you to look at the docstrings of the SimpleWORC functions
 introduced in this tutorial, and explore the other SimpleWORC functions,
 s SimpleWORC offers much more functionality than presented here.</p>
+<p>For tips and tricks on running a full experiment instead of this simple
+example, adding more evaluation options, debugging a crashed network etcetera,
+please go to <span class="xref std std-ref">User Manual</span> chapter or
+the <a class="reference internal" href="additionalfunctionality.html#additonalfunctionality-chapter"><span class="std std-ref">Additional functionality</span></a> chapter. If you
+run into any issues, check the <a class="reference internal" href="faq.html#faq-chapter"><span class="std std-ref">FAQ</span></a>,
+make an issue on the WORC Github, or feel free to mail me.</p>
+<p>We advice you to look at the docstrings of the SimpleWORC functions
+introduced in this tutorial, and explore the other SimpleWORC functions,
+as SimpleWORC offers much more functionality than presented here, see
+the documentation: <a class="reference external" href="https://worc.readthedocs.io/en/latest/autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC">https://worc.readthedocs.io/en/latest/autogen/WORC.facade.html#WORC.facade.simpleworc.SimpleWORC</a></p>
 <p>Some things we would advice to always do:</p>
-<ul class="simple">
-<li><p>Run actual experiments on the full settings (coarse=False):</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="bp">False</span>
+<ul>
+<li><p>Run actual experiments on the full settings (coarse=False):</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">coarse</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">binary_classification</span><span class="p">(</span><span class="n">coarse</span><span class="o">=</span><span class="n">coarse</span><span class="p">)</span>
 </pre></div>
 </div>
+</div></blockquote>
+</li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This will result in more computation time. We therefore recommmend
@@ -447,14 +468,36 @@ just before before <code class="docutils literal notranslate"><span class="pre">
 <p>This is not required when running WORC on the BIGR or SURFSara Cartesius cluster,
 as automatic detectors for these clusters have been built into SimpleWORC and BasicWORC.</p>
 </div>
-<ul class="simple">
-<li><p>Add extensive evaluation: <code class="docutils literal notranslate"><span class="pre">experiment.add_evaluation()</span></code> before <code class="docutils literal notranslate"><span class="pre">experiment.execute()</span></code>:</p></li>
-</ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">()</span>
+<ul>
+<li><p>Add extensive evaluation: <code class="docutils literal notranslate"><span class="pre">experiment.add_evaluation()</span></code> before <code class="docutils literal notranslate"><span class="pre">experiment.execute()</span></code>:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>For a complete overview of all functions, please look at the
+</div></blockquote>
+<p>See the “Outputs and evaluation of your network” section in the <span class="xref std std-ref">User Manual</span>
+chapter for more details on the evaluation outputs.</p>
+</li>
+</ul>
+<p>Changing fields in the configuration can be done with the add_config_overrides function, see below.
+We recommend doing this after the modus part, as these also perform config_overrides.
+NOTE: all configuration fields have to be provided as strings.</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">overrides</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Classification&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;classifiers&#39;</span><span class="p">:</span> <span class="s1">&#39;SVM&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+<span class="n">experiment</span><span class="o">.</span><span class="n">add_config_overrides</span><span class="p">(</span><span class="n">overrides</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>For a complete overview of all configuration functions, please look at the
 <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">Config chapter</span></a>.</p>
+</div></blockquote>
+</div>
 </div>
 </div>
 </div>
@@ -479,7 +522,7 @@ as automatic detectors for these clusters have been built into SimpleWORC and Ba
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

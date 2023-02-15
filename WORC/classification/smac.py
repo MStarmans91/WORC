@@ -291,6 +291,9 @@ def build_smac_config(parameters):
     cs.add_hyperparameter(imputation_n_neighbors)
     cs.add_condition(InCondition(child=imputation_n_neighbors, parent=imputation_strategy,
                                  values=['knn']))
+    
+    skipallNaN = Constant('ImputationSkipAllNaN', value=parameters['Imputation']['skipallNaN'][0])
+    cs.add_hyperparameter(skipallNaN)
 
     # Variance selection --> always on in RS
     # 0 hyperparameters

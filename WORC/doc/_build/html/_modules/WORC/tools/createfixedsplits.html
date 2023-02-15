@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.tools.createfixedsplits &mdash; WORC 3.6.0 documentation</title>
+  <title>WORC.tools.createfixedsplits &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -95,7 +95,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
 <ul>
@@ -165,7 +164,7 @@
   <h1>Source code for WORC.tools.createfixedsplits</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -185,13 +184,41 @@
 <span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
 <span class="kn">from</span> <span class="nn">WORC.processing.label_processing</span> <span class="k">import</span> <span class="n">load_labels</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">WORC.processing.label_processing</span> <span class="k">as</span> <span class="nn">lp</span>
 
 
 <div class="viewcode-block" id="createfixedsplits"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.createfixedsplits.createfixedsplits">[docs]</a><span class="k">def</span> <span class="nf">createfixedsplits</span><span class="p">(</span><span class="n">label_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">patient_IDs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">N_iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                      <span class="n">stratify</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                      <span class="n">stratify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">N_iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                      <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Create fixed splits for a cross validation.</span>
+<span class="sd">    Create fixed splits for a random-split cross-validation.</span>
+<span class="sd">    </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            label_file : filepath</span>
+<span class="sd">                CSV file containing the labels of the patients.</span>
+<span class="sd">            label_type: list of strings</span>
+<span class="sd">                labels to extracted from the label file, e.g. [&#39;label1&#39;]</span>
+<span class="sd">            patient_IDs: list of strings</span>
+<span class="sd">                names of patients to take into account. If None, take all</span>
+<span class="sd">            stratify: Boolean</span>
+<span class="sd">                If True, splits are stratified. In this case, you need to provide</span>
+<span class="sd">                label data.</span>
+<span class="sd">            test_size: float</span>
+<span class="sd">                Percentage of patients in test set per iteration.</span>
+<span class="sd">            N_iterations: integer</span>
+<span class="sd">                Number of cross-validation iterations</span>
+<span class="sd">            modus: str</span>
+<span class="sd">                singlelabel or regression. Multilabel not implemented yet.</span>
+<span class="sd">            output: filepath</span>
+<span class="sd">                csv filename to save output to.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            df: pandas Dataframe</span>
+<span class="sd">                Fixed splits created.</span>
+<span class="sd">            </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># Check whether input is valid</span>
     <span class="k">if</span> <span class="n">patient_IDs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -200,27 +227,37 @@
             <span class="n">label_data</span> <span class="o">=</span> <span class="n">load_labels</span><span class="p">(</span><span class="n">label_file</span><span class="p">,</span> <span class="n">label_type</span><span class="p">)</span>
             <span class="n">patient_IDs</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]</span>
 
-            <span class="c1"># Create the stratification object</span>
-            <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
-                <span class="n">stratify</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;multilabel&#39;</span><span class="p">:</span>
-                <span class="c1"># Create a stratification object from the labels</span>
-                <span class="c1"># Label = 0 means no label equals one</span>
-                <span class="c1"># Other label numbers refer to the label name that is 1</span>
-                <span class="n">stratify</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-                <span class="n">labels</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">pnum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
-                    <span class="n">plabel</span> <span class="o">=</span> <span class="mi">0</span>
-                    <span class="k">for</span> <span class="n">lnum</span><span class="p">,</span> <span class="n">slabel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="n">slabel</span><span class="p">[</span><span class="n">pnum</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                            <span class="n">plabel</span> <span class="o">=</span> <span class="n">lnum</span> <span class="o">+</span> <span class="mi">1</span>
-                    <span class="n">stratify</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plabel</span><span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid modus!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">modus</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCIOError</span><span class="p">(</span><span class="s1">&#39;Either a label file and label type or patient_IDs need to be provided!&#39;</span><span class="p">)</span>
-
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="s1">&#39;Either a label file and label type or patient_IDs need to be provided!&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">stratify</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">label_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">label_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Extract data for specific patients only</span>
+                <span class="n">label_data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">lp</span><span class="o">.</span><span class="n">findlabeldata</span><span class="p">(</span><span class="n">label_file</span><span class="p">,</span>
+                                                 <span class="n">label_type</span><span class="p">,</span>
+                                                 <span class="n">pids</span><span class="o">=</span><span class="n">patient_IDs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="s1">&#39;A label file and label type needs to be provided for stratified splitting!&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Create the stratification object</span>
+    <span class="k">if</span> <span class="n">stratify</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;singlelabel&#39;</span><span class="p">:</span>
+            <span class="n">stratify</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;multilabel&#39;</span><span class="p">:</span>
+            <span class="c1"># Create a stratification object from the labels</span>
+            <span class="c1"># Label = 0 means no label equals one</span>
+            <span class="c1"># Other label numbers refer to the label name that is 1</span>
+            <span class="n">stratify</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">pnum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+                <span class="n">plabel</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">lnum</span><span class="p">,</span> <span class="n">slabel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">slabel</span><span class="p">[</span><span class="n">pnum</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">plabel</span> <span class="o">=</span> <span class="n">lnum</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">stratify</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plabel</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> is not a valid modus!&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">modus</span><span class="p">)</span>
+                           
     <span class="n">pd_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_iterations</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Splitting iteration {i + 1} / </span><span class="si">{N_iterations}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -230,7 +267,8 @@
         <span class="c1"># Define stratification</span>
         <span class="n">unique_patient_IDs</span><span class="p">,</span> <span class="n">unique_indices</span> <span class="o">=</span>\
             <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">patient_IDs</span><span class="p">),</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">regression</span><span class="p">:</span>
+            
+        <span class="k">if</span> <span class="n">modus</span> <span class="o">==</span> <span class="s1">&#39;regression&#39;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">stratify</span><span class="p">:</span>
             <span class="n">unique_stratify</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">unique_stratify</span> <span class="o">=</span> <span class="p">[</span><span class="n">stratify</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">unique_indices</span><span class="p">]</span>
@@ -290,6 +328,22 @@
         <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="test"><a class="viewcode-back" href="../../../autogen/WORC.tools.html#WORC.tools.createfixedsplits.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="n">patient_IDs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HN1004&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1077&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1088&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1146&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1159&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1192&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1259&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1260&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;HN1323&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1331&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1339&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1342&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1372&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1491&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1501&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1519&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;HN1524&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1554&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1560&#39;</span><span class="p">,</span> <span class="s1">&#39;HN1748&#39;</span><span class="p">]</span>
+    <span class="n">createfixedsplits</span><span class="p">(</span><span class="n">label_file</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\Data\Examplefiles\pinfo_HN.csv&#39;</span><span class="p">,</span>
+                      <span class="n">patient_IDs</span><span class="o">=</span><span class="n">patient_IDs</span><span class="p">,</span> <span class="n">stratify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">label_type</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;imaginary_label_1&#39;</span><span class="p">],</span> <span class="n">N_iterations</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s1">&#39;fixedsplits.csv&#39;</span><span class="p">)</span></div>
+    
+    
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">test</span><span class="p">()</span>
+
+
+
 </pre></div>
 
            </div>
@@ -302,7 +356,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

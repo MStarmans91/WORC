@@ -101,7 +101,7 @@ def main():
                                 return_parameters=data['return_parameters'],
                                 error_score=data['error_score'],
                                 verbose=data['verbose'],
-                                return_all=False, use_smac=True)
+                                return_all=False, skip=False)
 
             # If the run failed because no features were left, report a score of 0
             # (SMAC will use the max integer value internally to steer away from crashing runs)

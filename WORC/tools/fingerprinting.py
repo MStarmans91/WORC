@@ -117,7 +117,10 @@ class Fingerprinter(object):
             max_num_images = int(config['Fingerprinting']['max_num_image'])
             if len(self.images) > max_num_images:
                 self.images = self.images[0:max_num_images]
-                self.segmentations = self.segmentations[0:max_num_images]
+                # FIXME
+                if self.segmentations is not None:
+                    print('FIXME: segmentations is None')
+                    self.segmentations = self.segmentations[0:max_num_images]
 
             for imagefile in self.images:
                 image = sitk.ReadImage(imagefile)
@@ -148,23 +151,25 @@ class Fingerprinter(object):
                 config['ImageFeatures']['phase'] = 'True'
 
             # Check if segmentations are 2D or 3D
-            num_masked_slices_all = list()
-            for segmentationfile in self.segmentations:
-                segmentation = sitk.GetArrayFromImage(sitk.ReadImage(segmentationfile))
-                segmentation = segmentation.astype(np.bool)
-                num_masked_slices = len(np.flatnonzero(np.any(segmentation, axis=(1, 2))))
-                num_masked_slices_all.append(num_masked_slices)
+            # FIXME
+            if self.segmentations is not None:
+                num_masked_slices_all = list()
+                for segmentationfile in self.segmentations:
+                    segmentation = sitk.GetArrayFromImage(sitk.ReadImage(segmentationfile))
+                    segmentation = segmentation.astype(np.bool)
+                    num_masked_slices = len(np.flatnonzero(np.any(segmentation, axis=(1, 2))))
+                    num_masked_slices_all.append(num_masked_slices)
 
-            if all(elem == 1 for elem in num_masked_slices_all):
-                print('All masks only contain one slice, so turn of 3D features.')
-                # NOTE: PREDICT will mostly switch itself between these features by looking at the masks
-                config['ImageFeatures']['extraction_mode'] = '2D'
+                if all(elem == 1 for elem in num_masked_slices_all):
+                    print('All masks only contain one slice, so turn of 3D features.')
+                    # NOTE: PREDICT will mostly switch itself between these features by looking at the masks
+                    config['ImageFeatures']['extraction_mode'] = '2D'
 
-                config['ImageFeatures']['orientation'] = 'False'
-                config['ImageFeatures']['texture_GLCMMS'] = 'False'
+                    config['ImageFeatures']['orientation'] = 'False'
+                    config['ImageFeatures']['texture_GLCMMS'] = 'False'
 
-                # For PyRadiomics, only this parameter needs to be changed
-                config['PyRadiomics']['force2D'] = 'True'
+                    # For PyRadiomics, only this parameter needs to be changed
+                    config['PyRadiomics']['force2D'] = 'True'
 
         else:
             raise WORCValueError(f'Type {type} is not valid for fingeprinting. Should be one of ["classification", "images"].')

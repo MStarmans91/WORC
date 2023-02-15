@@ -16,7 +16,6 @@ will be ignored. Additionally, .py files from the ``$FASTRHOME/config.d`` folder
 as well. You will see that upon installation, WORC has already put a ``WORC_config.py`` file in the
 ``config.d`` folder.
 
-% Note: Above was originally from quick start
 As ``WORC`` and the default tools used are mostly Python based, we've chosen
 to put our configuration in a ``configparser`` object. This has several
 advantages:
@@ -90,6 +89,12 @@ WORC on a cluster with nodes supporting only a single core to be used
 per node, e.g. the BIGR cluster, use only 1 core and threading as a
 backend.
 
+.. note::
+
+    If you want to override configuration fields that are fingerprinted, e.g.
+    the preprocessing, turn the fingerprinting off.
+
+
 **Description:**
 
 .. include:: ../autogen/config/WORC.config_General_description.rst
@@ -97,6 +102,8 @@ backend.
 **Defaults and Options:**
 
 .. include:: ../autogen/config/WORC.config_General_defopts.rst
+
+
 
 
 .. _config-Labels:
@@ -142,6 +149,23 @@ set: ``config[Labels][label_names] = Label1, Label2``
 .. include:: ../autogen/config/WORC.config_Labels_defopts.rst
 
 
+.. _config-Fingerprinting:
+
+Fingerprinting
+~~~~~~~~~~~~~~~
+The fingerprinting nodes are the first computational nodes to create
+a fingerprint of your dataset and accordingly adjust some configuration
+settings, see the  `WORC paper <https://doi.org/10.48550/arXiv.2108.08618>`_.
+
+**Description:**
+
+.. include:: ../autogen/config/WORC.config_Fingerprinting_description.rst
+
+**Defaults and Options:**
+
+.. include:: ../autogen/config/WORC.config_Fingerprinting_defopts.rst
+
+
 .. _config-Preprocessing:
 
 Preprocessing
@@ -152,6 +176,14 @@ as DICOM are scaled to Hounsfield Units. For more details on the preprocessing
 options, please see
 :ref:`the additional functionality chapter <additonalfunctionality-chapter>`.
 
+
+.. note::
+
+    As several preprocessing functions are fingerprinted, if you want to edit 
+    these configuration settings yourself, please turn of the fingerprinting,
+    see the :ref:`General section of the config <config-General>`.
+    
+
 **Description:**
 
 .. include:: ../autogen/config/WORC.config_Preprocessing_description.rst
@@ -159,7 +191,6 @@ options, please see
 **Defaults and Options:**
 
 .. include:: ../autogen/config/WORC.config_Preprocessing_defopts.rst
-
 
 .. _config-Segmentix:
 

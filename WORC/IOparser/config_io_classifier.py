@@ -59,6 +59,9 @@ def load_config(config_file_path):
     settings_dict['General']['tempsave'] =\
         settings['General'].getboolean('tempsave')
 
+    settings_dict['General']['DoTestNRSNEns'] =\
+        settings['General'].getboolean('DoTestNRSNEns')
+        
     # Feature Scaling
     settings_dict['FeatureScaling']['scale_features'] =\
         settings['FeatureScaling'].getboolean('scale_features')
@@ -154,6 +157,9 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Imputation']['n_neighbors'].split(',')]
 
+    settings_dict['Imputation']['skipallNaN'] =\
+        [str(settings['Imputation']['skipallNaN'])]        
+        
     # OneHotEncoding
     settings_dict['OneHotEncoding']['Use'] =\
         [str(item).strip() for item in
@@ -392,11 +398,13 @@ def load_config(config_file_path):
         settings['HyperOptimization'].getint('maxlen')
     settings_dict['HyperOptimization']['ranking_score'] = \
         str(settings['HyperOptimization']['ranking_score'])
-    settings_dict['HyperOptimization']['refit_workflows'] =\
-        settings['HyperOptimization'].getboolean('refit_workflows')
+    settings_dict['HyperOptimization']['refit_training_workflows'] =\
+        settings['HyperOptimization'].getboolean('refit_training_workflows')
+    settings_dict['HyperOptimization']['refit_validation_workflows'] =\
+        settings['HyperOptimization'].getboolean('refit_validation_workflows')
     settings_dict['HyperOptimization']['memory'] = \
         str(settings['HyperOptimization']['memory'])
-
+        
     # Settings for SMAC
     settings_dict['SMAC']['use'] =\
         settings['SMAC'].getboolean('use')

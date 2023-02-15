@@ -13,4 +13,5 @@ tempsave                       Determines whether after every cross validation i
 AssumeSameImageAndMaskMetadata Make the assumption that the image and mask have the same metadata. If True and there is a mismatch, metadata from the image will be copied to the mask.                            
 ComBat                         Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See <https://github.com/Jfortin1/ComBatHarmonization for more information./>`_ .
 Fingerprint                    Whether to use Fingerprinting or not.                                                                                                                                               
+DoTestNRSNEns                  If True, repeat the experiments from the WORC paper to check the performance of various N_RS, N_Ens and advanced ensembling combinations.                                           
 ============================== ====================================================================================================================================================================================

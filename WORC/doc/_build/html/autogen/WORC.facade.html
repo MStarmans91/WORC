@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>facade Package &mdash; WORC 3.6.0 documentation</title>
+  <title>facade Package &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -97,7 +97,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
 </ul>
 <ul class="current">
@@ -282,6 +281,23 @@ made error are caught before running the experiment.</p>
 <dd><p>Add manual overrides for the WORC configuration.</p>
 <p>For a full list of options, see the
 <a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
+<p>Example usage:</p>
+<dl>
+<dt>overrides = {</dt><dd><dl class="simple">
+<dt>‘Classification’: {</dt><dd><p>‘classifiers’: ‘SVM’,</p>
+</dd>
+</dl>
+<p>},
+‘Featsel’: {</p>
+<blockquote>
+<div><p># Other estimators do not support multiclass
+‘SelectFromModel_estimator’: ‘RF’</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}
+self.add_config_overrides(overrides)</p>
 <dl class="simple">
 <dt>config: dictionary</dt><dd><p>Determine which options to override with which values.</p>
 </dd>
@@ -607,7 +623,7 @@ the changes applied by the detectors.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

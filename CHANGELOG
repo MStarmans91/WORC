@@ -6,6 +6,38 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.6.1 - 2023-02-15
+------------------
+
+Fixed
+~~~~~
+- Bug when using elastix, dimensionality got wrong name in fastr network.
+- Bug in BasicWORC when starting from features
+- For statistical test thresholding, if refit does not work during ensembling, skip this method
+  instead of returning NaN.
+- Createfixedsplits function was outdated, updates to newest conventions and added
+  to documentation.
+- When using Dummy's, segmentix now still copies metadata information from image
+  to segmentation when required.
+
+Changed
+~~~~~~~
+- When part of fiting and scoring a workflow fails, during optimization return NaN as performance,
+  but during refitting skip that step. During optimization, if we skip it, the relation between
+  the hyperparameter and performance gets disturbed. During refitting, we need to have a model,
+  so best option is to skip the step. Previously, there was only skipping.
+- Set default of XGB estimator parallelization to single job.
+
+Added
+~~~~~
+- Documentation updates
+- Option to save the workflows trained on the train-validation training datasets, besides the option to save workflows
+  trained on the full training dataset. Not an option for SMAC due to implementation of SMAC.
+- Validate function for fastr HDF5 datatype, as previously fastr deemed empty hdf5 types as valid.
+- Option to eliminate features which are all NaN during imputation.
+- Preflightcheck on number of image types provided.
+
+
 3.6.0 - 2022-04-05
 ------------------
 

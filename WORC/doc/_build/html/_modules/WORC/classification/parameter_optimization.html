@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>WORC.classification.parameter_optimization &mdash; WORC 3.6.0 documentation</title>
+  <title>WORC.classification.parameter_optimization &mdash; WORC 3.6.1 documentation</title>
   
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                3.6.0
+                3.6.1
               </div>
             
           
@@ -95,7 +95,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../static/file_description.html">Resource File Formats</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
 <ul>
@@ -192,7 +191,8 @@
                              <span class="n">n_cores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                              <span class="n">memory</span><span class="o">=</span><span class="s1">&#39;2G&#39;</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ranking_score</span><span class="o">=</span><span class="s1">&#39;test_score&#39;</span><span class="p">,</span>
                              <span class="n">random_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                             <span class="n">refit_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                             <span class="n">refit_training_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Train a classifier and simultaneously optimizes hyperparameters using a</span>
 <span class="sd">    randomized search.</span>
@@ -245,7 +245,8 @@
                                                 <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">,</span>
                                                 <span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">,</span>
                                                 <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">,</span>
-                                                <span class="n">refit_workflows</span><span class="o">=</span><span class="n">refit_workflows</span><span class="p">)</span>
+                                                <span class="n">refit_training_workflows</span><span class="o">=</span><span class="n">refit_training_workflows</span><span class="p">,</span>
+                                                <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="n">refit_validation_workflows</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">random_search</span> <span class="o">=</span> <span class="n">RandomizedSearchCVJoblib</span><span class="p">(</span><span class="n">param_distributions</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
                                                  <span class="n">n_iter</span><span class="o">=</span><span class="n">N_iter</span><span class="p">,</span>
@@ -257,7 +258,8 @@
                                                  <span class="n">fastr_plugin</span><span class="o">=</span><span class="n">fastr_plugin</span><span class="p">,</span>
                                                  <span class="n">memory</span><span class="o">=</span><span class="n">memory</span><span class="p">,</span>
                                                  <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">,</span>
-                                                 <span class="n">refit_workflows</span><span class="o">=</span><span class="n">refit_workflows</span><span class="p">)</span>
+                                                 <span class="n">refit_training_workflows</span><span class="o">=</span><span class="n">refit_training_workflows</span><span class="p">,</span>
+                                                 <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="n">refit_validation_workflows</span><span class="p">)</span>
     <span class="n">random_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best found parameters:&quot;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">random_search</span><span class="o">.</span><span class="n">best_params_</span><span class="p">:</span>
@@ -272,7 +274,8 @@
                              <span class="n">n_jobspercore</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                              <span class="n">n_cores</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                              <span class="n">memory</span><span class="o">=</span><span class="s1">&#39;2G&#39;</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ranking_score</span><span class="o">=</span><span class="s1">&#39;test_score&#39;</span><span class="p">,</span>
-                             <span class="n">random_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refit_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">random_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refit_training_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                              <span class="n">smac_result_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Train a classifier and simultaneously optimizes hyperparameters using a</span>
@@ -326,7 +329,9 @@
                                        <span class="n">ranking_score</span><span class="o">=</span><span class="n">ranking_score</span><span class="p">,</span>
                                        <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
                                        <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
-                                       <span class="n">smac_result_file</span><span class="o">=</span><span class="n">smac_result_file</span><span class="p">)</span>
+                                       <span class="n">smac_result_file</span><span class="o">=</span><span class="n">smac_result_file</span><span class="p">,</span>
+                                       <span class="n">refit_training_workflows</span><span class="o">=</span><span class="n">refit_training_workflows</span><span class="p">,</span>
+                                       <span class="n">refit_validation_workflows</span><span class="o">=</span><span class="n">refit_validation_workflows</span><span class="p">)</span>
 
     <span class="n">guided_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best found parameters:&quot;</span><span class="p">)</span>
@@ -348,7 +353,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
 
     </p>
   </div>

@@ -587,6 +587,19 @@ class SimpleWORC():
         For a full list of options, see the
         :ref:`WORC Config chapter <config-chapter>` for allowed options.
 
+        Example usage:
+
+        overrides = {
+            'Classification': {
+                'classifiers': 'SVM',
+            },
+            'Featsel': {
+                # Other estimators do not support multiclass
+                'SelectFromModel_estimator': 'RF'
+            }
+        }
+        self.add_config_overrides(overrides)
+
         Parameters
         ----------
         config: dictionary
@@ -615,7 +628,7 @@ class SimpleWORC():
 
         """
         self._add_evaluation = True
-        self._selected_label = 0
+        self._selected_label = selected_label
         self._worc.modus = self._method
 
     def set_tmpdir(self, tmpdir):

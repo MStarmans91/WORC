@@ -134,7 +134,8 @@ def generate_config_options():
     config['General']['AssumeSameImageAndMaskMetadata'] = 'True, False'
     config['General']['ComBat'] = 'True, False'
     config['General']['Fingerprint'] = 'True, False'
-
+    config['General']['DoTestNRSNEns'] = 'Boolean'
+    
     # Fingerprinting
     config['Fingerprinting'] = dict()
     config['Fingerprinting']['max_num_image'] = 'Integer'
@@ -328,7 +329,8 @@ def generate_config_options():
     config['Imputation']['use'] = 'Boolean(s)'
     config['Imputation']['strategy'] = 'mean, median, most_frequent, constant, knn'
     config['Imputation']['n_neighbors'] = 'Two Integers: loc and scale'
-
+    config['Imputation']['skipallNaN'] = 'Boolean(s)'
+    
     # Resampling options
     config['Resampling'] = dict()
     config['Resampling']['Use'] = 'Float'
@@ -406,7 +408,8 @@ def generate_config_options():
     config['HyperOptimization']['maxlen'] = 'Integer'
     config['HyperOptimization']['ranking_score'] = 'String'
     config['HyperOptimization']['memory'] = 'String consisting of integer + "G"'
-    config['HyperOptimization']['refit_workflows'] = 'Boolean'
+    config['HyperOptimization']['refit_training_workflows'] = 'Boolean'
+    config['HyperOptimization']['refit_validation_workflows'] = 'Boolean'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
@@ -456,7 +459,8 @@ def generate_config_descriptions():
     config['General']['AssumeSameImageAndMaskMetadata'] = 'Make the assumption that the image and mask have the same metadata. If True and there is a mismatch, metadata from the image will be copied to the mask.'
     config['General']['ComBat'] = 'Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See <https://github.com/Jfortin1/ComBatHarmonization for more information./>`_ .'
     config['General']['Fingerprint'] = 'Whether to use Fingerprinting or not.'
-
+    config['General']['DoTestNRSNEns'] = 'If True, repeat the experiments from the WORC paper to check the performance of various N_RS, N_Ens and advanced ensembling combinations.'
+    
     # Fingerprinting
     config['Fingerprinting'] = dict()
     config['Fingerprinting']['max_num_image'] = 'Maximum number of images and segmentations to evaluate during fingerprinting to limit the workload.'
@@ -650,7 +654,8 @@ def generate_config_descriptions():
     config['Imputation']['use'] = 'If True, use feature imputation methods to replace NaN values. If False, all NaN features will be set to zero.'
     config['Imputation']['strategy'] = 'Method to be used for imputation.'
     config['Imputation']['n_neighbors'] = 'When using k-Nearest Neighbors (kNN) for feature imputation, determines the number of neighbors used for imputation. Can be a single integer or a list.'
-
+    config['Imputation']['skipallNaN'] = 'When True, if a feature is NaN for all objects/patients, simply remove this features for all patients.'
+    
     # Resampling options
     config['Resampling'] = dict()
     config['Resampling']['Use'] = 'Percentage of times Object (e.g. patient) resampling is used.'
@@ -725,7 +730,8 @@ def generate_config_descriptions():
     config['HyperOptimization']['maxlen'] = 'Number of estimators for which the fitted outcomes and parameters are saved. Increasing this number will increase the memory usage.'
     config['HyperOptimization']['ranking_score'] = 'Score used for ranking the performance of the evaluated workflows.'
     config['HyperOptimization']['memory'] = 'When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + "G".'
-    config['HyperOptimization']['refit_workflows'] = 'If True, refit all workflows in the ensemble automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.'
+    config['HyperOptimization']['refit_training_workflows'] = 'If True, refit all workflows trained on the full training dataset automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.'
+    config['HyperOptimization']['refit_validation_workflows'] = 'If True, refit all workflows trained on the train-validation training dataset automatically during training. This will save time while performing validation evaluation, but will take more time during training and make the saved model much larger.'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()

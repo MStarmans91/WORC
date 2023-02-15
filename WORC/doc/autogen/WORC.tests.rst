@@ -19,6 +19,15 @@ tests Package
     :show-inheritance:
     :special-members:
 
+:mod:`test_RSEnsemble` Module
+-----------------------------
+
+.. automodule:: WORC.tests.test_RSEnsemble
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`test_combat` Module
 -------------------------
 

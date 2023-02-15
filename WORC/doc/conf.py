@@ -77,8 +77,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'WORC'
-copyright = '2016 -- 2020, Biomedical Imaging Group Rotterdam, Departments of ' \
-            'Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands'
+copyright = '2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of ' \
+            'Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
