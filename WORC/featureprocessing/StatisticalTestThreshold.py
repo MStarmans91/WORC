@@ -81,9 +81,9 @@ class StatisticalTestThreshold(BaseEstimator, SelectorMixin):
                 # We do a statistical test per label and take the minimum p-value
                 n_label = Y_train[0].shape[0]
                 metric_values = list()
-                for i in range(n_label):
-                    class1 = [i for j, i in enumerate(fv) if np.argmax(Y_train[j]) == n_label]
-                    class2 = [i for j, i in enumerate(fv) if np.argmax(Y_train[j]) != n_label]
+                for i_label in range(n_label):
+                    class1 = [i for j, i in enumerate(fv) if np.argmax(Y_train[j]) == i_label]
+                    class2 = [i for j, i in enumerate(fv) if np.argmax(Y_train[j]) != i_label]
 
                     try:
                         metric_value_temp = self.metric_function(class1, class2, **self.parameters)[1]
