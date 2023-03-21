@@ -729,7 +729,13 @@ def plot_estimator_performance(prediction, label_data, label_type,
                                         precision, npv, f1_score_list, auc]
                         for name, perf in zip(metric_names_single, performances):
                             all_performances[name] = perf
-                            stats[f"{name} 95%:"] = f"{np.nanmean(perf)} {str(compute_confidence(perf, N_1, N_2, alpha))}"
+                            try:
+                                CI = compute_confidence(perf, N_1, N_2, alpha)
+                            except ZeroDivisionError:
+                                # CI not defined, give nan
+                                CI = [np.nan, np.nan]
+                                
+                            stats[f"{name} 95%:"] = f"{np.nanmean(perf)} {str(CI)}"
 
                 if thresholds is not None:
                     if len(thresholds) == 2:

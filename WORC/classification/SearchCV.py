@@ -436,7 +436,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
     def _check_is_fitted(self, method_name):
         if not self.refit:
-            raise NotFittedError(('This GridSearchCV instance was initialized '
+            raise NotFittedError(('This SearchCV instance was initialized '
                                   'with refit=False. %s is '
                                   'available only after refitting on the best '
                                   'parameters. ') % method_name)
@@ -1672,7 +1672,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         estimatordata = f"vfs://tmp/GS/{name}/{fname}"
 
         # Create the fastr network
-        network = fastr.create_network('WORC_GridSearch_' + name)
+        network = fastr.create_network('WORC_CASHOptimization_' + name)
         estimator_data = network.create_source('HDF5', id='estimator_source', resources=ResourceLimit(memory='4G'))
         traintest_data = network.create_source('HDF5', id='traintest', resources=ResourceLimit(memory='4G'))
         parameter_data = network.create_source('JsonFile', id='parameters', resources=ResourceLimit(memory='4G'))
