@@ -15,6 +15,8 @@ Fixed
   results now in a np.nan confidence interval.
 - Error catched and message added when you provide images and/or features in the
   test set, but not labels.
+- SimpleWORC and BasicWORC now detect whether user has provided a separate training
+  and test set and thus bootstrapping should be used.
 
 
 3.6.2 - 2023-03-14

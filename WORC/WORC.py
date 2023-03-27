@@ -547,6 +547,7 @@ class WORC(object):
         if wtype == 'training':
             self.build_training()
         elif wtype == 'testing':
+            # To Do
             self.build_testing()
 
     def build_training(self):
@@ -554,10 +555,10 @@ class WORC(object):
         # We either need images or features for Radiomics
         if self.images_test or self.features_test:
             if not self.labels_test:
-                m = "You provided images and/or features for a test set, but not ground thruth labels. Please also provide labels for the test set."
+                m = "You provided images and/or features for a test set, but not ground truth labels. Please also provide labels for the test set."
                 raise WORCexceptions.WORCValueError(m)
             self.TrainTest = True
-
+            
         if self.images_train or self.features_train:
             print('Building training network...')
             # We currently require labels for supervised learning

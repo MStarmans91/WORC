@@ -147,7 +147,8 @@ class BasicWORC(SimpleWORC):
             self._worc.semantics_test = self.semantics_file_test
         elif self._semantics_file_test:
             self._worc.semantics_test = self._semantics_file_test
-
+            
+        # Set the labels to predict
         self._worc.label_names = ', '.join(self._label_names)
         if 'Labels' not in self._config_builder._custom_overrides.keys():
             self._config_builder._custom_overrides['Labels'] = dict()
@@ -159,16 +160,21 @@ class BasicWORC(SimpleWORC):
             nmod = len(self._worc.images_train)
         else:
             nmod = len(self._worc.features_train)
+            
+         # Check whether user has provided a separate train and test set
+        self._check_traintest()
 
         # Create configuration files
         self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
         for cnum, _ in enumerate(self._worc.configs):
             self._worc.configs[cnum]['ImageFeatures']['image_type'] = self._image_types[cnum]
 
+         # Build the fastr network
         self._worc.build()
         if self._add_evaluation:
             self._worc.add_evaluation(label_type=self._label_names[self._selected_label],
                                       modus=self._method)
 
+        # Set the sources and sinks and execute the experiment.
         self._worc.set()
         self._worc.execute()
