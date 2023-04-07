@@ -1724,7 +1724,7 @@ class WORC(object):
                     self.sources_parameters[label].output
 
         # Append to nodes to list
-        if not self.OnlyTesT:
+        if not self.OnlyTest:
             self.calcfeatures_train[label].append(node_train)
             self.featureconverter_train[label].append(conv_train)
             
