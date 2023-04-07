@@ -1698,7 +1698,7 @@ class WORC(object):
                                          id=f'toolbox_name_{toolbox}_{label}',
                                          step_id='Feature_Extraction')
 
-        if not OnlyTest:
+        if not self.OnlyTest:
             conv_train.inputs['toolbox'] = self.source_toolbox_name[label].output
             if self.configs[0]['General']['Fingerprint'] == 'True':
                 conv_train.inputs['config'] =\
@@ -1859,7 +1859,7 @@ class WORC(object):
 
             # Create sources_segmentation
             # M1 = moving, others = fixed
-            if not OnlyTest:
+            if not self.OnlyTest:
                 self.elastix_nodes_train[label].inputs['fixed_image'] =\
                     self.converters_im_train[label].outputs['image']
 
