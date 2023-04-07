@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 from sklearn.model_selection._validation import _fit_and_score
 import numpy as np
 from sklearn.linear_model import Lasso, LogisticRegression
-from sklearn.feature_selection import SelectFromModel
+from sklearn.feature_selection import SelectFromModel, RFE
 from sklearn.decomposition import PCA
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -37,6 +37,7 @@ from WORC.featureprocessing.OneHotEncoderWrapper import OneHotEncoderWrapper
 import WORC
 import WORC.addexceptions as ae
 import time
+from xgboost.sklearn import XGBRegressor
 
 # Specific imports for error management
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
@@ -191,6 +192,10 @@ def fit_and_score(X, y, scoring,
         Either None if the statistical test feature selection is not used, or
         the fitted object.
 
+    RFESel: WORC RFESel Object
+        Either None if the recursive feature elimination feature selection is not used, or
+        the fitted object.
+        
     ReliefSel: WORC ReliefSel Object
         Either None if the RELIEF feature selection is not used, or
         the fitted object.
@@ -239,6 +244,7 @@ def fit_and_score(X, y, scoring,
     SelectModel = None
     pca = None
     StatisticalSel = None
+    RFESel = None
     VarSel = None
     ReliefSel = None
     if isinstance(scorers, dict):
@@ -449,7 +455,7 @@ def fit_and_score(X, y, scoring,
             ret[2] = runtime
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
+            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, RFESel, ReliefSel, Sampler
         else:
             return ret
 
@@ -490,7 +496,7 @@ def fit_and_score(X, y, scoring,
                 if return_all:
                     return ret, GroupSel, VarSel, SelectModel,\
                         feature_labels[0], scaler, encoder, imputer, pca,\
-                        StatisticalSel, ReliefSel, Sampler
+                        StatisticalSel, RFESel, ReliefSel, Sampler
                 else:
                     return ret
             
@@ -588,7 +594,7 @@ def fit_and_score(X, y, scoring,
                     if return_all:
                         return ret, GroupSel, VarSel, SelectModel,\
                             feature_labels[0], scaler, encoder, imputer, pca,\
-                            StatisticalSel, ReliefSel, Sampler
+                            StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
                         return ret
             else:
@@ -674,7 +680,7 @@ def fit_and_score(X, y, scoring,
                     if return_all:
                         return ret, GroupSel, VarSel, SelectModel,\
                             feature_labels[0], scaler, encoder, imputer, pca,\
-                            StatisticalSel, ReliefSel, Sampler
+                            StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
                         return ret
                     
@@ -698,6 +704,168 @@ def fit_and_score(X, y, scoring,
     if not return_all:
         del SelectModel
 
+    # --------------------------------------------------------------------
+    # Feature selection based on a statistical test
+    if 'StatisticalTestUse' in para_estimator.keys():
+        if para_estimator['StatisticalTestUse'] == 'True':
+            metric = para_estimator['StatisticalTestMetric']
+            threshold = para_estimator['StatisticalTestThreshold']
+            if verbose:
+                print(f"Selecting features based on statistical test. Method {metric}, threshold {round(threshold, 5)}.")
+                print("\t Original Length: " + str(len(X_train[0])))
+
+            StatisticalSel = StatisticalTestThreshold(metric=metric,
+                                                      threshold=threshold)
+
+            StatisticalSel.fit(X_train, y)
+            X_train_temp = StatisticalSel.transform(X_train)
+            if len(X_train_temp[0]) == 0:   
+                if verbose:
+                    print('[WARNING] No features are selected! Probably your statistical test feature selection was too strict.')
+                         
+                StatisticalSel = None           
+                if skip:
+                    if verbose:
+                        print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                    parameters['StatisticalTestUse'] = 'False'
+                else:
+                    if verbose:
+                        print('[WARNING] Returning NaN as performance.')
+                    
+                    # return NaN as performance
+                    para_estimator = delete_nonestimator_parameters(para_estimator)
+                    
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel,\
+                            feature_labels[0], scaler, encoder, imputer, pca,\
+                            StatisticalSel, RFESel, ReliefSel, Sampler
+                    else:
+                        return ret
+                        
+            else:
+                X_train = StatisticalSel.transform(X_train)
+                X_test = StatisticalSel.transform(X_test)
+                feature_labels = StatisticalSel.transform(feature_labels)
+
+            if verbose:
+                print("\t New Length: " + str(len(X_train[0])))
+
+        # Delete the statistical test keys
+        del para_estimator['StatisticalTestUse']
+        if 'StatisticalTestMetric' in para_estimator.keys():
+            del para_estimator['StatisticalTestMetric']
+
+        if 'StatisticalTestThreshold' in para_estimator.keys():
+            del para_estimator['StatisticalTestThreshold']
+
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del StatisticalSel
+    
+    # --------------------------------------------------------------------
+    # Feature selection through recursive feature elimination
+    if 'RFE' in para_estimator.keys():
+        model = para_estimator['RFE_estimator']
+        if para_estimator['RFE'] == 'True':
+            if verbose:
+                print(f"Selecting features using recursive feature elimination using model {model}.")
+        
+            if model == 'Lasso':
+                # Use lasso model for feature selection
+                alpha = para_estimator['RFE_lasso_alpha']
+                selectestimator = Lasso(alpha=alpha, random_state=random_seed)
+
+            elif model == 'LR':
+                # Use logistic regression model for feature selection
+                selectestimator = LogisticRegression(random_state=random_seed)
+
+            elif model == 'RF':
+                # Use random forest model for feature selection
+                n_estimators = para_estimator['RFE_n_trees']
+                selectestimator = RandomForestClassifier(n_estimators=n_estimators,
+                                                         random_state=random_seed)
+            else:
+                raise ae.WORCKeyError(f'Model {model} is not known for RFE. Use Lasso, LR, or RF.')
+            
+            if len(y_train.shape) >= 2:
+                # Multilabel or regression. Regression: second dimension has length 1
+                if y_train.shape[1] > 1 and model != 'RF':
+                    raise ae.WORCValueError(f'Model {model} is not suitable for multiclass classification. Please use RF or do not use RFE.')
+
+            # Prefit model
+            selectestimator.fit(X_train, y_train)
+
+            # Use fit to select optimal features
+            n_features_to_select = para_estimator['RFE_n_features_to_select']
+            step = para_estimator['RFE_step']
+            RFESel = RFE(selectestimator,
+                         n_features_to_select=n_features_to_select,
+                         step=step)
+            if verbose:
+                print("\t Original Length: " + str(len(X_train[0])))
+
+            X_train_temp = RFESel.transform(X_train)
+            if len(X_train_temp[0]) == 0:
+                if verbose:
+                    print('[WARNING]: No features are selected! Probably your data is too noisy or the selection too strict.')
+                
+                SelectModel = None
+                if skip:
+                    if verbose:
+                        print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                    parameters['RFE'] = 'False'
+                else:
+                    if verbose:
+                        print('[WARNING] Returning NaN as performance.')
+                    
+                    # return NaN as performance
+                    para_estimator = delete_nonestimator_parameters(para_estimator)
+                    
+                    # Update the runtime
+                    end_time = time.time()
+                    runtime = end_time - start_time
+                    if return_train_score:
+                        ret[3] = runtime
+                    else:
+                        ret[2] = runtime
+                    if return_all:
+                        return ret, GroupSel, VarSel, SelectModel,\
+                            feature_labels[0], scaler, encoder, imputer, pca,\
+                            StatisticalSel, RFESel, ReliefSel, Sampler
+                    else:
+                        return ret
+                    
+            else:
+                X_train = RFESel.transform(X_train)
+                X_test = RFESel.transform(X_test)
+                feature_labels = RFESel.transform(feature_labels)
+
+                if verbose:
+                    print("\t New Length: " + str(len(X_train[0])))
+
+        del para_estimator['RFE']
+        if 'RFE_lasso_alpha' in para_estimator.keys():
+            del para_estimator['RFE_lasso_alpha']
+        if 'RFE_estimator' in para_estimator.keys():
+            del para_estimator['RFE_estimator']
+        if 'RFE_n_trees' in para_estimator.keys():
+            del para_estimator['RFE_n_trees']
+        if 'RFE_n_features_to_select' in para_estimator.keys():
+            del para_estimator['RFE_n_features_to_select']
+        if 'RFE_n_trees' in para_estimator.keys():
+            del para_estimator['RFE_n_trees']
+    
+    # Delete the object if we do not need to return it
+    if not return_all:
+        del RFESel
+    
     # ----------------------------------------------------------------
     # PCA dimensionality reduction
     # Principle Component Analysis
@@ -736,7 +904,7 @@ def fit_and_score(X, y, scoring,
                     if return_all:
                         return ret, GroupSel, VarSel, SelectModel,\
                             feature_labels[0], scaler, encoder, imputer, pca,\
-                            StatisticalSel, ReliefSel, Sampler
+                            StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
                         return ret
 
@@ -778,7 +946,7 @@ def fit_and_score(X, y, scoring,
                         if return_all:
                             return ret, GroupSel, VarSel, SelectModel,\
                                 feature_labels[0], scaler, encoder, imputer, pca,\
-                                StatisticalSel, ReliefSel, Sampler
+                                StatisticalSel, RFESel, ReliefSel, Sampler
                         else:
                             return ret
                 else:
@@ -825,7 +993,7 @@ def fit_and_score(X, y, scoring,
                         if return_all:
                             return ret, GroupSel, VarSel, SelectModel,\
                                 feature_labels[0], scaler, encoder, imputer, pca,\
-                                StatisticalSel, ReliefSel, Sampler
+                                StatisticalSel, RFESel, ReliefSel, Sampler
                         else:
                             return ret
                         
@@ -840,71 +1008,6 @@ def fit_and_score(X, y, scoring,
         del para_estimator['UsePCA']
         if 'PCAType' in para_estimator.keys():
             del para_estimator['PCAType']
-
-    # --------------------------------------------------------------------
-    # Feature selection based on a statistical test
-    if 'StatisticalTestUse' in para_estimator.keys():
-        if para_estimator['StatisticalTestUse'] == 'True':
-            metric = para_estimator['StatisticalTestMetric']
-            threshold = para_estimator['StatisticalTestThreshold']
-            if verbose:
-                print(f"Selecting features based on statistical test. Method {metric}, threshold {round(threshold, 5)}.")
-                print("\t Original Length: " + str(len(X_train[0])))
-
-            StatisticalSel = StatisticalTestThreshold(metric=metric,
-                                                      threshold=threshold)
-
-            StatisticalSel.fit(X_train, y)
-            X_train_temp = StatisticalSel.transform(X_train)
-            if len(X_train_temp[0]) == 0:   
-                if verbose:
-                    print('[WARNING] No features are selected! Probably your statistical test feature selection was too strict.')
-                         
-                StatisticalSel = None           
-                if skip:
-                    if verbose:
-                        print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
-                    parameters['StatisticalTestUse'] = 'False'
-                else:
-                    if verbose:
-                        print('[WARNING] Returning NaN as performance.')
-                    
-                    # return NaN as performance
-                    para_estimator = delete_nonestimator_parameters(para_estimator)
-                    
-                    # Update the runtime
-                    end_time = time.time()
-                    runtime = end_time - start_time
-                    if return_train_score:
-                        ret[3] = runtime
-                    else:
-                        ret[2] = runtime
-                    if return_all:
-                        return ret, GroupSel, VarSel, SelectModel,\
-                            feature_labels[0], scaler, encoder, imputer, pca,\
-                            StatisticalSel, ReliefSel, Sampler
-                    else:
-                        return ret
-                        
-            else:
-                X_train = StatisticalSel.transform(X_train)
-                X_test = StatisticalSel.transform(X_test)
-                feature_labels = StatisticalSel.transform(feature_labels)
-
-            if verbose:
-                print("\t New Length: " + str(len(X_train[0])))
-
-        # Delete the statistical test keys
-        del para_estimator['StatisticalTestUse']
-        if 'StatisticalTestMetric' in para_estimator.keys():
-            del para_estimator['StatisticalTestMetric']
-
-        if 'StatisticalTestThreshold' in para_estimator.keys():
-            del para_estimator['StatisticalTestThreshold']
-
-    # Delete the object if we do not need to return it
-    if not return_all:
-        del StatisticalSel
 
     # ------------------------------------------------------------------------
     # Use object resampling
@@ -969,7 +1072,9 @@ def fit_and_score(X, y, scoring,
                         ret[2] = runtime
 
                     if return_all:
-                        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                        return ret, GroupSel, VarSel, SelectModel,\
+                            feature_labels[0], scaler, encoder, imputer,\
+                            pca, StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
                         return ret
                 else:
@@ -1054,7 +1159,7 @@ def fit_and_score(X, y, scoring,
     feature_values = np.concatenate((X_train, X_test), axis=0)
     y_all = np.concatenate((y_train, y_test), axis=0)
     para_estimator = None
-
+        
     try:
         ret = _fit_and_score(estimator, feature_values, y_all,
                              scorers, new_train,
@@ -1080,7 +1185,7 @@ def fit_and_score(X, y, scoring,
                 ret[2] = runtime
 
             if return_all:
-                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
+                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, RFESel, ReliefSel, Sampler
             else:
                 return ret
         else:
@@ -1113,7 +1218,7 @@ def fit_and_score(X, y, scoring,
         ret[2] = runtime
 
     if return_all:
-        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, ReliefSel, Sampler
+        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, RFESel, ReliefSel, Sampler
     else:
         return ret
 
@@ -1141,6 +1246,12 @@ def delete_nonestimator_parameters(parameters):
                   'SelectFromModel_lasso_alpha',
                   'SelectFromModel_estimator',
                   'SelectFromModel_n_trees',
+                  'RFE',
+                  'RFE_lasso_alpha',
+                  'RFE_estimator',
+                  'RFE_n_trees',
+                  'RFE_n_features_to_select',
+                  'RFE_step',
                   'Featsel_Variance',
                   'FeatPreProcess',
                   'FeatureScaling',

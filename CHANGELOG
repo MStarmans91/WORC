@@ -17,6 +17,20 @@ Fixed
   test set, but not labels.
 - SimpleWORC and BasicWORC now detect whether user has provided a separate training
   and test set and thus bootstrapping should be used.
+- Bug in PREDICT was fixed that mixed up the mode in shape feature extraction (2D / 2.5D)
+
+Changed
+~~~~~~~
+- Statistical test feature selection before PCA: otherwise when combined,
+  it will select PCA components, not features.
+
+Added
+~~~~~
+- Histogram equalization to preprocessing.
+- Recursive feature elimination (RFE) feature selection.
+- Workflow to provide evaluate a trained model on new data
+- Option to set a fixed random seed in the hyperoptimization
+  for reproducibility.
 
 
 3.6.2 - 2023-03-14

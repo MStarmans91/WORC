@@ -560,10 +560,10 @@ class SimpleWORC():
             Determine whether to do a coarse or full experiment.
 
         """
-        if coarse and estimators is None:
-            estimators = ['SVR']
-        elif estimators is None:
-            estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'AdaBoostRegressor', 'XGBRegressor', 'LinR', 'Ridge']
+        # if coarse and estimators is None:
+        #     estimators = ['SVR']
+        # elif estimators is None:
+        estimators = ['SVR', 'RFR', 'ElasticNet', 'Lasso', 'AdaBoostRegressor', 'XGBRegressor', 'LinR', 'Ridge']
 
         # regression-specific override
         overrides = {

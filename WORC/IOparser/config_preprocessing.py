@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,6 +63,19 @@ def load_config(config_file_path):
     if len(settings_dict['Preprocessing']['Clipping_Range']) != 2:
         raise ae.WORCValueError(f"Clipping range should be two floats split by a comma, got {settings['Preprocessing']['Clipping_Range']}.")
 
+    # Histogram equalization
+    settings_dict['Preprocessing']['HistogramEqualization'] =\
+        settings['Preprocessing'].getboolean('HistogramEqualization')
+    
+    settings_dict['Preprocessing']['HistogramEqualization_Alpha'] =\
+        float(settings['Preprocessing']['HistogramEqualization_Alpha'])  
+
+    settings_dict['Preprocessing']['HistogramEqualization_Beta'] =\
+        float(settings['Preprocessing']['HistogramEqualization_Beta'])      
+
+    settings_dict['Preprocessing']['HistogramEqualization_Radius'] =\
+        int(settings['Preprocessing']['HistogramEqualization_Radius']) 
+        
     # Normalization
     settings_dict['Preprocessing']['Normalize'] =\
         settings['Preprocessing'].getboolean('Normalize')

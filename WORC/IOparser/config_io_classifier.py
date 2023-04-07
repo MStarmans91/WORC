@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,6 +93,29 @@ def load_config(config_file_path):
         [int(str(item).strip()) for item in
          settings['Featsel']['SelectFromModel_n_trees'].split(',')]
 
+    settings_dict['Featsel']['RFE'] =\
+        settings['Featsel'].getfloat('RFE')
+
+    settings_dict['Featsel']['RFE_lasso_alpha'] =\
+        [float(str(item).strip()) for item in
+         settings['Featsel']['RFE_lasso_alpha'].split(',')]
+
+    settings_dict['Featsel']['RFE_estimator'] =\
+        [str(item).strip() for item in
+         settings['Featsel']['RFE_estimator'].split(',')]
+
+    settings_dict['Featsel']['RFE_n_trees'] =\
+        [int(str(item).strip()) for item in
+         settings['Featsel']['RFE_n_trees'].split(',')]
+        
+    settings_dict['Featsel']['RFE_n_features_to_select'] =\
+        [float(str(item).strip()) for item in
+         settings['Featsel']['RFE_n_features_to_select'].split(',')]
+        
+    settings_dict['Featsel']['RFE_step'] =\
+        [int(str(item).strip()) for item in
+         settings['Featsel']['RFE_step'].split(',')]
+           
     settings_dict['Featsel']['GroupwiseSearch'] =\
         [str(item).strip() for item in
          settings['Featsel']['GroupwiseSearch'].split(',')]
@@ -404,6 +427,8 @@ def load_config(config_file_path):
         settings['HyperOptimization'].getboolean('refit_validation_workflows')
     settings_dict['HyperOptimization']['memory'] = \
         str(settings['HyperOptimization']['memory'])
+    settings_dict['HyperOptimization']['fix_random_seed'] = \
+        settings['HyperOptimization'].getboolean('fix_random_seed')
         
     # Settings for SMAC
     settings_dict['SMAC']['use'] =\

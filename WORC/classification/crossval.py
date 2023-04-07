@@ -213,6 +213,7 @@ def random_split_cross_validation(image_features, feature_labels, classes,
         # Find best hyperparameters and construct classifier
         config['HyperOptimization']['use_fastr'] = use_fastr
         config['HyperOptimization']['fastr_plugin'] = fastr_plugin
+        del config['HyperOptimization']['fix_random_seed'] 
         n_cores = config['General']['Joblib_ncores']
         if use_SMAC:
             trained_classifier = guided_search_parameters(features=X_train,

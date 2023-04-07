@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -167,6 +167,10 @@ def generate_config_options():
     config['Preprocessing']['BiasCorrection_Mask'] = 'Float, Float, Float'
     config['Preprocessing']['CheckOrientation'] = 'True, False'
     config['Preprocessing']['OrientationPrimaryAxis'] = 'axial'
+    config['Preprocessing']['HistogramEqualization'] = 'True, False'
+    config['Preprocessing']['HistogramEqualization_Alpha'] = 'Float'
+    config['Preprocessing']['HistogramEqualization_Beta'] = 'Float'
+    config['Preprocessing']['HistogramEqualization_Radius'] = 'Float'
 
     # PREDICT - Feature calculation
     # Determine which features are calculated
@@ -289,6 +293,12 @@ def generate_config_options():
     config['Featsel']['ReliefSampleSize'] = 'Two Floats: loc and scale'
     config['Featsel']['ReliefDistanceP'] = 'Two Integers: loc and scale'
     config['Featsel']['ReliefNumFeatures'] = 'Two Integers: loc and scale'
+    config['Featsel']['RFE'] = 'Float'
+    config['Featsel']['RFE_estimator'] = config['Featsel']['SelectFromModel_estimator']
+    config['Featsel']['RFE_lasso_alpha'] =  config['Featsel']['SelectFromModel_lasso_alpha'] 
+    config['Featsel']['RFE_n_trees'] = config['Featsel']['SelectFromModel_n_trees']
+    config['Featsel']['RFE_n_features_to_select'] = 'Two Floats: loc and scale'
+    config['Featsel']['RFE_step'] = 'Number of features eliminated per step'
 
     # Groupwie Featureselection options
     config['SelectFeatGroup'] = dict()
@@ -410,6 +420,7 @@ def generate_config_options():
     config['HyperOptimization']['memory'] = 'String consisting of integer + "G"'
     config['HyperOptimization']['refit_training_workflows'] = 'Boolean'
     config['HyperOptimization']['refit_validation_workflows'] = 'Boolean'
+    config['HyperOptimization']['fix_random_seed'] = 'Boolean'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()
@@ -492,7 +503,11 @@ def generate_config_descriptions():
     config['Preprocessing']['BiasCorrection_Mask'] = 'Whether withing bias correction, a mask generated through Otsu thresholding is used or not.'
     config['Preprocessing']['CheckOrientation'] = 'Determine whether to check the image orientation or not. If checked, if the orientation is not equal to the OrientationPrimaryAxis, the image is rotated.'
     config['Preprocessing']['OrientationPrimaryAxis'] = 'If CheckOrientation is True, if primary axis is not this one, rotate image such that it is. Currently, only "axial" is supported.'
-
+    config['Preprocessing']['HistogramEqualization'] = 'Determine whether to use histogram equalization or not.'
+    config['Preprocessing']['HistogramEqualization_Alpha'] = 'Controls how much the filter acts like the classical histogram equalization method, see https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1AdaptiveHistogramEqualizationImageFilter.html'
+    config['Preprocessing']['HistogramEqualization_Beta'] = 'Controls how much the filters acts like an unsharp mask, see https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1AdaptiveHistogramEqualizationImageFilter.html'
+    config['Preprocessing']['HistogramEqualization_Radius'] = 'Controls the windows size, see https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1AdaptiveHistogramEqualizationImageFilter.html'
+    
     # PREDICT - Feature calculation
     # Determine which features are calculated
     config['ImageFeatures'] = dict()
@@ -615,7 +630,13 @@ def generate_config_descriptions():
     config['Featsel']['ReliefSampleSize'] = 'Min and max of sample size search range in Relief.'
     config['Featsel']['ReliefDistanceP'] = 'Min and max of positive distance search range in Relief.'
     config['Featsel']['ReliefNumFeatures'] = 'Min and max of number of features that is selected search range in Relief.'
-
+    config['Featsel']['RFE'] = 'Percentage of times recursive feature elimination (RFE) is used to select features.'
+    config['Featsel']['RFE_estimator'] = config['Featsel']['SelectFromModel_estimator'] 
+    config['Featsel']['RFE_lasso_alpha'] = config['Featsel']['SelectFromModel_lasso_alpha']
+    config['Featsel']['RFE_n_trees'] = config['Featsel']['SelectFromModel_n_trees']
+    config['Featsel']['RFE_n_features_to_select'] = 'Min and max of percentage of features to be selected in total.'
+    config['Featsel']['RFE_step'] = 'Number of features eliminated per step'
+        
     # Groupwie Featureselection options
     config['SelectFeatGroup'] = dict()
     config['SelectFeatGroup']['shape_features'] = 'If True, use shape features in model.'
@@ -732,6 +753,7 @@ def generate_config_descriptions():
     config['HyperOptimization']['memory'] = 'When using DRMAA plugin, e.g. on BIGR cluster, memory usage of a single optimization job. Should be a string consisting of an integer + "G".'
     config['HyperOptimization']['refit_training_workflows'] = 'If True, refit all workflows trained on the full training dataset automatically during training. This will save time while performing inference, but will take more time during training and make the saved model much larger.'
     config['HyperOptimization']['refit_validation_workflows'] = 'If True, refit all workflows trained on the train-validation training dataset automatically during training. This will save time while performing validation evaluation, but will take more time during training and make the saved model much larger.'
+    config['HyperOptimization']['fix_random_seed'] = 'If True, a fixed random seed is used for all fitted method with a random seed during training. In this way, if you would run the experiment again, you would get exactly the same result.'
 
     # Feature scaling options
     config['FeatureScaling'] = dict()

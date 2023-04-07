@@ -625,11 +625,14 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         if self.best_modelsel is not None:
             X = self.best_modelsel.transform(X)
 
-        if self.best_pca is not None:
-            X = self.best_pca.transform(X)
-
         if self.best_statisticalsel is not None:
             X = self.best_statisticalsel.transform(X)
+
+        if self.best_rfesel is not None:
+            X = self.best_rfesel.transform(X)
+                     
+        if self.best_pca is not None:
+            X = self.best_pca.transform(X)
 
         # Only resampling in training phase, i.e. if we have the labels
         if y is not None:
@@ -932,7 +935,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
 
         # Associate best options with new fits
         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
-            encoders, Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
+            encoders, Imputers, PCAs, StatisticalSel, RFESel, ReliefSel, Sampler) = out
         fitted_estimator = save_data[-2]
         self.best_groupsel = GroupSel
         self.best_scaler = scalers
@@ -944,6 +947,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
         self.best_pca = PCAs
         self.best_featlab = feature_labels
         self.best_statisticalsel = StatisticalSel
+        self.best_rfesel = RFESel
         self.best_reliefsel = ReliefSel
         self.best_Sampler = Sampler
         self.best_estimator_ = fitted_estimator
@@ -1067,7 +1071,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                                             train, valid, p_all,
                                             return_all=True)
                         (save_data, GroupSel, VarSel, SelectModel, feature_labels, scalers,
-                        encoders, Imputers, PCAs, StatisticalSel, ReliefSel, Sampler) = out
+                        encoders, Imputers, PCAs, StatisticalSel, RFESel, ReliefSel, Sampler) = out
                         new_estimator.best_groupsel = GroupSel
                         new_estimator.best_scaler = scalers
                         new_estimator.best_varsel = VarSel
@@ -1078,6 +1082,7 @@ class BaseSearchCV(six.with_metaclass(ABCMeta, BaseEstimator,
                         new_estimator.best_pca = PCAs
                         new_estimator.best_featlab = feature_labels
                         new_estimator.best_statisticalsel = StatisticalSel
+                        new_estimator.best_rfesel = RFESel
                         new_estimator.best_reliefsel = ReliefSel
                         new_estimator.best_Sampler = Sampler
 
