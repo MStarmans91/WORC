@@ -260,8 +260,8 @@ def add_parameters_to_grid(param_grid, config):
                          scale=config['Featsel']['RFE_n_trees'][1])
 
     param_grid['RFE_n_features_to_select'] =\
-        uniform(loc=config['Featsel']['RFE_n_features_to_select'][0],
-                scale=config['Featsel']['RFE_n_features_to_select'][1])
+        discrete_uniform(loc=config['Featsel']['RFE_n_features_to_select'][0],
+                         scale=config['Featsel']['RFE_n_features_to_select'][1])
         
     param_grid['RFE_step'] =\
         discrete_uniform(loc=config['Featsel']['RFE_step'][0],

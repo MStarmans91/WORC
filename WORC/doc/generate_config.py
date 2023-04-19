@@ -297,7 +297,7 @@ def generate_config_options():
     config['Featsel']['RFE_estimator'] = config['Featsel']['SelectFromModel_estimator']
     config['Featsel']['RFE_lasso_alpha'] =  config['Featsel']['SelectFromModel_lasso_alpha'] 
     config['Featsel']['RFE_n_trees'] = config['Featsel']['SelectFromModel_n_trees']
-    config['Featsel']['RFE_n_features_to_select'] = 'Two Floats: loc and scale'
+    config['Featsel']['RFE_n_features_to_select'] = 'Two Integers: loc and scale'
     config['Featsel']['RFE_step'] = 'Number of features eliminated per step'
 
     # Groupwie Featureselection options
@@ -634,7 +634,7 @@ def generate_config_descriptions():
     config['Featsel']['RFE_estimator'] = config['Featsel']['SelectFromModel_estimator'] 
     config['Featsel']['RFE_lasso_alpha'] = config['Featsel']['SelectFromModel_lasso_alpha']
     config['Featsel']['RFE_n_trees'] = config['Featsel']['SelectFromModel_n_trees']
-    config['Featsel']['RFE_n_features_to_select'] = 'Min and max of percentage of features to be selected in total.'
+    config['Featsel']['RFE_n_features_to_select'] = 'Number of features to select. Since we use sklearn < 0.24, this has to be an integer currently, not a float for a fraction of the features.'
     config['Featsel']['RFE_step'] = 'Number of features eliminated per step'
         
     # Groupwie Featureselection options

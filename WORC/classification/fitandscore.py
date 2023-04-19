@@ -808,25 +808,21 @@ def fit_and_score(X, y, scoring,
             RFESel = RFE(selectestimator,
                          n_features_to_select=n_features_to_select,
                          step=step)
-            if verbose:
-                print("\t Original Length: " + str(len(X_train[0])))
-
-            X_train_temp = RFESel.transform(X_train)
-            if len(X_train_temp[0]) == 0:
-                if verbose:
-                    print('[WARNING]: No features are selected! Probably your data is too noisy or the selection too strict.')
-                
-                SelectModel = None
+            try:
+                RFESel.fit(X_train, y_train)
+            except ValueError:
                 if skip:
                     if verbose:
                         print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
                     parameters['RFE'] = 'False'
+                    
                 else:
                     if verbose:
-                        print('[WARNING] Returning NaN as performance.')
+                        print('[WARNING] RFE cannot be fitted with these settings, too few features left, returning NaN as performance.')
                     
                     # return NaN as performance
                     para_estimator = delete_nonestimator_parameters(para_estimator)
+                    RFESel = None
                     
                     # Update the runtime
                     end_time = time.time()
@@ -841,14 +837,48 @@ def fit_and_score(X, y, scoring,
                             StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
                         return ret
-                    
             else:
-                X_train = RFESel.transform(X_train)
-                X_test = RFESel.transform(X_test)
-                feature_labels = RFESel.transform(feature_labels)
-
                 if verbose:
-                    print("\t New Length: " + str(len(X_train[0])))
+                    print("\t Original Length: " + str(len(X_train[0])))
+
+                X_train_temp = RFESel.transform(X_train)
+                if len(X_train_temp[0]) == 0:
+                    if verbose:
+                        print('[WARNING]: No features are selected! Probably your data is too noisy or the selection too strict.')
+                    
+                    RFESel = None
+                    if skip:
+                        if verbose:
+                            print('[WARNING] Refitting, so we need an estimator, thus skipping this step.')
+                        parameters['RFE'] = 'False'
+                    else:
+                        if verbose:
+                            print('[WARNING] Returning NaN as performance.')
+                        
+                        # return NaN as performance
+                        para_estimator = delete_nonestimator_parameters(para_estimator)
+                        
+                        # Update the runtime
+                        end_time = time.time()
+                        runtime = end_time - start_time
+                        if return_train_score:
+                            ret[3] = runtime
+                        else:
+                            ret[2] = runtime
+                        if return_all:
+                            return ret, GroupSel, VarSel, SelectModel,\
+                                feature_labels[0], scaler, encoder, imputer, pca,\
+                                StatisticalSel, RFESel, ReliefSel, Sampler
+                        else:
+                            return ret
+                        
+                else:
+                    X_train = RFESel.transform(X_train)
+                    X_test = RFESel.transform(X_test)
+                    feature_labels = RFESel.transform(feature_labels)
+
+                    if verbose:
+                        print("\t New Length: " + str(len(X_train[0])))
 
         del para_estimator['RFE']
         if 'RFE_lasso_alpha' in para_estimator.keys():

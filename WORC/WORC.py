@@ -396,7 +396,7 @@ class WORC(object):
         config['Featsel']['RFE_estimator'] = config['Featsel']['SelectFromModel_estimator']
         config['Featsel']['RFE_lasso_alpha'] = config['Featsel']['SelectFromModel_lasso_alpha']
         config['Featsel']['RFE_n_trees'] = config['Featsel']['SelectFromModel_n_trees']
-        config['Featsel']['RFE_n_features_to_select'] = '0.0, 0.5'
+        config['Featsel']['RFE_n_features_to_select'] = '10, 90'
         config['Featsel']['RFE_step'] = '1, 9'
 
         # Groupwise Featureselection options
