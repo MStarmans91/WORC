@@ -148,6 +148,9 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     # Add non-classifier parameters
     param_grid = add_parameters_to_grid(param_grid, config)
+    
+    # Delete parameters for hyperoptimization which already have been used
+    del config['HyperOptimization']['fix_random_seed'] 
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
