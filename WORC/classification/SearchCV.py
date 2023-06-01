@@ -1677,7 +1677,7 @@ class BaseSearchCVfastr(BaseSearchCV):
         estimatordata = f"vfs://tmp/GS/{name}/{fname}"
 
         # Create the fastr network
-        network = fastr.create_network('WORC_CASHOptimization_' + name)
+        network = fastr.create_network('WORC_CASH_' + name)
         estimator_data = network.create_source('HDF5', id='estimator_source', resources=ResourceLimit(memory='4G'))
         traintest_data = network.create_source('HDF5', id='traintest', resources=ResourceLimit(memory='4G'))
         parameter_data = network.create_source('JsonFile', id='parameters', resources=ResourceLimit(memory='4G'))

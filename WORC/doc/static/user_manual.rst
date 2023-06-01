@@ -211,9 +211,25 @@ Training and test sets
 When using a single dataset for both training and evaluation, you should
 only supply "training" datasets. By default, performance on a single
 dataset will be evaluated using cross-validation (default random split, but leave-one-out can also be configured). 
+
 Alternatively, you can supply a separate training and test set, by which you tell 
 ``WORC`` to use this single train-test split. To distinguish between these, for every source, we have a 
-train and test object which you can set:
+train and test object which you can set.
+
+.. note:: When using a separate train and test set, you always need to provide a training and test label file as well.
+        These can refer to the same CSV / Excel file.
+
+When using ``SimpleWORC`` or ``BasicWORC``, you can do
+this through the same function as the training set, but setting  ``is_training=False``, e.g.:
+
+
+.. code-block:: python
+
+    experiment.images_from_this_directory(testimagedatadir,
+                                          image_file_name=image_file_name,
+                                          is_training=False)
+
+When using the ``WORC`` object, or directly setting your sources in ``BasicWORC``, this would look like:
 
 .. code-block:: python
 

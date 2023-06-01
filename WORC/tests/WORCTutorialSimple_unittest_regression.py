@@ -185,7 +185,7 @@ def main():
     # Read the overall peformance
     performance_file = os.path.join(experiment_folder, 'performance_all_0.json')
     if not os.path.exists(performance_file):
-        raise ValueError('No performance file found: your network has failed.')
+        print('No performance file found: your network has failed.')
 
     with open(performance_file, 'r') as fp:
         performance = json.load(fp)

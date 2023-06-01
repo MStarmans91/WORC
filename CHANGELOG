@@ -18,6 +18,7 @@ Fixed
 - SimpleWORC and BasicWORC now detect whether user has provided a separate training
   and test set and thus bootstrapping should be used.
 - Bug in PREDICT was fixed that mixed up the mode in shape feature extraction (2D / 2.5D)
+- Bug in performance calculation of multiclass classification.
 
 Changed
 ~~~~~~~

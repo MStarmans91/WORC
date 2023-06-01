@@ -722,7 +722,7 @@ def plot_estimator_performance(prediction, label_data, label_type,
                         for name, perf in zip(metric_names_single, performances):
                             for nlabel, label in enumerate(label_type.split(',')):
                                 all_performances[f"{name}_{label}"] = perf[nlabel]
-                                stats[f"{name}_{label} 95%:"] = f"{np.nanmean(perf[nlabel])} {str(compute_confidence(perf, N_1, N_2, alpha))}"
+                                stats[f"{name}_{label} 95%:"] = f"{np.nanmean(perf[nlabel])} {str(compute_confidence(perf[nlabel], N_1, N_2, alpha))}"
                     else:
                         # Singleclass
                         performances = [accuracy, bca, sensitivity, specificity,
