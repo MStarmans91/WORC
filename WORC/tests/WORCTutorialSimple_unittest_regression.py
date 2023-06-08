@@ -186,15 +186,15 @@ def main():
     performance_file = os.path.join(experiment_folder, 'performance_all_0.json')
     if not os.path.exists(performance_file):
         print('No performance file found: your network has failed.')
+    else:
+        with open(performance_file, 'r') as fp:
+            performance = json.load(fp)
 
-    with open(performance_file, 'r') as fp:
-        performance = json.load(fp)
-
-    # Print the output performance
-    print("\n Performance:")
-    stats = performance['Statistics']
-    for k, v in stats.items():
-        print(f"\t {k} {v}.")
+        # Print the output performance
+        print("\n Performance:")
+        stats = performance['Statistics']
+        for k, v in stats.items():
+            print(f"\t {k} {v}.")
 
     # NOTE: the performance is probably horrible, which is expected as we ran
     # the experiment on coarse settings. These settings are recommended to only
