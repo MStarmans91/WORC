@@ -189,7 +189,7 @@ def main():
     performance_file = os.path.join(experiment_folder, 'performance_all_0.json')
     if not os.path.exists(performance_file):
         print('No performance file found: your network has failed.')
-    else
+    else:
         with open(performance_file, 'r') as fp:
             performance = json.load(fp)
 
