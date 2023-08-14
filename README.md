@@ -140,9 +140,9 @@ Make sure you add the executable to the PATH when prompted.
 ### Elastix
 Image registration is included in WORC through [elastix and transformix](http://elastix.isi.uu.nl/).
 In order to use elastix, please download the binaries and place them in your
-fastr.config.mounts['apps'] path. Check the elastix tool description for the correct
-subdirectory structure. For example, on Linux, the binaries and libraries should be in "../apps/elastix/4.8/install/"  and
-"../apps/elastix/4.8/install/lib" respectively.
+``fastr.config.mounts['apps']`` path. Check the elastix tool description for the correct
+subdirectory structure. For example, on Linux, the binaries and libraries should be in ``"../apps/elastix/4.8/install/"``  and
+``"../apps/elastix/4.8/install/lib"`` respectively.
 
 Note: optionally, you can tell WORC to copy the metadata from the image file
 to the segmentation file before applying the deformation field. This requires
