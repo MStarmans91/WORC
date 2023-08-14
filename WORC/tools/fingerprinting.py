@@ -151,7 +151,7 @@ class Fingerprinter(object):
                 config['ImageFeatures']['phase'] = 'True'
 
             # Check if segmentations are 2D or 3D
-            # FIXME
+            # FIXME ugly solution
             if self.segmentations is not None:
                 num_masked_slices_all = list()
                 for segmentationfile in self.segmentations:

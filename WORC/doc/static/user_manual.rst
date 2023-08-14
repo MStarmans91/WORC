@@ -3,22 +3,22 @@
 User Manual
 ===========
 
-In this chapter we will discuss the parts of WORC in more detail, mostly focussed on the inputs,
-outputs, and the various workflow possible. We will give a more complete overview of the system
-and describe the more advanced features.
+In this chapter we will discuss the parts of WORC in more detail, mostly focussed on facades,
+the inputs you can provide to WORC, the outputs, and the various workflow possible. We will
+give a more complete overview of the system and describe the more advanced features.
+
+We will not discuss the ``WORC.defaultconfig()`` function here, which generates the default
+configuration, as it is discussed on a separate page, see the :ref:`Config chapter <config-chapter>`.
 
 .. _tools:
 
-WORC object and facades
+WORC facades
 ------------------------
-
 The WORC toolbox is build around of one main object, the ``WORC`` object. This object provides all functionality
 of the toolbox. However, to make certain functionalities easier to use and limit the complexity,
 we have constructed two facades: ``SimpleWORC`` and ``BasicWORC``. We advice new users to start with ``SimpleWORC``,
 more advanced users ``BasicWORC``, and only use ``WORC`` for development purposes. Additionally, we advice you to take a look at the :ref:`configuration chapter <config-chapter>`
-for all the settings that can be adjusted in WORC.
-
-The specific functionalities of these two facades and the ``WORC`` object itself can be found in this section.
+for all the settings that can be adjusted in WORC. We give a short description of the two facades here.
 
 SimpleWORC
 ~~~~~~~~~~~~~~~~
@@ -37,78 +37,6 @@ and the docstrings of the functions in the object (:py:mod:`WORC.facade.basicwor
 One of the functionalities that ``BasicWORC`` provides over ``SimpleWORC`` is that you can also directly provide
 your data to ``WORC`` (e.g. ``images_train``) instead of using one of the wrapping functions of
 ``SimpleWORC`` (e.g. ``images_from_this_directory)
-
-.. _WORC:
-
-WORC
-~~~~~~~~~~~~~~~
-The ``WORC`` object can directly be assessed in the following way:
-.. code-block:: python
-
-   import WORC
-   network = WORC.WORC('somename')
-
-It's attributes are split in a couple of categories. We will not discuss
-the ``WORC.defaultconfig()`` function here, which generates the default
-configuration, as it is listed in a separate page, see the :ref:`Config chapter <config-chapter>`.
-More detailed documentation of the various functions can be found in the docstrings of :py:mod:`WORC.WORC`:
-we will mostly focus on the attributes, inputs, outputs and workflows here.
-
-There are numerous ``WORC`` attributes which serve as source nodes (i.e. inputs) for the
-FASTR network. These are:
-
--  ``images_train`` and ``images_test``
--  ``segmentations_train`` and ``segmentations_test``
--  ``semantics_train`` and ``semantics_test``
--  ``labels_train`` and ``labels_test``
--  ``masks_train`` and ``masks_test``
--  ``features_train`` and ``features_test``
--  ``metadata_train`` and ``metadata_test``
--  ``Elastix_Para``
--  ``fastrconfigs``
-
-These directly correspond to the :ref:`input file definitions discussed below <inputs>`
-How to provide your data to ``WORC`` is also described in this section.
-
-After supplying your sources as described above, you need to build the FASTR network. This
-can be done through the ``WORC.build()`` command. Depending on your sources,
-several nodes will be added and linked. This creates the ``WORC.network``
-object, which is a ``fastr.network`` object. You can edit this network
-freely, e.g. add another source or node. You can print the network with
-the ``WORC.network.draw_network`` command.
-
-Next, we have to tell the network which sources should be used in the
-source nodes. This can be done through the ``WORC.set()`` function. This will
-put your supplied sources into the source nodes and also creates the
-needed sink nodes. You can check these by looking at the created
-``WORC.source_data`` and ``WORC.sink_data`` objects.
-
-Finally, after completing above steps, you can execute the network
-through the ``WORC.execute()`` command.
-
-Thus a typical experiment in ``WORC`` would follow the following structure,
-assuming you have created the relevant objects as listed above:
-
-.. code-block:: python
-
-    import WORC
-
-    # Create object
-    experiment = WORC.WORC('name')
-
-    # Append sources
-    experiment.images_train.append(images_train)
-    experiment.segmentations_train.append(segmentations_train)
-    experiment.labels_train.append(labels_train)
-
-    # Create a configuration
-    config = experiment.defaultconfig()
-    experiment.configs.append(config)
-
-    # Build, set, and execute
-    network.build()
-    network.set()
-    network.execute()
 
 
 .. _inputs:
@@ -132,8 +60,8 @@ As an example, we here show how to provide images and segmentations to ``BasicWO
    images1 = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
 
-   network.images_train.append(images1)
-   network.segmentations_train.append(segmentations1)
+   experiment.images_train.append(images1)
+   experiment.segmentations_train.append(segmentations1)
 
 Here ``network`` can be a ``BasicWORC`` or ``WORC`` object. Each source is a list, to which you can provide
 dictionaries containing the actual sources. In these dictionaries, each element should correspond to a single
@@ -160,11 +88,11 @@ to the source list, e.g.:
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
    segmentations2 = {'patient1': '/data/Patient1/seg_tumor_CT.nii.gz', 'patient2': '/data/Patient2/seg_tumor_CT.nii.gz'}
 
-   network.images_train.append(images1)
-   network.images_train.append(images2)
+   experiment.images_train.append(images1)
+   experiment.images_train.append(images2)
 
-   network.segmentations_train.append(segmentations1)
-   network.segmentations_train.append(segmentations2)
+   experiment.segmentations_train.append(segmentations1)
+   experiment.segmentations_train.append(segmentations2)
 
 
 ``WORC`` will use the keys of the dictionaries to match the features from the same object or patient and combine
@@ -182,11 +110,11 @@ sources. For example:
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
    segmentations2 = {'patient1': '/data/Patient1/seg_liver_MR.nii.gz', 'patient2': '/data/Patient2/seg_liver_MR.nii.gz'}
 
-   network.images_train.append(images1)
-   network.images_train.append(images1)
+   experiment.images_train.append(images1)
+   experiment.images_train.append(images1)
 
-   network.segmentations_train.append(segmentations1)
-   network.segmentations_train.append(segmentations2)
+   experiment.segmentations_train.append(segmentations1)
+   experiment.segmentations_train.append(segmentations2)
 
 ``WORC`` will use the keys of the dictionaries to match the features from the same object or patient and combine
 them for the machine learning part.
@@ -211,29 +139,47 @@ Training and test sets
 When using a single dataset for both training and evaluation, you should
 only supply "training" datasets. By default, performance on a single
 dataset will be evaluated using cross-validation (default random split, but leave-one-out can also be configured). 
+
 Alternatively, you can supply a separate training and test set, by which you tell 
 ``WORC`` to use this single train-test split. To distinguish between these, for every source, we have a 
-train and test object which you can set:
+train and test object which you can set.
+
+.. note:: When using a separate train and test set, you always need to provide a training and test label file as well.
+        These can refer to the same CSV / Excel file.
+
+When using ``SimpleWORC`` or ``BasicWORC``, you can do
+this through the same function as the training set, but setting  ``is_training=False``, e.g.:
+
+
+.. code-block:: python
+
+    experiment.images_from_this_directory(testimagedatadir,
+                                          image_file_name=image_file_name,
+                                          is_training=False)
+
+When using the ``WORC`` object, or directly setting your sources in ``BasicWORC``, this would look like:
 
 .. code-block:: python
 
    images_train = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
    segmentations_train = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
 
-   network.images_train.append(images_train)
-   network.segmentations_train.append(segmentations_train)
+   experiment.images_train.append(images_train)
+   experiment.segmentations_train.append(segmentations_train)
 
    images_test = {'patient3': '/data/Patient3/image_MR.nii.gz', 'patient4': '/data/Patient4/image_MR.nii.gz'}
    segmentations_test = {'patient3': '/data/Patient3/seg_tumor_MR.nii.gz', 'patient4': '/data/Patient4/seg_tumor_MR.nii.gz'}
 
-   network.images_test.append(images_test)
-   network.segmentations_test.append(segmentations_test)
-   
-   # don't forget to set label file, even if it is the same as the label file for training
-   network.labels_from_this_file(label_file, False)
+   experiment.images_test.append(images_test)
+   experiment.segmentations_test.append(segmentations_test)
+
+   # In this example, we provide the same label file for both the training and test set, but these can be independent
+   label_file = '/data/label_file.csv'
+   experiment.labels_from_this_file(label_file)
+   experiment.labels_from_this_file(label_file, is_training=False)
 
 Another alternative is to only provide training objects, but also a .csv defining fixed training and test splits to be used for the 
-evaluation, e.g. ``network.fixed_splits = '/data/fixedsplits.csv``. See the https://github.com/MStarmans91/WORCtutorial repository for an example. ``SimpleWORC`` has the ``set_fixed_splits`` to set this object.
+evaluation, e.g. ``experiment.fixed_splits = '/data/fixedsplits.csv``. See the https://github.com/MStarmans91/WORCtutorial repository for an example. ``SimpleWORC`` has the ``set_fixed_splits`` to set this object.
 
 Missing data and dummy's
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -246,8 +192,8 @@ do so, you still have to provide a source but can add ''Dummy'' to the key:
    images1 = {'patient1': '/data/Patientc/image_MR.nii.gz', 'patient2_Dummy': '/data/Patient1/image_MR.nii.gz'}
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2_Dummy': '/data/Patient1/seg_tumor_MR.nii.gz'}
 
-   network.images_train.append(images1)
-   network.segmentations_train.append(segmentations1)
+   experiment.images_train.append(images1)
+   experiment.segmentations_train.append(segmentations1)
 
 ``WORC``  will process the sources normally up till the imputation part, so you have to provide valid data. As you see in the example above,
 we simply provided data from another patient.
@@ -256,8 +202,8 @@ Segmentation on the first image, but not on the others
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 When you use multiple image sequences, you can supply a ROI for each sequence by
 appending to to segmentations object as above. Alternatively, when you do not
-supply a segmentation for a specific sequence, ``WORC`` will use Elastix to
-align this sequence to another through image registration. It will then
+supply a segmentation for a specific sequence, ``WORC`` will use elastix (https://github.com/SuperElastix/elastix)
+to align this sequence to another through image registration. It will then
 warp the segmentation from this sequence to the sequence for which you
 did not supply a segmentation. **WORC will always align these sequences with no segmentations to the first sequence, i.e. the first object in the images_train list.**
 Hence make sure you supply the sequence for which you have a ROI as the first object:
@@ -268,10 +214,10 @@ Hence make sure you supply the sequence for which you have a ROI as the first ob
    images2 = {'patient1': '/data/Patient1/image_CT.nii.gz', 'patient2': '/data/Patient2/image_CT.nii.gz'}
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
 
-   network.images_train.append(images1)
-   network.images_train.append(images2)
+   experiment.images_train.append(images1)
+   experiment.images_train.append(images2)
 
-   network.segmentations_train.append(segmentations1)
+   experiment.segmentations_train.append(segmentations1)
 
 When providing only a segmentation for the first image in this way, ``WORC`` will automatically
 recognize that it needs to use registration.
@@ -320,7 +266,15 @@ Semantics or non-radiomics features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Semantic features are non-computational features, thus features that you supply instead of extract. Examples include
 using the age and sex of the patients in the classification. You can
-supply these as a .csv listing your features per patient, similar to the :ref:`label file <um-labels>`
+supply these as a .csv listing your features per patient, similar to the :ref:`label file <um-labels>`. See
+[the WORCTutorial Github repo](https://github.com/MStarmans91/WORCTutorial/tree/master/Data/Examplefiles) for an example file.
+
+You can provide these sources either through the ``set_registration_parameterfile`` function of the facades,
+by interacting with the ``BasicWORC`` ``elastix_parameter_file`` object, or the 
+``WORC`` ``Elastix_Para`` object. An example of the first option:
+
+.. code-block:: python
+
 
 Masks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -352,10 +306,18 @@ Elastix_Para
 If you have multiple images for each patient, e.g. T1 and T2, but only a
 single segmentation, you can use image registration to align and
 transform the segmentation to the other modality. This is done in WORC
-using Elastix http://elastix.isi.uu.nl/. In this source, you can supply
+using elastix (https://github.com/SuperElastix/elastix). In this source, you can supply
 a parameter file for Elastix to be used in the registration in .txt.
-format. Alternatively, you can use SimpleElastix to generate a parameter
-map and pass this object to ``WORC``.
+format. We provide one example parameter file in ``WORC`` (https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata),
+see the elastix model zoo for several others (https://github.com/SuperElastix/ElastixModelZoo/tree/master/models/default).
+
+You can provide these sources either through the ``set_registration_parameterfile`` function of the facades,
+by interacting with the ``BasicWORC`` ``elastix_parameter_file`` object, or the 
+``WORC`` ``Elastix_Para`` object. An example of the first option:
+
+.. code-block:: python
+
+    experiment.set_registration_parameterfile('/exampledata/ParametersRigid.txt')
 
 .. note:: ``WORC`` assumes your segmentation is made on the first
     ``WORC.images_train`` (or test) source you supply. The segmentation
@@ -576,11 +538,169 @@ The following outputs are only generated if certain configuration settings are u
 
 Debugging
 ---------
-
+For some of the most frequently occuring issues and answers, see the  :ref:`WORC FAQ <faq-chapter>`). 
 As WORC is based on fastr, debugging is similar to debugging a fastr pipeline: see therefore also
-`the fastr debugging guidelines <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging/>`_.
-
+`the fastr debugging guidelines <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging/>`_. 
 If you run into any issue, please create an issue on the `WORC Github <https://github.com/MStarmans91/WORC/issues/>`_.
+
+We advise you to follow the fastr debugging guide, but for convenience provide here an adoptation of 
+"Debugging a Network run with errors" with a WORC example.
+
+If a Network run did finish but there were errors detected, Fastr will report those
+at the end of the execution. An example of the output of a Network run with failures::
+
+    [INFO] networkrun:0688 >> ####################################
+    [INFO] networkrun:0689 >> #    network execution FINISHED    #
+    [INFO] networkrun:0690 >> ####################################
+    [INFO] simplereport:0026 >> ===== RESULTS =====
+    [INFO] simplereport:0036 >> classification: 0 success / 0 missing / 1 failed
+    [INFO] simplereport:0036 >> config_CT_0_sink: 1 success / 0 missing / 0 failed
+    [INFO] simplereport:0036 >> config_classification_sink: 1 success / 0 missing / 0 failed
+    [INFO] simplereport:0036 >> features_train_CT_0_predict: 19 success / 0 missing / 1 failed
+    [INFO] simplereport:0036 >> performance: 0 success / 0 missing / 1 failed
+    [INFO] simplereport:0036 >> segmentations_out_segmentix_train_CT_0: 20 success / 0 missing / 0 failed
+    [INFO] simplereport:0037 >> ===================
+    [WARNING] simplereport:0049 >> There were failed samples in the run, to start debugging you can run:
+
+       fastr trace C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json --sinks
+
+   see the debug section in the manual at https://fastr.readthedocs.io/en/develop/static/user_manual.html#debugging for more information.
+
+Fastr reports errors per sink, which are the outputs expected of the network, e.g., feature files and a classification model in WORC. Per sink, there 
+can be one or multiple samples / patients that failed. A sink / output failing can be due to multiple nodes in the network: if the classification model
+is not generated, it could be that the model fitting failed, but also a feature extraction node somewhere earlier in the pipeline. Hence I would 
+advice to start with a sink that's a result of a node early in the pipeline. You will also see this difference in the output that fastr gives,
+as some jobs have actually failed, while some have been cancelled because other jobs before that have failed. 
+If you have graphviz installed, fastr will draw an image of the full WORC network you are running so you can identify this, see 
+https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata/WORC_Example_STWStrategyHN.svg for an example.
+
+In the above example, we thus want to start with the ``features_train_CT_0_predict`` sink. Also you already get
+the suggestion to use :ref:`fastr trace <cmdline-trace>`. This command helps you inspect the staging directory of the Network run
+and pinpoint the errors. To get a very detailed error report we have to specify one sink and one sample.
+To see which samples have failed, we run the ``fastr trace`` command with the ``--samples`` option ::
+
+   (VEWORC) C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial>fastr trace "C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json" --samples
+    [WARNING]  __init__:0084 >> Not running in a production installation (branch "unknown" from installed package)
+   HN1004 -- 1 failed -- 1 succeeded
+   HN1077 -- 0 failed -- 2 succeeded
+   HN1088 -- 0 failed -- 2 succeeded
+   HN1146 -- 0 failed -- 2 succeeded
+   HN1159 -- 0 failed -- 2 succeeded
+   HN1192 -- 0 failed -- 2 succeeded
+   HN1259 -- 0 failed -- 2 succeeded
+   HN1260 -- 0 failed -- 2 succeeded
+   HN1323 -- 0 failed -- 2 succeeded
+   HN1331 -- 0 failed -- 2 succeeded
+   HN1339 -- 0 failed -- 2 succeeded
+   HN1342 -- 0 failed -- 2 succeeded
+   HN1372 -- 0 failed -- 2 succeeded
+   HN1491 -- 0 failed -- 2 succeeded
+   HN1501 -- 0 failed -- 2 succeeded
+   HN1519 -- 0 failed -- 2 succeeded
+   HN1524 -- 0 failed -- 2 succeeded
+   HN1554 -- 0 failed -- 2 succeeded
+   HN1560 -- 0 failed -- 2 succeeded
+   HN1748 -- 0 failed -- 2 succeeded
+   all -- 2 failed -- 2 succeeded
+
+You will recognize the names you gave to the samples. Per sample, you will see in how many sinks they have failed.
+In this case, the ``segmentations_out_segmentix_train_CT_0`` sink was succesfully generated for all samples,
+but our ``features_train_CT_0_predict`` failed. Note that the ``all`` sample is when we combine all patients, e.g.,
+in the classification node. In this case, only one sample failed, HN1004.
+
+Now we run the ``fastr trace`` command for our specific sink and a specific sample print a complete error
+report for that job::
+
+   (VEWORC) C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial>fastr trace "C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks features_train_CT_0_predict --samples HN1004
+    [WARNING]  __init__:0084 >> Not running in a production installation (branch "unknown" from installed package)
+   Tracing errors for sample HN1004 from sink features_train_CT_0_predict
+   Located result pickle: C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\WORC_Example_STWStrategyHN\calcfeatures_train_predict_CalcFeatures_1_0_CT_0\HN1004\__fastr_result__.yaml
+
+   ===== JOB WORC_Example_STWStrategyHN___calcfeatures_train_predict_CalcFeatures_1_0_CT_0___HN1004 =====
+   Network: WORC_Example_STWStrategyHN
+   Run: WORC_Example_STWStrategyHN_2023-08-11T16-59-52
+   Node: calcfeatures_train_predict_CalcFeatures_1_0_CT_0
+   Sample index: (0)
+   Sample id: HN1004
+   Status: JobState.execution_failed
+   Timestamp: 2023-08-11 15:01:15.442376
+   Job file: C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\calcfeatures_train_predict_CalcFeatures_1_0_CT_0\HN1004\__fastr_result__.yaml
+
+   ----- ERRORS -----
+   - FastrOutputValidationError: Output value [HDF5] "vfs://home/documents\github\worctutorial\worc_example_stwstrategyhn\calcfeatures_train_predict_calcfeatures_1_0_ct_0\hn1004\features_0.hdf5" not valid for datatype "'HDF5'" (C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\fastr\execution\job.py:1155)
+   - FastrOutputValidationError: The output "features" is invalid! (C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\fastr\execution\job.py:1103)
+   - FastrErrorInSubprocess: C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\phasepack\tools.py:14: UserWarning:
+   Module 'pyfftw' (FFTW Python bindings) could not be imported. To install it, try
+   running 'pip install pyfftw' from the terminal. Falling back on the slower
+   'fftpack' module for 2D Fourier transforms.
+     'fftpack' module for 2D Fourier transforms.""")
+   Traceback (most recent call last):
+     File "c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py", line 72, in <module>
+       main()
+     File "c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py", line 68, in main
+       semantics_file=args.sem)
+     File "c:\users\martijn starmans\documents\github\predictfastr\PREDICT\CalcFeatures.py", line 109, in CalcFeatures
+       raise ae.PREDICTIndexError(message)
+   PREDICT.addexceptions.PREDICTIndexError: Shapes of image((512, 512, 147)) and mask ((512, 512, 134)) do not match!
+    (C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\fastr\execution\executionscript.py:111)
+   - FastrValueError: Output values are not valid! (C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\fastr\execution\job.py:834)
+   ------------------
+
+   Command:
+   List representation: ['python', 'c:\\users\\martijn starmans\\documents\\github\\worc\\WORC\\resources\\fastr_tools\\predict\\bin\\CalcFeatures_tool.py', '--im', 'C:\\Users\\Martijn Starmans\\documents\\github\\worctutorial\\worc_example_stwstrategyhn\\preprocessing_train_ct_0\\hn1004\\image_0.nii.gz', '--out', 'C:\\Users\\Martijn Starmans\\documents\\github\\worctutorial\\worc_example_stwstrategyhn\\calcfeatures_train_predict_CalcFeatures_1_0_CT_0\\HN1004\\features_0.hdf5', '--seg', 'C:\\Users\\Martijn Starmans\\documents\\github\\worctutorial\\worc_example_stwstrategyhn\\segmentix_train_ct_0\\hn1004\\segmentation_out_0.nii.gz', '--para', 'C:\\Users\\Martijn Starmans\\documents\\github\\worctutorial\\worc_example_stwstrategyhn\\fingerprinter_ct_0\\all\\config_0.ini']
+
+   String representation: python ^"c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py^" --im ^"C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\preprocessing_train_ct_0\hn1004\image_0.nii.gz^" --out ^"C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\calcfeatures_train_predict_CalcFeatures_1_0_CT_0\HN1004\features_0.hdf5^" --seg ^"C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\segmentix_train_ct_0\hn1004\segmentation_out_0.nii.gz^" --para ^"C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\fingerprinter_ct_0\all\config_0.ini^"
+
+
+   Output data:
+   {'features': [<HDF5: 'vfs://home/documents\\github\\worctutorial\\worc_example_stwstrategyhn\\calcfeatures_train_predict_calcfeatures_1_0_ct_0\\hn1004\\features_0.hdf5'>]}
+
+   Status history:
+   2023-08-11 15:01:15.442376: JobState.created
+   2023-08-11 15:01:15.451894: JobState.hold
+   2023-08-11 15:04:21.852828: JobState.queued
+   2023-08-11 15:05:21.169469: JobState.running
+   2023-08-11 15:05:28.904541: JobState.execution_failed
+
+   ----- STDOUT -----
+   Loading inputs.
+   Load image and metadata file.
+   Load semantics file.
+   Load segmentation.
+   Shapes of image((512, 512, 147)) and mask ((512, 512, 135)) do not match!
+
+   ------------------
+
+   ----- STDERR -----
+   Traceback (most recent call last):
+     File "c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py", line 72, in <module>
+       main()
+     File "c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py", line 68, in main
+       semantics_file=args.sem)
+     File "c:\users\martijn starmans\documents\github\predictfastr\PREDICT\CalcFeatures.py", line 109, in CalcFeatures
+       raise ae.PREDICTIndexError(message)
+   PREDICT.addexceptions.PREDICTIndexError: Shapes of image((512, 512, 147)) and mask ((512, 512, 134)) do not match!
+
+   ------------------
+
+As shown above, it finds the result files of the failed job(s) and prints the most important information. The first
+paragraph shows the information about the Job that was involved. The second paragraph shows the exact calling command 
+that fastr was trying to execute for this job, both as a list (which is clearer and internally used in Python) and 
+as a string (which you can copy/paste to the shell to test the command and should reproduce the exact error encounteres, nice for debugging if you make changes in the code).
+Then there is the output data as determined by Fastr. The next section shows the status history of the
+Job which can give an indication about wait and run times. At the bottom, the stdout and stderr of the
+subprocess are printed. 
+
+But the section we are most interested in, is the Error section, which lists the errors that Fastr encounted during the
+execution of the Job. Note that the second FastrValueError is a general error fastr returns when a job failed:
+since there is no output generated, the output values are obviously not valid for what fastr expected. Hence that 
+does not give you any input on why the job failed. What you want is the actual error that occured in the tool, e.g.,
+the Python error. In this case, that's the PREDICT.addexceptions.PREDICTIndexError, which tells us that the mask
+that we provided for feature extraction had a different shape then the image. 
+
+Once you've solved the issues, you can just relaunch the experiment. WORC/fastr saves the temporary output files 
+and will thus continue where it left of, only checking for all jobs that were previously finished whether
+the output is still there.
 
 
 Example data
@@ -592,3 +712,80 @@ https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata. To
 save memory, for several types the example data is not included, but a script
 is provided to create the example data. This script (``create_example_data``) can
 be found in the exampledata folder as well.
+
+.. _WORC:
+
+WORC
+~~~~~~~~~~~~~~~
+The ``WORC`` object can also directly be assessed, but we don't recommend this as the facades adds
+a lot of functionality plus the WORC object can still be direclty accessed through the facades. 
+for completeness, we give some documentation here.
+
+The ``WORC`` object can  directly be accessed in the following way:
+
+.. code-block:: python
+
+   import WORC
+   network = WORC.WORC('somename')
+
+It's attributes are split in a couple of categories. We will not discuss
+the ``WORC.defaultconfig()`` function here, which generates the default
+configuration, as it is listed in a separate page, see the :ref:`Config chapter <config-chapter>`.
+More detailed documentation of the various functions can be found in the docstrings of :py:mod:`WORC.WORC`:
+we will mostly focus on the attributes, inputs, outputs and workflows here.
+
+There are numerous ``WORC`` attributes which serve as source nodes (i.e. inputs) for the
+FASTR experiment. These are:
+
+   - ``images_train`` and ``images_test``
+   - ``segmentations_train`` and ``segmentations_test``
+   - ``semantics_train`` and ``semantics_test``
+   - ``labels_train`` and ``labels_test``
+   - ``masks_train`` and ``masks_test``
+   - ``features_train`` and ``features_test``
+   - ``metadata_train`` and ``metadata_test``
+   - ``Elastix_Para``
+   - ``fastrconfigs``
+
+These directly correspond to the :ref:`input file definitions discussed below <inputs>`
+How to provide your data to ``WORC`` is also described in this section.
+
+After supplying your sources as described above, you need to build the FASTR experiment. This
+can be done through the ``WORC.build()`` command. Depending on your sources,
+several nodes will be added and linked. This creates the ``WORC.network``
+object, which is a ``fastr.network`` object. You can edit this network
+freely, e.g. add another source or node. You can print the network with
+the ``WORC.experiment.draw_network`` command.
+
+Next, we have to tell the network which sources should be used in the
+source nodes. This can be done through the ``WORC.set()`` function. This will
+put your supplied sources into the source nodes and also creates the
+needed sink nodes. You can check these by looking at the created
+``WORC.source_data`` and ``WORC.sink_data`` objects.
+
+Finally, after completing above steps, you can execute the network
+through the ``WORC.execute()`` command.
+
+Thus a typical experiment in ``WORC`` would follow the following structure,
+assuming you have created the relevant objects as listed above:
+
+.. code-block:: python
+
+    import WORC
+
+    # Create object
+    experiment = WORC.WORC('name')
+
+    # Append sources
+    experiment.images_train.append(images_train)
+    experiment.segmentations_train.append(segmentations_train)
+    experiment.labels_train.append(labels_train)
+
+    # Create a configuration
+    config = experiment.defaultconfig()
+    experiment.configs.append(config)
+
+    # Build, set, and execute
+    experiment.build()
+    experiment.set()
+    experiment.execute()

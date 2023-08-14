@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 import pandas as pd
 import numpy as np
 import os
+import SimpleITK as sitk
 
 currentdir = os.path.dirname(os.path.realpath(__file__))
 
@@ -52,7 +53,25 @@ def create_random_features(n_objects=7, n_features=10):
 
         print(f'Saving image features for object {i}.')
         panda_data.to_hdf(output, 'image_features')
+        
+        
+def create_random_imageandmask(size=512, slices=20):
+    # Create the image
+    image = np.rand.rand((size, size, slices))
+    
+    # Create a sphere mask in the center
+    ra = range(-int(slices/2), int(slices/2)+1)
+    x, y, z = np.meshgrid(ra, ra, ra)
+    radius = np.sqrt(x**2 + y**2 + z**2)
+    mask = radius.astype(int) == int(size/4)
 
+    # Convert the images to ITK objects
+    image = sitk.GetImageFromArray(image.astype(np.float32))
+    mask = sitk.GetImageFromArray(mask.astype(int))
+
+    return image, mask
+    
 
 if __name__ == "__main__":
     create_random_features()
+    create_random_imageandmask()
