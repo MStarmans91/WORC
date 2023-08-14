@@ -3,22 +3,22 @@
 User Manual
 ===========
 
-In this chapter we will discuss the parts of WORC in more detail, mostly focussed on the inputs,
-outputs, and the various workflow possible. We will give a more complete overview of the system
-and describe the more advanced features.
+In this chapter we will discuss the parts of WORC in more detail, mostly focussed on facades,
+the inputs you can provide to WORC, the outputs, and the various workflow possible. We will
+give a more complete overview of the system and describe the more advanced features.
+
+We will not discuss the ``WORC.defaultconfig()`` function here, which generates the default
+configuration, as it is discussed on a separate page, see the :ref:`Config chapter <config-chapter>`.
 
 .. _tools:
 
-WORC object and facades
+WORC facades
 ------------------------
-
 The WORC toolbox is build around of one main object, the ``WORC`` object. This object provides all functionality
 of the toolbox. However, to make certain functionalities easier to use and limit the complexity,
 we have constructed two facades: ``SimpleWORC`` and ``BasicWORC``. We advice new users to start with ``SimpleWORC``,
 more advanced users ``BasicWORC``, and only use ``WORC`` for development purposes. Additionally, we advice you to take a look at the :ref:`configuration chapter <config-chapter>`
-for all the settings that can be adjusted in WORC.
-
-The specific functionalities of these two facades and the ``WORC`` object itself can be found in this section.
+for all the settings that can be adjusted in WORC. We give a short description of the two facades here.
 
 SimpleWORC
 ~~~~~~~~~~~~~~~~
@@ -37,78 +37,6 @@ and the docstrings of the functions in the object (:py:mod:`WORC.facade.basicwor
 One of the functionalities that ``BasicWORC`` provides over ``SimpleWORC`` is that you can also directly provide
 your data to ``WORC`` (e.g. ``images_train``) instead of using one of the wrapping functions of
 ``SimpleWORC`` (e.g. ``images_from_this_directory)
-
-.. _WORC:
-
-WORC
-~~~~~~~~~~~~~~~
-The ``WORC`` object can directly be assessed in the following way:
-.. code-block:: python
-
-   import WORC
-   network = WORC.WORC('somename')
-
-It's attributes are split in a couple of categories. We will not discuss
-the ``WORC.defaultconfig()`` function here, which generates the default
-configuration, as it is listed in a separate page, see the :ref:`Config chapter <config-chapter>`.
-More detailed documentation of the various functions can be found in the docstrings of :py:mod:`WORC.WORC`:
-we will mostly focus on the attributes, inputs, outputs and workflows here.
-
-There are numerous ``WORC`` attributes which serve as source nodes (i.e. inputs) for the
-FASTR network. These are:
-
--  ``images_train`` and ``images_test``
--  ``segmentations_train`` and ``segmentations_test``
--  ``semantics_train`` and ``semantics_test``
--  ``labels_train`` and ``labels_test``
--  ``masks_train`` and ``masks_test``
--  ``features_train`` and ``features_test``
--  ``metadata_train`` and ``metadata_test``
--  ``Elastix_Para``
--  ``fastrconfigs``
-
-These directly correspond to the :ref:`input file definitions discussed below <inputs>`
-How to provide your data to ``WORC`` is also described in this section.
-
-After supplying your sources as described above, you need to build the FASTR network. This
-can be done through the ``WORC.build()`` command. Depending on your sources,
-several nodes will be added and linked. This creates the ``WORC.network``
-object, which is a ``fastr.network`` object. You can edit this network
-freely, e.g. add another source or node. You can print the network with
-the ``WORC.network.draw_network`` command.
-
-Next, we have to tell the network which sources should be used in the
-source nodes. This can be done through the ``WORC.set()`` function. This will
-put your supplied sources into the source nodes and also creates the
-needed sink nodes. You can check these by looking at the created
-``WORC.source_data`` and ``WORC.sink_data`` objects.
-
-Finally, after completing above steps, you can execute the network
-through the ``WORC.execute()`` command.
-
-Thus a typical experiment in ``WORC`` would follow the following structure,
-assuming you have created the relevant objects as listed above:
-
-.. code-block:: python
-
-    import WORC
-
-    # Create object
-    experiment = WORC.WORC('name')
-
-    # Append sources
-    experiment.images_train.append(images_train)
-    experiment.segmentations_train.append(segmentations_train)
-    experiment.labels_train.append(labels_train)
-
-    # Create a configuration
-    config = experiment.defaultconfig()
-    experiment.configs.append(config)
-
-    # Build, set, and execute
-    network.build()
-    network.set()
-    network.execute()
 
 
 .. _inputs:
@@ -132,8 +60,8 @@ As an example, we here show how to provide images and segmentations to ``BasicWO
    images1 = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
 
-   network.images_train.append(images1)
-   network.segmentations_train.append(segmentations1)
+   experiment.images_train.append(images1)
+   experiment.segmentations_train.append(segmentations1)
 
 Here ``network`` can be a ``BasicWORC`` or ``WORC`` object. Each source is a list, to which you can provide
 dictionaries containing the actual sources. In these dictionaries, each element should correspond to a single
@@ -160,11 +88,11 @@ to the source list, e.g.:
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
    segmentations2 = {'patient1': '/data/Patient1/seg_tumor_CT.nii.gz', 'patient2': '/data/Patient2/seg_tumor_CT.nii.gz'}
 
-   network.images_train.append(images1)
-   network.images_train.append(images2)
+   experiment.images_train.append(images1)
+   experiment.images_train.append(images2)
 
-   network.segmentations_train.append(segmentations1)
-   network.segmentations_train.append(segmentations2)
+   experiment.segmentations_train.append(segmentations1)
+   experiment.segmentations_train.append(segmentations2)
 
 
 ``WORC`` will use the keys of the dictionaries to match the features from the same object or patient and combine
@@ -182,11 +110,11 @@ sources. For example:
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
    segmentations2 = {'patient1': '/data/Patient1/seg_liver_MR.nii.gz', 'patient2': '/data/Patient2/seg_liver_MR.nii.gz'}
 
-   network.images_train.append(images1)
-   network.images_train.append(images1)
+   experiment.images_train.append(images1)
+   experiment.images_train.append(images1)
 
-   network.segmentations_train.append(segmentations1)
-   network.segmentations_train.append(segmentations2)
+   experiment.segmentations_train.append(segmentations1)
+   experiment.segmentations_train.append(segmentations2)
 
 ``WORC`` will use the keys of the dictionaries to match the features from the same object or patient and combine
 them for the machine learning part.
@@ -236,17 +164,22 @@ When using the ``WORC`` object, or directly setting your sources in ``BasicWORC`
    images_train = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
    segmentations_train = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
 
-   network.images_train.append(images_train)
-   network.segmentations_train.append(segmentations_train)
+   experiment.images_train.append(images_train)
+   experiment.segmentations_train.append(segmentations_train)
 
    images_test = {'patient3': '/data/Patient3/image_MR.nii.gz', 'patient4': '/data/Patient4/image_MR.nii.gz'}
    segmentations_test = {'patient3': '/data/Patient3/seg_tumor_MR.nii.gz', 'patient4': '/data/Patient4/seg_tumor_MR.nii.gz'}
 
-   network.images_test.append(images_test)
-   network.segmentations_test.append(segmentations_test)
+   experiment.images_test.append(images_test)
+   experiment.segmentations_test.append(segmentations_test)
+
+   # In this example, we provide the same label file for both the training and test set, but these can be independent
+   label_file = '/data/label_file.csv'
+   experiment.labels_from_this_file(label_file)
+   experiment.labels_from_this_file(label_file, is_training=False)
 
 Another alternative is to only provide training objects, but also a .csv defining fixed training and test splits to be used for the 
-evaluation, e.g. ``network.fixed_splits = '/data/fixedsplits.csv``. See the https://github.com/MStarmans91/WORCtutorial repository for an example. ``SimpleWORC`` has the ``set_fixed_splits`` to set this object.
+evaluation, e.g. ``experiment.fixed_splits = '/data/fixedsplits.csv``. See the https://github.com/MStarmans91/WORCtutorial repository for an example. ``SimpleWORC`` has the ``set_fixed_splits`` to set this object.
 
 Missing data and dummy's
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -259,8 +192,8 @@ do so, you still have to provide a source but can add ''Dummy'' to the key:
    images1 = {'patient1': '/data/Patientc/image_MR.nii.gz', 'patient2_Dummy': '/data/Patient1/image_MR.nii.gz'}
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2_Dummy': '/data/Patient1/seg_tumor_MR.nii.gz'}
 
-   network.images_train.append(images1)
-   network.segmentations_train.append(segmentations1)
+   experiment.images_train.append(images1)
+   experiment.segmentations_train.append(segmentations1)
 
 ``WORC``  will process the sources normally up till the imputation part, so you have to provide valid data. As you see in the example above,
 we simply provided data from another patient.
@@ -269,8 +202,8 @@ Segmentation on the first image, but not on the others
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 When you use multiple image sequences, you can supply a ROI for each sequence by
 appending to to segmentations object as above. Alternatively, when you do not
-supply a segmentation for a specific sequence, ``WORC`` will use Elastix to
-align this sequence to another through image registration. It will then
+supply a segmentation for a specific sequence, ``WORC`` will use elastix (https://github.com/SuperElastix/elastix)
+to align this sequence to another through image registration. It will then
 warp the segmentation from this sequence to the sequence for which you
 did not supply a segmentation. **WORC will always align these sequences with no segmentations to the first sequence, i.e. the first object in the images_train list.**
 Hence make sure you supply the sequence for which you have a ROI as the first object:
@@ -281,10 +214,10 @@ Hence make sure you supply the sequence for which you have a ROI as the first ob
    images2 = {'patient1': '/data/Patient1/image_CT.nii.gz', 'patient2': '/data/Patient2/image_CT.nii.gz'}
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
 
-   network.images_train.append(images1)
-   network.images_train.append(images2)
+   experiment.images_train.append(images1)
+   experiment.images_train.append(images2)
 
-   network.segmentations_train.append(segmentations1)
+   experiment.segmentations_train.append(segmentations1)
 
 When providing only a segmentation for the first image in this way, ``WORC`` will automatically
 recognize that it needs to use registration.
@@ -365,10 +298,18 @@ Elastix_Para
 If you have multiple images for each patient, e.g. T1 and T2, but only a
 single segmentation, you can use image registration to align and
 transform the segmentation to the other modality. This is done in WORC
-using Elastix http://elastix.isi.uu.nl/. In this source, you can supply
+using elastix (https://github.com/SuperElastix/elastix). In this source, you can supply
 a parameter file for Elastix to be used in the registration in .txt.
-format. Alternatively, you can use SimpleElastix to generate a parameter
-map and pass this object to ``WORC``.
+format. We provide one example parameter file in ``WORC`` (https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata),
+see the elastix model zoo for several others (https://github.com/SuperElastix/ElastixModelZoo/tree/master/models/default).
+
+You can provide these sources either through the ``set_registration_parameterfile`` function of the facades,
+by interacting with the ``BasicWORC`` ``elastix_parameter_file`` object, or the 
+``WORC`` ``Elastix_Para`` object. An example of the first option:
+
+.. code-block:: python
+
+    experiment.set_registration_parameterfile('/exampledata/ParametersRigid.txt')
 
 .. note:: ``WORC`` assumes your segmentation is made on the first
     ``WORC.images_train`` (or test) source you supply. The segmentation
@@ -763,3 +704,80 @@ https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata. To
 save memory, for several types the example data is not included, but a script
 is provided to create the example data. This script (``create_example_data``) can
 be found in the exampledata folder as well.
+
+.. _WORC:
+
+WORC
+~~~~~~~~~~~~~~~
+The ``WORC`` object can also directly be assessed, but we don't recommend this as the facades adds
+a lot of functionality plus the WORC object can still be direclty accessed through the facades. 
+for completeness, we give some documentation here.
+
+The ``WORC`` object can  directly be accessed in the following way:
+
+.. code-block:: python
+
+   import WORC
+   network = WORC.WORC('somename')
+
+It's attributes are split in a couple of categories. We will not discuss
+the ``WORC.defaultconfig()`` function here, which generates the default
+configuration, as it is listed in a separate page, see the :ref:`Config chapter <config-chapter>`.
+More detailed documentation of the various functions can be found in the docstrings of :py:mod:`WORC.WORC`:
+we will mostly focus on the attributes, inputs, outputs and workflows here.
+
+There are numerous ``WORC`` attributes which serve as source nodes (i.e. inputs) for the
+FASTR experiment. These are:
+
+-  ``images_train`` and ``images_test``
+-  ``segmentations_train`` and ``segmentations_test``
+-  ``semantics_train`` and ``semantics_test``
+-  ``labels_train`` and ``labels_test``
+-  ``masks_train`` and ``masks_test``
+-  ``features_train`` and ``features_test``
+-  ``metadata_train`` and ``metadata_test``
+-  ``Elastix_Para``
+-  ``fastrconfigs``
+
+These directly correspond to the :ref:`input file definitions discussed below <inputs>`
+How to provide your data to ``WORC`` is also described in this section.
+
+After supplying your sources as described above, you need to build the FASTR experiment. This
+can be done through the ``WORC.build()`` command. Depending on your sources,
+several nodes will be added and linked. This creates the ``WORC.network``
+object, which is a ``fastr.network`` object. You can edit this network
+freely, e.g. add another source or node. You can print the network with
+the ``WORC.experiment.draw_network`` command.
+
+Next, we have to tell the network which sources should be used in the
+source nodes. This can be done through the ``WORC.set()`` function. This will
+put your supplied sources into the source nodes and also creates the
+needed sink nodes. You can check these by looking at the created
+``WORC.source_data`` and ``WORC.sink_data`` objects.
+
+Finally, after completing above steps, you can execute the network
+through the ``WORC.execute()`` command.
+
+Thus a typical experiment in ``WORC`` would follow the following structure,
+assuming you have created the relevant objects as listed above:
+
+.. code-block:: python
+
+    import WORC
+
+    # Create object
+    experiment = WORC.WORC('name')
+
+    # Append sources
+    experiment.images_train.append(images_train)
+    experiment.segmentations_train.append(segmentations_train)
+    experiment.labels_train.append(labels_train)
+
+    # Create a configuration
+    config = experiment.defaultconfig()
+    experiment.configs.append(config)
+
+    # Build, set, and execute
+    experiment.build()
+    experiment.set()
+    experiment.execute()

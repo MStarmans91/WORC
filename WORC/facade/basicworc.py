@@ -47,6 +47,7 @@ class BasicWORC(SimpleWORC):
         self.metadata_train = []
         self.metadata_test = []
         self.semantics_file_train = []
+        self.elastix_parameter_file = []
         self.semantics_file_test = []
         self.radiomix_feature_file = None
 
@@ -149,6 +150,11 @@ class BasicWORC(SimpleWORC):
             self._worc.semantics_test = self.semantics_file_test
         elif self._semantics_file_test:
             self._worc.semantics_test = self._semantics_file_test
+            
+        if self.elastix_parameter_file:
+            self._worc.Elastix_Para = self.elastix_parameter_file
+        elif self._elastix_parameter_file:
+            self._worc.Elastix_Para = self._elastix_parameter_file
             
         if self.trained_model:
             self._worc.trained_model = self.trained_model

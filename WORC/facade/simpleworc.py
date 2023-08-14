@@ -96,6 +96,7 @@ class SimpleWORC():
         self._segmentations_test = []
         self._masks_train = []
         self._masks_test = []
+        self._elastix_parameter_file = []
         self._semantics_file_train = None
         self._semantics_file_test = None
         self._radiomix_feature_file = None
@@ -368,6 +369,34 @@ class SimpleWORC():
         else:
             self._semantics_file_test = [str(semantics_file.absolute()).replace('%20', ' ')]
 
+    def set_registration_parameterfile(self, file_path):
+        """Define which elastix parameter file(s) should be used by WORC to perform the registration.
+        
+        More information can be found in the elastix documentation on the format and settings:
+        https://github.com/SuperElastix/elastix/wiki. Examples of parameter files can be found in
+        the elastix model zoo github repo:
+        https://github.com/SuperElastix/ElastixModelZoo/tree/master/models/default.
+        
+        If you want to use multiple parameter files sequentially in the registration,
+        simply use this function multiple times.
+
+        Parameters
+        ----------
+        file_path: basestring
+            Location of the file to be used, should be a .txt file.
+
+        """
+        elastix_parameter_file = Path(file_path).expanduser()
+
+        if not elastix_parameter_file.is_file():
+            raise PathNotFoundException(file_path)
+
+        if not CsvDetector(elastix_parameter_file.absolute()):
+            raise InvalidCsvFileException(elastix_parameter_file.absolute())
+
+        self._elastix_parameter_file.append(str(elastix_parameter_file.absolute()).replace('%20', ' '))
+
+
     def run_inference(self, trained_model, config_files):
         """Run inference on a dataset using a previously trained WORC model.
 
@@ -395,7 +424,7 @@ class SimpleWORC():
             self._config_files.append(str(config_file.absolute()).replace('%20', ' '))
         
         # Change build type for making the fastr network
-        self._buildtype = 'testing'
+        self._buildtype = 'inference'
 
     def predict_labels(self, label_names: list):
         """Determine which label(s) to predict in your experiments.
@@ -753,6 +782,7 @@ class SimpleWORC():
         self._worc.segmentations_train = self._segmentations_train
         self._worc.masks_train = self._masks_train
         self._worc.labels_train = self._labels_file_train
+        self._worc.Elastix_Para = self._elastix_parameter_file
         self._worc.semantics_train = self._semantics_file_train
         self._worc.trained_model = self._trained_model
         self._worc.configs = self._config_files

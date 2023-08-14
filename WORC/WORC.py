@@ -553,18 +553,19 @@ class WORC(object):
         ----------
         buildtype: string, default 'training'
                 Specify the WORC execution type.
-                - testing: use if you have a trained classifier and want to
+                - inference: use if you have a trained classifier and want to
                            train it on some new images.
                 - training: use if you want to train a classifier from a dataset.
 
         """
         if buildtype == 'training':
             self.build_training()
-        elif buildtype == 'testing':
+        elif buildtype == 'inference':
+            raise WORCexceptions.WORCValueError("Inference workflow is still WIP and does not fully work yet.")
             self.TrainTest = True
             self.OnlyTest = True
-            self.build_testing()        
-
+            self.build_inference()       
+             
     def build_training(self):
         """Build the training network based on the given attributes."""
         # We either need images or features for Radiomics
@@ -1106,7 +1107,7 @@ class WORC(object):
         else:
             raise WORCexceptions.WORCIOError("Please provide either images or features.")
 
-    def build_testing(self):
+    def build_inference(self):
         """Build a network to test an already trained model on a test dataset based on the given attributes."""
         #FIXME WIP
         if self.images_test or self.features_test:

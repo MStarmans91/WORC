@@ -36,6 +36,7 @@ Added
 - Updated user manual with more extensive debugging guide.
 - Thoroughly updated user manual documentation on different data flows, e.g.
   train-test setups, multiple segmentations per patient.
+- function in SimpleWORC to add parameter files for elastix.
 
 
 3.6.2 - 2023-03-14
