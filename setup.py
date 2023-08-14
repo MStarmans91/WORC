@@ -1,4 +1,4 @@
-# Copyright 2016 - 2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016 - 2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
