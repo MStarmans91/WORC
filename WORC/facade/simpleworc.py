@@ -25,7 +25,8 @@ from .helpers.processing import convert_radiomix_features
 from .helpers.exceptions import PathNotFoundException, NoImagesFoundException, \
     NoSegmentationsFoundException, InvalidCsvFileException, \
     NoFeaturesFoundException, NoMasksFoundException
-from WORC.addexceptions import WORCKeyError, WORCValueError, WORCAssertionError
+from WORC.addexceptions import WORCKeyError, WORCValueError, WORCAssertionError, \
+    WORCIOError
 from .helpers.configbuilder import ConfigBuilder
 from WORC.detectors.detectors import CsvDetector, BigrClusterDetector, \
     SnelliusClusterDetector
@@ -52,6 +53,7 @@ def _error_bulldozer(func):
         PathNotFoundException, NoImagesFoundException,
         NoSegmentationsFoundException, InvalidCsvFileException,
         TypeError, ValueError, NotImplementedError, WORCKeyError,
+        WORCIOError,
         WORCValueError, WORCAssertionError, NoMasksFoundException,
     ]
     _valid_exceptions += [c[1] for c in inspect.getmembers(fastr.exceptions, inspect.isclass)]

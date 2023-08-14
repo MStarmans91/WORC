@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -260,35 +260,35 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
                    }
 
         for o in objects:
-            if 'hf_' in o:
+            if 'hf_' in o.lower():
                 labels.append(0)
-            elif 'sf_' in o:
+            elif 'sf_' in o.lower():
                 labels.append(1)
-            elif 'of_' in o:
+            elif 'of_' in o.lower():
                 labels.append(2)
-            elif 'GLCM_' in o or 'GLCMMS_' in o:
+            elif 'glcm_' in o or 'glcmms_' in o.lower():
                 labels.append(3)
-            elif 'GLRLM_' in o:
+            elif 'glrlm_' in o.lower():
                 labels.append(4)
-            elif 'GLSZM_' in o:
+            elif 'glszm_' in o.lower():
                 labels.append(5)
-            elif 'GLDM_' in o:
+            elif 'gldm_' in o.lower():
                 labels.append(6)
-            elif 'NGTDM_' in o:
+            elif 'ngtdm_' in o.lower():
                 labels.append(7)
-            elif 'Gabor_' in o:
+            elif 'gabor_' in o.lower():
                 labels.append(8)
-            elif 'semf_' in o:
+            elif 'semf_' in o.lower():
                 labels.append(9)
-            elif 'df_' in o:
+            elif 'df_' in o.lower():
                 labels.append(10)
-            elif 'logf_' in o:
+            elif 'logf_' in o.lower():
                 labels.append(11)
-            elif 'vf_' in o:
+            elif 'vf_' in o.lower():
                 labels.append(12)
-            elif 'LBP_' in o:
+            elif 'lbp_' in o.lower():
                 labels.append(13)
-            elif 'phasef_' in o:
+            elif 'phasef_' in o.lower():
                 labels.append(14)
             else:
                 raise KeyError(o)
