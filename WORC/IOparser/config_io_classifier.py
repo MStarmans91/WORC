@@ -398,7 +398,7 @@ def load_config(config_file_path):
     settings_dict['CrossValidation']['fixed_seed'] =\
         settings['CrossValidation'].getboolean('fixed_seed')
 
-    # Genetic settings
+    # Label settings
     settings_dict['Labels']['label_names'] =\
         [str(item).strip() for item in
          settings['Labels']['label_names'].split(',')]

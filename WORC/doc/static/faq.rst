@@ -18,11 +18,20 @@ Execution errors
 
 My experiment crashed, where to begin looking for errors?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You can check this FAQ for commonly known errors and how to fix them.
+
 The ``fastr`` toolbox has a method to trace back errors. For more details,
 see the `fastr documentation <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors>`_.
 If you want to know the exact error that occured in a job, make sure you trace back to a single sink and single sample,
-e.g. ``fastr trace $RUNDIR/__sink_data__.json --sinks sink_5 --sample sample_1_1 ``.
+e.g. ``fastr trace $RUNDIR/__sink_data__.json --sinks sink_5 --sample sample_1_1 ``. See the :ref:`User Manual chapter <usermanual-chapter>`
+for more info.
 
+Error: ``fastr.exceptions.FastrValueError: [...] FastrValueError from .../fastr/execution/job.py line 834: Output values are not valid!``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This a general error fastr returns when a job failed: since there is no output generated, the output values are obviously not valid for 
+what fastr expected. Hence that does not give you any input on why the job failed. What you want is the actual error that occured in the tool,
+e.g., the Python error. If you debug the fastr network, see above, use the fastr trace command to trace back the error
+of a specific sink and a specific sample to track down the exact tool error, e.g., the Python error.
 
 Error: ``File "H5FDsec2.c", line 941, in H5FD_sec2_lock unable to lock file, errno = 37, error message = 'No locks available'``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

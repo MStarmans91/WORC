@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,7 +56,7 @@ def _error_bulldozer(func):
     ]
     _valid_exceptions += [c[1] for c in inspect.getmembers(fastr.exceptions, inspect.isclass)]
 
-    unexpected_exception_exception = Exception('A blackhole to another dimenstion has opened. This exception should never be thrown. Double check your code or make an issue on the WORC github so that we can fix this issue.')
+    unexpected_exception_exception = Exception('An unexpected error has occured, which we have not catched in WORC. Double check your code or make an issue on the WORC github so that we can fix this issue. Please report the actual error raised in your report.')
 
     @wraps(func)
     def dec(*args, **kwargs):
@@ -108,9 +108,12 @@ class SimpleWORC():
         self._method = None
 
         self._fixed_splits = None
+        self._trained_model = None
+        self._config_files = []
 
         self._config_builder = ConfigBuilder()
         self._add_evaluation = False
+        self._buildtype = 'training'
 
         # Detect wether we are on a cluster
         if BigrClusterDetector().do_detection():
@@ -365,6 +368,35 @@ class SimpleWORC():
         else:
             self._semantics_file_test = [str(semantics_file.absolute()).replace('%20', ' ')]
 
+    def run_inference(self, trained_model, config_files):
+        """Run inference on a dataset using a previously trained WORC model.
+
+        Parameters
+        ----------
+        trained_model: basestring
+            Location of the HDF5 file of the trained model from WORC, commonly named "estimator_all_0.hdf5".
+         config_files: basestring
+            List of location of the .ini file of the configurations of the trained model from WORC, commonly named like "config_CT_0_all_0.ini".
+            Note: these are the config files for the feature extraction, not the model training itself, which is embedded in the trained model.
+        """
+        trained_model = Path(trained_model).expanduser()
+
+        if not trained_model.is_file():
+            raise PathNotFoundException(trained_model)
+        
+        self._trained_model = str(trained_model.absolute()).replace('%20', ' ')
+
+        for config_file in config_files:
+            config_file = Path(config_file).expanduser()
+
+            if not config_file.is_file():
+                raise PathNotFoundException(trained_model)
+            
+            self._config_files.append(str(config_file.absolute()).replace('%20', ' '))
+        
+        # Change build type for making the fastr network
+        self._buildtype = 'testing'
+
     def predict_labels(self, label_names: list):
         """Determine which label(s) to predict in your experiments.
 
@@ -386,7 +418,8 @@ class SimpleWORC():
         """
         if not self._labels_file_train:
             if not self.labels_file_train:
-                raise ValueError('No labels file set! You can do this through labels_from_this_file')
+                if not self._trained_model:
+                    raise ValueError('No labels file set! You can do this through labels_from_this_file')
 
         if not isinstance(label_names, list):
             raise TypeError(f'label_names is of type {type(label_names)} while list is expected')
@@ -444,23 +477,43 @@ class SimpleWORC():
 
     def count_num_subjects(self):
         """Count the number of subjects in the experiment."""
-        if self._radiomix_feature_file:
-            f = pd.read_excel(self._radiomix_feature_file)
-            pids = f.values[:, 4]
-            tocount = pids
-        elif self._images_train:
-            tocount = self._images_train[0]
-        elif self._features_train:
-            tocount = self._features_train[0]
-        elif self.images_train:
-            tocount = self.images_train[0]
-        elif self.features_train:
-            tocount = self.features_train[0]
+        if self._trained_model is not None:
+            # Only count test subjects
+            if self._radiomix_feature_file:
+                f = pd.read_excel(self._radiomix_feature_file)
+                pids = f.values[:, 4]
+                tocount = pids
+            elif self._images_test:
+                tocount = self._images_[0]
+            elif self._features_test:
+                tocount = self._features_test[0]
+            elif self.images_test:
+                tocount = self.images_test[0]
+            elif self.features_test:
+                tocount = self.features_test[0]
+            else:
+                message = 'No test features or images given, cannot count number ' +\
+                    ' of subjects. Make sure you input at least one of these ' +\
+                    'as source.'
+                raise WORCValueError(message)
         else:
-            message = 'No features or images given, cannot count number ' +\
-                ' of subjects. Make sure you input at least one of these ' +\
-                'as source.'
-            raise WORCValueError(message)
+            if self._radiomix_feature_file:
+                f = pd.read_excel(self._radiomix_feature_file)
+                pids = f.values[:, 4]
+                tocount = pids
+            elif self._images_train:
+                tocount = self._images_train[0]
+            elif self._features_train:
+                tocount = self._features_train[0]
+            elif self.images_train:
+                tocount = self.images_train[0]
+            elif self.features_train:
+                tocount = self.features_train[0]
+            else:
+                message = 'No train features or images given, cannot count number ' +\
+                    ' of subjects. Make sure you input at least one of these ' +\
+                    'as source.'
+                raise WORCValueError(message)
 
         if type(tocount) == dict():
             num_subjects = len(list(tocount.keys()))
@@ -701,6 +754,8 @@ class SimpleWORC():
         self._worc.masks_train = self._masks_train
         self._worc.labels_train = self._labels_file_train
         self._worc.semantics_train = self._semantics_file_train
+        self._worc.trained_model = self._trained_model
+        self._worc.configs = self._config_files
 
         # If a specific train-test setup is provided, add test sources
         if self._images_test:
@@ -743,7 +798,7 @@ class SimpleWORC():
             self._worc.configs[cnum]['ImageFeatures']['image_type'] = self._image_types[cnum]
 
         # Build the fastr network
-        self._worc.build()
+        self._worc.build(buildtype=self._buildtype)
         if self._add_evaluation:
             self._worc.add_evaluation(label_type=self._label_names[self._selected_label],
                                       modus=self._method)

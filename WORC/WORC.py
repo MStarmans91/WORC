@@ -590,9 +590,6 @@ class WORC(object):
                 # NOTE: We currently use the first configuration as general config
                 image_types = list()
                 for c in range(len(self.configs)):
-                    if type(self.configs[c]) == str:
-                        # Probably, c is a configuration file
-                        self.configs[c] = config_io.load_config(self.configs[c])
                     image_types.append(self.configs[c]['ImageFeatures']['image_type'])
 
                 if self.configs[0]['General']['Fingerprint'] == 'True' and any(imt not in all_modalities for imt in image_types):
@@ -1124,47 +1121,59 @@ class WORC(object):
             m = 'For a testing workflow, you need to provide a WORC config.ini file'
             raise WORCexceptions.WORCValueError(m)
         
+        self.network = fastr.create_network(self.name)
+        
+        # Add trained model node
+        memory = self.fastr_memory_parameters['Classification']
+        self.source_trained_model = self.network.create_source('HDF5',
+                                               id='trained_model',
+                                               node_group='trained_model', step_id='general_sources')
+
         if self.images_test or self.features_test:
             print('Building testing network...')
             # We currently require labels for supervised learning
             if self.labels_test:
                 self.network = fastr.create_network(self.name)
 
-                # NOTE: We currently use the first configuration as general config
+                # Extract some information from the configs
                 image_types = list()
-                for c in range(len(self.configs)):
-                    if type(self.configs[c]) == str:
-                        # Probably, c is a configuration file
-                        self.configs[c] = config_io.load_config(self.configs[c])
-                    image_types.append(self.configs[c]['ImageFeatures']['image_type'])
-
-                if self.configs[0]['General']['Fingerprint'] == 'True' and any(imt not in all_modalities for imt in image_types):
-                    m = f'One of your image types {image_types} is not one of the valid image types {quantitative_modalities + qualitative_modalities}. This is mandatory to set when performing fingerprinting, see the WORC Documentation (https://worc.readthedocs.io/en/latest/static/configuration.html#imagefeatures).'
-                    raise WORCexceptions.WORCValueError(m)
+                for conf_it in range(len(self.configs)):
+                    if type(self.configs[conf_it]) == str:
+                        # Config is a .ini file, load
+                        temp_conf = config_io.load_config(self.configs[conf_it])
+                    else:
+                        temp_conf = self.configs[conf_it]
+                    
+                    image_type = temp_conf['ImageFeatures']['image_type']   
+                    image_types.append(image_type)
+                    
+                    # NOTE: We currently use the first configuration as general config
+                    if conf_it == 0:
+                        print(temp_conf)
+                        ensemble_method = [temp_conf['Ensemble']['Method']]
+                        ensemble_size = [temp_conf['Ensemble']['Size']]
+                        label_names = [temp_conf['Labels']['label_names']]
+                        use_ComBat = temp_conf['General']['ComBat']
+                        use_segmentix = temp_conf['General']['Segmentix']
 
                 # Create various input sources
-                self.source_class_config =\
-                    self.network.create_source('ParameterFile',
-                                               id='config_classification_source',
-                                               node_group='conf', step_id='general_sources')
-
                 self.source_patientclass_test =\
                     self.network.create_source('PatientInfoFile',
                                                id='patientclass_test',
                                                node_group='pctest', step_id='test_sources')
 
                 self.source_ensemble_method =\
-                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Method']],
+                    self.network.create_constant('String', ensemble_method,
                                                  id='ensemble_method',
                                                  step_id='Evaluation')
 
                 self.source_ensemble_size =\
-                    self.network.create_constant('String', [self.configs[0]['Ensemble']['Size']],
+                    self.network.create_constant('String', ensemble_size,
                                                  id='ensemble_size',
                                                  step_id='Evaluation')
 
                 self.source_LabelType =\
-                    self.network.create_constant('String', [self.configs[0]['Labels']['label_names']],
+                    self.network.create_constant('String', label_names,
                                                  id='LabelType',
                                                  step_id='Evaluation')
 
@@ -1180,7 +1189,7 @@ class WORC(object):
                 self.plot_estimator.inputs['ensemble_size'] = self.source_ensemble_size.output
                 self.plot_estimator.inputs['label_type'] = self.source_LabelType.output
                 pinfo = self.source_patientclass_test.output
-                self.plot_estimator.inputs['prediction'] = self.classify.outputs['classification']
+                self.plot_estimator.inputs['prediction'] = self.source_trained_model.output
                 self.plot_estimator.inputs['pinfo'] = pinfo
                 
                 # Performance output
@@ -1193,7 +1202,7 @@ class WORC(object):
                 # -----------------------------------------------------
                 # Optionally, add ComBat Harmonization. Currently done
                 # on full dataset, not in a cross-validation
-                if self.configs[0]['General']['ComBat'] == 'True':
+                if use_ComBat == 'True':
                     message = '[ERROR] If you want to use ComBat, you need to provide training images or features as well.'
                     raise WORCexceptions.WORCNotImplementedError(message)
 
@@ -1241,8 +1250,7 @@ class WORC(object):
                             f' ({nim}) or 1 when using registration.'
                         raise WORCexceptions.WORCValueError(m)
 
-                    # BUG: We assume that first type defines if we use segmentix
-                    if self.configs[0]['General']['Segmentix'] == 'True':
+                    if use_segmentix == 'True':
                         # Use the segmentix toolbox for segmentation processing
                         print('\t - Adding segmentix node for segmentation preprocessing.')
                         self.sinks_segmentations_segmentix_test = dict()
@@ -1261,6 +1269,13 @@ class WORC(object):
                     # Create a part of the pipeline for each modality
                     self.modlabels = list()
                     for nmod, mod in enumerate(image_types):
+                        # Extract some modality specific config info 
+                        if type(self.configs[conf_it]) == str:
+                            # Config is a .ini file, load
+                            temp_conf = config_io.load_config(self.configs[nmod])
+                        else:
+                            temp_conf = self.configs[nmod]
+                        
                         # Create label for each modality/image
                         num = 0
                         label = mod + '_' + str(num)
@@ -1272,7 +1287,6 @@ class WORC(object):
 
                         # Create required sources and sinks
                         self.sources_parameters[label] = self.network.create_source('ParameterFile', id=f'config_{label}', step_id='general_sources')
-                        self.sinks_configs[label] = self.network.create_sink('ParameterFile', id=f'config_{label}_sink', node_group='conf', step_id='general_sinks')
                         self.sources_images_test[label] = self.network.create_source('ITKImageFile', id='images_test_' + label, node_group='test', step_id='test_sources')
 
                         if self.metadata_test and len(self.metadata_test) >= nmod + 1:
@@ -1311,16 +1325,21 @@ class WORC(object):
 
                         # -----------------------------------------------------
                         # Preprocessing
-                        preprocess_node = str(self.configs[nmod]['General']['Preprocessing'])
+                        preprocess_node = str(temp_conf['General']['Preprocessing'])
                         print('\t - Adding preprocessing node for image preprocessing.')
                         self.add_preprocessing(preprocess_node, label, nmod)
 
                         # -----------------------------------------------------
                         # Feature calculation
                         feature_calculators =\
-                            self.configs[nmod]['General']['FeatureCalculators']
-                        feature_calculators = feature_calculators.strip('][').split(', ')
-                        self.featurecalculators[label] = [f.split('/')[0] for f in feature_calculators]
+                            temp_conf['General']['FeatureCalculators']
+                        if not isinstance(feature_calculators, list):
+                            # Configparser object, need to split string
+                            feature_calculators = feature_calculators.strip('][').split(', ')
+                            self.featurecalculators[label] = [f.split('/')[0] for f in feature_calculators]
+                        else:
+                            self.featurecalculators[label] = feature_calculators
+                        
 
                         # Add lists for feature calculation and converter objects
                         self.calcfeatures_test[label] = list()
@@ -1361,9 +1380,9 @@ class WORC(object):
                         # -----------------------------------------------------
                         # Optionally, add segmentix, the in-house segmentation
                         # processor of WORC
-                        if self.configs[nmod]['General']['Segmentix'] == 'True':
+                        if temp_conf['General']['Segmentix'] == 'True':
                             self.add_segmentix(label, nmod)
-                        elif self.configs[nmod]['Preprocessing']['Resampling'] == 'True':
+                        elif temp_conf['Preprocessing']['Resampling'] == 'True':
                             raise WORCexceptions.WORCValueError('If you use resampling, ' +
                                                  'have to use segmentix to ' +
                                                  ' make sure the mask is ' +
@@ -1389,7 +1408,7 @@ class WORC(object):
 
                         # -----------------------------------------------------
                         # Optionally, add ComBat Harmonization
-                        if self.configs[0]['General']['ComBat'] == 'True':
+                        if use_ComBat == 'True':
                             # Link features to ComBat
                             self.links_Combat1_test[label] = list()
                             for i_node, fname in enumerate(self.featurecalculators[label]):
@@ -1404,7 +1423,9 @@ class WORC(object):
 
                         for i_node, fname in enumerate(self.featurecalculators[label]):
                             # Create sink for feature outputs
-                            self.sinks_features_test[label].append(self.network.create_sink('HDF5', id='features_test_' + label + '_' + fname, step_id='test_sinks'))
+                            node_id = 'features_test_' + label + '_' + fname
+                            node_id = node_id.replace(':', '_').replace('.', '_').replace('/', '_')
+                            self.sinks_features_test[label].append(self.network.create_sink('HDF5', id=node_id, step_id='test_sinks'))
 
                             # Save output
                             self.sinks_features_test[label][i_node].input = self.featureconverter_test[label][i_node].outputs['feat_out']
@@ -1502,7 +1523,7 @@ class WORC(object):
         self.links_Combat_out_train.collapse = 'ComBat'
         self.sinks_features_train_ComBat.input = self.ComBat.outputs['features_train_out']
 
-        if self.TrainTest:
+        if self.TrainTest or self.OnlyTest:
             # Create sink for ComBat output
             self.sinks_features_test_ComBat = self.network.create_sink('HDF5', id='features_test_ComBat', step_id='ComBat')
 
@@ -1517,6 +1538,14 @@ class WORC(object):
 
     def add_preprocessing(self, preprocess_node, label, nmod):
         """Add nodes required for preprocessing of images."""
+        
+        # Extract some general information on the setup
+        if type(self.configs[0]) == str:
+            # Config is a .ini file, load
+            temp_conf = config_io.load_config(self.configs[nmod])
+        else:
+            temp_conf = self.configs[nmod]
+        
         memory = self.fastr_memory_parameters['Preprocessing']
         if not self.OnlyTest:
             self.preprocessing_train[label] = self.network.create_node(preprocess_node, tool_version='1.0', id='preprocessing_train_' + label, resources=ResourceLimit(memory=memory), step_id='Preprocessing')
@@ -1525,16 +1554,16 @@ class WORC(object):
             self.preprocessing_test[label] = self.network.create_node(preprocess_node, tool_version='1.0', id='preprocessing_test_' + label, resources=ResourceLimit(memory=memory), step_id='Preprocessing')
 
         # Create required links
-        if self.configs[0]['General']['Fingerprint'] == 'True' and not self.OnlyTest:
-            self.preprocessing_train[label].inputs['parameters'] = self.node_fingerprinters[label].outputs['config']
-        else:
-            self.preprocessing_train[label].inputs['parameters'] = self.sources_parameters[label].output
-
         if not self.OnlyTest:
+            if temp_conf['General']['Fingerprint'] == 'True':
+                self.preprocessing_train[label].inputs['parameters'] = self.node_fingerprinters[label].outputs['config']
+            else:
+                self.preprocessing_train[label].inputs['parameters'] = self.sources_parameters[label].output
+
             self.preprocessing_train[label].inputs['image'] = self.converters_im_train[label].outputs['image']
 
         if self.TrainTest:
-            if self.configs[0]['General']['Fingerprint'] == 'True':
+            if temp_conf['General']['Fingerprint'] == 'True' and not self.OnlyTest:
                 self.preprocessing_test[label].inputs['parameters'] = self.node_fingerprinters[label].outputs['config']
             else:
                 self.preprocessing_test[label].inputs['parameters'] = self.sources_parameters[label].output
@@ -1626,7 +1655,18 @@ class WORC(object):
             node_train.inputs['image'] =\
                 self.preprocessing_train[label].outputs['image']
 
-        if self.TrainTest:
+        if self.OnlyTest:
+            if 'pyradiomics' in calcfeat_node.lower():
+                node_test.inputs['parameters'] =\
+                    self.source_config_pyradiomics[label].output
+            else:
+                node_test.inputs['parameters'] =\
+                    self.sources_parameters[label].output
+
+            node_test.inputs['image'] =\
+                self.preprocessing_test[label].outputs['image']
+                       
+        elif self.TrainTest:
             if 'pyradiomics' in calcfeat_node.lower():
                 if self.configs[0]['General']['Fingerprint'] != 'True':
                     node_test.inputs['parameters'] =\
@@ -1716,7 +1756,10 @@ class WORC(object):
 
             conv_test.inputs['feat_in'] = node_test.outputs['features']
             conv_test.inputs['toolbox'] = self.source_toolbox_name[label].output
-            if self.configs[0]['General']['Fingerprint'] == 'True':
+            if self.OnlyTest:
+                conv_test.inputs['config'] =\
+                    self.sources_parameters[label].output
+            elif self.configs[0]['General']['Fingerprint'] == 'True':
                 conv_test.inputs['config'] =\
                     self.node_fingerprinters[label].outputs['config']
             else:
@@ -2199,7 +2242,10 @@ class WORC(object):
         self.sink_data = dict()
 
         # Save the configurations as files
-        self.save_config()
+        if not self.OnlyTest:
+            self.save_config()
+        else:
+            self.fastrconfigs = self.configs
 
         # fixed splits
         if self.fixedsplits:
@@ -2208,6 +2254,7 @@ class WORC(object):
         # Set source and sink data
         self.source_data['patientclass_train'] = self.labels_train
         self.source_data['patientclass_test'] = self.labels_test
+        self.source_data['trained_model'] = self.trained_model
 
         self.sink_data['classification'] = ("vfs://output/{}/estimator_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['performance'] = ("vfs://output/{}/performance_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
@@ -2216,12 +2263,19 @@ class WORC(object):
         self.sink_data['features_train_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
         self.sink_data['features_test_ComBat'] = ("vfs://output/{}/ComBat/features_ComBat_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name)
 
+        # Get info from the first config file
+        if type(self.configs[0]) == str:
+            # Config is a .ini file, load
+            temp_conf = config_io.load_config(self.configs[0])
+        else:
+            temp_conf = self.configs[0]
+                        
         # Set the source data from the WORC objects you created
         for num, label in enumerate(self.modlabels):
             self.source_data['config_' + label] = self.fastrconfigs[num]
             self.sink_data[f'config_{label}_sink'] = f"vfs://output/{self.name}/config_{label}_{{sample_id}}_{{cardinality}}{{ext}}"
 
-            if 'pyradiomics' in self.configs[0]['General']['FeatureCalculators'] and self.configs[0]['General']['Fingerprint'] != 'True':
+            if 'pyradiomics' in temp_conf['General']['FeatureCalculators'] and temp_conf['General']['Fingerprint'] != 'True':
                 self.source_data['config_pyradiomics_' + label] = self.pyradiomics_configs[num]
 
             # Add train data sources
@@ -2291,6 +2345,7 @@ class WORC(object):
                 self.sink_data['images_out_elastix_test_' + label] = ("vfs://output/{}/Images/im_{}_elastix_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, label)
                 if hasattr(self, 'featurecalculators'):
                     for f in self.featurecalculators[label]:
+                        f = f.replace(':', '_').replace('.', '_').replace('/', '_')
                         self.sink_data['features_test_' + label + '_' + f] = ("vfs://output/{}/Features/features_{}_{}_{{sample_id}}_{{cardinality}}{{ext}}").format(self.name, f, label)
 
             # Add elastix sinks if used
@@ -2321,11 +2376,12 @@ class WORC(object):
         except graphviz.backend.CalledProcessError as e:
             print(f'[WORC WARNING] Graphviz executable gave an error: not drawing network diagram. Original error: {e}')
 
-        # export hyper param. search space to LaTeX table
-        for config in self.fastrconfigs:
-            config_path = Path(url2pathname(urlparse(config).path))
-            tex_path = f'{config_path.parent.absolute() / config_path.stem}_hyperparams_space.tex'
-            export_hyper_params_to_latex(config_path, tex_path)
+        # export hyper param. search space to LaTeX table. Only for training models.
+        if not self.OnlyTest:
+            for config in self.fastrconfigs:
+                config_path = Path(url2pathname(urlparse(config).path))
+                tex_path = f'{config_path.parent.absolute() / config_path.stem}_hyperparams_space.tex'
+                export_hyper_params_to_latex(config_path, tex_path)
 
         if DebugDetector().do_detection():
             print("Source Data:")

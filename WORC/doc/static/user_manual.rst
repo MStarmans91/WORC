@@ -589,11 +589,169 @@ The following outputs are only generated if certain configuration settings are u
 
 Debugging
 ---------
-
+For some of the most frequently occuring issues and answers, see the  :ref:`WORC FAQ <faq-chapter>`). 
 As WORC is based on fastr, debugging is similar to debugging a fastr pipeline: see therefore also
-`the fastr debugging guidelines <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging/>`_.
-
+`the fastr debugging guidelines <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging/>`_. 
 If you run into any issue, please create an issue on the `WORC Github <https://github.com/MStarmans91/WORC/issues/>`_.
+
+We advise you to follow the fastr debugging guide, but for convenience provide here an adoptation of 
+"Debugging a Network run with errors" with a WORC example.
+
+If a Network run did finish but there were errors detected, Fastr will report those
+at the end of the execution. An example of the output of a Network run with failures::
+
+    [INFO] networkrun:0688 >> ####################################
+    [INFO] networkrun:0689 >> #    network execution FINISHED    #
+    [INFO] networkrun:0690 >> ####################################
+    [INFO] simplereport:0026 >> ===== RESULTS =====
+    [INFO] simplereport:0036 >> classification: 0 success / 0 missing / 1 failed
+    [INFO] simplereport:0036 >> config_CT_0_sink: 1 success / 0 missing / 0 failed
+    [INFO] simplereport:0036 >> config_classification_sink: 1 success / 0 missing / 0 failed
+    [INFO] simplereport:0036 >> features_train_CT_0_predict: 19 success / 0 missing / 1 failed
+    [INFO] simplereport:0036 >> performance: 0 success / 0 missing / 1 failed
+    [INFO] simplereport:0036 >> segmentations_out_segmentix_train_CT_0: 20 success / 0 missing / 0 failed
+    [INFO] simplereport:0037 >> ===================
+    [WARNING] simplereport:0049 >> There were failed samples in the run, to start debugging you can run:
+
+       fastr trace C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json --sinks
+
+   see the debug section in the manual at https://fastr.readthedocs.io/en/develop/static/user_manual.html#debugging for more information.
+
+Fastr reports errors per sink, which are the outputs expected of the network, e.g., feature files and a classification model in WORC. Per sink, there 
+can be one or multiple samples / patients that failed. A sink / output failing can be due to multiple nodes in the network: if the classification model
+is not generated, it could be that the model fitting failed, but also a feature extraction node somewhere earlier in the pipeline. Hence I would 
+advice to start with a sink that's a result of a node early in the pipeline. You will also see this difference in the output that fastr gives,
+as some jobs have actually failed, while some have been cancelled because other jobs before that have failed. 
+If you have graphviz installed, fastr will draw an image of the full WORC network you are running so you can identify this, see 
+https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata/WORC_Example_STWStrategyHN.svg for an example.
+
+In the above example, we thus want to start with the ``features_train_CT_0_predict`` sink. Also you already get
+the suggestion to use :ref:`fastr trace <cmdline-trace>`. This command helps you inspect the staging directory of the Network run
+and pinpoint the errors. To get a very detailed error report we have to specify one sink and one sample.
+To see which samples have failed, we run the ``fastr trace`` command with the ``--samples`` option ::
+
+   (VEWORC) C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial>fastr trace "C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json" --samples
+    [WARNING]  __init__:0084 >> Not running in a production installation (branch "unknown" from installed package)
+   HN1004 -- 1 failed -- 1 succeeded
+   HN1077 -- 0 failed -- 2 succeeded
+   HN1088 -- 0 failed -- 2 succeeded
+   HN1146 -- 0 failed -- 2 succeeded
+   HN1159 -- 0 failed -- 2 succeeded
+   HN1192 -- 0 failed -- 2 succeeded
+   HN1259 -- 0 failed -- 2 succeeded
+   HN1260 -- 0 failed -- 2 succeeded
+   HN1323 -- 0 failed -- 2 succeeded
+   HN1331 -- 0 failed -- 2 succeeded
+   HN1339 -- 0 failed -- 2 succeeded
+   HN1342 -- 0 failed -- 2 succeeded
+   HN1372 -- 0 failed -- 2 succeeded
+   HN1491 -- 0 failed -- 2 succeeded
+   HN1501 -- 0 failed -- 2 succeeded
+   HN1519 -- 0 failed -- 2 succeeded
+   HN1524 -- 0 failed -- 2 succeeded
+   HN1554 -- 0 failed -- 2 succeeded
+   HN1560 -- 0 failed -- 2 succeeded
+   HN1748 -- 0 failed -- 2 succeeded
+   all -- 2 failed -- 2 succeeded
+
+You will recognize the names you gave to the samples. Per sample, you will see in how many sinks they have failed.
+In this case, the ``segmentations_out_segmentix_train_CT_0`` sink was succesfully generated for all samples,
+but our ``features_train_CT_0_predict`` failed. Note that the ``all`` sample is when we combine all patients, e.g.,
+in the classification node. In this case, only one sample failed, HN1004.
+
+Now we run the ``fastr trace`` command for our specific sink and a specific sample print a complete error
+report for that job::
+
+   (VEWORC) C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial>fastr trace "C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks features_train_CT_0_predict --samples HN1004
+    [WARNING]  __init__:0084 >> Not running in a production installation (branch "unknown" from installed package)
+   Tracing errors for sample HN1004 from sink features_train_CT_0_predict
+   Located result pickle: C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\WORC_Example_STWStrategyHN\calcfeatures_train_predict_CalcFeatures_1_0_CT_0\HN1004\__fastr_result__.yaml
+
+   ===== JOB WORC_Example_STWStrategyHN___calcfeatures_train_predict_CalcFeatures_1_0_CT_0___HN1004 =====
+   Network: WORC_Example_STWStrategyHN
+   Run: WORC_Example_STWStrategyHN_2023-08-11T16-59-52
+   Node: calcfeatures_train_predict_CalcFeatures_1_0_CT_0
+   Sample index: (0)
+   Sample id: HN1004
+   Status: JobState.execution_failed
+   Timestamp: 2023-08-11 15:01:15.442376
+   Job file: C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\calcfeatures_train_predict_CalcFeatures_1_0_CT_0\HN1004\__fastr_result__.yaml
+
+   ----- ERRORS -----
+   - FastrOutputValidationError: Output value [HDF5] "vfs://home/documents\github\worctutorial\worc_example_stwstrategyhn\calcfeatures_train_predict_calcfeatures_1_0_ct_0\hn1004\features_0.hdf5" not valid for datatype "'HDF5'" (C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\fastr\execution\job.py:1155)
+   - FastrOutputValidationError: The output "features" is invalid! (C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\fastr\execution\job.py:1103)
+   - FastrErrorInSubprocess: C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\phasepack\tools.py:14: UserWarning:
+   Module 'pyfftw' (FFTW Python bindings) could not be imported. To install it, try
+   running 'pip install pyfftw' from the terminal. Falling back on the slower
+   'fftpack' module for 2D Fourier transforms.
+     'fftpack' module for 2D Fourier transforms.""")
+   Traceback (most recent call last):
+     File "c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py", line 72, in <module>
+       main()
+     File "c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py", line 68, in main
+       semantics_file=args.sem)
+     File "c:\users\martijn starmans\documents\github\predictfastr\PREDICT\CalcFeatures.py", line 109, in CalcFeatures
+       raise ae.PREDICTIndexError(message)
+   PREDICT.addexceptions.PREDICTIndexError: Shapes of image((512, 512, 147)) and mask ((512, 512, 134)) do not match!
+    (C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\fastr\execution\executionscript.py:111)
+   - FastrValueError: Output values are not valid! (C:\Users\Martijn Starmans\.conda\envs\VEWORC\lib\site-packages\fastr\execution\job.py:834)
+   ------------------
+
+   Command:
+   List representation: ['python', 'c:\\users\\martijn starmans\\documents\\github\\worc\\WORC\\resources\\fastr_tools\\predict\\bin\\CalcFeatures_tool.py', '--im', 'C:\\Users\\Martijn Starmans\\documents\\github\\worctutorial\\worc_example_stwstrategyhn\\preprocessing_train_ct_0\\hn1004\\image_0.nii.gz', '--out', 'C:\\Users\\Martijn Starmans\\documents\\github\\worctutorial\\worc_example_stwstrategyhn\\calcfeatures_train_predict_CalcFeatures_1_0_CT_0\\HN1004\\features_0.hdf5', '--seg', 'C:\\Users\\Martijn Starmans\\documents\\github\\worctutorial\\worc_example_stwstrategyhn\\segmentix_train_ct_0\\hn1004\\segmentation_out_0.nii.gz', '--para', 'C:\\Users\\Martijn Starmans\\documents\\github\\worctutorial\\worc_example_stwstrategyhn\\fingerprinter_ct_0\\all\\config_0.ini']
+
+   String representation: python ^"c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py^" --im ^"C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\preprocessing_train_ct_0\hn1004\image_0.nii.gz^" --out ^"C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\calcfeatures_train_predict_CalcFeatures_1_0_CT_0\HN1004\features_0.hdf5^" --seg ^"C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\segmentix_train_ct_0\hn1004\segmentation_out_0.nii.gz^" --para ^"C:\Users\Martijn Starmans\documents\github\worctutorial\worc_example_stwstrategyhn\fingerprinter_ct_0\all\config_0.ini^"
+
+
+   Output data:
+   {'features': [<HDF5: 'vfs://home/documents\\github\\worctutorial\\worc_example_stwstrategyhn\\calcfeatures_train_predict_calcfeatures_1_0_ct_0\\hn1004\\features_0.hdf5'>]}
+
+   Status history:
+   2023-08-11 15:01:15.442376: JobState.created
+   2023-08-11 15:01:15.451894: JobState.hold
+   2023-08-11 15:04:21.852828: JobState.queued
+   2023-08-11 15:05:21.169469: JobState.running
+   2023-08-11 15:05:28.904541: JobState.execution_failed
+
+   ----- STDOUT -----
+   Loading inputs.
+   Load image and metadata file.
+   Load semantics file.
+   Load segmentation.
+   Shapes of image((512, 512, 147)) and mask ((512, 512, 135)) do not match!
+
+   ------------------
+
+   ----- STDERR -----
+   Traceback (most recent call last):
+     File "c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py", line 72, in <module>
+       main()
+     File "c:\users\martijn starmans\documents\github\worc\WORC\resources\fastr_tools\predict\bin\CalcFeatures_tool.py", line 68, in main
+       semantics_file=args.sem)
+     File "c:\users\martijn starmans\documents\github\predictfastr\PREDICT\CalcFeatures.py", line 109, in CalcFeatures
+       raise ae.PREDICTIndexError(message)
+   PREDICT.addexceptions.PREDICTIndexError: Shapes of image((512, 512, 147)) and mask ((512, 512, 134)) do not match!
+
+   ------------------
+
+As shown above, it finds the result files of the failed job(s) and prints the most important information. The first
+paragraph shows the information about the Job that was involved. The second paragraph shows the exact calling command 
+that fastr was trying to execute for this job, both as a list (which is clearer and internally used in Python) and 
+as a string (which you can copy/paste to the shell to test the command and should reproduce the exact error encounteres, nice for debugging if you make changes in the code).
+Then there is the output data as determined by Fastr. The next section shows the status history of the
+Job which can give an indication about wait and run times. At the bottom, the stdout and stderr of the
+subprocess are printed. 
+
+But the section we are most interested in, is the Error section, which lists the errors that Fastr encounted during the
+execution of the Job. Note that the second FastrValueError is a general error fastr returns when a job failed:
+since there is no output generated, the output values are obviously not valid for what fastr expected. Hence that 
+does not give you any input on why the job failed. What you want is the actual error that occured in the tool, e.g.,
+the Python error. In this case, that's the PREDICT.addexceptions.PREDICTIndexError, which tells us that the mask
+that we provided for feature extraction had a different shape then the image. 
+
+Once you've solved the issues, you can just relaunch the experiment. WORC/fastr saves the temporary output files 
+and will thus continue where it left of, only checking for all jobs that were previously finished whether
+the output is still there.
 
 
 Example data

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,12 +51,12 @@ class AbstractValidator(ABC):
 
 class SimpleValidator(AbstractValidator):
     def _validate(self, simpleworc, *args, **kwargs):
-        if not simpleworc._labels_file_train:
-            if hasattr(simpleworc, 'labels_file_train'):
-                if not simpleworc.labels_file_train:
-                    raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
-            else:
-                raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
+        # if not simpleworc._labels_file_train:
+        #     if hasattr(simpleworc, 'labels_file_train'):
+        #         if not simpleworc.labels_file_train:
+        #             raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
+        #     else:
+        #         raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
 
         if not simpleworc._label_names:
             if not simpleworc.label_names:
@@ -87,15 +87,15 @@ class MinSubjectsValidator(AbstractValidator):
             raise ae.WORCValueError(f'Less than {min_subjects} subjects (you have {simpleworc._num_subjects}) will probably make WORC crash due to a split in the test/validation set having only one subject. Use at least {min_subjects} subjects or more.')
 
 
-class EvaluateValidator(AbstractValidator):
-    def _validate(self, simpleworc, *args, **kwargs):
-        if simpleworc._add_evaluation:
-            if not simpleworc._images_train:
-                if hasattr(simpleworc, 'images_train'):
-                    if not simpleworc.images_train:
-                        raise ae.WORCValueError(f'You have added the evaluation pipeline, but have not provided images, which is currently required. We will work on this option in a future release.')
-                else:
-                    raise ae.WORCValueError(f'You have added the evaluation pipeline, but have not provided images, which is currently required. We will work on this option in a future release.')
+# class EvaluateValidator(AbstractValidator):
+#     def _validate(self, simpleworc, *args, **kwargs):
+#         if simpleworc._add_evaluation:
+#             if not simpleworc._images_train:
+#                 if hasattr(simpleworc, 'images_train'):
+#                     if not simpleworc.images_train:
+#                         raise ae.WORCValueError(f'You have added the evaluation pipeline, but have not provided images, which is currently required. We will work on this option in a future release.')
+#                 else:
+#                     raise ae.WORCValueError(f'You have added the evaluation pipeline, but have not provided images, which is currently required. We will work on this option in a future release.')
 
 
 class SamplesWarning(AbstractValidator):
@@ -111,20 +111,37 @@ class SamplesWarning(AbstractValidator):
 
 class InvalidLabelsValidator(AbstractValidator):
     def _validate(self, simpleworc):
-        errstr = None
-
+        labels_file_train = None
+        labels_file_test = None
+        
         if simpleworc._labels_file_train:
             labels_file_train = simpleworc._labels_file_train
         elif simpleworc.labels_file_train:
             labels_file_train = simpleworc.labels_file_train
+        elif simpleworc.trained_model is not None or simpleworc._trained_model is not None:
+            # Inference, only testing objects
+            if simpleworc._labels_file_test:
+                labels_file_test = simpleworc._labels_file_test
+            elif simpleworc.labels_file_test:
+                labels_file_test = simpleworc.labels_file_test
+            else:
+                raise ae.WORCValueError(f'No test labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
         else:
-            raise ae.WORCValueError(f'No labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
+            raise ae.WORCValueError(f'No training labels, use SimpleWorc().labels_from_this_file(**) to add labels.')
 
-        if not os.path.exists(labels_file_train):
-            raise ae.WORCValueError(f'Given label file {labels_file_train} does not exist.')
+        if labels_file_train is not None:
+            self._validate_labels_file(labels_file_train)
+            
+        if labels_file_test is not None:
+            self._validate_labels_file(labels_file_test)
 
+    def _validate_labels_file(self, labels_file):
+        errstr = None
+        if not os.path.exists(labels_file):
+            raise ae.WORCValueError(f'Given label file {labels_file} does not exist.')
+        
         try:
-            label_data = load_labels(labels_file_train)
+            label_data = load_labels(labels_file)
         except ae.WORCAssertionError as wae:
             if 'First column should be patient ID' in str(wae):
                 # TODO: print wrong column name and file so that it is clear what needs to be replaced in which file
@@ -153,7 +170,8 @@ class InvalidLabelsValidator(AbstractValidator):
 
         if errstr:
             raise ae.WORCValueError(errstr)
-
+        
+        
     def _get_all_substrings_for_array(self, arr):
         # generate a dict with substrings of each element in array
         all_matches = {}
@@ -172,7 +190,6 @@ class ValidatorsFactory:
             SimpleValidator(),
             MinSubjectsValidator(),
             SamplesWarning(),
-            EvaluateValidator(),
             InvalidLabelsValidator()
         ]
 

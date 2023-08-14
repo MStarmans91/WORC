@@ -32,6 +32,10 @@ Added
 - Workflow to provide evaluate a trained model on new data
 - Option to set a fixed random seed in the hyperoptimization
   for reproducibility.
+- Various FAQs
+- Updated user manual with more extensive debugging guide.
+- Thoroughly updated user manual documentation on different data flows, e.g.
+  train-test setups, multiple segmentations per patient.
 
 
 3.6.2 - 2023-03-14
