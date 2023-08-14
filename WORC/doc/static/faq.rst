@@ -157,8 +157,8 @@ name. To see which labels are exactly used, please see
 3. Tell ``WORC`` to use your feature and not compute the default ones
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 To this end, ``SimpleWORC``, and therefore also ``BasicWORC``, include the
-function ``features_from_this_directory()``. See also the
-:ref:`quick start guide <quickstart-chapter>`. As explained in the WORCTutorial,
+function ``features_from_this_directory()``. See the specific WORC tutorial
+on using your own features: https://github.com/MStarmans91/WORCtutorial/Extra_tutorials/WORCTutorialBasic_OwnFeatures.py.  As explained in the WORCTutorial,
 a default structure of your ``featuresdatadir`` folder is expected in this
 function: there should be a subfolder for each patient, in which the feature
 file should be. The feature file can have a fixed name, but wildcard are
