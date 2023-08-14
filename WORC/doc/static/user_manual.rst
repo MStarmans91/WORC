@@ -266,7 +266,15 @@ Semantics or non-radiomics features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Semantic features are non-computational features, thus features that you supply instead of extract. Examples include
 using the age and sex of the patients in the classification. You can
-supply these as a .csv listing your features per patient, similar to the :ref:`label file <um-labels>`
+supply these as a .csv listing your features per patient, similar to the :ref:`label file <um-labels>`. See
+[the WORCTutorial Github repo](https://github.com/MStarmans91/WORCTutorial/tree/master/Data/Examplefiles) for an example file.
+
+You can provide these sources either through the ``set_registration_parameterfile`` function of the facades,
+by interacting with the ``BasicWORC`` ``elastix_parameter_file`` object, or the 
+``WORC`` ``Elastix_Para`` object. An example of the first option:
+
+.. code-block:: python
+
 
 Masks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -729,15 +737,15 @@ we will mostly focus on the attributes, inputs, outputs and workflows here.
 There are numerous ``WORC`` attributes which serve as source nodes (i.e. inputs) for the
 FASTR experiment. These are:
 
--  ``images_train`` and ``images_test``
--  ``segmentations_train`` and ``segmentations_test``
--  ``semantics_train`` and ``semantics_test``
--  ``labels_train`` and ``labels_test``
--  ``masks_train`` and ``masks_test``
--  ``features_train`` and ``features_test``
--  ``metadata_train`` and ``metadata_test``
--  ``Elastix_Para``
--  ``fastrconfigs``
+- ``images_train`` and ``images_test``
+- ``segmentations_train`` and ``segmentations_test``
+- ``semantics_train`` and ``semantics_test``
+- ``labels_train`` and ``labels_test``
+- ``masks_train`` and ``masks_test``
+- ``features_train`` and ``features_test``
+- ``metadata_train`` and ``metadata_test``
+- ``Elastix_Para``
+- ``fastrconfigs``
 
 These directly correspond to the :ref:`input file definitions discussed below <inputs>`
 How to provide your data to ``WORC`` is also described in this section.
