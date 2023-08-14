@@ -737,15 +737,15 @@ we will mostly focus on the attributes, inputs, outputs and workflows here.
 There are numerous ``WORC`` attributes which serve as source nodes (i.e. inputs) for the
 FASTR experiment. These are:
 
-- ``images_train`` and ``images_test``
-- ``segmentations_train`` and ``segmentations_test``
-- ``semantics_train`` and ``semantics_test``
-- ``labels_train`` and ``labels_test``
-- ``masks_train`` and ``masks_test``
-- ``features_train`` and ``features_test``
-- ``metadata_train`` and ``metadata_test``
-- ``Elastix_Para``
-- ``fastrconfigs``
+   - ``images_train`` and ``images_test``
+   - ``segmentations_train`` and ``segmentations_test``
+   - ``semantics_train`` and ``semantics_test``
+   - ``labels_train`` and ``labels_test``
+   - ``masks_train`` and ``masks_test``
+   - ``features_train`` and ``features_test``
+   - ``metadata_train`` and ``metadata_test``
+   - ``Elastix_Para``
+   - ``fastrconfigs``
 
 These directly correspond to the :ref:`input file definitions discussed below <inputs>`
 How to provide your data to ``WORC`` is also described in this section.
