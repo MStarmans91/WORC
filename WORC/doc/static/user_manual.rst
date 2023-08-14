@@ -404,7 +404,7 @@ The following outputs and evaluation methods are always generated:
 
 4. The extracted features.
 
-    Stored in the ``Features`` folder, in the files ``features_{featuretoolboxname}_{image_type}_{num}_{sample_id}.hdf5``. Contains a panas series wih the following attributes:
+    Stored in the ``Features`` folder, in the files ``features_{featuretoolboxname}_{image_type}_{num}_{sample_id}.hdf5``. Contains a pandas series with the following attributes:
 
     - feature_labels: the labels or names of the features.
     - feature_values: the value of the features. Each element corresponds with the same element from the feature_labels attribute.

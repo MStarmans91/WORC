@@ -161,7 +161,10 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
             # Optional: perform chi2 test. Only do this when categorical, which we define as less than 20 options.
             unique_values = list(set(fv))
             unique_values.sort()
-            if len(unique_values) == 1:
+            if len(unique_values) == 0: # All NaN
+                print("[WORC Warning] " + fl + " has no value. Replacing chi2 metric value by NaN.")
+                pvalueschi2.append(np.nan)
+            elif len(unique_values) == 1:
                 print("[WORC Warning] " + fl + " has only one value. Replacing chi2 metric value by NaN.")
                 pvalueschi2.append(np.nan)
             elif len(unique_values) <= 20:
