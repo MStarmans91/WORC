@@ -1,39 +1,42 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Changelog &mdash; WORC 3.6.2 documentation</title>
+  <title>Changelog &mdash; WORC 3.6.3 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="WORC Package" href="../autogen/WORC.html" />
@@ -64,7 +67,7 @@
             
             
               <div class="version">
-                3.6.2
+                3.6.3
               </div>
             
           
@@ -81,6 +84,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -98,175 +102,181 @@
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">3.6.2 - 2023-03-14</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3.6.3 - 2023-08-15</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fixed">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">3.6.1 - 2023-02-15</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#added">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id4">3.6.0 - 2022-04-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">3.6.2 - 2023-03-14</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">3.5.0 - 2021-08-18</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id8">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id9">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id10">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">3.6.1 - 2023-02-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id11">3.4.5 - 2021-07-09</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id8">3.6.0 - 2022-04-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">3.5.0 - 2021-08-18</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id12">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id13">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id14">3.4.4 - 2021-07-01</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id15">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id16">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id17">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">3.4.5 - 2021-07-09</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Changed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id18">3.4.3 - 2021-06-02</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id18">3.4.4 - 2021-07-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id19">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id20">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id21">3.4.2 - 2021-05-27</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id22">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id23">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id22">3.4.3 - 2021-06-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id23">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id24">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id24">3.4.1 - 2021-05-18</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id25">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id26">Changed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id25">3.4.2 - 2021-05-27</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id26">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id27">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id28">3.4.0 - 2021-02-02</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id28">3.4.1 - 2021-05-18</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id29">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id30">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id31">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id32">3.3.5 - 2020-10-21</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id32">3.4.0 - 2021-02-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id33">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id34">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id35">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id36">3.3.4 - 2020-10-06</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id36">3.3.5 - 2020-10-21</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id37">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id38">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id39">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id40">3.3.3 - 2020-09-11</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id40">3.3.4 - 2020-10-06</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id41">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id44">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id45">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id42">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id43">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id46">3.3.2 - 2020-08-19</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id47">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id48">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id49">Changed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id44">3.3.3 - 2020-09-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id45">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id48">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id49">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id50">3.3.1 - 2020-07-31</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id51">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id52">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id50">3.3.2 - 2020-08-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id51">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id52">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id53">Changed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id53">3.3.0 - 2020-07-28</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id54">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id54">3.3.1 - 2020-07-31</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id55">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id56">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id57">3.2.2 - 2020-07-14</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id57">3.3.0 - 2020-07-28</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id58">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id59">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id60">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id61">3.2.1 - 2020-07-02</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id61">3.2.2 - 2020-07-14</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id62">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id63">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id64">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id65">3.2.0 - 2020-06-26</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id65">3.2.1 - 2020-07-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id66">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id67">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id68">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id69">3.1.4 - 2020-05-26</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id69">3.2.0 - 2020-06-26</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id70">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id71">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id72">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id73">3.1.3 - 2020-01-24</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id73">3.1.4 - 2020-05-26</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id74">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id75">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id76">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id77">3.1.2 - 2019-12-09</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id77">3.1.3 - 2020-01-24</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id78">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id79">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id80">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id81">3.1.1 - 2019-11-28</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id81">3.1.2 - 2019-12-09</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id82">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id83">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id84">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id85">3.1.0 - 2019-10-16</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id85">3.1.1 - 2019-11-28</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id86">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id87">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id88">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id89">3.0.0 - 2019-05-08</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id89">3.1.0 - 2019-10-16</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id90">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id91">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id92">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id93">2.1.3 - 2019-04-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id94">Changed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id93">3.0.0 - 2019-05-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id94">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id95">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id96">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id95">2.1.2 - 2019-04-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id96">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id97">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id98">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id97">2.1.3 - 2019-04-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id98">Changed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id99">2.1.1 - 2019-02-15</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id99">2.1.2 - 2019-04-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id100">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id101">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id102">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id103">2.1.0 - 2018-08-09</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id103">2.1.1 - 2019-02-15</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id104">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id105">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id106">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id107">2.0.0 - 2018-02-13</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id107">2.1.0 - 2018-08-09</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id108">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id109">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id110">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id111">2.0.0 - 2018-02-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id112">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id113">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id114">Fixed</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#rc1-2017-05-08">1.0.0rc1 - 2017-05-08</a></li>
@@ -280,6 +290,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -314,18 +325,20 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Changelog</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/static/changelog.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -345,19 +358,58 @@
 <p>The format is based on <a class="reference external" href="http://keepachangelog.com/">Keep a Changelog</a>
 and this project adheres to <a class="reference external" href="http://semver.org/">Semantic Versioning</a></p>
 <div class="section" id="id1">
-<h2>3.6.2 - 2023-03-14<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>3.6.3 - 2023-08-15<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Bug in computing confidence intervals when performance was always the same,
+results now in a np.nan confidence interval.</p></li>
+<li><p>Error catched and message added when you provide images and/or features in the
+test set, but not labels.</p></li>
+<li><p>SimpleWORC and BasicWORC now detect whether user has provided a separate training
+and test set and thus bootstrapping should be used.</p></li>
+<li><p>Bug in PREDICT was fixed that mixed up the mode in shape feature extraction (2D / 2.5D)</p></li>
+<li><p>Bug in performance calculation of multiclass classification.</p></li>
+<li><p>Bugs in statistical feature testing.</p></li>
+</ul>
+</div>
+<div class="section" id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Statistical test feature selection before PCA: otherwise when combined,
+it will select PCA components, not features.</p></li>
+</ul>
+</div>
+<div class="section" id="added">
+<h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Histogram equalization to preprocessing.</p></li>
+<li><p>Recursive feature elimination (RFE) feature selection.</p></li>
+<li><p>Workflow to provide evaluate a trained model on new data</p></li>
+<li><p>Option to set a fixed random seed in the hyperoptimization
+for reproducibility.</p></li>
+<li><p>Various FAQs</p></li>
+<li><p>Updated user manual with more extensive debugging guide.</p></li>
+<li><p>Thoroughly updated user manual documentation on different data flows, e.g.
+train-test setups, multiple segmentations per patient.</p></li>
+<li><p>function in SimpleWORC to add parameter files for elastix.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>3.6.2 - 2023-03-14<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>Fixed<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug when using statisticaltestthreshold in multiclass classification,
 see Github Issue #73.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id2">
-<h2>3.6.1 - 2023-02-15<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id3">
-<h3>Fixed<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h2>3.6.1 - 2023-02-15<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h3>Fixed<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug when using elastix, dimensionality got wrong name in fastr network.</p></li>
 <li><p>Bug in BasicWORC when starting from features</p></li>
@@ -369,8 +421,8 @@ to documentation.</p></li>
 to segmentation when required.</p></li>
 </ul>
 </div>
-<div class="section" id="changed">
-<h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Changed<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>When part of fiting and scoring a workflow fails, during optimization return NaN as performance,
 but during refitting skip that step. During optimization, if we skip it, the relation between
@@ -379,8 +431,8 @@ so best option is to skip the step. Previously, there was only skipping.</p></li
 <li><p>Set default of XGB estimator parallelization to single job.</p></li>
 </ul>
 </div>
-<div class="section" id="added">
-<h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Added<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Documentation updates</p></li>
 <li><p>Option to save the workflows trained on the train-validation training datasets, besides the option to save workflows
@@ -391,10 +443,10 @@ trained on the full training dataset. Not an option for SMAC due to implementati
 </ul>
 </div>
 </div>
-<div class="section" id="id4">
-<h2>3.6.0 - 2022-04-05<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id5">
-<h3>Added<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h2>3.6.0 - 2022-04-05<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id9">
+<h3>Added<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bayesian optimization through SMAC as alternative to random search. Due
 to specific requirements for SMAC, this is not by default installed.
@@ -405,18 +457,18 @@ Instructions to install this component are provided in the documentation.</p></l
 <li><p>Light fingerprinting approach to adjust config based on dataset.</p></li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h3>Fixed<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h3>Fixed<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>When none of the workflows to be included in the workflow converges during
 retraining, add the next best performing workflows.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id7">
-<h2>3.5.0 - 2021-08-18<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id8">
-<h3>Fixed<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h2>3.5.0 - 2021-08-18<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id12">
+<h3>Fixed<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug in plotting 2D images when ranking the posteriors or percentages.</p></li>
 <li><p>Bug in Evaluate for Regression.</p></li>
@@ -426,50 +478,50 @@ to read certain NIFTI files. See: <a class="reference external" href="https://gi
 Reverting to SimpleITK 2.0.2 for now</p></li>
 </ul>
 </div>
-<div class="section" id="id9">
-<h3>Changed<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id13">
+<h3>Changed<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Defaults for splitting jobs in hyperoptimization: now more parallelized.</p></li>
 </ul>
 </div>
-<div class="section" id="id10">
-<h3>Added<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id14">
+<h3>Added<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Documentation on additional functionality.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id11">
-<h2>3.4.5 - 2021-07-09<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id15">
+<h2>3.4.5 - 2021-07-09<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p>Unit tests moved from Travis to Github Workflow from this verion on.</p>
 </div></blockquote>
-<div class="section" id="id12">
-<h3>Fixed<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id16">
+<h3>Fixed<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug in plotting images when ranking the posteriors or percentages.</p></li>
 <li><p>Linting issues.</p></li>
 </ul>
 </div>
-<div class="section" id="id13">
-<h3>Changed<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id17">
+<h3>Changed<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Removed deprecated scatterplot, RankedSVM functions.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id14">
-<h2>3.4.4 - 2021-07-01<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id15">
-<h3>Fixed<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id18">
+<h2>3.4.4 - 2021-07-01<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id19">
+<h3>Fixed<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug where most recent added estimators were not valid in SimpleWORC.</p></li>
 <li><p>SelectorMixin is now imported directly from sklearn.feature_selection,
 as sklearn.feature_selection.base is deprecated and will be removed.</p></li>
 </ul>
 </div>
-<div class="section" id="id16">
-<h3>Changed<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id20">
+<h3>Changed<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Apply variance threshold selection before feature scaling, otherwise
 variance is always the same for all features.</p></li>
@@ -477,34 +529,34 @@ variance is always the same for all features.</p></li>
 use changed from 0.20 to 0.275.</p></li>
 </ul>
 </div>
-<div class="section" id="id17">
-<h3>Added<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id21">
+<h3>Added<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Functionality in plotting images functions.</p></li>
 <li><p>Documentation on how to use your own features.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id18">
-<h2>3.4.3 - 2021-06-02<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id19">
-<h3>Fixed<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id22">
+<h2>3.4.3 - 2021-06-02<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id23">
+<h3>Fixed<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>SimpleWORC and BasicWORC now support multilabel workflows.</p></li>
 <li><p>SimpleWORC and BasicWORC now support use of masks.</p></li>
 </ul>
 </div>
-<div class="section" id="id20">
-<h3>Added<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id24">
+<h3>Added<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Unit testing for multilabel workflows.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id21">
-<h2>3.4.2 - 2021-05-27<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id22">
-<h3>Fixed<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id25">
+<h2>3.4.2 - 2021-05-27<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id26">
+<h3>Fixed<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug in flattening of plot_ranked_posteriors function.</p></li>
 <li><p>Bug in plot_images: could not handle 2D images when applying slicing.</p></li>
@@ -513,17 +565,17 @@ use changed from 0.20 to 0.275.</p></li>
 <li><p>Preflighcheck now also accepts labels from txt or XNAT.</p></li>
 </ul>
 </div>
-<div class="section" id="id23">
-<h3>Added<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id27">
+<h3>Added<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Label file can now also be separated by semicolons.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id24">
-<h2>3.4.1 - 2021-05-18<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id25">
-<h3>Fixed<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id28">
+<h2>3.4.1 - 2021-05-18<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id29">
+<h3>Fixed<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bugfix when PCA cannot be fitted.</p></li>
 <li><p>Bugfix when using LOO cross-validation in performance evaluation.</p></li>
@@ -536,16 +588,16 @@ which is unsuitable for clusters.</p></li>
 <li><p>Several fixes for using 2D images.</p></li>
 </ul>
 </div>
-<div class="section" id="id26">
-<h3>Changed<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id30">
+<h3>Changed<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Reverted back to weighted f1-score without predictproba for optimization,
 more stable.</p></li>
 <li><p>Updated regressors in SimpleWORC.</p></li>
 </ul>
 </div>
-<div class="section" id="id27">
-<h3>Added<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id31">
+<h3>Added<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Option to combine features from a varying number of objects per patient,
 e.g. by averaging or taking the maximum.</p></li>
@@ -556,10 +608,10 @@ and outliers.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id28">
-<h2>3.4.0 - 2021-02-02<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id29">
-<h3>Fixed<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id32">
+<h2>3.4.0 - 2021-02-02<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id33">
+<h3>Fixed<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>MAJOR: Bug in SearchCV sorting of output files.</p></li>
 <li><p>Bug in StatisticalTest for Manhattan plot.</p></li>
@@ -568,16 +620,16 @@ and outliers.</p></li>
 <li><p>Fix random states in boosting estimators.</p></li>
 </ul>
 </div>
-<div class="section" id="id30">
-<h3>Changed<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id34">
+<h3>Changed<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>IMPORTANT: previously, used f1_score based on estimator.predict function.
 Now, use predict_proba.</p></li>
 <li><p>New defaults for random-search and ensemble.</p></li>
 </ul>
 </div>
-<div class="section" id="id31">
-<h3>Added<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id35">
+<h3>Added<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>All performances to output statistics.</p></li>
 <li><p>Script for plotting of errors in classification. Not embedded yet.</p></li>
@@ -586,24 +638,24 @@ Now, use predict_proba.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id32">
-<h2>3.3.5 - 2020-10-21<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id33">
-<h3>Fixed<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id36">
+<h2>3.3.5 - 2020-10-21<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id37">
+<h3>Fixed<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Some function cleaning: removing redundant parts / variables.</p></li>
 </ul>
 </div>
-<div class="section" id="id34">
-<h3>Changed<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id38">
+<h3>Changed<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Part of developper documentation for addinf methods to hyperoptimization.</p></li>
 <li><p>Default config: SelectFromModel incorporated, so now also use
 that in feature selection step.</p></li>
 </ul>
 </div>
-<div class="section" id="id35">
-<h3>Added<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id39">
+<h3>Added<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>OneHotEncoder to workflows / HyperOptimization.</p></li>
 <li><p>Documentation updates.</p></li>
@@ -615,10 +667,10 @@ that in feature selection step.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id36">
-<h2>3.3.4 - 2020-10-06<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id37">
-<h3>Fixed<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id40">
+<h2>3.3.4 - 2020-10-06<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id41">
+<h3>Fixed<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bugfixes in some error messages.</p></li>
 <li><p>If a classifier cannot give a score, use the prediction instead.</p></li>
@@ -626,16 +678,16 @@ that in feature selection step.</p></li>
 <li><p>Bugfix: use f1-weighted score in SimpleWORC binary classification.</p></li>
 </ul>
 </div>
-<div class="section" id="id38">
-<h3>Changed<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id42">
+<h3>Changed<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>There are no longer ‘’patient_features’’ in PREDICT: these are extracted
 from the DICOM tags and are thus now called ‘’dicom_features.</p></li>
 <li><p>As bootstrapping is now more efficient, increase default to 1000 iterations.</p></li>
 </ul>
 </div>
-<div class="section" id="id39">
-<h3>Added<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id43">
+<h3>Added<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Option to transpose all images and segmentations to a default orientation.
 Currently only supports axial.</p></li>
@@ -647,25 +699,25 @@ Currently only supports axial.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id40">
-<h2>3.3.3 - 2020-09-11<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id41">
-<h3>Fixed<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id44">
+<h2>3.3.3 - 2020-09-11<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id45">
+<h3>Fixed<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>In the RobustStandardScaler, if less than two values for a feature are left,
-use the original set inset of the <a href="#id42"><span class="problematic" id="id43">``</span></a>robust’’ reduced set.</p></li>
+use the original set inset of the <a href="#id46"><span class="problematic" id="id47">``</span></a>robust’’ reduced set.</p></li>
 </ul>
 </div>
-<div class="section" id="id44">
-<h3>Changed<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id48">
+<h3>Changed<a class="headerlink" href="#id48" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>By default, semantic features are skipped in scaling, as the robust scaler
 cannot deal well with categorical variables.</p></li>
 <li><p>Wrapped scalers in single WORC scaler object to allow above for all scalers.</p></li>
 </ul>
 </div>
-<div class="section" id="id45">
-<h3>Added<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id49">
+<h3>Added<a class="headerlink" href="#id49" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Leave-One-Out (LOO) cross-validation.</p></li>
 <li><p>Option to skip features in scaling.</p></li>
@@ -676,10 +728,10 @@ with DICOM metadata.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id46">
-<h2>3.3.2 - 2020-08-19<a class="headerlink" href="#id46" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id47">
-<h3>Fixed<a class="headerlink" href="#id47" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id50">
+<h2>3.3.2 - 2020-08-19<a class="headerlink" href="#id50" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id51">
+<h3>Fixed<a class="headerlink" href="#id51" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug in fit and score when using scaling: was incorrectly parsed as string
 and always set to None.</p></li>
@@ -687,16 +739,16 @@ and always set to None.</p></li>
 <li><p>Typo in configuration documentation.</p></li>
 </ul>
 </div>
-<div class="section" id="id48">
-<h3>Added<a class="headerlink" href="#id48" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id52">
+<h3>Added<a class="headerlink" href="#id52" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>New type of scaler (robust z-scoring)</p></li>
 <li><p>Resampling of image and mask in preprocessing (preprocessing and segmentix
 nodes)</p></li>
 </ul>
 </div>
-<div class="section" id="id49">
-<h3>Changed<a class="headerlink" href="#id49" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id53">
+<h3>Changed<a class="headerlink" href="#id53" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Newly added scaler is now also the default to use, instead of the search
 over the older included scalers.</p></li>
@@ -704,10 +756,10 @@ over the older included scalers.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id50">
-<h2>3.3.1 - 2020-07-31<a class="headerlink" href="#id50" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id51">
-<h3>Changed<a class="headerlink" href="#id51" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id54">
+<h2>3.3.1 - 2020-07-31<a class="headerlink" href="#id54" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id55">
+<h3>Changed<a class="headerlink" href="#id55" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Updated to using tikzplotlib for conversion of figures to LaTeX instead
 of deprecated matplotlib2tikz.</p></li>
@@ -716,17 +768,17 @@ of deprecated matplotlib2tikz.</p></li>
 sklearn KNNImputer.</p></li>
 </ul>
 </div>
-<div class="section" id="id52">
-<h3>Fixed<a class="headerlink" href="#id52" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id56">
+<h3>Fixed<a class="headerlink" href="#id56" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug in fixandscore when using resampling.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id53">
-<h2>3.3.0 - 2020-07-28<a class="headerlink" href="#id53" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id54">
-<h3>Added<a class="headerlink" href="#id54" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id57">
+<h2>3.3.0 - 2020-07-28<a class="headerlink" href="#id57" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id58">
+<h3>Added<a class="headerlink" href="#id58" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Graphviz vizualization of network is now nicely grouped.</p></li>
 <li><p>Properly integrated ObjectSampler: various resampling options now available.</p></li>
@@ -735,8 +787,8 @@ sklearn KNNImputer.</p></li>
 <li><p>FAQ version to documentation</p></li>
 </ul>
 </div>
-<div class="section" id="id55">
-<h3>Changed<a class="headerlink" href="#id55" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id59">
+<h3>Changed<a class="headerlink" href="#id59" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Upgraded to new versions of sklearn (0.23.1) and imbalanced learn (0.7.0)</p></li>
 <li><p>Some defaults, based on computation time.</p></li>
@@ -750,8 +802,8 @@ we use all kinds of estimators.</p></li>
 <li><p>L1 penalty does not work with new standard LR solver. Removed L1 penalty.</p></li>
 </ul>
 </div>
-<div class="section" id="id56">
-<h3>Fixed<a class="headerlink" href="#id56" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id60">
+<h3>Fixed<a class="headerlink" href="#id60" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug when using both elastix and segmentix.</p></li>
 <li><p>Bug when using elastix in train-test workflow.</p></li>
@@ -770,18 +822,18 @@ overrides are given.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id57">
-<h2>3.2.2 - 2020-07-14<a class="headerlink" href="#id57" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id58">
-<h3>Added<a class="headerlink" href="#id58" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id61">
+<h2>3.2.2 - 2020-07-14<a class="headerlink" href="#id61" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id62">
+<h3>Added<a class="headerlink" href="#id62" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>In classify node, when using temporary saves, start from where
 the process previously stopped instead of from the beginning.</p></li>
 <li><p>Imputation to ComBat.</p></li>
 </ul>
 </div>
-<div class="section" id="id59">
-<h3>Changed<a class="headerlink" href="#id59" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id63">
+<h3>Changed<a class="headerlink" href="#id63" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Imputation is now the first step in the workflows. More logical as
 scaler and variance threshold can crash on missing values.</p></li>
@@ -789,8 +841,8 @@ scaler and variance threshold can crash on missing values.</p></li>
 not normalize.</p></li>
 </ul>
 </div>
-<div class="section" id="id60">
-<h3>Fixed<a class="headerlink" href="#id60" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id64">
+<h3>Fixed<a class="headerlink" href="#id64" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Preflightcheck now also compatible with BasicWORC.</p></li>
 <li><p>Bugfix in ComBat when not using mod variable and skipping patients.</p></li>
@@ -800,16 +852,16 @@ not normalize.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id61">
-<h2>3.2.1 - 2020-07-02<a class="headerlink" href="#id61" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id62">
-<h3>Added<a class="headerlink" href="#id62" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id65">
+<h2>3.2.1 - 2020-07-02<a class="headerlink" href="#id65" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id66">
+<h3>Added<a class="headerlink" href="#id66" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Major documentation update.</p></li>
 </ul>
 </div>
-<div class="section" id="id63">
-<h3>Changed<a class="headerlink" href="#id63" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id67">
+<h3>Changed<a class="headerlink" href="#id67" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>PyRadiomics setup not dependent on pre-install of numpy anymore, so altered
 travis, yml, setup, and documentation.</p></li>
@@ -821,24 +873,24 @@ from PyRadiomics add +1000 features, which did not seem to help in many
 experiments while majorly slowing down the computation.</p></li>
 </ul>
 </div>
-<div class="section" id="id64">
-<h3>Fixed<a class="headerlink" href="#id64" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id68">
+<h3>Fixed<a class="headerlink" href="#id68" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Catch error when PCA does not converge in fit and score function.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id65">
-<h2>3.2.0 - 2020-06-26<a class="headerlink" href="#id65" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id66">
-<h3>Added<a class="headerlink" href="#id66" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id69">
+<h2>3.2.0 - 2020-06-26<a class="headerlink" href="#id69" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id70">
+<h3>Added<a class="headerlink" href="#id70" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Labelprocessing can now also handle having patient ID in the feature files.
 Was required for ComBat.</p></li>
 </ul>
 </div>
-<div class="section" id="id67">
-<h3>Changed<a class="headerlink" href="#id67" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id71">
+<h3>Changed<a class="headerlink" href="#id71" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Output of plot_SVM function is better ordered.</p></li>
 <li><p>Several defaults, as we now have PyRadiomics fully embedded, resulting in
@@ -846,8 +898,8 @@ a large increase in features.</p></li>
 <li><p>No more overrides for the full config, as the default now is the full config.</p></li>
 </ul>
 </div>
-<div class="section" id="id68">
-<h3>Fixed<a class="headerlink" href="#id68" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id72">
+<h3>Fixed<a class="headerlink" href="#id72" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Cardinality of decomposition tool was incorrect.</p></li>
 <li><p>ComBat integration in WORC network now works properly.</p></li>
@@ -860,10 +912,10 @@ and thus therefore also PREDICT. Fixed in setup.py and readthedocs files.</p></l
 </ul>
 </div>
 </div>
-<div class="section" id="id69">
-<h2>3.1.4 - 2020-05-26<a class="headerlink" href="#id69" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id70">
-<h3>Added<a class="headerlink" href="#id70" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id73">
+<h2>3.1.4 - 2020-05-26<a class="headerlink" href="#id73" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id74">
+<h3>Added<a class="headerlink" href="#id74" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Catch error if number of segmentations supplied does not match number of
 images.</p></li>
@@ -892,8 +944,8 @@ format.</p></li>
 <li><p>Combat: in WORK workflow.</p></li>
 </ul>
 </div>
-<div class="section" id="id71">
-<h3>Changed<a class="headerlink" href="#id71" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id75">
+<h3>Changed<a class="headerlink" href="#id75" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Resampling of objects is now after feature selection.</p></li>
 <li><p>Made plot_SVM function more memory efficient.</p></li>
@@ -907,8 +959,8 @@ converted to lower case.</p></li>
 <li><p>Segmentix tool is cleaned up. Segmentix script is moved to processing.</p></li>
 </ul>
 </div>
-<div class="section" id="id72">
-<h3>Fixed<a class="headerlink" href="#id72" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id76">
+<h3>Fixed<a class="headerlink" href="#id76" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Order of methods in preprocessing function of SearchCV did not correspond
 with that in fitandscore.</p></li>
@@ -921,10 +973,10 @@ for reproducability of the results.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id73">
-<h2>3.1.3 - 2020-01-24<a class="headerlink" href="#id73" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id74">
-<h3>Added<a class="headerlink" href="#id74" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id77">
+<h2>3.1.3 - 2020-01-24<a class="headerlink" href="#id77" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id78">
+<h3>Added<a class="headerlink" href="#id78" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Some options for the plot_images slicer function.</p></li>
 <li><p>Validators to check your inputs before executing experiment.</p></li>
@@ -936,8 +988,8 @@ for reproducability of the results.</p></li>
 <li><p>Error when config file cannot be found.</p></li>
 </ul>
 </div>
-<div class="section" id="id75">
-<h3>Changed<a class="headerlink" href="#id75" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id79">
+<h3>Changed<a class="headerlink" href="#id79" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Preprocessor slows down progress and is not always neccesary. Made it optional.</p></li>
 <li><p>Moved the preprocessor to the SearchCV script to do once on the training set,
@@ -948,18 +1000,18 @@ used when plotting the performance.</p></li>
 <li><p>Joblib now uses by default only 1 core and threading backend.</p></li>
 </ul>
 </div>
-<div class="section" id="id76">
-<h3>Fixed<a class="headerlink" href="#id76" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id80">
+<h3>Fixed<a class="headerlink" href="#id80" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Bug in patient naming of plotting function: if ensembling was done in training,
 do not re-ensemble.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id77">
-<h2>3.1.2 - 2019-12-09<a class="headerlink" href="#id77" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id78">
-<h3>Added<a class="headerlink" href="#id78" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id81">
+<h2>3.1.2 - 2019-12-09<a class="headerlink" href="#id81" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id82">
+<h3>Added<a class="headerlink" href="#id82" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Support for Oncoradiomics RadiomiX tool</p></li>
 <li><p>Groupwise Search includes GLDZM, Fractal, location, NGTDM, NGLDM, wavelet,
@@ -969,38 +1021,38 @@ and rgrd features</p></li>
 are ran. Mostly to detect possible faults/errors in the data.</p></li>
 </ul>
 </div>
-<div class="section" id="id79">
-<h3>Changed<a class="headerlink" href="#id79" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id83">
+<h3>Changed<a class="headerlink" href="#id83" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>On runtime, copy config.d file if it does not exist yet.</p></li>
 </ul>
 </div>
-<div class="section" id="id80">
-<h3>Fixed<a class="headerlink" href="#id80" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id84">
+<h3>Fixed<a class="headerlink" href="#id84" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>KNN imputation gave an error if &gt;80% of the feature values were missing.
 Added preprocessing function to remove these features.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id81">
-<h2>3.1.1 - 2019-11-28<a class="headerlink" href="#id81" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id82">
-<h3>Added<a class="headerlink" href="#id82" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id85">
+<h2>3.1.1 - 2019-11-28<a class="headerlink" href="#id85" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id86">
+<h3>Added<a class="headerlink" href="#id86" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Travis continuous integration for Windows.</p></li>
 <li><p>Removed RT Struct Reader, as it was buggy and not used.</p></li>
 </ul>
 </div>
-<div class="section" id="id83">
-<h3>Changed<a class="headerlink" href="#id83" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id87">
+<h3>Changed<a class="headerlink" href="#id87" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>SimpleWORC now properly uses the fastr FileSystem plugin, instead
 of supplying the absolute filepaths.</p></li>
 </ul>
 </div>
-<div class="section" id="id84">
-<h3>Fixed<a class="headerlink" href="#id84" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id88">
+<h3>Fixed<a class="headerlink" href="#id88" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Under Windows, creation of the fastr home folder if it did not exist
 did not work when using pip for installing. We now use a new feature
@@ -1012,10 +1064,10 @@ Windows, Travis gives errors if the tempdir is not in a vfs mount.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id85">
-<h2>3.1.0 - 2019-10-16<a class="headerlink" href="#id85" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id86">
-<h3>Added<a class="headerlink" href="#id86" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id89">
+<h2>3.1.0 - 2019-10-16<a class="headerlink" href="#id89" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id90">
+<h3>Added<a class="headerlink" href="#id90" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Thresholding option in plot_SVM.</p></li>
 <li><p>NPV (Negative Preditive Value) to classification metrics.</p></li>
@@ -1039,8 +1091,8 @@ plotting functions and the metrics.</p></li>
 <li><p>Various detectors.</p></li>
 </ul>
 </div>
-<div class="section" id="id87">
-<h3>Changed<a class="headerlink" href="#id87" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id91">
+<h3>Changed<a class="headerlink" href="#id91" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Plot_SVR is removed: it’s now embedded in plot_SVM.</p></li>
 <li><p>Moved statistical feature selection to last step in fit and score.</p></li>
@@ -1054,8 +1106,8 @@ plotting functions and the metrics.</p></li>
 <li><p>Use inspect to find packagedir</p></li>
 </ul>
 </div>
-<div class="section" id="id88">
-<h3>Fixed<a class="headerlink" href="#id88" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id92">
+<h3>Fixed<a class="headerlink" href="#id92" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Metric computation can now handle it when both the truth and the predicted
 labels are from a single class.</p></li>
@@ -1083,10 +1135,10 @@ conversion.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id89">
-<h2>3.0.0 - 2019-05-08<a class="headerlink" href="#id89" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id90">
-<h3>Added<a class="headerlink" href="#id90" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id93">
+<h2>3.0.0 - 2019-05-08<a class="headerlink" href="#id93" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id94">
+<h3>Added<a class="headerlink" href="#id94" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Now ported to Python3.6+ (Python 2 is no longer supported!). Thereby also
 to fastr3.</p></li>
@@ -1096,8 +1148,8 @@ to use OS file separator.</p></li>
 <li><p>Config is now also a sink.</p></li>
 </ul>
 </div>
-<div class="section" id="id91">
-<h3>Changed<a class="headerlink" href="#id91" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id95">
+<h3>Changed<a class="headerlink" href="#id95" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>PCE and DTI node removed, as they were not open source.</p></li>
 <li><p>Pinfo file can now also be a csv. Txt is still supported.</p></li>
@@ -1106,8 +1158,8 @@ of Joblib, as this is much more flexible.</p></li>
 <li><p>When the conffidence interval cannot be computed, just use the mean.</p></li>
 </ul>
 </div>
-<div class="section" id="id92">
-<h3>Fixed<a class="headerlink" href="#id92" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id96">
+<h3>Fixed<a class="headerlink" href="#id96" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>WORC_config.py was not correctly copied in Windows due to incorrect path separation.</p></li>
 <li><p>Source creation for the config was only for Linux.</p></li>
@@ -1118,41 +1170,41 @@ segmentix by using bitwise_xor instead.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id93">
-<h2>2.1.3 - 2019-04-08<a class="headerlink" href="#id93" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id94">
-<h3>Changed<a class="headerlink" href="#id94" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id97">
+<h2>2.1.3 - 2019-04-08<a class="headerlink" href="#id97" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id98">
+<h3>Changed<a class="headerlink" href="#id98" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>PREDICT was updated, so had to update the requirements. Changed it
 to a minimum of PREDICT to prevent these issues in the future.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id95">
-<h2>2.1.2 - 2019-04-02<a class="headerlink" href="#id95" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id96">
-<h3>Added<a class="headerlink" href="#id96" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id99">
+<h2>2.1.2 - 2019-04-02<a class="headerlink" href="#id99" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id100">
+<h3>Added<a class="headerlink" href="#id100" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Dummy workflow in segmentix and calcfeatures PREDICT tools.</p></li>
 <li><p>Added several new PREDICT parameters.</p></li>
 <li><p>Slicer tool.</p></li>
 </ul>
 </div>
-<div class="section" id="id97">
-<h3>Changed<a class="headerlink" href="#id97" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id101">
+<h3>Changed<a class="headerlink" href="#id101" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Memory for elastix tool is now larger.</p></li>
 </ul>
 </div>
-<div class="section" id="id98">
-<h3>Fixed<a class="headerlink" href="#id98" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id102">
+<h3>Fixed<a class="headerlink" href="#id102" title="Permalink to this headline">¶</a></h3>
 <p>-Evaluate framework now correctly adopts the name you give it.</p>
 </div>
 </div>
-<div class="section" id="id99">
-<h2>2.1.1 - 2019-02-15<a class="headerlink" href="#id99" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id100">
-<h3>Added<a class="headerlink" href="#id100" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id103">
+<h2>2.1.1 - 2019-02-15<a class="headerlink" href="#id103" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id104">
+<h3>Added<a class="headerlink" href="#id104" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Several new PREDICT variables to the config.</p></li>
 <li><p>Multilabel classification workflow.</p></li>
@@ -1160,26 +1212,26 @@ to a minimum of PREDICT to prevent these issues in the future.</p></li>
 <li><p>RankedSVM multilabel classification and Relief feature selection.</p></li>
 </ul>
 </div>
-<div class="section" id="id101">
-<h3>Changed<a class="headerlink" href="#id101" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id105">
+<h3>Changed<a class="headerlink" href="#id105" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Major reduction in memory usage, especially due to PREDICT updates.</p></li>
 <li><p>Only use first configuration in the classify config.</p></li>
 <li><p>Outputs are now in multiple subfolders instead of one big folder.</p></li>
 </ul>
 </div>
-<div class="section" id="id102">
-<h3>Fixed<a class="headerlink" href="#id102" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id106">
+<h3>Fixed<a class="headerlink" href="#id106" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Minor bug in test workflow: needed str of label in appending to classify.</p></li>
 <li><p>There was a bug in using a .ini file as a config.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id103">
-<h2>2.1.0 - 2018-08-09<a class="headerlink" href="#id103" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id104">
-<h3>Added<a class="headerlink" href="#id104" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id107">
+<h2>2.1.0 - 2018-08-09<a class="headerlink" href="#id107" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id108">
+<h3>Added<a class="headerlink" href="#id108" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Feature imputation settings in WORC config.</p></li>
 <li><p>PCA settings in WORC config.</p></li>
@@ -1201,8 +1253,8 @@ work includes the optional addition of the Evaluate network to the WORC network.
 whether a temporary save will be made after each cross validation.</p></li>
 </ul>
 </div>
-<div class="section" id="id105">
-<h3>Changed<a class="headerlink" href="#id105" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id109">
+<h3>Changed<a class="headerlink" href="#id109" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Separate sinks for the output segmentations of the elastix and segmentix
 nodes.</p></li>
@@ -1210,8 +1262,8 @@ nodes.</p></li>
 anymore required as well as ITK tools.</p></li>
 </ul>
 </div>
-<div class="section" id="id106">
-<h3>Fixed<a class="headerlink" href="#id106" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id110">
+<h3>Fixed<a class="headerlink" href="#id110" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Patientclass ID was used for both test and training. Now given separate names.</p></li>
 <li><p>When elastix is used but segmentix isn’t, there was a bug.</p></li>
@@ -1223,10 +1275,10 @@ transformix.</p></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id107">
-<h2>2.0.0 - 2018-02-13<a class="headerlink" href="#id107" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id108">
-<h3>Added<a class="headerlink" href="#id108" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id111">
+<h2>2.0.0 - 2018-02-13<a class="headerlink" href="#id111" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id112">
+<h3>Added<a class="headerlink" href="#id112" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Elastix and transformix as separate workflow in the tools folder. Can be used
 through the WORC.Tools attribute.</p></li>
@@ -1236,8 +1288,8 @@ through the WORC.Tools attribute.</p></li>
 trainclassifier tool in terms of inputs and outputs.</p></li>
 </ul>
 </div>
-<div class="section" id="id109">
-<h3>Changed<a class="headerlink" href="#id109" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id113">
+<h3>Changed<a class="headerlink" href="#id113" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Option for multiple modalities. Supports infinitely many inputs per object.</p></li>
 <li><p>Moved many PREDICT parameters to the configuration file.</p></li>
@@ -1246,8 +1298,8 @@ Elastix will automatically be used for registration. Note that you have to
 put the reference segmentation on the first modality!</p></li>
 </ul>
 </div>
-<div class="section" id="id110">
-<h3>Fixed<a class="headerlink" href="#id110" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id114">
+<h3>Fixed<a class="headerlink" href="#id114" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Proper combining of features from multiple modalities to classify tool.</p></li>
 <li><p>Minor bugs in segmentix tool.</p></li>
@@ -1266,29 +1318,29 @@ put the reference segmentation on the first modality!</p></li>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../autogen/WORC.html" class="btn btn-neutral float-right" title="WORC Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="developerdocumentation.html" class="btn btn-neutral float-left" title="Developer documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="../autogen/WORC.html" class="btn btn-neutral float-right" title="WORC Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="developerdocumentation.html" class="btn btn-neutral float-left" title="Developer documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
+        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -1296,7 +1348,6 @@ put the reference segmentation on the first modality!</p></li>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
-3.6.3 - Unreleased
+3.6.3 - 2023-08-15
 ------------------
 
 Fixed
@@ -19,6 +19,7 @@ Fixed
   and test set and thus bootstrapping should be used.
 - Bug in PREDICT was fixed that mixed up the mode in shape feature extraction (2D / 2.5D)
 - Bug in performance calculation of multiclass classification.
+- Bugs in statistical feature testing.
 
 Changed
 ~~~~~~~
