@@ -154,7 +154,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
             try:
                 pmwu = mannwhitneyu(class1, class2)[1]
                 if pmwu == 0.0:
-                    print("[WORC Warning] Mann-Whtiney U test resulted in a p-value of exactly 0.0, which is not valid. Replacing metric value by NaN.")
+                    print("[WORC Warning] Mann-Whitney U test resulted in a p-value of exactly 0.0, which is not valid. Replacing metric value by NaN.")
                     pvaluesmw.append(np.nan)
                 else:
                     pvaluesmw.append(pmwu)
