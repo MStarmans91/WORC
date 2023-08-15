@@ -171,9 +171,13 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
                 class1_count = [class1.count(i) for i in unique_values]
                 class2_count = [class2.count(i) for i in unique_values]
                 obs = np.array([class1_count, class2_count])
-
-                _, p, _, _ = chi2_contingency(obs)
-                pvalueschi2.append(p)
+                
+                try:
+                    _, p, _, _ = chi2_contingency(obs)
+                    pvalueschi2.append(p)
+                except ValueError:
+                    print("[WORC Warning] " + fl + " has a zero element in table of frequencies. Replacing chi2 metric value by NaN.")
+                    pvalueschi2.append(np.nan)
             else:
                 print("[WORC Warning] " + fl + " is no categorical variable. Replacing chi2 metric value by NaN.")
                 pvalueschi2.append(np.nan)
