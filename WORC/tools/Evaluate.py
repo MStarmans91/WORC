@@ -383,7 +383,11 @@ class Evaluate(object):
     def create_links_Addon(self):
         """Create links in network between nodes when adding Evaluate to WORC."""
         # Sources from the WORC network are used
-        prediction = self.parent.classify.outputs['classification']
+        if self.parent.OnlyTest:
+            prediction = self.parent.source_trained_model.output
+        else:
+            prediction = self.parent.classify.outputs['classification']
+            
         if hasattr(self.parent, 'source_patientclass_test'):
             pinfo = self.parent.source_patientclass_test.output
         else:

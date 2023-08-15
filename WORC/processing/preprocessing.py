@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,14 +28,20 @@ import WORC.addexceptions as ae
 def preprocess(imagefile, config, metadata=None, mask=None):
     """Apply preprocessing to an image to prepare it for feture extration."""
     # Read the config, image and if given masks and metadata
-    config = config_io.load_config(config)
-    image = sitk.ReadImage(imagefile)
+    if isinstance(config, str):
+        config = config_io.load_config(config)
+        
+    if isinstance(imagefile, str):
+        image = sitk.ReadImage(imagefile)
+    else:
+        image = imagefile
 
     if metadata is not None:
         metadata = pydicom.read_file(metadata)
 
     if mask is not None:
-        mask = sitk.ReadImage(mask)
+        if isinstance(mask, str):
+            mask = sitk.ReadImage(mask)
 
     # Convert image to Hounsfield units if type is CT
     image_type = config['ImageFeatures']['image_type']
@@ -89,6 +95,19 @@ def preprocess(imagefile, config, metadata=None, mask=None):
                            upperbound=range[1])
     else:
         print('No clipping was applied.')
+        
+    # Apply histogram equalization
+    if config['Preprocessing']['HistogramEqualization']:
+        alpha = config['Preprocessing']['HistogramEqualization_Alpha']
+        beta = config['Preprocessing']['HistogramEqualization_Beta']
+        radius = config['Preprocessing']['HistogramEqualization_Radius']
+        print(f'Apply histogram equalization with alpha {alpha}, beta {beta}, and radius {radius}.')
+        image = histogram_equalization(image=image,
+                                       alpha=alpha,
+                                       beta=beta,
+                                       radius=radius)
+    else:
+        print('No histogram equalization was applied.')      
 
     # Apply normalization
     if config['Preprocessing']['Normalize']:
@@ -183,6 +202,42 @@ def clip_image(image, lowerbound=-1000.0, upperbound=3000.0):
 
     return clipped_image
 
+
+def histogram_equalization(image, alpha=0.3, beta=0.3, radius=5):
+    """Perform histogram equalization on an image.
+    
+    See for documentation https://simpleitk.org/doxygen/latest/html/classitk_1_1simple_1_1AdaptiveHistogramEqualizationImageFilter.html.
+    
+     Parameters
+    ----------
+    image: ITK Image
+        Image to normalize
+        
+    alpha: float, default 0.3
+        controls how much the filter acts like the classical histogram equalization
+        method (alpha=0) to how much the filter acts like an unsharp mask (alpha=1).
+        
+    beta: float, default 0.3
+        controls how much the filter acts like an unsharp mask (beta=0) to much
+        the filter acts like pass through (beta=1, with alpha=1).
+    
+    radius: integer, default None
+       Controls the size of the region over which local statistics are calculated.
+       The size of the window is controlled by SetRadius the default Radius is 5 in all directions.
+
+    Returns
+    -------
+    image : ITK Image
+        Output image.
+        
+    """
+    hqfilter = sitk.AdaptiveHistogramEqualizationImageFilter()
+    hqfilter.SetAlpha(alpha)
+    hqfilter.SetBeta(beta)
+    hqfilter.SetRadius(radius) 
+    heq_image = hqfilter.Execute(image)
+    return heq_image
+    
 
 def normalize_image(image, mask=None, method='z_score', Normalize_ROI='Full',
                     Dilate_ROI='True',

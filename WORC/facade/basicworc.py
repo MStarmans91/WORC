@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,12 +47,15 @@ class BasicWORC(SimpleWORC):
         self.metadata_train = []
         self.metadata_test = []
         self.semantics_file_train = []
+        self.elastix_parameter_file = []
         self.semantics_file_test = []
         self.radiomix_feature_file = None
 
         self.labels_file_train = None
         self.labels_file_test = None
         self.label_names = []
+        self.trained_model = None
+        self.config_files = []
 
         self.fixed_splits = None
 
@@ -147,7 +150,18 @@ class BasicWORC(SimpleWORC):
             self._worc.semantics_test = self.semantics_file_test
         elif self._semantics_file_test:
             self._worc.semantics_test = self._semantics_file_test
-
+            
+        if self.elastix_parameter_file:
+            self._worc.Elastix_Para = self.elastix_parameter_file
+        elif self._elastix_parameter_file:
+            self._worc.Elastix_Para = self._elastix_parameter_file
+            
+        if self.trained_model:
+            self._worc.trained_model = self.trained_model
+        elif self._trained_model:
+            self._worc.trained_model = self._trained_model   
+                     
+        # Set the labels to predict
         self._worc.label_names = ', '.join(self._label_names)
         if 'Labels' not in self._config_builder._custom_overrides.keys():
             self._config_builder._custom_overrides['Labels'] = dict()
@@ -159,16 +173,26 @@ class BasicWORC(SimpleWORC):
             nmod = len(self._worc.images_train)
         else:
             nmod = len(self._worc.features_train)
+            
+         # Check whether user has provided a separate train and test set
+        self._check_traintest()
 
-        # Create configuration files
-        self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
-        for cnum, _ in enumerate(self._worc.configs):
-            self._worc.configs[cnum]['ImageFeatures']['image_type'] = self._image_types[cnum]
+        # Create configuration files if needed
+        if self.config_files:
+            self._worc.configs = self.config_files
+        elif self._config_files:
+            self._worc.configs = self._config_files
+        else:
+            self._worc.configs = [self._config_builder.build_config(self._worc.defaultconfig())] * nmod
+            for cnum, _ in enumerate(self._worc.configs):
+                self._worc.configs[cnum]['ImageFeatures']['image_type'] = self._image_types[cnum]
 
-        self._worc.build()
+        # Build the fastr network
+        self._worc.build(buildtype=self._buildtype)
         if self._add_evaluation:
             self._worc.add_evaluation(label_type=self._label_names[self._selected_label],
                                       modus=self._method)
 
+        # Set the sources and sinks and execute the experiment.
         self._worc.set()
         self._worc.execute()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,16 +76,21 @@ def manhattan_importance(values, labels, feature_labels,
             ymaxlim = i - 1
             break
 
-    ymin = np.min(values)
+    ymin = np.min(values) # might be zero
+    yposmin = max(np.min(values[values > 0]), np.finfo(values.dtype).eps)
     for i in range(0, 100):
-        if 10**(-i) < ymin:
+        if 10**(-i) < (ymin if ymin > 0 else yposmin):
             yminlim = i
             break
 
     # Set several figure lay-out options
     plt.gca().invert_yaxis()
-    plt.yscale('log')
-    plt.ylim((10**-ymaxlim, 10**-yminlim))
+    if ymin > 0:
+        plt.yscale('log')
+        plt.ylim((10**-ymaxlim, 10**-yminlim))
+    else:
+        plt.yscale('symlog', linthresh=10**-yminlim)
+        plt.ylim((10**-ymaxlim, 0.0))
     plt.xlim((0, max(positions)))
 
     plt.yticks([10**-i for i in range(ymaxlim, yminlim + 1)],
@@ -109,6 +114,12 @@ def manhattan_importance(values, labels, feature_labels,
     plt.annotate(f'p={round(threshold_annotated, 5)}',
                  (1, y_value_annotated),
                  xytext=(1, y_value_annotated*0.95), size=8, color='magenta')
+
+    if 0.05 > 10**-yminlim:
+        plt.hlines(0.05, 0, max(positions),  linestyles='dashed', linewidth=1, color='magenta')
+        plt.annotate('p=0.05',
+                     (1, 0.05),
+                     xytext=(1, 0.05*0.95), size=8, color='magenta')
 
     plt.xlabel("Feature groups", size=12)
     plt.ylabel("P-value Mann-Whitney U", size=12)

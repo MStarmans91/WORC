@@ -18,14 +18,23 @@ Execution errors
 
 My experiment crashed, where to begin looking for errors?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You can check this FAQ for commonly known errors and how to fix them.
+
 The ``fastr`` toolbox has a method to trace back errors. For more details,
 see the `fastr documentation <https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging-a-network-run-with-errors>`_.
 If you want to know the exact error that occured in a job, make sure you trace back to a single sink and single sample,
-e.g. ``fastr trace $RUNDIR/__sink_data__.json --sinks sink_5 --sample sample_1_1 ``.
+e.g. ``fastr trace $RUNDIR/__sink_data__.json --sinks sink_5 --sample sample_1_1 ``. See the :ref:`User Manual chapter <usermanual-chapter>`
+for more info.
 
+Error: ``fastr.exceptions.FastrValueError: [...] FastrValueError from `` ``.../fastr/execution/job.py line 834: Output values are not valid!``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This a general error fastr returns when a job failed: since there is no output generated, the output values are obviously not valid for 
+what fastr expected. Hence that does not give you any input on why the job failed. What you want is the actual error that occured in the tool,
+e.g., the Python error. If you debug the fastr network, see above, use the fastr trace command to trace back the error
+of a specific sink and a specific sample to track down the exact tool error, e.g., the Python error.
 
-Error: ``File "H5FDsec2.c", line 941, in H5FD_sec2_lock unable to lock file, errno = 37, error message = 'No locks available'``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error: ``File "H5FDsec2.c", line 941, in H5FD_sec2_lock unable to lock file,`` ``errno = 37, error message = 'No locks available'``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Known HDF5 error, see also https://github.com/h5py/h5py/issues/1101.
 Can be solved by setting the HDF5_USE_FILE_LOCKING environment variable to 'FALSE',
 e.g. adding export HDF5_USE_FILE_LOCKING='FALSE' to your ~..bashrc on Linux.
@@ -50,7 +59,7 @@ from your label file occurs in the filename of your inputs. For example,
 when using the example label file from the `WORC tutorial <https://github.com/MStarmans91/WORCTutorial/blob/master/Data/Examplefiles/pinfo_HN.csv/>`_,
 if your Patient ID is not listed in column 1, this error will occur.
 
-Error: ``File "...\lib\site-packages\numpy\lib\function_base.py", line 4406, in delete keep[obj,] = False IndexError: arrays used as indices must be of integer (or boolean) type``
+Error: ``File "...\lib\site-packages\numpy\lib\function_base.py", line 4406, in delete`` ``keep[obj,] = False IndexError: arrays used as indices must be of integer (or boolean) type``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 This is an error in PyRadiomics 3.0, see also
 `this issue <https://github.com/Radiomics/pyradiomics/issues/592/>`_. It has
@@ -148,8 +157,8 @@ name. To see which labels are exactly used, please see
 3. Tell ``WORC`` to use your feature and not compute the default ones
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 To this end, ``SimpleWORC``, and therefore also ``BasicWORC``, include the
-function ``features_from_this_directory()``. See also the
-:ref:`quick start guide <quickstart-chapter>`. As explained in the WORCTutorial,
+function ``features_from_this_directory()``. See the specific WORC tutorial
+on using your own features: https://github.com/MStarmans91/WORCtutorial/Extra_tutorials/WORCTutorialBasic_OwnFeatures.py.  As explained in the WORCTutorial,
 a default structure of your ``featuresdatadir`` folder is expected in this
 function: there should be a subfolder for each patient, in which the feature
 file should be. The feature file can have a fixed name, but wildcard are
@@ -158,9 +167,12 @@ function.
 
 Altneratively, when using ``BasicWORC``, you can append dictionaries to the
 ``features_train`` object. Each dictionary you append should have as keys
-the patient names, and as values the paths to the feature files, e.g.
-``feature_dict = {'Patient1': '/path/to/featurespatient1.hdf5',
-'Patient2': '/path/to/someotherrandandomfolderwith/featurespatient2.hdf5'...}``.
+the patient names, and as values the paths to the feature files, e.g.:: 
+
+.. code-block:: python
+
+   feature_dict = {'Patient1': '/path/to/featurespatient1.hdf5', 'Patient2': '/path/to/someotherrandandomfolderwith/featurespatient2.hdf5'}
+
 
 How to change the temporary and output folders?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

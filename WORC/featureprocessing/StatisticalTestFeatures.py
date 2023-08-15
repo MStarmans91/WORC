@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -80,7 +80,6 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
     if type(output_tex) is list:
         output_tex = ''.join(output_tex)
 
-    print(output_png, output_tex)
     # Create output folder if required
     if not os.path.exists(os.path.dirname(output_csv)):
         os.makedirs(os.path.dirname(output_csv))
@@ -153,7 +152,12 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
             pvalueswelch.append(ttest_ind(class1, class2, equal_var=False)[1])
             pvalueswil.append(ranksums(class1, class2)[1])
             try:
-                pvaluesmw.append(mannwhitneyu(class1, class2)[1])
+                pmwu = mannwhitneyu(class1, class2)[1]
+                if pmwu == 0.0:
+                    print("[WORC Warning] Mann-Whitney U test resulted in a p-value of exactly 0.0, which is not valid. Replacing metric value by NaN.")
+                    pvaluesmw.append(np.nan)
+                else:
+                    pvaluesmw.append(pmwu)
             except ValueError as e:
                 print("[WORC Warning] " + str(e) + '. Replacing metric value by NaN.')
                 pvaluesmw.append(np.nan)
@@ -161,16 +165,23 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
             # Optional: perform chi2 test. Only do this when categorical, which we define as less than 20 options.
             unique_values = list(set(fv))
             unique_values.sort()
-            if len(unique_values) == 1:
+            if len(unique_values) == 0: # All NaN
+                print("[WORC Warning] " + fl + " has no value. Replacing chi2 metric value by NaN.")
+                pvalueschi2.append(np.nan)
+            elif len(unique_values) == 1:
                 print("[WORC Warning] " + fl + " has only one value. Replacing chi2 metric value by NaN.")
                 pvalueschi2.append(np.nan)
             elif len(unique_values) <= 20:
                 class1_count = [class1.count(i) for i in unique_values]
                 class2_count = [class2.count(i) for i in unique_values]
                 obs = np.array([class1_count, class2_count])
-
-                _, p, _, _ = chi2_contingency(obs)
-                pvalueschi2.append(p)
+                
+                try:
+                    _, p, _, _ = chi2_contingency(obs)
+                    pvalueschi2.append(p)
+                except ValueError:
+                    print("[WORC Warning] " + fl + " has a zero element in table of frequencies. Replacing chi2 metric value by NaN.")
+                    pvalueschi2.append(np.nan)
             else:
                 print("[WORC Warning] " + fl + " is no categorical variable. Replacing chi2 metric value by NaN.")
                 pvalueschi2.append(np.nan)
@@ -257,35 +268,35 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
                    }
 
         for o in objects:
-            if 'hf_' in o:
+            if 'hf_' in o.lower():
                 labels.append(0)
-            elif 'sf_' in o:
+            elif 'sf_' in o.lower():
                 labels.append(1)
-            elif 'of_' in o:
+            elif 'of_' in o.lower():
                 labels.append(2)
-            elif 'GLCM_' in o or 'GLCMMS_' in o:
+            elif 'glcm_' in o or 'glcmms_' in o.lower():
                 labels.append(3)
-            elif 'GLRLM_' in o:
+            elif 'glrlm_' in o.lower():
                 labels.append(4)
-            elif 'GLSZM_' in o:
+            elif 'glszm_' in o.lower():
                 labels.append(5)
-            elif 'GLDM_' in o:
+            elif 'gldm_' in o.lower():
                 labels.append(6)
-            elif 'NGTDM_' in o:
+            elif 'ngtdm_' in o.lower():
                 labels.append(7)
-            elif 'Gabor_' in o:
+            elif 'gabor_' in o.lower():
                 labels.append(8)
-            elif 'semf_' in o:
+            elif 'semf_' in o.lower():
                 labels.append(9)
-            elif 'df_' in o:
+            elif 'df_' in o.lower():
                 labels.append(10)
-            elif 'logf_' in o:
+            elif 'logf_' in o.lower():
                 labels.append(11)
-            elif 'vf_' in o:
+            elif 'vf_' in o.lower():
                 labels.append(12)
-            elif 'LBP_' in o:
+            elif 'lbp_' in o.lower():
                 labels.append(13)
-            elif 'phasef_' in o:
+            elif 'phasef_' in o.lower():
                 labels.append(14)
             else:
                 raise KeyError(o)

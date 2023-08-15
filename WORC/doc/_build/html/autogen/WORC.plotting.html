@@ -1,39 +1,42 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>plotting Package &mdash; WORC 3.6.2 documentation</title>
+  <title>plotting Package &mdash; WORC 3.6.3 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="processing Package" href="WORC.processing.html" />
@@ -64,7 +67,7 @@
             
             
               <div class="version">
-                3.6.2
+                3.6.3
               </div>
             
           
@@ -81,6 +84,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -145,6 +149,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -179,11 +184,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="WORC.html">WORC Package</a> &raquo;</li>
         
@@ -192,7 +199,7 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="../_sources/autogen/WORC.plotting.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -213,9 +220,9 @@
 <span class="target" id="module-WORC.plotting"></span></div>
 <div class="section" id="module-WORC.plotting.compute_CI">
 <span id="compute-ci-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">compute_CI</span></code> Module<a class="headerlink" href="#module-WORC.plotting.compute_CI" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.compute_CI.compute_confidence">
-<code class="descclassname">WORC.plotting.compute_CI.</code><code class="descname">compute_confidence</code><span class="sig-paren">(</span><em>metric</em>, <em>N_train</em>, <em>N_test</em>, <em>alpha=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/compute_CI.html#compute_confidence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.compute_CI.compute_confidence" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.compute_CI.</span></code><code class="sig-name descname"><span class="pre">compute_confidence</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/compute_CI.html#compute_confidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.compute_CI.compute_confidence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to calculate the adjusted confidence interval for cross-validation.
 metric: numpy array containing the result for a metric for the different cross validations
 (e.g. If 20 cross-validations are performed it is a list of length 20 with the calculated accuracy for
@@ -225,18 +232,18 @@ N_test: Integer, number of test_samples
 alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 0.95</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.compute_CI.compute_confidence_bootstrap">
-<code class="descclassname">WORC.plotting.compute_CI.</code><code class="descname">compute_confidence_bootstrap</code><span class="sig-paren">(</span><em>bootstrap_metric</em>, <em>test_metric</em>, <em>N_1</em>, <em>alpha=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/compute_CI.html#compute_confidence_bootstrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.compute_CI.compute_confidence_bootstrap" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.compute_CI.</span></code><code class="sig-name descname"><span class="pre">compute_confidence_bootstrap</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bootstrap_metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/compute_CI.html#compute_confidence_bootstrap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.compute_CI.compute_confidence_bootstrap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to calculate confidence interval for bootstrapped samples.
 metric: numpy array containing the result for a metric for the different bootstrap iterations
 test_metric: the value of the metric evaluated on the true, full test set
 alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 0.95</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.compute_CI.compute_confidence_logit">
-<code class="descclassname">WORC.plotting.compute_CI.</code><code class="descname">compute_confidence_logit</code><span class="sig-paren">(</span><em>metric</em>, <em>N_train</em>, <em>N_test</em>, <em>alpha=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/compute_CI.html#compute_confidence_logit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.compute_CI.compute_confidence_logit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.compute_CI.</span></code><code class="sig-name descname"><span class="pre">compute_confidence_logit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/compute_CI.html#compute_confidence_logit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.compute_CI.compute_confidence_logit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to calculate the adjusted confidence interval
 metric: numpy array containing the result for a metric for the different cross validations
 (e.g. If 20 cross-validations are performed it is a list of length 20 with the calculated accuracy for
@@ -249,30 +256,30 @@ alpha: float ranging from 0 to 1 to calculate the alpha*100% CI, default 95%</p>
 </div>
 <div class="section" id="module-WORC.plotting.linstretch">
 <span id="linstretch-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">linstretch</span></code> Module<a class="headerlink" href="#module-WORC.plotting.linstretch" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.linstretch.linstretch">
-<code class="descclassname">WORC.plotting.linstretch.</code><code class="descname">linstretch</code><span class="sig-paren">(</span><em>i</em>, <em>i_max=255</em>, <em>i_min=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/linstretch.html#linstretch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.linstretch.linstretch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.linstretch.</span></code><code class="sig-name descname"><span class="pre">linstretch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/linstretch.html#linstretch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.linstretch.linstretch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stretch the input image i pixel values from i_min to i_max</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-WORC.plotting.plot_ROC">
 <span id="plot-roc-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ROC</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_ROC" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ROC.curve_thresholding">
-<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">curve_thresholding</code><span class="sig-paren">(</span><em>metric1t</em>, <em>metric2t</em>, <em>thresholds</em>, <em>nsamples=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#curve_thresholding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.curve_thresholding" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ROC.</span></code><code class="sig-name descname"><span class="pre">curve_thresholding</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric1t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric2t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#curve_thresholding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.curve_thresholding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct metric1 and metric2 (either FPR and TPR, or TPR and Precision)
 ratios at different thresholds for the scores of an estimator.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ROC.main">
-<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.main" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ROC.</span></code><code class="sig-name descname"><span class="pre">main</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ROC.plot_PRC_CIc">
-<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">plot_PRC_CIc</code><span class="sig-paren">(</span><em>y_truth</em>, <em>y_score</em>, <em>N_1</em>, <em>N_2</em>, <em>plot='default'</em>, <em>alpha=0.95</em>, <em>verbose=False</em>, <em>DEBUG=False</em>, <em>tsamples=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_PRC_CIc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_PRC_CIc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ROC.</span></code><code class="sig-name descname"><span class="pre">plot_PRC_CIc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DEBUG</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_PRC_CIc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_PRC_CIc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a Precision-Recall curve with confidence intervals.</p>
 <dl class="simple">
 <dt>tsamples: number of sample points on which to determine the confidence intervals.</dt><dd><p>The sample pointsare used on the thresholds for y_score.</p>
@@ -280,14 +287,14 @@ ratios at different thresholds for the scores of an estimator.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ROC.plot_ROC">
-<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">plot_ROC</code><span class="sig-paren">(</span><em>prediction</em>, <em>pinfo</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=1</em>, <em>label_type=None</em>, <em>ROC_png=None</em>, <em>ROC_tex=None</em>, <em>ROC_csv=None</em>, <em>PRC_png=None</em>, <em>PRC_tex=None</em>, <em>PRC_csv=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_ROC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_ROC" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ROC.</span></code><code class="sig-name descname"><span class="pre">plot_ROC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top_N'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ROC_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ROC_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ROC_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PRC_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PRC_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PRC_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_ROC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_ROC" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ROC.plot_ROC_CIc">
-<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">plot_ROC_CIc</code><span class="sig-paren">(</span><em>y_truth</em>, <em>y_score</em>, <em>N_1</em>, <em>N_2</em>, <em>plot='default'</em>, <em>alpha=0.95</em>, <em>verbose=False</em>, <em>DEBUG=False</em>, <em>tsamples=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_ROC_CIc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_ROC_CIc" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ROC.</span></code><code class="sig-name descname"><span class="pre">plot_ROC_CIc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DEBUG</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_ROC_CIc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_ROC_CIc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a Receiver Operator Characteristic (ROC) curve with confidence intervals.</p>
 <dl class="simple">
 <dt>tsamples: number of sample points on which to determine the confidence intervals.</dt><dd><p>The sample pointsare used on the thresholds for y_score.</p>
@@ -295,17 +302,17 @@ ratios at different thresholds for the scores of an estimator.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ROC.plot_single_PRC">
-<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">plot_single_PRC</code><span class="sig-paren">(</span><em>y_truth</em>, <em>y_score</em>, <em>verbose=False</em>, <em>returnplot=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_single_PRC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_single_PRC" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ROC.</span></code><code class="sig-name descname"><span class="pre">plot_single_PRC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returnplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_single_PRC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_single_PRC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the precision and recall (=true positive rate)
 for the ground truth and score of a single estimator. These ratios
 can be used to plot a Precision Recall Curve (ROC).</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ROC.plot_single_ROC">
-<code class="descclassname">WORC.plotting.plot_ROC.</code><code class="descname">plot_single_ROC</code><span class="sig-paren">(</span><em>y_truth</em>, <em>y_score</em>, <em>verbose=False</em>, <em>returnplot=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_single_ROC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_single_ROC" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ROC.</span></code><code class="sig-name descname"><span class="pre">plot_single_ROC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">returnplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ROC.html#plot_single_ROC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ROC.plot_single_ROC" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the False Positive Ratio (FPR) and True Positive Ratio (TPR)
 for the ground truth and score of a single estimator. These ratios
 can be used to plot a Receiver Operator Characteristic (ROC) curve.</p>
@@ -314,24 +321,24 @@ can be used to plot a Receiver Operator Characteristic (ROC) curve.</p>
 </div>
 <div class="section" id="module-WORC.plotting.plot_barchart">
 <span id="plot-barchart-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_barchart</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_barchart" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_barchart.count_parameters">
-<code class="descclassname">WORC.plotting.plot_barchart.</code><code class="descname">count_parameters</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#count_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.count_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_barchart.</span></code><code class="sig-name descname"><span class="pre">count_parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#count_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.count_parameters" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_barchart.main">
-<code class="descclassname">WORC.plotting.plot_barchart.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.main" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_barchart.</span></code><code class="sig-name descname"><span class="pre">main</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_barchart.paracheck">
-<code class="descclassname">WORC.plotting.plot_barchart.</code><code class="descname">paracheck</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#paracheck"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.paracheck" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_barchart.</span></code><code class="sig-name descname"><span class="pre">paracheck</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#paracheck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.paracheck" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_barchart.plot_barchart">
-<code class="descclassname">WORC.plotting.plot_barchart.</code><code class="descname">plot_barchart</code><span class="sig-paren">(</span><em>prediction</em>, <em>estimators=10</em>, <em>label_type=None</em>, <em>output_tex=None</em>, <em>output_png=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#plot_barchart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.plot_barchart" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_barchart.</span></code><code class="sig-name descname"><span class="pre">plot_barchart</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#plot_barchart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.plot_barchart" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a barchart of the top X hyperparameters settings of the ranked
 estimators in all cross validation iterations.</p>
 <dl class="simple">
@@ -356,17 +363,17 @@ the first label from the prediction file will be used.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_barchart.plot_bars">
-<code class="descclassname">WORC.plotting.plot_barchart.</code><code class="descname">plot_bars</code><span class="sig-paren">(</span><em>params</em>, <em>normalization_factor=None</em>, <em>figwidth=40</em>, <em>fontsize=30</em>, <em>spacing=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#plot_bars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.plot_bars" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_barchart.</span></code><code class="sig-name descname"><span class="pre">plot_bars</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_barchart.html#plot_bars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_barchart.plot_bars" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="module-WORC.plotting.plot_boxplot_features">
 <span id="plot-boxplot-features-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot_features</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_boxplot_features" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_boxplot_features.generate_feature_boxplots">
-<code class="descclassname">WORC.plotting.plot_boxplot_features.</code><code class="descname">generate_feature_boxplots</code><span class="sig-paren">(</span><em>image_features</em>, <em>label_data</em>, <em>output_zip</em>, <em>dpi=500</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_boxplot_features.html#generate_feature_boxplots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_boxplot_features.generate_feature_boxplots" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_boxplot_features.</span></code><code class="sig-name descname"><span class="pre">generate_feature_boxplots</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_zip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_boxplot_features.html#generate_feature_boxplots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_boxplot_features.generate_feature_boxplots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate boxplots of the feature values among different objects.</p>
 <dl class="simple">
 <dt>features: list, mandatory</dt><dd><p>List with a dictionary of the feature labels and values for each patient.</p>
@@ -378,65 +385,65 @@ the first label from the prediction file will be used.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_boxplot_features.plot_boxplot_features">
-<code class="descclassname">WORC.plotting.plot_boxplot_features.</code><code class="descname">plot_boxplot_features</code><span class="sig-paren">(</span><em>features</em>, <em>label_data</em>, <em>config</em>, <em>output_zip</em>, <em>label_type=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_boxplot_features.html#plot_boxplot_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_boxplot_features.plot_boxplot_features" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_boxplot_features.</span></code><code class="sig-name descname"><span class="pre">plot_boxplot_features</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_zip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_boxplot_features.html#plot_boxplot_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_boxplot_features.plot_boxplot_features" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="module-WORC.plotting.plot_boxplot_performance">
 <span id="plot-boxplot-performance-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_boxplot_performance</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_boxplot_performance" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_boxplot_performance.generate_performance_boxplots">
-<code class="descclassname">WORC.plotting.plot_boxplot_performance.</code><code class="descname">generate_performance_boxplots</code><span class="sig-paren">(</span><em>performances</em>, <em>metrics</em>, <em>outputfolder</em>, <em>colors=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_boxplot_performance.html#generate_performance_boxplots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_boxplot_performance.generate_performance_boxplots" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_boxplot_performance.</span></code><code class="sig-name descname"><span class="pre">generate_performance_boxplots</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">performances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputfolder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_boxplot_performance.html#generate_performance_boxplots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_boxplot_performance.generate_performance_boxplots" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate boxplots for performance of various models.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_boxplot_performance.test">
-<code class="descclassname">WORC.plotting.plot_boxplot_performance.</code><code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_boxplot_performance.html#test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_boxplot_performance.test" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_boxplot_performance.</span></code><code class="sig-name descname"><span class="pre">test</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_boxplot_performance.html#test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_boxplot_performance.test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test functionality with synthetic data.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-WORC.plotting.plot_errors">
 <span id="plot-errors-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_errors</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_errors" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_errors.plot_errors">
-<code class="descclassname">WORC.plotting.plot_errors.</code><code class="descname">plot_errors</code><span class="sig-paren">(</span><em>featurefiles</em>, <em>patientinfo</em>, <em>label_type</em>, <em>featurenames</em>, <em>posteriors_csv=None</em>, <em>agesex=True</em>, <em>output_png=None</em>, <em>output_tex=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_errors.html#plot_errors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_errors.plot_errors" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_errors.</span></code><code class="sig-name descname"><span class="pre">plot_errors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">featurefiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patientinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">featurenames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posteriors_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agesex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_errors.html#plot_errors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_errors.plot_errors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scatterplot of all objects with marking of errors.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-WORC.plotting.plot_estimator_performance">
 <span id="plot-estimator-performance-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_estimator_performance</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_estimator_performance" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_estimator_performance.combine_multiple_estimators">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">combine_multiple_estimators</code><span class="sig-paren">(</span><em>predictions</em>, <em>label_data</em>, <em>N_1</em>, <em>N_2</em>, <em>multilabel_type</em>, <em>label_types</em>, <em>ensemble=1</em>, <em>strategy='argmax'</em>, <em>alpha=0.95</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#combine_multiple_estimators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.combine_multiple_estimators" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_estimator_performance.</span></code><code class="sig-name descname"><span class="pre">combine_multiple_estimators</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predictions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multilabel_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'argmax'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#combine_multiple_estimators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.combine_multiple_estimators" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine multiple estimators in a single model.</p>
 <p>Note: the multilabel_type labels should correspond to the ordering in label_types.
 Hence, if multilabel_type = 0, the prediction is label_type[0] etc.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_estimator_performance.compute_statistics">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">compute_statistics</code><span class="sig-paren">(</span><em>y_truth</em>, <em>y_score</em>, <em>y_prediction</em>, <em>modus</em>, <em>regression</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#compute_statistics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.compute_statistics" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_estimator_performance.</span></code><code class="sig-name descname"><span class="pre">compute_statistics</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_truth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#compute_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.compute_statistics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute statistics on predictions.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_estimator_performance.fit_thresholds">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">fit_thresholds</code><span class="sig-paren">(</span><em>thresholds</em>, <em>estimator</em>, <em>label_type</em>, <em>X_train</em>, <em>Y_train</em>, <em>ensemble_method</em>, <em>ensemble_size</em>, <em>ensemble_scoring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#fit_thresholds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.fit_thresholds" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_estimator_performance.</span></code><code class="sig-name descname"><span class="pre">fit_thresholds</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thresholds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y_train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_scoring</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#fit_thresholds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.fit_thresholds" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_estimator_performance.main">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.main" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_estimator_performance.</span></code><code class="sig-name descname"><span class="pre">main</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_estimator_performance.plot_estimator_performance">
-<code class="descclassname">WORC.plotting.plot_estimator_performance.</code><code class="descname">plot_estimator_performance</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_data</em>, <em>label_type</em>, <em>crossval_type=None</em>, <em>alpha=0.95</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>verbose=True</em>, <em>ensemble_scoring=None</em>, <em>output=None</em>, <em>modus=None</em>, <em>thresholds=None</em>, <em>survival=False</em>, <em>shuffle_estimators=False</em>, <em>bootstrap=None</em>, <em>bootstrap_N=None</em>, <em>overfit_scaler=None</em>, <em>save_memory=True</em>, <em>refit_ensemble=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#plot_estimator_performance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.plot_estimator_performance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_estimator_performance.</span></code><code class="sig-name descname"><span class="pre">plot_estimator_performance</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crossval_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top_N'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">survival</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle_estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bootstrap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bootstrap_N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overfit_scaler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_memory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refit_ensemble</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_estimator_performance.html#plot_estimator_performance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_estimator_performance.plot_estimator_performance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the output of a single estimator, e.g. a SVM.</p>
 <dl class="simple">
 <dt>prediction: pandas dataframe or string, mandatory</dt><dd><p>output of trainclassifier function, either a pandas dataframe
@@ -495,9 +502,9 @@ y_truths: list</p>
 </div>
 <div class="section" id="module-WORC.plotting.plot_hyperparameters">
 <span id="plot-hyperparameters-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_hyperparameters</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_hyperparameters" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_hyperparameters.plot_hyperparameters">
-<code class="descclassname">WORC.plotting.plot_hyperparameters.</code><code class="descname">plot_hyperparameters</code><span class="sig-paren">(</span><em>prediction</em>, <em>label_type=None</em>, <em>estsize=50</em>, <em>output=None</em>, <em>removeconstants=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_hyperparameters.html#plot_hyperparameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_hyperparameters.plot_hyperparameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_hyperparameters.</span></code><code class="sig-name descname"><span class="pre">plot_hyperparameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removeconstants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_hyperparameters.html#plot_hyperparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_hyperparameters.plot_hyperparameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gather which hyperparameters have been used in the best workflows.</p>
 <dl class="simple">
 <dt>prediction: pandas dataframe or string, mandatory</dt><dd><p>output of trainclassifier function, either a pandas dataframe
@@ -519,25 +526,25 @@ value in all workflows.</p>
 </div>
 <div class="section" id="module-WORC.plotting.plot_images">
 <span id="plot-images-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_images</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_images" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_images.bbox_2D">
-<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">bbox_2D</code><span class="sig-paren">(</span><em>img, mask, padding=[1, 1], img2=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#bbox_2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.bbox_2D" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_images.</span></code><code class="sig-name descname"><span class="pre">bbox_2D</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">img2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#bbox_2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_images.bbox_2D" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_images.extract_boundary">
-<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">extract_boundary</code><span class="sig-paren">(</span><em>contour</em>, <em>radius=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#extract_boundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.extract_boundary" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_images.</span></code><code class="sig-name descname"><span class="pre">extract_boundary</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">contour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#extract_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_images.extract_boundary" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_images.plot_im_and_overlay">
-<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">plot_im_and_overlay</code><span class="sig-paren">(</span><em>image</em>, <em>mask=None</em>, <em>figsize=(3</em>, <em>3)</em>, <em>alpha=0.4</em>, <em>color='cyan'</em>, <em>colormap='gray'</em>, <em>colorbar=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#plot_im_and_overlay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.plot_im_and_overlay" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_images.</span></code><code class="sig-name descname"><span class="pre">plot_im_and_overlay</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3,</span> <span class="pre">3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cyan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colormap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#plot_im_and_overlay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_images.plot_im_and_overlay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot an image in a matplotlib figure and overlay with a mask.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_images.slicer">
-<code class="descclassname">WORC.plotting.plot_images.</code><code class="descname">slicer</code><span class="sig-paren">(</span><em>image, mask=None, output_name=None, output_name_zoom=None, thresholds=[-5, 5], zoomfactor=4, dpi=500, normalize=True, expand=False, boundary=False, square=False, flip=True, rot90=0, alpha=0.4, axis='axial', index=None, color='cyan', radius=2, colormap='gray', fill=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#slicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_images.slicer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_images.</span></code><code class="sig-name descname"><span class="pre">slicer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_name_zoom</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresholds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[-</span> <span class="pre">5,</span> <span class="pre">5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoomfactor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expand</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rot90</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'axial'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cyan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colormap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_images.html#slicer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_images.slicer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot slice of image where mask is largest, with mask as overlay.</p>
 <p>image and mask should both be arrays</p>
 </dd></dl>
@@ -545,43 +552,43 @@ value in all workflows.</p>
 </div>
 <div class="section" id="module-WORC.plotting.plot_pvalues_features">
 <span id="plot-pvalues-features-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_pvalues_features</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_pvalues_features" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_pvalues_features.manhattan_importance">
-<code class="descclassname">WORC.plotting.plot_pvalues_features.</code><code class="descname">manhattan_importance</code><span class="sig-paren">(</span><em>values</em>, <em>labels</em>, <em>feature_labels</em>, <em>output_png=None</em>, <em>output_tex=None</em>, <em>mapping=None</em>, <em>threshold_annotated=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_pvalues_features.html#manhattan_importance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_pvalues_features.manhattan_importance" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_pvalues_features.</span></code><code class="sig-name descname"><span class="pre">manhattan_importance</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_png</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_tex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold_annotated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_pvalues_features.html#manhattan_importance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_pvalues_features.manhattan_importance" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
 <div class="section" id="module-WORC.plotting.plot_ranked_scores">
 <span id="plot-ranked-scores-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plot_ranked_scores</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plot_ranked_scores" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ranked_scores.flatten_object">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">flatten_object</code><span class="sig-paren">(</span><em>input</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#flatten_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.flatten_object" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ranked_scores.</span></code><code class="sig-name descname"><span class="pre">flatten_object</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#flatten_object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.flatten_object" title="Permalink to this definition">¶</a></dt>
 <dd><p>Flatten various objects to a 1D list.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ranked_scores.main">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.main" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ranked_scores.</span></code><code class="sig-name descname"><span class="pre">main</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ranked_scores.plot_ranked_images">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_images</code><span class="sig-paren">(</span><em>pinfo</em>, <em>label_type</em>, <em>images</em>, <em>segmentations</em>, <em>ranked_truths</em>, <em>ranked_scores</em>, <em>ranked_PIDs</em>, <em>output_zip=None</em>, <em>output_itk=None</em>, <em>zoomfactor=4</em>, <em>scores='percentages'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_images" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ranked_scores.</span></code><code class="sig-name descname"><span class="pre">plot_ranked_images</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmentations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranked_truths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranked_scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranked_PIDs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_zip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_itk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoomfactor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'percentages'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_images" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ranked_scores.plot_ranked_percentages">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_percentages</code><span class="sig-paren">(</span><em>estimator</em>, <em>pinfo</em>, <em>label_type=None</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>output_csv=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_percentages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_percentages" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ranked_scores.</span></code><code class="sig-name descname"><span class="pre">plot_ranked_percentages</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top_N'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_percentages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_percentages" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ranked_scores.plot_ranked_posteriors">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_posteriors</code><span class="sig-paren">(</span><em>estimator</em>, <em>pinfo</em>, <em>label_type=None</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>output_csv=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_posteriors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_posteriors" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ranked_scores.</span></code><code class="sig-name descname"><span class="pre">plot_ranked_posteriors</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top_N'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_posteriors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_posteriors" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plot_ranked_scores.plot_ranked_scores">
-<code class="descclassname">WORC.plotting.plot_ranked_scores.</code><code class="descname">plot_ranked_scores</code><span class="sig-paren">(</span><em>estimator</em>, <em>pinfo</em>, <em>label_type</em>, <em>scores='percentages'</em>, <em>images=[]</em>, <em>segmentations=[]</em>, <em>ensemble_method='top_N'</em>, <em>ensemble_size=100</em>, <em>output_csv=None</em>, <em>output_zip=None</em>, <em>output_itk=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_scores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_scores" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plot_ranked_scores.</span></code><code class="sig-name descname"><span class="pre">plot_ranked_scores</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'percentages'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmentations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top_N'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensemble_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_zip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_itk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plot_ranked_scores.html#plot_ranked_scores"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plot_ranked_scores.plot_ranked_scores" title="Permalink to this definition">¶</a></dt>
 <dd><p>Rank the patients according to their average score. The score can either
 be the average posterior or the percentage of times the patient was
 classified correctly in the cross validations. Additionally,
@@ -621,9 +628,9 @@ zip file.</p>
 </div>
 <div class="section" id="module-WORC.plotting.plotminmaxresponse">
 <span id="plotminmaxresponse-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotminmaxresponse</span></code> Module<a class="headerlink" href="#module-WORC.plotting.plotminmaxresponse" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<dl class="py function">
 <dt id="WORC.plotting.plotminmaxresponse.main">
-<code class="descclassname">WORC.plotting.plotminmaxresponse.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plotminmaxresponse.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WORC.plotting.plotminmaxresponse.main" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">WORC.plotting.plotminmaxresponse.</span></code><code class="sig-name descname"><span class="pre">main</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/plotting/plotminmaxresponse.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.plotting.plotminmaxresponse.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -634,29 +641,29 @@ zip file.</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="WORC.processing.html" class="btn btn-neutral float-right" title="processing Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="WORC.featureprocessing.html" class="btn btn-neutral float-left" title="featureprocessing Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+        <a href="WORC.processing.html" class="btn btn-neutral float-right" title="processing Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="WORC.featureprocessing.html" class="btn btn-neutral float-left" title="featureprocessing Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
+        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -664,7 +671,6 @@ zip file.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

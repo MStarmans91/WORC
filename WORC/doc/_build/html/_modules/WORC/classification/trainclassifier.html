@@ -1,39 +1,42 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>WORC.classification.trainclassifier &mdash; WORC 3.6.2 documentation</title>
+  <title>WORC.classification.trainclassifier &mdash; WORC 3.6.3 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -62,7 +65,7 @@
             
             
               <div class="version">
-                3.6.2
+                3.6.3
               </div>
             
           
@@ -79,6 +82,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -104,6 +108,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -138,11 +143,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -164,7 +171,7 @@
   <h1>Source code for WORC.classification.trainclassifier</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -181,12 +188,12 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="k">import</span> <span class="n">uniform</span>
-<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
-<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="k">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
-<span class="kn">from</span> <span class="nn">WORC.IOparser.file_io</span> <span class="k">import</span> <span class="n">load_features</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">uniform</span>
+<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="kn">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
+<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="kn">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
+<span class="kn">from</span> <span class="nn">WORC.IOparser.file_io</span> <span class="kn">import</span> <span class="n">load_features</span>
 <span class="kn">import</span> <span class="nn">WORC.IOparser.config_io_classifier</span> <span class="k">as</span> <span class="nn">config_io</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="k">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> \
+<span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="kn">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> \
     <span class="n">log_uniform</span><span class="p">,</span> <span class="n">boolean_uniform</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
@@ -312,6 +319,9 @@
 
     <span class="c1"># Add non-classifier parameters</span>
     <span class="n">param_grid</span> <span class="o">=</span> <span class="n">add_parameters_to_grid</span><span class="p">(</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+    
+    <span class="c1"># Delete parameters for hyperoptimization which already have been used</span>
+    <span class="k">del</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;fix_random_seed&#39;</span><span class="p">]</span> 
 
     <span class="c1"># For N_iter, perform k-fold crossvalidation</span>
     <span class="n">outputfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_hdf</span><span class="p">)</span>
@@ -409,6 +419,28 @@
         <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
                          <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;SelectFromModel_n_trees&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;RFE&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">boolean_uniform</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE&#39;</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;RFE_lasso_alpha&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE_lasso_alpha&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE_lasso_alpha&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;RFE_estimator&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE_estimator&#39;</span><span class="p">]</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;RFE_n_trees&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE_n_trees&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE_n_trees&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;RFE_n_features_to_select&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE_n_features_to_select&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE_n_features_to_select&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        
+    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;RFE_step&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE_step&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                         <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;RFE_step&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">boolean_uniform</span><span class="p">(</span><span class="n">threshold</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;UsePCA&#39;</span><span class="p">])</span>
     <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;PCAType&#39;</span><span class="p">]</span>
@@ -442,8 +474,12 @@
                          <span class="n">scale</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;ReliefNumFeatures&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="c1"># Add a random seed, which is required for many methods</span>
-    <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;HyperOptimization&#39;</span><span class="p">][</span><span class="s1">&#39;fix_random_seed&#39;</span><span class="p">]:</span>
+        <span class="c1"># Fix the random seed</span>
+        <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">22</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">]</span> <span class="o">=</span>\
+            <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">param_grid</span></div>
 </pre></div>
@@ -452,20 +488,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
+        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -473,7 +514,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -1,4 +1,4 @@
-# Copyright 2016 - 2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016 - 2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,7 +93,7 @@ class NoseTestCommand(TestCommand):
 
 setup(
     name='WORC',
-    version='3.6.2',
+    version='3.6.3',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',

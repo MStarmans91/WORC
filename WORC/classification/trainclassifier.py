@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -148,6 +148,9 @@ def trainclassifier(feat_train, patientinfo_train, config,
 
     # Add non-classifier parameters
     param_grid = add_parameters_to_grid(param_grid, config)
+    
+    # Delete parameters for hyperoptimization which already have been used
+    del config['HyperOptimization']['fix_random_seed'] 
 
     # For N_iter, perform k-fold crossvalidation
     outputfolder = os.path.dirname(output_hdf)
@@ -245,6 +248,28 @@ def add_parameters_to_grid(param_grid, config):
         discrete_uniform(loc=config['Featsel']['SelectFromModel_n_trees'][0],
                          scale=config['Featsel']['SelectFromModel_n_trees'][1])
 
+    param_grid['RFE'] =\
+        boolean_uniform(threshold=config['Featsel']['RFE'])
+
+    param_grid['RFE_lasso_alpha'] =\
+        uniform(loc=config['Featsel']['RFE_lasso_alpha'][0],
+                scale=config['Featsel']['RFE_lasso_alpha'][1])
+
+    param_grid['RFE_estimator'] =\
+        config['Featsel']['RFE_estimator']
+
+    param_grid['RFE_n_trees'] =\
+        discrete_uniform(loc=config['Featsel']['RFE_n_trees'][0],
+                         scale=config['Featsel']['RFE_n_trees'][1])
+
+    param_grid['RFE_n_features_to_select'] =\
+        discrete_uniform(loc=config['Featsel']['RFE_n_features_to_select'][0],
+                         scale=config['Featsel']['RFE_n_features_to_select'][1])
+        
+    param_grid['RFE_step'] =\
+        discrete_uniform(loc=config['Featsel']['RFE_step'][0],
+                         scale=config['Featsel']['RFE_step'][1])
+        
     param_grid['UsePCA'] =\
         boolean_uniform(threshold=config['Featsel']['UsePCA'])
     param_grid['PCAType'] = config['Featsel']['PCAType']
@@ -278,7 +303,11 @@ def add_parameters_to_grid(param_grid, config):
                          scale=config['Featsel']['ReliefNumFeatures'][1])
 
     # Add a random seed, which is required for many methods
-    param_grid['random_seed'] =\
-        discrete_uniform(loc=0, scale=2**32 - 1)
+    if config['HyperOptimization']['fix_random_seed']:
+        # Fix the random seed
+        param_grid['random_seed'] = [22]
+    else:
+        param_grid['random_seed'] =\
+            discrete_uniform(loc=0, scale=2**32 - 1)
 
     return param_grid

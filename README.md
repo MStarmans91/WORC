@@ -1,4 +1,4 @@
-# WORC v3.6.2
+# WORC v3.6.3
 ## Workflow for Optimal Radiomics Classification
 
 ## Information
@@ -37,12 +37,12 @@ When using WORC, please cite this repository and the paper describing WORC as as
 
 ```bibtex
 @article{starmans2021reproducible,
-   title={Reproducible radiomics through automated machine learning validated on twelve clinical applications}, 
-   author={Martijn P. A. Starmans and Sebastian R. van der Voort and Thomas Phil and Milea J. M. Timbergen and Melissa Vos and Guillaume A. Padmos and Wouter Kessels and David    Hanff and Dirk J. Grunhagen and Cornelis Verhoef and Stefan Sleijfer and Martin J. van den Bent and Marion Smits and Roy S. Dwarkasing and Christopher J. Els and Federico Fiduzi and Geert J. L. H. van Leenders and Anela Blazevic and Johannes Hofland and Tessa Brabander and Renza A. H. van Gils and Gaston J. H. Franssen and Richard A. Feelders and Wouter W. de Herder and Florian E. Buisman and Francois E. J. A. Willemssen and Bas Groot Koerkamp and Lindsay Angus and Astrid A. M. van der Veldt and Ana Rajicic and Arlette E. Odink and Mitchell Deen and Jose M. Castillo T. and Jifke Veenland and Ivo Schoots and Michel Renckens and Michail Doukas and Rob A. de Man and Jan N. M. IJzermans and Razvan L. Miclea and Peter B. Vermeulen and Esther E. Bron and Maarten G. Thomeer and Jacob J. Visser and Wiro J. Niessen and Stefan Klein},
-   year={2021},
-   eprint={2108.08618},
-   archivePrefix={arXiv},
-   primaryClass={eess.IV}
+   title          = {Reproducible radiomics through automated machine learning validated on twelve clinical applications}, 
+   author         = {Martijn P. A. Starmans and Sebastian R. van der Voort and Thomas Phil and Milea J. M. Timbergen and Melissa Vos and Guillaume A. Padmos and Wouter Kessels and David    Hanff and Dirk J. Grunhagen and Cornelis Verhoef and Stefan Sleijfer and Martin J. van den Bent and Marion Smits and Roy S. Dwarkasing and Christopher J. Els and Federico Fiduzi and Geert J. L. H. van Leenders and Anela Blazevic and Johannes Hofland and Tessa Brabander and Renza A. H. van Gils and Gaston J. H. Franssen and Richard A. Feelders and Wouter W. de Herder and Florian E. Buisman and Francois E. J. A. Willemssen and Bas Groot Koerkamp and Lindsay Angus and Astrid A. M. van der Veldt and Ana Rajicic and Arlette E. Odink and Mitchell Deen and Jose M. Castillo T. and Jifke Veenland and Ivo Schoots and Michel Renckens and Michail Doukas and Rob A. de Man and Jan N. M. IJzermans and Razvan L. Miclea and Peter B. Vermeulen and Esther E. Bron and Maarten G. Thomeer and Jacob J. Visser and Wiro J. Niessen and Stefan Klein},
+   year           = {2021},
+   eprint         = {2108.08618},
+   archivePrefix  = {arXiv},
+   primaryClass   = {eess.IV}
 }
 
 @software{starmans2018worc,
@@ -140,9 +140,9 @@ Make sure you add the executable to the PATH when prompted.
 ### Elastix
 Image registration is included in WORC through [elastix and transformix](http://elastix.isi.uu.nl/).
 In order to use elastix, please download the binaries and place them in your
-fastr.config.mounts['apps'] path. Check the elastix tool description for the correct
-subdirectory structure. For example, on Linux, the binaries and libraries should be in "../apps/elastix/4.8/install/"  and
-"../apps/elastix/4.8/install/lib" respectively.
+``fastr.config.mounts['apps']`` path. Check the elastix tool description for the correct
+subdirectory structure. For example, on Linux, the binaries and libraries should be in ``"../apps/elastix/4.8/install/"``  and
+``"../apps/elastix/4.8/install/lib"`` respectively.
 
 Note: optionally, you can tell WORC to copy the metadata from the image file
 to the segmentation file before applying the deformation field. This requires

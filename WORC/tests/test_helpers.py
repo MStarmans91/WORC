@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,8 @@
 from WORC.detectors.detectors import WORCDirectoryDetector
 from WORC.addexceptions import WORCValueError
 import os
+import numpy as np
+import SimpleITK as sitk
 
 
 def find_exampledatadir():
@@ -41,3 +43,17 @@ def find_testdatadir():
         if not os.path.exists(testdatadir):
             os.mkdir(testdatadir)
         return testdatadir
+    
+    
+def create_SimpeITKimage(size=10):
+    """Create a random float SimpleITK image"""
+    return sitk.GetImageFromArray(np.random.rand(size, size, size))
+
+
+def create_SimpeITKimage_mask(size=10, radius=3):
+    """Create a random binary SimpleITK image"""
+    mask = sitk.GetImageFromArray(np.zeros((size, size, size)))
+    start = int((size-radius)/2)
+    stop = int((size+radius)/2)
+    mask[start:stop, start:stop, start:stop] = 1
+    return mask
