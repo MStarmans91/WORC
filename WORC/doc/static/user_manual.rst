@@ -265,15 +265,17 @@ case, your sources should look as following:
 Semantics or non-radiomics features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Semantic features are non-computational features, thus features that you supply instead of extract. Examples include
-using the age and sex of the patients in the classification. You can
+using clinical features such as the age and sex of the patients in the classification. You can
 supply these as a .csv listing your features per patient, similar to the :ref:`label file <um-labels>`. See
 [the WORCTutorial Github repo](https://github.com/MStarmans91/WORCTutorial/tree/master/Data/Examplefiles) for an example file.
 
-You can provide these sources either through the ``set_registration_parameterfile`` function of the facades,
-by interacting with the ``BasicWORC`` ``elastix_parameter_file`` object, or the 
-``WORC`` ``Elastix_Para`` object. An example of the first option:
+You can provide these sources either through the ``semantics_from_this_file`` function of the facades,
+by interacting with the ``BasicWORC`` ``semantics_file_train`` or ``semantics_file_test`` objects, or the 
+same objects from the main ``WORC`` object. An example of the first option:
 
 .. code-block:: python
+
+    network.semantics_from_this_file(file_path="semantic_features.csv", is_training=True)
 
 
 Masks
