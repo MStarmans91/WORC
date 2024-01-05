@@ -15,8 +15,7 @@
 
 import os
 import sys
-from setuptools.command.test import test as TestCommand
-from setuptools import setup
+from distutils.core import setup
 
 if sys.version_info < (3, 6):
     sys.exit('Sorry, Python < 3.6 is not supported')
@@ -79,18 +78,6 @@ config_d = os.path.join(fastr_home, 'config.d')
 worc_config = os.path.join('WORC', 'fastrconfig', 'WORC_config.py')
 
 
-class NoseTestCommand(TestCommand):
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
-
-    def run_tests(self):
-        # Run nose ensuring that argv simulates running nosetests directly
-        import nose
-        nose.run_exit(argv=['nosetests'])
-
-
 setup(
     name='WORC',
     version='3.6.3',
@@ -110,8 +97,7 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering :: Information Analysis',
         'Topic :: System :: Distributed Computing',
@@ -134,7 +120,6 @@ setup(
     install_requires=_requires,
     tests_require=_tests_require,
     test_suite='nose.collector',
-    cmdclass={'test': NoseTestCommand},
     entry_points=entry_points,
     setup_requires=_requires
 )
