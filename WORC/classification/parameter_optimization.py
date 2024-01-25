@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 import numpy as np
 from sklearn.utils import check_random_state
 from sklearn.model_selection import StratifiedShuffleSplit, ShuffleSplit
-from WORC.classification.SearchCV import RandomizedSearchCVfastr, RandomizedSearchCVJoblib, GuidedSearchCVSMAC
+from WORC.classification.SearchCV import RandomizedSearchCVfastr, GuidedSearchCVSMAC
 
 
 def random_search_parameters(features, labels, N_iter, test_size,

@@ -6,6 +6,31 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`_
 and this project adheres to `Semantic Versioning <http://semver.org/>`_
 
+3.7.0 - Unreleased
+------------------
+Updates to be compatible with Python 3.11, dropped <=3.7 support.
+
+Fixed
+~~~~~
+- ret list in WORC.classification.fitandscore.fit_and_score
+    is now the result dict in line with sklearn updates. 
+- Bug in statistical feature testing.
+
+Changed
+~~~~~~~
+- Several dependencies have been updated, most notably
+    dependency on scikit-learn==0.23.1.
+- The WORC.classification.BaseSearchCV object was updated to 
+    BaseSearchCVWORC, inhereting the dependencies from 
+    sklearn.model_selection._search.BaseSearchCV. While still
+    depending on a hidden object, this is more future proof
+    than the previous construction from scratch.
+
+Removed
+~~~~~~~
+- Joblib SearchCV objects. Rarely used, costs quite some work to maintain.
+
+
 3.6.3 - Unreleased
 ------------------
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,12 @@ except:
 import ast
 import os
 import json
+
+# Ignore pytables performance warning, as we are on purpose saving objects as such
+import warnings
+from tables import PerformanceWarning
+warnings.filterwarnings("ignore", category=PerformanceWarning)
+warnings.filterwarnings("ignore", category=PerformanceWarning, module="pandas.io.pytables")
 
 
 def main():

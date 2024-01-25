@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from traceback import format_exc
 from sklearn.model_selection._validation import _fit_and_score
 import numpy as np
 from sklearn.linear_model import Lasso, LogisticRegression
@@ -60,11 +61,13 @@ def fit_and_score(X, y, scoring,
                   return_n_test_samples=True,
                   return_times=True, return_parameters=False,
                   return_estimator=False,
-                  error_score='raise', verbose=False,
+                  error_score=np.nan, verbose=False,
                   return_all=True, refit_training_workflows=False,
                   refit_validation_workflows=False,
                   skip=False):
-    """Fit an estimator to a dataset and score the performance.
+    """Fit estimator and compute scores for a given dataset split.
+
+    Heavily based on the sklearn.validation.model_selection._fitandscore function
 
     The following
     methods can currently be applied as preprocessing before fitting, in
@@ -84,77 +87,94 @@ def fit_and_score(X, y, scoring,
 
     All of the steps are optional.
 
-    Parameters
+        Parameters
     ----------
-    estimator: sklearn estimator, mandatory
-            Unfitted estimator which will be fit.
+    estimator : estimator object implementing 'fit'
+        The object to use to fit the data.
 
-    X: array, mandatory
-            Array containingfor each object (rows) the feature values
-            (1st Column) and the associated feature label (2nd Column).
+    X : array-like of shape (n_samples, n_features)
+        The data to fit.
 
-    y: list(?), mandatory
-            List containing the labels of the objects.
+    y : array-like of shape (n_samples,) or (n_samples, n_outputs) or None
+        The target variable to try to predict in the case of
+        supervised learning.
 
-    scorer: sklearn scorer, mandatory
-            Function used as optimization criterion for the hyperparamater optimization.
+    scorer : A single callable or dict mapping scorer name to the callable
+        If it is a single callable, the return value for ``train_scores`` and
+        ``test_scores`` is a single float.
 
-    train: list, mandatory
-            Indices of the objects to be used as training set.
+        For a dict, it should be one mapping the scorer name to the scorer
+        callable object / function.
 
-    test: list, mandatory
-            Indices of the objects to be used as testing set.
+        The callable object / fn should have signature
+        ``scorer(estimator, X, y)``.
 
-    parameters: dictionary, mandatory
-            Contains the settings used for the above preprocessing functions
-            and the fitting. TODO: Create a default object and show the
-            fields.
+    train : array-like of shape (n_train_samples,)
+        Indices of training samples.
 
-    fit_params:dictionary, default None
-            Parameters supplied to the estimator for fitting. See the SKlearn
-            site for the parameters of the estimators.
+    test : array-like of shape (n_test_samples,)
+        Indices of test samples.
 
-    return_train_score: boolean, default True
-            Save the training score to the final SearchCV object.
+    verbose : int
+        The verbosity level.
 
-    return_n_test_samples: boolean, default True
-            Save the number of times each sample was used in the test set
-            to the final SearchCV object.
+    error_score : 'raise' or numeric, default=np.nan
+        Value to assign to the score if an error occurs in estimator fitting.
+        If set to 'raise', the error is raised.
+        If a numeric value is given, FitFailedWarning is raised.
 
-    return_times: boolean, default True
-            Save the time spend for each fit to the final SearchCV object.
+    parameters : dict or None
+        Parameters to be set on the estimator.
 
-    return_parameters: boolean, default True
-            Return the parameters used in the final fit to the final SearchCV
-            object.
+    fit_params : dict or None
+        Parameters that will be passed to ``estimator.fit``.
+
+    return_train_score : bool, default=False
+        Compute and return score on training set.
+
+    return_parameters : bool, default=False
+        Return parameters that has been used for the estimator.
+
+    split_progress : {list, tuple} of int, default=None
+        A list or tuple of format (<current_split_id>, <total_num_of_splits>).
+
+    candidate_progress : {list, tuple} of int, default=None
+        A list or tuple of format
+        (<current_candidate_id>, <total_number_of_candidates>).
+
+    return_n_test_samples : bool, default=False
+        Whether to return the ``n_test_samples``.
+
+    return_times : bool, default=False
+        Whether to return the fit/score times.
 
     return_estimator : bool, default=False
         Whether to return the fitted estimator.
 
-    error_score: numeric or "raise" by default
-            Value to assign to the score if an error occurs in estimator
-            fitting. If set to "raise", the error is raised. If a numeric
-            value is given, FitFailedWarning is raised. This parameter
-            does not affect the refit step, which will always raise the error.
-
-    verbose: boolean, default=True
-            If True, print intermediate progress to command line. Warnings are
-            always printed.
-
-    return_all: boolean, default=True
-            If False, only the ret object containing the performance will be
-            returned. If True, the ret object plus all fitted objects will be
-            returned.
 
     Returns
     ----------
-    Depending on the return_all input parameter, either only ret or all objects
+    Depending on the return_all input parameter, either only result or all objects
     below are returned.
 
-    ret: list
-        Contains optionally the train_scores and the test_scores,
-        fit_time, score_time, parameters_est
-        and parameters_all.
+    result : dict with the following attributes
+        train_scores : dict of scorer name -> float
+            Score on training set (for all the scorers),
+            returned only if `return_train_score` is `True`.
+        test_scores : dict of scorer name -> float
+            Score on testing set (for all the scorers).
+        n_test_samples : int
+            Number of test samples.
+        fit_time : float
+            Time spent for fitting in seconds.
+        score_time : float
+            Time spent for scoring in seconds.
+        parameters : dict or None
+            The parameters that have been evaluated.
+        estimator : estimator object
+            The fitted estimator.
+        fit_error : str or None
+            Traceback str if the fit failed, None if the fit succeeded.
 
     GroupSel: WORC GroupSel Object
         Either None if the groupwise feature selection is not used, or
@@ -257,25 +277,26 @@ def fit_and_score(X, y, scoring,
             train_scores = error_score
 
     # Initiate dummy return object for when fit and scoring failes: sklearn defaults
-    ret = [train_scores, test_scores] if return_train_score else [test_scores]
-
+    result = {}
+    result["test_scores"] = test_scores
+    if return_train_score:
+        result["train_scores"] = train_scores
     if return_n_test_samples:
-        ret.append(_num_samples(X_test))
+        result["n_test_samples"] = _num_samples(X_test)
     if return_times:
-        ret.extend([fit_time, score_time])
+        result["fit_time"] = fit_time
+        result["score_time"] = score_time
     if return_parameters:
-        ret.append(para_estimator)
+        result["parameters"] = parameters
     if return_estimator:
-        ret.append(estimator)
+        result["estimator"] = estimator
 
     # Additional to sklearn defaults: return all parameters and refitted estimator
-    ret.append(parameters)
-
+    result["parameters"] = parameters
     if refit_training_workflows:
-        ret.append(None)
-        
+        result["training_workflows"] = None
     if refit_validation_workflows:
-        ret.append(None)
+        result["validation_workflows"] = None
 
     # ------------------------------------------------------------------------
     # OneHotEncoder
@@ -446,18 +467,16 @@ def fit_and_score(X, y, scoring,
         # Delete the non-used fields
         para_estimator = delete_nonestimator_parameters(para_estimator)
 
-        # Update the runtime
+        # Update the fit_time
         end_time = time.time()
-        runtime = end_time - start_time
-        if return_train_score:
-            ret[3] = runtime
-        else:
-            ret[2] = runtime
+        fit_time = end_time - start_time
+        result["fit_time"] = fit_time
+        result["fit_error"] = format_exc()
 
         if return_all:
-            return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, RFESel, ReliefSel, Sampler
+            return result, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, RFESel, ReliefSel, Sampler
         else:
-            return ret
+            return result
 
     # --------------------------------------------------------------------
     # Feature selection based on variance
@@ -486,19 +505,18 @@ def fit_and_score(X, y, scoring,
                 # return NaN as performance
                 para_estimator = delete_nonestimator_parameters(para_estimator)
                 
-                # Update the runtime
+                # Update the fit_time
                 end_time = time.time()
-                runtime = end_time - start_time
-                if return_train_score:
-                    ret[3] = runtime
-                else:
-                    ret[2] = runtime
+                fit_time = end_time - start_time
+                result["fit_time"] = fit_time
+                result["fit_error"] = format_exc()
+
                 if return_all:
-                    return ret, GroupSel, VarSel, SelectModel,\
+                    return result, GroupSel, VarSel, SelectModel,\
                         feature_labels[0], scaler, encoder, imputer, pca,\
                         StatisticalSel, RFESel, ReliefSel, Sampler
                 else:
-                    return ret
+                    return result
             
         if verbose:
             print("\t New Length: " + str(len(X_train[0])))
@@ -584,19 +602,18 @@ def fit_and_score(X, y, scoring,
                     # return NaN as performance
                     para_estimator = delete_nonestimator_parameters(para_estimator)
                     
-                    # Update the runtime
+                    # Update the fit_time
                     end_time = time.time()
-                    runtime = end_time - start_time
-                    if return_train_score:
-                        ret[3] = runtime
-                    else:
-                        ret[2] = runtime
+                    fit_time = end_time - start_time
+                    result["fit_time"] = fit_time
+                    result["fit_error"] = format_exc()
+
                     if return_all:
-                        return ret, GroupSel, VarSel, SelectModel,\
+                        return result, GroupSel, VarSel, SelectModel,\
                             feature_labels[0], scaler, encoder, imputer, pca,\
                             StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
-                        return ret
+                        return result
             else:
                 X_train = X_train_temp
                 X_test = ReliefSel.transform(X_test)
@@ -670,19 +687,18 @@ def fit_and_score(X, y, scoring,
                     # return NaN as performance
                     para_estimator = delete_nonestimator_parameters(para_estimator)
                     
-                    # Update the runtime
+                    # Update the fit_time
                     end_time = time.time()
-                    runtime = end_time - start_time
-                    if return_train_score:
-                        ret[3] = runtime
-                    else:
-                        ret[2] = runtime
+                    fit_time = end_time - start_time
+                    result["fit_time"] = fit_time
+                    result["fit_error"] = format_exc()
+
                     if return_all:
-                        return ret, GroupSel, VarSel, SelectModel,\
+                        return result, GroupSel, VarSel, SelectModel,\
                             feature_labels[0], scaler, encoder, imputer, pca,\
                             StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
-                        return ret
+                        return result
                     
             else:
                 X_train = SelectModel.transform(X_train)
@@ -735,19 +751,18 @@ def fit_and_score(X, y, scoring,
                     # return NaN as performance
                     para_estimator = delete_nonestimator_parameters(para_estimator)
                     
-                    # Update the runtime
+                    # Update the fit_time
                     end_time = time.time()
-                    runtime = end_time - start_time
-                    if return_train_score:
-                        ret[3] = runtime
-                    else:
-                        ret[2] = runtime
+                    fit_time = end_time - start_time
+                    result["fit_time"] = fit_time
+                    result["fit_error"] = format_exc()
+
                     if return_all:
-                        return ret, GroupSel, VarSel, SelectModel,\
+                        return result, GroupSel, VarSel, SelectModel,\
                             feature_labels[0], scaler, encoder, imputer, pca,\
                             StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
-                        return ret
+                        return result
                         
             else:
                 X_train = StatisticalSel.transform(X_train)
@@ -824,19 +839,18 @@ def fit_and_score(X, y, scoring,
                     para_estimator = delete_nonestimator_parameters(para_estimator)
                     RFESel = None
                     
-                    # Update the runtime
+                    # Update the fit_time
                     end_time = time.time()
-                    runtime = end_time - start_time
-                    if return_train_score:
-                        ret[3] = runtime
-                    else:
-                        ret[2] = runtime
+                    fit_time = end_time - start_time
+                    result["fit_time"] = fit_time
+                    result["fit_error"] = format_exc()
+
                     if return_all:
-                        return ret, GroupSel, VarSel, SelectModel,\
+                        return result, GroupSel, VarSel, SelectModel,\
                             feature_labels[0], scaler, encoder, imputer, pca,\
                             StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
-                        return ret
+                        return result
             else:
                 if verbose:
                     print("\t Original Length: " + str(len(X_train[0])))
@@ -858,19 +872,18 @@ def fit_and_score(X, y, scoring,
                         # return NaN as performance
                         para_estimator = delete_nonestimator_parameters(para_estimator)
                         
-                        # Update the runtime
+                        # Update the fit_time
                         end_time = time.time()
-                        runtime = end_time - start_time
-                        if return_train_score:
-                            ret[3] = runtime
-                        else:
-                            ret[2] = runtime
+                        fit_time = end_time - start_time
+                        result["fit_time"] = fit_time
+                        result["fit_error"] = format_exc()
+
                         if return_all:
-                            return ret, GroupSel, VarSel, SelectModel,\
+                            return result, GroupSel, VarSel, SelectModel,\
                                 feature_labels[0], scaler, encoder, imputer, pca,\
                                 StatisticalSel, RFESel, ReliefSel, Sampler
                         else:
-                            return ret
+                            return result
                         
                 else:
                     X_train = RFESel.transform(X_train)
@@ -924,19 +937,18 @@ def fit_and_score(X, y, scoring,
                     # return NaN as performance
                     para_estimator = delete_nonestimator_parameters(para_estimator)
                     
-                    # Update the runtime
+                    # Update the fit_time
                     end_time = time.time()
-                    runtime = end_time - start_time
-                    if return_train_score:
-                        ret[3] = runtime
-                    else:
-                        ret[2] = runtime
+                    fit_time = end_time - start_time
+                    result["fit_time"] = fit_time
+                    result["fit_error"] = format_exc()
+
                     if return_all:
-                        return ret, GroupSel, VarSel, SelectModel,\
+                        return result, GroupSel, VarSel, SelectModel,\
                             feature_labels[0], scaler, encoder, imputer, pca,\
                             StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
-                        return ret
+                        return result
 
             else:
                 evariance = pca.explained_variance_ratio_
@@ -966,19 +978,18 @@ def fit_and_score(X, y, scoring,
                         # return NaN as performance
                         para_estimator = delete_nonestimator_parameters(para_estimator)
                         
-                        # Update the runtime
+                        # Update the fit_time
                         end_time = time.time()
-                        runtime = end_time - start_time
-                        if return_train_score:
-                            ret[3] = runtime
-                        else:
-                            ret[2] = runtime
+                        fit_time = end_time - start_time
+                        result["fit_time"] = fit_time
+                        result["fit_error"] = format_exc()
+
                         if return_all:
-                            return ret, GroupSel, VarSel, SelectModel,\
+                            return result, GroupSel, VarSel, SelectModel,\
                                 feature_labels[0], scaler, encoder, imputer, pca,\
                                 StatisticalSel, RFESel, ReliefSel, Sampler
                         else:
-                            return ret
+                            return result
                 else:
                     X_train = pca.transform(X_train)
                     X_test = pca.transform(X_test)
@@ -1013,19 +1024,18 @@ def fit_and_score(X, y, scoring,
                         # return NaN as performance
                         para_estimator = delete_nonestimator_parameters(para_estimator)
                         
-                        # Update the runtime
+                        # Update the fit_time
                         end_time = time.time()
-                        runtime = end_time - start_time
-                        if return_train_score:
-                            ret[3] = runtime
-                        else:
-                            ret[2] = runtime
+                        fit_time = end_time - start_time
+                        result["fit_time"] = fit_time
+                        result["fit_error"] = format_exc()
+
                         if return_all:
-                            return ret, GroupSel, VarSel, SelectModel,\
+                            return result, GroupSel, VarSel, SelectModel,\
                                 feature_labels[0], scaler, encoder, imputer, pca,\
                                 StatisticalSel, RFESel, ReliefSel, Sampler
                         else:
-                            return ret
+                            return result
                         
         if verbose:
             print("\t New Length: " + str(len(X_train[0])))
@@ -1085,7 +1095,7 @@ def fit_and_score(X, y, scoring,
                 Sampler = None
                 parameters['Resampling_Use'] = 'False'
 
-            except RuntimeError as e:
+            except refit_timeError as e:
                 if 'ADASYN is not suited for this specific dataset. Use SMOTE instead.' in str(e):
                     # Seldomly occurs, therefore return performance dummy
                     if verbose:
@@ -1093,20 +1103,18 @@ def fit_and_score(X, y, scoring,
                         print(parameters)
                     para_estimator = delete_nonestimator_parameters(para_estimator)
 
-                    # Update the runtime
+                    # Update the fit_time
                     end_time = time.time()
-                    runtime = end_time - start_time
-                    if return_train_score:
-                        ret[3] = runtime
-                    else:
-                        ret[2] = runtime
+                    fit_time = end_time - start_time
+                    result["fit_time"] = fit_time
+                    result["fit_error"] = format_exc()
 
                     if return_all:
-                        return ret, GroupSel, VarSel, SelectModel,\
+                        return result, GroupSel, VarSel, SelectModel,\
                             feature_labels[0], scaler, encoder, imputer,\
                             pca, StatisticalSel, RFESel, ReliefSel, Sampler
                     else:
-                        return ret
+                        return result
                 else:
                     raise e
             else:
@@ -1191,7 +1199,7 @@ def fit_and_score(X, y, scoring,
     para_estimator = None
         
     try:
-        ret = _fit_and_score(estimator, feature_values, y_all,
+        result = _fit_and_score(estimator, feature_values, y_all,
                              scorers, new_train,
                              new_test, verbose,
                              para_estimator, fit_params,
@@ -1206,23 +1214,23 @@ def fit_and_score(X, y, scoring,
             if verbose:
                 print(f'[WARNING]: skipping this setting due to LDA Error: {e}.')
 
-            # Update the runtime
-            end_time = time.time()
-            runtime = end_time - start_time
-            if return_train_score:
-                ret[3] = runtime
-            else:
-                ret[2] = runtime
+                # Update the fit_time
+                end_time = time.time()
+                fit_time = end_time - start_time
+                result["fit_time"] = fit_time
+                result["fit_error"] = format_exc()
 
             if return_all:
-                return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, RFESel, ReliefSel, Sampler
+                return result, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, RFESel, ReliefSel, Sampler
             else:
-                return ret
+                return result
         else:
             raise e
 
     # Add original parameters to return object
-    ret.append(parameters)
+    result["parameters"] = parameters
+    if return_estimator:
+        result["estimator"] = estimator
 
     if refit_training_workflows:
         # Refit estimator on train-test training dataset
@@ -1230,27 +1238,25 @@ def fit_and_score(X, y, scoring,
         estimator = WORC.classification.SearchCV.RandomizedSearchCVfastr()
         estimator.refit_and_score(X, y, parameters,
                                   train=indices, test=indices)
-        ret.append(estimator)
+        result["training_workflows"] = estimator
         
     if refit_validation_workflows:
         # Refit estimator on train-validation training dataset
         estimator = WORC.classification.SearchCV.RandomizedSearchCVfastr()
         estimator.refit_and_score(X, y, parameters,
                                   train=train, test=test)
-        ret.append(estimator)
+        result["validation_workflows"] = estimator
         
     # End the timing and store the fit_time
     end_time = time.time()
-    runtime = end_time - start_time
-    if return_train_score:
-        ret[3] = runtime
-    else:
-        ret[2] = runtime
+    fit_time = end_time - start_time
+    result["fit_time"] = fit_time
+    result["fit_error"] = None
 
     if return_all:
-        return ret, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, RFESel, ReliefSel, Sampler
+        return result, GroupSel, VarSel, SelectModel, feature_labels[0], scaler, encoder, imputer, pca, StatisticalSel, RFESel, ReliefSel, Sampler
     else:
-        return ret
+        return result
 
 
 def delete_nonestimator_parameters(parameters):

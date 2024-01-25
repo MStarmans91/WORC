@@ -1,14 +1,31 @@
+#!/usr/bin/env python
+
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
+# Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from WORC.IOparser.config_io_classifier import load_config
 from WORC.classification.construct_classifier import create_param_grid
 from WORC.classification.trainclassifier import add_parameters_to_grid
 from WORC.classification.AdvancedSampler import log_uniform, discrete_uniform, boolean_uniform
-from scipy.stats._distn_infrastructure import rv_frozen
+from scipy.stats._distn_infrastructure import rv_continuous_frozen
 
 printers = {
     log_uniform: lambda x: '$\mathcal{U}^l(' + str(x.base) + '^{' + str(x.loc) + '}, ' + str(x.base) + '^{' + str(
         x.loc + x.scale) + '})$',
     discrete_uniform: lambda x: '$\mathcal{U}^d(' + str(x.loc) + ', ' + str(x.loc + x.scale) + ')$',
-    rv_frozen: lambda x: '$\mathcal{U}(' + str(x.kwds['loc']) + ', ' + str(x.kwds['loc'] + x.kwds['scale']) + ')$',
+    rv_continuous_frozen: lambda x: '$\mathcal{U}(' + str(x.kwds['loc']) + ', ' + str(x.kwds['loc'] + x.kwds['scale']) + ')$',
     boolean_uniform: lambda x: '$\mathcal{B}(' + str(x.threshold) + ')$',
     list: lambda x: '{[' + ', '.join([str(y).replace('_', '\_') for y in x]) + ']}'
 }

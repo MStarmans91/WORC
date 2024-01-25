@@ -266,7 +266,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
                 labels.append(1)
             elif 'of_' in o.lower():
                 labels.append(2)
-            elif 'glcm_' in o or 'glcmms_' in o.lower():
+            elif 'glcm_' in o.lower() or 'glcmms_' in o.lower():
                 labels.append(3)
             elif 'glrlm_' in o.lower():
                 labels.append(4)
@@ -291,7 +291,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
             elif 'phasef_' in o.lower():
                 labels.append(14)
             else:
-                raise KeyError(o)
+                raise KeyError(f"Cannot find any known feature name in key {o}.")
 
         # Replace several labels
         objects = [o.replace('CalcFeatures_', '') for o in objects]

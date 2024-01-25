@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,16 @@ import pandas as pd
 from joblib import Parallel, delayed
 from WORC.classification.fitandscore import fit_and_score
 import WORC.addexceptions as ae
+
+# Ignore pytables performance warning, as we are on purpose saving objects as such
+import warnings
+from tables import PerformanceWarning, NaturalNameWarning
+import pandas as pd
+warnings.filterwarnings("ignore", category=PerformanceWarning)
+warnings.filterwarnings("ignore", category=PerformanceWarning, module="pandas.io.pytables")
+warnings.filterwarnings("ignore", category=pd.io.pytables.PerformanceWarning)
+warnings.filterwarnings("ignore", category=NaturalNameWarning)
+
 
 
 def main():

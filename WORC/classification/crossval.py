@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ import glob
 import random
 import json
 import copy
+import warnings
 from sklearn.metrics import f1_score, roc_auc_score
 from sklearn.model_selection import train_test_split, LeaveOneOut
 from joblib import Parallel, delayed
@@ -32,6 +33,15 @@ import WORC.addexceptions as ae
 from WORC.classification.parameter_optimization import random_search_parameters, guided_search_parameters
 from WORC.classification.regressors import regressors
 from WORC.classification.SearchCV import RandomizedSearchCVfastr
+
+# Ignore pytables performance warning, as we are on purpose saving objects as such
+from tables import PerformanceWarning, NaturalNameWarning
+import pandas as pd
+warnings.filterwarnings("ignore", category=PerformanceWarning)
+warnings.filterwarnings("ignore", category=PerformanceWarning, module="pandas.io.pytables")
+warnings.filterwarnings("ignore", category=pd.io.pytables.PerformanceWarning)
+warnings.filterwarnings("ignore", category=NaturalNameWarning)
+
 
 
 def random_split_cross_validation(image_features, feature_labels, classes,
