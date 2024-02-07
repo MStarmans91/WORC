@@ -80,7 +80,7 @@ worc_config = os.path.join('WORC', 'fastrconfig', 'WORC_config.py')
 
 setup(
     name='WORC',
-    version='3.6.3',
+    version='3.7.0',
     description='Workflow for Optimal Radiomics Classification.',
     long_description=_description,
     url='https://github.com/MStarmans91/WORC',
@@ -110,7 +110,7 @@ setup(
               'WORC.resources',
               'WORC.IOparser',
               'WORC.processing'],
-    python_requires=">=3.6",
+    python_requires=">=3.11",
     include_package_data=True,
     package_data={'fastr.resources': resources_list,
                   'WORC': ['versioninfo'],
