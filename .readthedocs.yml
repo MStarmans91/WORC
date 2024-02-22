@@ -7,10 +7,6 @@ sphinx:
 
 formats: []
 
-# Set the version of OS
-build:
-  os: ubuntu-20.04  # <- add this line
-
 python:
   version: 3.7
   install:
