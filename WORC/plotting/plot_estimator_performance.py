@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
-# Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Department of
+# Radioly & Nuclear Medicine, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import shap
 import os
 import sys
 import numpy as np
@@ -328,6 +329,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
         y_scores = list()
         y_predictions = list()
         pids = list()
+    elif output == "shap":
+        shap_values = list()
 
     # Extract sample size
     N_1 = float(len(prediction[label_type]['patient_ID_train'][0]))
@@ -434,8 +437,8 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 fitted_model.cv_iter = cv_iter
 
             # Create the ensemble
-            X_train_temp = [(x, feature_labels) for x in X_train_temp]
-            fitted_model.create_ensemble(X_train_temp, Y_train_temp,
+            X_train_temp_modelfit = [(x, feature_labels) for x in X_train_temp]
+            fitted_model.create_ensemble(X_train_temp_modelfit, Y_train_temp,
                                          method=ensemble_method, size=ensemble_size,
                                          verbose=verbose, scoring=ensemble_scoring,
                                          overfit_scaler=overfit_scaler)
@@ -595,8 +598,15 @@ def plot_estimator_performance(prediction, label_data, label_type,
                 SpearmanC.append(SpearmanC_temp)
                 SpearmanP.append(SpearmanP_temp)
 
+        elif output == 'shap':
+            print("Generating SHAP values.")
+            # Use KernelExplainer as it is generic
+            shap_explainer = shap.KernelExplainer(fitted_model.predict_proba, np.asarray(X_train_temp))
+            shap_values_temp = shap_explainer.shap_values(np.asarray(X_test_temp))
+            shap_values.append(shap_values_temp)
+
         # Delete some objects to save memory in cross-validtion
-        if not bootstrap and save_memory:
+        if not bootstrap and save_memory and not output == 'shap':
             del fitted_model, X_test_temp, X_train_temp, Y_train_temp
             del Y_test_temp, test_patient_IDs, train_patient_IDs
             prediction[label_type]['X_test'][i] = None
@@ -814,6 +824,9 @@ def plot_estimator_performance(prediction, label_data, label_type,
 
         return output
 
+    elif output == 'shap':
+        X_test = prediction[label_type]['X_test']
+        return shap_values, X_test, feature_labels
 
 def combine_multiple_estimators(predictions, label_data, N_1, N_2,
                                 multilabel_type, label_types,
