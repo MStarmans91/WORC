@@ -23,7 +23,7 @@
 
 # Introduction
 
-WORC is an open-source python package for the easy execution and fully automatic construction and optimization of radiomics workflows.
+WORC is an open-source python package for the easy execution and fully automatic construction and optimization of radiomics workflows. For more details, we refer to the WORC paper: https://doi.org/10.48550/arXiv.2108.08618.
 
 <img src="images/WORC.jpg" alt="Overview"/>
 
@@ -35,7 +35,7 @@ we hope to find a universal radiomics strategy that can address various problems
 ## License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
 
-When using WORC, please cite this repository and the paper describing WORC as as follows:
+When using WORC, please cite **both** this repository and the paper describing WORC as follows:
 
 ```bibtex
 @article{starmans2021reproducible,
@@ -69,6 +69,8 @@ The WORC tutorial is hosted at https://github.com/MStarmans91/WORCTutorial.
 
 The official documentation can be found at [https://worc.readthedocs.io](https://worc.readthedocs.io).
 
+I've developed WORC during my PhD, you can find the thesis revolving around it here: http://hdl.handle.net/1765/137089.
+
 The publicly released WORC database is described in the following paper:
 
 ```bibtex
@@ -86,9 +88,13 @@ The publicly released WORC database is described in the following paper:
 
 The code to download the WORC database and reproduce our experiments can be found at https://github.com/MStarmans91/WORCDatabase.
 
+If you run into any issues, feel free to [make an issue on this Github](https://github.com/MStarmans91/WORC/issues). We advise you to read the FAQ first though: https://worc.readthedocs.io/en/latest/static/faq.html.
+
 ## Installation
 
-WORC supports Unix and Windows systems with Python 3.6+: the [unit tests](https://github.com/MStarmans91/WORC/actions?query=workflow%3A%22Unit+test%22)
+> **_NOTE:_** Yes, we by default run a very old version of Python and some old package versions (e.g., sklearn 0.23) due to hardware constraints. We have however already prepared a release which runs under Python 3.11 and more recent packages, which you could alternatively use: https://github.com/MStarmans91/WORC/tree/newpython. While not all features are fully tested, the default experimental setups work.
+
+WORC supports Unix and Windows systems with Python 3.6 and 3.7: the [unit tests](https://github.com/MStarmans91/WORC/actions?query=workflow%3A%22Unit+test%22)
 are performed on the latest Ubuntu and Windows versions with Python 3.7. For detailed installation
 instructions, please check  [the ReadTheDocs installation guidelines](https://worc.readthedocs.io/en/latest/static/quick_start.html#installation).
 
@@ -127,7 +133,7 @@ We are happy to help you with any questions. Please sent us a mail or place an i
 We welcome contributions to WORC. For the moment, converting your toolbox into a FASTR tool is satisfactory:
 see also [the fastr tool development documentation](https://fastr.readthedocs.io/en/stable/static/user_manual.html#create-your-own-tool).
 
-## Optional
+## Optional extra features
 Besides the default installation, there are several optional packages you could install to support WORC.
 
 ### Graphviz
