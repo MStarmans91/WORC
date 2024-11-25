@@ -78,6 +78,55 @@ for the NGTDM:
 See also my fork of PyRadiomics, which you can also install to fix the issue:
 https://github.com/MStarmans91/pyradiomics.
 
+I get (many) errors related to PyRadiomics
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Both based on our own experience, feedback from WORC users, and the Github issues, PyRadiomics 3.1.0 is extremely buggy.
+If you are using this version, the errors you get may relate to this. We therefore recommend to use the latest
+stable version, 3.0.1.
+
+Error: ``ValueError: Image/Mask geometry mismatch. Potential fix: increase tolerance using geometryTolerance, see Documentation:Usage:Customizing the Extraction:Settings:geometryTolerance for more information"``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The full error will be similar to the following:
+
+.. code-block:: python
+
+  Traceback (most recent call last):
+    File "...\lib\site-packages\radiomics\imageoperations.py", line 228, in checkMask
+      lsif.Execute(imageNode, maskNode)
+    File "...\lib\site-packages\SimpleITK\SimpleITK.py", line 16078, in Execute
+      return _SimpleITK.LabelStatisticsImageFilter_Execute(self, image, labelImage)
+  RuntimeError: Exception thrown in SimpleITK LabelStatisticsImageFilter_Execute: d:\a\1\sitk-build\itk-prefix\include\itk-5.1\itkImageSink.hxx:242:
+  itk::ERROR: itk::ERROR: LabelStatisticsImageFilter(00000280C42E6A10): Inputs do not occupy the same physical space!
+  InputImage Origin: [-1.7624083e+01, 9.7990314e+00, -5.3576663e+01], InputImagePrimary Origin: [-1.7623698e+01, 9.7988536e+00, -5.3576664e+01]
+          Tolerance: 1.0000000e-04
+
+
+  During handling of the above exception, another exception occurred:
+
+  Traceback (most recent call last):
+    File "...\lib\site-packages\radiomics\scripts\segment.py", line 70, in _extractFeatures
+      feature_vector.update(extractor.execute(imageFilepath, maskFilepath, label, label_channel))
+    File "...\lib\site-packages\radiomics\featureextractor.py", line 276, in execute
+      boundingBox, correctedMask = imageoperations.checkMask(image, mask, **_settings)
+    File "...\lib\site-packages\radiomics\imageoperations.py", line 243, in checkMask
+      raise ValueError('Image/Mask geometry mismatch. Potential fix: increase tolerance using geometryTolerance, '
+  ValueError: Image/Mask geometry mismatch. Potential fix: increase tolerance using geometryTolerance, see Documentation:Usage:Customizing the Extraction:Settings:geometryTolerance for more information
+
+Your image and mask do not have exactly the same geometry, i.e., pixel spacing and/or origin, for which PyRadiomics applies a tolerance
+which you do not meet, see also https://pyradiomics.readthedocs.io/en/latest/faq.html?highlight=resample#geometry-mismatch-between-image-and-mask.
+Up to you to inspect why this has happened and if this is correct or not. In ``WORC``, to fix this issue, you can simply set the
+``["General"]["AssumeSameImageAndMaskMetadata"]`` parameter to ``True``: in this way, in the preprocessing step, ``WORC`` will simply
+copy-paste the metadata from the image to your segmentation to ensure they are the same. If you are using ``BasicWORC`` or ``SimpleWORC``,
+simply add the following:
+
+.. code-block:: python
+    overrides = {
+        'Classification': {
+            'classifiers': 'SVM',
+          },
+      }
+    experiment.add_config_overrides(overrides)
+
 Other
 -----
 
@@ -208,3 +257,5 @@ My jobs on the BIGR cluster get cancelled due to memory errors
 You can adjust the memory for various jobs through changing the values in the ``WORC.fastr_memory_parameters`` dictionary 
 (accesible in ``SimpleWORC`` and ``BasicWORC`` through ``_worc.fastr_memory_parameters``.) The fit_and_score job
 memory can be adjusted through the WORC HyperOptimization config, see :ref:`Configuration chapter <config-chapter>`.
+
+

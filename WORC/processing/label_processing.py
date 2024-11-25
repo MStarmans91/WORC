@@ -62,7 +62,7 @@ def load_labels(label_file, label_type=None):
     for i_label in label_type:
         label_index = np.where(label_names == i_label)[0]
         if label_index.size == 0:
-            raise ae.WORCValueError('Could not find label: ' + str(i_label))
+            raise ae.WORCValueError(f'Could not find label: {i_label}: only label names present are {label_names}.')
         else:
             labels.append(label_status[:, label_index])
 

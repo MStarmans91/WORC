@@ -274,7 +274,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
                 labels.append(1)
             elif 'of_' in o.lower():
                 labels.append(2)
-            elif 'glcm_' in o or 'glcmms_' in o.lower():
+            elif 'glcm_' in o.lower() or 'glcmms_' in o.lower():
                 labels.append(3)
             elif 'glrlm_' in o.lower():
                 labels.append(4)

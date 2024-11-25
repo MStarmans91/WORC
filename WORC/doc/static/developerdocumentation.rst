@@ -1,6 +1,29 @@
 Developer documentation
 =======================
 
+Information on the `fastr`` workflow engine
+---------------------------------------------
+The `WORC` toolbox makes use of the `fastr` package [1]_, an automated workflow engine.
+`fastr` does not provide any actual implementation of the required (radiomics) algorithms,
+but serves as a computational workflow engine, which has several advantages.
+
+Firstly, `fastr` requires workflows to be modular and split into standardized components
+or *tools*, with standardized inputs and outputs. This nicely connects to the modular design of `WORC`, for which we therefore wrapped each component as a tool in `fastr`. Alternating between feature extraction toolboxes can be easily done by changing a single field in the `WORC` toolbox configuration.
+
+Second, provenance is automatically tracked by `fastr` to facilitate repeatability and reproducibility.
+
+Third, `fastr` offers support for multiple execution plugins in order to be able to
+execute the same workflow on different computational resources or clusters. Examples
+include linear execution, local threading on multiple CPUs, and SLURM [2]_.
+
+Fourth, `fastr` is agnostic to software language. Hence, instead of restricting the
+user to a single programming language, algorithms (e.g., feature toolboxes) can be
+supplied in a variety of languages such as `Python`, `Matlab`, `R`, and command line executables.
+
+Fifth, `fastr` provides a variety of import and export plugins for loading and saving
+data. Besides using the local file storage, these include the use of `XNAT` [3]_.
+
+
 Adding a feature processing toolbox
 -----------------------------------
 We suggest to use the wrapping we did around the PyRadiomics toolbox as an example.
@@ -115,3 +138,15 @@ to follow or even copy-paste this example to add your own tools.
    but in principle you can just copy paste again the parts of the plotting of the ROC curve. Make sure you add: the
    additional sources (inputs) your tool requires if they are not already in the rest of WORC, the actual tool you made,
    and sinks (outputs) so the output is also actually stored when your tool is done in an output folder.
+
+
+.. _references:
+
+References
+==========
+
+.. [1] Achterberg, H. C., Koek, M., & Niessen, W. J. (2016). *Fastr: A Workflow Engine for Advanced Data Flows in Medical Image Analysis*. Frontiers in ICT, 3, 15. https://doi.org/10.3389/fict.2016.00015
+
+.. [2] Yoo, A. B., Jette, M. A., & Grondona, M. (2003). *SLURM: Simple Linux Utility for Resource Management*. Job Scheduling Strategies for Parallel Processing, Lecture Notes in Computer Science, 2862, 44–60. https://doi.org/10.1007/10968987_3
+
+.. [3] Marcus, D. S., Olsen, T. R., Ramaratnam, M., & Buckner, R. L. (2007). *The extensible neuroimaging archive toolkit*. Neuroinformatics, 5(1), 11–33. https://doi.org/10.1385/NI:5:1:11

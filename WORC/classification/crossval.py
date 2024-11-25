@@ -865,7 +865,8 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             # Get the mean performances and get new ranking
             F1_validation = estimator.cv_results_['mean_test_score']
             F1_validation = [F1_validation[i] for i in selected_workflows]
-            workflow_ranking = np.argsort(np.asarray(F1_validation)).tolist()[::-1]  # Normally, rank from smallest to largest, so reverse
+            # workflow_ranking = np.argsort(np.asarray(F1_validation)).tolist()[::-1]  # Outdated
+            workflow_ranking = np.argsort(np.where(np.isnan(F1_validation), -np.inf, F1_validation)).tolist()[::-1]  # Normally, rank from smallest to largest, so reverse
             workflow_ranking = workflow_ranking[0:maxlen]  # only maxlen estimators needed for ensembling tests
             F1_validation = [F1_validation[i] for i in workflow_ranking]
 
@@ -917,8 +918,8 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             F1_training = [F1_training[i] for i in selected_workflows]
             F1_training = [F1_training[i] for i in workflow_ranking]
 
-            performances[f'Mean training F1-score {key} top {maxlen}'] = F1_validation
-            performances[f'Mean validation F1-score {key} top {maxlen}'] = F1_training
+            performances[f'Mean training F1-score {key} top {maxlen}'] = F1_training
+            performances[f'Mean validation F1-score {key} top {maxlen}'] = F1_validation
 
             for ensemble in ensembles:
                 if isinstance(ensemble, int):
