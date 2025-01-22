@@ -258,4 +258,11 @@ You can adjust the memory for various jobs through changing the values in the ``
 (accesible in ``SimpleWORC`` and ``BasicWORC`` through ``_worc.fastr_memory_parameters``.) The fit_and_score job
 memory can be adjusted through the WORC HyperOptimization config, see :ref:`Configuration chapter <config-chapter>`.
 
-
+Why are you still only supporting Python 3.6, 3.7 and 3.8?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Primarily because our dependency on PyRadiomics.
+We would love to change this in the future.
+We have already build MVPs using Python 3.11 for our own feature computation
+toolbox PREDICT (https://github.com/Svdvoort/PREDICTFastr/tree/py311) and for
+WORC (https://github.com/MStarmans91/WORC/tree/newpython). These run, including
+actually using PyRadiomics, but have not been thorougly tested on the resulting performance.
