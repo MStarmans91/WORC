@@ -32,7 +32,7 @@ def clean():
 
 def clean_dir(directory):
     for filepath in directory.iterdir():
-        if filepath.suffix in ('.rst', '.txt'):
+        if filepath.suffix in ('.rst', '.txt') and filepath.name != 'requirements.txt':
             filepath.unlink()
             print(f'removed {filepath}')
 

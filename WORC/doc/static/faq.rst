@@ -159,7 +159,7 @@ Can I use my own features instead of the standard ``WORC`` features?
 ``WORC`` also includes an option to use your own features instead of the default
 features included. ``WORC`` will than simply start at the data mining
 (e.g. classification, regression) step, and thus after the normal
-feature extraction. This requires three things
+feature extraction. This requires three steps:
 
 
 1. Convert your features to the default ``WORC`` format
