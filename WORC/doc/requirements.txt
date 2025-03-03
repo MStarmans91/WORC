@@ -5,3 +5,4 @@ sphinx-argparse
 sphinxcontrib-httpdomain
 sphinx-autodoc-typehints
 xnat==0.2.2
+fastr==3.2.3
