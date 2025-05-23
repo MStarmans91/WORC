@@ -1,6 +1,5 @@
 configparser
 fastr
-ghalton
 imbalanced-learn
 lifelines
 # Matplotlib for using tikzplotlib, see https://github.com/nschloe/tikzplotlib/issues/559

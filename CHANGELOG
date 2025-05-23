@@ -10,6 +10,8 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`_
 ------------------
 Updates to be compatible with Python 3.11, dropped <=3.7 support.
 
+Note: check whether how WORC ranks workflows in the searchcv is consistent with sklearn.
+
 Fixed
 ~~~~~
 - ret list in WORC.classification.fitandscore.fit_and_score
@@ -29,6 +31,8 @@ Changed
 Removed
 ~~~~~~~
 - Joblib SearchCV objects. Rarely used, costs quite some work to maintain.
+- Halton sampler instead of random search. ghalton package outdated, rarely
+  used extra feature anyway.
 
 
 3.6.3 - Unreleased
