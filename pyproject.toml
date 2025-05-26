@@ -69,6 +69,12 @@ dev = [
   "flake8",
   "pre-commit"
 ]
+docs = [
+  "sphinx",
+  "furo",  # or whatever theme you use
+  "numpydoc",
+  "sphinx-autodoc-typehints",
+]
 
 [project.scripts]
 WORC = "WORC.WORC:main"
