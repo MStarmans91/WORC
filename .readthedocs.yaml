@@ -14,7 +14,7 @@ build:
 
 python:
   # First, install numpy explicitly
-  - requirements: docs/requirements-pre.txt
+  - requirements: requirements-pre.txt
   # Then install your package using pyproject.toml
   - method: pip
     path: .
