@@ -10,7 +10,7 @@ build:
 
 python:
   install:
-    - requirements: doc/requirements-doc-numpy.txt
-    - requirements: doc/requirements-doc-predict.txt
+    - requirements: WORC/doc/requirements-doc-numpy.txt
+    - requirements: WORC/doc/requirements-doc-predict.txt
     - method: pip
       path: .
