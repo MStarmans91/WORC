@@ -1,39 +1,42 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>WORC: Workflow for Optimal Radiomics Classification &mdash; WORC 3.6.2 documentation</title>
+  <title>WORC: Workflow for Optimal Radiomics Classification &mdash; WORC 3.6.3 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Introduction" href="static/introduction.html" /> 
@@ -63,7 +66,7 @@
             
             
               <div class="version">
-                3.6.2
+                3.6.3
               </div>
             
           
@@ -80,6 +83,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -105,6 +109,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -139,18 +144,20 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Docs</a> &raquo;</li>
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
         
       <li>WORC: Workflow for Optimal Radiomics Classification</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
-            
+          
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
           
         
@@ -244,10 +251,9 @@ presented at the following conferences:</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/user_manual.html">User Manual</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#worc-object-and-facades">WORC object and facades</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#worc-facades">WORC facades</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#simpleworc">SimpleWORC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#basicworc">BasicWORC</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#worc">WORC</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#input-file-definitions-and-how-to-provide-them-to-worc">Input file definitions and how to provide them to WORC</a><ul>
@@ -263,7 +269,10 @@ presented at the following conferences:</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#outputs-and-evaluation-of-your-network">Outputs and evaluation of your network</a></li>
 <li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#debugging">Debugging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#example-data">Example data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/user_manual.html#example-data">Example data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/user_manual.html#worc">WORC</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/configuration.html">Configuration</a><ul>
@@ -341,11 +350,12 @@ presented at the following conferences:</p>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="static/faq.html#execution-errors">Execution errors</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#my-experiment-crashed-where-to-begin-looking-for-errors">My experiment crashed, where to begin looking for errors?</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-file-h5fdsec2-c-line-941-in-h5fd-sec2-lock-unable-to-lock-file-errno-37-error-message-no-locks-available">Error: <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&quot;H5FDsec2.c&quot;,</span> <span class="pre">line</span> <span class="pre">941,</span> <span class="pre">in</span> <span class="pre">H5FD_sec2_lock</span> <span class="pre">unable</span> <span class="pre">to</span> <span class="pre">lock</span> <span class="pre">file,</span> <span class="pre">errno</span> <span class="pre">=</span> <span class="pre">37,</span> <span class="pre">error</span> <span class="pre">message</span> <span class="pre">=</span> <span class="pre">'No</span> <span class="pre">locks</span> <span class="pre">available'</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-fastr-exceptions-fastrvalueerror-fastrvalueerror-from-fastr-execution-job-py-line-834-output-values-are-not-valid">Error: <code class="docutils literal notranslate"><span class="pre">fastr.exceptions.FastrValueError:</span> <span class="pre">[...]</span> <span class="pre">FastrValueError</span> <span class="pre">from</span> <span class="pre">``</span> <span class="pre">``.../fastr/execution/job.py</span> <span class="pre">line</span> <span class="pre">834:</span> <span class="pre">Output</span> <span class="pre">values</span> <span class="pre">are</span> <span class="pre">not</span> <span class="pre">valid!</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-file-h5fdsec2-c-line-941-in-h5fd-sec2-lock-unable-to-lock-file-errno-37-error-message-no-locks-available">Error: <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&quot;H5FDsec2.c&quot;,</span> <span class="pre">line</span> <span class="pre">941,</span> <span class="pre">in</span> <span class="pre">H5FD_sec2_lock</span> <span class="pre">unable</span> <span class="pre">to</span> <span class="pre">lock</span> <span class="pre">file,</span></code> <code class="docutils literal notranslate"><span class="pre">errno</span> <span class="pre">=</span> <span class="pre">37,</span> <span class="pre">error</span> <span class="pre">message</span> <span class="pre">=</span> <span class="pre">'No</span> <span class="pre">locks</span> <span class="pre">available'</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-failed-building-wheel-for-cryptography-occurs-often-on-bigr-cluster">Error: <code class="docutils literal notranslate"><span class="pre">Failed</span> <span class="pre">building</span> <span class="pre">wheel</span> <span class="pre">for</span> <span class="pre">cryptography</span></code> (occurs often on BIGR cluster)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-worc-addexceptions-worcvalueerror-first-column-in-the-file-given-to-simpleworc-labels-from-this-file-needs-to-be-named-patient">Error: <code class="docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCValueError:</span> <span class="pre">First</span> <span class="pre">column</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">file</span></code> <code class="docutils literal notranslate"><span class="pre">given</span> <span class="pre">to</span> <span class="pre">SimpleWORC().labels_from_this_file(**)</span> <span class="pre">needs</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">named</span> <span class="pre">Patient.</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-worc-addexceptions-worckeyerror-no-entry-found-in-labeling-for-feature-file-feat-out-0-hdf5">Error: <code class="docutils literal notranslate"><span class="pre">WORC.addexceptions.WORCKeyError:</span> <span class="pre">'No</span> <span class="pre">entry</span> <span class="pre">found</span> <span class="pre">in</span> <span class="pre">labeling</span></code> <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">feature</span> <span class="pre">file</span> <span class="pre">.../feat_out_0.hdf5.'</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-file-lib-site-packages-numpy-lib-function-base-py-line-4406-in-delete-keep-obj-false-indexerror-arrays-used-as-indices-must-be-of-integer-or-boolean-type">Error: <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&quot;...\lib\site-packages\numpy\lib\function_base.py&quot;,</span> <span class="pre">line</span> <span class="pre">4406,</span> <span class="pre">in</span> <span class="pre">delete</span> <span class="pre">keep[obj,]</span> <span class="pre">=</span> <span class="pre">False</span> <span class="pre">IndexError:</span> <span class="pre">arrays</span> <span class="pre">used</span> <span class="pre">as</span> <span class="pre">indices</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">of</span> <span class="pre">integer</span> <span class="pre">(or</span> <span class="pre">boolean)</span> <span class="pre">type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/faq.html#error-file-lib-site-packages-numpy-lib-function-base-py-line-4406-in-delete-keep-obj-false-indexerror-arrays-used-as-indices-must-be-of-integer-or-boolean-type">Error: <code class="docutils literal notranslate"><span class="pre">File</span> <span class="pre">&quot;...\lib\site-packages\numpy\lib\function_base.py&quot;,</span> <span class="pre">line</span> <span class="pre">4406,</span> <span class="pre">in</span> <span class="pre">delete</span></code> <code class="docutils literal notranslate"><span class="pre">keep[obj,]</span> <span class="pre">=</span> <span class="pre">False</span> <span class="pre">IndexError:</span> <span class="pre">arrays</span> <span class="pre">used</span> <span class="pre">as</span> <span class="pre">indices</span> <span class="pre">must</span> <span class="pre">be</span> <span class="pre">of</span> <span class="pre">integer</span> <span class="pre">(or</span> <span class="pre">boolean)</span> <span class="pre">type</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="static/faq.html#other">Other</a><ul>
@@ -365,175 +375,181 @@ presented at the following conferences:</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="static/changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id1">3.6.2 - 2023-03-14</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id1">3.6.3 - 2023-08-15</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#fixed">Fixed</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id2">3.6.1 - 2023-02-15</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id3">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#changed">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#added">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id4">3.6.0 - 2022-04-05</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id5">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id6">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id2">3.6.2 - 2023-03-14</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id3">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id7">3.5.0 - 2021-08-18</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id8">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id9">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id10">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id4">3.6.1 - 2023-02-15</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id5">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id6">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id7">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id11">3.4.5 - 2021-07-09</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id8">3.6.0 - 2022-04-05</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id9">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id10">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id11">3.5.0 - 2021-08-18</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id12">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id13">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id14">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id14">3.4.4 - 2021-07-01</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id15">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id16">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id17">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id15">3.4.5 - 2021-07-09</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id16">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id17">Changed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id18">3.4.3 - 2021-06-02</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id18">3.4.4 - 2021-07-01</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id19">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id20">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id20">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id21">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id21">3.4.2 - 2021-05-27</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id22">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id23">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id22">3.4.3 - 2021-06-02</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id23">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id24">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id24">3.4.1 - 2021-05-18</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id25">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id26">Changed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id25">3.4.2 - 2021-05-27</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id26">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id27">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id28">3.4.0 - 2021-02-02</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id28">3.4.1 - 2021-05-18</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id29">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id30">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id31">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id32">3.3.5 - 2020-10-21</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id32">3.4.0 - 2021-02-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id33">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id34">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id35">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id36">3.3.4 - 2020-10-06</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id36">3.3.5 - 2020-10-21</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id37">Fixed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id38">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id39">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id40">3.3.3 - 2020-09-11</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id40">3.3.4 - 2020-10-06</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id41">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id44">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id45">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id42">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id43">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id46">3.3.2 - 2020-08-19</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id47">Fixed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id48">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id49">Changed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id44">3.3.3 - 2020-09-11</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id45">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id48">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id49">Added</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id50">3.3.1 - 2020-07-31</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id51">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id52">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id50">3.3.2 - 2020-08-19</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id51">Fixed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id52">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id53">Changed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id53">3.3.0 - 2020-07-28</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id54">Added</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id54">3.3.1 - 2020-07-31</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id55">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id56">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id57">3.2.2 - 2020-07-14</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id57">3.3.0 - 2020-07-28</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id58">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id59">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id60">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id61">3.2.1 - 2020-07-02</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id61">3.2.2 - 2020-07-14</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id62">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id63">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id64">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id65">3.2.0 - 2020-06-26</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id65">3.2.1 - 2020-07-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id66">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id67">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id68">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id69">3.1.4 - 2020-05-26</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id69">3.2.0 - 2020-06-26</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id70">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id71">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id72">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id73">3.1.3 - 2020-01-24</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id73">3.1.4 - 2020-05-26</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id74">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id75">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id76">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id77">3.1.2 - 2019-12-09</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id77">3.1.3 - 2020-01-24</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id78">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id79">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id80">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id81">3.1.1 - 2019-11-28</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id81">3.1.2 - 2019-12-09</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id82">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id83">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id84">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id85">3.1.0 - 2019-10-16</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id85">3.1.1 - 2019-11-28</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id86">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id87">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id88">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id89">3.0.0 - 2019-05-08</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id89">3.1.0 - 2019-10-16</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id90">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id91">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id92">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id93">2.1.3 - 2019-04-08</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id94">Changed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id93">3.0.0 - 2019-05-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id94">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id95">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id96">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id95">2.1.2 - 2019-04-02</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id96">Added</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id97">Changed</a></li>
-<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id98">Fixed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id97">2.1.3 - 2019-04-08</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id98">Changed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id99">2.1.1 - 2019-02-15</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id99">2.1.2 - 2019-04-02</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id100">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id101">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id102">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id103">2.1.0 - 2018-08-09</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id103">2.1.1 - 2019-02-15</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id104">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id105">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id106">Fixed</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id107">2.0.0 - 2018-02-13</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id107">2.1.0 - 2018-08-09</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id108">Added</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id109">Changed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id110">Fixed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="static/changelog.html#id111">2.0.0 - 2018-02-13</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id112">Added</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id113">Changed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="static/changelog.html#id114">Fixed</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="static/changelog.html#rc1-2017-05-08">1.0.0rc1 - 2017-05-08</a></li>
@@ -666,6 +682,7 @@ presented at the following conferences:</p>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_helpers</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_iccthreshold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_iccthreshold</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_plot_errors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_plot_errors</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_preprocessing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_preprocessing</span></code> Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="autogen/WORC.tests.html#module-WORC.tests.test_validators"><code class="xref py py-mod docutils literal notranslate"><span class="pre">test_validators</span></code> Module</a></li>
 </ul>
 </li>
@@ -706,27 +723,28 @@ presented at the following conferences:</p>
            
           </div>
           <footer>
-  
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="static/introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
+        <a href="static/introduction.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
+        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -734,7 +752,6 @@ presented at the following conferences:</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

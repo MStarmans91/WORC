@@ -64,6 +64,15 @@ tests Package
     :show-inheritance:
     :special-members:
 
+:mod:`test_preprocessing` Module
+--------------------------------
+
+.. automodule:: WORC.tests.test_preprocessing
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+
 :mod:`test_validators` Module
 -----------------------------
 

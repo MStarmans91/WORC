@@ -21,6 +21,9 @@ Fixed
 - Check_is_fitted didnt check the specific attribute but only 
   whether the best estimator was fitted overall.
 - Logging conflicts with fastr
+- Remove HDF5 validity check took to much memory.
+- ReadTheDocs building with newer python.
+- Unit testing with newer python.
 
 Changed
 ~~~~~~~
@@ -36,6 +39,7 @@ Changed
 - Depend on numpy<=1.26.3 due to PyRadiomics dependencies.
 - Reverted back to matplot2tikz instead of tikzplotlib as tikzplotlib
   has compatibility issues and is not properly maintained anymore.
+- Minor bug in statistical testing for GLCMMS features.
 
 Removed
 ~~~~~~~
@@ -43,6 +47,9 @@ Removed
 - Removed the Halton sampler which was an alternative to random search.
   ghalton package outdated, rarely used extra feature anyway.
 
+Added
+~~~~~
+- Some documentation
 
 3.6.3 - Unreleased
 ------------------
@@ -57,6 +64,7 @@ Fixed
   and test set and thus bootstrapping should be used.
 - Bug in PREDICT was fixed that mixed up the mode in shape feature extraction (2D / 2.5D)
 - Bug in performance calculation of multiclass classification.
+- Bugs in statistical feature testing.
 
 Changed
 ~~~~~~~

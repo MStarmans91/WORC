@@ -561,7 +561,7 @@ class WORC(object):
         if buildtype == 'training':
             self.build_training()
         elif buildtype == 'inference':
-            raise WORCexceptions.WORCValueError("Inference workflow is still WIP and does not fully work yet.")
+            # raise WORCexceptions.WORCValueError("Inference workflow is still WIP and does not fully work yet.")
             self.TrainTest = True
             self.OnlyTest = True
             self.build_inference()       
@@ -1134,7 +1134,6 @@ class WORC(object):
             print('Building testing network...')
             # We currently require labels for supervised learning
             if self.labels_test:
-                self.network = fastr.create_network(self.name)
 
                 # Extract some information from the configs
                 image_types = list()

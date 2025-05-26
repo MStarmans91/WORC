@@ -33,12 +33,5 @@ class HDF5(URLType):
         if not os.path.isfile(parsed_value):
             return False
 
-        try:
-            # Read the file and extract features
-            data = pd.read_hdf(parsed_value)
-            return True
-        
-        except HDF5ExtError:
-            # Not a valid hdf5 file
-            return False
+        return True
         

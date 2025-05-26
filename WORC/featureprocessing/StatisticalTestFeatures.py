@@ -80,7 +80,6 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
     if type(output_tex) is list:
         output_tex = ''.join(output_tex)
 
-    print(output_png, output_tex)
     # Create output folder if required
     if not os.path.exists(os.path.dirname(output_csv)):
         os.makedirs(os.path.dirname(output_csv))
@@ -153,7 +152,12 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
             pvalueswelch.append(ttest_ind(class1, class2, equal_var=False)[1])
             pvalueswil.append(ranksums(class1, class2)[1])
             try:
-                pvaluesmw.append(mannwhitneyu(class1, class2)[1])
+                pmwu = mannwhitneyu(class1, class2)[1]
+                if pmwu == 0.0:
+                    print("[WORC Warning] Mann-Whitney U test resulted in a p-value of exactly 0.0, which is not valid. Replacing metric value by NaN.")
+                    pvaluesmw.append(np.nan)
+                else:
+                    pvaluesmw.append(pmwu)
             except ValueError as e:
                 print("[WORC Warning] " + str(e) + '. Replacing metric value by NaN.')
                 pvaluesmw.append(np.nan)
@@ -171,9 +175,13 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
                 class1_count = [class1.count(i) for i in unique_values]
                 class2_count = [class2.count(i) for i in unique_values]
                 obs = np.array([class1_count, class2_count])
-
-                _, p, _, _ = chi2_contingency(obs)
-                pvalueschi2.append(p)
+                
+                try:
+                    _, p, _, _ = chi2_contingency(obs)
+                    pvalueschi2.append(p)
+                except ValueError:
+                    print("[WORC Warning] " + fl + " has a zero element in table of frequencies. Replacing chi2 metric value by NaN.")
+                    pvalueschi2.append(np.nan)
             else:
                 print("[WORC Warning] " + fl + " is no categorical variable. Replacing chi2 metric value by NaN.")
                 pvalueschi2.append(np.nan)
