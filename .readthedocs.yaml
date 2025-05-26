@@ -10,6 +10,7 @@ build:
 
 python:
   install:
-    - requirements: requirements-pre.txt
+    - pip: numpy<=1.26.3
+    - pip: git+https://github.com/Svdvoort/PREDICTFastr.git@py311#egg=PREDICT
     - method: pip
       path: .
