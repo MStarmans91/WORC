@@ -4,7 +4,3 @@ sphinx
 sphinx-argparse
 sphinxcontrib-httpdomain
 sphinx-autodoc-typehints
-python-dateutil==2.8.0
-xnat==0.3.28
-lifelines==0.21.1
-importlib-metadata<5.0
