@@ -12,7 +12,7 @@ python:
   install:
     # 1. Install patched dependency from GitHub first
     - method: pip
-      path: "git+https://github.com/YourUsername/YourRepo.git@your-branch#egg=PackageName"
+      path: "git+https://github.com/Svdvoort/PREDICTFastr.git@py311#egg=PREDICT"
 
     # 2. Then pre-requirements (e.g., numpy pinning)
     - requirements: requirements-pre.txt
