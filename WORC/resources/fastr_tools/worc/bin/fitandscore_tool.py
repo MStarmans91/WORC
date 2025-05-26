@@ -145,7 +145,7 @@ def main():
             pd.Series([ret],
                       index=source_labels,
                       name='Fit and Score Output')
-        source_data.to_hdf(args.out, 'RET')
+        source_data.to_hdf(path_or_buf=args.out, key='RET')
 
 
 if __name__ == '__main__':

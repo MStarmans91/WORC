@@ -540,10 +540,21 @@ def crossval(config, label_data, image_features,
     else:
         tempfolder = None
 
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
+    # Setup the logging to work independent of the fastr logging
+    logger = logging.getLogger(__name__)  # or 'my_module.subpart' if you want
+    logger.setLevel(logging.DEBUG)
 
-    logging.basicConfig(filename=logfilename, level=logging.DEBUG)
+    # Add handler only if not already added (to avoid duplicate logs)
+    if not logger.handlers:
+        fh = logging.FileHandler(logfilename)
+        fh.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+
+    logger.debug('Starting fitting of estimators.')
+    
+    # Extract some parameters
     crossval_type = config['CrossValidation']['Type']
     n_iterations = config['CrossValidation']['N_iterations']
     test_size = config['CrossValidation']['test_size']

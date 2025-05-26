@@ -67,8 +67,10 @@ def main():
         data_path = '/home/martijn/git/WORCTutorial/Data'
     elif 'Martijn Starmans' in script_path:
         data_path = r'C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\Data'
+    elif '795023' in script_path:
+        data_path = r'C:\Users\795023\Documents\GitHub\WORCTutorial\Data'
     else:
-        raise ValueError("System not recognized")
+        raise ValueError(f"System not recognized, script path {script_path}")
     # download_HeadAndNeck(datafolder=data_path, nsubjects=nsubjects)
 
     # Identify our data structure: change the fields below accordingly
@@ -99,7 +101,7 @@ def main():
     coarse = True
 
     # Give your experiment a name
-    experiment_name = 'Example_STWStrategyHN_Regression'
+    experiment_name = 'Example_STWStrategyHN_Regression_py311'
 
     # Instead of the default tempdir, let's but the temporary output in a subfolder
     # in the same folder as this script

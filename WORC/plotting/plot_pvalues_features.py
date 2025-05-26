@@ -20,7 +20,7 @@ matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 import numpy as np
-import tikzplotlib
+import matplot2tikz
 
 
 def manhattan_importance(values, labels, feature_labels,
@@ -141,7 +141,7 @@ def manhattan_importance(values, labels, feature_labels,
         print(f"Plot saved as {output_png}!")
 
     if output_tex is not None:
-        tikzplotlib.save(output_tex)
+        matplot2tikz.save(output_tex)
         print(f"Plot saved as {output_tex}!")
 
     return f

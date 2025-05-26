@@ -1,0 +1,86 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "WORC"
+version = "3.7.0"
+description = "Workflow for Optimal Radiomics Classification."
+readme = "README.rst"
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+authors = [
+  {name = "Martijn P. A. Starmans", email = "m.starmans@erasmusmc.nl"},
+]
+keywords = ["bioinformatics", "radiomics", "features"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: System :: Distributed Computing",
+    "Topic :: System :: Logging",
+    "Topic :: Utilities"
+]
+
+dependencies = [
+  # Matplotlib for using tikzplotlib, see https://github.com/nschloe/tikzplotlib/issues/559
+  # Numpy for Pyradiomics, which doesnt work on Numpy 2.X
+    "fastr",
+    "imbalanced-learn",
+    "lifelines",
+    "matplotlib",
+    "matplot2tikz",
+    "natsort",
+    "numpy<=1.26.3",
+    "pandas",
+    "PREDICT",
+    "pyOpenSSL",
+    "pydicom",
+    "scikit-image",
+    "scikit-learn",
+    "scipy",
+    "SimpleITK",
+    "six",
+    "sphinx",
+    "tables",
+    "tqdm",
+    "xgboost",
+    "xlrd",
+    "xnat"
+]
+
+[project.optional-dependencies]
+test = [
+  "nose",
+  "coverage"
+]
+dev = [
+  "pytest",
+  "black",
+  "flake8",
+  "pre-commit"
+]
+
+[project.scripts]
+WORC = "WORC.WORC:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["WORC*"]
+
+[tool.setuptools.package-data]
+"fastr.resources" = ["*"]
+"WORC" = ["versioninfo"]
+"src" = ["IOparser/*.ini"]
