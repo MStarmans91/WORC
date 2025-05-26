@@ -1,1 +1,2 @@
 numpy<=1.26.3
+git+https://github.com/Svdvoort/PREDICTFastr.git@py311#egg=PREDICT
