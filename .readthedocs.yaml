@@ -13,8 +13,7 @@ build:
     python: "3.11"
 
 python:
-  # First, install numpy explicitly
-  - requirements: requirements-pre.txt
-  # Then install your package using pyproject.toml
-  - method: pip
-    path: .
+  install:
+    - requirements: requirements-pre.txt
+    - method: pip
+      path: .
