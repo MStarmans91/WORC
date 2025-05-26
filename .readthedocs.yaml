@@ -7,11 +7,15 @@ build:
   os: "ubuntu-22.04"
   tools:
     python: "3.11"
-  apt_packages:
-    - python3-distutils
 
-python:
   install:
+    # 1. Install patched dependency from GitHub first
+    - method: pip
+      path: "git+https://github.com/Svdvoort/PREDICTFastr.git@py311#egg=PREDICT"
+
+    # 2. Then pre-requirements (e.g., numpy pinning)
     - requirements: requirements-pre.txt
+
+    # 3. Finally, install your own package
     - method: pip
       path: .
