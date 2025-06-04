@@ -1,0 +1,6 @@
+furo
+readthedocs-sphinx-search
+sphinx
+sphinx-argparse
+sphinxcontrib-httpdomain
+sphinx-autodoc-typehints

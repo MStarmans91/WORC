@@ -47,6 +47,5 @@ Subpackages
     WORC.statistics
     WORC.tests
     WORC.tools
-    WORC.tutorial
     WORC.validators
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2025 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from sklearn.model_selection._search import BaseSearchCV, _estimator_has
+from sklearn.model_selection._search import BaseSearchCV
+# from sklearn.utils.validation import _estimator_has
 from sklearn.utils.metaestimators import available_if
 
 import os
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from collections.abc import Sized
 import numpy as np
 import warnings
@@ -47,8 +48,6 @@ from sklearn.model_selection._split import check_cv
 from sklearn.metrics import f1_score, roc_auc_score, mean_squared_error
 from sklearn.metrics import accuracy_score
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn.utils.validation import _check_fit_params
-from sklearn.model_selection._validation import _aggregate_score_dicts
 
 from WORC.classification.fitandscore import fit_and_score, replacenan
 from WORC.classification.metrics import check_multimetric_scoring
@@ -56,6 +55,10 @@ from WORC.classification import construct_classifier as cc
 from WORC.featureprocessing.Preprocessor import Preprocessor
 from WORC.detectors.detectors import DebugDetector
 import WORC.addexceptions as WORCexceptions
+
+# Import public alternatives to private sklearn functions
+from WORC.classification.utils import validate_fit_params, estimator_has
+from WORC.classification.utils import aggregate_score_dicts, normalize_score_results
 
 # Imports used in the Bayesian optimization
 from WORC.classification.smac import build_smac_config
@@ -73,7 +76,6 @@ warnings.filterwarnings("ignore", category=NaturalNameWarning)
 def rms_score(truth, prediction):
     """Root-mean-square-error metric."""
     return np.sqrt(mean_squared_error(truth, prediction))
-
 
 def sar_score(truth, prediction):
     """SAR metric from Caruana et al. 2004."""
@@ -454,7 +456,11 @@ class BaseSearchCVWORC(BaseSearchCV):
                                   'available only after refitting on the best '
                                   'parameters. ') % method_name)
         else:
-            check_is_fitted(self, 'best_estimator_')
+            if isinstance(self.best_estimator_, Ensemble):
+                # Only check the first estimator of the ensemble
+                check_is_fitted(self.best_estimator_.estimators[0], method_name)
+            else:
+                check_is_fitted(self.best_estimator_, method_name)
 
     def score(self, X, y=None):
         """Compute the score (i.e. probability) on a given data.
@@ -487,9 +493,7 @@ class BaseSearchCVWORC(BaseSearchCV):
 
         return self.scorer_(self.best_estimator_, X, y)
 
-
-
-    @available_if(_estimator_has("predict"))
+    @available_if(estimator_has("predict"))
     def predict(self, X):
         """Call predict on the estimator with the best found parameters.
 
@@ -511,7 +515,7 @@ class BaseSearchCVWORC(BaseSearchCV):
             X, _ = self.preprocess(X)
             return self.best_estimator_.predict(X)
 
-    @available_if(_estimator_has("predict_proba"))
+    @available_if(estimator_has("predict_proba"))
     def predict_proba(self, X):
         """Call predict_proba on the estimator with the best found parameters.
 
@@ -537,7 +541,7 @@ class BaseSearchCVWORC(BaseSearchCV):
             X, _ = self.preprocess(X)
             return self.best_estimator_.predict_proba(X)
 
-    @available_if(_estimator_has("predict_log_proba"))
+    @available_if(estimator_has("predict_log_proba"))
     def predict_log_proba(self, X):
         """Call predict_log_proba on the estimator with the best found parameters.
 
@@ -563,7 +567,7 @@ class BaseSearchCVWORC(BaseSearchCV):
             X, _ = self.preprocess(X)
             return self.best_estimator_.predict_log_proba(X)
 
-    @available_if(_estimator_has("decision_function"))
+    @available_if(estimator_has("decision_function"))
     def decision_function(self, X):
         """Call decision_function on the estimator with the best found parameters.
 
@@ -585,7 +589,7 @@ class BaseSearchCVWORC(BaseSearchCV):
             X, _ = self.preprocess(X)
             return self.best_estimator_.decision_function(X)
 
-    @available_if(_estimator_has("transform"))
+    @available_if(estimator_has("transform"))
     def transform(self, X):
         """Call transform on the estimator with the best found parameters.
 
@@ -607,7 +611,7 @@ class BaseSearchCVWORC(BaseSearchCV):
             X = self.preprocess(X)
             return self.best_estimator_.transform(X)
 
-    @available_if(_estimator_has("inverse_transform"))
+    @available_if(estimator_has("inverse_transform"))
     def inverse_transform(self, Xt):
         """Call inverse_transform on the estimator with the best found params.
 
@@ -688,8 +692,8 @@ class BaseSearchCVWORC(BaseSearchCV):
         return X, y
 
     def process_fit(self, n_splits, parameters_all,
-                    test_sample_counts, test_score_dicts,
-                    train_score_dicts, fit_time, score_time, cv_iter,
+                    test_sample_counts, test_scores,
+                    train_scores, fit_time, score_time, cv_iter,
                     X, y, fit_error, fitted_training_workflows=list(), fitted_validation_workflows=list(),
                     use_smac=False):
         """Process a fit.
@@ -709,9 +713,14 @@ class BaseSearchCVWORC(BaseSearchCV):
         # _warn_or_raise_about_fit_failures(all_out, self.error_score)
         # if callable(self.scoring):
         #             _insert_error_scores(all_out, self.error_score)
-        test_scores = _aggregate_score_dicts(test_score_dicts)
+
+        # Removed 20250523 due to sklearn compability, function earlier already used
+        # test_scores = aggregate_score_dicts(test_score_dicts)
+        # if self.return_train_score:
+        #     train_scores = aggregate_score_dicts(train_score_dicts)
+        test_scores_dict = normalize_score_results(test_scores)
         if self.return_train_score:
-            train_scores = _aggregate_score_dicts(train_score_dicts)
+            train_scores_dict = normalize_score_results(train_scores)
 
         # We take only one result per split, default by sklearn
         pipelines_per_split = int(len(parameters_all) / n_splits)
@@ -799,17 +808,17 @@ class BaseSearchCVWORC(BaseSearchCV):
         test_estimator = cc.construct_classifier(candidate_params_all[0])
         scorers, self.multimetric_ = check_multimetric_scoring(
             test_estimator, scoring=self.scoring)
-
+    
         # NOTE test_sample counts (weights) remain the same for all candidates
         test_sample_counts = np.array(test_sample_counts[:n_splits],
                                       dtype=int)
 
         icheck = 0
-        for scorer_name in scorers.keys():
+        for scorer_name in test_scores_dict:
             # Computed the (weighted) mean and std for test scores alone
             _store(
                 "test_%s" % scorer_name,
-                test_scores[scorer_name],
+                test_scores_dict[scorer_name],
                 splits=True,
                 rank=True,
                 weights=None,
@@ -820,9 +829,9 @@ class BaseSearchCVWORC(BaseSearchCV):
                 key_name = 'test_%s' % scorer_name
                 for i in range(10):
                     print('Iteration: ' + str(i))
-                    print(test_scores[scorer_name][i])
+                    print(test_scores_dict[scorer_name][i])
                     print(results["split%d_%s" % (0, key_name)][i])
-                    print(test_scores[scorer_name][i + 10])
+                    print(test_scores_dict[scorer_name][i + 10])
                     print(results["split%d_%s" % (1, key_name)][i])
                     print(results['mean_%s' % key_name][i])
                     print('\n')
@@ -831,7 +840,7 @@ class BaseSearchCVWORC(BaseSearchCV):
             if self.return_train_score:
                 _store(
                     "train_%s" % scorer_name,
-                    train_scores[scorer_name],
+                    train_scores_dict[scorer_name],
                     splits=True,
                 )
 
@@ -918,7 +927,7 @@ class BaseSearchCVWORC(BaseSearchCV):
                                  train=indices, test=indices)
 
         # Store the only scorer not as a dict for single metric evaluation
-        self.scorer_ = scorers if self.multimetric_ else scorers['score']
+        self.scorer_ = scorers if self.multimetric_ else scorers
 
         # Refit the top performing workflows on the full training dataset
         if self.refit_training_workflows and fitted_training_workflows:
@@ -990,7 +999,7 @@ class BaseSearchCVWORC(BaseSearchCV):
             preprocessor = None
 
         # Refit all preprocessing functions
-        fit_params = _check_fit_params(X_fit, self.fit_params)
+        fit_params = validate_fit_params(X_fit, self.fit_params)
         out = fit_and_score(X_fit, y, self.scoring,
                             train, test, parameters_all,
                             fit_params=fit_params,
@@ -1489,8 +1498,6 @@ class BaseSearchCVWORC(BaseSearchCV):
         # First create and score the ensemble on the validation set
         # If we only want the best solution, we use the score from cv_results_
         # For not Single or Top_N, the score has already been computed during fitting
-        print(len(self.cv_results_['mean_test_score']))
-        print(self.cv_results_['mean_test_score'])
         if method == 'Single':
             self.ensemble_validation_score = self.cv_results_['mean_test_score'][0]
         elif method == 'top_N':
@@ -1547,6 +1554,9 @@ class BaseSearchCVWORC(BaseSearchCV):
                 # Determine whether to overfit the feature scaling on the test set
                 base_estimator.overfit_scaler = overfit_scaler
 
+                # Since sklearn needs an estimator object to get tags, we set it to the best estimator
+                base_estimator.estimator = base_estimator.best_estimator_
+
                 try:
                     # Try a prediction to see if estimator is truly fitted
                     base_estimator.predict(np.asarray([X_train[0][0], X_train[1][0]]))
@@ -1571,6 +1581,9 @@ class BaseSearchCVWORC(BaseSearchCV):
 
                 # Determine whether to overfit the feature scaling on the test set
                 base_estimator.overfit_scaler = overfit_scaler
+
+                # Since sklearn needs an estimator object to get tags, we set it to the best estimator
+                base_estimator.estimator = base_estimator.best_estimator_
 
                 try:
                     # Try a prediction to see if estimator is truly fitted
@@ -1610,7 +1623,7 @@ class BaseSearchCVfastr(BaseSearchCVWORC):
         # per estimator. Thus, this is done inside the fit and scoring
 
         # Check fitting parameters
-        fit_params = _check_fit_params(X, self.fit_params)
+        fit_params = validate_fit_params(X, self.fit_params)
 
         # Create temporary directory for fastr
         if DebugDetector().do_detection():
@@ -1803,7 +1816,7 @@ class BaseSearchCVfastr(BaseSearchCVWORC):
             all_out.extend(data)
 
         # Sort output in the relevant objects
-        all_out = _aggregate_score_dicts(all_out)
+        all_out = aggregate_score_dicts(all_out)
         
         test_sample_counts = all_out["n_test_samples"]
         test_scores = all_out["test_scores"]
@@ -1831,8 +1844,8 @@ class BaseSearchCVfastr(BaseSearchCVWORC):
         self.process_fit(n_splits=n_splits,
                          parameters_all=all_out['parameters'],
                          test_sample_counts=test_sample_counts,
-                         test_score_dicts=test_scores,
-                         train_score_dicts=train_scores,
+                         test_scores=test_scores,
+                         train_scores=train_scores,
                          fit_time=fit_time,
                          score_time=score_time,
                          cv_iter=cv_iter,
@@ -2054,7 +2067,7 @@ class RandomizedSearchCVfastr(BaseSearchCVfastr):
     def __init__(self, param_distributions={}, n_iter=10, scoring=None,
                  fit_params=None, n_jobs=1, refit=True, cv=None,
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
-                 error_score='raise', return_train_score=True,
+                 error_score=np.nan, return_train_score=True,
                  n_jobspercore=100, fastr_plugin=None, memory='2G', maxlen=100,
                  ranking_score='test_score', refit_training_workflows=False,
                  refit_validation_workflows=False):
@@ -2319,7 +2332,7 @@ class GridSearchCVfastr(BaseSearchCVfastr):
 
     def __init__(self, estimator, param_grid, scoring=None, fit_params=None,
                  n_jobs=1, refit=True, cv=None, verbose=0,
-                 pre_dispatch='2*n_jobs', error_score='raise',
+                 pre_dispatch='2*n_jobs', error_score=np.nan,
                  return_train_score=True):
         super(GridSearchCVfastr, self).__init__(
             scoring=scoring, fit_params=fit_params,
@@ -2554,8 +2567,8 @@ class BaseSearchCVSMAC(BaseSearchCVWORC):
         self.process_fit(n_splits=n_splits,
                     parameters_all=parameters_all,
                     test_sample_counts=test_sample_counts,
-                    test_score_dicts=test_scores,
-                    train_score_dicts=train_scores,
+                    test_scores=test_scores,
+                    train_scores=train_scores,
                     fit_time=fit_time,
                     score_time=score_time,
                     cv_iter=cv_iter,
@@ -2762,7 +2775,7 @@ class GuidedSearchCVSMAC(BaseSearchCVSMAC):
     def __init__(self, param_distributions={}, n_iter=10, scoring=None,
                  fit_params=None, n_jobs=1, refit=True, cv=None,
                  verbose=0, pre_dispatch='2*n_jobs', random_state=None,
-                 error_score='raise', return_train_score=True,
+                 error_score=np.nan, return_train_score=True,
                  n_jobspercore=100, fastr_plugin=None, maxlen=100,
                  ranking_score='test_score', features=None, labels=None,
                  refit_training_workflows=False, refit_validation_workflows=False,

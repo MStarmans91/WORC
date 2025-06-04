@@ -15,21 +15,41 @@ Fixed
 - ret list in WORC.classification.fitandscore.fit_and_score
     is now the result dict in line with sklearn updates. 
 - Bug in statistical feature testing.
+- Updated fastr config.d to be compatible with new pip editable install.
+- Removed n_jobs argument in many imbalanced learn functions
+  as its deprecated.
+- Check_is_fitted didnt check the specific attribute but only 
+  whether the best estimator was fitted overall.
+- Logging conflicts with fastr
+- Remove HDF5 validity check took to much memory.
+- ReadTheDocs building with newer python.
+- Unit testing with newer python.
 
 Changed
 ~~~~~~~
 - Several dependencies have been updated, most notably
-    dependency on scikit-learn==0.23.1.
+    dependency on scikit-learn==0.23.1. 
 - The WORC.classification.BaseSearchCV object was updated to 
     BaseSearchCVWORC, inhereting the dependencies from 
     sklearn.model_selection._search.BaseSearchCV. While still
     depending on a hidden object, this is more future proof
     than the previous construction from scratch.
+- Replaced some private sklearn API functions by custom public ones 
+  for improved compatibility.
+- Depend on numpy<=1.26.3 due to PyRadiomics dependencies.
+- Reverted back to matplot2tikz instead of tikzplotlib as tikzplotlib
+  has compatibility issues and is not properly maintained anymore.
+- Minor bug in statistical testing for GLCMMS features.
 
 Removed
 ~~~~~~~
 - Joblib SearchCV objects. Rarely used, costs quite some work to maintain.
+- Removed the Halton sampler which was an alternative to random search.
+  ghalton package outdated, rarely used extra feature anyway.
 
+Added
+~~~~~
+- Some documentation
 
 3.6.3 - Unreleased
 ------------------
@@ -44,6 +64,7 @@ Fixed
   and test set and thus bootstrapping should be used.
 - Bug in PREDICT was fixed that mixed up the mode in shape feature extraction (2D / 2.5D)
 - Bug in performance calculation of multiclass classification.
+- Bugs in statistical feature testing.
 
 Changed
 ~~~~~~~

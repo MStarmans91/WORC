@@ -1197,18 +1197,25 @@ def fit_and_score(X, y, scoring,
     feature_values = np.concatenate((X_train, X_test), axis=0)
     y_all = np.concatenate((y_train, y_test), axis=0)
     para_estimator = None
-        
+    
     try:
-        result = _fit_and_score(estimator, feature_values, y_all,
-                             scorers, new_train,
-                             new_test, verbose,
-                             para_estimator, fit_params,
-                             return_train_score=return_train_score,
-                             return_parameters=return_parameters,
-                             return_n_test_samples=return_n_test_samples,
-                             return_times=return_times,
-                             return_estimator=return_estimator,
-                             error_score=error_score)
+        result = _fit_and_score(
+            estimator=estimator,
+            X=feature_values,
+            y=y_all,
+            scorer=scorers,
+            train=new_train,
+            test=new_test,
+            verbose=verbose,
+            parameters=para_estimator,
+            fit_params=fit_params,
+            score_params=None,
+            return_train_score=return_train_score,
+            return_parameters=return_parameters,
+            return_n_test_samples=return_n_test_samples,
+            return_times=return_times,
+            return_estimator=return_estimator,
+            error_score=error_score)
     except (ValueError, LinAlgError) as e:
         if type(estimator) == LDA:
             if verbose:

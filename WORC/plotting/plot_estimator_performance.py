@@ -27,8 +27,8 @@ from sklearn.utils import resample
 import WORC.addexceptions as ae
 from WORC.classification import metrics
 import WORC.processing.label_processing as lp
-from WORC.plotting.compute_CI import compute_confidence
-from WORC.plotting.compute_CI import compute_confidence_bootstrap
+from WORC.statistics.compute_CI import compute_confidence
+from WORC.statistics.compute_CI import compute_confidence_bootstrap
 
 
 def fit_thresholds(thresholds, estimator, label_type, X_train, Y_train,
@@ -589,7 +589,6 @@ def plot_estimator_performance(prediction, label_data, label_type,
                     PearsonP_temp, SpearmanC_temp,\
                     SpearmanP_temp = performances
 
-                print('R2 Score: ' + str(r2score_temp))
                 r2score.append(r2score_temp)
                 MSE.append(MSE_temp)
                 coefICC.append(coefICC_temp)

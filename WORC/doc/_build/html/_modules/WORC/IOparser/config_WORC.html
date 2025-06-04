@@ -1,39 +1,42 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>WORC.IOparser.config_WORC &mdash; WORC 3.6.2 documentation</title>
+  <title>WORC.IOparser.config_WORC &mdash; WORC 3.6.3 documentation</title>
   
-
-  
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
 
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
@@ -62,7 +65,7 @@
             
             
               <div class="version">
-                3.6.2
+                3.6.3
               </div>
             
           
@@ -79,6 +82,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -104,6 +108,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -138,11 +143,13 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
@@ -164,7 +171,7 @@
   <h1>Source code for WORC.IOparser.config_WORC</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2020 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -195,20 +202,21 @@
 <span class="sd">        settings_dict: dictionary containing all parsed settings.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">config_file_path</span><span class="p">):</span>
-        <span class="n">e</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;File </span><span class="si">{config_file_path}</span><span class="s1"> does not exist!&#39;</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;File </span><span class="si">{</span><span class="n">config_file_path</span><span class="si">}</span><span class="s1"> does not exist!&#39;</span>
         <span class="k">raise</span> <span class="n">ae</span><span class="o">.</span><span class="n">WORCKeyError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
     <span class="n">settings</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
     <span class="n">settings</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">config_file_path</span><span class="p">)</span>
 
-    <span class="n">settings_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;General&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
-                     <span class="s1">&#39;SVMFeatures&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">()}</span>
+    <span class="n">settings_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;ImageFeatures&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;General&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
+                     <span class="s1">&#39;SVMFeatures&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;Ensemble&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
+                     <span class="s1">&#39;Labels&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">()}</span>
 
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;image_type&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;ImageFeatures&#39;</span><span class="p">][</span><span class="s1">&#39;image_type&#39;</span><span class="p">])</span>
 
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;FeatureCalculators&#39;</span><span class="p">]</span> <span class="o">=</span>\
-        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;[]&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
          <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;FeatureCalculators&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
 
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span> <span class="o">=</span>\
@@ -219,7 +227,31 @@
 
     <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">]</span> <span class="o">=</span>\
         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Segmentix&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Settings for ensembling</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Method&#39;</span><span class="p">])</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Size&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">int</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Ensemble&#39;</span><span class="p">][</span><span class="s1">&#39;Size&#39;</span><span class="p">])</span>
 
+   <span class="c1"># Label settings</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;label_names&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span>
+         <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;label_names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;modus&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;modus&#39;</span><span class="p">])</span>
+        
+    <span class="c1"># Whether to use some methods or not</span>
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;ComBat&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;ComBat&#39;</span><span class="p">])</span>
+    
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;Fingerprint&#39;</span><span class="p">])</span>
+
+    <span class="n">settings_dict</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">][</span><span class="s1">&#39;Resampling&#39;</span><span class="p">]</span> <span class="o">=</span>\
+        <span class="n">settings</span><span class="p">[</span><span class="s1">&#39;Preprocessing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getboolean</span><span class="p">(</span><span class="s1">&#39;Resampling&#39;</span><span class="p">)</span>
+         
     <span class="k">return</span> <span class="n">settings_dict</span></div>
 </pre></div>
 
@@ -227,20 +259,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
+        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
@@ -248,7 +285,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

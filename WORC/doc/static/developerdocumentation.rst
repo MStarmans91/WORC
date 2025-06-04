@@ -1,6 +1,29 @@
 Developer documentation
 =======================
 
+Information on the `fastr`` workflow engine
+---------------------------------------------
+The `WORC` toolbox makes use of the `fastr` package [1]_, an automated workflow engine.
+`fastr` does not provide any actual implementation of the required (radiomics) algorithms,
+but serves as a computational workflow engine, which has several advantages.
+
+Firstly, `fastr` requires workflows to be modular and split into standardized components
+or *tools*, with standardized inputs and outputs. This nicely connects to the modular design of `WORC`, for which we therefore wrapped each component as a tool in `fastr`. Alternating between feature extraction toolboxes can be easily done by changing a single field in the `WORC` toolbox configuration.
+
+Second, provenance is automatically tracked by `fastr` to facilitate repeatability and reproducibility.
+
+Third, `fastr` offers support for multiple execution plugins in order to be able to
+execute the same workflow on different computational resources or clusters. Examples
+include linear execution, local threading on multiple CPUs, and SLURM [2]_.
+
+Fourth, `fastr` is agnostic to software language. Hence, instead of restricting the
+user to a single programming language, algorithms (e.g., feature toolboxes) can be
+supplied in a variety of languages such as `Python`, `Matlab`, `R`, and command line executables.
+
+Fifth, `fastr` provides a variety of import and export plugins for loading and saving
+data. Besides using the local file storage, these include the use of `XNAT` [3]_.
+
+
 Adding a feature processing toolbox
 -----------------------------------
 We suggest to use the wrapping we did around the PyRadiomics toolbox as an example.
@@ -88,3 +111,42 @@ Adding methods to hyperoptimization
 5. If you want your new method to be used by the ``SimpleWORC`` or a child
    facade, check :py:mod:`WORC.facade.SimpleWORC` to see if you need to add it,
    e.g. whitelist a classifier.
+
+Adding a (plotting) tool to the WORC evaluation pipeline
+----------------------------------------------------------
+We illustrate here how plotting the ROC curves is embedded in ``WORC``, and
+to follow or even copy-paste this example to add your own tools. 
+
+1. Write a script to perform the actual analysis, preferably stored in the 
+   plotting subfolder. See for example the one of the
+   `ROC curves <https://github.com/MStarmans91/WORC/blob/master/WORC/plotting/plot_ROC.py/>`_.
+2. Make it command-line executable and able to parse input arguments. For the ROC curves, we did this 
+   in the above script as well, but that is optional. It should be stored in 
+   `the WORC fastr_tools folder <https://github.com/MStarmans91/WORC/tree/master/WORC/resources/fastr_tools/worc/bin/>`_,
+   see also the `ROC script in that folder <https://github.com/MStarmans91/WORC/blob/master/WORC/resources/fastr_tools/worc/bin/PlotROC.py/>`_,
+   for step 3. Make sure it both is able to take in input arguments (parameters, file names) and output arguments (file names)
+   to store the results in.
+3. Make a fastr tool, i.e., a wrapper around your ``main`` function that fastr can call. See 
+   `the general fastr documentation on creating your own tool <https://fastr.readthedocs.io/en/stable/static/user_manual.html#create-your-own-tool/>`_,
+   and the `WORC tool for the ROC curve plotting< https://github.com/MStarmans91/WORC/blob/master/WORC/resources/fastr_tools/worc/PlotROC.xml/``>_.
+   You can see we call the script from step 2 for this. For the input and output files, you can run ``fastr.types`` to see which
+   datatypes are in your current ``fastr`` installation. You an see we added
+   several in ``WORC``, see also `the WORC fastr_types folder <https://github.com/MStarmans91/WORC/tree/master/WORC/resources/fastr_types/>`_.
+4. Now add it the the `Evaluation part of WORC <https://github.com/MStarmans91/WORC/blob/master/WORC/tools/Evaluate.py/>`_.
+   If you are new to creating fastr networks, you may want to check out
+   `the fastr documentation <https://fastr.readthedocs.io/en/stable/static/quick_start.html#creating-a-simple-network/>`_,
+   but in principle you can just copy paste again the parts of the plotting of the ROC curve. Make sure you add: the
+   additional sources (inputs) your tool requires if they are not already in the rest of WORC, the actual tool you made,
+   and sinks (outputs) so the output is also actually stored when your tool is done in an output folder.
+
+
+.. _references:
+
+References
+==========
+
+.. [1] Achterberg, H. C., Koek, M., & Niessen, W. J. (2016). *Fastr: A Workflow Engine for Advanced Data Flows in Medical Image Analysis*. Frontiers in ICT, 3, 15. https://doi.org/10.3389/fict.2016.00015
+
+.. [2] Yoo, A. B., Jette, M. A., & Grondona, M. (2003). *SLURM: Simple Linux Utility for Resource Management*. Job Scheduling Strategies for Parallel Processing, Lecture Notes in Computer Science, 2862, 44–60. https://doi.org/10.1007/10968987_3
+
+.. [3] Marcus, D. S., Olsen, T. R., Ramaratnam, M., & Buckner, R. L. (2007). *The extensible neuroimaging archive toolkit*. Neuroinformatics, 5(1), 11–33. https://doi.org/10.1385/NI:5:1:11
