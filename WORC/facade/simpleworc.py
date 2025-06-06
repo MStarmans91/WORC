@@ -121,8 +121,10 @@ class SimpleWORC():
         # Detect wether we are on a cluster
         if BigrClusterDetector().do_detection():
             self._worc.fastr_plugin = 'DRMAAExecution'
+            self.add_config_overrides({'Classification': {'fastr_plugin': 'DRMAAExecution'}})
         elif SnelliusClusterDetector().do_detection():
             self._worc.fastr_plugin = 'ProcessPoolExecution'
+            self.add_config_overrides({'Classification': {'fastr_plugin': 'ProcessPoolExecution'}})
 
     def set_fixed_splits(self, fixed_splits_csv):
         """Provide CSV with fixed splits for cross-validation.
