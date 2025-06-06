@@ -1800,10 +1800,10 @@ class BaseSearchCVfastr(BaseSearchCVWORC):
             message = ('Fitting classifiers has failed for ' +
                        f'{difference} / {expected_no_files} files. The temporary ' +
                        f'results where not deleted and can be found in {tempfolder}. ' +
-                       'Probably your fitting and scoring failed: check out ' +
-                       'the tmp/fitandscore folder within the tempfolder for ' +
-                       'the fastr job temporary results or run: fastr trace ' +
-                       f'"{fname}{os.path.sep}__sink_data__.json" --samples.')
+                       'Probably your fitting and scoring failed: "run fastr trace ' +
+                       f'"{fname}{os.path.sep}__sink_data__.json" --samples"' +
+                       'to figure out which samples failed. Next, select one failed sample, and run' +
+                       f'fastr trace {fname}{os.path.sep}__sink_data__.json" --sinks output --samples [NAMEOFFAILEDSAMPLE]"')
             raise WORCexceptions.WORCValueError(message)
 
         # Read in the output data once finished

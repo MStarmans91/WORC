@@ -13,6 +13,11 @@ PyRadiomics, require numpy during their installation. To solve this issue,
 simply first install numpy before installing WORC or any of the dependencies
 , i.e. ``pip install numpy`` or ``conda install numpy`` when using Anaconda.
 
+I get some issues with package versions (on the Snellius cluster)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+For ease of use, we provide a `pip freeze <https://github.com/MStarmans91/WORC/tree/master/WORC/doc/static>`_
+of one of our recent testing environments.
+
 Execution errors
 ----------------
 
