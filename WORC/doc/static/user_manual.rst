@@ -57,7 +57,7 @@ As an example, we here show how to provide images and segmentations to ``BasicWO
 
 .. code-block:: python
 
-   images1 = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/data/Patient2/image_MR.nii.gz'}
+   images1 = {'patient1': '/data/Patient1/image_MR.nii.gz', 'patient2': '/maybesomeotherpath/Patient_002/MR_image.nii.gz'}
    segmentations1 = {'patient1': '/data/Patient1/seg_tumor_MR.nii.gz', 'patient2': '/data/Patient2/seg_tumor_MR.nii.gz'}
 
    experiment.images_train.append(images1)
@@ -69,6 +69,9 @@ object for classification, e.g., a patient or a lesions. The keys indicate
 the ID of the element, e.g. the patient name, while the values should be strings corresponding to
 the source filenames. The keys are used to match the images and segmentations to the
 label and semantics sources, so make sure these correspond to the label file.
+
+.. note:: The location and naming of your files does not matter; the keys of the dictionary define
+            the sample ID that is used to match the files to other inputs.
 
 .. note:: You have to make sure the images and segmentation (and other) sources match in size,
            i.e., that the same keys are present.

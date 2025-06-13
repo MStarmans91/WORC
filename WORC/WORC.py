@@ -1513,7 +1513,7 @@ class WORC(object):
             self.link_combat_1 = self.network.create_link(self.source_class_config.output, self.ComBat.inputs['config'])
 
         self.link_combat_2 = self.network.create_link(self.source_patientclass_train.output, self.ComBat.inputs['patientclass_train'])
-        self.link_combat_1.collapse = 'conf'
+        # self.link_combat_1.collapse = 'conf'
         self.link_combat_2.collapse = 'pctrain'
         self.links_Combat1_train = dict()
         self.links_Combat1_test = dict()
