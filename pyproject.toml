@@ -79,7 +79,7 @@ docs = [
   "sphinx-autodoc-typehints",
   "readthedocs-sphinx-search",
   "sphinx-argparse",
-  "sphinxcontrib-httpdomain,"
+  "sphinxcontrib-httpdomain",
   "sphinx-autodoc-typehints"
 ]
 
