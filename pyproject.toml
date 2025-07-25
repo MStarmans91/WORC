@@ -8,7 +8,7 @@ version = "3.7.0"
 description = "Workflow for Optimal Radiomics Classification."
 readme = "README.rst"
 requires-python = ">=3.11"
-license = {text = "Apache-2.0"}
+license = "Apache-2.0"
 authors = [
   {name = "Martijn P. A. Starmans", email = "m.starmans@erasmusmc.nl"},
 ]
@@ -20,7 +20,6 @@ classifiers = [
     "Intended Audience :: Healthcare Industry",
     "Intended Audience :: Information Technology",
     "Intended Audience :: Education",
-    "License :: OSI Approved :: Apache Software License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.11",
@@ -37,17 +36,21 @@ dependencies = [
     "fastr",
     "imbalanced-learn",
     "lifelines",
+    "lxml",
     "matplotlib",
     "matplot2tikz",
     "natsort",
+    "networkx<=3.4.2", # for fastr
     "numpy<=1.26.3",
     "pandas",
-    "PREDICT",
+    "PREDICT>=3.2.0",
     "pyOpenSSL",
     "pydicom",
+    "rdflib",
     "scikit-image",
     "scikit-learn",
     "scipy",
+    "setuptools<=80.8.0", # for fastr
     "SimpleITK",
     "six",
     "sphinx",
@@ -71,9 +74,13 @@ dev = [
 ]
 docs = [
   "sphinx",
-  "furo",  # or whatever theme you use
+  "sphinx_rtd_theme",  # or whatever theme you use
   "numpydoc",
   "sphinx-autodoc-typehints",
+  "readthedocs-sphinx-search",
+  "sphinx-argparse",
+  "sphinxcontrib-httpdomain,"
+  "sphinx-autodoc-typehints"
 ]
 
 [project.scripts]
