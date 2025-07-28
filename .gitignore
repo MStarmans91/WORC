@@ -138,3 +138,9 @@ WORC/tests/*.png
 WORC/tests/*.mat
 WORC/tests/performance*.json
 WORC/tests/WORC_Example_STWStrategyHN_*
+
+# Project log
+ToDoandNotes*.txt
+
+# Cleanupreadme
+cleanupreadmemdtorst*.py

@@ -1,9 +1,0 @@
-fastr
-xnat
-tables
-drmaa
-nose
-nose-parameterized
-tqdm
-six
-sphinx

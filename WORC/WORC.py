@@ -1347,6 +1347,10 @@ class WORC(object):
 
                         for f in feature_calculators:
                             print(f'\t - Adding feature calculation node: {f}.')
+                            # remove potential leading spaces due to parsing issues
+                            if f[0] == ' ':
+                                f = f[1::]
+
                             self.add_feature_calculator(f, label, nmod)
 
                         # -----------------------------------------------------
