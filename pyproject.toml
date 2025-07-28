@@ -43,6 +43,7 @@ dependencies = [
     "networkx<=3.4.2", # for fastr
     "numpy<=1.26.3",
     "pandas",
+    "pyradiomics==3.0.1",
     "PREDICT>=3.2.0",
     "pyOpenSSL",
     "pydicom",
