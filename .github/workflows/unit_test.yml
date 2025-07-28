@@ -29,7 +29,8 @@ jobs:
       - name: Install dependencies from pyproject.toml
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 numpy
+          pip install flake8
+          pip install numpy==1.26.3
           pip install .
        # Assumes `pyproject.toml` has [project] and/or [tool.setuptools]
 
