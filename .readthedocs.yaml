@@ -10,8 +10,6 @@ build:
 
 python:
   install:
-    - requirements: WORC/doc/requirements-pre-numpy.txt
-    - requirements: WORC/doc/requirements-pre-predict.txt
     - requirements: WORC/doc/requirements.txt
     - method: pip
       path: .
