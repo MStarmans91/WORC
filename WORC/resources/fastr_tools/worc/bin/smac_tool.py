@@ -92,8 +92,8 @@ def main():
         else:
             return float(15000000)
 
-        # Read the data from the smac_tool
-        nonlocal data
+        # Read the data from the smac_tool: removed, not sure it works everywhere
+        # nonlocal data
 
         # Fit the classifier and store the result
         all_scores = []

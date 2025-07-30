@@ -1095,7 +1095,7 @@ def fit_and_score(X, y, scoring,
                 Sampler = None
                 parameters['Resampling_Use'] = 'False'
 
-            except refit_timeError as e:
+            except RuntimeError as e:
                 if 'ADASYN is not suited for this specific dataset. Use SMOTE instead.' in str(e):
                     # Seldomly occurs, therefore return performance dummy
                     if verbose:

@@ -83,18 +83,8 @@ def random_search_parameters(features, labels, N_iter, test_size,
                                                 refit_training_workflows=refit_training_workflows,
                                                 refit_validation_workflows=refit_validation_workflows)
     else:
-        random_search = RandomizedSearchCVJoblib(param_distributions=param_grid,
-                                                 n_iter=N_iter,
-                                                 scoring=scoring_method,
-                                                 n_jobs=n_cores,
-                                                 n_jobspercore=n_jobspercore,
-                                                 maxlen=maxlen,
-                                                 verbose=1, cv=cv,
-                                                 fastr_plugin=fastr_plugin,
-                                                 memory=memory,
-                                                 ranking_score=ranking_score,
-                                                 refit_training_workflows=refit_training_workflows,
-                                                 refit_validation_workflows=refit_validation_workflows)
+        raise ValueError("RandomizedSearchCVJoblib was removed from WORC in version 3.7.0+, please use fastr.")
+    
     random_search.fit(features, labels)
     print("Best found parameters:")
     for i in random_search.best_params_:
