@@ -28,13 +28,12 @@ def download_subject(project, subject, datafolder, session, verbose=False):
     # Download all data and keep track of resources
     download_counter = 0
     resource_labels = list()
-    for e in subject.experiments:
+    for experiment in subject.experiments:
         resmap = {}
-        experiment = subject.experiments[e]
 
         # FIXME: Need a way to smartly check whether we have a matching RT struct and image
         # Current solution: We only download the CT sessions, no PET / MRI / Other scans
-        # Specific for STW Strategy BMIA XNAT projects
+        # Specific for STW Strategy Health-RI XNAT projects
 
         if experiment.session_type is None:  # some files in project don't have _CT postfix
             print(f"\tSkipping patient {subject.label}, experiment {experiment.label}: type is not CT but {experiment.session_type}.")
@@ -44,12 +43,11 @@ def download_subject(project, subject, datafolder, session, verbose=False):
             print(f"\tSkipping patient {subject.label}, experiment {experiment.label}: type is not CT but {experiment.session_type}.")
             continue
 
-        for s in experiment.scans:
-            scan = experiment.scans[s]
+        for scan in experiment.scans:
             print(("\tDownloading patient {}, experiment {}, scan {}.").format(subject.label, experiment.label,
                                                                              scan.id))
-            for res in scan.resources:
-                resource_label = scan.resources[res].label
+            for resource in scan.resources:
+                resource_label = resource.label
                 if resource_label == 'NIFTI':
                     # Create output directory
                     outdir = datafolder + '/{}'.format(subject.label)
@@ -58,7 +56,7 @@ def download_subject(project, subject, datafolder, session, verbose=False):
 
                     resmap[resource_label] = scan
                     print(f'resource is {resource_label}')
-                    scan.resources[res].download_dir(outdir)
+                    resource.download_dir(outdir)
                     resource_labels.append(resource_label)
                     download_counter += 1
 
@@ -136,7 +134,7 @@ def download_project(project_name, xnat_url, datafolder, nsubjects=10,
         downloaded_subjects_counter = 0
         for s in range(0, subjects_len):
             s = project.subjects[s]
-            print(f'Working on subject {subjects_counter}/{subjects_len}')
+            print(f'Working on subject {s} ({subjects_counter}/{subjects_len})')
             subjects_counter += 1
 
             success = download_subject(project_name, s, datafolder, session, verbose)
