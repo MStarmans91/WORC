@@ -142,15 +142,15 @@ html_theme = 'sphinx_book_theme'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-    "path_to_docs": "doc",
-    "repository_url": "https://github.com/MStarmans91/WORC",
-    "use_repository_button": True,
-    "use_edit_page_button": True,
-    "use_issues_button": True,
     "use_download_button": False,
     "home_page_in_toc": True,
-    "show_navbar_depth": 2,
-    "theme_toggle": True,
+    "show_navbar_depth": 2,          # Controls collapsible depth
+    "collapse_navigation": True,     # Optional: auto-collapse sections
+    "navigation_with_keys": True,    # Optional: allows ← → nav
+    "use_repository_button": False,
+    "use_edit_page_button": False,
+    "use_issues_button": False,
+    "theme_toggle": True,            # Enable dark/light toggle
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
