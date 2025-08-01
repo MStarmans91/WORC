@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import platform
 import os
 import yaml
 import fastr
@@ -2395,9 +2396,13 @@ class WORC(object):
             for k in self.sink_data.keys():
                 print(f"\t {k}: {self.sink_data[k]}.")
 
-            # When debugging, set the tempdir to the default of fastr + name
-            self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'],
-                                             self.name)
+            # # When debugging, set the tempdir to the default of fastr + name
+            system = platform.system()
+            if system != 'Darwin':
+                self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
+                print(f"Setting fastr_tmpdir to: {self.fastr_tmpdir}")
+            else:
+                print("macOS detected — not overriding fastr_tmpdir")
 
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 
