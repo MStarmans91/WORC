@@ -2403,8 +2403,8 @@ class BaseSearchCVSMAC(BaseSearchCVWORC):
 
         else:
             name = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+            tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
 
-        tempfolder = os.path.join(fastr.config.mounts['tmp'], 'GS', name)
         if not os.path.exists(tempfolder):
             os.makedirs(tempfolder)
 

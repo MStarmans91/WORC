@@ -81,8 +81,7 @@ docs = [
   "readthedocs-sphinx-search",
   "sphinx-argparse",
   "sphinxcontrib-httpdomain",
-  "sphinx-autodoc-typehints",
-  "sphinx-book-theme"
+  "sphinx-autodoc-typehints"
 ]
 
 [project.scripts]
