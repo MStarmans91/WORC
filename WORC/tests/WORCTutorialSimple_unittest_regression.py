@@ -101,7 +101,7 @@ def main():
     coarse = True
 
     # Give your experiment a name
-    experiment_name = 'Example_STWStrategyHN_Regression_py311'
+    experiment_name = 'Example_STWStrategyHN_Regression'
 
     # Instead of the default tempdir, let's but the temporary output in a subfolder
     # in the same folder as this script
@@ -126,6 +126,7 @@ def main():
     experiment = BasicWORC(experiment_name)
 
     # Set the input data according to the variables we defined earlier
+    print(f"Setting {imagedatadir} as image data dir")
     experiment.images_from_this_directory(imagedatadir,
                                           image_file_name=image_file_name)
     experiment.segmentations_from_this_directory(imagedatadir,
@@ -139,9 +140,11 @@ def main():
                                            'Features',
                                            'features_*.hdf5'))
     features_train = {os.path.splitext(os.path.basename(f))[0].split('CT_0_')[1]: f for f in feature_files}
+    print(f"Setting {features_train} as feature files from {classification_experiment_folder}")
     experiment.features_train.append(features_train)
 
     # Labels
+    print(f"Setting {label_file} as label file")
     experiment.labels_from_this_file(label_file)
     experiment.predict_labels(label_name)
 
