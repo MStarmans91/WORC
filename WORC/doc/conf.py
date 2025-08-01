@@ -152,6 +152,7 @@ html_theme_options = {
     "use_edit_page_button": False,
     "use_issues_button": False,
     "theme_toggle": True,            # Enable dark/light toggle
+    "single_page": False,  # keep as False to allow sidebar nesting
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
