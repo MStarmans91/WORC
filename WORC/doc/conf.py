@@ -144,7 +144,8 @@ html_theme = 'sphinx_book_theme'
 html_theme_options = {
     "use_download_button": False,
     "home_page_in_toc": True,
-    "show_navbar_depth": 2,          # Controls collapsible depth
+    "show_navbar_depth": 4,          # Controls collapsible depth
+    "navigation_depth": 4,
     "collapse_navigation": True,     # Optional: auto-collapse sections
     "navigation_with_keys": True,    # Optional: allows ← → nav
     "use_repository_button": False,
