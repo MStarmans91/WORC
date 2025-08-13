@@ -8,7 +8,7 @@ Welcome to the WORC documentation!
 WORC is an open-source python package for the fully automatic execution of end-to-end
 radiomics pipelines. Using automated machine learning, WORC automatically determines the optimal combination
 from a wide variety of radiomics methods and parameters to develop a radiomics model on your dataset. Thereby, performing
-a radiomics study is effectively reduced to a black box with a push button, where you simply have to input
+a radiomics study is effectively reduced to a box with a push button, where you simply have to input
 your data and WORC will adapt the workflow to your application. Thus, WORC is especially suitable
 for the fast development of signatures and probing datasets for new biomarkers.
 
@@ -16,24 +16,27 @@ for the fast development of signatures and probing datasets for new biomarkers.
    used for regression and multilabel classification. See for more details the
    :ref:`additonalfunctionality-chapter` chapter.
 
-We aim to establish a general radiomics platform supporting easy
-integration of other tools. With our modular build and support of
-different software languages (Python, MATLAB, R, executables etc.), we want
-to facilitate and stimulate collaboration, standardisation and
-comparison of different radiomics approaches. By combining this in a
-single framework, we hope to find an universal radiomics strategy that
-can address various problems.
-
 WORC is open-source (licensed under the Apache 2.0 license) and hosted on Github at `https://github.com/MStarmans91/WORC <https://github.com/MStarmans91/WORC>`_
 
 For support, go to the issues on the Gibhub page: `https://github.com/MStarmans91/WORC/issues <https://github.com/MStarmans91/WORC/issues>`_
 
+WORC is made possible by contributions from the following people: Martijn P. A. Starmans, Sebastian R. van der Voort, Thomas Phil, and Stefan Klein
+
+Starting with WORC
+---------------------------------------------
+
 To get yourself a copy, see the :ref:`installation-chapter` chapter.
 
-The official documentation can be found at `WORC.readthedocs.io <http://WORC.readthedocs.io>`_.
+To start with WORC, we recommend the following:
 
-For Tutorials on WORC, both for beginner and advanced WORCflows, please
-see our Tutorial repository https://github.com/MStarmans91/WORCTutorial.
+1.  ⁠Watch the following lecture: https://youtu.be/g0o2v8seFw4?si=o_souikOxgpPu18m.
+2.  Read the paper: https://doi.org/10.48550/arXiv.2108.08618. 
+3.  Follow the WORC tutorial: https://github.com/MStarmans91/WORCtutorial. Start with the Simple Tutorial, once you want to use your own data move to the Basic one with BasicWORC which has more functionalities.
+4.  The documentation is always handy, see `WORC.readthedocs.io <http://WORC.readthedocs.io>`_. Specifically, check the FAQ for common errors / questions: https://worc.readthedocs.io/en/latest/static/faq.html.
+5.  Another nice example of use of WORC on the public WORC database, to give you an idea of “beyond the tutorial”: https://github.com/MStarmans91/WORCDatabase. 
+
+Some publications using WORC
+---------------------------------------------
 
 The preprint of the WORC article, the WORC database, and my PhD thesis in which I developped WORC can be found here:
 
