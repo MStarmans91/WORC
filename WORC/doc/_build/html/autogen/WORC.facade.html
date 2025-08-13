@@ -1,98 +1,209 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="helpers Package" href="WORC.facade.helpers.html" /><link rel="prev" title="export Package" href="WORC.export.html" />
+        <link rel="prefetch" href="../_static/WORC_Logo.svg" as="image" />
 
-
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>facade Package &mdash; WORC 3.6.3 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>facade Package - WORC 3.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/extra.css?v=a591123b" />
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
     
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
     
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="helpers Package" href="WORC.facade.helpers.html" />
-    <link rel="prev" title="export Package" href="WORC.export.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
-   
-  <div class="wy-grid-for-nav">
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
     
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
 
-          
-            <a href="../index.html" class="icon icon-home"> WORC
-          
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
 
-          
-            
-            <img src="../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
-          
-          </a>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
 
-          
-            
-            
-              <div class="version">
-                3.6.3
-              </div>
-            
-          
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
 
-          
-        </div>
 
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul>
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">WORC 3.7.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/WORC_Logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">WORC 3.7.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
 <li class="toctree-l1"><a class="reference internal" href="../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
@@ -101,119 +212,86 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../static/developerdocumentation.html#references">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="WORC.html">WORC Package</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="WORC.html#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.html#module-WORC.addexceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="WORC.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.classification.html">classification Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.detectors.html">detectors Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.exampledata.html">exampledata Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.export.html">export Package</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">facade Package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">facade</span></code> Package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-WORC.facade.basicworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">basicworc</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-WORC.facade.simpleworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simpleworc</span></code> Module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="WORC.html">WORC Package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of WORC Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html">classification Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.detectors.html">detectors Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.exampledata.html">exampledata Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.export.html">export Package</a></li>
+<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">facade Package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of facade Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html">helpers Package</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.fastrconfig.html">fastrconfig Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.featureprocessing.html">featureprocessing Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.plotting.html">plotting Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.resources.html">resources Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.statistics.html">statistics Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.tests.html">tests Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.fastrconfig.html">fastrconfig Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html">featureprocessing Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html">plotting Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="WORC.resources.html">resources Package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of resources Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="WORC.resources.fastr_tests.html">fastr_tests Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.resources.fastr_tools.html">fastr_tools Package</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.statistics.html">statistics Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.tests.html">tests Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
 </ul>
 </li>
 </ul>
 
-            
-          
-        </div>
-        
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">WORC</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="WORC.html">WORC Package</a> &raquo;</li>
-        
-      <li>facade Package</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="../_sources/autogen/WORC.facade.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="facade-package">
-<h1>facade Package<a class="headerlink" href="#facade-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="id1">
-<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">facade</span></code> Package<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-WORC.facade"></span></div>
-<div class="section" id="module-WORC.facade.basicworc">
-<span id="basicworc-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">basicworc</span></code> Module<a class="headerlink" href="#module-WORC.facade.basicworc" title="Permalink to this headline">¶</a></h2>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/autogen/WORC.facade.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="facade-package">
+<h1>facade Package<a class="headerlink" href="#facade-package" title="Link to this heading">¶</a></h1>
+<section id="id1">
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">facade</span></code> Package<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-WORC.facade.basicworc">
+<span id="basicworc-module"></span><span id="module-WORC.facade"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">basicworc</span></code> Module<a class="headerlink" href="#module-WORC.facade.basicworc" title="Link to this heading">¶</a></h2>
 <dl class="py class">
-<dt id="WORC.facade.basicworc.BasicWORC">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">WORC.facade.basicworc.</span></code><code class="sig-name descname"><span class="pre">BasicWORC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WORC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC" title="WORC.facade.simpleworc.SimpleWORC"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORC.facade.simpleworc.SimpleWORC</span></code></a></p>
+<dt class="sig sig-object py" id="WORC.facade.basicworc.BasicWORC">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.facade.basicworc.</span></span><span class="sig-name descname"><span class="pre">BasicWORC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WORC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC" title="WORC.facade.simpleworc.SimpleWORC"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleWORC</span></code></a></p>
 <p>Facade around the main WORC object for simple interaction.</p>
 <p>Based upon the SimpleWORC object, but with additional functionality:
 - Sources of WORC (e.g. images_train, segmentations_train, …)</p>
@@ -222,23 +300,26 @@
 </div></blockquote>
 <p>Please also see the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.</p>
 <dl class="py method">
-<dt id="WORC.facade.basicworc.BasicWORC.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WORC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.__init__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.basicworc.BasicWORC.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WORC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize SimpleWORC object.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>name: string, default WORC</dt><dd><p>String to identify name of experiments. Will be used in the temporary files and outputs.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="WORC.facade.basicworc.BasicWORC.__module__">
-<code class="sig-name descname"><span class="pre">__module__</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'WORC.facade.basicworc'</span></em><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.__module__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.basicworc.BasicWORC.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.facade.basicworc'</span></em><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.__module__" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.basicworc.BasicWORC.execute">
-<code class="sig-name descname"><span class="pre">execute</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.execute" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.basicworc.BasicWORC.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/basicworc.html#BasicWORC.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.basicworc.BasicWORC.execute" title="Link to this definition">¶</a></dt>
 <dd><p>Execute the experiment.</p>
 <p>Before executing the actual experiment, this function will first run several validators
 and check the provided setup to make sure some of the most common
@@ -247,44 +328,52 @@ made error are caught before running the experiment.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-WORC.facade.simpleworc">
-<span id="simpleworc-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">simpleworc</span></code> Module<a class="headerlink" href="#module-WORC.facade.simpleworc" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-WORC.facade.simpleworc">
+<span id="simpleworc-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">simpleworc</span></code> Module<a class="headerlink" href="#module-WORC.facade.simpleworc" title="Link to this heading">¶</a></h2>
 <dl class="py class">
-<dt id="WORC.facade.simpleworc.SimpleWORC">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">WORC.facade.simpleworc.</span></code><code class="sig-name descname"><span class="pre">SimpleWORC</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WORC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.facade.simpleworc.</span></span><span class="sig-name descname"><span class="pre">SimpleWORC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WORC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Facade around the main WORC object for simple interaction.</p>
 <p>Please also see the <a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/">WORCTutorial Github</a>.</p>
 <dl class="py attribute">
-<dt id="WORC.facade.simpleworc.SimpleWORC.__dict__">
-<code class="sig-name descname"><span class="pre">__dict__</span></code><em class="property"> <span class="pre">=</span> <span class="pre">mappingproxy({'__module__':</span> <span class="pre">'WORC.facade.simpleworc',</span> <span class="pre">'__doc__':</span> <span class="pre">'Facade</span> <span class="pre">around</span> <span class="pre">the</span> <span class="pre">main</span> <span class="pre">WORC</span> <span class="pre">object</span> <span class="pre">for</span> <span class="pre">simple</span> <span class="pre">interaction.\n\n</span>&#160;&#160;&#160; <span class="pre">Please</span> <span class="pre">also</span> <span class="pre">see</span> <span class="pre">the</span> <span class="pre">`WORCTutorial</span> <span class="pre">Github</span> <span class="pre">&lt;https://github.com/MStarmans91/WORCTutorial/&gt;`_.\n</span>&#160;&#160;&#160; <span class="pre">',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.__init__&gt;,</span> <span class="pre">'set_fixed_splits':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_fixed_splits&gt;,</span> <span class="pre">'set_image_types':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_image_types&gt;,</span> <span class="pre">'features_from_this_directory':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.features_from_this_directory&gt;,</span> <span class="pre">'images_from_this_directory':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.images_from_this_directory&gt;,</span> <span class="pre">'segmentations_from_this_directory':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.segmentations_from_this_directory&gt;,</span> <span class="pre">'masks_from_this_directory':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.masks_from_this_directory&gt;,</span> <span class="pre">'labels_from_this_file':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.labels_from_this_file&gt;,</span> <span class="pre">'semantics_from_this_file':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.semantics_from_this_file&gt;,</span> <span class="pre">'set_registration_parameterfile':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_registration_parameterfile&gt;,</span> <span class="pre">'run_inference':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.run_inference&gt;,</span> <span class="pre">'predict_labels':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.predict_labels&gt;,</span> <span class="pre">'_set_and_validate_estimators':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC._set_and_validate_estimators&gt;,</span> <span class="pre">'count_num_subjects':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.count_num_subjects&gt;,</span> <span class="pre">'_validate':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC._validate&gt;,</span> <span class="pre">'binary_classification':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.binary_classification&gt;,</span> <span class="pre">'multiclass_classification':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.multiclass_classification&gt;,</span> <span class="pre">'regression':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.regression&gt;,</span> <span class="pre">'survival':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.survival&gt;,</span> <span class="pre">'add_config_overrides':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.add_config_overrides&gt;,</span> <span class="pre">'add_evaluation':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.add_evaluation&gt;,</span> <span class="pre">'set_tmpdir':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_tmpdir&gt;,</span> <span class="pre">'set_multicore_execution':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_multicore_execution&gt;,</span> <span class="pre">'features_from_radiomix_xlsx':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.features_from_radiomix_xlsx&gt;,</span> <span class="pre">'_check_traintest':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC._check_traintest&gt;,</span> <span class="pre">'execute':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.execute&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'SimpleWORC'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'SimpleWORC'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__dict__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.__annotations__">
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__annotations__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.__dict__">
+<span class="sig-name descname"><span class="pre">__dict__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">mappingproxy({'__module__':</span> <span class="pre">'WORC.facade.simpleworc',</span> <span class="pre">'__doc__':</span> <span class="pre">'Facade</span> <span class="pre">around</span> <span class="pre">the</span> <span class="pre">main</span> <span class="pre">WORC</span> <span class="pre">object</span> <span class="pre">for</span> <span class="pre">simple</span> <span class="pre">interaction.\n\n</span>&#160;&#160;&#160; <span class="pre">Please</span> <span class="pre">also</span> <span class="pre">see</span> <span class="pre">the</span> <span class="pre">`WORCTutorial</span> <span class="pre">Github</span> <span class="pre">&lt;https://github.com/MStarmans91/WORCTutorial/&gt;`_.\n</span>&#160;&#160;&#160; <span class="pre">',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.__init__&gt;,</span> <span class="pre">'set_fixed_splits':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_fixed_splits&gt;,</span> <span class="pre">'set_image_types':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_image_types&gt;,</span> <span class="pre">'features_from_this_directory':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.features_from_this_directory&gt;,</span> <span class="pre">'images_from_this_directory':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.images_from_this_directory&gt;,</span> <span class="pre">'segmentations_from_this_directory':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.segmentations_from_this_directory&gt;,</span> <span class="pre">'masks_from_this_directory':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.masks_from_this_directory&gt;,</span> <span class="pre">'labels_from_this_file':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.labels_from_this_file&gt;,</span> <span class="pre">'semantics_from_this_file':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.semantics_from_this_file&gt;,</span> <span class="pre">'set_registration_parameterfile':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_registration_parameterfile&gt;,</span> <span class="pre">'run_inference':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.run_inference&gt;,</span> <span class="pre">'predict_labels':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.predict_labels&gt;,</span> <span class="pre">'_set_and_validate_estimators':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC._set_and_validate_estimators&gt;,</span> <span class="pre">'count_num_subjects':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.count_num_subjects&gt;,</span> <span class="pre">'_validate':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC._validate&gt;,</span> <span class="pre">'binary_classification':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.binary_classification&gt;,</span> <span class="pre">'multiclass_classification':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.multiclass_classification&gt;,</span> <span class="pre">'regression':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.regression&gt;,</span> <span class="pre">'survival':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.survival&gt;,</span> <span class="pre">'add_config_overrides':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.add_config_overrides&gt;,</span> <span class="pre">'add_evaluation':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.add_evaluation&gt;,</span> <span class="pre">'set_tmpdir':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_tmpdir&gt;,</span> <span class="pre">'set_multicore_execution':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.set_multicore_execution&gt;,</span> <span class="pre">'features_from_radiomix_xlsx':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.features_from_radiomix_xlsx&gt;,</span> <span class="pre">'_check_traintest':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC._check_traintest&gt;,</span> <span class="pre">'execute':</span> <span class="pre">&lt;function</span> <span class="pre">SimpleWORC.execute&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'SimpleWORC'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'SimpleWORC'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__dict__" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.__init__">
-<code class="sig-name descname"><span class="pre">__init__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WORC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__init__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WORC'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__init__" title="Link to this definition">¶</a></dt>
 <dd><p>Initialize SimpleWORC object.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>name: string, default WORC</dt><dd><p>String to identify name of experiments. Will be used in the temporary files and outputs.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="WORC.facade.simpleworc.SimpleWORC.__module__">
-<code class="sig-name descname"><span class="pre">__module__</span></code><em class="property"> <span class="pre">=</span> <span class="pre">'WORC.facade.simpleworc'</span></em><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__module__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.facade.simpleworc'</span></em><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__module__" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="WORC.facade.simpleworc.SimpleWORC.__weakref__">
-<code class="sig-name descname"><span class="pre">__weakref__</span></code><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.__weakref__" title="Link to this definition">¶</a></dt>
 <dd><p>list of weak references to the object (if defined)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.add_config_overrides">
-<code class="sig-name descname"><span class="pre">add_config_overrides</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.add_config_overrides"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.add_config_overrides" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.add_config_overrides">
+<span class="sig-name descname"><span class="pre">add_config_overrides</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.add_config_overrides"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.add_config_overrides" title="Link to this definition">¶</a></dt>
 <dd><p>Add manual overrides for the WORC configuration.</p>
 <p>For a full list of options, see the
 <a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
@@ -305,15 +394,18 @@ made error are caught before running the experiment.</p>
 </dl>
 <p>}
 self.add_config_overrides(overrides)</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>config: dictionary</dt><dd><p>Determine which options to override with which values.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.add_evaluation">
-<code class="sig-name descname"><span class="pre">add_evaluation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.add_evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.add_evaluation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.add_evaluation">
+<span class="sig-name descname"><span class="pre">add_evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.add_evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.add_evaluation" title="Link to this definition">¶</a></dt>
 <dd><p>Add the evaluation workflow to the standard WORC workflow.</p>
 <p>Adds several evaluation measures, including:</p>
 <ul class="simple">
@@ -324,17 +416,22 @@ self.add_config_overrides(overrides)</p>
 <li><p>Decompositions (e.g. PCA, t-SNE)</p></li>
 </ul>
 <p>See the <a class="reference internal" href="../static/additionalfunctionality.html#additonalfunctionality-chapter"><span class="std std-ref">WORC documentation</span></a> for additional info.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>selected_label: integer, default 0</dt><dd><p>Determine for which of the labels to be predicted the evaluate workflow
 should be executed.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.binary_classification">
-<code class="sig-name descname"><span class="pre">binary_classification</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'f1_weighted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coarse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.binary_classification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.binary_classification" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.binary_classification">
+<span class="sig-name descname"><span class="pre">binary_classification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'f1_weighted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coarse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.binary_classification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.binary_classification" title="Link to this definition">¶</a></dt>
 <dd><p>Tell WORC do to a binary classification experiment.</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
 <dl>
 <dt>estimators: list</dt><dd><p>List of strings with names of valid estimators. See the
 <a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
@@ -347,17 +444,18 @@ config will be used.</p>
 <dt>coarse: boolean, default True</dt><dd><p>Determine whether to do a coarse or full experiment.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.count_num_subjects">
-<code class="sig-name descname"><span class="pre">count_num_subjects</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.count_num_subjects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.count_num_subjects" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.count_num_subjects">
+<span class="sig-name descname"><span class="pre">count_num_subjects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.count_num_subjects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.count_num_subjects" title="Link to this definition">¶</a></dt>
 <dd><p>Count the number of subjects in the experiment.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.execute">
-<code class="sig-name descname"><span class="pre">execute</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.execute" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.execute" title="Link to this definition">¶</a></dt>
 <dd><p>Execute the experiment.</p>
 <p>Before executing the actual experiment, this function will first run several validators
 and check the provided setup to make sure some of the most common
@@ -365,73 +463,82 @@ made error are caught before running the experiment.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.features_from_radiomix_xlsx">
-<code class="sig-name descname"><span class="pre">features_from_radiomix_xlsx</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.features_from_radiomix_xlsx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.features_from_radiomix_xlsx" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.features_from_radiomix_xlsx">
+<span class="sig-name descname"><span class="pre">features_from_radiomix_xlsx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.features_from_radiomix_xlsx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.features_from_radiomix_xlsx" title="Link to this definition">¶</a></dt>
 <dd><p>Use a feature file which is generated by the OncoRadiomics Radiomix tool.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.features_from_this_directory">
-<code class="sig-name descname"><span class="pre">features_from_this_directory</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'features.hdf5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.features_from_this_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.features_from_this_directory" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.features_from_this_directory">
+<span class="sig-name descname"><span class="pre">features_from_this_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'features.hdf5'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.features_from_this_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.features_from_this_directory" title="Link to this definition">¶</a></dt>
 <dd><p>Use features from a directory as sources in WORC.</p>
 <p>SimpleWORC uses a directory glob to look for files meeting
 the requirements to include, based on the input parameters.</p>
 <p>Example:
 When using “directory = C:UsersMyNameFeatureFolder”,
 features_from_this_directory will include all features.hdf5 files from all subfolders in the directory.</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>directory: string</dt><dd><p>Identifies the root directory in which to search for feature files.</p>
 </dd>
 <dt>feature_file_name: string, default features.hdf5</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
 </dd>
-<dt>glob: string, default <a href="#id3"><span class="problematic" id="id4">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+<dt>glob: string, default <a href="#id8"><span class="problematic" id="id9">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
 </dd>
 <dt>is_training: Boolean, default True</dt><dd><p>Identify whether these features should be used in the training or test dataset.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.images_from_this_directory">
-<code class="sig-name descname"><span class="pre">images_from_this_directory</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'image.nii.gz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.images_from_this_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.images_from_this_directory" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.images_from_this_directory">
+<span class="sig-name descname"><span class="pre">images_from_this_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'image.nii.gz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.images_from_this_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.images_from_this_directory" title="Link to this definition">¶</a></dt>
 <dd><p>Use images from a directory as sources in WORC.</p>
 <p>SimpleWORC uses a directory glob to look for files meeting
 the requirements to include, based on the input parameters.</p>
 <p>Example:
 When using “directory = C:UsersMyNameImageFolder”,
 images_from_this_directory will include all image.nii.gz files from all subfolders in the directory.</p>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>directory: string</dt><dd><p>Identifies the root directory in which to search for image files.</p>
 </dd>
 <dt>image_file_name: string, default image.nii.gz</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
 </dd>
-<dt>glob: string, default <a href="#id5"><span class="problematic" id="id6">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+<dt>glob: string, default <a href="#id11"><span class="problematic" id="id12">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
 </dd>
 <dt>is_training: Boolean, default True</dt><dd><p>Identify whether these images should be used in the training or test dataset.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.labels_from_this_file">
-<code class="sig-name descname"><span class="pre">labels_from_this_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.labels_from_this_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.labels_from_this_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.labels_from_this_file">
+<span class="sig-name descname"><span class="pre">labels_from_this_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.labels_from_this_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.labels_from_this_file" title="Link to this definition">¶</a></dt>
 <dd><p>Define which file should be used by WORC to extract the object labels.</p>
 <p>Should be a .csv or .txt file: see
 <span class="xref std std-ref">the WORC user manual</span> for more details on
 the formatting of this file.</p>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>file_path: basestring</dt><dd><p>Location of the file to be used as label file. Can be a .csv or .txt file.</p>
 </dd>
 <dt>is_training: Boolean, default True</dt><dd><p>Identify whether this label file should be used in the training or test dataset.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.masks_from_this_directory">
-<code class="sig-name descname"><span class="pre">masks_from_this_directory</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mask.nii.gz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.masks_from_this_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.masks_from_this_directory" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.masks_from_this_directory">
+<span class="sig-name descname"><span class="pre">masks_from_this_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mask.nii.gz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.masks_from_this_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.masks_from_this_directory" title="Link to this definition">¶</a></dt>
 <dd><p>Use masks from a directory as sources in WORC.</p>
-<p>Masks are used in a variety of tools to <a href="#id7"><span class="problematic" id="id8">``</span></a>mask’’ certain parts
+<p>Masks are used in a variety of tools to <a href="#id14"><span class="problematic" id="id15">``</span></a>mask’’ certain parts
 of the image, e.g. in the normalization. Masks are fully
 optional.</p>
 <p>SimpleWORC uses a directory glob to look for files meeting
@@ -439,22 +546,27 @@ the requirements to include, based on the input parameters.</p>
 <p>Example:
 When using “directory = C:UsersMyNameMaskFolder”,
 masks_from_this_directory will include all mask.nii.gz files from all subfolders in the directory.</p>
+<section id="id16">
+<h3>Parameters<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>directory: string</dt><dd><p>Identifies the root directory in which to search for mask files.</p>
 </dd>
 <dt>mask_file_name: string, default mask.nii.gz</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
 </dd>
-<dt>glob: string, default <a href="#id9"><span class="problematic" id="id10">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+<dt>glob: string, default <a href="#id17"><span class="problematic" id="id18">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
 </dd>
 <dt>is_training: Boolean, default True</dt><dd><p>Identify whether these masks should be used in the training or test dataset.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.multiclass_classification">
-<code class="sig-name descname"><span class="pre">multiclass_classification</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'f1_weighted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coarse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.multiclass_classification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.multiclass_classification" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.multiclass_classification">
+<span class="sig-name descname"><span class="pre">multiclass_classification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'f1_weighted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coarse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.multiclass_classification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.multiclass_classification" title="Link to this definition">¶</a></dt>
 <dd><p>Tell WORC do to a multiclass classification experiment.</p>
+<section id="id19">
+<h3>Parameters<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
 <dl>
 <dt>estimators: list</dt><dd><p>List of strings with names of valid estimators. See the
 <a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
@@ -467,17 +579,20 @@ config will be used.</p>
 <dt>coarse: boolean, default True</dt><dd><p>Determine whether to do a coarse or full experiment.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.predict_labels">
-<code class="sig-name descname"><span class="pre">predict_labels</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.predict_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.predict_labels" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.predict_labels">
+<span class="sig-name descname"><span class="pre">predict_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.predict_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.predict_labels" title="Link to this definition">¶</a></dt>
 <dd><p>Determine which label(s) to predict in your experiments.</p>
 <p>The labels(s) you want to predict should be given in strings and
 should be included in the header of your labels_from_this_file csv.
 Note that you therefore first need to use that function to determine
 which label file to use, and afterwards use this function
 to select one of the headers / columns containing the actual label.</p>
+<section id="id20">
+<h3>Parameters<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>label_names: list</dt><dd><p>List of strings containing the label name(s) to predict. For each
 label, a separate (classification) model will be created, or,
@@ -485,12 +600,15 @@ if a multilabel experiment is run, a singel multiclass / multilabel
 classification model</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.regression">
-<code class="sig-name descname"><span class="pre">regression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'r2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coarse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.regression" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.regression">
+<span class="sig-name descname"><span class="pre">regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'r2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coarse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.regression" title="Link to this definition">¶</a></dt>
 <dd><p>Tell WORC do to a regression experiment.</p>
+<section id="id21">
+<h3>Parameters<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
 <dl>
 <dt>estimators: list</dt><dd><p>List of strings with names of valid estimators. See the
 <a class="reference internal" href="../static/configuration.html#config-chapter"><span class="std std-ref">WORC Config chapter</span></a> for allowed options.</p>
@@ -503,12 +621,15 @@ config will be used.</p>
 <dt>coarse: boolean, default True</dt><dd><p>Determine whether to do a coarse or full experiment.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.run_inference">
-<code class="sig-name descname"><span class="pre">run_inference</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.run_inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.run_inference" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.run_inference">
+<span class="sig-name descname"><span class="pre">run_inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trained_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.run_inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.run_inference" title="Link to this definition">¶</a></dt>
 <dd><p>Run inference on a dataset using a previously trained WORC model.</p>
+<section id="id22">
+<h3>Parameters<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
 <dl>
 <dt>trained_model: basestring</dt><dd><blockquote>
 <div><p>Location of the HDF5 file of the trained model from WORC, commonly named “estimator_all_0.hdf5”.</p>
@@ -520,11 +641,12 @@ Note: these are the config files for the feature extraction, not the model train
 </dl>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.segmentations_from_this_directory">
-<code class="sig-name descname"><span class="pre">segmentations_from_this_directory</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmentation_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'segmentation.nii.gz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.segmentations_from_this_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.segmentations_from_this_directory" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.segmentations_from_this_directory">
+<span class="sig-name descname"><span class="pre">segmentations_from_this_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segmentation_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'segmentation.nii.gz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">glob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.segmentations_from_this_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.segmentations_from_this_directory" title="Link to this definition">¶</a></dt>
 <dd><p>Use segmentations from a directory as sources in WORC.</p>
 <p>Segmentations define the region of interest from which the features
 are extracted.</p>
@@ -539,7 +661,7 @@ segmentations_from_this_directory will include all segmentation.nii.gz files fro
 </dd>
 <dt>segmentation_file_name: string, default segmentation.nii.gz</dt><dd><p>Name of the files which will be included. Can include wildcards (*).</p>
 </dd>
-<dt>glob: string, default <a href="#id11"><span class="problematic" id="id12">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
+<dt>glob: string, default <a href="#id23"><span class="problematic" id="id24">*</span></a>/</dt><dd><p>Identify the search string to be used in the glob. Can include wildcards (*).</p>
 </dd>
 <dt>is_training: Boolean, default True</dt><dd><p>Identify whether these segmentations should be used in the training or test dataset.</p>
 </dd>
@@ -548,44 +670,53 @@ segmentations_from_this_directory will include all segmentation.nii.gz files fro
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.semantics_from_this_file">
-<code class="sig-name descname"><span class="pre">semantics_from_this_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.semantics_from_this_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.semantics_from_this_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.semantics_from_this_file">
+<span class="sig-name descname"><span class="pre">semantics_from_this_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_training</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.semantics_from_this_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.semantics_from_this_file" title="Link to this definition">¶</a></dt>
 <dd><p>Define which file should be used by WORC to extract the semantic features.</p>
 <p>The values in these file can be used as semantic, i.e. non-computational,
 features in WORC. Should be a .csv file: see
 <span class="xref std std-ref">the WORC user manual</span> for more details on
 the formatting of this file.</p>
+<section id="id25">
+<h3>Parameters<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>file_path: basestring</dt><dd><p>Location of the file to be used as semantics file. Can be a .csv or .txt file.</p>
 </dd>
 <dt>is_training: Boolean, default True</dt><dd><p>Identify whether this semantics  file should be used in the training or test dataset.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.set_fixed_splits">
-<code class="sig-name descname"><span class="pre">set_fixed_splits</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fixed_splits_csv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_fixed_splits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_fixed_splits" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.set_fixed_splits">
+<span class="sig-name descname"><span class="pre">set_fixed_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fixed_splits_csv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_fixed_splits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_fixed_splits" title="Link to this definition">¶</a></dt>
 <dd><p>Provide CSV with fixed splits for cross-validation.</p>
+<section id="id26">
+<h3>Parameters<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>fixed_splits_csv: string</dt><dd><p>Path of CSV file</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.set_image_types">
-<code class="sig-name descname"><span class="pre">set_image_types</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_types</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_image_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_image_types" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.set_image_types">
+<span class="sig-name descname"><span class="pre">set_image_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_types</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_image_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_image_types" title="Link to this definition">¶</a></dt>
 <dd><p>Set the type of images to be processed.</p>
+<section id="id27">
+<h3>Parameters<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>image_types: list of strings</dt><dd><p>Names of types of images that are provided to WORC.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.set_multicore_execution">
-<code class="sig-name descname"><span class="pre">set_multicore_execution</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_multicore_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_multicore_execution" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.set_multicore_execution">
+<span class="sig-name descname"><span class="pre">set_multicore_execution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_multicore_execution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_multicore_execution" title="Link to this definition">¶</a></dt>
 <dd><p>“Execute experiment in multicore mode.</p>
 <p>By default, SimpleWORC executes experiments in LinearExecution mode, meaning that
 only a single core will be used and jobs are executed in series. When multicore mode
@@ -597,8 +728,8 @@ the changes applied by the detectors.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.set_registration_parameterfile">
-<code class="sig-name descname"><span class="pre">set_registration_parameterfile</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_registration_parameterfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_registration_parameterfile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.set_registration_parameterfile">
+<span class="sig-name descname"><span class="pre">set_registration_parameterfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_registration_parameterfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_registration_parameterfile" title="Link to this definition">¶</a></dt>
 <dd><p>Define which elastix parameter file(s) should be used by WORC to perform the registration.</p>
 <p>More information can be found in the elastix documentation on the format and settings:
 <a class="reference external" href="https://github.com/SuperElastix/elastix/wiki">https://github.com/SuperElastix/elastix/wiki</a>. Examples of parameter files can be found in
@@ -606,89 +737,221 @@ the elastix model zoo github repo:
 <a class="reference external" href="https://github.com/SuperElastix/ElastixModelZoo/tree/master/models/default">https://github.com/SuperElastix/ElastixModelZoo/tree/master/models/default</a>.</p>
 <p>If you want to use multiple parameter files sequentially in the registration,
 simply use this function multiple times.</p>
+<section id="id28">
+<h3>Parameters<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
 <dl class="simple">
 <dt>file_path: basestring</dt><dd><p>Location of the file to be used, should be a .txt file.</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.set_tmpdir">
-<code class="sig-name descname"><span class="pre">set_tmpdir</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_tmpdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_tmpdir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.set_tmpdir">
+<span class="sig-name descname"><span class="pre">set_tmpdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmpdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.set_tmpdir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.set_tmpdir" title="Link to this definition">¶</a></dt>
 <dd><p>Set a directory for storing temporary files from the experiment.</p>
 <p>If not specified, the default fastr tmpdir is used, see <code class="docutils literal notranslate"><span class="pre">fastr.config.mounts['tmp']</span></code> .</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="WORC.facade.simpleworc.SimpleWORC.survival">
-<code class="sig-name descname"><span class="pre">survival</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coarse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.survival"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.survival" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="WORC.facade.simpleworc.SimpleWORC.survival">
+<span class="sig-name descname"><span class="pre">survival</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimators</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coarse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/facade/simpleworc.html#SimpleWORC.survival"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.facade.simpleworc.SimpleWORC.survival" title="Link to this definition">¶</a></dt>
 <dd><p>Tell WORC do to a regression experiment. Not implemented yet.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="WORC.facade.helpers.html">helpers Package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="WORC.facade.helpers.html#module-WORC.facade.helpers.configbuilder"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configbuilder</span></code> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.facade.helpers.html#module-WORC.facade.helpers.exceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exceptions</span></code> Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.facade.helpers.html#module-WORC.facade.helpers.processing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">processing</span></code> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.facade.helpers.html#module-WORC.facade.helpers.configbuilder"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configbuilder</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.__dict__"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder.__dict__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.__init__"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.__module__"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.__weakref__"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder.__weakref__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.build_config"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder.build_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.coarse_overrides"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder.coarse_overrides()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.custom_config_overrides"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder.custom_config_overrides()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.estimator_scoring_overrides"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder.estimator_scoring_overrides()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.configbuilder.ConfigBuilder.fullprint"><code class="docutils literal notranslate"><span class="pre">ConfigBuilder.fullprint()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.facade.helpers.html#module-WORC.facade.helpers.exceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">exceptions</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.InvalidCsvFileException"><code class="docutils literal notranslate"><span class="pre">InvalidCsvFileException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.InvalidCsvFileException.__init__"><code class="docutils literal notranslate"><span class="pre">InvalidCsvFileException.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.InvalidCsvFileException.__module__"><code class="docutils literal notranslate"><span class="pre">InvalidCsvFileException.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.InvalidCsvFileException.__weakref__"><code class="docutils literal notranslate"><span class="pre">InvalidCsvFileException.__weakref__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.InvalidOrderException"><code class="docutils literal notranslate"><span class="pre">InvalidOrderException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.InvalidOrderException.__init__"><code class="docutils literal notranslate"><span class="pre">InvalidOrderException.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.InvalidOrderException.__module__"><code class="docutils literal notranslate"><span class="pre">InvalidOrderException.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.InvalidOrderException.__weakref__"><code class="docutils literal notranslate"><span class="pre">InvalidOrderException.__weakref__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoFeaturesFoundException"><code class="docutils literal notranslate"><span class="pre">NoFeaturesFoundException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoFeaturesFoundException.__init__"><code class="docutils literal notranslate"><span class="pre">NoFeaturesFoundException.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoFeaturesFoundException.__module__"><code class="docutils literal notranslate"><span class="pre">NoFeaturesFoundException.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoFeaturesFoundException.__weakref__"><code class="docutils literal notranslate"><span class="pre">NoFeaturesFoundException.__weakref__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoImagesFoundException"><code class="docutils literal notranslate"><span class="pre">NoImagesFoundException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoImagesFoundException.__init__"><code class="docutils literal notranslate"><span class="pre">NoImagesFoundException.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoImagesFoundException.__module__"><code class="docutils literal notranslate"><span class="pre">NoImagesFoundException.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoImagesFoundException.__weakref__"><code class="docutils literal notranslate"><span class="pre">NoImagesFoundException.__weakref__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoMasksFoundException"><code class="docutils literal notranslate"><span class="pre">NoMasksFoundException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoMasksFoundException.__init__"><code class="docutils literal notranslate"><span class="pre">NoMasksFoundException.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoMasksFoundException.__module__"><code class="docutils literal notranslate"><span class="pre">NoMasksFoundException.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoMasksFoundException.__weakref__"><code class="docutils literal notranslate"><span class="pre">NoMasksFoundException.__weakref__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoSegmentationsFoundException"><code class="docutils literal notranslate"><span class="pre">NoSegmentationsFoundException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoSegmentationsFoundException.__init__"><code class="docutils literal notranslate"><span class="pre">NoSegmentationsFoundException.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoSegmentationsFoundException.__module__"><code class="docutils literal notranslate"><span class="pre">NoSegmentationsFoundException.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.NoSegmentationsFoundException.__weakref__"><code class="docutils literal notranslate"><span class="pre">NoSegmentationsFoundException.__weakref__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.PathNotFoundException"><code class="docutils literal notranslate"><span class="pre">PathNotFoundException</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.PathNotFoundException.__init__"><code class="docutils literal notranslate"><span class="pre">PathNotFoundException.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.PathNotFoundException.__module__"><code class="docutils literal notranslate"><span class="pre">PathNotFoundException.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.exceptions.PathNotFoundException.__weakref__"><code class="docutils literal notranslate"><span class="pre">PathNotFoundException.__weakref__</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="WORC.facade.helpers.html#module-WORC.facade.helpers.processing"><code class="xref py py-mod docutils literal notranslate"><span class="pre">processing</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html#WORC.facade.helpers.processing.convert_radiomix_features"><code class="docutils literal notranslate"><span class="pre">convert_radiomix_features()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
-</div>
+</section>
+</section>
 
-
-           </div>
-           
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="WORC.facade.helpers.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">helpers Package</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="WORC.export.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">export Package</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016 -- 2025, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="WORC.facade.helpers.html" class="btn btn-neutral float-right" title="helpers Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="WORC.export.html" class="btn btn-neutral float-left" title="export Package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
     </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">facade Package</a><ul>
+<li><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">facade</span></code> Package</a></li>
+<li><a class="reference internal" href="#module-WORC.facade.basicworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">basicworc</span></code> Module</a><ul>
+<li><a class="reference internal" href="#WORC.facade.basicworc.BasicWORC"><code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code></a><ul>
+<li><a class="reference internal" href="#WORC.facade.basicworc.BasicWORC.__init__"><code class="docutils literal notranslate"><span class="pre">BasicWORC.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.basicworc.BasicWORC.__module__"><code class="docutils literal notranslate"><span class="pre">BasicWORC.__module__</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.basicworc.BasicWORC.execute"><code class="docutils literal notranslate"><span class="pre">BasicWORC.execute()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-WORC.facade.simpleworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simpleworc</span></code> Module</a><ul>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC"><code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code></a><ul>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.__annotations__"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.__annotations__</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.__dict__"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.__dict__</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.__init__"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.__module__"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.__module__</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.__weakref__"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.__weakref__</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.add_config_overrides"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.add_config_overrides()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.add_evaluation"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.add_evaluation()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.binary_classification"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.binary_classification()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.count_num_subjects"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.count_num_subjects()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.execute"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.execute()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.features_from_radiomix_xlsx"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.features_from_radiomix_xlsx()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.features_from_this_directory"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.features_from_this_directory()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.images_from_this_directory"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.images_from_this_directory()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.labels_from_this_file"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.labels_from_this_file()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.masks_from_this_directory"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.masks_from_this_directory()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.multiclass_classification"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.multiclass_classification()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.predict_labels"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.predict_labels()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.regression"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.regression()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.run_inference"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.run_inference()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.segmentations_from_this_directory"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.segmentations_from_this_directory()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.semantics_from_this_file"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.semantics_from_this_file()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.set_fixed_splits"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.set_fixed_splits()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.set_image_types"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.set_image_types()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.set_multicore_execution"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.set_multicore_execution()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.set_registration_parameterfile"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.set_registration_parameterfile()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.set_tmpdir"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.set_tmpdir()</span></code></a></li>
+<li><a class="reference internal" href="#WORC.facade.simpleworc.SimpleWORC.survival"><code class="docutils literal notranslate"><span class="pre">SimpleWORC.survival()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+</ul>
+</li>
+</ul>
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
-
-    </p>
-  </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
+          </div>
         </div>
       </div>
-
-    </section>
-
+      
+      
+    </aside>
   </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
+</div><script src="../_static/documentation_options.js?v=229cbe3b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
 </html>

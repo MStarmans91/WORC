@@ -19,10 +19,10 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
-import tikzplotlib
+import matplot2tikz
 import pandas as pd
 import argparse
-from WORC.plotting.compute_CI import compute_confidence as CI
+from WORC.statistics.compute_CI import compute_confidence as CI
 import numpy as np
 from sklearn.metrics import roc_auc_score, auc
 from sklearn.metrics import precision_recall_curve
@@ -656,7 +656,7 @@ def plot_ROC(prediction, pinfo, ensemble_method='top_N',
         print(("ROC saved as {} !").format(ROC_png))
 
     if ROC_tex is not None:
-        tikzplotlib.save(ROC_tex)
+        matplot2tikz.save(ROC_tex)
         print(("ROC saved as {} !").format(ROC_tex))
 
     if ROC_csv is not None:
@@ -681,7 +681,7 @@ def plot_ROC(prediction, pinfo, ensemble_method='top_N',
         print(("PRC saved as {} !").format(PRC_png))
 
     if PRC_tex is not None:
-        tikzplotlib.save(PRC_tex)
+        matplot2tikz.save(PRC_tex)
         print(("PRC saved as {} !").format(PRC_tex))
 
     if PRC_csv is not None:

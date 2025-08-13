@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ import glob
 import random
 import json
 import copy
+import warnings
 from sklearn.metrics import f1_score, roc_auc_score
 from sklearn.model_selection import train_test_split, LeaveOneOut
 from joblib import Parallel, delayed
@@ -32,6 +33,15 @@ import WORC.addexceptions as ae
 from WORC.classification.parameter_optimization import random_search_parameters, guided_search_parameters
 from WORC.classification.regressors import regressors
 from WORC.classification.SearchCV import RandomizedSearchCVfastr
+
+# Ignore pytables performance warning, as we are on purpose saving objects as such
+from tables import PerformanceWarning, NaturalNameWarning
+import pandas as pd
+warnings.filterwarnings("ignore", category=PerformanceWarning)
+warnings.filterwarnings("ignore", category=PerformanceWarning, module="pandas.io.pytables")
+warnings.filterwarnings("ignore", category=pd.io.pytables.PerformanceWarning)
+warnings.filterwarnings("ignore", category=NaturalNameWarning)
+
 
 
 def random_split_cross_validation(image_features, feature_labels, classes,
@@ -530,10 +540,21 @@ def crossval(config, label_data, image_features,
     else:
         tempfolder = None
 
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
+    # Setup the logging to work independent of the fastr logging
+    logger = logging.getLogger(__name__)  # or 'my_module.subpart' if you want
+    logger.setLevel(logging.DEBUG)
 
-    logging.basicConfig(filename=logfilename, level=logging.DEBUG)
+    # Add handler only if not already added (to avoid duplicate logs)
+    if not logger.handlers:
+        fh = logging.FileHandler(logfilename)
+        fh.setLevel(logging.DEBUG)
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+
+    logger.debug('Starting fitting of estimators.')
+    
+    # Extract some parameters
     crossval_type = config['CrossValidation']['Type']
     n_iterations = config['CrossValidation']['N_iterations']
     test_size = config['CrossValidation']['test_size']
@@ -865,7 +886,8 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             # Get the mean performances and get new ranking
             F1_validation = estimator.cv_results_['mean_test_score']
             F1_validation = [F1_validation[i] for i in selected_workflows]
-            workflow_ranking = np.argsort(np.asarray(F1_validation)).tolist()[::-1]  # Normally, rank from smallest to largest, so reverse
+            # workflow_ranking = np.argsort(np.asarray(F1_validation)).tolist()[::-1]  # Outdated
+            workflow_ranking = np.argsort(np.where(np.isnan(F1_validation), -np.inf, F1_validation)).tolist()[::-1]  # Normally, rank from smallest to largest, so reverse
             workflow_ranking = workflow_ranking[0:maxlen]  # only maxlen estimators needed for ensembling tests
             F1_validation = [F1_validation[i] for i in workflow_ranking]
 
@@ -917,8 +939,8 @@ def test_RS_Ensemble(estimator_input, X_train, Y_train, X_test, Y_test,
             F1_training = [F1_training[i] for i in selected_workflows]
             F1_training = [F1_training[i] for i in workflow_ranking]
 
-            performances[f'Mean training F1-score {key} top {maxlen}'] = F1_validation
-            performances[f'Mean validation F1-score {key} top {maxlen}'] = F1_training
+            performances[f'Mean training F1-score {key} top {maxlen}'] = F1_training
+            performances[f'Mean validation F1-score {key} top {maxlen}'] = F1_validation
 
             for ensemble in ensembles:
                 if isinstance(ensemble, int):

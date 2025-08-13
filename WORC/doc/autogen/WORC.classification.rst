@@ -118,3 +118,12 @@ classification Package
     :show-inheritance:
     :special-members:
 
+:mod:`utils` Module
+-------------------
+
+.. automodule:: WORC.classification.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :special-members:
+

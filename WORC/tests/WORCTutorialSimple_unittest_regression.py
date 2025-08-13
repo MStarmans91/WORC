@@ -54,7 +54,7 @@ def main():
     #
     # You can skip this part if you use your own data.
     # In the example, We will use open source data from the online XNAT platform
-    # at https://xnat.bmia.nl/data/archive/projects/stwstrategyhn1. This dataset
+    # at https://xnat.health-ri.nl/data/archive/projects/stwstrategyhn1. This dataset
     # consists of CT scans of patients with Head and Neck tumors. We will download
     # a subset of 20 patients in this folder. You can change this settings if you
     # like
@@ -67,8 +67,10 @@ def main():
         data_path = '/home/martijn/git/WORCTutorial/Data'
     elif 'Martijn Starmans' in script_path:
         data_path = r'C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\Data'
+    elif '795023' in script_path:
+        data_path = r'C:\Users\795023\Documents\GitHub\WORCTutorial\Data'
     else:
-        raise ValueError("System not recognized")
+        raise ValueError(f"System not recognized, script path {script_path}")
     # download_HeadAndNeck(datafolder=data_path, nsubjects=nsubjects)
 
     # Identify our data structure: change the fields below accordingly
@@ -124,6 +126,7 @@ def main():
     experiment = BasicWORC(experiment_name)
 
     # Set the input data according to the variables we defined earlier
+    print(f"Setting {imagedatadir} as image data dir")
     experiment.images_from_this_directory(imagedatadir,
                                           image_file_name=image_file_name)
     experiment.segmentations_from_this_directory(imagedatadir,
@@ -137,9 +140,11 @@ def main():
                                            'Features',
                                            'features_*.hdf5'))
     features_train = {os.path.splitext(os.path.basename(f))[0].split('CT_0_')[1]: f for f in feature_files}
+    print(f"Setting {features_train} as feature files from {classification_experiment_folder}")
     experiment.features_train.append(features_train)
 
     # Labels
+    print(f"Setting {label_file} as label file")
     experiment.labels_from_this_file(label_file)
     experiment.predict_labels(label_name)
 

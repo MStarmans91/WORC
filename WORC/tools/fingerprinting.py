@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -156,7 +156,7 @@ class Fingerprinter(object):
                 num_masked_slices_all = list()
                 for segmentationfile in self.segmentations:
                     segmentation = sitk.GetArrayFromImage(sitk.ReadImage(segmentationfile))
-                    segmentation = segmentation.astype(np.bool)
+                    segmentation = segmentation.astype(bool)
                     num_masked_slices = len(np.flatnonzero(np.any(segmentation, axis=(1, 2))))
                     num_masked_slices_all.append(num_masked_slices)
 

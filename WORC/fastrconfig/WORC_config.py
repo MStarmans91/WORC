@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2019 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2025 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,35 +17,22 @@
 
 import os
 import fastr
-import pkg_resources
-import site
-import sys
+import importlib.util
 
-# Get directory in which packages are installed
-working_set = pkg_resources.working_set
-requirement_spec = pkg_resources.Requirement.parse('WORC')
-egg_info = working_set.find(requirement_spec)
-if egg_info is None:  # Backwards compatibility with WORC2
-    try:
-        packagedir = site.getsitepackages()[0]
-    except AttributeError:
-        # Inside virtualenvironment, so getsitepackages doesnt work.
-        paths = sys.path
-        for p in paths:
-            if os.path.isdir(p) and os.path.basename(p) == 'site-packages':
-                packagedir = p
-else:
-    packagedir = egg_info.location
+# Find the WORC installation path
+# packagedir = r"C:\Users\795023\Documents\GitHub\WORC"
+spec = importlib.util.find_spec("WORC")
+worc_path = os.path.dirname(spec.origin)
 
 # Add the WORC FASTR tools and type paths
-tools_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_tools')] + tools_path
-types_path = [os.path.join(packagedir, 'WORC', 'resources', 'fastr_types')] + types_path
+tools_path = [os.path.join(worc_path, 'resources', 'fastr_tools')] + tools_path
+types_path = [os.path.join(worc_path, 'resources', 'fastr_types')] + types_path
 
 # Mounts accessible to fastr virtual file system
-mounts['worc_example_data'] = os.path.join(packagedir, 'WORC', 'exampledata')
+mounts['worc_example_data'] = os.path.join(worc_path, 'exampledata')
 mounts['apps'] = os.path.expanduser(os.path.join('~', 'apps'))
 mounts['output'] = os.path.expanduser(os.path.join('~', 'WORC', 'output'))
-mounts['test'] = os.path.join(packagedir, 'WORC', 'resources', 'fastr_tests')
+mounts['test'] = os.path.join(worc_path, 'resources', 'fastr_tests')
 
 # The ITKFile type requires a preferred type when no specification is given.
 # We will set it to Nifti, but you may change this.

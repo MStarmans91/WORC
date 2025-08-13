@@ -1,0 +1,6 @@
+readthedocs-sphinx-search
+sphinx
+sphinx-argparse
+sphinxcontrib-httpdomain
+sphinx-autodoc-typehints
+sphinx_rtd_theme

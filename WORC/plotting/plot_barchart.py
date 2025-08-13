@@ -19,7 +19,7 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
-import tikzplotlib
+import matplot2tikz
 import numpy as np
 import pandas as pd
 from collections import Counter
@@ -100,7 +100,7 @@ def plot_barchart(prediction, estimators=10, label_type=None, output_tex=None,
     # Save the output
     if output_tex is not None:
         print(f'Saving barchart to {output_tex}.')
-        tikzplotlib.save(output_tex)
+        matplot2tikz.save(output_tex)
 
     if output_png is not None:
         print(f'Saving barchart to {output_png}.')

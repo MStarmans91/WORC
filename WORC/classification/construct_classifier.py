@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,11 +29,17 @@ import scipy
 from WORC.classification.AdvancedSampler import log_uniform, discrete_uniform
 import WORC.addexceptions as ae
 from xgboost import XGBClassifier, XGBRegressor
+from WORC.validators.preflightcheck import run_once
+
+@run_once
+def infoprinter(message):
+    print(message)
 
 try:
     from lightgbm import LGBMClassifier
 except:
-    print("[INFO] LightGCM classifier currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.")
+    message = "[INFO] LightGBM classifier currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html."
+    infoprinter(message)
 
 
 
@@ -280,8 +286,8 @@ def create_param_grid(config):
     param_grid['SVMKernel'] = config['SVMKernel']
     param_grid['SVMC'] = log_uniform(loc=config['SVMC'][0],
                                      scale=config['SVMC'][1])
-    param_grid['SVMdegree'] = scipy.stats.uniform(loc=config['SVMdegree'][0],
-                                                  scale=config['SVMdegree'][1])
+    param_grid['SVMdegree'] = discrete_uniform(loc=config['SVMdegree'][0],
+                                                scale=config['SVMdegree'][1])
     param_grid['SVMcoef0'] = scipy.stats.uniform(loc=config['SVMcoef0'][0],
                                                  scale=config['SVMcoef0'][1])
     param_grid['SVMgamma'] = log_uniform(loc=config['SVMgamma'][0],

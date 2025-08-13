@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,7 +62,7 @@ def load_labels(label_file, label_type=None):
     for i_label in label_type:
         label_index = np.where(label_names == i_label)[0]
         if label_index.size == 0:
-            raise ae.WORCValueError('Could not find label: ' + str(i_label))
+            raise ae.WORCValueError(f'Could not find label: {i_label}: only label names present are {label_names}.')
         else:
             labels.append(label_status[:, label_index])
 
@@ -104,7 +104,7 @@ def load_label_txt(input_file):
 
     # label status is stored in all remaining columns
     label_status = data[1:, 1:]
-    label_status = label_status.astype(np.float)
+    label_status = label_status.astype(float)
 
     return label_names, patient_ID, label_status
 
@@ -138,7 +138,7 @@ def load_label_csv(input_file):
 
     # label status is stored in all remaining columns
     label_status = data.values[:, 1:]
-    label_status = label_status.astype(np.float)
+    label_status = label_status.astype(float)
 
     return label_names, patient_ID, label_status
 

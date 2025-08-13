@@ -1,7 +1,5 @@
+# WORC: Workflow for Optimal Radiomics Classification (v3.7.0)
 <a href="https://bigr.nl/"><img src="https://bigr.nl/img/bigr.jpg" alt="Your Image Alt Text" width="200"/></a>
-
-# WORC v3.6.3
-## Workflow for Optimal Radiomics Classification
 
 ## Information
 
@@ -23,19 +21,63 @@
 
 # Introduction
 
-WORC is an open-source python package for the easy execution and fully automatic construction and optimization of radiomics workflows. For more details, we refer to the WORC paper: https://doi.org/10.48550/arXiv.2108.08618.
+**WORC** (Workflow for Optimal Radiomics Classification) is an open-source Python package that provides an end-to-end pipeline for fully automatic optimization of radiomics models, facilitating easy and systematic data probing for radiomics signatures by automatically comparing and combining thousand radiomics methods.
+
+## 🔍 Key Features
+
+- ✅ **End-to-End Pipeline**: Everythong from imaging data and segmentations to performance evaluation.
+- 🧪 **Modular Design**: Easily integrate custom classifiers, feature selectors, or workflows.
+- 🏥 **Domain Focused**: Designed and tested on 30+ multicenter medical datasets.
+- 📁 **Multi-modal Input**: Supports multiple image modalities, regions, custom features, and clinical data.
+- 📊 **Explainability Tools**: Built-in feature ranking and visualization utilities.
+- 🔁 **Robust Optimization**: Nested cross-validation and sample size0based confidence interval estimation.
+- 🧬 **Radiomics-Ready**: Includes PyRadiomics-based feature extraction and harmonization.
+
+---
 
 <img src="images/WORC.jpg" alt="Overview"/>
 
-We aim to establish a general radiomics platform supporting easy integration of other tools. With our modular build
-and support of different software languages (python, MATLAB, ruby, java etc.), we want to facilitate and stimulate
-collaboration, standardisation and comparison of different radiomics approaches. By combining this in a single framework,
-we hope to find a universal radiomics strategy that can address various problems.
+## 📦 Installation
 
-## License
+WORC is tested on Python 3.11.5 on Ubuntu, Windows, and Mac. For detailed installation
+instructions, please check  [the ReadTheDocs installation guidelines](https://worc.readthedocs.io/en/latest/static/quick_start.html#installation).
+
+The package can be installed through pip:
+
+    pip install WORC
+
+Or directly from the repository for development:
+
+    git clone https://github.com/MStarmans91/WORC.git
+    cd WORC
+    pip install .
+
+## 📚 Tutorial, documentation and dataset
+The WORC tutorial is hosted at https://github.com/MStarmans91/WORCTutorial. For your first use, we recommend to start with the SimpleWORC tutorial.
+
+The official documentation can be found at [https://worc.readthedocs.io](https://worc.readthedocs.io).
+
+The publicly released WORC database is described in the following paper:
+
+```bibtex
+@article {Starmans2021WORCDatabase,
+	author = {Starmans, Martijn P.A. and Timbergen, Milea J.M. and Vos, Melissa and Padmos, Guillaume A. and Gr{\"u}nhagen, Dirk J. and Verhoef, Cornelis and Sleijfer, Stefan and van Leenders, Geert J.L.H. and Buisman, Florian E. and Willemssen, Francois E.J.A. and Koerkamp, Bas Groot and Angus, Lindsay and van der Veldt, Astrid A.M. and Rajicic, Ana and Odink, Arlette E. and Renckens, Michel and Doukas, Michail and de Man, Rob A. and IJzermans, Jan N.M. and Miclea, Razvan L. and Vermeulen, Peter B. and Thomeer, Maarten G. and Visser, Jacob J. and Niessen, Wiro J. and Klein, Stefan},
+	title = {The WORC database: MRI and CT scans, segmentations, and clinical labels for 930 patients from six radiomics studies},
+	elocation-id = {2021.08.19.21262238},
+	year = {2021},
+	doi = {10.1101/2021.08.19.21262238},
+	URL = {https://www.medrxiv.org/content/early/2021/08/25/2021.08.19.21262238},
+	eprint = {https://www.medrxiv.org/content/early/2021/08/25/2021.08.19.21262238.full.pdf},
+	journal = {medRxiv}
+}
+```
+
+The code to download the WORC database and reproduce our experiments can be found at https://github.com/MStarmans91/WORCDatabase.
+
+## 📄 License
 This package is covered by the open source [APACHE 2.0 License](APACHE-LICENSE-2.0).
 
-When using WORC, please cite **both** this repository and the paper describing WORC as follows:
+When using WORC, please cite this repository and the paper describing WORC as follows:
 
 ```bibtex
 @article{starmans2021reproducible,
@@ -59,79 +101,8 @@ When using WORC, please cite **both** this repository and the paper describing W
 
 For the DOI, visit [![][DOI]][DOI-lnk].
 
-## Disclaimer
-This package is still under development. We try to thoroughly test and evaluate every new build and function, but
-bugs can off course still occur. Please contact us through the channels below if you find any and we will try to fix
-them as soon as possible, or create an issue on this Github.
-
-## Tutorial, documentation and dataset
-The WORC tutorial is hosted at https://github.com/MStarmans91/WORCTutorial.
-
-The official documentation can be found at [https://worc.readthedocs.io](https://worc.readthedocs.io).
-
-I've developed WORC during my PhD, you can find the thesis revolving around it here: http://hdl.handle.net/1765/137089.
-
-The publicly released WORC database is described in the following paper:
-
-```bibtex
-@article {Starmans2021WORCDatabase,
-	author = {Starmans, Martijn P.A. and Timbergen, Milea J.M. and Vos, Melissa and Padmos, Guillaume A. and Gr{\"u}nhagen, Dirk J. and Verhoef, Cornelis and Sleijfer, Stefan and van Leenders, Geert J.L.H. and Buisman, Florian E. and Willemssen, Francois E.J.A. and Koerkamp, Bas Groot and Angus, Lindsay and van der Veldt, Astrid A.M. and Rajicic, Ana and Odink, Arlette E. and Renckens, Michel and Doukas, Michail and de Man, Rob A. and IJzermans, Jan N.M. and Miclea, Razvan L. and Vermeulen, Peter B. and Thomeer, Maarten G. and Visser, Jacob J. and Niessen, Wiro J. and Klein, Stefan},
-	title = {The WORC database: MRI and CT scans, segmentations, and clinical labels for 930 patients from six radiomics studies},
-	elocation-id = {2021.08.19.21262238},
-	year = {2021},
-	doi = {10.1101/2021.08.19.21262238},
-	URL = {https://www.medrxiv.org/content/early/2021/08/25/2021.08.19.21262238},
-	eprint = {https://www.medrxiv.org/content/early/2021/08/25/2021.08.19.21262238.full.pdf},
-	journal = {medRxiv}
-}
-```
-
-The code to download the WORC database and reproduce our experiments can be found at https://github.com/MStarmans91/WORCDatabase.
-
-If you run into any issues, feel free to [make an issue on this Github](https://github.com/MStarmans91/WORC/issues). We advise you to read the FAQ first though: https://worc.readthedocs.io/en/latest/static/faq.html.
-
-## Installation
-
-> **_NOTE:_** Yes, we by default run a very old version of Python and some old package versions (e.g., sklearn 0.23) due to hardware constraints. We have however already prepared a release which runs under Python 3.11 and more recent packages, which you could alternatively use: https://github.com/MStarmans91/WORC/tree/newpython. While not all features are fully tested, the default experimental setups work.
-
-WORC supports Unix and Windows systems with Python 3.6 and 3.7: the [unit tests](https://github.com/MStarmans91/WORC/actions?query=workflow%3A%22Unit+test%22)
-are performed on the latest Ubuntu and Windows versions with Python 3.7. For detailed installation
-instructions, please check  [the ReadTheDocs installation guidelines](https://worc.readthedocs.io/en/latest/static/quick_start.html#installation).
-
-The package can be installed through pip:
-
-      pip install WORC
-
-Alternatively, you can directly install WORC from this repository:
-
-      python setup.py install
-
-Make sure you install the requirements first:
-
-      pip install -r requirements.txt
-
-## 3rd-party packages used in WORC:
-
- - SimpleITK (Image loading and preprocessing)
- - [Pyradiomics](https://github.com/radiomics/pyradiomics)
- - [PREDICT](https://github.com/Svdvoort/PREDICTFastr)
- - scikit-learn
- - imbalanced-learn
- - xgboost
- - [fastr (Workflow design and building)](http://fastr.readthedocs.io)
- - [ComBat](https://github.com/Jfortin1/ComBatHarmonization) (optional)
-
-See for other python packages the [requirements file](requirements.txt).
-
-## Start
-We suggest you start with the [WORC Tutorial](https://github.com/MStarmans91/WORCTutorial).
-Besides a Jupyter notebook with instructions, we provide there also an example script for you to get started with.
-
 ## Contact
 We are happy to help you with any questions. Please sent us a mail or place an issue on the Github.
-
-We welcome contributions to WORC. For the moment, converting your toolbox into a FASTR tool is satisfactory:
-see also [the fastr tool development documentation](https://fastr.readthedocs.io/en/stable/static/user_manual.html#create-your-own-tool).
 
 ## Optional extra features
 Besides the default installation, there are several optional packages you could install to support WORC.

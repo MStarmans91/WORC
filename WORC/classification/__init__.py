@@ -6,3 +6,4 @@ import WORC.classification.metrics
 import WORC.classification.parameter_optimization
 import WORC.classification.crossval
 import WORC.classification.trainclassifier
+import WORC.classification.utils

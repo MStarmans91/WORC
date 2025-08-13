@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
-# Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
+# Copyright 2016-2025 Biomedical Imaging Group Rotterdam, Department of
+# Radiology and Nuclear Medicine, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -162,8 +162,9 @@ def Decomposition(features, patientinfo, config, output, label_type=None,
 
         # -------------------------------------------------------
         # Fit t-SNE
-        tSNE = TSNE(n_components=n_components)
-        class_all = class1 + class2
+        class_all = np.asarray(class1 + class2)
+        perplexity = min(30, int(class_all.shape[0]/2))
+        tSNE = TSNE(n_components=n_components, perplexity=perplexity)
         class_all_tsne = tSNE.fit_transform(class_all)
 
         class1_tSNE = class_all_tsne[0:len(class1)]

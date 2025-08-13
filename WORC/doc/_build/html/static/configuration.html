@@ -1,210 +1,290 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Radiomics Features" href="features.html" /><link rel="prev" title="User Manual" href="user_manual.html" />
+        <link rel="prefetch" href="../_static/WORC_Logo.svg" as="image" />
 
-
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>Configuration &mdash; WORC 3.6.3 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>Configuration - WORC 3.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/extra.css?v=a591123b" />
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
     
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
     
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Radiomics Features" href="features.html" />
-    <link rel="prev" title="User Manual" href="user_manual.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
-   
-  <div class="wy-grid-for-nav">
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
     
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
 
-          
-            <a href="../index.html" class="icon icon-home"> WORC
-          
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
 
-          
-            
-            <img src="../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
-          
-          </a>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
 
-          
-            
-            
-              <div class="version">
-                3.6.3
-              </div>
-            
-          
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
 
-          
-        </div>
 
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul class="current">
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">WORC 3.7.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/WORC_Logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">WORC 3.7.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_manual.html">User Manual</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creation-and-interaction">Creation and interaction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#contents">Contents</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#general">General</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#labels">Labels</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#fingerprinting">Fingerprinting</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#preprocessing">Preprocessing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#segmentix">Segmentix</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imagefeatures">ImageFeatures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pyradiomics">PyRadiomics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#combat">ComBat</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#featpreprocess">FeatPreProcess</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#onehotencoding">OneHotEncoding</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imputation">Imputation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#featurescaling">FeatureScaling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#featsel">Featsel</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#selectfeatgroup">SelectFeatGroup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#resampling">Resampling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#classification">Classification</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#crossvalidation">CrossValidation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hyperoptimization">HyperOptimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#smac">SMAC</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#ensemble">Ensemble</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#evaluation">Evaluation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#bootstrap">Bootstrap</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html#references">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../autogen/WORC.html">WORC Package</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../autogen/WORC.html">WORC Package</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of WORC Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.IOparser.html">IOparser Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.classification.html">classification Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.detectors.html">detectors Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.exampledata.html">exampledata Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.export.html">export Package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../autogen/WORC.facade.html">facade Package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of facade Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autogen/WORC.facade.helpers.html">helpers Package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.fastrconfig.html">fastrconfig Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.featureprocessing.html">featureprocessing Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.plotting.html">plotting Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.processing.html">processing Package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../autogen/WORC.resources.html">resources Package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of resources Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autogen/WORC.resources.fastr_tests.html">fastr_tests Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../autogen/WORC.resources.fastr_tools.html">fastr_tools Package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.statistics.html">statistics Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.tests.html">tests Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.tools.html">tools Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.validators.html">validators Package</a></li>
+</ul>
+</li>
 </ul>
 
-            
-          
-        </div>
-        
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">WORC</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Configuration</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="../_sources/static/configuration.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="configuration">
-<span id="config-chapter"></span><h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/static/configuration.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="configuration">
+<span id="config-chapter"></span><h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
 <p>WORC has defaults for all settings so it can be run out of the box to test the examples.
 However, you may want to alter the fastr configuration to your system settings, e.g.
 to locate your input and output folders and how much you want to parallelize the execution.</p>
@@ -221,9 +301,9 @@ advantages:</p>
 <li><p>Second, each tool can be set to parse only specific parts of the configuration,
 enabling us to supply one file to all tools instead of needing many parameter files.</p></li>
 </ol>
-</div>
-<div class="section" id="creation-and-interaction">
-<h2>Creation and interaction<a class="headerlink" href="#creation-and-interaction" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="creation-and-interaction">
+<h2>Creation and interaction<a class="headerlink" href="#creation-and-interaction" title="Link to this heading">¶</a></h2>
 <p>The default configuration is generated through the
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">WORC.defaultconfig()</span></code>
 function. You can then change things as you would in a dictionary and
@@ -256,16 +336,13 @@ likely to be used, e.g.</p>
 list can be created by using commas for separation, e.g.
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">Network.create_source</span></code>.</p>
 </div>
-</div>
-<div class="section" id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">¶</a></h2>
 <p>The config object can be indexed as <code class="docutils literal notranslate"><span class="pre">config[key][subkey]</span> <span class="pre">=</span> <span class="pre">value</span></code>. The various keys, subkeys, and the values
 (description, defaults and options) can be found below.</p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 75%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Key</p></th>
 <th class="head"><p>Reference</p></th>
@@ -340,9 +417,10 @@ list can be created by using commas for separation, e.g.
 </tr>
 </tbody>
 </table>
+</div>
 <p>Details on each section of the config can be found below.</p>
-<div class="section" id="general">
-<span id="config-general"></span><h3>General<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h3>
+<section id="general">
+<span id="config-general"></span><h3>General<a class="headerlink" href="#general" title="Link to this heading">¶</a></h3>
 <p>These fields contain general settings for when using WORC.
 For more info on the Joblib settings, which are used in the Joblib
 Parallel function, see <a class="reference external" href="https://pythonhosted.org/joblib/parallel.html">here</a>. When you run
@@ -355,11 +433,8 @@ backend.</p>
 the preprocessing, turn the fingerprinting off.</p>
 </div>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 86%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -407,13 +482,10 @@ the preprocessing, turn the fingerprinting off.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 15%" />
-<col style="width: 28%" />
-<col style="width: 56%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -476,18 +548,15 @@ the preprocessing, turn the fingerprinting off.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="labels">
-<span id="config-labels"></span><h3>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="labels">
+<span id="config-labels"></span><h3>Labels<a class="headerlink" href="#labels" title="Link to this heading">¶</a></h3>
 <p>Set the label used for classification.</p>
 <p>This part is quite important, as it should match your label file.
 Suppose your patientclass.txt file you supplied as source for labels
 looks like this:</p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 38%" />
-<col style="width: 31%" />
-<col style="width: 31%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Patient</p></th>
 <th class="head"><p>Label1</p></th>
@@ -509,6 +578,7 @@ looks like this:</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p>You can supply a single label or multiple labels split by commas, for
 each of which an estimator will be fit. For example, suppose you simply
 want to use Label1 for classification, then set:</p>
@@ -518,11 +588,8 @@ want to use Label1 for classification, then set:</p>
 <p>If you want to first train a classifier on Label1 and then Label2,
 set: <code class="docutils literal notranslate"><span class="pre">config[Labels][label_names]</span> <span class="pre">=</span> <span class="pre">Label1,</span> <span class="pre">Label2</span></code></p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 11%" />
-<col style="width: 89%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -543,13 +610,10 @@ set: <code class="docutils literal notranslate"><span class="pre">config[Labels]
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 23%" />
-<col style="width: 29%" />
-<col style="width: 48%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -576,17 +640,15 @@ set: <code class="docutils literal notranslate"><span class="pre">config[Labels]
 </tbody>
 </table>
 </div>
-<div class="section" id="fingerprinting">
-<span id="config-fingerprinting"></span><h3>Fingerprinting<a class="headerlink" href="#fingerprinting" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="fingerprinting">
+<span id="config-fingerprinting"></span><h3>Fingerprinting<a class="headerlink" href="#fingerprinting" title="Link to this heading">¶</a></h3>
 <p>The fingerprinting nodes are the first computational nodes to create
 a fingerprint of your dataset and accordingly adjust some configuration
 settings, see the  <a class="reference external" href="https://doi.org/10.48550/arXiv.2108.08618">WORC paper</a>.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 12%" />
-<col style="width: 88%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -598,13 +660,10 @@ settings, see the  <a class="reference external" href="https://doi.org/10.48550/
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 48%" />
-<col style="width: 26%" />
-<col style="width: 26%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -619,8 +678,9 @@ settings, see the  <a class="reference external" href="https://doi.org/10.48550/
 </tbody>
 </table>
 </div>
-<div class="section" id="preprocessing">
-<span id="config-preprocessing"></span><h3>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="preprocessing">
+<span id="config-preprocessing"></span><h3>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading">¶</a></h3>
 <p>The preprocessing node acts before the feature extraction on the image.
 Additionally, scans with imagetype CT (see later in the tutorial) provided
 as DICOM are scaled to Hounsfield Units. For more details on the preprocessing
@@ -633,11 +693,8 @@ these configuration settings yourself, please turn of the fingerprinting,
 see the <a class="reference internal" href="#config-general"><span class="std std-ref">General section of the config</span></a>.</p>
 </div>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -703,13 +760,10 @@ see the <a class="reference internal" href="#config-general"><span class="std st
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 45%" />
-<col style="width: 24%" />
-<col style="width: 31%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -796,16 +850,14 @@ see the <a class="reference internal" href="#config-general"><span class="std st
 </tbody>
 </table>
 </div>
-<div class="section" id="segmentix">
-<span id="config-segmentix"></span><h3>Segmentix<a class="headerlink" href="#segmentix" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="segmentix">
+<span id="config-segmentix"></span><h3>Segmentix<a class="headerlink" href="#segmentix" title="Link to this heading">¶</a></h3>
 <p>These fields are only important if you specified using the segmentix
 tool in the general configuration.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 12%" />
-<col style="width: 88%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -835,13 +887,10 @@ tool in the general configuration.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 39%" />
-<col style="width: 14%" />
-<col style="width: 47%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -880,18 +929,16 @@ tool in the general configuration.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="imagefeatures">
-<span id="config-imagefeatures"></span><h3>ImageFeatures<a class="headerlink" href="#imagefeatures" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="imagefeatures">
+<span id="config-imagefeatures"></span><h3>ImageFeatures<a class="headerlink" href="#imagefeatures" title="Link to this heading">¶</a></h3>
 <p>If using the PREDICT toolbox for feature extraction, you can specify some
 settings for the
 feature computation here. Also, you can select if the certain features
 are computed or not.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 7%" />
-<col style="width: 93%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -993,13 +1040,10 @@ are computed or not.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 22%" />
-<col style="width: 22%" />
-<col style="width: 57%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -1134,17 +1178,15 @@ are computed or not.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="pyradiomics">
-<span id="config-pyradiomics"></span><h3>PyRadiomics<a class="headerlink" href="#pyradiomics" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="pyradiomics">
+<span id="config-pyradiomics"></span><h3>PyRadiomics<a class="headerlink" href="#pyradiomics" title="Link to this heading">¶</a></h3>
 <p>If using the PyRadiomics toolbox, you can specify some settings for the
 feature computation here. For more information, see
 <a class="reference external" href="https://pyradiomics.readthedocs.io/en/latest/customization.htm">https://pyradiomics.readthedocs.io/en/latest/customization.htm</a>.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 7%" />
-<col style="width: 93%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -1219,13 +1261,10 @@ feature computation here. For more information, see
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 14%" />
-<col style="width: 7%" />
-<col style="width: 79%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -1324,17 +1363,15 @@ feature computation here. For more information, see
 </tbody>
 </table>
 </div>
-<div class="section" id="combat">
-<span id="config-combat"></span><h3>ComBat<a class="headerlink" href="#combat" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="combat">
+<span id="config-combat"></span><h3>ComBat<a class="headerlink" href="#combat" title="Link to this heading">¶</a></h3>
 <p>If using the ComBat toolbox, you can specify some settings for the
 feature harmonization here. For more information, see
 <a class="reference external" href="https://github.com/Jfortin1/ComBatHarmonization">https://github.com/Jfortin1/ComBatHarmonization</a>.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 9%" />
-<col style="width: 91%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -1367,13 +1404,10 @@ feature harmonization here. For more information, see
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 18%" />
-<col style="width: 48%" />
-<col style="width: 34%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -1416,16 +1450,14 @@ feature harmonization here. For more information, see
 </tbody>
 </table>
 </div>
-<div class="section" id="featpreprocess">
-<span id="config-featpreprocess"></span><h3>FeatPreProcess<a class="headerlink" href="#featpreprocess" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="featpreprocess">
+<span id="config-featpreprocess"></span><h3>FeatPreProcess<a class="headerlink" href="#featpreprocess" title="Link to this heading">¶</a></h3>
 <p>Before the features are given to the classification function, and thus the
 hyperoptimization, these can be preprocessed as following.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 11%" />
-<col style="width: 89%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -1443,13 +1475,10 @@ hyperoptimization, these can be preprocessed as following.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 44%" />
-<col style="width: 22%" />
-<col style="width: 34%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -1472,18 +1501,16 @@ hyperoptimization, these can be preprocessed as following.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="onehotencoding">
-<span id="config-onehotencoding"></span><h3>OneHotEncoding<a class="headerlink" href="#onehotencoding" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="onehotencoding">
+<span id="config-onehotencoding"></span><h3>OneHotEncoding<a class="headerlink" href="#onehotencoding" title="Link to this heading">¶</a></h3>
 <p>Optionally, you can use OneHotEncoding on specific features. For more
 information on why and how this is done, see <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html">https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html</a>.
 By default, this is not done, as WORC does not know for which
 specific features you would like to do this.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 7%" />
-<col style="width: 93%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -1498,13 +1525,10 @@ specific features you would like to do this.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 48%" />
-<col style="width: 17%" />
-<col style="width: 36%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -1523,8 +1547,9 @@ specific features you would like to do this.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="imputation">
-<span id="config-imputation"></span><h3>Imputation<a class="headerlink" href="#imputation" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="imputation">
+<span id="config-imputation"></span><h3>Imputation<a class="headerlink" href="#imputation" title="Link to this heading">¶</a></h3>
 <p>These settings are used for feature imputation. Note that these settings
 are actually used
 in the hyperparameter optimization. Hence you can provide multiple
@@ -1532,11 +1557,8 @@ values per field, of which random samples will be drawn of which finally
 the best setting in combination with the other hyperparameters is
 selected.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 7%" />
-<col style="width: 93%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -1557,13 +1579,10 @@ selected.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 12%" />
-<col style="width: 44%" />
-<col style="width: 44%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -1590,15 +1609,13 @@ selected.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="featurescaling">
-<span id="config-featurescaling"></span><h3>FeatureScaling<a class="headerlink" href="#featurescaling" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="featurescaling">
+<span id="config-featurescaling"></span><h3>FeatureScaling<a class="headerlink" href="#featurescaling" title="Link to this heading">¶</a></h3>
 <p>Determines which method is applied to scale each feature.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 7%" />
-<col style="width: 93%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -1613,13 +1630,10 @@ selected.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 67%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -1638,8 +1652,9 @@ selected.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="featsel">
-<span id="config-featsel"></span><h3>Featsel<a class="headerlink" href="#featsel" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="featsel">
+<span id="config-featsel"></span><h3>Featsel<a class="headerlink" href="#featsel" title="Link to this heading">¶</a></h3>
 <p>Define feature selection methods. Note that these settings are
 actually used in the hyperparameter optimization. Hence you can provide
 multiple values per field, of which random samples will be drawn of
@@ -1647,11 +1662,8 @@ which finally the best setting in combination with the other
 hyperparameters is selected. Again, these should be formatted as string
 containing the actual values, e.g. value1, value2.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 9%" />
-<col style="width: 91%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -1726,13 +1738,10 @@ containing the actual values, e.g. value1, value2.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 31%" />
-<col style="width: 26%" />
-<col style="width: 43%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -1831,17 +1840,15 @@ containing the actual values, e.g. value1, value2.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="selectfeatgroup">
-<span id="config-selectfeatgroup"></span><h3>SelectFeatGroup<a class="headerlink" href="#selectfeatgroup" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="selectfeatgroup">
+<span id="config-selectfeatgroup"></span><h3>SelectFeatGroup<a class="headerlink" href="#selectfeatgroup" title="Link to this heading">¶</a></h3>
 <p>If the PREDICT and/or PyRadiomics feature computation tools are used,
 then you can do a gridsearch among the various feature groups for the
 optimal combination. Here, you determine which groups can be selected.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 71%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -1925,13 +1932,10 @@ optimal combination. Here, you determine which groups can be selected.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 24%" />
-<col style="width: 27%" />
-<col style="width: 49%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -2042,17 +2046,15 @@ optimal combination. Here, you determine which groups can be selected.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="resampling">
-<span id="config-resampling"></span><h3>Resampling<a class="headerlink" href="#resampling" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="resampling">
+<span id="config-resampling"></span><h3>Resampling<a class="headerlink" href="#resampling" title="Link to this heading">¶</a></h3>
 <p>Before performing the hyperoptimization, you can use various resampling
 techniques to resample (under-sampling, over-sampling, or both) the data.
 All methods are adopted from <a class="reference external" href="https://imbalanced-learn.readthedocs.io/">imbalanced learn</a>.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 8%" />
-<col style="width: 92%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -2079,13 +2081,10 @@ All methods are adopted from <a class="reference external" href="https://imbalan
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 6%" />
-<col style="width: 47%" />
-<col style="width: 47%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -2120,8 +2119,9 @@ All methods are adopted from <a class="reference external" href="https://imbalan
 </tbody>
 </table>
 </div>
-<div class="section" id="classification">
-<span id="config-classification"></span><h3>Classification<a class="headerlink" href="#classification" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="classification">
+<span id="config-classification"></span><h3>Classification<a class="headerlink" href="#classification" title="Link to this heading">¶</a></h3>
 <p>Determine settings for the classification in the hyperoptimization. Most of the
 classifiers are implemented using sklearn; hence descriptions of the
 hyperparameters can also be found there.</p>
@@ -2131,11 +2131,8 @@ and <a class="reference external" href="https://www.analyticsvidhya.com/blog/201
 <p>Note, as XGB and AdaBoost take significantly longer to fit (3x), they
 are picked less often by default.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 87%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -2264,13 +2261,10 @@ are picked less often by default.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 8%" />
-<col style="width: 20%" />
-<col style="width: 72%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -2441,15 +2435,13 @@ are picked less often by default.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="crossvalidation">
-<span id="config-crossvalidation"></span><h3>CrossValidation<a class="headerlink" href="#crossvalidation" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="crossvalidation">
+<span id="config-crossvalidation"></span><h3>CrossValidation<a class="headerlink" href="#crossvalidation" title="Link to this heading">¶</a></h3>
 <p>When using cross validation, specify the following settings.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 8%" />
-<col style="width: 92%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -2470,13 +2462,10 @@ are picked less often by default.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 29%" />
-<col style="width: 29%" />
-<col style="width: 41%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -2503,15 +2492,13 @@ are picked less often by default.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="hyperoptimization">
-<span id="config-hyperoptimization"></span><h3>HyperOptimization<a class="headerlink" href="#hyperoptimization" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="hyperoptimization">
+<span id="config-hyperoptimization"></span><h3>HyperOptimization<a class="headerlink" href="#hyperoptimization" title="Link to this heading">¶</a></h3>
 <p>Specify the hyperparameter optimization procedure here.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -2553,13 +2540,10 @@ are picked less often by default.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 4%" />
-<col style="width: 86%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -2614,17 +2598,15 @@ are picked less often by default.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="smac">
-<span id="config-smac"></span><h3>SMAC<a class="headerlink" href="#smac" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="smac">
+<span id="config-smac"></span><h3>SMAC<a class="headerlink" href="#smac" title="Link to this heading">¶</a></h3>
 <p>WORC enables the use of the SMAC algorithm for the hyperparameter optimization.
 SMAC uses the same parameter options as the default random search, except for
 resampling which is currently not compatible with SMAC.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 8%" />
-<col style="width: 92%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -2651,13 +2633,10 @@ resampling which is currently not compatible with SMAC.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 38%" />
-<col style="width: 22%" />
-<col style="width: 41%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -2692,17 +2671,15 @@ resampling which is currently not compatible with SMAC.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="ensemble">
-<span id="config-ensemble"></span><h3>Ensemble<a class="headerlink" href="#ensemble" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="ensemble">
+<span id="config-ensemble"></span><h3>Ensemble<a class="headerlink" href="#ensemble" title="Link to this heading">¶</a></h3>
 <p>WORC supports ensembling of workflows. This is not a default approach in
 radiomics, hence the default is to not use it and select only the best
 performing workflow.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 4%" />
-<col style="width: 96%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -2720,13 +2697,10 @@ performing workflow.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 8%" />
-<col style="width: 10%" />
-<col style="width: 82%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -2749,15 +2723,13 @@ performing workflow.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="evaluation">
-<span id="config-evaluation"></span><h3>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="evaluation">
+<span id="config-evaluation"></span><h3>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading">¶</a></h3>
 <p>In the evaluation of the performance, several adjustments can be made.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 6%" />
-<col style="width: 94%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -2769,13 +2741,10 @@ performing workflow.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 42%" />
-<col style="width: 23%" />
-<col style="width: 35%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -2790,15 +2759,13 @@ performing workflow.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="bootstrap">
-<span id="config-bootstrap"></span><h3>Bootstrap<a class="headerlink" href="#bootstrap" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="bootstrap">
+<span id="config-bootstrap"></span><h3>Bootstrap<a class="headerlink" href="#bootstrap" title="Link to this heading">¶</a></h3>
 <p>Besides cross validation, WORC supports bootstrapping on the test set for performance evaluation.</p>
 <p><strong>Description:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 21%" />
-<col style="width: 79%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Description</p></th>
@@ -2813,13 +2780,10 @@ performing workflow.</p>
 </tr>
 </tbody>
 </table>
+</div>
 <p><strong>Defaults and Options:</strong></p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 46%" />
-<col style="width: 27%" />
-<col style="width: 27%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Subkey</p></th>
 <th class="head"><p>Default</p></th>
@@ -2838,55 +2802,107 @@ performing workflow.</p>
 </tbody>
 </table>
 </div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
-
-           </div>
-           
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="features.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Radiomics Features</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="user_manual.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">User Manual</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016 -- 2025, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="features.html" class="btn btn-neutral float-right" title="Radiomics Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="user_manual.html" class="btn btn-neutral float-left" title="User Manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
     </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Configuration</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#creation-and-interaction">Creation and interaction</a></li>
+<li><a class="reference internal" href="#contents">Contents</a><ul>
+<li><a class="reference internal" href="#general">General</a></li>
+<li><a class="reference internal" href="#labels">Labels</a></li>
+<li><a class="reference internal" href="#fingerprinting">Fingerprinting</a></li>
+<li><a class="reference internal" href="#preprocessing">Preprocessing</a></li>
+<li><a class="reference internal" href="#segmentix">Segmentix</a></li>
+<li><a class="reference internal" href="#imagefeatures">ImageFeatures</a></li>
+<li><a class="reference internal" href="#pyradiomics">PyRadiomics</a></li>
+<li><a class="reference internal" href="#combat">ComBat</a></li>
+<li><a class="reference internal" href="#featpreprocess">FeatPreProcess</a></li>
+<li><a class="reference internal" href="#onehotencoding">OneHotEncoding</a></li>
+<li><a class="reference internal" href="#imputation">Imputation</a></li>
+<li><a class="reference internal" href="#featurescaling">FeatureScaling</a></li>
+<li><a class="reference internal" href="#featsel">Featsel</a></li>
+<li><a class="reference internal" href="#selectfeatgroup">SelectFeatGroup</a></li>
+<li><a class="reference internal" href="#resampling">Resampling</a></li>
+<li><a class="reference internal" href="#classification">Classification</a></li>
+<li><a class="reference internal" href="#crossvalidation">CrossValidation</a></li>
+<li><a class="reference internal" href="#hyperoptimization">HyperOptimization</a></li>
+<li><a class="reference internal" href="#smac">SMAC</a></li>
+<li><a class="reference internal" href="#ensemble">Ensemble</a></li>
+<li><a class="reference internal" href="#evaluation">Evaluation</a></li>
+<li><a class="reference internal" href="#bootstrap">Bootstrap</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
-
-    </p>
-  </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
+          </div>
         </div>
       </div>
-
-    </section>
-
+      
+      
+    </aside>
   </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
+</div><script src="../_static/documentation_options.js?v=229cbe3b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
 </html>

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2014 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,15 @@
 
 import argparse
 from WORC.classification.trainclassifier import trainclassifier
+
+# Ignore pytables performance warning, as we are on purpose saving objects as such
+import warnings
+from tables import PerformanceWarning, NaturalNameWarning
+import pandas as pd
+warnings.filterwarnings("ignore", category=PerformanceWarning)
+warnings.filterwarnings("ignore", category=PerformanceWarning, module="pandas.io.pytables")
+warnings.filterwarnings("ignore", category=pd.io.pytables.PerformanceWarning)
+warnings.filterwarnings("ignore", category=NaturalNameWarning)
 
 
 def main():
