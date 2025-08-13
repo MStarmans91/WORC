@@ -30,8 +30,7 @@
 - 🏥 **Domain Focused**: Designed and tested on 30+ multicenter medical datasets.
 - 📁 **Multi-modal Input**: Supports multiple image modalities, regions, custom features, and clinical data.
 - 📊 **Explainability Tools**: Built-in feature ranking and visualization utilities.
-- 🔁 **Robust Optimization**: Nested cross-validation and sample size0based confidence interval estimation.
-- 🧬 **Radiomics-Ready**: Includes PyRadiomics-based feature extraction and harmonization.
+- 🔁 **Robust Optimization**: Nested cross-validation and sample size-based confidence interval estimation.
 
 ---
 
@@ -132,3 +131,4 @@ for installation instructions.
 We use the XNATpy package to connect the toolbox to the XNAT online database platforms. You will only
 need this when you use the example dataset we provided, or if you want to download or upload data from or to XNAT. We advise you to specify
 your account settings in a .netrc file when using this feature for your own datasets, such that you do not need to input them on every request.
+
