@@ -34,7 +34,7 @@ def download_subject(project, subject, datafolder, session, verbose=False):
 
         # FIXME: Need a way to smartly check whether we have a matching RT struct and image
         # Current solution: We only download the CT sessions, no PET / MRI / Other scans
-        # Specific for STW Strategy BMIA XNAT projects
+        # Specific for STW Strategy Health-RI XNAT projects
 
         if experiment.session_type is None:  # some files in project don't have _CT postfix
             print(f"\tSkipping patient {subject.label}, experiment {experiment.label}: type is not CT but {experiment.session_type}.")
@@ -163,7 +163,7 @@ def download_HeadAndNeck(datafolder=None, nsubjects=10):
         if not os.path.exists(datafolder):
             os.makedirs(datafolder)
 
-    xnat_url = 'https://xnat.bmia.nl'
+    xnat_url = 'https://xnat.health-ri.nl'
     project_name = 'stwstrategyhn1'
     download_project(project_name, xnat_url, datafolder, nsubjects=nsubjects,
                      verbose=True)

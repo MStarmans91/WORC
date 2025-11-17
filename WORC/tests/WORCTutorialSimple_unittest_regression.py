@@ -54,7 +54,7 @@ def main():
     #
     # You can skip this part if you use your own data.
     # In the example, We will use open source data from the online XNAT platform
-    # at https://xnat.bmia.nl/data/archive/projects/stwstrategyhn1. This dataset
+    # at https://xnat.health-ri.nl/data/archive/projects/stwstrategyhn1. This dataset
     # consists of CT scans of patients with Head and Neck tumors. We will download
     # a subset of 20 patients in this folder. You can change this settings if you
     # like
