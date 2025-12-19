@@ -311,7 +311,8 @@ def check_multimetric_scoring(estimator, scoring=None):
     """
     if callable(scoring) or scoring is None or isinstance(scoring,
                                                           str):
-        scorers = {"score": check_scoring(estimator, scoring=scoring)}
+        # Just one, similar behaviour to the sklearn function, just return a single scorer
+        scorers = check_scoring(estimator, scoring=scoring)
         return scorers, False
     else:
         err_msg_generic = ("scoring should either be a single string or "

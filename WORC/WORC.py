@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import platform
 import os
 import yaml
 import fastr
@@ -1347,6 +1348,10 @@ class WORC(object):
 
                         for f in feature_calculators:
                             print(f'\t - Adding feature calculation node: {f}.')
+                            # remove potential leading spaces due to parsing issues
+                            if f[0] == ' ':
+                                f = f[1::]
+
                             self.add_feature_calculator(f, label, nmod)
 
                         # -----------------------------------------------------
@@ -1513,7 +1518,7 @@ class WORC(object):
             self.link_combat_1 = self.network.create_link(self.source_class_config.output, self.ComBat.inputs['config'])
 
         self.link_combat_2 = self.network.create_link(self.source_patientclass_train.output, self.ComBat.inputs['patientclass_train'])
-        self.link_combat_1.collapse = 'conf'
+        # self.link_combat_1.collapse = 'conf'
         self.link_combat_2.collapse = 'pctrain'
         self.links_Combat1_train = dict()
         self.links_Combat1_test = dict()
@@ -2391,9 +2396,13 @@ class WORC(object):
             for k in self.sink_data.keys():
                 print(f"\t {k}: {self.sink_data[k]}.")
 
-            # When debugging, set the tempdir to the default of fastr + name
-            self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'],
-                                             self.name)
+            # # When debugging, set the tempdir to the default of fastr + name
+            system = platform.system()
+            if system != 'Darwin':
+                self.fastr_tmpdir = os.path.join(fastr.config.mounts['tmp'], self.name)
+                print(f"Setting fastr_tmpdir to: {self.fastr_tmpdir}")
+            else:
+                print("macOS detected — not overriding fastr_tmpdir")
 
         self.network.execute(self.source_data, self.sink_data, execution_plugin=self.fastr_plugin, tmpdir=self.fastr_tmpdir)
 

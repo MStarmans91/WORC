@@ -63,11 +63,11 @@ class ObjectSampler(object):
         elif method == 'RandomOverSampling':
             self.init_RandomOverSampling(sampling_strategy)
         elif method == 'ADASYN':
-            self.init_ADASYN(sampling_strategy, n_neighbors, n_jobs)
+            self.init_ADASYN(sampling_strategy, n_neighbors)
         elif method == 'BorderlineSMOTE':
-            self.init_BorderlineSMOTE(k_neighbors, n_jobs)
+            self.init_BorderlineSMOTE(k_neighbors)
         elif method == 'SMOTE':
-            self.init_SMOTE(k_neighbors, n_jobs)
+            self.init_SMOTE(k_neighbors)
         elif method == 'SMOTEENN':
             self.init_SMOTEENN(sampling_strategy)
         elif method == 'SMOTETomek':
@@ -108,36 +108,30 @@ class ObjectSampler(object):
                                                       random_state=self.random_state)
         self.sampling_strategy = sampling_strategy
 
-    def init_ADASYN(self, sampling_strategy, n_neighbors, n_jobs):
+    def init_ADASYN(self, sampling_strategy, n_neighbors):
         """Creata a ADASYN sampler object."""
         self.object = over_sampling.ADASYN(sampling_strategy=sampling_strategy,
                                            random_state=self.random_state,
-                                           n_neighbors=n_neighbors,
-                                           n_jobs=n_jobs)
+                                           n_neighbors=n_neighbors)
 
         self.sampling_strategy = sampling_strategy
         self.n_neighbors = n_neighbors
-        self.n_jobs = n_jobs
 
-    def init_BorderlineSMOTE(self, k_neighbors, n_jobs):
+    def init_BorderlineSMOTE(self, k_neighbors):
         """Creata a BorderlineSMOTE sampler object."""
         self.object =\
             over_sampling.BorderlineSMOTE(random_state=self.random_state,
-                                          k_neighbors=k_neighbors,
-                                          n_jobs=n_jobs)
+                                          k_neighbors=k_neighbors)
 
         self.k_neighbors = k_neighbors
-        self.n_jobs = n_jobs
 
-    def init_SMOTE(self, k_neighbors, n_jobs):
+    def init_SMOTE(self, k_neighbors):
         """Creata a SMOTE sampler object."""
         self.object =\
             over_sampling.SMOTE(random_state=self.random_state,
-                                k_neighbors=k_neighbors,
-                                n_jobs=n_jobs)
+                                k_neighbors=k_neighbors)
 
         self.k_neighbors = k_neighbors
-        self.n_jobs = n_jobs
 
     def init_SMOTEENN(self, sampling_strategy):
         """Creata a SMOTEEN sampler object."""

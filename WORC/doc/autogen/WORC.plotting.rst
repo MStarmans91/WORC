@@ -10,15 +10,6 @@ plotting Package
     :show-inheritance:
     :special-members:
 
-:mod:`compute_CI` Module
-------------------------
-
-.. automodule:: WORC.plotting.compute_CI
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :special-members:
-
 :mod:`linstretch` Module
 ------------------------
 

@@ -1,244 +1,322 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Configuration" href="configuration.html" /><link rel="prev" title="Quick start guide" href="quick_start.html" />
+        <link rel="prefetch" href="../_static/WORC_Logo.svg" as="image" />
 
-
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>User Manual &mdash; WORC 3.6.3 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>User Manual - WORC 3.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/extra.css?v=a591123b" />
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/doctools.js"></script>
     
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
     
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Configuration" href="configuration.html" />
-    <link rel="prev" title="Quick start guide" href="quick_start.html" /> 
-</head>
-
-<body class="wy-body-for-nav">
-
-   
-  <div class="wy-grid-for-nav">
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
     
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-          
 
-          
-            <a href="../index.html" class="icon icon-home"> WORC
-          
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
 
-          
-            
-            <img src="../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
-          
-          </a>
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
 
-          
-            
-            
-              <div class="version">
-                3.6.3
-              </div>
-            
-          
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
 
-          
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
 
-          
-        </div>
 
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <ul class="current">
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">WORC 3.7.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/WORC_Logo.svg" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">WORC 3.7.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick start guide</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">User Manual</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#worc-facades">WORC facades</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#simpleworc">SimpleWORC</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#basicworc">BasicWORC</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#input-file-definitions-and-how-to-provide-them-to-worc">Input file definitions and how to provide them to WORC</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#providing-your-inputs-to-worc-and-data-flows">Providing your inputs to WORC and data flows</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#using-multiple-sources-per-patient">Using multiple sources per patient</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mutiple-rois-or-segmentations-per-object-patient">Mutiple ROIs or segmentations per object/patient</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#training-and-test-sets">Training and test sets</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#missing-data-and-dummy-s">Missing data and dummy’s</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#segmentation-on-the-first-image-but-not-on-the-others">Segmentation on the first image, but not on the others</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#images-and-segmentations">Images and segmentations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#labels">Labels</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#semantics-or-non-radiomics-features">Semantics or non-radiomics features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#masks">Masks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#metadata">Metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#elastix-para">Elastix_Para</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#outputs-and-evaluation-of-your-network">Outputs and evaluation of your network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example-data">Example data</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#worc">WORC</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="features.html">Radiomics Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developerdocumentation.html#references">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../autogen/WORC.html">WORC Package</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../autogen/WORC.html">WORC Package</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of WORC Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.IOparser.html">IOparser Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.classification.html">classification Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.detectors.html">detectors Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.exampledata.html">exampledata Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.export.html">export Package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../autogen/WORC.facade.html">facade Package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of facade Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autogen/WORC.facade.helpers.html">helpers Package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.fastrconfig.html">fastrconfig Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.featureprocessing.html">featureprocessing Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.plotting.html">plotting Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.processing.html">processing Package</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../autogen/WORC.resources.html">resources Package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of resources Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autogen/WORC.resources.fastr_tests.html">fastr_tests Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../autogen/WORC.resources.fastr_tools.html">fastr_tools Package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.statistics.html">statistics Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.tests.html">tests Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.tools.html">tools Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autogen/WORC.validators.html">validators Package</a></li>
+</ul>
+</li>
 </ul>
 
-            
-          
-        </div>
-        
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">WORC</a>
-        
-      </nav>
-
-
-      <div class="wy-nav-content">
-        
-        <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
-  <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>User Manual</li>
-    
-    
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="../_sources/static/user_manual.rst.txt" rel="nofollow"> View page source</a>
-          
-        
-      </li>
-    
-  </ul>
-
-  
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-            
-  <div class="section" id="user-manual">
-<h1>User Manual<a class="headerlink" href="#user-manual" title="Permalink to this headline">¶</a></h1>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/static/user_manual.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="user-manual">
+<h1>User Manual<a class="headerlink" href="#user-manual" title="Link to this heading">¶</a></h1>
 <p>In this chapter we will discuss the parts of WORC in more detail, mostly focussed on facades,
 the inputs you can provide to WORC, the outputs, and the various workflow possible. We will
 give a more complete overview of the system and describe the more advanced features.</p>
 <p>We will not discuss the <code class="docutils literal notranslate"><span class="pre">WORC.defaultconfig()</span></code> function here, which generates the default
 configuration, as it is discussed on a separate page, see the <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">Config chapter</span></a>.</p>
-<div class="section" id="worc-facades">
-<span id="tools"></span><h2>WORC facades<a class="headerlink" href="#worc-facades" title="Permalink to this headline">¶</a></h2>
+<section id="worc-facades">
+<span id="tools"></span><h2>WORC facades<a class="headerlink" href="#worc-facades" title="Link to this heading">¶</a></h2>
 <p>The WORC toolbox is build around of one main object, the <code class="docutils literal notranslate"><span class="pre">WORC</span></code> object. This object provides all functionality
 of the toolbox. However, to make certain functionalities easier to use and limit the complexity,
 we have constructed two facades: <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> and <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code>. We advice new users to start with <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code>,
 more advanced users <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code>, and only use <code class="docutils literal notranslate"><span class="pre">WORC</span></code> for development purposes. Additionally, we advice you to take a look at the <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">configuration chapter</span></a>
 for all the settings that can be adjusted in WORC. We give a short description of the two facades here.</p>
-<div class="section" id="simpleworc">
-<h3>SimpleWORC<a class="headerlink" href="#simpleworc" title="Permalink to this headline">¶</a></h3>
+<section id="simpleworc">
+<h3>SimpleWORC<a class="headerlink" href="#simpleworc" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> facade is the simplest to interact with and provides
 all functionality required for conducting basic experiments.
 Much of the documentation of <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> can be found in its tutorial (<a class="reference external" href="https://github.com/MStarmans91/WORCtutorial">https://github.com/MStarmans91/WORCtutorial</a> and
 <a class="reference internal" href="quick_start.html#quickstart-chapter"><span class="std std-ref">the quick start</span></a>) and the docstrings of the functions in the object (<a class="reference internal" href="../autogen/WORC.facade.html#module-WORC.facade.simpleworc" title="WORC.facade.simpleworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC.facade.simpleworc</span></code></a>).
 Many of the functions are  wrappers to interact with the <code class="docutils literal notranslate"><span class="pre">WORC</span></code> object, and therefore in the background use the functionality described below.</p>
-</div>
-<div class="section" id="basicworc">
-<h3>BasicWORC<a class="headerlink" href="#basicworc" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="basicworc">
+<h3>BasicWORC<a class="headerlink" href="#basicworc" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code> object is based on the <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> object, and thus provides exactly the same functionality,
 plus several more advances functions. Much of the documentation of <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code> can be found in its tutorial (<a class="reference external" href="https://github.com/MStarmans91/WORCtutorial">https://github.com/MStarmans91/WORCtutorial</a>)
 and the docstrings of the functions in the object (<a class="reference internal" href="../autogen/WORC.facade.html#module-WORC.facade.basicworc" title="WORC.facade.basicworc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC.facade.basicworc</span></code></a>).</p>
 <p>One of the functionalities that <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code> provides over <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> is that you can also directly provide
 your data to <code class="docutils literal notranslate"><span class="pre">WORC</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">images_train</span></code>) instead of using one of the wrapping functions of
 <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> (e.g. <a href="#id1"><span class="problematic" id="id2">``</span></a>images_from_this_directory)</p>
-</div>
-</div>
-<div class="section" id="input-file-definitions-and-how-to-provide-them-to-worc">
-<span id="inputs"></span><h2>Input file definitions and how to provide them to WORC<a class="headerlink" href="#input-file-definitions-and-how-to-provide-them-to-worc" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="providing-your-inputs-to-worc-and-data-flows">
-<h3>Providing your inputs to WORC and data flows<a class="headerlink" href="#providing-your-inputs-to-worc-and-data-flows" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="input-file-definitions-and-how-to-provide-them-to-worc">
+<span id="inputs"></span><h2>Input file definitions and how to provide them to WORC<a class="headerlink" href="#input-file-definitions-and-how-to-provide-them-to-worc" title="Link to this heading">¶</a></h2>
+<section id="providing-your-inputs-to-worc-and-data-flows">
+<h3>Providing your inputs to WORC and data flows<a class="headerlink" href="#providing-your-inputs-to-worc-and-data-flows" title="Link to this heading">¶</a></h3>
 <p>Let’s first start on how to provide any of the below mentioned types of input data to  <code class="docutils literal notranslate"><span class="pre">WORC</span></code>.
 <code class="docutils literal notranslate"><span class="pre">WORC</span></code> facilitates different data flows (or networks or pipelines), which are automatically
 constructed based on the inputs and configuration you provide. We here
@@ -246,7 +324,7 @@ discuss how the data can be set in <code class="docutils literal notranslate"><s
 <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> provides several wrappers to more easily provide data, which interact with
 thee objects.</p>
 <p>As an example, we here show how to provide images and segmentations to <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code> and <code class="docutils literal notranslate"><span class="pre">WORC</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/image_MR.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient2/image_MR.nii.gz&#39;</span><span class="p">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/image_MR.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;/maybesomeotherpath/Patient_002/MR_image.nii.gz&#39;</span><span class="p">}</span>
 <span class="n">segmentations1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/seg_tumor_MR.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient2/seg_tumor_MR.nii.gz&#39;</span><span class="p">}</span>
 
 <span class="n">experiment</span><span class="o">.</span><span class="n">images_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">images1</span><span class="p">)</span>
@@ -261,6 +339,11 @@ the source filenames. The keys are used to match the images and segmentations to
 label and semantics sources, so make sure these correspond to the label file.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>The location and naming of your files does not matter; the keys of the dictionary define
+the sample ID that is used to match the files to other inputs.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>You have to make sure the images and segmentation (and other) sources match in size,
 i.e., that the same keys are present.</p>
 </div>
@@ -269,8 +352,8 @@ i.e., that the same keys are present.</p>
 <p>You have to supply a configuration file for each image or feature source you append.
 Thus, in the first example above, you need to append two configurations!</p>
 </div>
-<div class="section" id="using-multiple-sources-per-patient">
-<h4>Using multiple sources per patient<a class="headerlink" href="#using-multiple-sources-per-patient" title="Permalink to this headline">¶</a></h4>
+<section id="using-multiple-sources-per-patient">
+<h4>Using multiple sources per patient<a class="headerlink" href="#using-multiple-sources-per-patient" title="Link to this heading">¶</a></h4>
 <p>If you want to provide multiple sources, e.g. images, per patient, simply append another dictionary
 to the source list, e.g.:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient1/image_MR.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="s1">&#39;/data/Patient2/image_MR.nii.gz&#39;</span><span class="p">}</span>
@@ -287,9 +370,9 @@ to the source list, e.g.:</p>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">WORC</span></code> will use the keys of the dictionaries to match the features from the same object or patient and combine
 them for the machine learning part.</p>
-</div>
-<div class="section" id="mutiple-rois-or-segmentations-per-object-patient">
-<h4>Mutiple ROIs or segmentations per object/patient<a class="headerlink" href="#mutiple-rois-or-segmentations-per-object-patient" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="mutiple-rois-or-segmentations-per-object-patient">
+<h4>Mutiple ROIs or segmentations per object/patient<a class="headerlink" href="#mutiple-rois-or-segmentations-per-object-patient" title="Link to this heading">¶</a></h4>
 <p>You can off course have multiple images or ROIs per object, e.g. a liver
 ROI and a tumor ROI. This can be easily done by appending to the
 sources. For example:</p>
@@ -320,9 +403,9 @@ in the classification.</p>
 <p><code class="docutils literal notranslate"><span class="pre">WORC</span></code> will automatically group all samples from a patient either all in the training
 or all in the test set.</p>
 </div>
-</div>
-<div class="section" id="training-and-test-sets">
-<h4>Training and test sets<a class="headerlink" href="#training-and-test-sets" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="training-and-test-sets">
+<h4>Training and test sets<a class="headerlink" href="#training-and-test-sets" title="Link to this heading">¶</a></h4>
 <p>When using a single dataset for both training and evaluation, you should
 only supply “training” datasets. By default, performance on a single
 dataset will be evaluated using cross-validation (default random split, but leave-one-out can also be configured).</p>
@@ -362,9 +445,9 @@ this through the same function as the training set, but setting  <code class="do
 </div>
 <p>Another alternative is to only provide training objects, but also a .csv defining fixed training and test splits to be used for the
 evaluation, e.g. <code class="docutils literal notranslate"><span class="pre">experiment.fixed_splits</span> <span class="pre">=</span> <span class="pre">'/data/fixedsplits.csv</span></code>. See the <a class="reference external" href="https://github.com/MStarmans91/WORCtutorial">https://github.com/MStarmans91/WORCtutorial</a> repository for an example. <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> has the <code class="docutils literal notranslate"><span class="pre">set_fixed_splits</span></code> to set this object.</p>
-</div>
-<div class="section" id="missing-data-and-dummy-s">
-<h4>Missing data and dummy’s<a class="headerlink" href="#missing-data-and-dummy-s" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="missing-data-and-dummy-s">
+<h4>Missing data and dummy’s<a class="headerlink" href="#missing-data-and-dummy-s" title="Link to this heading">¶</a></h4>
 <p>Suppose you are missing a specific image for a specific patient. <code class="docutils literal notranslate"><span class="pre">WORC</span></code> can impute the features of this patient.
 The underlying package we use for workflow execution (fastr) can however handle missing data. Therefore, to tell <code class="docutils literal notranslate"><span class="pre">WORC</span></code> to
 do so, you still have to provide a source but can add ‘’Dummy’’ to the key:</p>
@@ -377,9 +460,9 @@ do so, you still have to provide a source but can add ‘’Dummy’’ to the k
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">WORC</span></code>  will process the sources normally up till the imputation part, so you have to provide valid data. As you see in the example above,
 we simply provided data from another patient.</p>
-</div>
-<div class="section" id="segmentation-on-the-first-image-but-not-on-the-others">
-<h4>Segmentation on the first image, but not on the others<a class="headerlink" href="#segmentation-on-the-first-image-but-not-on-the-others" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="segmentation-on-the-first-image-but-not-on-the-others">
+<h4>Segmentation on the first image, but not on the others<a class="headerlink" href="#segmentation-on-the-first-image-but-not-on-the-others" title="Link to this heading">¶</a></h4>
 <p>When you use multiple image sequences, you can supply a ROI for each sequence by
 appending to to segmentations object as above. Alternatively, when you do not
 supply a segmentation for a specific sequence, <code class="docutils literal notranslate"><span class="pre">WORC</span></code> will use elastix (<a class="reference external" href="https://github.com/SuperElastix/elastix">https://github.com/SuperElastix/elastix</a>)
@@ -399,28 +482,24 @@ Hence make sure you supply the sequence for which you have a ROI as the first ob
 </div>
 <p>When providing only a segmentation for the first image in this way, <code class="docutils literal notranslate"><span class="pre">WORC</span></code> will automatically
 recognize that it needs to use registration.</p>
-</div>
-</div>
-<div class="section" id="images-and-segmentations">
-<h3>Images and segmentations<a class="headerlink" href="#images-and-segmentations" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="images-and-segmentations">
+<h3>Images and segmentations<a class="headerlink" href="#images-and-segmentations" title="Link to this heading">¶</a></h3>
 <p>The minimal input for a radiomics pipeline consists of either images
 plus segmentations, or features, plus a label file (and a configuration,
 but you can just use the default one).</p>
 <p>If you supply images and segmentations, features will be computed within the segmentations
 on the images. They are read out using SimpleITK, which supports various
 image formats such as DICOM, NIFTI, TIFF, NRRD and MHD.</p>
-</div>
-<div class="section" id="labels">
-<span id="um-labels"></span><h3>Labels<a class="headerlink" href="#labels" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="labels">
+<span id="um-labels"></span><h3>Labels<a class="headerlink" href="#labels" title="Link to this heading">¶</a></h3>
 <p>The labels are predicted in the classification: should be a .txt or .csv file.
 The first column should head <code class="docutils literal notranslate"><span class="pre">Patient</span></code> and contain the patient ID. The next columns
 can contain labels you want to predict, e.g. tumor type, risk, genetics. For example:</p>
+<div class="table-wrapper docutils container">
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 38%" />
-<col style="width: 31%" />
-<col style="width: 31%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Patient</p></th>
 <th class="head"><p>Label1</p></th>
@@ -442,6 +521,7 @@ can contain labels you want to predict, e.g. tumor type, risk, genetics. For exa
 </tr>
 </tbody>
 </table>
+</div>
 <p>These labels are matched to the correct image/features by the sample names of the image/features. So in this
 case, your sources should look as following:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">images_train</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;patient1&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="s1">&#39;patient2&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="o">...</span><span class="p">}</span>
@@ -453,44 +533,44 @@ case, your sources should look as following:</p>
 <p><code class="docutils literal notranslate"><span class="pre">WORC</span></code> will automatically group all samples from a patient either all in the training
 or all in the test set.</p>
 </div>
-</div>
-<div class="section" id="semantics-or-non-radiomics-features">
-<h3>Semantics or non-radiomics features<a class="headerlink" href="#semantics-or-non-radiomics-features" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="semantics-or-non-radiomics-features">
+<h3>Semantics or non-radiomics features<a class="headerlink" href="#semantics-or-non-radiomics-features" title="Link to this heading">¶</a></h3>
 <p>Semantic features are non-computational features, thus features that you supply instead of extract. Examples include
-using the age and sex of the patients in the classification. You can
+using clinical features such as the age and sex of the patients in the classification. You can
 supply these as a .csv listing your features per patient, similar to the <a class="reference internal" href="#um-labels"><span class="std std-ref">label file</span></a>. See
 [the WORCTutorial Github repo](<a class="reference external" href="https://github.com/MStarmans91/WORCTutorial/tree/master/Data/Examplefiles">https://github.com/MStarmans91/WORCTutorial/tree/master/Data/Examplefiles</a>) for an example file.</p>
-<p>You can provide these sources either through the <code class="docutils literal notranslate"><span class="pre">set_registration_parameterfile</span></code> function of the facades,
-by interacting with the <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code> <code class="docutils literal notranslate"><span class="pre">elastix_parameter_file</span></code> object, or the
-<code class="docutils literal notranslate"><span class="pre">WORC</span></code> <code class="docutils literal notranslate"><span class="pre">Elastix_Para</span></code> object. An example of the first option:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<p>You can provide these sources either through the <code class="docutils literal notranslate"><span class="pre">semantics_from_this_file</span></code> function of the facades,
+by interacting with the <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code> <code class="docutils literal notranslate"><span class="pre">semantics_file_train</span></code> or <code class="docutils literal notranslate"><span class="pre">semantics_file_test</span></code> objects, or the
+same objects from the main <code class="docutils literal notranslate"><span class="pre">WORC</span></code> object. An example of the first option:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">network</span><span class="o">.</span><span class="n">semantics_from_this_file</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="s2">&quot;semantic_features.csv&quot;</span><span class="p">,</span> <span class="n">is_training</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="masks">
-<h3>Masks<a class="headerlink" href="#masks" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="masks">
+<h3>Masks<a class="headerlink" href="#masks" title="Link to this heading">¶</a></h3>
 <p>WORC contains a segmentation preprocessing tool, called segmentix.
 The idea is that you can manipulate
 your segmentation, e.g. using dilation, then use a mask to make sure it
 is still valid. See the <a class="reference internal" href="configuration.html#config-chapter"><span class="std std-ref">config chapter</span></a> for all segmentix options.</p>
-</div>
-<div class="section" id="features">
-<h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Link to this heading">¶</a></h3>
 <p>If you already computed your features, e.g. from a previous run, you can
 directly supply the features instead of the images and segmentations and
 skip the feature computation step. These should be stored in .hdf5 files
 matching the WORC format.</p>
-</div>
-<div class="section" id="metadata">
-<h3>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="metadata">
+<h3>Metadata<a class="headerlink" href="#metadata" title="Link to this heading">¶</a></h3>
 <p>This source can be used if you want to use tags from the DICOM header as
 features, e.g. patient age and sex. In this case, this source should
 contain a single DICOM per patient from which the tags that are read.
 Check the PREDICT.imagefeatures.patient_feature module for the currently
 implemented tags.</p>
-</div>
-<div class="section" id="elastix-para">
-<h3>Elastix_Para<a class="headerlink" href="#elastix-para" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="elastix-para">
+<h3>Elastix_Para<a class="headerlink" href="#elastix-para" title="Link to this heading">¶</a></h3>
 <p>If you have multiple images for each patient, e.g. T1 and T2, but only a
 single segmentation, you can use image registration to align and
 transform the segmentation to the other modality. This is done in WORC
@@ -510,10 +590,10 @@ by interacting with the <code class="docutils literal notranslate"><span class="
 <code class="docutils literal notranslate"><span class="pre">WORC.images_train</span></code> (or test) source you supply. The segmentation
 will be alligned to all other image sources.</p>
 </div>
-</div>
-</div>
-<div class="section" id="outputs-and-evaluation-of-your-network">
-<span id="um-evaluation"></span><h2>Outputs and evaluation of your network<a class="headerlink" href="#outputs-and-evaluation-of-your-network" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="outputs-and-evaluation-of-your-network">
+<span id="um-evaluation"></span><h2>Outputs and evaluation of your network<a class="headerlink" href="#outputs-and-evaluation-of-your-network" title="Link to this heading">¶</a></h2>
 <p>General remark: when we talk about a sample, we mean one sample that has a set of features associated with it and is thus used as such in the model training or evaluation.
 A sample can correspond with a single patient, but if you have multiple tumors per patient for which features are separately extracted per tumor, these can be treated as separate sample.</p>
 <p>The following outputs and evaluation methods are always generated:</p>
@@ -694,7 +774,7 @@ of your features.</p>
 </li>
 </ol>
 <p>To add the evaluation workflow, simply use the <code class="docutils literal notranslate"><span class="pre">add_evaluation</span></code> function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">WORC</span>
 <span class="n">experiment</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
 <span class="n">label_type</span> <span class="o">=</span> <span class="s1">&#39;name_of_label_predicted_for_evaluation&#39;</span>
 <span class="o">...</span>
@@ -702,7 +782,7 @@ of your features.</p>
 </pre></div>
 </div>
 <p>Or in the <code class="docutils literal notranslate"><span class="pre">SimpleWORC</span></code> or <code class="docutils literal notranslate"><span class="pre">BasicWORC</span></code> facades:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">WORC</span> <span class="kn">import</span> <span class="n">SimpleWORC</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">WORC</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleWORC</span>
 <span class="n">experiment</span> <span class="o">=</span> <span class="n">SimpleWORC</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
 <span class="o">...</span>
 <span class="n">experiment</span><span class="o">.</span><span class="n">add_evaluation</span><span class="p">()</span>
@@ -719,9 +799,9 @@ performed to warp the segmentations from one sequence to another.</p>
 </div></blockquote>
 </li>
 </ol>
-</div>
-<div class="section" id="debugging">
-<h2>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">¶</a></h2>
 <p>For some of the most frequently occuring issues and answers, see the  <a class="reference internal" href="faq.html#faq-chapter"><span class="std std-ref">WORC FAQ</span></a>).
 As WORC is based on fastr, debugging is similar to debugging a fastr pipeline: see therefore also
 <a class="reference external" href="https://fastr.readthedocs.io/en/stable/static/user_manual.html#debugging/">the fastr debugging guidelines</a>.
@@ -760,7 +840,7 @@ the suggestion to use <span class="xref std std-ref">fastr trace</span>. This co
 and pinpoint the errors. To get a very detailed error report we have to specify one sink and one sample.
 To see which samples have failed, we run the <code class="docutils literal notranslate"><span class="pre">fastr</span> <span class="pre">trace</span></code> command with the <code class="docutils literal notranslate"><span class="pre">--samples</span></code> option</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">VEWORC</span><span class="p">)</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Users</span>\<span class="n">Martijn</span> <span class="n">Starmans</span>\<span class="n">Documents</span>\<span class="n">GitHub</span>\<span class="n">WORCTutorial</span><span class="o">&gt;</span><span class="n">fastr</span> <span class="n">trace</span> <span class="s2">&quot;C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\WORC_Example_STWStrategyHN\__sink_data__.json&quot;</span> <span class="o">--</span><span class="n">samples</span>
- <span class="p">[</span><span class="n">WARNING</span><span class="p">]</span>  <span class="fm">__init__</span><span class="p">:</span><span class="mi">0084</span> <span class="o">&gt;&gt;</span> <span class="n">Not</span> <span class="n">running</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">production</span> <span class="n">installation</span> <span class="p">(</span><span class="n">branch</span> <span class="s2">&quot;unknown&quot;</span> <span class="kn">from</span> <span class="nn">installed</span> <span class="n">package</span><span class="p">)</span>
+ <span class="p">[</span><span class="n">WARNING</span><span class="p">]</span>  <span class="fm">__init__</span><span class="p">:</span><span class="mi">0084</span> <span class="o">&gt;&gt;</span> <span class="n">Not</span> <span class="n">running</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">production</span> <span class="n">installation</span> <span class="p">(</span><span class="n">branch</span> <span class="s2">&quot;unknown&quot;</span> <span class="kn">from</span><span class="w"> </span><span class="nn">installed</span> <span class="n">package</span><span class="p">)</span>
 <span class="n">HN1004</span> <span class="o">--</span> <span class="mi">1</span> <span class="n">failed</span> <span class="o">--</span> <span class="mi">1</span> <span class="n">succeeded</span>
 <span class="n">HN1077</span> <span class="o">--</span> <span class="mi">0</span> <span class="n">failed</span> <span class="o">--</span> <span class="mi">2</span> <span class="n">succeeded</span>
 <span class="n">HN1088</span> <span class="o">--</span> <span class="mi">0</span> <span class="n">failed</span> <span class="o">--</span> <span class="mi">2</span> <span class="n">succeeded</span>
@@ -879,22 +959,22 @@ that we provided for feature extraction had a different shape then the image.</p
 <p>Once you’ve solved the issues, you can just relaunch the experiment. WORC/fastr saves the temporary output files
 and will thus continue where it left of, only checking for all jobs that were previously finished whether
 the output is still there.</p>
-</div>
-<div class="section" id="example-data">
-<h2>Example data<a class="headerlink" href="#example-data" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="example-data">
+<h2>Example data<a class="headerlink" href="#example-data" title="Link to this heading">¶</a></h2>
 <p>For many files used in typical WORC experiments, we provide example data. Some
 of these can be found in the exampledata folder within the WORC package:
 <a class="reference external" href="https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata">https://github.com/MStarmans91/WORC/tree/master/WORC/exampledata</a>. To
 save memory, for several types the example data is not included, but a script
 is provided to create the example data. This script (<code class="docutils literal notranslate"><span class="pre">create_example_data</span></code>) can
 be found in the exampledata folder as well.</p>
-<div class="section" id="worc">
-<span id="id3"></span><h3>WORC<a class="headerlink" href="#worc" title="Permalink to this headline">¶</a></h3>
+<section id="worc">
+<span id="id3"></span><h3>WORC<a class="headerlink" href="#worc" title="Link to this heading">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">WORC</span></code> object can also directly be assessed, but we don’t recommend this as the facades adds
 a lot of functionality plus the WORC object can still be direclty accessed through the facades.
 for completeness, we give some documentation here.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">WORC</span></code> object can  directly be accessed in the following way:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">WORC</span>
 <span class="n">network</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;somename&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -935,7 +1015,7 @@ needed sink nodes. You can check these by looking at the created
 through the <code class="docutils literal notranslate"><span class="pre">WORC.execute()</span></code> command.</p>
 <p>Thus a typical experiment in <code class="docutils literal notranslate"><span class="pre">WORC</span></code> would follow the following structure,
 assuming you have created the relevant objects as listed above:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">WORC</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">WORC</span>
 
 <span class="c1"># Create object</span>
 <span class="n">experiment</span> <span class="o">=</span> <span class="n">WORC</span><span class="o">.</span><span class="n">WORC</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
@@ -955,56 +1035,109 @@ assuming you have created the relevant objects as listed above:</p>
 <span class="n">experiment</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
-
-           </div>
-           
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="configuration.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Configuration</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="quick_start.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Quick start guide</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2016 -- 2025, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="configuration.html" class="btn btn-neutral float-right" title="Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="quick_start.html" class="btn btn-neutral float-left" title="Quick start guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
     </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">User Manual</a><ul>
+<li><a class="reference internal" href="#worc-facades">WORC facades</a><ul>
+<li><a class="reference internal" href="#simpleworc">SimpleWORC</a></li>
+<li><a class="reference internal" href="#basicworc">BasicWORC</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#input-file-definitions-and-how-to-provide-them-to-worc">Input file definitions and how to provide them to WORC</a><ul>
+<li><a class="reference internal" href="#providing-your-inputs-to-worc-and-data-flows">Providing your inputs to WORC and data flows</a><ul>
+<li><a class="reference internal" href="#using-multiple-sources-per-patient">Using multiple sources per patient</a></li>
+<li><a class="reference internal" href="#mutiple-rois-or-segmentations-per-object-patient">Mutiple ROIs or segmentations per object/patient</a></li>
+<li><a class="reference internal" href="#training-and-test-sets">Training and test sets</a></li>
+<li><a class="reference internal" href="#missing-data-and-dummy-s">Missing data and dummy’s</a></li>
+<li><a class="reference internal" href="#segmentation-on-the-first-image-but-not-on-the-others">Segmentation on the first image, but not on the others</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#images-and-segmentations">Images and segmentations</a></li>
+<li><a class="reference internal" href="#labels">Labels</a></li>
+<li><a class="reference internal" href="#semantics-or-non-radiomics-features">Semantics or non-radiomics features</a></li>
+<li><a class="reference internal" href="#masks">Masks</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#metadata">Metadata</a></li>
+<li><a class="reference internal" href="#elastix-para">Elastix_Para</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#outputs-and-evaluation-of-your-network">Outputs and evaluation of your network</a></li>
+<li><a class="reference internal" href="#debugging">Debugging</a></li>
+<li><a class="reference internal" href="#example-data">Example data</a><ul>
+<li><a class="reference internal" href="#worc">WORC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>
-        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
-
-    </p>
-  </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
-
-</footer>
+          </div>
         </div>
       </div>
-
-    </section>
-
+      
+      
+    </aside>
   </div>
-  
-
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
-
-  
-  
-    
-   
-
-</body>
+</div><script src="../_static/documentation_options.js?v=229cbe3b"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    </body>
 </html>

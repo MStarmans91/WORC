@@ -20,7 +20,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
-import tikzplotlib
+import matplot2tikz
 
 
 def generate_performance_boxplots(performances, metrics, outputfolder,
@@ -118,7 +118,7 @@ def generate_performance_boxplots(performances, metrics, outputfolder,
 
     fname = 'boxplot_test.tex'
     outputname_tex = os.path.join(outputfolder, fname)
-    tikzplotlib.save(outputname_tex)
+    matplot2tikz.save(outputname_tex)
 
 
 def test():

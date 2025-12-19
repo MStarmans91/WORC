@@ -2,7 +2,7 @@ name: Unit test
 
 on:
   push:
-    branches: [master, development]
+    branches: [master, newpython, development]
   pull_request:
     branches: [master]
 
@@ -12,40 +12,48 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        python-version: [3.7]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: [3.11.5]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
-      - name: Install dependencies
+
+      - name: Install dependencies from pyproject.toml
         run: |
           python -m pip install --upgrade pip
           pip install flake8
-          pip install -r requirements.txt
+          pip install numpy==1.26.3 wheel
+          pip install --no-build-isolation pyradiomics==3.0.1
+          pip install .
+       # Assumes `pyproject.toml` has [project] and/or [tool.setuptools]
+
       - name: Additional dependency for MaxOSX for XGBoost
         run: |
             brew install libomp
         if: matrix.os == 'macos-latest'
+
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=WORC_config.py
           # exit-zero treats all errors as warnings.
           flake8 . --count --exit-zero --statistics --max-line-length=1000 --exclude=WORC_config.py,*elastixtools*
-      - name: Install WORC package itself
-        run: python setup.py -q install
+
       - name: Clone the WORC Tutorial and run as test
         run: |
           git clone --single-branch --branch develop https://github.com/MStarmans91/WORCTutorial
           python WORCTutorial/WORCTutorialSimple.py
         env:
           WORCDEBUG: true
+
       - name: Debugging on Linux
         run: |
             fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
@@ -53,6 +61,7 @@ jobs:
             fastr trace /tmp/WORC_Example_STWStrategyHN/__sink_data__.json --sinks performance --samples all
             fastr trace /tmp/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
         if: matrix.os == 'ubuntu-latest'
+
       - name: Debugging on Windows
         run: |
             fastr trace "C:\Users\RUNNER~1\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks features_train_CT_0_predict --samples HN1331
@@ -60,13 +69,15 @@ jobs:
             fastr trace "C:\Users\RUNNER~1\AppData\Local\Temp\WORC_Example_STWStrategyHN\__sink_data__.json" --sinks performance --samples all
             fastr trace "C:\Users\RUNNER~1\AppData\Local\Temp\GS\DEBUG_0\tmp\__sink_data__.json" --sinks output --samples id_0__0000__0000
         if: matrix.os == 'windows-latest'
+
       - name: Debugging on MaxOSX
         run: |
             fastr trace WORCTutorial/WORC_Example_STWStrategyHN/__sink_data__.json --sinks features_train_CT_0_predict --samples HN1331
             fastr trace WORCTutorial/WORC_Example_STWStrategyHN/__sink_data__.json --sinks classification --samples all
             fastr trace WORCTutorial/WORC_Example_STWStrategyHN/__sink_data__.json --sinks performance --samples all
-            fastr trace WORCTutorial/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000
+            # fastr trace WORCTutorial/GS/DEBUG_0/tmp/__sink_data__.json --sinks output --samples id_0__0000__0000 # Skipped due to varying tmp folder
         if: matrix.os == 'macos-latest'
+
       - name: Run additional test for regression on Linux
         run: |
             rm -r /tmp/GS/DEBUG_0
@@ -77,6 +88,7 @@ jobs:
         env:
           WORCDEBUG: true
         if: matrix.os == 'ubuntu-latest'
+        
       - name: Run additional tests for multiclass on Linux
         run: |
             rm -r /tmp/GS/DEBUG_0

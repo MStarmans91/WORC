@@ -24,7 +24,7 @@ import numpy as np
 from WORC.IOparser.file_io import load_features
 import pandas as pd
 import WORC.addexceptions as ae
-import tikzplotlib
+import matplot2tikz
 
 
 def plot_errors(featurefiles, patientinfo, label_type, featurenames,
@@ -136,5 +136,5 @@ def plot_errors(featurefiles, patientinfo, label_type, featurenames,
         print(f"Plot saved as {output_png}!")
 
     if output_tex is not None:
-        tikzplotlib.save(output_tex)
+        matplot2tikz.save(output_tex)
         print(f"Plot saved as {output_tex}!")

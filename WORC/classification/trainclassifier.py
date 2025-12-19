@@ -25,6 +25,15 @@ import WORC.IOparser.config_io_classifier as config_io
 from WORC.classification.AdvancedSampler import discrete_uniform, \
     log_uniform, boolean_uniform
 import json
+import warnings
+
+# Ignore pytables performance warning, as we are on purpose saving objects as such
+from tables import PerformanceWarning, NaturalNameWarning
+import pandas as pd
+warnings.filterwarnings("ignore", category=PerformanceWarning)
+warnings.filterwarnings("ignore", category=PerformanceWarning, module="pandas.io.pytables")
+warnings.filterwarnings("ignore", category=pd.io.pytables.PerformanceWarning)
+warnings.filterwarnings("ignore", category=NaturalNameWarning)
 
 
 def trainclassifier(feat_train, patientinfo_train, config,

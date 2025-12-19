@@ -25,6 +25,15 @@ import os
 min_subjects = 10
 recommended_subjects = 50
 
+def run_once(f):
+    """For executing functions only once in the entire WORC run."""
+    def wrapper(*args, **kwargs):
+        if not wrapper.has_run:
+            wrapper.has_run = True
+            return f(*args, **kwargs)
+    wrapper.has_run = False
+    return wrapper
+
 
 class AbstractValidator(ABC):
     # noinspection PyBroadException

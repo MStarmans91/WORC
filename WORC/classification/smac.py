@@ -15,6 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from WORC.validators.preflightcheck import run_once
+
+@run_once
+def infoprinter(message):
+    print(message)
+
 try:
     from ConfigSpace.conditions import InCondition
     from ConfigSpace.hyperparameters import CategoricalHyperparameter, \
@@ -22,8 +28,8 @@ try:
         Constant
     from smac.configspace import ConfigurationSpace
 except:
-    print("[INFO] Bayesian optimization through SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html.")
-
+    message = "[INFO] Bayesian optimization through SMAC functionality currently not available. Please see https://worc.readthedocs.io/en/latest/static/additionalfunctionality.html."
+    infoprinter(message)
 
 
 def build_smac_config(parameters):
