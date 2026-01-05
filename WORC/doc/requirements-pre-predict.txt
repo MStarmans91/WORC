@@ -1,1 +1,0 @@
-git+https://github.com/Svdvoort/PREDICTFastr.git@py311#egg=PREDICT

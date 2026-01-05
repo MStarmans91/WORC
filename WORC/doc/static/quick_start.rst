@@ -116,7 +116,7 @@ folder for each patient, where in each folder there is a image.nii.gz and a mask
       * ...
 
 In the example, we will use open source data from the online
-`BMIA XNAT platform <https://xnat.bmia.nl/data/archive/projects/stwstrategyhn1/>`_
+`Health-RI XNAT platform <https://xnat.health-ri.nl/data/archive/projects/stwstrategyhn1/>`_
 This dataset consists of CT scans of patients with Head and Neck tumors. We will download
 a subset of 20 patients in this folder. You can change this settings if you like.
 

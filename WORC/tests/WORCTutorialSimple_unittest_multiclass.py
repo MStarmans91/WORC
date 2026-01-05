@@ -54,7 +54,7 @@ def main():
     #
     # You can skip this part if you use your own data.
     # In the example, We will use open source data from the online XNAT platform
-    # at https://xnat.bmia.nl/data/archive/projects/stwstrategyhn1. This dataset
+    # at https://xnat.health-ri.nl/data/archive/projects/stwstrategyhn1. This dataset
     # consists of CT scans of patients with Head and Neck tumors. We will download
     # a subset of 20 patients in this folder. You can change this settings if you
     # like
@@ -67,8 +67,10 @@ def main():
         data_path = '/home/martijn/git/WORCTutorial/Data'
     elif 'Martijn Starmans' in script_path:
         data_path = r'C:\Users\Martijn Starmans\Documents\GitHub\WORCTutorial\Data'
+    elif '795023' in script_path:
+        data_path = r'C:\Users\795023\Documents\GitHub\WORCTutorial\Data'
     else:
-        raise ValueError("System not recognized")
+        raise ValueError(f"System not recognized, script path {script_path}")
     # download_HeadAndNeck(datafolder=data_path, nsubjects=nsubjects)
 
     # Identify our data structure: change the fields below accordingly
