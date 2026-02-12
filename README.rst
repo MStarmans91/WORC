@@ -1,4 +1,4 @@
-WORC: Workflow for Optimal Radiomics Classification (v3.7.0)
+WORC: Workflow for Optimal Radiomics Classification (v3.7.1)
 ============================================================
 
 Information

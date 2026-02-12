@@ -21,7 +21,7 @@ import WORC.processing.label_processing as lp
 import WORC.addexceptions as WORCexceptions
 import numpy as np
 import os
-
+import glob
 
 def load_data(featurefiles, patientinfo=None, label_names=None, modnames=[],
               combine_features=False, combine_method='mean'):
@@ -260,6 +260,67 @@ def load_features(feat, patientinfo, label_type, combine_features=False,
     return label_data, image_features
 
 
+def windows_file_parser(foldername, searchstrings, searchfilename,
+                        outputtype="features"):
+    """Check which files should be passed to a function.
+
+    Can be applied to circumvent the Windows command line limit to "manually" search
+    for files which should be fe to a function, instead of WORC passing these directly 
+    into the function.
+
+    Parameters
+        ----------
+        foldername: string, mandatory
+                Folder in which to search
+
+        searchstrings: list of strings, mandatory
+                String(s) used to search for files in the foldername
+
+        searchfilename: string, mandatory
+                Name of files which should be looked for in the found subfolders.
+
+        outputtype: string, optional
+                Type of filenames that are output. Default: "features"
+
+    Output
+        ---------
+        output: list
+
+    """
+    num_found_folders = 0
+    for searchstring in searchstrings:
+        found_folders = [d for d in glob.glob(os.path.join(foldername, searchstring)) if os.path.isdir(d)]
+        if len(found_folders) == 0:
+            continue
+    
+        num_found_folders += 1
+        
+        output = list()
+        for found_folder in found_folders:
+            print(f"[INFO] Parsing folder {found_folder}")
+            foundfiles = glob.glob(os.path.join(found_folder, "*", searchfilename))
+            foundfiles.sort()
+
+            # Check if we get the expected number of images
+            num_expected_files = len(glob.glob(os.path.join(found_folder, "*")))
+            if len(foundfiles) != num_expected_files:
+                search_strategy = os.path.join(found_folder, "*", searchfilename)
+                raise WORCexceptions.WORCValueError(f"Number of files {searchfilename} found in {found_folder} is {len(foundfiles)}, expected {num_expected_files}. Search strategy was {search_strategy}. Check the output of your fastr network which jobs failed. Simply re-running may be sufficient, as this job may have started before the desired input was generated due to this hacky solution.")
+
+            if outputtype == "features":
+                modality = "_".join(os.path.basename(found_folder).split("_")[-2:])
+                output.append(modality + "=" + ",".join(foundfiles))
+            elif outputtype in ["images", "segmentations"]:
+                return foundfiles
+            else:
+                raise WORCexceptions.WORCValueError(f"outputtype {outputtype} not recognized.")
+                
+        if num_found_folders == 0:
+            raise WORCexceptions.WORCValueError(f"Couldn't find files in folder {foldername} with searchstrings {','.join(searchstrings)}.")
+                                                
+        return output
+    
+    
 def convert_config_pyradiomics(config):
     """Convert WORC to PyRadiomics config.
 

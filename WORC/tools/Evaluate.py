@@ -475,22 +475,23 @@ class Evaluate(object):
                         # Take features directly from feature computation toolboxes
                         for node in self.parent.featureconverter_train[label]:
                             name = node.id
-                            if 'classification' in self.modus:
+                            if 'classification' in self.modus and not self.parent.WindowsCharacterLimitHack:
                                 self.links_STest_Features[name] =\
                                     self.node_STest.inputs['features'][name] << node.outputs['feat_out']
 
                                 self.links_decomposition_Features[name] =\
                                     self.node_decomposition.inputs['features'][name] << node.outputs['feat_out']
-
-                            self.links_Boxplots_Features[name] =\
-                                self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']
-
-                            # All features should be input at once
-                            if 'classification' in self.modus:
+                                
+                                # All features should be input at once
                                 self.links_STest_Features[name].collapse = 'train'
                                 self.links_decomposition_Features[name].collapse = 'train'
 
-                            self.links_Boxplots_Features[name].collapse = 'train'
+                            if not self.parent.WindowsCharacterLimitHack:
+                                self.links_Boxplots_Features[name] =\
+                                    self.node_Boxplots_Features.inputs['features'][name] << node.outputs['feat_out']                              
+
+                                # All features should be input at once
+                                self.links_Boxplots_Features[name].collapse = 'train'
                     else:
                         # Feature are precomputed and given as sources
                         for node in self.parent.sources_features_train.values():
@@ -553,7 +554,7 @@ class Evaluate(object):
             segmentations =\
                 self.parent.sources_segmentations_test[label].output
 
-            if 'classification' in self.modus:
+            if 'classification' in self.modus and not self.parent.WindowsCharacterLimitHack:
                 self.link_images_perc =\
                     self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
                 self.link_images_perc.collapse = 'test'
@@ -561,16 +562,17 @@ class Evaluate(object):
                     self.network.create_link(segmentations, self.node_Ranked_Percentages.inputs['segmentations'])
                 self.link_segmentations_perc.collapse = 'test'
 
-            self.link_images_post =\
-                self.network.create_link(images, self.node_Ranked_Posteriors.inputs['images'])
-            self.link_images_post.collapse = 'test'
-            self.link_segmentations_post =\
-                self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
-            self.link_segmentations_post.collapse = 'test'
+            if not self.parent.WindowsCharacterLimitHack:
+                self.link_images_post =\
+                    self.network.create_link(images, self.node_Ranked_Posteriors.inputs['images'])
+                self.link_images_post.collapse = 'test'
+                self.link_segmentations_post =\
+                    self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
+                self.link_segmentations_post.collapse = 'test'
 
         elif hasattr(self.parent, 'sources_images_train'):
             if self.parent.sources_images_train:
-                if 'classification' in self.modus:
+                if 'classification' in self.modus and not self.parent.WindowsCharacterLimitHack:
                     self.link_images_perc =\
                         self.network.create_link(images, self.node_Ranked_Percentages.inputs['images'])
                     self.link_images_perc.collapse = 'train'
@@ -578,12 +580,13 @@ class Evaluate(object):
                         self.network.create_link(segmentations, self.node_Ranked_Percentages.inputs['segmentations'])
                     self.link_segmentations_perc.collapse = 'train'
 
-                self.link_images_post =\
-                    self.network.create_link(images, self.node_Ranked_Posteriors.inputs['images'])
-                self.link_images_post.collapse = 'train'
-                self.link_segmentations_post =\
-                    self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
-                self.link_segmentations_post.collapse = 'train'
+                if not self.parent.WindowsCharacterLimitHack:
+                    self.link_images_post =\
+                        self.network.create_link(images, self.node_Ranked_Posteriors.inputs['images'])
+                    self.link_images_post.collapse = 'train'
+                    self.link_segmentations_post =\
+                        self.network.create_link(segmentations, self.node_Ranked_Posteriors.inputs['segmentations'])
+                    self.link_segmentations_post.collapse = 'train'
 
     def set(self, estimator=None, pinfo=None, images=None,
             segmentations=None, config=None, features=None,

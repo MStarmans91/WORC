@@ -31,7 +31,7 @@ warnings.filterwarnings("ignore", category=NaturalNameWarning)
 def main():
     parser = argparse.ArgumentParser(description='Radiomics classification')
     parser.add_argument('-feat_train', '--feat_train', metavar='features_train',
-                        nargs='+', dest='feat_train', type=str, required=True,
+                        nargs='+', dest='feat_train', type=str, required=False,
                         help='Patient features input of first modality (HDF)')
     parser.add_argument('-feat_test', '--feat_test', metavar='features_test',
                         nargs='+', dest='feat_test', type=str, required=False,

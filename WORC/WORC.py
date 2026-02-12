@@ -163,6 +163,7 @@ class WORC(object):
         self._add_evaluation = False
         self.TrainTest = False
         self.OnlyTest = False
+        self.WindowsCharacterLimitHack = False
 
         # Memory settings for all fastr nodes
         self.fastr_memory_parameters = dict()
@@ -205,10 +206,12 @@ class WORC(object):
         config['General']['ComBat'] = 'False'
         config['General']['Fingerprint'] = 'True'
         config['General']['DoTestNRSNEns'] = 'False'
+        config['General']['WindowsCharacterLimitHack'] = str(self.WindowsCharacterLimitHack)
 
         # Fingerprinting
         config['Fingerprinting'] = dict()
         config['Fingerprinting']['max_num_image'] = '100'
+        config['Fingerprinting']['inputtype'] = 'images'
 
         # Options for the object/patient labels that are used
         config['Labels'] = dict()
@@ -879,15 +882,20 @@ class WORC(object):
                         # Add fingerprinting
                         if self.configs[0]['General']['Fingerprint'] == 'True':
                             self.add_fingerprinter(id=label, type='images', config_source=self.sources_parameters[label].output)
-                            self.links_fingerprinting[f'{label}_images'] = self.network.create_link(self.converters_im_train[label].outputs['image'], self.node_fingerprinters[label].inputs['images_train'])
-                            self.links_fingerprinting[f'{label}_images'].collapse = 'train'
+
+                            # When applying the hack, the fingerprinter job will itself check which files it needs to read
+                            if not self.WindowsCharacterLimitHack:
+                                self.links_fingerprinting[f'{label}_images'] = self.network.create_link(self.converters_im_train[label].outputs['image'], self.node_fingerprinters[label].inputs['images_train'])
+                                self.links_fingerprinting[f'{label}_images'].collapse = 'train'
 
                             self.sinks_configs[label].input = self.node_fingerprinters[label].outputs['config']
 
                             if nmod == 0:
-                                # Also add images from first modality for classification fingerprinter
-                                self.links_fingerprinting['classification'] = self.network.create_link(self.converters_im_train[label].outputs['image'], self.node_fingerprinters['classification'].inputs['images_train'])
-                                self.links_fingerprinting['classification'].collapse = 'train'
+                                # When applying the hack, the fingerprinter job will itself check which files it needs to read
+                                if not self.WindowsCharacterLimitHack:
+                                    # Also add images from first modality for classification fingerprinter
+                                    self.links_fingerprinting['classification'] = self.network.create_link(self.converters_im_train[label].outputs['image'], self.node_fingerprinters['classification'].inputs['images_train'])
+                                    self.links_fingerprinting['classification'].collapse = 'train'
 
                         else:
                             self.sinks_configs[label].input = self.sources_parameters[label].output
@@ -957,8 +965,10 @@ class WORC(object):
 
                             # Add to fingerprinting if required
                             if self.configs[0]['General']['Fingerprint'] == 'True':
-                                self.links_fingerprinting[f'{label}_segmentations'] = self.network.create_link(self.converters_seg_train[label].outputs['image'], self.node_fingerprinters[label].inputs['segmentations_train'])
-                                self.links_fingerprinting[f'{label}_segmentations'].collapse = 'train'
+                                # When applying the hack, the fingerprinter job will itself check which files it needs to read
+                                if not self.WindowsCharacterLimitHack:
+                                    self.links_fingerprinting[f'{label}_segmentations'] = self.network.create_link(self.converters_seg_train[label].outputs['image'], self.node_fingerprinters[label].inputs['segmentations_train'])
+                                    self.links_fingerprinting[f'{label}_segmentations'].collapse = 'train'
 
                         elif self.segmode == 'Register':
                             # ---------------------------------------------
@@ -968,9 +978,11 @@ class WORC(object):
 
                             # Add to fingerprinting if required
                             if self.configs[0]['General']['Fingerprint'] == 'True':
-                                # Since there are no segmentations yet of this modality, just use those of the first, provided modality
-                                self.links_fingerprinting[f'{label}_segmentations'] = self.network.create_link(self.converters_seg_train[self.modlabels[0]].outputs['image'], self.node_fingerprinters[label].inputs['segmentations_train'])
-                                self.links_fingerprinting[f'{label}_segmentations'].collapse = 'train'
+                                # When applying the hack, the fingerprinter job will itself check which files it needs to read
+                                if not self.WindowsCharacterLimitHack:
+                                    # Since there are no segmentations yet of this modality, just use those of the first, provided modality
+                                    self.links_fingerprinting[f'{label}_segmentations'] = self.network.create_link(self.converters_seg_train[self.modlabels[0]].outputs['image'], self.node_fingerprinters[label].inputs['segmentations_train'])
+                                    self.links_fingerprinting[f'{label}_segmentations'].collapse = 'train'
 
                         # -----------------------------------------------------
                         # Optionally, add segmentix, the in-house segmentation
@@ -1043,8 +1055,9 @@ class WORC(object):
 
                             # Append features to the classification
                             if not self.configs[0]['General']['ComBat'] == 'True':
-                                self.links_C1_train[label].append(self.classify.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
-                                self.links_C1_train[label][i_node].collapse = 'train'
+                                if not self.WindowsCharacterLimitHack:
+                                    self.links_C1_train[label].append(self.classify.inputs['features_train'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_train[label][i_node].outputs['feat_out'])
+                                    self.links_C1_train[label][i_node].collapse = 'train'
 
                             # Save output
                             self.sinks_features_train[label][i_node].input = self.featureconverter_train[label][i_node].outputs['feat_out']
@@ -1056,8 +1069,9 @@ class WORC(object):
 
                                 # Append features to the classification
                                 if not self.configs[0]['General']['ComBat'] == 'True':
-                                    self.links_C1_test[label].append(self.classify.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
-                                    self.links_C1_test[label][i_node].collapse = 'test'
+                                    if not self.WindowsCharacterLimitHack:
+                                        self.links_C1_test[label].append(self.classify.inputs['features_test'][f'{label}_{self.featurecalculators[label][i_node]}'] << self.featureconverter_test[label][i_node].outputs['feat_out'])
+                                        self.links_C1_test[label][i_node].collapse = 'test'
 
                                 # Save output
                                 self.sinks_features_test[label][i_node].input = self.featureconverter_test[label][i_node].outputs['feat_out']
@@ -1086,22 +1100,26 @@ class WORC(object):
                         self.sources_features_train[label] = self.network.create_source('HDF5', id='features_train_' + label, node_group='train', step_id='train_sources')
 
                         # Add the features from this modality to the classifier node input
-                        self.links_C1_train[label] = self.classify.inputs['features_train'][str(label)] << self.sources_features_train[label].output
-                        self.links_C1_train[label].collapse = 'train'
+                        if not self.WindowsCharacterLimitHack:
+                            self.links_C1_train[label] = self.classify.inputs['features_train'][str(label)] << self.sources_features_train[label].output
+                            self.links_C1_train[label].collapse = 'train'
 
                         if self.features_test:
                             # Create a node for the feature computation
                             self.sources_features_test[label] = self.network.create_source('HDF5', id='features_test_' + label, node_group='test', step_id='test_sources')
 
                             # Add the features from this modality to the classifier node input
-                            self.links_C1_test[label] = self.classify.inputs['features_test'][str(label)] << self.sources_features_test[label].output
-                            self.links_C1_test[label].collapse = 'test'
+                            if not self.WindowsCharacterLimitHack:
+                                self.links_C1_test[label] = self.classify.inputs['features_test'][str(label)] << self.sources_features_test[label].output
+                                self.links_C1_test[label].collapse = 'test'
 
                         # Add input to fingerprinting for classification
                         if self.configs[0]['General']['Fingerprint'] == 'True':
-                            if num == 0:
-                                self.links_fingerprinting['classification'] = self.network.create_link(self.sources_features_train[label].output, self.node_fingerprinters['classification'].inputs['features_train'])
-                                self.links_fingerprinting['classification'].collapse = 'train'
+                            # When applying the hack, the fingerprinter job will itself check which files it needs to read
+                            if not self.WindowsCharacterLimitHack:
+                                if num == 0:
+                                    self.links_fingerprinting['classification'] = self.network.create_link(self.sources_features_train[label].output, self.node_fingerprinters['classification'].inputs['features_train'])
+                                    self.links_fingerprinting['classification'].collapse = 'train'
 
             else:
                 raise WORCexceptions.WORCIOError("Please provide labels for training, i.e., WORC.labels_train or SimpleWORC.labels_from_this_file.")

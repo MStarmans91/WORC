@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2026 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+import glob
 import numpy as np
 import configparser
 import SimpleITK as sitk
 from WORC.addexceptions import WORCKeyError, WORCValueError
 from WORC.processing.label_processing import findlabeldata
+from WORC.IOparser.file_io import windows_file_parser
 
 quantitative_modalities = ['CT', 'PET', 'Thermography', 'ADC', 'MG']
 qualitative_modalities = ['MRI', 'MR', 'DWI', 'US']
@@ -51,6 +54,36 @@ class Fingerprinter(object):
         config = configparser.ConfigParser()
         config.read(self.configuration)
 
+        # If WindowsCharacterlimitHack is enabled, manually check which images or features should be used
+        if config['General']['WindowsCharacterLimitHack'] or config['General']['WindowsCharacterLimitHack'] == "True":
+            print("[INFO] Applying Windows Character Limit hack to check which input images / segmentations / features to take.")
+            tempfolder = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(self.configuration))))
+            if config['Fingerprinting']['inputtype'] == 'images':
+                searchstrings = ["convert_im_train_*"]
+                searchfilename = "image_0.nii.gz"
+                self.images = windows_file_parser(foldername=tempfolder,
+                                                  searchstrings=searchstrings,
+                                                  searchfilename=searchfilename,
+                                                  outputtype="images")
+        
+                if self.type == 'images':
+                    # We also need segmentations
+                    searchstrings = ["convert_seg_train_*"]
+                    searchfilename = "image_0.nii.gz"
+                    self.segmentations = windows_file_parser(foldername=tempfolder,
+                                                             searchstrings=searchstrings,
+                                                             searchfilename=searchfilename,
+                                                             outputtype="segmentations")
+                
+            elif config['Fingerprinting']['inputtype'] == 'features':
+                # Assume we need the first feature set only, hence the outputtype images
+                searchstrings = ["featureconverter_train*", "features_train*"]
+                searchfilename = "feat_out_0.hdf5"
+                self.features = windows_file_parser(foldername=tempfolder,
+                                                    searchstrings=searchstrings,
+                                                    searchfilename=searchfilename,
+                                                    outputtype="images")
+                
         if self.type == 'classification':
             # Check class balance
             label_type = config['Labels']['label_names']
@@ -119,8 +152,9 @@ class Fingerprinter(object):
                 self.images = self.images[0:max_num_images]
                 # FIXME
                 if self.segmentations is not None:
-                    print('FIXME: segmentations is None')
                     self.segmentations = self.segmentations[0:max_num_images]
+                else:
+                    print('FIXME: segmentations is None')
 
             for imagefile in self.images:
                 image = sitk.ReadImage(imagefile)
