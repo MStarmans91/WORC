@@ -44,7 +44,7 @@ dependencies = [
     "numpy<=1.26.3",
     "pandas",
     'pyradiomics==3.0.1; sys_platform != "readthedocs"', 
-    'PREDICT>=3.2.0; sys_platform != "readthedocs"'
+    'PREDICT>=3.2.0; sys_platform != "readthedocs"',
     "pyOpenSSL",
     "pydicom",
     "rdflib",
