@@ -1,4 +1,4 @@
-WORC: Workflow for Optimal Radiomics Classification (v3.7.0)
+WORC: Workflow for Optimal Radiomics Classification (v3.7.1)
 ============================================================
 
 Information
@@ -23,8 +23,7 @@ Introduction
 - 🏥 **Domain Focused**: Designed and tested on 30+ multicenter medical datasets.
 - 📁 **Multi-modal Input**: Supports multiple image modalities, regions, custom features, and clinical data.
 - 📊 **Explainability Tools**: Built-in feature ranking and visualization utilities.
-- 🔁 **Robust Optimization**: Nested cross-validation and sample size0based confidence interval estimation.
-- 🧬 **Radiomics-Ready**: Includes PyRadiomics-based feature extraction and harmonization.
+- 🔁 **Robust Optimization**: Nested cross-validation and sample size-based confidence interval estimation.
 
 --------------
 
@@ -105,8 +104,8 @@ Contact
 
 We are happy to help you with any questions. Please sent us a mail or place an issue on the Github.
 
-Optional extra packages and software
-------------------------------------
+Optional extra features
+-----------------------
 
 Besides the default installation, there are several optional packages you could install to support WORC.
 

@@ -4,3 +4,28 @@ sphinx-argparse
 sphinxcontrib-httpdomain
 sphinx-autodoc-typehints
 sphinx_rtd_theme
+fastr
+imbalanced-learn
+lifelines
+lxml
+matplotlib
+matplot2tikz
+natsort
+networkx<=3.4.2 # for fastr
+numpy<=1.26.3
+pandas
+pyOpenSSL
+pydicom
+rdflib
+scikit-image
+scikit-learn
+scipy
+setuptools<=80.8.0 # for fastr
+SimpleITK
+six
+sphinx
+tables
+tqdm
+xgboost
+xlrd
+xnat

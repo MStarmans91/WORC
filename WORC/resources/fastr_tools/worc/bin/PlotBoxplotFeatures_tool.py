@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2017-2018 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2017-2026 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ from WORC.plotting.plot_boxplot_features import plot_boxplot_features
 def main():
     parser = argparse.ArgumentParser(description='Radiomics classification')
     parser.add_argument('-feat', '--feat', metavar='features',
-                        nargs='+', dest='feat', type=str, required=True,
+                        nargs='+', dest='feat', type=str, required=False,
                         help='Patient features input of first modality (HDF)')
     parser.add_argument('-pc', '--pc', metavar='Patientinfo',
                         dest='pc',

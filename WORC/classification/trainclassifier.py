@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2026 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +16,13 @@
 # limitations under the License.
 
 import os
-import numpy as np
 from scipy.stats import uniform
 from WORC.classification import crossval as cv
 from WORC.classification import construct_classifier as cc
-from WORC.IOparser.file_io import load_features
+from WORC.IOparser.file_io import load_features, windows_file_parser
 import WORC.IOparser.config_io_classifier as config_io
 from WORC.classification.AdvancedSampler import discrete_uniform, \
     log_uniform, boolean_uniform
-import json
 import warnings
 
 # Ignore pytables performance warning, as we are on purpose saving objects as such
@@ -125,12 +123,28 @@ def trainclassifier(feat_train, patientinfo_train, config,
             output_smac = output_smac[0]
 
     # Load variables from the config file
+    tempfolder = os.path.dirname(os.path.dirname(os.path.dirname(config)))
     config = config_io.load_config(config)
     label_type = config['Labels']['label_names']
     modus = config['Labels']['modus']
     combine_features = config['FeatPreProcess']['Combine']
     combine_method = config['FeatPreProcess']['Combine_method']
 
+    # If WindowsCharacterlimitHack is enabled, manually check which images or features should be used
+    if config['General']['WindowsCharacterLimitHack'] or config['General']['WindowsCharacterLimitHack'] == "True":
+        print("[INFO] Applying Windows Character Limit hack to check which input features to take.")
+        searchstrings = ["featureconverter_train*", "features_train*"]
+        searchfilename = "feat_out_0.hdf5"
+        feat_train = windows_file_parser(foldername=tempfolder,
+                                         searchstrings=searchstrings,
+                                         searchfilename=searchfilename)
+        
+        if patientinfo_test is not None:
+            searchstrings = ["featureconverter_test*", "features_test*"]
+            feat_test = windows_file_parser(foldername=tempfolder,
+                                            searchstrings=searchstrings,
+                                            searchfilename=searchfilename)
+        
     # Load the feature files and match to label data
     label_data_train, image_features_train =\
         load_features(feat_train, patientinfo_train, label_type,

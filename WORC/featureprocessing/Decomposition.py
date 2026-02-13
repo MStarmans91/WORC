@@ -23,9 +23,9 @@ import os
 import numpy as np
 from sklearn.decomposition import PCA, SparsePCA, KernelPCA
 from sklearn.manifold import TSNE
-from WORC.IOparser.file_io import load_features
 import WORC.IOparser.config_io_classifier as config_io
 from WORC.featureprocessing.Imputer import Imputer
+from WORC.IOparser.file_io import load_features, windows_file_parser
 
 
 def Decomposition(features, patientinfo, config, output, label_type=None,
@@ -62,8 +62,18 @@ def Decomposition(features, patientinfo, config, output, label_type=None,
 
     """
     # Load variables from the config file
+    tempfolder = os.path.dirname(os.path.dirname(os.path.dirname(config)))
     config = config_io.load_config(config)
 
+    # If WindowsCharacterlimitHack is enabled, manually check which images or features should be used
+    if config['General']['WindowsCharacterLimitHack'] or config['General']['WindowsCharacterLimitHack'] == "True":
+        print("[INFO] Applying Windows Character Limit hack to check which input features to take.")
+        searchstrings = ["featureconverter_train*", "features_train*"]
+        searchfilename = "feat_out_0.hdf5"
+        features = windows_file_parser(foldername=tempfolder,
+                                       searchstrings=searchstrings,
+                                       searchfilename=searchfilename)
+        
     # Create output folder if required
     if not os.path.exists(os.path.dirname(output)):
         os.makedirs(os.path.dirname(output))

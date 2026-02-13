@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=64", "wheel"]
+requires = ["setuptools>=64", "wheel", "numpy"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "WORC"
-version = "3.7.0"
+version = "3.7.1"
 description = "Workflow for Optimal Radiomics Classification."
 readme = "README.rst"
 requires-python = ">=3.11"

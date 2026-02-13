@@ -38,6 +38,26 @@ what fastr expected. Hence that does not give you any input on why the job faile
 e.g., the Python error. If you debug the fastr network, see above, use the fastr trace command to trace back the error
 of a specific sink and a specific sample to track down the exact tool error, e.g., the Python error.
 
+Error: ``FileNotFoundError: [WinError 206] The filename or extension is too long``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This happens on Windows when fastr runs into the command line character limit. Unfortunately there is no elegant way to solve this. However,
+we have build in a hack that you can activate with just a single parameter and line of code. Add the following to your code:
+
+.. code-block:: python
+
+  experiment._worc.WindowsCharacterLimitHack = True
+
+The jobs that usually run into character limits as they depend on a large number of files (e.g., fingerprinter, classification,
+statisticaltestfeatures) will now not get the actual files as input arguments, but themselves just look for the right files. This
+works quite universally as the filenames and structure are heavily standardized. One issue is that these jobs can be started by
+fastr before the jobs they depend on, as for fastr they appear independent. Hence, this may require restarting your experiment one or 
+multiple time. We realize this is inconvenient, but fortunately requires little effort.
+
+.. note:: When using fastr trace to trace back the error, fastr itself will show a different error:
+          ``fastr.exceptions.FastrExecutableNotFoundError: Could not find executable "python" on PATH:``
+
+
+
 Error: ``File "H5FDsec2.c", line 941, in H5FD_sec2_lock unable to lock file,`` ``errno = 37, error message = 'No locks available'``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Known HDF5 error, see also https://github.com/h5py/h5py/issues/1101.

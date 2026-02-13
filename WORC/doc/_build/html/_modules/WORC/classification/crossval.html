@@ -1,95 +1,47 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>WORC.classification.crossval &mdash; WORC 3.6.3 documentation</title>
-  
+  <title>WORC.classification.crossval &mdash; WORC 3.7.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/extra.css?v=a591123b" />
 
   
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=86e43a22"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../../index.html" class="icon icon-home"> WORC
           
-
-          
-            
-            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
-          
+          <a href="../../../index.html" class="icon icon-home">
+            WORC
+              <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                3.6.3
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
@@ -99,79 +51,41 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html#references">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">WORC</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>WORC.classification.crossval</li>
-    
-    
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">WORC.classification.crossval</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for WORC.classification.crossval</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2022 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2024 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -186,26 +100,38 @@
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">gmtime</span><span class="p">,</span> <span class="n">strftime</span>
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">LeaveOneOut</span>
-<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">ae</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.parameter_optimization</span> <span class="kn">import</span> <span class="n">random_search_parameters</span><span class="p">,</span> <span class="n">guided_search_parameters</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.regressors</span> <span class="kn">import</span> <span class="n">regressors</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.SearchCV</span> <span class="kn">import</span> <span class="n">RandomizedSearchCVfastr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">gmtime</span><span class="p">,</span> <span class="n">strftime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_auc_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">LeaveOneOut</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">WORC.addexceptions</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ae</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">WORC.classification.parameter_optimization</span><span class="w"> </span><span class="kn">import</span> <span class="n">random_search_parameters</span><span class="p">,</span> <span class="n">guided_search_parameters</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">WORC.classification.regressors</span><span class="w"> </span><span class="kn">import</span> <span class="n">regressors</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">WORC.classification.SearchCV</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomizedSearchCVfastr</span>
+
+<span class="c1"># Ignore pytables performance warning, as we are on purpose saving objects as such</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">PerformanceWarning</span><span class="p">,</span> <span class="n">NaturalNameWarning</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">PerformanceWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">PerformanceWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s2">&quot;pandas.io.pytables&quot;</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">pytables</span><span class="o">.</span><span class="n">PerformanceWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">NaturalNameWarning</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="random_split_cross_validation"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.random_split_cross_validation">[docs]</a><span class="k">def</span> <span class="nf">random_split_cross_validation</span><span class="p">(</span><span class="n">image_features</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span>
+
+<div class="viewcode-block" id="random_split_cross_validation">
+<a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.random_split_cross_validation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">random_split_cross_validation</span><span class="p">(</span><span class="n">image_features</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span>
                                   <span class="n">patient_ids</span><span class="p">,</span>
                                   <span class="n">n_iterations</span><span class="p">,</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span>
                                   <span class="n">modus</span><span class="p">,</span> <span class="n">test_size</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">save_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -214,7 +140,7 @@
                                   <span class="n">fixed_seed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                   <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                   <span class="n">use_SMAC</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">smac_result_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Cross-validation in which data is randomly split in each iteration.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cross-validation in which data is randomly split in each iteration.</span>
 
 <span class="sd">    Due to options of doing single-label and multi-label classification,</span>
 <span class="sd">    stratified splitting, and regression, we use a manual loop instead</span>
@@ -458,14 +384,17 @@
     <span class="k">return</span> <span class="n">save_data</span></div>
 
 
-<div class="viewcode-block" id="LOO_cross_validation"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.LOO_cross_validation">[docs]</a><span class="k">def</span> <span class="nf">LOO_cross_validation</span><span class="p">(</span><span class="n">image_features</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">patient_ids</span><span class="p">,</span>
+
+<div class="viewcode-block" id="LOO_cross_validation">
+<a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.LOO_cross_validation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">LOO_cross_validation</span><span class="p">(</span><span class="n">image_features</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">patient_ids</span><span class="p">,</span>
                          <span class="n">param_grid</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span>
                          <span class="n">modus</span><span class="p">,</span> <span class="n">test_size</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">save_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                          <span class="n">tempsave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tempfolder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                          <span class="n">fixed_seed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                          <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                          <span class="n">use_SMAC</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">smac_result_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Cross-validation in which each sample is once used as the test set.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cross-validation in which each sample is once used as the test set.</span>
 
 <span class="sd">    Mostly based on the default sklearn object.</span>
 
@@ -590,12 +519,15 @@
     <span class="k">return</span> <span class="n">save_data</span></div>
 
 
-<div class="viewcode-block" id="crossval"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.crossval">[docs]</a><span class="k">def</span> <span class="nf">crossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span><span class="p">,</span>
+
+<div class="viewcode-block" id="crossval">
+<a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.crossval">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">crossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span><span class="p">,</span>
              <span class="n">param_grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tempsave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Use&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span> <span class="n">outputfolder</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">,</span> <span class="n">use_SMAC</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">smac_result_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs multiple individual classifiers based on the label settings.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs multiple individual classifiers based on the label settings.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -701,10 +633,21 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">tempfolder</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">handlers</span><span class="p">[:]:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+    <span class="c1"># Setup the logging to work independent of the fastr logging</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>  <span class="c1"># or &#39;my_module.subpart&#39; if you want</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">logfilename</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="c1"># Add handler only if not already added (to avoid duplicate logs)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">logfilename</span><span class="p">)</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Starting fitting of estimators.&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Extract some parameters</span>
     <span class="n">crossval_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span>
     <span class="n">n_iterations</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;N_iterations&#39;</span><span class="p">]</span>
     <span class="n">test_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;CrossValidation&#39;</span><span class="p">][</span><span class="s1">&#39;test_size&#39;</span><span class="p">]</span>
@@ -827,11 +770,14 @@
     <span class="k">return</span> <span class="n">panda_data</span></div>
 
 
-<div class="viewcode-block" id="nocrossval"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.nocrossval">[docs]</a><span class="k">def</span> <span class="nf">nocrossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span> <span class="n">label_data_test</span><span class="p">,</span> <span class="n">image_features_train</span><span class="p">,</span>
+
+<div class="viewcode-block" id="nocrossval">
+<a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.nocrossval">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">nocrossval</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">label_data_train</span><span class="p">,</span> <span class="n">label_data_test</span><span class="p">,</span> <span class="n">image_features_train</span><span class="p">,</span>
                <span class="n">image_features_test</span><span class="p">,</span> <span class="n">param_grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_fastr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                <span class="n">fastr_plugin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ensemble</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Use&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
                <span class="n">modus</span><span class="o">=</span><span class="s1">&#39;singlelabel&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Constructs multiple individual classifiers based on the label settings.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs multiple individual classifiers based on the label settings.</span>
 
 <span class="sd">    Arguments:</span>
 <span class="sd">        config (Dict): Dictionary with config settings</span>
@@ -985,10 +931,13 @@
     <span class="k">return</span> <span class="n">panda_data</span></div>
 
 
-<div class="viewcode-block" id="test_RS_Ensemble"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.test_RS_Ensemble">[docs]</a><span class="k">def</span> <span class="nf">test_RS_Ensemble</span><span class="p">(</span><span class="n">estimator_input</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="p">,</span>
+
+<div class="viewcode-block" id="test_RS_Ensemble">
+<a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.crossval.test_RS_Ensemble">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_RS_Ensemble</span><span class="p">(</span><span class="n">estimator_input</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">Y_test</span><span class="p">,</span>
                      <span class="n">feature_labels</span><span class="p">,</span> <span class="n">output_json</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">RSs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">ensembles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Test performance for different random search and ensemble sizes.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test performance for different random search and ensemble sizes.</span>
 
 <span class="sd">    This function is written for conducting a specific experiment from the</span>
 <span class="sd">    WORC paper to test how the performance varies with varying random search</span>
@@ -1036,7 +985,8 @@
             <span class="c1"># Get the mean performances and get new ranking</span>
             <span class="n">F1_validation</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">[</span><span class="s1">&#39;mean_test_score&#39;</span><span class="p">]</span>
             <span class="n">F1_validation</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_validation</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_workflows</span><span class="p">]</span>
-            <span class="n">workflow_ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">F1_validation</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Normally, rank from smallest to largest, so reverse</span>
+            <span class="c1"># workflow_ranking = np.argsort(np.asarray(F1_validation)).tolist()[::-1]  # Outdated</span>
+            <span class="n">workflow_ranking</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">F1_validation</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">F1_validation</span><span class="p">))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Normally, rank from smallest to largest, so reverse</span>
             <span class="n">workflow_ranking</span> <span class="o">=</span> <span class="n">workflow_ranking</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">maxlen</span><span class="p">]</span>  <span class="c1"># only maxlen estimators needed for ensembling tests</span>
             <span class="n">F1_validation</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_validation</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">workflow_ranking</span><span class="p">]</span>
 
@@ -1058,7 +1008,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Refit all validation workflows so we dont have to do this for every ensembling method.&#39;</span><span class="p">)</span>
                 
                 <span class="c1"># Define function to fit a single estimator</span>
-                <span class="k">def</span> <span class="nf">fitvalidationestimator</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+                <span class="k">def</span><span class="w"> </span><span class="nf">fitvalidationestimator</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
                     <span class="n">new_estimator</span> <span class="o">=</span> <span class="n">RandomizedSearchCVfastr</span><span class="p">()</span>
                     <span class="n">new_estimator</span><span class="o">.</span><span class="n">refit_and_score</span><span class="p">(</span><span class="n">X_train_temp</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span>
                                                   <span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="n">test</span><span class="p">)</span>
@@ -1088,8 +1038,8 @@
             <span class="n">F1_training</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_training</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_workflows</span><span class="p">]</span>
             <span class="n">F1_training</span> <span class="o">=</span> <span class="p">[</span><span class="n">F1_training</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">workflow_ranking</span><span class="p">]</span>
 
-            <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Mean training F1-score </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1"> top </span><span class="si">{</span><span class="n">maxlen</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">F1_validation</span>
-            <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Mean validation F1-score </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1"> top </span><span class="si">{</span><span class="n">maxlen</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">F1_training</span>
+            <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Mean training F1-score </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1"> top </span><span class="si">{</span><span class="n">maxlen</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">F1_training</span>
+            <span class="n">performances</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Mean validation F1-score </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1"> top </span><span class="si">{</span><span class="n">maxlen</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">F1_validation</span>
 
             <span class="k">for</span> <span class="n">ensemble</span> <span class="ow">in</span> <span class="n">ensembles</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ensemble</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -1126,49 +1076,34 @@
         <span class="c1"># Write output</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_json</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">performances</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
-
-    </p>
+    <p>&#169; Copyright 2016 -- 2025, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

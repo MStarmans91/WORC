@@ -1,95 +1,47 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>WORC.classification.trainclassifier &mdash; WORC 3.6.3 documentation</title>
-  
+  <title>WORC.classification.trainclassifier &mdash; WORC 3.7.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/extra.css?v=a591123b" />
 
   
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=86e43a22"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../../index.html" class="icon icon-home"> WORC
           
-
-          
-            
-            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
-          
+          <a href="../../../index.html" class="icon icon-home">
+            WORC
+              <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                3.6.3
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
@@ -99,79 +51,41 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html#references">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">WORC</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>WORC.classification.trainclassifier</li>
-    
-    
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">WORC.classification.trainclassifier</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for WORC.classification.trainclassifier</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="c1"># Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of</span>
+<span class="c1"># Copyright 2016-2026 Biomedical Imaging Group Rotterdam, Departments of</span>
 <span class="c1"># Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -186,23 +100,32 @@
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">uniform</span>
-<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="kn">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
-<span class="kn">from</span> <span class="nn">WORC.classification</span> <span class="kn">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
-<span class="kn">from</span> <span class="nn">WORC.IOparser.file_io</span> <span class="kn">import</span> <span class="n">load_features</span>
-<span class="kn">import</span> <span class="nn">WORC.IOparser.config_io_classifier</span> <span class="k">as</span> <span class="nn">config_io</span>
-<span class="kn">from</span> <span class="nn">WORC.classification.AdvancedSampler</span> <span class="kn">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> \
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">uniform</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">WORC.classification</span><span class="w"> </span><span class="kn">import</span> <span class="n">crossval</span> <span class="k">as</span> <span class="n">cv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">WORC.classification</span><span class="w"> </span><span class="kn">import</span> <span class="n">construct_classifier</span> <span class="k">as</span> <span class="n">cc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">WORC.IOparser.file_io</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_features</span><span class="p">,</span> <span class="n">windows_file_parser</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">WORC.IOparser.config_io_classifier</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">config_io</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">WORC.classification.AdvancedSampler</span><span class="w"> </span><span class="kn">import</span> <span class="n">discrete_uniform</span><span class="p">,</span> \
     <span class="n">log_uniform</span><span class="p">,</span> <span class="n">boolean_uniform</span>
-<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="c1"># Ignore pytables performance warning, as we are on purpose saving objects as such</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tables</span><span class="w"> </span><span class="kn">import</span> <span class="n">PerformanceWarning</span><span class="p">,</span> <span class="n">NaturalNameWarning</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">PerformanceWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">PerformanceWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s2">&quot;pandas.io.pytables&quot;</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">pytables</span><span class="o">.</span><span class="n">PerformanceWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">NaturalNameWarning</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="trainclassifier"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.trainclassifier.trainclassifier">[docs]</a><span class="k">def</span> <span class="nf">trainclassifier</span><span class="p">(</span><span class="n">feat_train</span><span class="p">,</span> <span class="n">patientinfo_train</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span>
+<div class="viewcode-block" id="trainclassifier">
+<a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.trainclassifier.trainclassifier">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">trainclassifier</span><span class="p">(</span><span class="n">feat_train</span><span class="p">,</span> <span class="n">patientinfo_train</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span>
                     <span class="n">output_hdf</span><span class="p">,</span>
                     <span class="n">feat_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">patientinfo_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">fixedsplits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_smac</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Train a classifier using machine learning from features.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train a classifier using machine learning from features.</span>
 
 <span class="sd">    By default, if no</span>
 <span class="sd">    split in training and test is supplied, a cross validation</span>
@@ -287,12 +210,28 @@
             <span class="n">output_smac</span> <span class="o">=</span> <span class="n">output_smac</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Load variables from the config file</span>
+    <span class="n">tempfolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">config</span><span class="p">)))</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">config_io</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
     <span class="n">label_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;label_names&#39;</span><span class="p">]</span>
     <span class="n">modus</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">][</span><span class="s1">&#39;modus&#39;</span><span class="p">]</span>
     <span class="n">combine_features</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatPreProcess&#39;</span><span class="p">][</span><span class="s1">&#39;Combine&#39;</span><span class="p">]</span>
     <span class="n">combine_method</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;FeatPreProcess&#39;</span><span class="p">][</span><span class="s1">&#39;Combine_method&#39;</span><span class="p">]</span>
 
+    <span class="c1"># If WindowsCharacterlimitHack is enabled, manually check which images or features should be used</span>
+    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;WindowsCharacterLimitHack&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;General&#39;</span><span class="p">][</span><span class="s1">&#39;WindowsCharacterLimitHack&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;True&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[INFO] Applying Windows Character Limit hack to check which input features to take.&quot;</span><span class="p">)</span>
+        <span class="n">searchstrings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;featureconverter_train*&quot;</span><span class="p">,</span> <span class="s2">&quot;features_train*&quot;</span><span class="p">]</span>
+        <span class="n">searchfilename</span> <span class="o">=</span> <span class="s2">&quot;feat_out_0.hdf5&quot;</span>
+        <span class="n">feat_train</span> <span class="o">=</span> <span class="n">windows_file_parser</span><span class="p">(</span><span class="n">foldername</span><span class="o">=</span><span class="n">tempfolder</span><span class="p">,</span>
+                                         <span class="n">searchstrings</span><span class="o">=</span><span class="n">searchstrings</span><span class="p">,</span>
+                                         <span class="n">searchfilename</span><span class="o">=</span><span class="n">searchfilename</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">patientinfo_test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">searchstrings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;featureconverter_test*&quot;</span><span class="p">,</span> <span class="s2">&quot;features_test*&quot;</span><span class="p">]</span>
+            <span class="n">feat_test</span> <span class="o">=</span> <span class="n">windows_file_parser</span><span class="p">(</span><span class="n">foldername</span><span class="o">=</span><span class="n">tempfolder</span><span class="p">,</span>
+                                            <span class="n">searchstrings</span><span class="o">=</span><span class="n">searchstrings</span><span class="p">,</span>
+                                            <span class="n">searchfilename</span><span class="o">=</span><span class="n">searchfilename</span><span class="p">)</span>
+        
     <span class="c1"># Load the feature files and match to label data</span>
     <span class="n">label_data_train</span><span class="p">,</span> <span class="n">image_features_train</span> <span class="o">=</span>\
         <span class="n">load_features</span><span class="p">(</span><span class="n">feat_train</span><span class="p">,</span> <span class="n">patientinfo_train</span><span class="p">,</span> <span class="n">label_type</span><span class="p">,</span>
@@ -358,8 +297,11 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saved data!&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="add_parameters_to_grid"><a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.trainclassifier.add_parameters_to_grid">[docs]</a><span class="k">def</span> <span class="nf">add_parameters_to_grid</span><span class="p">(</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Add non-classifier parameters from config  to param grid.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="add_parameters_to_grid">
+<a class="viewcode-back" href="../../../autogen/WORC.classification.html#WORC.classification.trainclassifier.add_parameters_to_grid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_parameters_to_grid</span><span class="p">(</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add non-classifier parameters from config  to param grid.&quot;&quot;&quot;</span>
     <span class="c1"># IF at least once groupwise search is turned on, add it to the param grid</span>
     <span class="k">if</span> <span class="s1">&#39;True&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;GroupwiseSearch&#39;</span><span class="p">]:</span>
         <span class="n">param_grid</span><span class="p">[</span><span class="s1">&#39;SelectGroups&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;Featsel&#39;</span><span class="p">][</span><span class="s1">&#39;GroupwiseSearch&#39;</span><span class="p">]</span>
@@ -482,49 +424,34 @@
             <span class="n">discrete_uniform</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">param_grid</span></div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.
-
-    </p>
+    <p>&#169; Copyright 2016 -- 2025, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

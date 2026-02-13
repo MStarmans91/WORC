@@ -1,91 +1,47 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>WORC.IOparser.file_io &mdash; WORC 3.6.2 documentation</title>
-  
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WORC.IOparser.file_io &mdash; WORC 3.7.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/extra.css?v=a591123b" />
 
   
-  
-  
-  
-
-  
-  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
-  
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=86e43a22"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../../../index.html" class="icon icon-home"> WORC
           
-
-          
-            
-            <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
-          
+          <a href="../../../index.html" class="icon icon-home">
+            WORC
+              <img src="../../../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
           </a>
-
-          
-            
-            
-              <div class="version">
-                3.6.2
-              </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/quick_start.html">Quick start guide</a></li>
@@ -95,72 +51,37 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../static/additionalfunctionality.html">Additional functionality</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/faq.html">FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../static/developerdocumentation.html#references">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../static/changelog.html">Changelog</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../autogen/WORC.html">WORC Package</a></li>
 </ul>
 
-            
-          
         </div>
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">WORC</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../../../index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-        
-      <li>WORC.IOparser.file_io</li>
-    
-    
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">WORC.IOparser.file_io</li>
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for WORC.IOparser.file_io</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
@@ -180,16 +101,18 @@
 <span class="c1"># limitations under the License.</span>
 
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">WORC.processing.label_processing</span> <span class="k">as</span> <span class="nn">lp</span>
-<span class="kn">import</span> <span class="nn">WORC.addexceptions</span> <span class="k">as</span> <span class="nn">WORCexceptions</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">WORC.processing.label_processing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">lp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">WORC.addexceptions</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">WORCexceptions</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
 
-
-<div class="viewcode-block" id="load_data"><a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.load_data">[docs]</a><span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="n">featurefiles</span><span class="p">,</span> <span class="n">patientinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">modnames</span><span class="o">=</span><span class="p">[],</span>
+<div class="viewcode-block" id="load_data">
+<a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.load_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="n">featurefiles</span><span class="p">,</span> <span class="n">patientinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">modnames</span><span class="o">=</span><span class="p">[],</span>
               <span class="n">combine_features</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">combine_method</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read feature files and stack the features per patient in an array.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read feature files and stack the features per patient in an array.</span>
 
 <span class="sd">        Additionally, if a patient label file is supplied, the features from</span>
 <span class="sd">        a patient will be matched to the labels.</span>
@@ -246,11 +169,11 @@
     <span class="c1"># Check when we found patient ID&#39;s, if we did for all objects</span>
     <span class="k">if</span> <span class="n">pids</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_features_temp</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Length of pids {len(pids)}&#39;</span> <span class="o">+</span>
+            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Length of pids </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pids</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span> <span class="o">+</span>
                                                 <span class="s1">&#39;does not match&#39;</span> <span class="o">+</span>
                                                 <span class="s1">&#39;number of objects &#39;</span> <span class="o">+</span>
                                                 <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_features_temp</span><span class="p">))</span> <span class="o">+</span>
-                                                <span class="n">f</span><span class="s1">&#39;Found </span><span class="si">{pids}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                                                <span class="sa">f</span><span class="s1">&#39;Found </span><span class="si">{</span><span class="n">pids</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
     <span class="c1"># If some objects miss certain features, we will identify these with NaN values</span>
     <span class="n">feature_labels_all</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
@@ -318,7 +241,7 @@
         <span class="n">new_pids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="n">new_features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="n">pid_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">])</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Original number of samples / patients: </span><span class="si">{pid_length}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Original number of samples / patients: </span><span class="si">{</span><span class="n">pid_length</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
         <span class="n">already_processed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">pnum</span><span class="p">,</span> <span class="n">pid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">]):</span>
@@ -333,13 +256,13 @@
 
                 <span class="c1"># Only process patients which occur multiple times</span>
                 <span class="k">if</span> <span class="n">occurrences</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Found </span><span class="si">{occurrences}</span><span class="s1"> occurrences for </span><span class="si">{pid}</span><span class="s1">.&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Found </span><span class="si">{</span><span class="n">occurrences</span><span class="si">}</span><span class="s1"> occurrences for </span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
                     <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">pid</span><span class="p">]</span>
                     <span class="n">feature_values_thispatient</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">image_features</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">])</span>
                     <span class="k">if</span> <span class="n">combine_method</span> <span class="o">==</span> <span class="s1">&#39;mean&#39;</span><span class="p">:</span>
                         <span class="n">feature_values_thispatient</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">feature_values_thispatient</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">KeyError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="si">{combine_method}</span><span class="s1"> is not a valid combination method, should be mean or max.&#39;</span><span class="p">)</span>
+                        <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">combine_method</span><span class="si">}</span><span class="s1"> is not a valid combination method, should be mean or max.&#39;</span><span class="p">)</span>
                     <span class="n">features</span> <span class="o">=</span> <span class="p">(</span><span class="n">feature_values_thispatient</span><span class="p">,</span> <span class="n">feature_labels</span><span class="p">)</span>
 
                     <span class="c1"># And add the new one</span>
@@ -358,14 +281,17 @@
         <span class="n">image_features</span> <span class="o">=</span> <span class="n">new_features</span>
 
         <span class="n">pid_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_data</span><span class="p">[</span><span class="s1">&#39;patient_IDs&#39;</span><span class="p">])</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Number of samples / patients after combining: </span><span class="si">{pid_length}</span><span class="s1">.&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Number of samples / patients after combining: </span><span class="si">{</span><span class="n">pid_length</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span></div>
 
 
-<div class="viewcode-block" id="load_features"><a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.load_features">[docs]</a><span class="k">def</span> <span class="nf">load_features</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">patientinfo</span><span class="p">,</span> <span class="n">label_type</span><span class="p">,</span> <span class="n">combine_features</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+
+<div class="viewcode-block" id="load_features">
+<a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.load_features">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_features</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">patientinfo</span><span class="p">,</span> <span class="n">label_type</span><span class="p">,</span> <span class="n">combine_features</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">combine_method</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read feature files and stack the features per patient in an array.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read feature files and stack the features per patient in an array.</span>
 
 <span class="sd">        Additionally, if a patient label file is supplied, the features from</span>
 <span class="sd">        a patient will be matched to the labels.</span>
@@ -424,8 +350,75 @@
     <span class="k">return</span> <span class="n">label_data</span><span class="p">,</span> <span class="n">image_features</span></div>
 
 
-<div class="viewcode-block" id="convert_config_pyradiomics"><a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.convert_config_pyradiomics">[docs]</a><span class="k">def</span> <span class="nf">convert_config_pyradiomics</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert WORC to PyRadiomics config.</span>
+
+<div class="viewcode-block" id="windows_file_parser">
+<a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.windows_file_parser">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">windows_file_parser</span><span class="p">(</span><span class="n">foldername</span><span class="p">,</span> <span class="n">searchstrings</span><span class="p">,</span> <span class="n">searchfilename</span><span class="p">,</span>
+                        <span class="n">outputtype</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check which files should be passed to a function.</span>
+
+<span class="sd">    Can be applied to circumvent the Windows command line limit to &quot;manually&quot; search</span>
+<span class="sd">    for files which should be fe to a function, instead of WORC passing these directly </span>
+<span class="sd">    into the function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        foldername: string, mandatory</span>
+<span class="sd">                Folder in which to search</span>
+
+<span class="sd">        searchstrings: list of strings, mandatory</span>
+<span class="sd">                String(s) used to search for files in the foldername</span>
+
+<span class="sd">        searchfilename: string, mandatory</span>
+<span class="sd">                Name of files which should be looked for in the found subfolders.</span>
+
+<span class="sd">        outputtype: string, optional</span>
+<span class="sd">                Type of filenames that are output. Default: &quot;features&quot;</span>
+
+<span class="sd">    Output</span>
+<span class="sd">        ---------</span>
+<span class="sd">        output: list</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_found_folders</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">searchstring</span> <span class="ow">in</span> <span class="n">searchstrings</span><span class="p">:</span>
+        <span class="n">found_folders</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">foldername</span><span class="p">,</span> <span class="n">searchstring</span><span class="p">))</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">d</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">found_folders</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+    
+        <span class="n">num_found_folders</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">found_folder</span> <span class="ow">in</span> <span class="n">found_folders</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Parsing folder </span><span class="si">{</span><span class="n">found_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">foundfiles</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">found_folder</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">searchfilename</span><span class="p">))</span>
+            <span class="n">foundfiles</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+            <span class="c1"># Check if we get the expected number of images</span>
+            <span class="n">num_expected_files</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">found_folder</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">foundfiles</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_expected_files</span><span class="p">:</span>
+                <span class="n">search_strategy</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">found_folder</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">searchfilename</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of files </span><span class="si">{</span><span class="n">searchfilename</span><span class="si">}</span><span class="s2"> found in </span><span class="si">{</span><span class="n">found_folder</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">foundfiles</span><span class="p">)</span><span class="si">}</span><span class="s2">, expected </span><span class="si">{</span><span class="n">num_expected_files</span><span class="si">}</span><span class="s2">. Search strategy was </span><span class="si">{</span><span class="n">search_strategy</span><span class="si">}</span><span class="s2">. Check the output of your fastr network which jobs failed. Simply re-running may be sufficient, as this job may have started before the desired input was generated due to this hacky solution.&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">outputtype</span> <span class="o">==</span> <span class="s2">&quot;features&quot;</span><span class="p">:</span>
+                <span class="n">modality</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">found_folder</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span>
+                <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">modality</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">foundfiles</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">outputtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;images&quot;</span><span class="p">,</span> <span class="s2">&quot;segmentations&quot;</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="n">foundfiles</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;outputtype </span><span class="si">{</span><span class="n">outputtype</span><span class="si">}</span><span class="s2"> not recognized.&quot;</span><span class="p">)</span>
+                
+        <span class="k">if</span> <span class="n">num_found_folders</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Couldn&#39;t find files in folder </span><span class="si">{</span><span class="n">foldername</span><span class="si">}</span><span class="s2"> with searchstrings </span><span class="si">{</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">searchstrings</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                                                
+        <span class="k">return</span> <span class="n">output</span></div>
+
+    
+    
+<div class="viewcode-block" id="convert_config_pyradiomics">
+<a class="viewcode-back" href="../../../autogen/WORC.IOparser.html#WORC.IOparser.file_io.convert_config_pyradiomics">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_config_pyradiomics</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert WORC to PyRadiomics config.</span>
 
 <span class="sd">    Convert fields from WORC confiparser object to a PyRadiomics</span>
 <span class="sd">    compatible dictionary.</span>
@@ -489,7 +482,7 @@
             <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;PyRadiomics&#39;</span><span class="p">][</span><span class="s1">&#39;resampledPixelSpacing&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;resampledPixelSpacing&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
             <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;setting&#39;</span><span class="p">][</span><span class="s1">&#39;resampledPixelSpacing&#39;</span><span class="p">])</span>
-            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Length PyRadiomics resampledPixelSpacing should be 3, got </span><span class="si">{length}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">WORCexceptions</span><span class="o">.</span><span class="n">WORCValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Length PyRadiomics resampledPixelSpacing should be 3, got </span><span class="si">{</span><span class="n">length</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
 
     <span class="c1"># Extract several general values as well</span>
     <span class="c1"># Convert strings with values to list of ints</span>
@@ -529,45 +522,34 @@
         <span class="n">outputconfig</span><span class="p">[</span><span class="s1">&#39;featureClass&#39;</span><span class="p">][</span><span class="s1">&#39;ngtdm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">outputconfig</span></div>
+
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &copy; Copyright 2016 -- 2023, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
-
-    </p>
+    <p>&#169; Copyright 2016 -- 2025, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.</p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

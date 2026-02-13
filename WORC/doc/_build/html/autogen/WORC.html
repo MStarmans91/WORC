@@ -1,209 +1,51 @@
-<!doctype html>
-<html class="no-js" lang="en" data-content_root="../">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="IOparser Package" href="WORC.IOparser.html" /><link rel="prev" title="Changelog" href="../static/changelog.html" />
-        <link rel="prefetch" href="../_static/WORC_Logo.svg" as="image" />
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
-        <title>WORC Package - WORC 3.7.0 documentation</title>
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WORC Package &mdash; WORC 3.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=25af2a20" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="../_static/extra.css?v=a591123b" />
-    
-    
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/extra.css?v=a591123b" />
 
-
-<style>
-  body {
-    --color-code-background: #eeffcc;
-  --color-code-foreground: black;
   
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
-  
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #2b2b2b;
-  --color-code-foreground: #f8f8f2;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=86e43a22"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IOparser Package" href="WORC.IOparser.html" />
+    <link rel="prev" title="Changelog" href="../static/changelog.html" /> 
+</head>
 
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
-    <title>Auto light/dark, in light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
-      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
-      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
-      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
-      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
-      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
-      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
-      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
-      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
-      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
-      <circle cx="14.5" cy="9.55" r="3.6"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
-    <title>Auto light/dark, in dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
-      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
-      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
-      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
-      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
-      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
-      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
-      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
-      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
-      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
-      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-pencil" viewBox="0 0 24 24">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
-      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-      <path d="M13.5 6.5l4 4" />
-      <path d="M20 21l2 -2l-2 -2" />
-      <path d="M17 17l-2 2l2 2" />
-    </svg>
-  </symbol>
-  <symbol id="svg-eye" viewBox="0 0 24 24">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-      <path
-        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
-      <path d="M20 21l2 -2l-2 -2" />
-      <path d="M17 17l-2 2l2 2" />
-    </svg>
-  </symbol>
-</svg>
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
-
-<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="../index.html"><div class="brand">WORC 3.7.0 documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
-          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
-      </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
-    </div>
-  </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
-  <div class="sidebar-logo-container">
-    <img class="sidebar-logo" src="../_static/WORC_Logo.svg" alt="Logo"/>
-  </div>
-  
-  <span class="sidebar-brand-text">WORC 3.7.0 documentation</span>
-  
-</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
-</form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            WORC
+              <img src="../_static/WORC_Logo.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../static/introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/quick_start.html">Quick start guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../static/user_manual.html">User Manual</a></li>
@@ -216,82 +58,142 @@
 <li class="toctree-l1"><a class="reference internal" href="../static/changelog.html">Changelog</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">WORC Package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of WORC Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.classification.html">classification Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.detectors.html">detectors Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.exampledata.html">exampledata Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.export.html">export Package</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="WORC.facade.html">facade Package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of facade Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="WORC.facade.helpers.html">helpers Package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">WORC Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.WORC.Tools"><code class="docutils literal notranslate"><span class="pre">Tools</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.Tools.__dict__"><code class="docutils literal notranslate"><span class="pre">Tools.__dict__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.Tools.__init__"><code class="docutils literal notranslate"><span class="pre">Tools.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.Tools.__module__"><code class="docutils literal notranslate"><span class="pre">Tools.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.Tools.__weakref__"><code class="docutils literal notranslate"><span class="pre">Tools.__weakref__</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.fastrconfig.html">fastrconfig Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.featureprocessing.html">featureprocessing Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.plotting.html">plotting Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="WORC.resources.html">resources Package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of resources Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="WORC.resources.fastr_tests.html">fastr_tests Package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="WORC.resources.fastr_tools.html">fastr_tools Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.WORC.WORC"><code class="docutils literal notranslate"><span class="pre">WORC</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.__dict__"><code class="docutils literal notranslate"><span class="pre">WORC.__dict__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.__init__"><code class="docutils literal notranslate"><span class="pre">WORC.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.__module__"><code class="docutils literal notranslate"><span class="pre">WORC.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.__weakref__"><code class="docutils literal notranslate"><span class="pre">WORC.__weakref__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.add_ComBat"><code class="docutils literal notranslate"><span class="pre">WORC.add_ComBat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.add_elastix"><code class="docutils literal notranslate"><span class="pre">WORC.add_elastix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.add_elastix_sourcesandsinks"><code class="docutils literal notranslate"><span class="pre">WORC.add_elastix_sourcesandsinks()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.add_evaluation"><code class="docutils literal notranslate"><span class="pre">WORC.add_evaluation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.add_feature_calculator"><code class="docutils literal notranslate"><span class="pre">WORC.add_feature_calculator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.add_fingerprinter"><code class="docutils literal notranslate"><span class="pre">WORC.add_fingerprinter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.add_preprocessing"><code class="docutils literal notranslate"><span class="pre">WORC.add_preprocessing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.add_segmentix"><code class="docutils literal notranslate"><span class="pre">WORC.add_segmentix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.add_tools"><code class="docutils literal notranslate"><span class="pre">WORC.add_tools()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.build"><code class="docutils literal notranslate"><span class="pre">WORC.build()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.build_inference"><code class="docutils literal notranslate"><span class="pre">WORC.build_inference()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.build_training"><code class="docutils literal notranslate"><span class="pre">WORC.build_training()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.defaultconfig"><code class="docutils literal notranslate"><span class="pre">WORC.defaultconfig()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.execute"><code class="docutils literal notranslate"><span class="pre">WORC.execute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.save_config"><code class="docutils literal notranslate"><span class="pre">WORC.save_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.WORC.WORC.set"><code class="docutils literal notranslate"><span class="pre">WORC.set()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.statistics.html">statistics Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.tests.html">tests Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-WORC.addexceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.addexceptions.WORCAssertionError"><code class="docutils literal notranslate"><span class="pre">WORCAssertionError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCAssertionError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCAssertionError.__module__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.addexceptions.WORCError"><code class="docutils literal notranslate"><span class="pre">WORCError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCError.__annotations__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCError.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCError.__weakref__"><code class="docutils literal notranslate"><span class="pre">WORCError.__weakref__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.addexceptions.WORCIOError"><code class="docutils literal notranslate"><span class="pre">WORCIOError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCIOError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCIOError.__annotations__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCIOError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCIOError.__module__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCIOError.__weakref__"><code class="docutils literal notranslate"><span class="pre">WORCIOError.__weakref__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.addexceptions.WORCIndexError"><code class="docutils literal notranslate"><span class="pre">WORCIndexError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCIndexError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCIndexError.__annotations__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCIndexError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCIndexError.__module__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.addexceptions.WORCKeyError"><code class="docutils literal notranslate"><span class="pre">WORCKeyError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCKeyError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCKeyError.__annotations__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCKeyError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCKeyError.__module__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.addexceptions.WORCNotImplementedError"><code class="docutils literal notranslate"><span class="pre">WORCNotImplementedError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCNotImplementedError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCNotImplementedError.__annotations__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCNotImplementedError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCNotImplementedError.__module__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.addexceptions.WORCTypeError"><code class="docutils literal notranslate"><span class="pre">WORCTypeError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCTypeError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCTypeError.__annotations__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCTypeError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCTypeError.__module__</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#WORC.addexceptions.WORCValueError"><code class="docutils literal notranslate"><span class="pre">WORCValueError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCValueError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCValueError.__annotations__</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#WORC.addexceptions.WORCValueError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCValueError.__module__</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.classification.html">classification Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.detectors.html">detectors Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.exampledata.html">exampledata Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.export.html">export Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.facade.html">facade Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.fastrconfig.html">fastrconfig Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.featureprocessing.html">featureprocessing Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.plotting.html">plotting Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.processing.html">processing Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.resources.html">resources Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.statistics.html">statistics Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.tests.html">tests Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.tools.html">tools Package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.validators.html">validators Package</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
-</div>
-</div>
-
-      </div>
-      
-    </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          <div class="view-this-page">
-  <a class="muted-link" href="../_sources/autogen/WORC.rst.txt" title="View this page">
-    <svg><use href="#svg-eye"></use></svg>
-    <span class="visually-hidden">View this page</span>
-  </a>
-</div>
-<div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
-              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
         </div>
-        <article role="main" id="furo-main-content">
-          <section id="worc-package">
-<h1>WORC Package<a class="headerlink" href="#worc-package" title="Link to this heading">¶</a></h1>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WORC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">WORC Package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/autogen/WORC.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="worc-package">
+<h1>WORC Package<a class="headerlink" href="#worc-package" title="Link to this heading"></a></h1>
 <section id="id1">
-<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 </section>
 <section id="module-WORC.WORC">
-<span id="worc-module"></span><span id="module-WORC.__init__"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module<a class="headerlink" href="#module-WORC.WORC" title="Link to this heading">¶</a></h2>
+<span id="worc-module"></span><span id="module-WORC.__init__"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module<a class="headerlink" href="#module-WORC.WORC" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="WORC.WORC.Tools">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.WORC.</span></span><span class="sig-name descname"><span class="pre">Tools</span></span><a class="reference internal" href="../_modules/WORC/WORC.html#Tools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.Tools" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.WORC.</span></span><span class="sig-name descname"><span class="pre">Tools</span></span><a class="reference internal" href="../_modules/WORC/WORC.html#Tools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.Tools" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Create other pipelines besides the default radiomics executions.</p>
 <p>Currently includes:
 1. Registration pipeline
@@ -299,32 +201,32 @@
 3. Slicer pipeline, to create pngs of middle slice of images.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.WORC.Tools.__dict__">
-<span class="sig-name descname"><span class="pre">__dict__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">mappingproxy({'__module__':</span> <span class="pre">'WORC.WORC',</span> <span class="pre">'__doc__':</span> <span class="pre">'\n</span>&#160;&#160;&#160; <span class="pre">Create</span> <span class="pre">other</span> <span class="pre">pipelines</span> <span class="pre">besides</span> <span class="pre">the</span> <span class="pre">default</span> <span class="pre">radiomics</span> <span class="pre">executions.\n\n</span>&#160;&#160;&#160; <span class="pre">Currently</span> <span class="pre">includes:\n</span>&#160;&#160;&#160; <span class="pre">1.</span> <span class="pre">Registration</span> <span class="pre">pipeline\n</span>&#160;&#160;&#160; <span class="pre">2.</span> <span class="pre">Evaluation</span> <span class="pre">pipeline\n</span>&#160;&#160;&#160; <span class="pre">3.</span> <span class="pre">Slicer</span> <span class="pre">pipeline,</span> <span class="pre">to</span> <span class="pre">create</span> <span class="pre">pngs</span> <span class="pre">of</span> <span class="pre">middle</span> <span class="pre">slice</span> <span class="pre">of</span> <span class="pre">images.\n</span>&#160;&#160;&#160; <span class="pre">',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">Tools.__init__&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'Tools'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'Tools'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#WORC.WORC.Tools.__dict__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__dict__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">mappingproxy({'__module__':</span> <span class="pre">'WORC.WORC',</span> <span class="pre">'__doc__':</span> <span class="pre">'\n</span>&#160;&#160;&#160; <span class="pre">Create</span> <span class="pre">other</span> <span class="pre">pipelines</span> <span class="pre">besides</span> <span class="pre">the</span> <span class="pre">default</span> <span class="pre">radiomics</span> <span class="pre">executions.\n\n</span>&#160;&#160;&#160; <span class="pre">Currently</span> <span class="pre">includes:\n</span>&#160;&#160;&#160; <span class="pre">1.</span> <span class="pre">Registration</span> <span class="pre">pipeline\n</span>&#160;&#160;&#160; <span class="pre">2.</span> <span class="pre">Evaluation</span> <span class="pre">pipeline\n</span>&#160;&#160;&#160; <span class="pre">3.</span> <span class="pre">Slicer</span> <span class="pre">pipeline,</span> <span class="pre">to</span> <span class="pre">create</span> <span class="pre">pngs</span> <span class="pre">of</span> <span class="pre">middle</span> <span class="pre">slice</span> <span class="pre">of</span> <span class="pre">images.\n</span>&#160;&#160;&#160; <span class="pre">',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">Tools.__init__&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'Tools'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'Tools'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></span><a class="headerlink" href="#WORC.WORC.Tools.__dict__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.Tools.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#Tools.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.Tools.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#Tools.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.Tools.__init__" title="Link to this definition"></a></dt>
 <dd><p>Initialize object with all pipelines.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.WORC.Tools.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.WORC'</span></em><a class="headerlink" href="#WORC.WORC.Tools.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.WORC'</span></span><a class="headerlink" href="#WORC.WORC.Tools.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.WORC.Tools.__weakref__">
-<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#WORC.WORC.Tools.__weakref__" title="Link to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#WORC.WORC.Tools.__weakref__" title="Link to this definition"></a></dt>
+<dd><p>list of weak references to the object</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="WORC.WORC.WORC">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.WORC.</span></span><span class="sig-name descname"><span class="pre">WORC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.WORC.</span></span><span class="sig-name descname"><span class="pre">WORC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Workflow for Optimal Radiomics Classification.</p>
 <p>A Workflow for Optimal Radiomics Classification (WORC) object that
 serves as a pipeline spawner and manager for optimizating radiomics
@@ -351,7 +253,7 @@ sample ID’s, e.g.</p>
 </dd>
 </dl>
 <section id="attributes">
-<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h3>
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
 <blockquote>
 <div><dl class="simple">
 <dt>name: String, default ‘WORC’</dt><dd><p>name of the network.</p>
@@ -388,12 +290,12 @@ Segmentations should be of the ITK Image type.</p>
 </div></blockquote>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.__dict__">
-<span class="sig-name descname"><span class="pre">__dict__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">mappingproxy({'__module__':</span> <span class="pre">'WORC.WORC',</span> <span class="pre">'__doc__':</span> <span class="pre">'Workflow</span> <span class="pre">for</span> <span class="pre">Optimal</span> <span class="pre">Radiomics</span> <span class="pre">Classification.\n\n</span>&#160;&#160;&#160; <span class="pre">A</span> <span class="pre">Workflow</span> <span class="pre">for</span> <span class="pre">Optimal</span> <span class="pre">Radiomics</span> <span class="pre">Classification</span> <span class="pre">(WORC)</span> <span class="pre">object</span> <span class="pre">that\n</span>&#160;&#160;&#160; <span class="pre">serves</span> <span class="pre">as</span> <span class="pre">a</span> <span class="pre">pipeline</span> <span class="pre">spawner</span> <span class="pre">and</span> <span class="pre">manager</span> <span class="pre">for</span> <span class="pre">optimizating</span> <span class="pre">radiomics\n</span>&#160;&#160;&#160; <span class="pre">studies.</span> <span class="pre">Depending</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">set,</span> <span class="pre">the</span> <span class="pre">object</span> <span class="pre">will</span> <span class="pre">spawn</span> <span class="pre">an\n</span>&#160;&#160;&#160; <span class="pre">appropriate</span> <span class="pre">pipeline</span> <span class="pre">and</span> <span class="pre">manage</span> <span class="pre">it.\n\n</span>&#160;&#160;&#160; <span class="pre">Note</span> <span class="pre">that</span> <span class="pre">many</span> <span class="pre">attributes</span> <span class="pre">are</span> <span class="pre">lists</span> <span class="pre">and</span> <span class="pre">can</span> <span class="pre">therefore</span> <span class="pre">contain</span> <span class="pre">multiple\n</span>&#160;&#160;&#160; <span class="pre">instances.</span> <span class="pre">For</span> <span class="pre">example,</span> <span class="pre">when</span> <span class="pre">providing</span> <span class="pre">two</span> <span class="pre">sequences</span> <span class="pre">per</span> <span class="pre">patient,\n</span>&#160;&#160;&#160; <span class="pre">the</span> <span class="pre">&quot;images&quot;</span> <span class="pre">list</span> <span class="pre">contains</span> <span class="pre">two</span> <span class="pre">items.</span> <span class="pre">The</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">items</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">lists\n</span>&#160;&#160;&#160; <span class="pre">is</span> <span class="pre">described</span> <span class="pre">below.\n\n</span>&#160;&#160;&#160; <span class="pre">All</span> <span class="pre">objects</span> <span class="pre">that</span> <span class="pre">serve</span> <span class="pre">as</span> <span class="pre">source</span> <span class="pre">for</span> <span class="pre">your</span> <span class="pre">network,</span> <span class="pre">i.e.</span> <span class="pre">refer</span> <span class="pre">to\n</span>&#160;&#160;&#160; <span class="pre">actual</span> <span class="pre">files</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">used,</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">formatted</span> <span class="pre">as</span> <span class="pre">fastr</span> <span class="pre">sources</span> <span class="pre">suited</span> <span class="pre">for\n</span>&#160;&#160;&#160; <span class="pre">one</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">fastr</span> <span class="pre">plugings,</span> <span class="pre">see</span> <span class="pre">also\n</span>&#160;&#160;&#160; <span class="pre">http://fastr.readthedocs.io/en/stable/fastr.reference.html#ioplugin-reference\n</span>&#160;&#160;&#160; <span class="pre">The</span> <span class="pre">objects</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">lists</span> <span class="pre">of</span> <span class="pre">these</span> <span class="pre">fastr</span> <span class="pre">sources</span> <span class="pre">or</span> <span class="pre">dictionaries</span> <span class="pre">with</span> <span class="pre">the\n</span>&#160;&#160;&#160; <span class="pre">sample</span> <span class="pre">ID\'s,</span> <span class="pre">e.g.\n\n</span>&#160;&#160;&#160; <span class="pre">images_train</span> <span class="pre">=</span> <span class="pre">[{\'Patient001\':</span> <span class="pre">vfs://input/CT001.nii.gz,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">\'Patient002\':</span> <span class="pre">vfs://input/CT002.nii.gz},\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">{\'Patient001\':</span> <span class="pre">vfs://input/MR001.nii.gz,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">\'Patient002\':</span> <span class="pre">vfs://input/MR002.nii.gz}]\n\n</span>&#160;&#160;&#160; <span class="pre">Attributes\n</span>&#160;&#160;&#160; <span class="pre">------------------\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">name:</span> <span class="pre">String,</span> <span class="pre">default</span> <span class="pre">\'WORC\'\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">network.\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">configs:</span> <span class="pre">list,</span> <span class="pre">required\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Configuration</span> <span class="pre">parameters,</span> <span class="pre">either</span> <span class="pre">ConfigParser</span> <span class="pre">objects\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">created</span> <span class="pre">through</span> <span class="pre">the</span> <span class="pre">defaultconfig</span> <span class="pre">function</span> <span class="pre">or</span> <span class="pre">paths</span> <span class="pre">of</span> <span class="pre">config</span> <span class="pre">.ini\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">files.</span> <span class="pre">(list,</span> <span class="pre">required)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">labels:</span> <span class="pre">list,</span> <span class="pre">required\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Paths</span> <span class="pre">to</span> <span class="pre">files</span> <span class="pre">containing</span> <span class="pre">patient</span> <span class="pre">labels</span> <span class="pre">(.txt</span> <span class="pre">files).\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">network:</span> <span class="pre">automatically</span> <span class="pre">generated\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">The</span> <span class="pre">FASTR</span> <span class="pre">network</span> <span class="pre">generated</span> <span class="pre">through</span> <span class="pre">the</span> <span class="pre">&quot;build&quot;</span> <span class="pre">function.\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">images:</span> <span class="pre">list,</span> <span class="pre">optional\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Paths</span> <span class="pre">refering</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">images</span> <span class="pre">used</span> <span class="pre">for</span> <span class="pre">Radiomics</span> <span class="pre">computation.</span> <span class="pre">Images\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">should</span> <span class="pre">be</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ITK</span> <span class="pre">Image</span> <span class="pre">type.\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">segmentations:</span> <span class="pre">list,</span> <span class="pre">optional\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Paths</span> <span class="pre">refering</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">segmentations</span> <span class="pre">used</span> <span class="pre">for</span> <span class="pre">Radiomics</span> <span class="pre">computation.\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Segmentations</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ITK</span> <span class="pre">Image</span> <span class="pre">type.\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">semantics:</span> <span class="pre">semantic</span> <span class="pre">features</span> <span class="pre">per</span> <span class="pre">image</span> <span class="pre">type</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">masks:</span> <span class="pre">state</span> <span class="pre">which</span> <span class="pre">pixels</span> <span class="pre">of</span> <span class="pre">images</span> <span class="pre">are</span> <span class="pre">valid</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">features:</span> <span class="pre">input</span> <span class="pre">Radiomics</span> <span class="pre">features</span> <span class="pre">for</span> <span class="pre">classification</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">metadata:</span> <span class="pre">DICOM</span> <span class="pre">headers</span> <span class="pre">belonging</span> <span class="pre">to</span> <span class="pre">images</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Elastix_Para:</span> <span class="pre">parameter</span> <span class="pre">files</span> <span class="pre">for</span> <span class="pre">Elastix</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fastr_plugin:</span> <span class="pre">plugin</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">for</span> <span class="pre">FASTR</span> <span class="pre">execution\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fastr_tempdir:</span> <span class="pre">temporary</span> <span class="pre">directory</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">for</span> <span class="pre">FASTR</span> <span class="pre">execution\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">additions:</span> <span class="pre">additional</span> <span class="pre">inputs</span> <span class="pre">for</span> <span class="pre">your</span> <span class="pre">network</span> <span class="pre">(dict,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">source_data:</span> <span class="pre">data</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">as</span> <span class="pre">sources</span> <span class="pre">for</span> <span class="pre">FASTR</span> <span class="pre">(dict)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">sink_data:</span> <span class="pre">data</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">as</span> <span class="pre">sinks</span> <span class="pre">for</span> <span class="pre">FASTR</span> <span class="pre">(dict)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">CopyMetadata:</span> <span class="pre">Boolean,</span> <span class="pre">default</span> <span class="pre">True\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">when</span> <span class="pre">using</span> <span class="pre">elastix,</span> <span class="pre">copy</span> <span class="pre">metadata</span> <span class="pre">from</span> <span class="pre">image</span> <span class="pre">to</span> <span class="pre">segmentation</span> <span class="pre">or</span> <span class="pre">not\n\n</span>&#160;&#160;&#160; <span class="pre">',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.__init__&gt;,</span> <span class="pre">'defaultconfig':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.defaultconfig&gt;,</span> <span class="pre">'add_tools':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_tools&gt;,</span> <span class="pre">'build':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.build&gt;,</span> <span class="pre">'build_training':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.build_training&gt;,</span> <span class="pre">'build_inference':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.build_inference&gt;,</span> <span class="pre">'add_fingerprinter':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_fingerprinter&gt;,</span> <span class="pre">'add_ComBat':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_ComBat&gt;,</span> <span class="pre">'add_preprocessing':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_preprocessing&gt;,</span> <span class="pre">'add_feature_calculator':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_feature_calculator&gt;,</span> <span class="pre">'add_elastix_sourcesandsinks':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_elastix_sourcesandsinks&gt;,</span> <span class="pre">'add_elastix':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_elastix&gt;,</span> <span class="pre">'add_segmentix':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_segmentix&gt;,</span> <span class="pre">'set':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.set&gt;,</span> <span class="pre">'execute':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.execute&gt;,</span> <span class="pre">'add_evaluation':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_evaluation&gt;,</span> <span class="pre">'save_config':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.save_config&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'WORC'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'WORC'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#WORC.WORC.WORC.__dict__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__dict__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">mappingproxy({'__module__':</span> <span class="pre">'WORC.WORC',</span> <span class="pre">'__doc__':</span> <span class="pre">'Workflow</span> <span class="pre">for</span> <span class="pre">Optimal</span> <span class="pre">Radiomics</span> <span class="pre">Classification.\n\n</span>&#160;&#160;&#160; <span class="pre">A</span> <span class="pre">Workflow</span> <span class="pre">for</span> <span class="pre">Optimal</span> <span class="pre">Radiomics</span> <span class="pre">Classification</span> <span class="pre">(WORC)</span> <span class="pre">object</span> <span class="pre">that\n</span>&#160;&#160;&#160; <span class="pre">serves</span> <span class="pre">as</span> <span class="pre">a</span> <span class="pre">pipeline</span> <span class="pre">spawner</span> <span class="pre">and</span> <span class="pre">manager</span> <span class="pre">for</span> <span class="pre">optimizating</span> <span class="pre">radiomics\n</span>&#160;&#160;&#160; <span class="pre">studies.</span> <span class="pre">Depending</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">attributes</span> <span class="pre">set,</span> <span class="pre">the</span> <span class="pre">object</span> <span class="pre">will</span> <span class="pre">spawn</span> <span class="pre">an\n</span>&#160;&#160;&#160; <span class="pre">appropriate</span> <span class="pre">pipeline</span> <span class="pre">and</span> <span class="pre">manage</span> <span class="pre">it.\n\n</span>&#160;&#160;&#160; <span class="pre">Note</span> <span class="pre">that</span> <span class="pre">many</span> <span class="pre">attributes</span> <span class="pre">are</span> <span class="pre">lists</span> <span class="pre">and</span> <span class="pre">can</span> <span class="pre">therefore</span> <span class="pre">contain</span> <span class="pre">multiple\n</span>&#160;&#160;&#160; <span class="pre">instances.</span> <span class="pre">For</span> <span class="pre">example,</span> <span class="pre">when</span> <span class="pre">providing</span> <span class="pre">two</span> <span class="pre">sequences</span> <span class="pre">per</span> <span class="pre">patient,\n</span>&#160;&#160;&#160; <span class="pre">the</span> <span class="pre">&quot;images&quot;</span> <span class="pre">list</span> <span class="pre">contains</span> <span class="pre">two</span> <span class="pre">items.</span> <span class="pre">The</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">items</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">lists\n</span>&#160;&#160;&#160; <span class="pre">is</span> <span class="pre">described</span> <span class="pre">below.\n\n</span>&#160;&#160;&#160; <span class="pre">All</span> <span class="pre">objects</span> <span class="pre">that</span> <span class="pre">serve</span> <span class="pre">as</span> <span class="pre">source</span> <span class="pre">for</span> <span class="pre">your</span> <span class="pre">network,</span> <span class="pre">i.e.</span> <span class="pre">refer</span> <span class="pre">to\n</span>&#160;&#160;&#160; <span class="pre">actual</span> <span class="pre">files</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">used,</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">formatted</span> <span class="pre">as</span> <span class="pre">fastr</span> <span class="pre">sources</span> <span class="pre">suited</span> <span class="pre">for\n</span>&#160;&#160;&#160; <span class="pre">one</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">fastr</span> <span class="pre">plugings,</span> <span class="pre">see</span> <span class="pre">also\n</span>&#160;&#160;&#160; <span class="pre">http://fastr.readthedocs.io/en/stable/fastr.reference.html#ioplugin-reference\n</span>&#160;&#160;&#160; <span class="pre">The</span> <span class="pre">objects</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">lists</span> <span class="pre">of</span> <span class="pre">these</span> <span class="pre">fastr</span> <span class="pre">sources</span> <span class="pre">or</span> <span class="pre">dictionaries</span> <span class="pre">with</span> <span class="pre">the\n</span>&#160;&#160;&#160; <span class="pre">sample</span> <span class="pre">ID\'s,</span> <span class="pre">e.g.\n\n</span>&#160;&#160;&#160; <span class="pre">images_train</span> <span class="pre">=</span> <span class="pre">[{\'Patient001\':</span> <span class="pre">vfs://input/CT001.nii.gz,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">\'Patient002\':</span> <span class="pre">vfs://input/CT002.nii.gz},\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">{\'Patient001\':</span> <span class="pre">vfs://input/MR001.nii.gz,\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">\'Patient002\':</span> <span class="pre">vfs://input/MR002.nii.gz}]\n\n</span>&#160;&#160;&#160; <span class="pre">Attributes\n</span>&#160;&#160;&#160; <span class="pre">------------------\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">name:</span> <span class="pre">String,</span> <span class="pre">default</span> <span class="pre">\'WORC\'\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">network.\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">configs:</span> <span class="pre">list,</span> <span class="pre">required\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Configuration</span> <span class="pre">parameters,</span> <span class="pre">either</span> <span class="pre">ConfigParser</span> <span class="pre">objects\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">created</span> <span class="pre">through</span> <span class="pre">the</span> <span class="pre">defaultconfig</span> <span class="pre">function</span> <span class="pre">or</span> <span class="pre">paths</span> <span class="pre">of</span> <span class="pre">config</span> <span class="pre">.ini\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">files.</span> <span class="pre">(list,</span> <span class="pre">required)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">labels:</span> <span class="pre">list,</span> <span class="pre">required\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Paths</span> <span class="pre">to</span> <span class="pre">files</span> <span class="pre">containing</span> <span class="pre">patient</span> <span class="pre">labels</span> <span class="pre">(.txt</span> <span class="pre">files).\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">network:</span> <span class="pre">automatically</span> <span class="pre">generated\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">The</span> <span class="pre">FASTR</span> <span class="pre">network</span> <span class="pre">generated</span> <span class="pre">through</span> <span class="pre">the</span> <span class="pre">&quot;build&quot;</span> <span class="pre">function.\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">images:</span> <span class="pre">list,</span> <span class="pre">optional\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Paths</span> <span class="pre">refering</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">images</span> <span class="pre">used</span> <span class="pre">for</span> <span class="pre">Radiomics</span> <span class="pre">computation.</span> <span class="pre">Images\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">should</span> <span class="pre">be</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ITK</span> <span class="pre">Image</span> <span class="pre">type.\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">segmentations:</span> <span class="pre">list,</span> <span class="pre">optional\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Paths</span> <span class="pre">refering</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">segmentations</span> <span class="pre">used</span> <span class="pre">for</span> <span class="pre">Radiomics</span> <span class="pre">computation.\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Segmentations</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">ITK</span> <span class="pre">Image</span> <span class="pre">type.\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">semantics:</span> <span class="pre">semantic</span> <span class="pre">features</span> <span class="pre">per</span> <span class="pre">image</span> <span class="pre">type</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">masks:</span> <span class="pre">state</span> <span class="pre">which</span> <span class="pre">pixels</span> <span class="pre">of</span> <span class="pre">images</span> <span class="pre">are</span> <span class="pre">valid</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">features:</span> <span class="pre">input</span> <span class="pre">Radiomics</span> <span class="pre">features</span> <span class="pre">for</span> <span class="pre">classification</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">metadata:</span> <span class="pre">DICOM</span> <span class="pre">headers</span> <span class="pre">belonging</span> <span class="pre">to</span> <span class="pre">images</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">Elastix_Para:</span> <span class="pre">parameter</span> <span class="pre">files</span> <span class="pre">for</span> <span class="pre">Elastix</span> <span class="pre">(list,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fastr_plugin:</span> <span class="pre">plugin</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">for</span> <span class="pre">FASTR</span> <span class="pre">execution\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">fastr_tempdir:</span> <span class="pre">temporary</span> <span class="pre">directory</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">for</span> <span class="pre">FASTR</span> <span class="pre">execution\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">additions:</span> <span class="pre">additional</span> <span class="pre">inputs</span> <span class="pre">for</span> <span class="pre">your</span> <span class="pre">network</span> <span class="pre">(dict,</span> <span class="pre">optional)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">source_data:</span> <span class="pre">data</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">as</span> <span class="pre">sources</span> <span class="pre">for</span> <span class="pre">FASTR</span> <span class="pre">(dict)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">sink_data:</span> <span class="pre">data</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">as</span> <span class="pre">sinks</span> <span class="pre">for</span> <span class="pre">FASTR</span> <span class="pre">(dict)\n\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">CopyMetadata:</span> <span class="pre">Boolean,</span> <span class="pre">default</span> <span class="pre">True\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">when</span> <span class="pre">using</span> <span class="pre">elastix,</span> <span class="pre">copy</span> <span class="pre">metadata</span> <span class="pre">from</span> <span class="pre">image</span> <span class="pre">to</span> <span class="pre">segmentation</span> <span class="pre">or</span> <span class="pre">not\n\n</span>&#160;&#160;&#160; <span class="pre">',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.__init__&gt;,</span> <span class="pre">'defaultconfig':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.defaultconfig&gt;,</span> <span class="pre">'add_tools':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_tools&gt;,</span> <span class="pre">'build':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.build&gt;,</span> <span class="pre">'build_training':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.build_training&gt;,</span> <span class="pre">'build_inference':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.build_inference&gt;,</span> <span class="pre">'add_fingerprinter':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_fingerprinter&gt;,</span> <span class="pre">'add_ComBat':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_ComBat&gt;,</span> <span class="pre">'add_preprocessing':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_preprocessing&gt;,</span> <span class="pre">'add_feature_calculator':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_feature_calculator&gt;,</span> <span class="pre">'add_elastix_sourcesandsinks':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_elastix_sourcesandsinks&gt;,</span> <span class="pre">'add_elastix':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_elastix&gt;,</span> <span class="pre">'add_segmentix':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_segmentix&gt;,</span> <span class="pre">'set':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.set&gt;,</span> <span class="pre">'execute':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.execute&gt;,</span> <span class="pre">'add_evaluation':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.add_evaluation&gt;,</span> <span class="pre">'save_config':</span> <span class="pre">&lt;function</span> <span class="pre">WORC.save_config&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'WORC'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'WORC'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></span><a class="headerlink" href="#WORC.WORC.WORC.__dict__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'test'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.__init__" title="Link to this definition"></a></dt>
 <dd><p>Initialize WORC object.</p>
 <p>Set the initial variables all to None, except for some defaults.</p>
 <dl class="simple">
@@ -404,37 +306,37 @@ Segmentations should be of the ITK Image type.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.WORC'</span></em><a class="headerlink" href="#WORC.WORC.WORC.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.WORC'</span></span><a class="headerlink" href="#WORC.WORC.WORC.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.__weakref__">
-<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#WORC.WORC.WORC.__weakref__" title="Link to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#WORC.WORC.WORC.__weakref__" title="Link to this definition"></a></dt>
+<dd><p>list of weak references to the object</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.add_ComBat">
-<span class="sig-name descname"><span class="pre">add_ComBat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_ComBat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_ComBat" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_ComBat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_ComBat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_ComBat" title="Link to this definition"></a></dt>
 <dd><p>Add ComBat harmonization to the network.</p>
 <p>Note: applied on all objects, not in a train-test or cross-val setting.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.add_elastix">
-<span class="sig-name descname"><span class="pre">add_elastix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_elastix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_elastix" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_elastix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_elastix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_elastix" title="Link to this definition"></a></dt>
 <dd><p>Add image registration through elastix to network.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.add_elastix_sourcesandsinks">
-<span class="sig-name descname"><span class="pre">add_elastix_sourcesandsinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_elastix_sourcesandsinks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_elastix_sourcesandsinks" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_elastix_sourcesandsinks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_elastix_sourcesandsinks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_elastix_sourcesandsinks" title="Link to this definition"></a></dt>
 <dd><p>Add sources and sinks required for image registration.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.add_evaluation">
-<span class="sig-name descname"><span class="pre">add_evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary_classification'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_evaluation" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary_classification'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_evaluation" title="Link to this definition"></a></dt>
 <dd><p>Add branch for evaluation of performance to network.</p>
 <p>Note: should be done after build, before set:
 WORC.build()
@@ -445,13 +347,13 @@ WORC.execute()</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.add_feature_calculator">
-<span class="sig-name descname"><span class="pre">add_feature_calculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calcfeat_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_feature_calculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_feature_calculator" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_feature_calculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calcfeat_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_feature_calculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_feature_calculator" title="Link to this definition"></a></dt>
 <dd><p>Add a feature calculation node to the network.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.add_fingerprinter">
-<span class="sig-name descname"><span class="pre">add_fingerprinter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_fingerprinter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_fingerprinter" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_fingerprinter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_fingerprinter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_fingerprinter" title="Link to this definition"></a></dt>
 <dd><p>Add WORC Fingerprinter to the network.</p>
 <p>Note: applied per imaging sequence, or per feature file if no
 images are present.</p>
@@ -459,28 +361,28 @@ images are present.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.add_preprocessing">
-<span class="sig-name descname"><span class="pre">add_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preprocess_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_preprocessing" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preprocess_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_preprocessing" title="Link to this definition"></a></dt>
 <dd><p>Add nodes required for preprocessing of images.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.add_segmentix">
-<span class="sig-name descname"><span class="pre">add_segmentix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_segmentix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_segmentix" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_segmentix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nmod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_segmentix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_segmentix" title="Link to this definition"></a></dt>
 <dd><p>Add segmentix to the network.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.add_tools">
-<span class="sig-name descname"><span class="pre">add_tools</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_tools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_tools" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_tools</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.add_tools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.add_tools" title="Link to this definition"></a></dt>
 <dd><p>Add several tools to the WORC object.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.build">
-<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'training'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.build" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'training'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.build" title="Link to this definition"></a></dt>
 <dd><p>Build the  network based on the given attributes.</p>
 <section id="parameters">
-<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h4>
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
 <dl>
 <dt>buildtype: string, default ‘training’</dt><dd><p>Specify the WORC execution type.
 - inference: use if you have a trained classifier and want to</p>
@@ -497,19 +399,19 @@ images are present.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.build_inference">
-<span class="sig-name descname"><span class="pre">build_inference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.build_inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.build_inference" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build_inference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.build_inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.build_inference" title="Link to this definition"></a></dt>
 <dd><p>Build a network to test an already trained model on a test dataset based on the given attributes.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.build_training">
-<span class="sig-name descname"><span class="pre">build_training</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.build_training"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.build_training" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">build_training</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.build_training"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.build_training" title="Link to this definition"></a></dt>
 <dd><p>Build the training network based on the given attributes.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.defaultconfig">
-<span class="sig-name descname"><span class="pre">defaultconfig</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.defaultconfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.defaultconfig" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">defaultconfig</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.defaultconfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.defaultconfig" title="Link to this definition"></a></dt>
 <dd><p>Generate a configparser object holding all default configuration values.</p>
 <dl class="simple">
 <dt>Returns:</dt><dd><p>config: configparser configuration file</p>
@@ -519,19 +421,19 @@ images are present.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.execute">
-<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.execute" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.execute" title="Link to this definition"></a></dt>
 <dd><p>Execute the network through the fastr.network.execute command.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.save_config">
-<span class="sig-name descname"><span class="pre">save_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.save_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.save_config" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">save_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.save_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.save_config" title="Link to this definition"></a></dt>
 <dd><p>Save the config files to physical files and add to network.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="WORC.WORC.WORC.set">
-<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.set" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WORC/WORC.html#WORC.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.WORC.WORC.set" title="Link to this definition"></a></dt>
 <dd><p>Set the FASTR source and sink data based on the given attributes.</p>
 </dd></dl>
 
@@ -540,156 +442,156 @@ images are present.</p>
 
 </section>
 <section id="module-WORC.addexceptions">
-<span id="addexceptions-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module<a class="headerlink" href="#module-WORC.addexceptions" title="Link to this heading">¶</a></h2>
+<span id="addexceptions-module"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module<a class="headerlink" href="#module-WORC.addexceptions" title="Link to this heading"></a></h2>
 <p>This module contains all WORC-related Exceptions</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCAssertionError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCAssertionError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCAssertionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCAssertionError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertionError</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCAssertionError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCAssertionError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCAssertionError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AssertionError</span></code></a></p>
 <p>AssertionError in the WORC system</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCAssertionError.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></em><a class="headerlink" href="#WORC.addexceptions.WORCAssertionError.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></span><a class="headerlink" href="#WORC.addexceptions.WORCAssertionError.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 <p>This is the base class for all WORC related exceptions. Catching this
 class of exceptions should ensure a proper execution of WORC.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCError.__annotations__">
-<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#WORC.addexceptions.WORCError.__annotations__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#WORC.addexceptions.WORCError.__annotations__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCError.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></em><a class="headerlink" href="#WORC.addexceptions.WORCError.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></span><a class="headerlink" href="#WORC.addexceptions.WORCError.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCError.__weakref__">
-<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#WORC.addexceptions.WORCError.__weakref__" title="Link to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#WORC.addexceptions.WORCError.__weakref__" title="Link to this definition"></a></dt>
+<dd><p>list of weak references to the object</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCIOError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCIOError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCIOError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCIOError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OSError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OSError</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCIOError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCIOError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCIOError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#OSError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OSError</span></code></a></p>
 <p>IOError in WORC</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCIOError.__annotations__">
-<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#WORC.addexceptions.WORCIOError.__annotations__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#WORC.addexceptions.WORCIOError.__annotations__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCIOError.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></em><a class="headerlink" href="#WORC.addexceptions.WORCIOError.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></span><a class="headerlink" href="#WORC.addexceptions.WORCIOError.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCIOError.__weakref__">
-<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#WORC.addexceptions.WORCIOError.__weakref__" title="Link to this definition">¶</a></dt>
-<dd><p>list of weak references to the object (if defined)</p>
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#WORC.addexceptions.WORCIOError.__weakref__" title="Link to this definition"></a></dt>
+<dd><p>list of weak references to the object</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCIndexError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCIndexError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCIndexError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCIndexError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexError</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCIndexError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCIndexError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCIndexError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#IndexError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IndexError</span></code></a></p>
 <p>IndexError in the WORC system</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCIndexError.__annotations__">
-<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#WORC.addexceptions.WORCIndexError.__annotations__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#WORC.addexceptions.WORCIndexError.__annotations__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCIndexError.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></em><a class="headerlink" href="#WORC.addexceptions.WORCIndexError.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></span><a class="headerlink" href="#WORC.addexceptions.WORCIndexError.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCKeyError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCKeyError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCKeyError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCKeyError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">KeyError</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCKeyError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCKeyError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCKeyError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">KeyError</span></code></a></p>
 <p>KeyError in the WORC system</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCKeyError.__annotations__">
-<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#WORC.addexceptions.WORCKeyError.__annotations__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#WORC.addexceptions.WORCKeyError.__annotations__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCKeyError.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></em><a class="headerlink" href="#WORC.addexceptions.WORCKeyError.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></span><a class="headerlink" href="#WORC.addexceptions.WORCKeyError.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCNotImplementedError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCNotImplementedError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCNotImplementedError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCNotImplementedError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCNotImplementedError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCNotImplementedError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCNotImplementedError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a></p>
 <p>This function/method has not been implemented on purpose (e.g. should be
 overwritten in a sub-class)</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCNotImplementedError.__annotations__">
-<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#WORC.addexceptions.WORCNotImplementedError.__annotations__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#WORC.addexceptions.WORCNotImplementedError.__annotations__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCNotImplementedError.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></em><a class="headerlink" href="#WORC.addexceptions.WORCNotImplementedError.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></span><a class="headerlink" href="#WORC.addexceptions.WORCNotImplementedError.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCTypeError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCTypeError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCTypeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCTypeError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCTypeError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCTypeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCTypeError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TypeError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></a></p>
 <p>TypeError in the WORC system</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCTypeError.__annotations__">
-<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#WORC.addexceptions.WORCTypeError.__annotations__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#WORC.addexceptions.WORCTypeError.__annotations__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCTypeError.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></em><a class="headerlink" href="#WORC.addexceptions.WORCTypeError.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></span><a class="headerlink" href="#WORC.addexceptions.WORCTypeError.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCValueError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCValueError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCValueError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCValueError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a></p>
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">WORC.addexceptions.</span></span><span class="sig-name descname"><span class="pre">WORCValueError</span></span><a class="reference internal" href="../_modules/WORC/addexceptions.html#WORCValueError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#WORC.addexceptions.WORCValueError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#WORC.addexceptions.WORCError" title="WORC.addexceptions.WORCError"><code class="xref py py-class docutils literal notranslate"><span class="pre">WORCError</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></a></p>
 <p>ValueError in the WORC system</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCValueError.__annotations__">
-<span class="sig-name descname"><span class="pre">__annotations__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#WORC.addexceptions.WORCValueError.__annotations__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__annotations__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#WORC.addexceptions.WORCValueError.__annotations__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="WORC.addexceptions.WORCValueError.__module__">
-<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></em><a class="headerlink" href="#WORC.addexceptions.WORCValueError.__module__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__module__</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'WORC.addexceptions'</span></span><a class="headerlink" href="#WORC.addexceptions.WORCValueError.__module__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="WORC.IOparser.html">IOparser Package</a><ul>
@@ -721,6 +623,7 @@ overwritten in a sub-class)</p>
 <li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html#WORC.IOparser.file_io.convert_config_pyradiomics"><code class="docutils literal notranslate"><span class="pre">convert_config_pyradiomics()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html#WORC.IOparser.file_io.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html#WORC.IOparser.file_io.load_features"><code class="docutils literal notranslate"><span class="pre">load_features()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="WORC.IOparser.html#WORC.IOparser.file_io.windows_file_parser"><code class="docutils literal notranslate"><span class="pre">windows_file_parser()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1637,155 +1540,35 @@ overwritten in a sub-class)</p>
 </section>
 </section>
 
-        </article>
-      </div>
-      <footer>
-        
-        <div class="related-pages">
-          <a class="next-page" href="WORC.IOparser.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">IOparser Package</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="../static/changelog.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">Changelog</div>
-                
-              </div>
-            </a>
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2016 -- 2025, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands
-            </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-            
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer">
-      
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">WORC Package</a><ul>
-<li><a class="reference internal" href="#id1"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Package</a></li>
-<li><a class="reference internal" href="#module-WORC.WORC"><code class="xref py py-mod docutils literal notranslate"><span class="pre">WORC</span></code> Module</a><ul>
-<li><a class="reference internal" href="#WORC.WORC.Tools"><code class="docutils literal notranslate"><span class="pre">Tools</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.WORC.Tools.__dict__"><code class="docutils literal notranslate"><span class="pre">Tools.__dict__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.Tools.__init__"><code class="docutils literal notranslate"><span class="pre">Tools.__init__()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.Tools.__module__"><code class="docutils literal notranslate"><span class="pre">Tools.__module__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.Tools.__weakref__"><code class="docutils literal notranslate"><span class="pre">Tools.__weakref__</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#WORC.WORC.WORC"><code class="docutils literal notranslate"><span class="pre">WORC</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.WORC.WORC.__dict__"><code class="docutils literal notranslate"><span class="pre">WORC.__dict__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.__init__"><code class="docutils literal notranslate"><span class="pre">WORC.__init__()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.__module__"><code class="docutils literal notranslate"><span class="pre">WORC.__module__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.__weakref__"><code class="docutils literal notranslate"><span class="pre">WORC.__weakref__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.add_ComBat"><code class="docutils literal notranslate"><span class="pre">WORC.add_ComBat()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.add_elastix"><code class="docutils literal notranslate"><span class="pre">WORC.add_elastix()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.add_elastix_sourcesandsinks"><code class="docutils literal notranslate"><span class="pre">WORC.add_elastix_sourcesandsinks()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.add_evaluation"><code class="docutils literal notranslate"><span class="pre">WORC.add_evaluation()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.add_feature_calculator"><code class="docutils literal notranslate"><span class="pre">WORC.add_feature_calculator()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.add_fingerprinter"><code class="docutils literal notranslate"><span class="pre">WORC.add_fingerprinter()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.add_preprocessing"><code class="docutils literal notranslate"><span class="pre">WORC.add_preprocessing()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.add_segmentix"><code class="docutils literal notranslate"><span class="pre">WORC.add_segmentix()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.add_tools"><code class="docutils literal notranslate"><span class="pre">WORC.add_tools()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.build"><code class="docutils literal notranslate"><span class="pre">WORC.build()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.build_inference"><code class="docutils literal notranslate"><span class="pre">WORC.build_inference()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.build_training"><code class="docutils literal notranslate"><span class="pre">WORC.build_training()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.defaultconfig"><code class="docutils literal notranslate"><span class="pre">WORC.defaultconfig()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.execute"><code class="docutils literal notranslate"><span class="pre">WORC.execute()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.save_config"><code class="docutils literal notranslate"><span class="pre">WORC.save_config()</span></code></a></li>
-<li><a class="reference internal" href="#WORC.WORC.WORC.set"><code class="docutils literal notranslate"><span class="pre">WORC.set()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-WORC.addexceptions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">addexceptions</span></code> Module</a><ul>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCAssertionError"><code class="docutils literal notranslate"><span class="pre">WORCAssertionError</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCAssertionError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCAssertionError.__module__</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCError"><code class="docutils literal notranslate"><span class="pre">WORCError</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCError.__annotations__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCError.__module__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCError.__weakref__"><code class="docutils literal notranslate"><span class="pre">WORCError.__weakref__</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCIOError"><code class="docutils literal notranslate"><span class="pre">WORCIOError</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCIOError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCIOError.__annotations__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCIOError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCIOError.__module__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCIOError.__weakref__"><code class="docutils literal notranslate"><span class="pre">WORCIOError.__weakref__</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCIndexError"><code class="docutils literal notranslate"><span class="pre">WORCIndexError</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCIndexError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCIndexError.__annotations__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCIndexError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCIndexError.__module__</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCKeyError"><code class="docutils literal notranslate"><span class="pre">WORCKeyError</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCKeyError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCKeyError.__annotations__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCKeyError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCKeyError.__module__</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCNotImplementedError"><code class="docutils literal notranslate"><span class="pre">WORCNotImplementedError</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCNotImplementedError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCNotImplementedError.__annotations__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCNotImplementedError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCNotImplementedError.__module__</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCTypeError"><code class="docutils literal notranslate"><span class="pre">WORCTypeError</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCTypeError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCTypeError.__annotations__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCTypeError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCTypeError.__module__</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCValueError"><code class="docutils literal notranslate"><span class="pre">WORCValueError</span></code></a><ul>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCValueError.__annotations__"><code class="docutils literal notranslate"><span class="pre">WORCValueError.__annotations__</span></code></a></li>
-<li><a class="reference internal" href="#WORC.addexceptions.WORCValueError.__module__"><code class="docutils literal notranslate"><span class="pre">WORCValueError.__module__</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
-</ul>
-</li>
-</ul>
 
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../static/changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="WORC.IOparser.html" class="btn btn-neutral float-right" title="IOparser Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2016 -- 2025, Biomedical Imaging Group Rotterdam, Department of Radiology and Nuclear Medicine, Erasmus University Medical Center, Rotterdam, The Netherlands.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      
-      
-    </aside>
+    </section>
   </div>
-</div><script src="../_static/documentation_options.js?v=229cbe3b"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
-    </body>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

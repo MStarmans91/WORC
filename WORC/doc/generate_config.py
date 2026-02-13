@@ -134,11 +134,13 @@ def generate_config_options():
     config['General']['AssumeSameImageAndMaskMetadata'] = 'True, False'
     config['General']['ComBat'] = 'True, False'
     config['General']['Fingerprint'] = 'True, False'
-    config['General']['DoTestNRSNEns'] = 'Boolean'
+    config['General']['DoTestNRSNEns'] = 'True, False'
+    config['General']['WindowsCharacterLimitHack'] = "True, False"
     
     # Fingerprinting
     config['Fingerprinting'] = dict()
     config['Fingerprinting']['max_num_image'] = 'Integer'
+    config['Fingerprinting']['inputtype'] = 'images, features'
 
     # Segmentix
     config['Segmentix'] = dict()
@@ -471,10 +473,12 @@ def generate_config_descriptions():
     config['General']['ComBat'] = 'Whether to use ComBat feature harmonization on your FULL dataset, i.e. not in a train-test setting. See <https://github.com/Jfortin1/ComBatHarmonization for more information./>`_ .'
     config['General']['Fingerprint'] = 'Whether to use Fingerprinting or not.'
     config['General']['DoTestNRSNEns'] = 'If True, repeat the experiments from the WORC paper to check the performance of various N_RS, N_Ens and advanced ensembling combinations.'
-    
+    config['General']['WindowsCharacterLimitHack'] = "If True, various nodes (e.g., classify, fingerprinter) in the fastr network will themsleves look for the right files instead of fastr suppling them. This overcomes the command line character limit on Windows."
+
     # Fingerprinting
     config['Fingerprinting'] = dict()
     config['Fingerprinting']['max_num_image'] = 'Maximum number of images and segmentations to evaluate during fingerprinting to limit the workload.'
+    config['Fingerprinting']['inputtype'] = 'Type of input the fingerprinting node needs. Only used when using Windows hack.'
 
     # Segmentix
     config['Segmentix'] = dict()

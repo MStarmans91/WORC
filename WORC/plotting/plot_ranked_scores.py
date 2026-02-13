@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2021 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2026 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ import SimpleITK as sitk
 from WORC.addexceptions import WORCKeyError
 import zipfile
 from sys import platform
+from WORC.IOparser.file_io import windows_file_parser
 
 
 # NOTE: Need to add thresholds of plot_ranked_images to arguments
@@ -448,6 +449,27 @@ def plot_ranked_scores(estimator, pinfo, label_type, scores='percentages',
     if label_type is None:
         # Assume we want to have the first key
         label_type = prediction.keys()[0]
+
+    # If WindowsCharacterlimitHack is enabled, manually check which images and segmentations should be used
+    applyhack =  prediction[prediction.keys()[0]].config['General']['WindowsCharacterLimitHack']
+    if applyhack or applyhack == "True":
+        print("[INFO] Applying Windows Character Limit hack to check which input images and segmentations to take.")
+        tempfolder = os.path.dirname(os.path.dirname(os.path.dirname(estimator)))
+        # We just assume you want to plot images since thats default behavior in WORC
+        searchstrings = ["convert_im_train_*"]
+        searchfilename = "image_0.nii.gz"
+        images = windows_file_parser(foldername=tempfolder,
+                                     searchstrings=searchstrings,
+                                     searchfilename=searchfilename,
+                                     outputtype="images")
+        
+        # We also need segmentations
+        searchstrings = ["convert_seg_train_*"]
+        searchfilename = "image_0.nii.gz"
+        segmentations = windows_file_parser(foldername=tempfolder,
+                                            searchstrings=searchstrings,
+                                            searchfilename=searchfilename,
+                                            outputtype="segmentations")
 
     if scores == 'posteriors':
         ranked_scores, ranked_truths, ranked_PIDs =\

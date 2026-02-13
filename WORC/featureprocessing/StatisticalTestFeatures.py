@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2016-2023 Biomedical Imaging Group Rotterdam, Departments of
+# Copyright 2016-2026 Biomedical Imaging Group Rotterdam, Departments of
 # Medical Informatics and Radiology, Erasmus MC, Rotterdam, The Netherlands
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,9 +24,9 @@ import csv
 import numpy as np
 from scipy.stats import ttest_ind, ranksums, mannwhitneyu, chi2_contingency
 import WORC.IOparser.config_io_classifier as config_io
-from WORC.IOparser.file_io import load_features
 from WORC.detectors.detectors import DebugDetector
 from WORC.plotting.plot_pvalues_features import manhattan_importance
+from WORC.IOparser.file_io import load_features, windows_file_parser
 
 
 def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
@@ -63,6 +63,7 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
 
     """
     # Load variables from the config file
+    tempfolder = os.path.dirname(os.path.dirname(os.path.dirname(config)))
     config = config_io.load_config(config)
 
     if type(patientinfo) is list:
@@ -87,6 +88,15 @@ def StatisticalTestFeatures(features, patientinfo, config, output_csv=None,
     if label_type is None:
         label_type = config['Labels']['label_names']
 
+    # If WindowsCharacterlimitHack is enabled, manually check which images or features should be used
+    if config['General']['WindowsCharacterLimitHack'] or config['General']['WindowsCharacterLimitHack'] == "True":
+        print("[INFO] Applying Windows Character Limit hack to check which input features to take.")
+        searchstrings = ["featureconverter_train*", "features_train*"]
+        searchfilename = "feat_out_0.hdf5"
+        features = windows_file_parser(foldername=tempfolder,
+                                       searchstrings=searchstrings,
+                                       searchfilename=searchfilename)
+            
     # Read the features and classification data
     print("Reading features and label data.")
     label_data, image_features =\

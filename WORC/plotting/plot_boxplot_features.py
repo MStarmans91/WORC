@@ -16,20 +16,30 @@
 # limitations under the License.
 
 import WORC.IOparser.config_io_classifier as config_io
-from WORC.IOparser.file_io import load_features
 import os
 import numpy as np
 import zipfile
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
+from WORC.IOparser.file_io import load_features, windows_file_parser
 
 
 def plot_boxplot_features(features, label_data, config, output_zip,
                           label_type=None, verbose=False):
     # Load variables from the config file
+    tempfolder = os.path.dirname(os.path.dirname(os.path.dirname(config)))
     config = config_io.load_config(config)
 
+    # If WindowsCharacterlimitHack is enabled, manually check which images or features should be used
+    if config['General']['WindowsCharacterLimitHack'] or config['General']['WindowsCharacterLimitHack'] == "True":
+        print("[INFO] Applying Windows Character Limit hack to check which input features to take.")
+        searchstrings = ["featureconverter_train*", "features_train*"]
+        searchfilename = "feat_out_0.hdf5"
+        features = windows_file_parser(foldername=tempfolder,
+                                       searchstrings=searchstrings,
+                                       searchfilename=searchfilename)
+        
     # Create output folder if required
     if not os.path.exists(os.path.dirname(output_zip)):
         os.makedirs(os.path.dirname(output_zip))

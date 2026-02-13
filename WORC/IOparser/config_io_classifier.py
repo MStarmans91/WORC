@@ -61,6 +61,9 @@ def load_config(config_file_path):
 
     settings_dict['General']['DoTestNRSNEns'] =\
         settings['General'].getboolean('DoTestNRSNEns')
+    
+    settings_dict['General']['WindowsCharacterLimitHack'] =\
+        settings['General'].getboolean('WindowsCharacterLimitHack')
         
     # Feature Scaling
     settings_dict['FeatureScaling']['scale_features'] =\
