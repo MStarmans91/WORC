@@ -13,5 +13,6 @@ tempsave                       True                                             
 AssumeSameImageAndMaskMetadata False                                                   True, False                                                                                                   
 ComBat                         False                                                   True, False                                                                                                   
 Fingerprint                    True                                                    True, False                                                                                                   
-DoTestNRSNEns                  False                                                   Boolean                                                                                                       
+DoTestNRSNEns                  False                                                   True, False                                                                                                   
+WindowsCharacterLimitHack      False                                                   True, False                                                                                                   
 ============================== ======================================================= ==============================================================================================================
