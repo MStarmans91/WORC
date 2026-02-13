@@ -10,8 +10,5 @@ build:
 
 python:
   install:
-      # preinstall setuptools first
-    - method: pip
-      requirements: "setuptools>=65.0"
     - requirements: WORC/doc/requirements-pre-numpy.txt
     - requirements: WORC/doc/requirements.txt
