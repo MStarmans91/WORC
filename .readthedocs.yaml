@@ -8,13 +8,8 @@ build:
   tools:
     python: "3.11"
   commands:
-    # Make sure pip is modern
     - pip install --upgrade pip setuptools wheel
-
-    # Install numpy FIRST so pyradiomics can import it during metadata build
     - pip install "numpy==1.26.3"
-
-    # Now install pyradiomics without build isolation
     - pip install --no-build-isolation "pyradiomics==3.0.1"
 
 python:
