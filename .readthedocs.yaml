@@ -12,4 +12,6 @@ python:
   install:
     - requirements: WORC/doc/requirements-pre-numpy.txt
     - requirements: WORC/doc/requirements.txt
-    - command: pip install . --no-deps
+    - method: pip
+      path: .
+      pip_args: ["--no-deps"]
