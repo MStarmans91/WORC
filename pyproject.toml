@@ -43,6 +43,8 @@ dependencies = [
     "networkx<=3.4.2", # for fastr
     "numpy<=1.26.3",
     "pandas",
+    "pyradiomics==3.0.1 ; "READTHEDOCS" not in os.environ',
+    "PREDICT>=3.2.0 ; "READTHEDOCS" not in os.environ',
     "pyOpenSSL",
     "pydicom",
     "rdflib",
@@ -61,10 +63,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-features = [
-  "pyradiomics==3.0.1",
-  "PREDICT>=3.2.0"
-]
 test = [
   "nose",
   "coverage"
