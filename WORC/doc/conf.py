@@ -11,16 +11,15 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-# Mock imports to eliminate some issues with C-extensions
-autodoc_mock_imports = ['radiomics', 'pyradiomics', 'PREDICT', "fastr", "SimpleITK", "pkg_resources"]
-
-
-from collections import namedtuple
 import os
 import sys
+from collections import namedtuple
 
 # Add repository root to Python path
 sys.path.insert(0, os.path.abspath('../..'))
+
+# Mock imports to eliminate some issues with C-extensions
+autodoc_mock_imports = ['radiomics', 'pyradiomics', 'PREDICT', "fastr", "SimpleITK", "pkg_resources"]
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
