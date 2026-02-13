@@ -63,6 +63,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+pyradiomics = ["pyradiomics==3.0.1"]
 test = [
   "nose",
   "coverage"

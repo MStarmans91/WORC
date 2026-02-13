@@ -9,7 +9,8 @@ build:
     python: "3.11"
 
 python:
-  system_packages: true
   install:
     - requirements: WORC/doc/requirements-pre-numpy.txt
     - requirements: WORC/doc/requirements.txt
+    - method: pip
+      path: .
