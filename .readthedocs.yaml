@@ -7,10 +7,12 @@ build:
   os: "ubuntu-22.04"
   tools:
     python: "3.11"
-  commands:
-    - python -m pip install --upgrade pip setuptools wheel
 
 python:
   install:
+      # preinstall setuptools first
+    - method: pip
+      requirements:
+        - setuptools
     - requirements: WORC/doc/requirements-pre-numpy.txt
     - requirements: WORC/doc/requirements.txt
