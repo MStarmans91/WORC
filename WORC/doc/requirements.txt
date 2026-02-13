@@ -4,3 +4,5 @@ sphinx-argparse
 sphinxcontrib-httpdomain
 sphinx-autodoc-typehints
 sphinx_rtd_theme
+pyyaml
+fastr
