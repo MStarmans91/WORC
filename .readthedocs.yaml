@@ -14,5 +14,3 @@ python:
     - requirements: WORC/doc/requirements.txt
     - method: pip
       path: .
-      extra_requirements:
-        - --no-build-isolation
